@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N9 — Normal Force Does Not Always Equal Weight</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3; keep identical across all note pages.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider: dots spaced like a motion diagram ----------- */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--ink); border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.experiments{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.experiments li{ margin:.55rem 0; }
+  ol.experiments b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Note 9</span>
+  </div>
+
+  <h1>Normal Force Does Not Always Equal Weight</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Every scale on Earth measures the <em>normal force</em> — how hard you press on the surface —
+    not your true weight. The two agree only when you are not accelerating. In this note you will
+    alter a scale's reading with your own motion, then record the normal force with a Vernier force
+    platform while riding an elevator, and explain every feature of the graph with Newton's laws.
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <b>Measure</b> normal force in inertial and accelerating frames ·
+    <b>Draw</b> free-body diagrams of an object in both ·
+    <b>Describe</b> the relationship between normal force and weight in both.
+  </div>
+
+  <h2>The four experiments</h2>
+  <ol class="experiments">
+    <li><b>Spring scale:</b> hang a mass, then accelerate the scale up and down. Watch the reading at every phase — starting, moving, stopping.</li>
+    <li><b>Digital scale, tilted:</b> the reading drops as the angle steepens. Your free-body diagram explains why — the scale reads a force component, not a mass.</li>
+    <li><b>Bathroom scale squats:</b> stand still, then squat down and up. Which way does the needle deflect at each phase of the motion, and what does that tell you?</li>
+    <li><b>The elevator ride:</b> the Vernier force platform records normal force vs. time for a full trip. Start from the second floor and descend. Every bump and dip in that graph is Newton's second law speaking.</li>
+  </ol>
+
+  <div class="strobe uniform" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>constant velocity — scale reads true weight</small>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~15 min</span>
+    <!-- ================================================================
+         REPLACE the placeholder div below with your video embed iframe:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M3 N9 walkthrough with Dr. Cho"></iframe></div>
+         ================================================================ -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <div class="strobe accel" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>accelerating — scale reads more or less than mg</small>
+  </div>
+
+  <h2>The key relationships</h2>
+  <p>All three come from one idea: apply <em>ΣF = ma</em> to the object standing on the scale, with up as positive.</p>
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>N</mi><mo>=</mo><mi>m</mi><mi>g</mi>
+      </math>
+      <span class="use">at rest or constant velocity — the only case where the scale shows true weight</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>N</mi><mo>=</mo><mi>m</mi><mo stretchy="false">(</mo><mi>g</mi><mo>+</mo><mi>a</mi><mo stretchy="false">)</mo>
+      </math>
+      <span class="use">accelerating upward (a &gt; 0): you feel heavier; downward (a &lt; 0): lighter</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>N</mi><mo>=</mo><mn>0</mn>
+        <mspace width="0.6em"/><mtext>when</mtext><mspace width="0.6em"/>
+        <mi>a</mi><mo>=</mo><mo>&#x2212;</mo><mi>g</mi>
+      </math>
+      <span class="use">free fall — apparent weightlessness, the scale reads zero</span>
+    </li>
+  </ul>
+
+  <div class="strobe uniform" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <!-- Point these hrefs at files in this course's Manage Files area
+         (Insert Quicklink → Course File), NOT at external storage. -->
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print or open on a tablet; record your predictions and scale readings for all four experiments.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes — check your force-vs-time sketch against the recorded elevator data.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N6 — Verifying Newton's Second Law with a Half Atwood Machine</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as the other note pages; keep identical across pages.
+     Adds: .apparatus (simple SVG schematic, this note only).
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+
+  /* --- strobe divider ------------------------------------------------ */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- apparatus schematic ------------------------------------------- */
+  .apparatus{ margin:1.4rem auto; max-width:520px; }
+  .apparatus svg{ width:100%; height:auto; display:block; }
+  .apparatus figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem;
+    color:var(--muted); text-align:center; margin-top:.4rem;
+  }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.tasks{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.tasks li{ margin:.55rem 0; }
+  ol.tasks b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Note 6</span>
+  </div>
+
+  <h1>Verifying Newton's Second Law with a Half Atwood Machine</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Newton's second law fits in five characters — <em>F&nbsp;=&nbsp;ma</em> — but it makes a testable
+    promise: double the net force on an object and its acceleration doubles; double the mass and the
+    acceleration halves. The Half Atwood machine — a cart on a track, pulled by a hanging mass over a
+    pulley — lets us put that promise on trial. The hanging weight supplies a known force, the whole
+    system shares one acceleration, and your job is to predict it before the measurement pronounces
+    the verdict.
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <b>Draw</b> free-body diagrams for both objects in the Half Atwood setup ·
+    <b>Write</b> Newton's second law equations for each ·
+    <b>Describe</b> how the setup verifies the law.
+  </div>
+
+  <h2>The apparatus</h2>
+  <figure class="apparatus">
+    <svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Half Atwood machine schematic: a cart of mass m1 on a horizontal track is connected by a string over a pulley at the table edge to a hanging mass m2. The cart accelerates along the track as the mass falls.">
+      <!-- table -->
+      <rect x="20" y="130" width="360" height="14" fill="#1e6b3c"/>
+      <rect x="40" y="144" width="16" height="80" fill="#d7e2da"/>
+      <rect x="330" y="144" width="16" height="80" fill="#d7e2da"/>
+      <!-- cart -->
+      <rect x="120" y="96" width="90" height="28" rx="5" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="2"/>
+      <circle cx="142" cy="128" r="8" fill="#ffffff" stroke="#1e6b3c" stroke-width="2"/>
+      <circle cx="188" cy="128" r="8" fill="#ffffff" stroke="#1e6b3c" stroke-width="2"/>
+      <text x="165" y="115" font-family="Segoe UI, sans-serif" font-size="15" fill="#1d2b23" text-anchor="middle" font-style="italic">m&#8321;</text>
+      <!-- string: cart to pulley -->
+      <line x1="210" y1="110" x2="382" y2="110" stroke="#5c6b62" stroke-width="2"/>
+      <!-- pulley -->
+      <circle cx="388" cy="122" r="14" fill="#ffffff" stroke="#1e6b3c" stroke-width="2.5"/>
+      <circle cx="388" cy="122" r="3" fill="#1e6b3c"/>
+      <!-- string: pulley down to mass; wraps the wheel -->
+      <path d="M 382 110 A 14 14 0 0 1 402 122" fill="none" stroke="#5c6b62" stroke-width="2"/>
+      <line x1="402" y1="122" x2="402" y2="176" stroke="#5c6b62" stroke-width="2"/>
+      <!-- hanging mass -->
+      <rect x="384" y="176" width="36" height="34" rx="4" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="2"/>
+      <text x="402" y="198" font-family="Segoe UI, sans-serif" font-size="15" fill="#1d2b23" text-anchor="middle" font-style="italic">m&#8322;</text>
+      <!-- acceleration arrows -->
+      <line x1="120" y1="82" x2="76" y2="82" stroke="#1e6b3c" stroke-width="2.5" marker-end="url(#ah)"/>
+      <text x="98" y="72" font-family="Segoe UI, sans-serif" font-size="13" fill="#1e6b3c" text-anchor="middle" font-style="italic">a</text>
+      <line x1="440" y1="176" x2="440" y2="212" stroke="#1e6b3c" stroke-width="2.5" marker-end="url(#ah)"/>
+      <text x="452" y="196" font-family="Segoe UI, sans-serif" font-size="13" fill="#1e6b3c" font-style="italic">a</text>
+      <defs>
+        <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 z" fill="#1e6b3c"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>One string, one acceleration: the cart speeds up along the track exactly as fast as the mass falls. Wait — which direction should the cart's arrow point? Exactly.</figcaption>
+  </figure>
+
+  <h2>Your tasks in this note</h2>
+  <ol class="tasks">
+    <li><b>Draw the setup</b> in your guided notes — track, cart, pulley, hanging mass, string. Getting the geometry down is half of getting the physics right.</li>
+    <li><b>Free-body diagrams, one per object:</b> the cart and the hanging mass each get their own. The same tension appears in both — that string is what ties the two equations together.</li>
+    <li><b>Write Newton's second law for each object</b> along its direction of motion, then combine them to predict the system's acceleration.</li>
+    <li><b>Describe the verification strategy:</b> what do you change, what do you measure, and what pattern must the data show if F&nbsp;=&nbsp;ma is telling the truth?</li>
+  </ol>
+
+  <div class="strobe accel" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>the cart under constant net force — steady acceleration</small>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~15 min</span>
+    <!-- ================================================================
+         REPLACE the placeholder div below with your video embed iframe:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M3 N6 walkthrough with Dr. Cho"></iframe></div>
+         ================================================================ -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <div class="strobe uniform" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <h2>The key relationships</h2>
+  <p>Two objects, two equations, one shared acceleration and one shared tension. Everything follows from writing each object's story separately, then letting the string connect them.</p>
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>T</mi><mo>=</mo><msub><mi>m</mi><mn>1</mn></msub><mi>a</mi>
+      </math>
+      <span class="use">the cart, along the track — tension is its only horizontal force (frictionless track)</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>m</mi><mn>2</mn></msub><mi>g</mi><mo>&#x2212;</mo><mi>T</mi>
+        <mo>=</mo><msub><mi>m</mi><mn>2</mn></msub><mi>a</mi>
+      </math>
+      <span class="use">the hanging mass, taking down as positive — gravity wins by exactly m&#8322;a</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>a</mi><mo>=</mo>
+        <mfrac>
+          <mrow><msub><mi>m</mi><mn>2</mn></msub><mi>g</mi></mrow>
+          <mrow><msub><mi>m</mi><mn>1</mn></msub><mo>+</mo><msub><mi>m</mi><mn>2</mn></msub></mrow>
+        </mfrac>
+      </math>
+      <span class="use">add the two equations — the driving weight divided by the total mass being moved</span>
+    </li>
+  </ul>
+
+  <div class="strobe uniform" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <!-- Point these hrefs at files in this course's Manage Files area
+         (Insert Quicklink → Course File), NOT at external storage. -->
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Draw the setup and both free-body diagrams before the video reveals them.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes — check your equations and verification strategy against the worked version.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+</body>
+</html>
