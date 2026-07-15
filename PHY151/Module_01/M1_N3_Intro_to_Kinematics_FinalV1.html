@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N3 — Introduction to Kinematics</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template (enhanced)
+     Body/serif for reading, green accent to match course shell.
+     All styles + scripts self-contained; no external dependencies.
+     Upload via Manage Files and insert as a full page so the inline
+     <script> blocks survive (the HTML editor strips scripts).
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --green-deep:#134a29;
+    --amber:#c77b1f;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .sans{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider: dots spaced like a motion diagram ----------- */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  /* constant-velocity divider: equal gaps */
+  .strobe.uniform span + span{ margin-left:26px; }
+  /* accelerating divider: widening gaps (Δx grows each interval) */
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+  /* animated pulse sweeping left-to-right along the dots */
+  @keyframes strobePulse{
+    0%,100%{ transform:scale(1); opacity:.55; }
+    35%{ transform:scale(1.9); opacity:1; }
+  }
+  .strobe.animate span{ animation:strobePulse 2.4s ease-in-out infinite; }
+  .strobe.animate span:nth-child(1){ animation-delay:0s; }
+  .strobe.animate span:nth-child(2){ animation-delay:.16s; }
+  .strobe.animate span:nth-child(3){ animation-delay:.32s; }
+  .strobe.animate span:nth-child(4){ animation-delay:.48s; }
+  .strobe.animate span:nth-child(5){ animation-delay:.64s; }
+  .strobe.animate span:nth-child(6){ animation-delay:.80s; }
+  @media (prefers-reduced-motion: reduce){
+    .strobe.animate span{ animation:none; }
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- "you already know this" callout ------------------------------ */
+  .prior{
+    border:1px solid var(--rule); border-radius:10px; overflow:hidden;
+    margin:1.8rem 0;
+  }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; letter-spacing:.01em; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{
+    background:var(--green-soft); border-radius:8px; padding:.75rem .8rem;
+  }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  /* --- performance expectations ------------------------------------- */
+  .pe{
+    border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0;
+  }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{
+    display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem;
+    border-radius:6px;
+  }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+  .pe li .txt b{ font-weight:600; }
+
+  /* --- guiding questions -------------------------------------------- */
+  h2{
+    font-size:1.25rem; margin:0 0 .8rem; font-weight:700;
+  }
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.questions li{ margin:.45rem 0; }
+  ol.questions{ list-style-type:upper-roman; }
+
+  /* --- interactive simulator ---------------------------------------- */
+  .sim{
+    border:1px solid var(--rule); border-radius:12px; overflow:hidden;
+    margin:1.2rem 0 .6rem; background:#fbfdfc;
+  }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .controls{ display:grid; gap:.9rem 1.4rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .controls{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{
+    display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem;
+  }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin-top:.8rem;
+  }
+
+  /* --- predict-first self check ------------------------------------- */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0;
+    background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px;
+    padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem;
+    margin-top:.7rem; color:var(--green-deep); min-height:1.2em;
+  }
+
+  /* --- exit ticket (short self-scoring quiz) ------------------------ */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff;
+    padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{
+    display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule);
+    border-radius:6px; padding:.5rem .7rem; cursor:pointer;
+  }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{
+    font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px;
+  }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- words-to-physics table --------------------------------------- */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; }
+  .translate td .tag.up{ color:var(--green); }
+  .translate td .tag.zero{ color:var(--muted); }
+  .translate td .tag.down{ color:#c0392b; }
+
+  /* --- looking-ahead signpost --------------------------------------- */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list .icon{ font-size:1.3rem; flex:none; width:1.6em; text-align:center; }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:14em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding: .9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Motion</span>
+    <span>Note 3</span>
+  </div>
+
+  <h1>Introduction to Kinematics</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Kinematics is the study of motion using physics concepts and equations.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li>
+        <span class="tick">PE1</span>
+        <span class="txt"><b>Define motion</b> as a change in position over time, and distinguish scalar quantities (distance, speed) from vector quantities (displacement, velocity, acceleration).</span>
+      </li>
+      <li>
+        <span class="tick">PE2</span>
+        <span class="txt"><b>Describe motion</b> using position, displacement, velocity, and acceleration, and report each with correct SI units.</span>
+      </li>
+      <li>
+        <span class="tick">PE3</span>
+        <span class="txt"><b>Interpret a motion (strobe) diagram</b> to decide whether an object is at rest, moving at constant velocity, or accelerating.</span>
+      </li>
+      <li>
+        <span class="tick">PE4</span>
+        <span class="txt"><b>Select the appropriate kinematic equation</b> for a problem by matching the quantities you know against the quantity you need.</span>
+      </li>
+      <li>
+        <span class="tick">PE5</span>
+        <span class="txt"><b>Recognize the three kinematic equations</b> and identify what each one is for. You'll practice applying them to solve problems starting in Note&nbsp;6.</span>
+      </li>
+      <li>
+        <span class="tick">PE6</span>
+        <span class="txt"><b>Connect everyday experiences</b> of motion &mdash; braking, falling, coasting &mdash; to the physics concepts of velocity and acceleration.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- animated motion-diagram divider -->
+  <div class="strobe accel animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>this whole note is about how position changes in time</small>
+  </div>
+
+  <!-- ============ #3 CONNECTING PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>You have felt kinematics your whole life — every time speed changes, your body notices.
+      The equations below just put numbers on things you already have intuition for:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🚗</span>
+          <b>Braking at a light</b>
+          <small>Velocity drops to zero — negative acceleration you feel push you forward.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">📱</span>
+          <b>A dropped phone</b>
+          <small>It speeds up as it falls — constant acceleration from gravity.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🛝</span>
+          <b>A ball down a ramp</b>
+          <small>Steeper ramp, faster gain in speed — bigger acceleration.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we answer four questions</h2>
+  <ol class="questions">
+    <li>What is motion?</li>
+    <li>How do we describe motion in physics?</li>
+    <li>How do we apply the ideas to real situations?</li>
+    <li>What are the three key equations of kinematics?</li>
+  </ol>
+
+  <!-- ============ #1 + #2 INTERACTIVE + VISUAL SIMULATOR ============ -->
+  <h2>Play with it: the strobe motion lab</h2>
+  <p>Drag the sliders, then press <b>Run</b>. A strobe mark drops every second — watch the
+  spacing. Equal gaps mean constant velocity; gaps that widen mean the object is accelerating.
+  The graph on the right draws velocity vs. time as it moves.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>▶</span> Interactive · Strobe Motion Lab</div>
+    <div class="stage">
+      <canvas id="simCanvas" width="720" height="300" role="img"
+        aria-label="Animation of a moving dot dropping strobe marks, with a live velocity-versus-time graph."></canvas>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl">
+          <label for="v0">Initial velocity v₀ <span class="val"><span id="v0val">8</span> m/s</span></label>
+          <input type="range" id="v0" min="0" max="20" step="1" value="8">
+        </div>
+        <div class="ctrl">
+          <label for="acc">Acceleration a <span class="val"><span id="accval">2.0</span> m/s²</span></label>
+          <input type="range" id="acc" min="-4" max="6" step="0.5" value="2">
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="runBtn">▶ Run</button>
+        <button class="btn" id="pauseBtn">⏸ Pause</button>
+        <button class="btn" id="resetBtn">↺ Reset</button>
+      </div>
+      <div class="readout">
+        <span class="chip">t = <b id="tOut">0.0</b> s</span>
+        <span class="chip">v = <b id="vOut">8.0</b> m/s</span>
+        <span class="chip">x = <b id="xOut">0.0</b> m</span>
+      </div>
+      <div class="hint-row" id="simHint">Set acceleration to 0 to see equal spacing — that is constant velocity.</div>
+    </div>
+  </div>
+
+  <!-- ============ #1 PREDICT-FIRST SELF CHECK ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first: you know the acceleration and how long it acts, and you want the
+    displacement. Which equation do you reach for?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">v = v₀ + at</button>
+      <button class="opt" data-correct="true">Δx = v₀t + ½at²</button>
+      <button class="opt" data-correct="false">v² = v₀² + 2aΔx</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~15 min</span>
+    <!-- ================================================================
+         REPLACE the placeholder div below with your video embed iframe.
+         Ensia / YouTube / Panopto embed codes all drop in the same way:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M1 N3 walkthrough with Dr. Cho"></iframe></div>
+         ================================================================ -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ #3 WORDS-TO-PHYSICS TABLE ============ -->
+  <h2>From everyday words to physics</h2>
+  <p>Half the battle is translating a plain-English situation into the right physics. Here is the
+  everyday language you already use, lined up with what it means for velocity and acceleration:</p>
+  <div class="translate">
+    <table>
+      <thead>
+        <tr><th>You'd say&hellip;</th><th>What's happening</th><th>Acceleration</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>"Flooring it"</td><td>Speeding up hard</td><td><span class="tag up">positive (large)</span></td></tr>
+        <tr><td>"Slamming the brakes"</td><td>Slowing down fast</td><td><span class="tag down">negative (large)</span></td></tr>
+        <tr><td>"On cruise control"</td><td>Steady speed</td><td><span class="tag zero">zero</span></td></tr>
+        <tr><td>"Coasting to a stop"</td><td>Gently slowing</td><td><span class="tag down">negative (small)</span></td></tr>
+        <tr><td>"Dropping a ball"</td><td>Free fall</td><td><span class="tag up">≈ 9.8 m/s² down</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="strobe accel" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>accelerating — widening steps</small>
+  </div>
+
+  <h2>The three key equations</h2>
+  <p>These are developed step by step in the video and in your guided notes.
+  The icon tells you at a glance <em>when</em> to reach for each one.</p>
+  <p class="preview-note"><strong>Looking ahead:</strong> we're previewing acceleration here so you can see the whole picture. We build these ideas carefully over the next notes — constant-speed motion first, then acceleration in Note&nbsp;6 — so don't worry about mastering the equations yet. For now, just get familiar with what each one does.</p>
+  <ul class="eq-list">
+    <li>
+      <span class="icon" title="Solve for velocity after a time">⏱️</span>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>v</mi><mo>=</mo><msub><mi>v</mi><mn>0</mn></msub><mo>+</mo><mi>a</mi><mi>t</mi>
+      </math>
+      <span class="use">velocity after accelerating for a time t</span>
+    </li>
+    <li>
+      <span class="icon" title="Solve for displacement when time is known">📏</span>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>&#x394;</mi><mi>x</mi><mo>=</mo><msub><mi>v</mi><mn>0</mn></msub><mi>t</mi><mo>+</mo>
+        <mfrac><mn>1</mn><mn>2</mn></mfrac><mi>a</mi><msup><mi>t</mi><mn>2</mn></msup>
+      </math>
+      <span class="use">displacement when time is known</span>
+    </li>
+    <li>
+      <span class="icon" title="No time needed — links speed and displacement">🚫⏱️</span>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msup><mi>v</mi><mn>2</mn></msup><mo>=</mo><msubsup><mi>v</mi><mn>0</mn><mn>2</mn></msubsup>
+        <mo>+</mo><mn>2</mn><mi>a</mi><mi>&#x394;</mi><mi>x</mi>
+      </math>
+      <span class="use">links speed and displacement — no time needed</span>
+    </li>
+  </ul>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>constant velocity — equal steps</small>
+  </div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> On a strobe diagram, the dots get <em>farther apart</em> each second. What does that tell you?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> The object is slowing down.</label>
+          <label><input type="radio" name="q1" value="b"> The object moves at constant velocity.</label>
+          <label><input type="radio" name="q1" value="c"> The object is speeding up (accelerating).</label>
+          <label><input type="radio" name="q1" value="d"> The object is at rest.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> You know v₀, the acceleration a, and the time t, and you want the <em>final velocity</em>. Which equation?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> v = v₀ + at</label>
+          <label><input type="radio" name="q2" value="b"> Δx = v₀t + ½at²</label>
+          <label><input type="radio" name="q2" value="c"> v² = v₀² + 2aΔx</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> A cyclist starts at 4 m/s and accelerates at 2 m/s² for 3 s. What is her final velocity?</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="final velocity in meters per second">
+          <span class="unit">m/s</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Which of these is a <em>vector</em> (it has a direction), not just a size?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> Distance</label>
+          <label><input type="radio" name="q4" value="b"> Speed</label>
+          <label><input type="radio" name="q4" value="c"> Displacement</label>
+          <label><input type="radio" name="q4" value="d"> Time</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <!-- Point these hrefs at the files uploaded to this course's Manage Files
+         area (Insert Quicklink → Course File), NOT at external storage. -->
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print or open on a tablet and fill it in as you follow along.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 1 closes — check your own work against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   Strobe Motion Lab — self-contained, no dependencies.
+   Left half: a dot moving on a track, dropping a mark every 1.0 s of
+   simulated time. Right half: a live velocity-vs-time plot.
+   Simulated physics uses v = v0 + a t and x = v0 t + 1/2 a t^2.
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+
+  var GX = Math.round(W*0.60);          // x where the graph panel starts
+  var trackY = Math.round(H*0.42);      // vertical center of the track
+  var pxPerM = 5.5;                     // pixels per meter along the track
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var v0 = 8, a = 2;
+  var t = 0, running = false, last = null, marks = [], samples = [];
+  var T_MAX = 8;                        // seconds shown before auto-stop / graph width
+
+  var el = {
+    v0: document.getElementById('v0'), acc: document.getElementById('acc'),
+    v0val: document.getElementById('v0val'), accval: document.getElementById('accval'),
+    tOut: document.getElementById('tOut'), vOut: document.getElementById('vOut'), xOut: document.getElementById('xOut'),
+    run: document.getElementById('runBtn'), pause: document.getElementById('pauseBtn'), reset: document.getElementById('resetBtn'),
+    hint: document.getElementById('simHint')
+  };
+
+  function pos(tt){ return v0*tt + 0.5*a*tt*tt; }   // x(t) in meters
+  function vel(tt){ return v0 + a*tt; }             // v(t)
+
+  function reset(){
+    running = false; t = 0; last = null; marks = []; samples = [{t:0, v:vel(0)}];
+    draw();
+    readout();
+  }
+
+  function readout(){
+    el.tOut.textContent = t.toFixed(1);
+    el.vOut.textContent = vel(t).toFixed(1);
+    el.xOut.textContent = pos(t).toFixed(1);
+  }
+
+  function loop(ts){
+    if(!running) return;
+    if(last === null) last = ts;
+    var dt = Math.min((ts - last)/1000, 0.05); // clamp for tab-switch spikes
+    last = ts;
+
+    var prevWhole = Math.floor(t);
+    t += dt;
+    var nowWhole = Math.floor(t);
+    for(var s = prevWhole+1; s <= nowWhole; s++){
+      if(s>0 && s<=T_MAX) marks.push({t:s, x:pos(s)});
+    }
+    samples.push({t:t, v:vel(t)});
+
+    if(t >= T_MAX){ t = T_MAX; running = false; }
+    draw(); readout();
+    if(running) requestAnimationFrame(loop);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
+
+    /* ---------- left: track + strobe marks ---------- */
+    ctx.strokeStyle = '#2c5a3f'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(20, trackY); ctx.lineTo(GX-20, trackY); ctx.stroke();
+
+    ctx.fillStyle = '#274b37'; ctx.font = '10px Segoe UI, sans-serif';
+    for(var m=0; m<=120; m+=20){
+      var tx = 24 + m*pxPerM;
+      if(tx > GX-24) break;
+      ctx.fillRect(tx, trackY-4, 1, 8);
+    }
+
+    for(var i=0;i<marks.length;i++){
+      var mx = 24 + marks[i].x*pxPerM;
+      if(mx > GX-24) continue;
+      ctx.globalAlpha = 0.85;
+      ctx.fillStyle = '#7fd1a0';
+      ctx.beginPath(); ctx.arc(mx, trackY, 4, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    var cx = 24 + pos(t)*pxPerM;
+    if(cx <= GX-24){
+      ctx.fillStyle = 'rgba(126,209,160,0.25)';
+      ctx.beginPath(); ctx.arc(cx-6, trackY, 8, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#eafaf0';
+      ctx.beginPath(); ctx.arc(cx, trackY, 8, 0, Math.PI*2); ctx.fill();
+    } else {
+      ctx.fillStyle = '#eafaf0';
+      ctx.beginPath(); ctx.arc(GX-24, trackY, 8, 0, Math.PI*2); ctx.fill();
+    }
+
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillText('position →', 24, trackY+26);
+    ctx.fillText('one dot = 1 second', 24, H-14);
+
+    /* ---------- right: velocity-vs-time graph ---------- */
+    var gx0 = GX+14, gy0 = 30, gW = W-gx0-18, gH = H-70;
+    ctx.strokeStyle = '#2c5a3f'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(gx0, gy0); ctx.lineTo(gx0, gy0+gH); ctx.lineTo(gx0+gW, gy0+gH);
+    ctx.stroke();
+
+    var vMax = 20 + 6*T_MAX;          // generous ceiling (max v0 + max a*t)
+    var vMin = Math.min(0, -4*T_MAX); // allow negative a
+    function gX(tt){ return gx0 + (tt/T_MAX)*gW; }
+    function gY(vv){ return gy0 + gH - ((vv - vMin)/(vMax - vMin))*gH; }
+
+    if(vMin < 0){
+      ctx.strokeStyle = '#24402f'; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(gx0, gY(0)); ctx.lineTo(gx0+gW, gY(0)); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    if(samples.length>1){
+      ctx.strokeStyle = '#ffd27f'; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for(var k=0;k<samples.length;k++){
+        var X = gX(samples[k].t), Y = gY(samples[k].v);
+        if(k===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y);
+      }
+      ctx.stroke();
+      var hx = gX(t), hy = gY(vel(t));
+      ctx.fillStyle = '#fff2d6';
+      ctx.beginPath(); ctx.arc(hx, hy, 3.5, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillText('velocity', gx0, gy0-10);
+    ctx.fillText('time →', gx0+gW-38, gy0+gH+18);
+  }
+
+  function syncLabels(){
+    el.v0val.textContent = v0.toFixed(0);
+    el.accval.textContent = a.toFixed(1);
+    if(Math.abs(a) < 0.01) el.hint.textContent = 'Acceleration is 0 → the strobe marks are evenly spaced. That is constant velocity.';
+    else if(a > 0) el.hint.textContent = 'Positive acceleration → each gap is wider than the last. The object keeps speeding up.';
+    else el.hint.textContent = 'Negative acceleration → gaps shrink as it slows. It may even stop and reverse.';
+  }
+
+  el.v0.addEventListener('input', function(){ v0 = parseFloat(this.value); syncLabels(); reset(); });
+  el.acc.addEventListener('input', function(){ a = parseFloat(this.value); syncLabels(); reset(); });
+
+  el.run.addEventListener('click', function(){
+    if(t >= T_MAX) reset();
+    if(running) return;
+    running = true; last = null;
+    if(reduceMotion){
+      for(var s=1;s<=T_MAX;s++) marks.push({t:s, x:pos(s)});
+      samples = []; for(var q=0;q<=T_MAX*10;q++){ var tt=q/10; samples.push({t:tt,v:vel(tt)}); }
+      t = T_MAX; running = false; draw(); readout();
+    } else {
+      requestAnimationFrame(loop);
+    }
+  });
+  el.pause.addEventListener('click', function(){ running = false; });
+  el.reset.addEventListener('click', reset);
+
+  syncLabels();
+  reset();
+})();
+
+/* ---------- predict-first self check ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct');
+        fb.style.color = '#134a29';
+        fb.textContent = '✓ Exactly. Time is known and displacement is unknown, so Δx = v₀t + ½at² is the one.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite — that one solves for a different unknown. You know t and want Δx, so use Δx = v₀t + ½at².';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q1:'c', q2:'a', q4:'c' };
+  var expl = {
+    q1:'widening gaps mean it covers more ground each second — it is speeding up.',
+    q2:'with v₀, a, and t known and v unknown, use v = v₀ + at.',
+    q4:'displacement carries a direction (e.g., 5 m east); distance, speed, and time do not.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong');
+    card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v - 10) < 0.05){ correct++; markCard('card-q3', true, '✓ Correct: v = 4 + 2×3 = 10 m/s.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number (m/s).'); }
+    else { markCard('card-q3', false, '✗ Use v = v₀ + at = 4 + 2×3 = 10 m/s.'); }
+
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q3input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
