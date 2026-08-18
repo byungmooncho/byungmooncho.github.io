@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N1 — Scales of Nature</title>
+<style>
+/* ==================================================================
+FLCC Physics note page — hybrid guided-notes template
+Same stylesheet family as M1 N3/N8, M3 N5/N6/N9; keep identical.
+Adds: .scale-rail (powers-of-ten explorer, this note only).
+================================================================== */
+:root{
+  --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+  --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+}
+html{ -webkit-text-size-adjust:100%; }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+  font-size:1.06rem; line-height:1.65;
+}
+.note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+.sans{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+.eyebrow{
+  font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+  border-bottom:2px solid var(--green); padding-bottom:.6rem;
+}
+.eyebrow strong{ color:var(--green); font-weight:600; }
+h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+.synopsis{
+  background:var(--green-soft); border-left:4px solid var(--green);
+  padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+}
+.synopsis .label{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+  font-weight:600; display:block; margin-bottom:.25rem;
+}
+.prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+.prior .head{
+  background:linear-gradient(90deg, var(--green), var(--green-deep));
+  color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+}
+.prior .head .spark{ font-size:1.15rem; line-height:1; }
+.prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; letter-spacing:.01em; }
+.prior .body{ padding:1rem 1.1rem 1.15rem; }
+.prior p{ margin:.2rem 0 1rem; }
+.prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+@media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+.case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+.case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+.case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+.case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+.pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+.pe .head{
+  background:var(--green-soft); border-bottom:1px solid var(--rule);
+  padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+}
+.pe .head strong{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--green); font-weight:600;
+}
+.pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+.pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+.pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+.pe li + li{ border-top:1px solid var(--rule); }
+.pe li .tick{
+  flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+  background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+}
+.pe li .txt{ flex:1; }
+.pe li .txt b{ font-weight:600; }
+h2{ font-size:1.25rem; margin:1.8rem 0 .8rem; font-weight:700; }
+ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; }
+ol.questions li{ margin:.45rem 0; }
+
+/* --- powers-of-ten explorer (this note's interactive) --- */
+.sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+.sim .sim-head{
+  background:var(--green); color:#fff; padding:.6rem 1rem;
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+  letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+  display:flex; align-items:center; gap:.5rem;
+}
+.sim .stage{ background:#0f1f16; padding:1.4rem 1.2rem 1.8rem; }
+.sim .panel{ padding:1rem 1.1rem 1.15rem; }
+.ctrl label{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+  color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+}
+.ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+.ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+.scale-rail{ position:relative; height:64px; margin:1rem 0 .4rem; }
+.scale-rail .track{
+  position:absolute; left:0; right:0; top:30px; height:4px; border-radius:2px;
+  background:linear-gradient(90deg,#3a6,#7fd1a0,#ffd27f,#f0a15f,#e06a4f);
+}
+.scale-rail .puck{
+  position:absolute; top:16px; width:32px; height:32px; margin-left:-16px;
+  border-radius:50%; background:#eafaf0; border:3px solid var(--green);
+  display:flex; align-items:center; justify-content:center;
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.7rem; font-weight:700; color:var(--green-deep);
+  transition:left .15s ease;
+}
+.scale-readout{
+  font-family:"Segoe UI", system-ui, sans-serif; text-align:center; color:#eafaf0; margin-top:.6rem;
+}
+.scale-readout .mag{ font-size:1.6rem; font-weight:700; color:#ffd27f; }
+.scale-readout .obj{ font-size:1.05rem; margin-top:.2rem; }
+.scale-readout .obj small{ display:block; color:#9fc4ad; font-size:.82rem; margin-top:.15rem; }
+.readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+.readout .chip{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+  background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+  padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+}
+.readout .chip b{ color:var(--green-deep); }
+
+/* --- fill-in data table (order-of-magnitude worksheet) --- */
+.datatable{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+.datatable table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+.datatable th, .datatable td{ text-align:left; padding:.55rem .75rem; border-bottom:1px solid var(--rule); vertical-align:middle; }
+.datatable th{ background:var(--green-soft); color:var(--green-deep); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; }
+.datatable tr:last-child td{ border-bottom:0; }
+.datatable input[type=text]{
+  width:100%; box-sizing:border-box; font:inherit; padding:.35rem .5rem;
+  border:1px solid var(--rule); border-radius:5px; background:#fff;
+}
+.datatable .toggle-row{ padding:.6rem .75rem; background:#fbfdfc; }
+.btn{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+  border:1px solid var(--green); background:#fff; color:var(--green);
+  padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+}
+.btn.primary{ background:var(--green); color:#fff; }
+.btn:hover{ filter:brightness(.96); }
+
+/* --- predict-first / probe --- */
+.probe{
+  border:1px solid var(--rule); border-left:4px solid var(--amber);
+  border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+}
+.probe .q{ font-weight:700; margin:0 0 .7rem; }
+.probe .opts{ display:grid; gap:.5rem; }
+.probe .opt{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+  border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+}
+.probe .opt:hover{ border-color:var(--amber); }
+.probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+.probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+.probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+/* --- video slot --- */
+.video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+.video-slot .label{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+}
+.video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.video-placeholder{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+}
+
+/* --- exit ticket --- */
+.ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+.ticket .t-head{
+  background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff;
+  padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif;
+}
+.ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+.ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+.ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+.q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+.q-card.right{ border-left-color:var(--green); }
+.q-card.wrong{ border-left-color:#c0392b; }
+.q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+.q-card .qtext .num{ color:var(--green); }
+.q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+.q-opts label{
+  display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule);
+  border-radius:6px; padding:.5rem .7rem; cursor:pointer;
+}
+.q-opts label:hover{ border-color:var(--green); }
+.q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+.q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+.q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.q-num .unit{ color:var(--muted); margin-left:.45rem; }
+.q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+.q-card.right .qfb{ color:var(--green-deep); }
+.q-card.wrong .qfb{ color:#c0392b; }
+.ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+.ticket .score{
+  font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+  margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+  border:1px solid var(--rule); display:none;
+}
+.ticket .score.show{ display:block; }
+.preview-note{
+  background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+  padding:.7rem 1rem; margin:.9rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+}
+.preview-note strong{ color:var(--amber); }
+.downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+@media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+.dl-card{
+  border:1px solid var(--rule); border-radius:8px; padding: .9rem 1rem;
+  text-decoration:none; color:inherit; display:block; background:#fff;
+}
+.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+.dl-card .kind{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+}
+.dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+.dl-card .hint{ font-size:.88rem; color:var(--muted); }
+footer{
+  margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow">
+<span><strong>FLCC Physics</strong></span>
+<span>Module 1 · Measurements and Motion</span>
+<span>Note 1</span>
+</div>
+
+<h1>Scales of Nature</h1>
+
+<div class="synopsis">
+<span class="label">Synopsis</span>
+We explore objects in the universe from very small to extremely large. Because the range of numbers spanned is unimaginably large, we describe the sizes in terms of <b>orders of magnitude</b> &mdash; the number of zeros in the number.
+</div>
+
+<div class="pe">
+<div class="head">
+<strong>Performance Expectations</strong>
+<span>By the end of this note, you will be able to&hellip;</span>
+</div>
+<ul>
+<li><span class="tick">PE1</span><span class="txt"><b>Describe quantities</b> in order-of-magnitude scales (10 to a power) rather than exact numbers.</span></li>
+<li><span class="tick">PE2</span><span class="txt"><b>Compare sizes and masses</b> across many orders of magnitude, from a quark to the observable universe.</span></li>
+<li><span class="tick">PE3</span><span class="txt"><b>Use ratios of powers of ten</b> to answer "how many times bigger/smaller" and "how many of these fit inside that" questions.</span></li>
+</ul>
+</div>
+
+<div class="prior">
+<div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+<div class="body">
+<p>You already reach for "order of magnitude" thinking without calling it that:</p>
+<div class="cases">
+<div class="case"><span class="emoji">🏙️</span><b>City vs. country</b><small>A city has ~1 million people; a country can have ~100&ndash;1000x more — you don't need the exact count to compare scale.</small></div>
+<div class="case"><span class="emoji">💵</span><b>"Six figures"</b><small>People describe salaries or prices by number of digits — that's an order-of-magnitude shorthand already.</small></div>
+<div class="case"><span class="emoji">🔬</span><b>Ant vs. elephant</b><small>You instantly know these differ by orders of magnitude in size and mass, without weighing either one.</small></div>
+</div>
+</div>
+</div>
+
+<h2>Instructions</h2>
+<ol class="questions">
+<li>Go to <a href="https://scaleofuniverse.com/en" target="_blank" rel="noopener">scaleofuniverse.com/en</a> (or search "scale of the universe").</li>
+<li>For each object below, estimate an order-of-magnitude size in meters (write as 10 to a power; a range like 10<sup>a</sup>&ndash;10<sup>b</sup> is fine).</li>
+</ol>
+
+<h2>Play with it: the powers-of-ten explorer</h2>
+<p>Drag the slider from the smallest to the largest scales in the universe. The puck jumps to a real object at each order of magnitude — use it to sanity-check the estimates you write in the table below.</p>
+
+<div class="sim" id="sim">
+<div class="sim-head"><span>▶</span> Interactive · Powers-of-Ten Explorer</div>
+<div class="stage">
+<div class="scale-rail">
+<div class="track"></div>
+<div class="puck" id="puck">10<sup>n</sup></div>
+</div>
+<div class="scale-readout">
+<div class="mag">10<sup id="magExp">0</sup> m</div>
+<div class="obj" id="objName">&mdash;<small id="objNote"></small></div>
+</div>
+</div>
+<div class="panel">
+<div class="ctrl">
+<label for="scaleSlider">Order of magnitude <span class="val"><span id="scaleVal">0</span></span></label>
+<input type="range" id="scaleSlider" min="-18" max="27" step="1" value="0">
+</div>
+<div class="readout">
+<span class="chip">Range shown: <b>10<sup>-18</sup></b> to <b>10<sup>27</sup></b> m</span>
+<span class="chip">Span: <b id="spanOut">45</b> orders of magnitude</span>
+</div>
+</div>
+</div>
+
+<div class="probe" id="probe">
+<p class="q">Predict first: the observable universe is roughly 10<sup>27</sup> m across. A quark is roughly 10<sup>-18</sup> m. About how many orders of magnitude separate them?</p>
+<div class="opts">
+<button class="opt" data-correct="false">9</button>
+<button class="opt" data-correct="true">45</button>
+<button class="opt" data-correct="false">27</button>
+</div>
+<div class="feedback" id="probeFb" role="status"></div>
+</div>
+
+<h2>Q1&ndash;Q7: size and mass ratios</h2>
+<ol class="questions">
+<li>By how many orders of magnitude (powers of 10) is the largest larger than the smallest? (Ratio of large to small = difference in the exponents.)</li>
+<li>How many would span a typical human if laid end to end? i) Atom: ____ ii) Cell: ____</li>
+<li>What is the ratio of the largest to the smallest mass?</li>
+<li>If the universe's mass is the total mass of all galaxies, roughly how many galaxies make up the universe? Show your calculation.</li>
+<li>If a galaxy's mass is roughly the total mass of all its stars, roughly how many stars make up a galaxy? Show your calculation.</li>
+<li>Based on Q4 and Q5, roughly how many stars are in the universe?</li>
+<li>Roughly how many drops of water make up all the liquid water on Earth?</li>
+</ol>
+
+<h2>Size table (fill in your estimates)</h2>
+<div class="datatable">
+<table>
+<thead><tr><th>Object</th><th>Order of magnitude (m)</th></tr></thead>
+<tbody id="sizeTable"></tbody>
+</table>
+<div class="toggle-row"><button class="btn" id="sizeReveal">Show typical reference values</button></div>
+</div>
+
+<h2>Mass table (fill in your estimates)</h2>
+<div class="datatable">
+<table>
+<thead><tr><th>Object</th><th>Order of magnitude (kg)</th></tr></thead>
+<tbody id="massTable"></tbody>
+</table>
+<div class="toggle-row"><button class="btn" id="massReveal">Show typical reference values</button></div>
+</div>
+
+<h2>Watch: working through the note</h2>
+<div class="video-slot">
+<span class="label">Walkthrough video · ~15 min</span>
+<!-- Replace with your embed: <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N1 walkthrough with Dr. Cho"></iframe></div> -->
+<div class="video-frame"><div class="video-placeholder">Video embed goes here.</div></div>
+</div>
+
+<p class="preview-note"><strong>Looking ahead:</strong> orders of magnitude come back constantly in this course — from the size of atoms in later units to the numbers you'll compute with scientific notation in Note 2. Getting comfortable estimating scale now pays off all semester.</p>
+
+<div class="ticket" id="ticket">
+<div class="t-head">
+<strong>🎟️ Exit ticket</strong>
+<span class="sub">Four quick questions — check yourself before you close this note.</span>
+</div>
+<div class="t-body">
+
+<div class="q-card" id="card-q1">
+<p class="qtext"><span class="num">Q1.</span> A human is roughly 10<sup>0</sup> m tall. A cell is roughly 10<sup>-5</sup> m. About how many cells, laid end to end, would span a human?</p>
+<div class="q-opts">
+<label><input type="radio" name="q1" value="a"> 10</label>
+<label><input type="radio" name="q1" value="b"> 10,000</label>
+<label><input type="radio" name="q1" value="c"> 100,000</label>
+<label><input type="radio" name="q1" value="d"> 10,000,000</label>
+</div>
+<div class="qfb"></div>
+</div>
+
+<div class="q-card" id="card-q2">
+<p class="qtext"><span class="num">Q2.</span> If Object A is 10<sup>8</sup> m and Object B is 10<sup>3</sup> m, how many orders of magnitude bigger is A than B?</p>
+<div class="q-num">
+<input type="number" id="q2input" step="any" inputmode="decimal" aria-label="orders of magnitude">
+<span class="unit">orders of magnitude</span>
+</div>
+<div class="qfb"></div>
+</div>
+
+<div class="q-card" id="card-q3">
+<p class="qtext"><span class="num">Q3.</span> Which pair of objects differs by the <em>most</em> orders of magnitude?</p>
+<div class="q-opts">
+<label><input type="radio" name="q3" value="a"> A grain of sand and a compact car</label>
+<label><input type="radio" name="q3" value="b"> A cell and a human</label>
+<label><input type="radio" name="q3" value="c"> A proton and the Sun</label>
+<label><input type="radio" name="q3" value="d"> The Earth and the Milky Way</label>
+</div>
+<div class="qfb"></div>
+</div>
+
+<div class="q-card" id="card-q4">
+<p class="qtext"><span class="num">Q4.</span> "Order of magnitude" thinking is most useful when&hellip;</p>
+<div class="q-opts">
+<label><input type="radio" name="q4" value="a"> You need an answer accurate to the penny.</label>
+<label><input type="radio" name="q4" value="b"> The numbers involved span many powers of ten and exact values aren't the point.</label>
+<label><input type="radio" name="q4" value="c"> You are measuring with a ruler.</label>
+<label><input type="radio" name="q4" value="d"> You only have two objects to compare.</label>
+</div>
+<div class="qfb"></div>
+</div>
+
+<div class="actions">
+<button class="btn primary" id="ticketCheck">Check my answers</button>
+<button class="btn" id="ticketReset">Clear</button>
+</div>
+<div class="score" id="ticketScore" role="status"></div>
+</div>
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+<span class="kind">Before the video</span>
+<span class="name">Guided notes — blank (PDF)</span>
+<span class="hint">Print or open on a tablet and fill it in as you follow along.</span>
+</a>
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+<span class="kind">After the module</span>
+<span class="name">Completed notes (PDF)</span>
+<span class="hint">Released when Module 1 closes — check your own work against it.</span>
+</a>
+</div>
+
+<footer>
+Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+</footer>
+
+</div>
+
+<script>
+/* ---------- powers-of-ten explorer ---------- */
+(function(){
+  var objects = [
+    {e:-18, name:"Quark", note:"smaller than any atomic particle we can resolve"},
+    {e:-15, name:"Proton / nucleus", note:"10⁻¹⁵ m"},
+    {e:-10, name:"Atom", note:"a single hydrogen atom is about this size"},
+    {e:-9,  name:"Small molecule", note:"a few atoms bonded together"},
+    {e:-7,  name:"Large molecule", note:"e.g. a protein, tens of thousands of atoms"},
+    {e:-5,  name:"Cell", note:"a typical animal cell"},
+    {e:0,   name:"Human height", note:"about 1–2 m"},
+    {e:7,   name:"Radius of the Earth", note:"≈ 6.4×10⁶ m"},
+    {e:8,   name:"Radius of a large planet", note:"e.g. Jupiter"},
+    {e:13,  name:"Size of the Solar System", note:"out to the Kuiper Belt"},
+    {e:16,  name:"Distance to Proxima Centauri", note:"nearest star to the Sun"},
+    {e:21,  name:"Size of the Milky Way", note:"our home galaxy"},
+    {e:24,  name:"Size of a galaxy cluster", note:""},
+    {e:25,  name:"Size of a supercluster", note:""},
+    {e:27,  name:"Size of the observable universe", note:""}
+  ];
+  var slider = document.getElementById('scaleSlider');
+  var puck = document.getElementById('puck');
+  var magExp = document.getElementById('magExp');
+  var scaleVal = document.getElementById('scaleVal');
+  var objName = document.getElementById('objName');
+  var objNote = document.getElementById('objNote');
+  var min = parseInt(slider.min,10), max = parseInt(slider.max,10);
+
+  function nearest(e){
+    var best = objects[0], bestD = Math.abs(objects[0].e - e);
+    objects.forEach(function(o){
+      var d = Math.abs(o.e - e);
+      if(d < bestD){ best = o; bestD = d; }
+    });
+    return best;
+  }
+
+  function update(){
+    var e = parseInt(slider.value, 10);
+    var pct = (e - min) / (max - min) * 100;
+    puck.style.left = pct + '%';
+    magExp.textContent = e;
+    scaleVal.textContent = e;
+    var o = nearest(e);
+    objName.innerHTML = o.name + (o.note ? '<small>' + o.note + '</small>' : '<small>10ᵉˢ ' + e + ' m — no landmark object exactly here</small>');
+  }
+  slider.addEventListener('input', update);
+  update();
+})();
+
+/* ---------- predict-first probe ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct');
+        fb.style.color = '#134a29';
+        fb.textContent = '✓ Right — 27 − (−18) = 45 orders of magnitude. That is an almost incomprehensible range.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Subtract the exponents: 27 − (−18) = 45.';
+      }
+    });
+  });
+})();
+
+/* ---------- fill-in data tables ---------- */
+(function(){
+  var sizeObjects = [
+    ["Quark", "—"], ["Nucleus", "—"], ["Atom", "10⁻¹⁰"],
+    ["Small molecule (a few atoms)", "—"], ["Large molecules (e.g. proteins)", "—"],
+    ["Cell", "10⁻⁵"], ["Human height", "10⁰"], ["Radius of the Earth", "10⁷"],
+    ["Radius of a large planet", "10⁸"], ["Size of Solar System (Kuiper Belt)", "10¹³"],
+    ["Distance to Proxima Centauri", "10¹⁶"], ["Size of the Milky Way Galaxy", "10²¹"],
+    ["Size of clusters of galaxies", "10²⁴"], ["Size of superclusters of galaxies", "10²⁵"],
+    ["Size of the observable universe", "10²⁷"]
+  ];
+  var massObjects = [
+    ["Electron", "10⁻³⁰"], ["Proton", "10⁻²⁷"], ["Cell", "10⁻¹³"],
+    ["Grain of sand", "10⁻⁶"], ["Drop of water", "10⁻⁵"], ["Cell phone", "10⁻¹"],
+    ["Human", "10²"], ["Compact car", "10³"], ["Everest (mountain)", "10¹²"],
+    ["All liquid water on Earth", "10²¹"], ["Earth", "10²⁴"], ["Moon", "10²³"],
+    ["Sun", "10³⁰"], ["Black hole at center of Milky Way", "10³⁷"],
+    ["Milky Way", "10⁴²"], ["Universe", "10⁵³"]
+  ];
+
+  function buildTable(bodyId, data){
+    var tbody = document.getElementById(bodyId);
+    data.forEach(function(row, i){
+      var tr = document.createElement('tr');
+      var tdName = document.createElement('td');
+      tdName.textContent = row[0];
+      var tdInput = document.createElement('td');
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'e.g. 10^−⁸';
+      input.dataset.ref = row[1];
+      input.id = bodyId + '_' + i;
+      tdInput.appendChild(input);
+      tr.appendChild(tdName); tr.appendChild(tdInput);
+      tbody.appendChild(tr);
+    });
+  }
+  buildTable('sizeTable', sizeObjects);
+  buildTable('massTable', massObjects);
+
+  function wireReveal(btnId, bodyId, data){
+    var btn = document.getElementById(btnId);
+    var shown = false;
+    btn.addEventListener('click', function(){
+      shown = !shown;
+      data.forEach(function(row, i){
+        var input = document.getElementById(bodyId + '_' + i);
+        if(shown){ input.value = row[1]; input.style.background = '#eaf3ed'; }
+        else { input.value=''; input.style.background='#fff'; }
+      });
+      btn.textContent = shown ? 'Hide reference values' : 'Show typical reference values';
+    });
+  }
+  wireReveal('sizeReveal', 'sizeTable', sizeObjects);
+  wireReveal('massReveal', 'massTable', massObjects);
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q1:'d', q3:'c', q4:'b' };
+  var expl = {
+    q1:'human (10⁰) to cell (10⁻⁵) is 5 orders of magnitude → 10⁵ = 10,000,000 cells.',
+    q3:'proton (≈10⁻¹⁵ m) to the Sun (≈10⁹ m) spans roughly 24 orders of magnitude — the widest gap here.',
+    q4:'order-of-magnitude estimates are for comparing scale, not for precise measurement.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong');
+    card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q2input').value);
+    if(Math.abs(v - 5) < 0.05){ correct++; markCard('card-q2', true, '✓ Correct: 8 − 3 = 5 orders of magnitude.'); }
+    else if(isNaN(v)){ markCard('card-q2', false, 'Enter a number.'); }
+    else { markCard('card-q2', false, '✗ Subtract the exponents: 8 − 3 = 5.'); }
+
+    var tail = correct === total ? "Nice — you're ready to move on!"
+      : correct >= 2 ? 'Good start — revisit the ones you missed.'
+      : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q2input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
