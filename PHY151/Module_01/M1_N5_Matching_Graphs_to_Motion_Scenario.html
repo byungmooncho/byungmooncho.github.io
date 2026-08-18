@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N5 — Matching Graphs to Motion Scenario</title>
+<style>
+:root{
+  --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+  --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62; --axis:#1f5fbf;
+}
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:Charter,"Bitstream Charter",Georgia,"Times New Roman",serif; font-size:1.06rem; line-height:1.65; }
+.note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+.eyebrow{ font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em; border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+.eyebrow strong{ color:var(--green); font-weight:600; }
+h1{ font-size:1.85rem; line-height:1.22; margin:1rem 0 .25rem; font-weight:700; }
+.synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+.synopsis .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem; }
+.pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+.pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; }
+.pe .head strong{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); }
+.pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+.pe li{ display:flex; gap:.7rem; padding:.5rem .6rem; }
+.pe li + li{ border-top:1px solid var(--rule); }
+.pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; font-weight:700; }
+h2{ font-size:1.22rem; margin:1.9rem 0 .8rem; font-weight:700; }
+h3{ font-size:1.02rem; margin:1.3rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+.graph-card{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.1rem 0 1.4rem; background:#fbfdfc; }
+.graph-card .gc-head{ background:var(--green); color:#fff; padding:.55rem 1rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; letter-spacing:.05em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.6rem; flex-wrap:wrap; }
+.graph-card canvas{ display:block; width:100%; height:auto; background:#fff; }
+.graph-card .gc-body{ padding:.9rem 1.1rem 1.1rem; }
+.tabs{ display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.7rem; }
+.tabs button{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.78rem; font-weight:600; border:1px solid var(--rule); background:#fff; color:var(--green-deep); padding:.35rem .8rem; border-radius:20px; cursor:pointer; }
+.tabs button.active{ background:var(--green); border-color:var(--green); color:#fff; }
+table.interval{ width:100%; border-collapse:collapse; font-family:"Segoe UI",system-ui,sans-serif; font-size:.88rem; margin:.6rem 0 .3rem; }
+table.interval th, table.interval td{ border:1px solid var(--rule); padding:.4rem .6rem; text-align:left; vertical-align:top; }
+table.interval th{ background:var(--green-soft); color:var(--green-deep); width:6.5rem; }
+table.interval textarea{ width:100%; min-height:2.4rem; border:none; font-family:inherit; font-size:.88rem; resize:vertical; background:transparent; }
+table.interval textarea:focus{ outline:2px solid var(--green); border-radius:4px; }
+.reveal-btn{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.4rem .85rem; border-radius:6px; cursor:pointer; margin-top:.3rem; }
+.reveal-box{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; background:var(--green-soft); border:1px solid var(--rule); border-radius:6px; padding:.6rem .8rem; margin-top:.6rem; display:none; }
+.reveal-box.show{ display:block; }
+.scenario-desc{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; background:#fff8ec; border:1px solid #ecd9b0; border-radius:8px; padding:.8rem 1rem; margin-bottom:.8rem; }
+.scenario-desc ul{ margin:.3rem 0 0; padding-left:1.2rem; }
+.ask-row{ display:flex; flex-wrap:wrap; gap:.8rem; align-items:center; margin-top:.7rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.88rem; }
+.ask-row label{ font-weight:600; color:var(--green-deep); }
+.ask-row input[type=number]{ font:inherit; width:6.5rem; padding:.35rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.ask-fb{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.84rem; margin-top:.4rem; min-height:1.1em; }
+.probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+.probe .q{ font-weight:700; margin:0 0 .7rem; }
+.probe .opts{ display:grid; gap:.5rem; }
+.probe .opt{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; }
+.probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+.probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+.probe .feedback{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+.video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+.video-slot .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem; }
+.video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.video-placeholder{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cfe4d7; font-family:"Segoe UI",system-ui,sans-serif; font-size:.95rem; text-align:center; padding:1rem; }
+.btn{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+.btn.primary{ background:var(--green); color:#fff; }
+.ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+.ticket .t-head{ background:linear-gradient(90deg,var(--green),var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI",system-ui,sans-serif; }
+.ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+.ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+.q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+.q-card.right{ border-left-color:var(--green); }
+.q-card.wrong{ border-left-color:#c0392b; }
+.q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+.q-card .qtext .num{ color:var(--green); }
+.q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-opts label{ display:flex; gap:.55rem; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+.q-num{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-num input[type=number]{ font:inherit; width:8rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.q-card .qfb{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+.q-card.right .qfb{ color:var(--green-deep); }
+.q-card.wrong .qfb{ color:#c0392b; }
+.ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+.ticket .score{ font-family:"Segoe UI",system-ui,sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+.ticket .score.show{ display:block; }
+.downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+@media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+.dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+.dl-card .kind{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+.dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+.dl-card .hint{ font-size:.88rem; color:var(--muted); }
+footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 · Measurements and Motion</span><span>Note 5</span></div>
+<h1>Constant Speed Motion: Matching Graphs to Motion Scenario</h1>
+
+<div class="synopsis">
+<span class="label">Synopsis</span>
+Motion graphs <em>quantitatively</em> encapsulate the motion of an object — we can learn the position and speed of the object as a function of time. In this note you will 1) describe the motion in words from a motion graph (distance vs. time), and 2) sketch a motion graph from a written description of an object's motion.
+</div>
+
+<div class="pe">
+<div class="head"><strong>Performance Expectations</strong></div>
+<ul>
+<li><span class="tick">PE1</span>Give a quantitative description of an object's motion from a motion graph.</li>
+<li><span class="tick">PE2</span>Draw the motion graph from a description of an object's motion.</li>
+</ul>
+</div>
+
+<div class="probe" id="probe">
+<p class="q">Predict first: on a distance-vs-time graph, a flat (horizontal) segment means the object is...</p>
+<div class="opts">
+<button class="opt" data-correct="true">Stopped — not moving</button>
+<button class="opt" data-correct="false">Moving at constant speed</button>
+<button class="opt" data-correct="false">Speeding up</button>
+</div>
+<div class="feedback" id="probeFb" role="status"></div>
+</div>
+
+<h2>1) Describe the motion from the graph</h2>
+<p>Each graph below plots distance vs. time for an object. For each time interval, describe: how far did it go, was it forward or backward, and how fast? Type your answer, then reveal the model description.</p>
+
+<div class="graph-card">
+<div class="gc-head"><span>Graph A</span><span>Distance vs. Time</span></div>
+<canvas id="cvA" width="680" height="260"></canvas>
+<div class="gc-body">
+<table class="interval">
+<tr><th>0 – 10 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>10 – 20 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+</table>
+<button class="reveal-btn" data-reveal="revA">Reveal model description</button>
+<div class="reveal-box" id="revA">
+<strong>0–10 s:</strong> moves forward (away from start) 5 m in 10 s → constant speed 0.5 m/s forward.<br>
+<strong>10–20 s:</strong> moves backward 5 m in 10 s, back to the start → constant speed 0.5 m/s backward.
+</div>
+</div>
+</div>
+
+<div class="graph-card">
+<div class="gc-head"><span>Graph B</span><span>Distance vs. Time</span></div>
+<canvas id="cvB" width="680" height="260"></canvas>
+<div class="gc-body">
+<table class="interval">
+<tr><th>0 – 5 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>5 – 10 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>10 – 20 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+</table>
+<button class="reveal-btn" data-reveal="revB">Reveal model description</button>
+<div class="reveal-box" id="revB">
+<strong>0–5 s:</strong> forward 5 m in 5 s → constant speed 1 m/s forward.<br>
+<strong>5–10 s:</strong> flat — stopped for 5 s.<br>
+<strong>10–20 s:</strong> backward 5 m in 10 s, back to the start → constant speed 0.5 m/s backward.
+</div>
+</div>
+</div>
+
+<div class="graph-card">
+<div class="gc-head"><span>Graph C</span><span>Distance vs. Time</span></div>
+<canvas id="cvC" width="680" height="260"></canvas>
+<div class="gc-body">
+<table class="interval">
+<tr><th>0 – 5 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>5 – 8 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>8 – 10 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>10 – 11 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>11 – 13 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>13 – 15 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+<tr><th>15 – 20 s</th><td><textarea placeholder="How far? Forward or backward? How fast?"></textarea></td></tr>
+</table>
+<button class="reveal-btn" data-reveal="revC">Reveal model description</button>
+<div class="reveal-box" id="revC">
+<strong>0–5 s:</strong> forward 2.5 m → 0.5 m/s forward.<br>
+<strong>5–8 s:</strong> backward 4.5 m in 3 s → 1.5 m/s backward (passes the start and keeps going).<br>
+<strong>8–10 s:</strong> flat at −2 m — stopped for 2 s.<br>
+<strong>10–11 s:</strong> forward 2 m in 1 s → 2 m/s forward (back to the start).<br>
+<strong>11–13 s:</strong> flat at 0 m — stopped for 2 s.<br>
+<strong>13–15 s:</strong> forward 2.5 m in 2 s → 1.25 m/s forward.<br>
+<strong>15–20 s:</strong> backward 2.5 m in 5 s → 0.5 m/s backward (back to the start).
+</div>
+</div>
+</div>
+
+<h2>2) Sketch the graph from the description</h2>
+<p>Each box below describes an object's motion. Use the tabs to check your sketch of distance, speed, and acceleration vs. time — then answer the questions.</p>
+
+<div class="graph-card">
+<div class="gc-head"><span>Scenario 1</span><span id="tabsHeadS1"></span></div>
+<div class="scenario-desc">
+<ul>
+<li>Move forward at 1 m/s for 2 s.</li>
+<li>Stop for 2 s.</li>
+<li>Move forward at 2 m/s for 2 s.</li>
+<li>Stop for 4 s.</li>
+<li>Move forward at 0.5 m/s for 4 s.</li>
+<li>Move backward at 1 m/s for 6 s.</li>
+</ul>
+</div>
+<div class="gc-body">
+<div class="tabs" data-target="cvS1">
+<button class="active" data-mode="d">Distance</button>
+<button data-mode="v">Speed</button>
+<button data-mode="a">Acceleration</button>
+</div>
+</div>
+<canvas id="cvS1" width="680" height="260"></canvas>
+<div class="gc-body">
+<div class="ask-row">
+<label for="s1where">Q) Where am I at t = 20 s? (m)</label>
+<input type="number" id="s1where" step="any">
+<button class="btn" data-check="s1where">Check</button>
+</div>
+<div class="ask-fb" id="s1whereFb"></div>
+</div>
+</div>
+
+<div class="graph-card">
+<div class="gc-head"><span>Scenario 2</span><span id="tabsHeadS2"></span></div>
+<div class="scenario-desc">
+<ul>
+<li>Move backward at 1 m/s for 4 s.</li>
+<li>Stop for 4 s.</li>
+<li>Move forward at 2 m/s for 4 s.</li>
+<li>Stop for 2 s.</li>
+<li>Move backward 4 m in 6 s.</li>
+</ul>
+</div>
+<div class="gc-body">
+<div class="tabs" data-target="cvS2">
+<button class="active" data-mode="d">Distance</button>
+<button data-mode="v">Speed</button>
+<button data-mode="a">Acceleration</button>
+</div>
+</div>
+<canvas id="cvS2" width="680" height="260"></canvas>
+<div class="gc-body">
+<div class="ask-row">
+<label for="s2where">Q) Where am I at t = 20 s? (m)</label>
+<input type="number" id="s2where" step="any">
+<button class="btn" data-check="s2where">Check</button>
+</div>
+<div class="ask-fb" id="s2whereFb"></div>
+<div class="ask-row">
+<label for="s2speed">Q) Final speed (m/s, magnitude)</label>
+<input type="number" id="s2speed" step="any">
+<button class="btn" data-check="s2speed">Check</button>
+</div>
+<div class="ask-fb" id="s2speedFb"></div>
+</div>
+</div>
+
+<div class="graph-card">
+<div class="gc-head"><span>Scenario 3</span><span id="tabsHeadS3"></span></div>
+<div class="scenario-desc">
+<ul>
+<li>Move forward at 2 m/s for 4 s.</li>
+<li>Stop for 2 s.</li>
+<li>Move backward at 2 m/s for 8 s.</li>
+<li>Move forward at 1 m/s for 6 s.</li>
+</ul>
+</div>
+<div class="gc-body">
+<div class="tabs" data-target="cvS3">
+<button class="active" data-mode="d">Distance</button>
+<button data-mode="v">Speed</button>
+<button data-mode="a">Acceleration</button>
+</div>
+</div>
+<canvas id="cvS3" width="680" height="260"></canvas>
+<div class="gc-body">
+<div class="ask-row">
+<label for="s3where">Q) Where am I at t = 20 s? (m)</label>
+<input type="number" id="s3where" step="any">
+<button class="btn" data-check="s3where">Check</button>
+</div>
+<div class="ask-fb" id="s3whereFb"></div>
+<div class="ask-row">
+<label for="s3speed">Q) Final speed (m/s, magnitude)</label>
+<input type="number" id="s3speed" step="any">
+<button class="btn" data-check="s3speed">Check</button>
+</div>
+<div class="ask-fb" id="s3speedFb"></div>
+</div>
+</div>
+
+<h2>Watch: working through the note</h2>
+<div class="video-slot"><span class="label">Walkthrough video · ~18 min</span><div class="video-frame"><div class="video-placeholder">Video embed goes here.</div></div></div>
+
+<div class="ticket" id="ticket">
+<div class="t-head"><strong>🎟️ Exit ticket</strong><span class="sub">Four quick questions.</span></div>
+<div class="t-body">
+<div class="q-card" id="card-q1">
+<p class="qtext"><span class="num">Q1.</span> On a distance-vs-time graph, a steeper slope means...</p>
+<div class="q-opts">
+<label><input type="radio" name="q1" value="a"> A slower speed</label>
+<label><input type="radio" name="q1" value="b"> A faster speed</label>
+<label><input type="radio" name="q1" value="c"> The object stopped</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q2">
+<p class="qtext"><span class="num">Q2.</span> A downward-sloping segment on a distance-vs-time graph means the object is moving...</p>
+<div class="q-opts">
+<label><input type="radio" name="q2" value="a"> Forward</label>
+<label><input type="radio" name="q2" value="b"> Backward</label>
+<label><input type="radio" name="q2" value="c"> Not at all</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q3">
+<p class="qtext"><span class="num">Q3.</span> An object moves forward at 2 m/s for 3 s, then stops for 2 s. How far has it traveled from start when it stops?</p>
+<div class="q-num"><input type="number" id="q3input" step="any"></div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q4">
+<p class="qtext"><span class="num">Q4.</span> During a "stop" interval on a distance-vs-time graph, the speed-vs-time graph shows...</p>
+<div class="q-opts">
+<label><input type="radio" name="q4" value="a"> A flat line at zero</label>
+<label><input type="radio" name="q4" value="b"> A steep spike</label>
+<label><input type="radio" name="q4" value="c"> A curve</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="actions"><button class="btn primary" id="ticketCheck">Check my answers</button><button class="btn" id="ticketReset">Clear</button></div>
+<div class="score" id="ticketScore" role="status"></div>
+</div>
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">Before the video</span><span class="name">Guided notes — blank (PDF)</span><span class="hint">Print or open on a tablet and fill it in as you follow along.</span></a>
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">Released when Module 1 closes.</span></a>
+</div>
+
+<footer>Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151</footer>
+</div>
+
+<script>
+(function(){
+  var AXIS='#1f5fbf', GREEN='#1e6b3c', GRIDLINE='#d7e2da', INK='#1d2b23', MUTED='#5c6b62';
+
+  function setupAxes(ctx, W, H, tMax, yMin, yMax, yLabel){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+    var gx0=55, gx1=W-20, gy0=18, gy1=H-32;
+    ctx.strokeStyle=AXIS; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(gx0,gy0); ctx.lineTo(gx0,gy1); ctx.lineTo(gx1,gy1); ctx.stroke();
+    ctx.fillStyle=INK; ctx.font='12px Segoe UI, sans-serif';
+    ctx.fillText(yLabel, gx0, gy0-4);
+    ctx.fillText('t (s)', gx1-24, gy1+26);
+    ctx.font='10.5px Segoe UI, sans-serif'; ctx.fillStyle=MUTED;
+    for(var t=0;t<=tMax;t+=(tMax>15?5:2)){
+      var x = gx0+(t/tMax)*(gx1-gx0);
+      ctx.strokeStyle=GRIDLINE; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x,gy0); ctx.lineTo(x,gy1); ctx.stroke();
+      ctx.fillText(t, x-4, gy1+14);
+    }
+    var zeroY = gy1 - ((0-yMin)/(yMax-yMin))*(gy1-gy0);
+    ctx.strokeStyle=GRIDLINE; ctx.beginPath(); ctx.moveTo(gx0,zeroY); ctx.lineTo(gx1,zeroY); ctx.stroke();
+    ctx.fillText('0', gx0-14, zeroY+4);
+    return {gx0:gx0, gx1:gx1, gy0:gy0, gy1:gy1, zeroY:zeroY,
+      X:function(t){ return gx0+(t/tMax)*(gx1-gx0); },
+      Y:function(v){ return gy1 - ((v-yMin)/(yMax-yMin))*(gy1-gy0); } };
+  }
+
+  function drawPolyline(ctx, ax, pts, step){
+    ctx.strokeStyle=GREEN; ctx.lineWidth=2.5; ctx.beginPath();
+    for(var i=0;i<pts.length;i++){
+      var x=ax.X(pts[i].t), y=ax.Y(pts[i].d);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+  function drawSteps(ctx, ax, segs){
+    ctx.strokeStyle=GREEN; ctx.lineWidth=2.5; ctx.beginPath();
+    for(var i=0;i<segs.length;i++){
+      var s=segs[i];
+      var x0=ax.X(s.t0), x1=ax.X(s.t1), y=ax.Y(s.v);
+      if(i===0) ctx.moveTo(x0,y); else ctx.lineTo(x0,y);
+      ctx.lineTo(x1,y);
+    }
+    ctx.stroke();
+    ctx.strokeStyle='#c9d6ce'; ctx.setLineDash([3,3]); ctx.lineWidth=1;
+    for(var j=0;j<segs.length-1;j++){
+      var xt=ax.X(segs[j].t1);
+      ctx.beginPath(); ctx.moveTo(xt, ax.Y(segs[j].v)); ctx.lineTo(xt, ax.Y(segs[j+1].v)); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+  function drawAccelFlat(ctx, ax, transitions, tMax){
+    ctx.strokeStyle=GREEN; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(ax.X(0), ax.zeroY); ctx.lineTo(ax.X(tMax), ax.zeroY); ctx.stroke();
+    ctx.fillStyle=MUTED; ctx.font='10.5px Segoe UI, sans-serif';
+    transitions.forEach(function(t){
+      ctx.strokeStyle=AXIS; ctx.setLineDash([2,2]); ctx.lineWidth=1.2;
+      ctx.beginPath(); ctx.moveTo(ax.X(t), ax.gy0); ctx.lineTo(ax.X(t), ax.gy1); ctx.stroke();
+      ctx.setLineDash([]);
+    });
+  }
+
+  function renderGivenGraph(canvasId, pts){
+    var cv = document.getElementById(canvasId); var ctx = cv.getContext('2d');
+    var ax = setupAxes(ctx, cv.width, cv.height, 20, -3, 6, 'Distance (m)');
+    drawPolyline(ctx, ax, pts);
+  }
+
+  // Graph A: 2-interval (chart10) 0-10 fwd slope .5, 10-20 back slope -.5
+  renderGivenGraph('cvA', [{t:0,d:0},{t:10,d:5},{t:20,d:0}]);
+  // Graph B: 3-interval (chart2) 0-5 fwd, 5-10 stop, 10-20 back
+  renderGivenGraph('cvB', [{t:0,d:0},{t:5,d:5},{t:10,d:5},{t:20,d:0}]);
+  // Graph C: 7-interval (chart1)
+  renderGivenGraph('cvC', [{t:0,d:0},{t:5,d:2.5},{t:8,d:-2},{t:10,d:-2},{t:11,d:0},{t:13,d:0},{t:15,d:2.5},{t:20,d:0}]);
+
+  document.querySelectorAll('.reveal-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var box = document.getElementById(this.getAttribute('data-reveal'));
+      box.classList.toggle('show');
+      this.textContent = box.classList.contains('show') ? 'Hide model description' : 'Reveal model description';
+    });
+  });
+
+  var scenarios = {
+    cvS1: {
+      d: [{t:0,d:0},{t:2,d:2},{t:4,d:2},{t:6,d:6},{t:10,d:6},{t:14,d:8},{t:20,d:2}],
+      v: [{t0:0,t1:2,v:1},{t0:2,t1:4,v:0},{t0:4,t1:6,v:2},{t0:6,t1:10,v:0},{t0:10,t1:14,v:0.5},{t0:14,t1:20,v:-1}],
+      trans:[2,4,6,10,14], vMin:-2, vMax:3, dMin:-1, dMax:9
+    },
+    cvS2: {
+      d: [{t:0,d:0},{t:4,d:-4},{t:8,d:-4},{t:12,d:4},{t:14,d:4},{t:20,d:0}],
+      v: [{t0:0,t1:4,v:-1},{t0:4,t1:8,v:0},{t0:8,t1:12,v:2},{t0:12,t1:14,v:0},{t0:14,t1:20,v:-4/6}],
+      trans:[4,8,12,14], vMin:-2, vMax:3, dMin:-6, dMax:6
+    },
+    cvS3: {
+      d: [{t:0,d:0},{t:4,d:8},{t:6,d:8},{t:14,d:-8},{t:20,d:-2}],
+      v: [{t0:0,t1:4,v:2},{t0:4,t1:6,v:0},{t0:6,t1:14,v:-2},{t0:14,t1:20,v:1}],
+      trans:[4,6,14], vMin:-3, vMax:3, dMin:-10, dMax:9
+    }
+  };
+
+  function renderScenario(id, mode){
+    var s = scenarios[id];
+    var cv = document.getElementById(id); var ctx = cv.getContext('2d');
+    if(mode==='d'){
+      var ax = setupAxes(ctx, cv.width, cv.height, 20, s.dMin, s.dMax, 'Distance (m)');
+      drawPolyline(ctx, ax, s.d);
+    } else if(mode==='v'){
+      var ax2 = setupAxes(ctx, cv.width, cv.height, 20, s.vMin, s.vMax, 'Speed (m/s)');
+      drawSteps(ctx, ax2, s.v);
+    } else {
+      var ax3 = setupAxes(ctx, cv.width, cv.height, 20, -1, 1, 'Acceleration (m/s²)');
+      drawAccelFlat(ctx, ax3, s.trans, 20);
+    }
+  }
+  ['cvS1','cvS2','cvS3'].forEach(function(id){ renderScenario(id,'d'); });
+
+  document.querySelectorAll('.tabs').forEach(function(tabgroup){
+    var target = tabgroup.getAttribute('data-target');
+    tabgroup.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        tabgroup.querySelectorAll('button').forEach(function(x){ x.classList.remove('active'); });
+        this.classList.add('active');
+        renderScenario(target, this.getAttribute('data-mode'));
+      });
+    });
+  });
+
+  var answers = { s1where:2, s2where:0, s2speed:2/3, s3where:-2, s3speed:1 };
+  document.querySelectorAll('[data-check]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = this.getAttribute('data-check');
+      var val = parseFloat(document.getElementById(key).value);
+      var fb = document.getElementById(key+'Fb');
+      var target = answers[key];
+      if(isNaN(val)){ fb.style.color='#c0392b'; fb.textContent='Enter a number.'; return; }
+      if(Math.abs(val-target) < 0.06){ fb.style.color='#134a29'; fb.textContent='✓ Correct — '+ (target) + (key.indexOf('speed')>-1?' m/s.':' m.'); }
+      else { fb.style.color='#c0392b'; fb.textContent='✗ Not quite. Add up each segment\'s signed displacement (or check the final segment\'s rate) and try again.'; }
+    });
+  });
+})();
+
+(function(){
+  var probe = document.getElementById('probe');
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){ this.classList.add('correct'); fb.style.color='#134a29'; fb.textContent='✓ Right — flat means zero slope, which means zero speed: the object is stopped.'; }
+      else { this.classList.add('wrong'); probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); }); fb.style.color='#c0392b'; fb.textContent='✗ A flat segment has zero slope — and slope is speed, so zero slope means the object is stopped.'; }
+    });
+  });
+})();
+
+(function(){
+  var ticket = document.getElementById('ticket');
+  var mc = { q1:'b', q2:'b', q4:'a' };
+  var expl = {
+    q1:'slope on a distance-time graph is speed — a steeper line means a faster speed.',
+    q2:'going backward means distance from the reference point is decreasing, which shows up as a downward slope.',
+    q4:'zero speed at every instant during a stop shows up as a flat line at zero on the speed-vs-time graph.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok?'right':'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct=0, total=4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value===mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — '+expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v-6)<0.05){ correct++; markCard('card-q3', true, '✓ Correct: 2 m/s × 3 s = 6 m, then it stays at 6 m while stopped.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number.'); }
+    else { markCard('card-q3', false, '✗ distance = speed × time = 2 × 3 = 6 m (the stop afterward doesn\'t add distance).'); }
+    var tail = correct===total ? "Nice — you're ready to move on!" : correct>=2 ? 'Good start — revisit the ones you missed.' : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked=false; });
+    document.getElementById('q3input').value='';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent=''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent='';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N9 — Air Rocket Vertical Launch</title>
+<style>
+:root{
+  --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+  --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62; --axis:#1f5fbf;
+}
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:Charter,"Bitstream Charter",Georgia,"Times New Roman",serif; font-size:1.06rem; line-height:1.65; }
+.note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+.eyebrow{ font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em; border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+.eyebrow strong{ color:var(--green); font-weight:600; }
+h1{ font-size:1.9rem; line-height:1.22; margin:1rem 0 .25rem; font-weight:700; }
+.subhead{ font-family:"Segoe UI",system-ui,sans-serif; font-weight:600; color:var(--green-deep); font-size:.95rem; margin:0 0 1rem; }
+.synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+.synopsis .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem; }
+.pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+.pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; }
+.pe .head strong{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); }
+.pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+.pe li{ display:flex; gap:.7rem; padding:.5rem .6rem; }
+.pe li + li{ border-top:1px solid var(--rule); }
+.pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; font-weight:700; }
+h2{ font-size:1.22rem; margin:1.9rem 0 .8rem; font-weight:700; }
+.preamble{ border:1px solid var(--rule); border-radius:10px; padding:1rem 1.1rem; margin:1.2rem 0; background:#fbfdfc; }
+.pq{ margin:0 0 1.1rem; }
+.pq:last-child{ margin-bottom:0; }
+.pq p{ margin:0 0 .4rem; }
+.pq textarea{ width:100%; min-height:2.3rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.88rem; border:1px solid var(--rule); border-radius:6px; padding:.45rem .6rem; resize:vertical; }
+.pq input[type=number]{ font:inherit; width:7rem; padding:.35rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.reveal-btn{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.4rem .85rem; border-radius:6px; cursor:pointer; margin-top:.6rem; }
+.reveal-box{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; background:var(--green-soft); border:1px solid var(--rule); border-radius:6px; padding:.7rem .9rem; margin-top:.6rem; display:none; }
+.reveal-box.show{ display:block; }
+.reveal-box p{ margin:0 0 .5rem; }
+.reveal-box p:last-child{ margin-bottom:0; }
+.calc{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+.calc .calc-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; }
+.calc .panel{ padding:1.1rem; }
+.calc-row{ display:flex; flex-wrap:wrap; gap:.8rem; align-items:center; font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; margin-bottom:.7rem; }
+.calc-row label{ font-weight:600; color:var(--green-deep); min-width:11rem; }
+.calc-row input[type=number]{ font:inherit; width:7rem; padding:.4rem .55rem; border:1px solid var(--rule); border-radius:6px; }
+.readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:.6rem; }
+.readout .chip{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; background:var(--green-soft); border:1px solid var(--rule); border-radius:20px; padding:.3rem .8rem; }
+.readout .chip b{ color:var(--green-deep); }
+table.datatable{ width:100%; border-collapse:collapse; font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; margin:.8rem 0; }
+table.datatable th, table.datatable td{ border:1px solid var(--rule); padding:.4rem .5rem; text-align:center; }
+table.datatable th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+table.datatable td.rowlabel{ background:var(--green-soft); color:var(--green-deep); font-weight:600; text-align:left; }
+table.datatable input[type=number]{ font:inherit; width:4.5rem; padding:.25rem .3rem; border:1px solid var(--rule); border-radius:4px; text-align:center; }
+table.datatable td.computed{ font-weight:700; color:var(--green-deep); background:#f5faf7; }
+.probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+.probe .q{ font-weight:700; margin:0 0 .7rem; }
+.probe .opts{ display:grid; gap:.5rem; }
+.probe .opt{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; }
+.probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+.probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+.probe .feedback{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+.video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+.video-slot .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem; }
+.video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.video-placeholder{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cfe4d7; font-family:"Segoe UI",system-ui,sans-serif; font-size:.95rem; text-align:center; padding:1rem; }
+.btn{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+.btn.primary{ background:var(--green); color:#fff; }
+.ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+.ticket .t-head{ background:linear-gradient(90deg,var(--green),var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI",system-ui,sans-serif; }
+.ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+.ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+.q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+.q-card.right{ border-left-color:var(--green); }
+.q-card.wrong{ border-left-color:#c0392b; }
+.q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+.q-card .qtext .num{ color:var(--green); }
+.q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-opts label{ display:flex; gap:.55rem; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+.q-num{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-num input[type=number]{ font:inherit; width:8rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.q-card .qfb{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+.q-card.right .qfb{ color:var(--green-deep); }
+.q-card.wrong .qfb{ color:#c0392b; }
+.ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+.ticket .score{ font-family:"Segoe UI",system-ui,sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+.ticket .score.show{ display:block; }
+.downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+@media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+.dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+.dl-card .kind{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+.dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+.dl-card .hint{ font-size:.88rem; color:var(--muted); }
+footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 · Measurements and Motion</span><span>Note 9</span></div>
+<h1>Air Rocket Vertical Launch</h1>
+<p class="subhead">The Big Question: How do we get to another planet?</p>
+
+<div class="synopsis">
+<span class="label">Synopsis</span>
+Gravity perpetually pulls us toward the center of the Earth; to reach another planet, a rocket's propulsion must <em>completely</em> overcome that pull. Newton showed a rocket can escape Earth's pull entirely if launched fast enough — the key is launch speed, called the <em>escape velocity</em> (≈11,000 m/s). In this lab, we launch an air rocket to model a vertical launch: we measure its flight time, use it to find the rocket's initial velocity, and then find the maximum height it reached.
+</div>
+
+<div class="pe">
+<div class="head"><strong>Performance Expectations</strong></div>
+<ul>
+<li><span class="tick">PE1</span>Launch air rockets at four thrust levels (low, medium, high, super) and measure flight time.</li>
+<li><span class="tick">PE2</span>Determine initial launch velocity from flight time using v<sub>f</sub> = v<sub>i</sub> + at.</li>
+<li><span class="tick">PE3</span>Determine the maximum height reached by the rocket.</li>
+</ul>
+</div>
+
+<h2>Preamble</h2>
+<div class="preamble">
+<div class="pq"><p><strong>1)</strong> We DEFINE upward as positive, and g = −9.8 m/s². Explain the meaning of the negative sign: the negative sign means the upward motion must ________ against the gr______ force, because this force pulls everything do______, the opposite direction to upward motion.</p><textarea placeholder="Your answer..."></textarea></div>
+<div class="pq"><p><strong>2)</strong> Suppose it took 6 s from launch to falling back. How long did it take to reach the apex? Explain how you got this number.</p>
+<div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.4rem;"><input type="number" step="any" placeholder="s"> seconds</div>
+<textarea placeholder="Explanation..."></textarea></div>
+<div class="pq"><p><strong>3)</strong> At the apex, the rocket's velocity is momentarily zero. Why?</p><textarea placeholder="Your answer..."></textarea></div>
+<div class="pq"><p><strong>4)</strong> The downward trip is a "mirror image" of the upward trip. Explain why, for the upward trip alone (launch to apex), v<sub>i</sub> = −g·(t<sub>flight</sub>/2), where t<sub>flight</sub> is the full flight time (launch to landing).</p><textarea placeholder="Your answer..."></textarea></div>
+<div class="pq"><p><strong>5)</strong> A velocity arrow has length and direction. The length represents s______d. The arrowhead indicates d________n. The arrow as a whole represents v_______y.</p><textarea placeholder="Your answer..."></textarea></div>
+<div class="pq"><p><strong>6)</strong> How is speed different from velocity?</p><textarea placeholder="Your answer..."></textarea></div>
+<div class="pq"><p><strong>7)</strong> The velocity when the rocket falls back to the ground is v<sub>f,ground</sub> = −v<sub>i</sub>. Explain: (i) why v<sub>f,ground</sub> has the same numerical value as v<sub>i</sub>; (ii) why v<sub>f,ground</sub> is the negative of v<sub>i</sub>.</p><textarea placeholder="Your answer..."></textarea></div>
+<div class="pq"><p><strong>8)</strong> If the initial velocity is 30 m/s, what is v<sub>f,ground</sub>?</p><div style="display:flex;gap:.6rem;align-items:center;"><input type="number" step="any" id="q8input"> m/s <button class="btn" id="q8check">Check</button><span id="q8fb" style="font-family:'Segoe UI',sans-serif;font-size:.85rem;"></span></div></div>
+<div class="pq"><p><strong>9)</strong> The flight time is 6 s. Calculate the initial velocity and the maximum height reached. Show all work.</p><textarea placeholder="Show your work..." style="min-height:4rem;"></textarea></div>
+<button class="reveal-btn" id="revealPreamble">Reveal model answers</button>
+<div class="reveal-box" id="preambleAnswers">
+<p><strong>1)</strong> The negative sign means the upward motion must <u>fight</u> against the <u>gravitational</u> force, because this force pulls everything <u>downward</u>, opposite to the upward motion.</p>
+<p><strong>2)</strong> 3 s — by symmetry (mirror image), the trip up takes exactly half the total flight time.</p>
+<p><strong>3)</strong> Because it is the instant the rocket switches from moving upward to moving downward — velocity must pass through zero to reverse direction.</p>
+<p><strong>4)</strong> At the apex, v<sub>f</sub> = 0. Using v<sub>f</sub>=v<sub>i</sub>+at with t = t<sub>flight</sub>/2 (time to the apex): 0 = v<sub>i</sub> + g(t<sub>flight</sub>/2), so v<sub>i</sub> = −g(t<sub>flight</sub>/2).</p>
+<p><strong>5)</strong> The length represents s<u>pee</u>d. The arrowhead indicates d<u>irectio</u>n. The arrow as a whole represents v<u>elocit</u>y.</p>
+<p><strong>6)</strong> Velocity has a direction; speed does not (speed is just the magnitude/length).</p>
+<p><strong>7)</strong> (i) By the up/down mirror symmetry of the trajectory, the rocket returns to the same height with the same speed it left with. (ii) It's moving downward instead of upward, so with upward defined positive, that velocity is negative.</p>
+<p><strong>8)</strong> v<sub>f,ground</sub> = −30 m/s.</p>
+<p><strong>9)</strong> v<sub>i</sub> = −g(t/2) = −(−9.8)(3) = 29.4 m/s. Max height: using v<sub>f</sub>²=v<sub>i</sub>²+2ad with v<sub>f</sub>=0 at apex: d = −v<sub>i</sub>²/(2g) = −(29.4)²/(2×−9.8) = 44.1 m.</p>
+</div>
+</div>
+
+<div class="probe" id="probe">
+<p class="q">Predict first: if the flight time doubles (same rocket, twice the time in the air), what happens to the maximum height?</p>
+<div class="opts">
+<button class="opt" data-correct="false">It also doubles.</button>
+<button class="opt" data-correct="true">It quadruples (×4).</button>
+<button class="opt" data-correct="false">It stays the same.</button>
+</div>
+<div class="feedback" id="probeFb" role="status"></div>
+</div>
+
+<h2>Flight time → initial velocity → max height calculator</h2>
+<p>Enter a flight time to see the physics behind the lab calculations (v<sub>i</sub> = −g·t/2, then d = −v<sub>i</sub>²/2g).</p>
+<div class="calc">
+<div class="calc-head"><span>▶</span> Interactive · Vertical Launch Calculator</div>
+<div class="panel">
+<div class="calc-row">
+<label for="flightT">Flight time (launch → landing)</label>
+<input type="number" id="flightT" step="any" value="6" min="0"> s
+</div>
+<div class="readout">
+<span class="chip">Time to apex = <b id="apexT">3.00</b> s</span>
+<span class="chip">Initial velocity v<sub>i</sub> = <b id="viOut">29.40</b> m/s</span>
+<span class="chip">Max height = <b id="hOut">44.10</b> m</span>
+</div>
+</div>
+</div>
+
+<h2>Lab data: flight time table</h2>
+<p>Launch at each thrust level three times, record flight time, then average. The calculator below auto-fills initial velocity and max height from your averages.</p>
+<div style="overflow-x:auto;">
+<table class="datatable" id="labTable">
+<tr><th>Thrust Strength</th><th>Trial 1 (s)</th><th>Trial 2 (s)</th><th>Trial 3 (s)</th><th>Average Flight Time (s)</th><th>Initial Velocity (m/s)</th><th>Max Height (m)</th></tr>
+<tr data-row="Low"><td class="rowlabel">Low</td><td><input type="number" step="any" class="t1"></td><td><input type="number" step="any" class="t2"></td><td><input type="number" step="any" class="t3"></td><td class="computed avg">—</td><td class="computed vi">—</td><td class="computed h">—</td></tr>
+<tr data-row="Medium"><td class="rowlabel">Medium</td><td><input type="number" step="any" class="t1"></td><td><input type="number" step="any" class="t2"></td><td><input type="number" step="any" class="t3"></td><td class="computed avg">—</td><td class="computed vi">—</td><td class="computed h">—</td></tr>
+<tr data-row="High"><td class="rowlabel">High</td><td><input type="number" step="any" class="t1"></td><td><input type="number" step="any" class="t2"></td><td><input type="number" step="any" class="t3"></td><td class="computed avg">—</td><td class="computed vi">—</td><td class="computed h">—</td></tr>
+<tr data-row="Super"><td class="rowlabel">Super</td><td><input type="number" step="any" class="t1"></td><td><input type="number" step="any" class="t2"></td><td><input type="number" step="any" class="t3"></td><td class="computed avg">—</td><td class="computed vi">—</td><td class="computed h">—</td></tr>
+</table>
+</div>
+<p style="font-size:.9rem;color:var(--muted);">Show your full work for the High Thrust Strength example calculation (v<sub>i</sub> = , then d = ) in your guided notes before checking with your instructor.</p>
+
+<h2>Watch: working through the note</h2>
+<div class="video-slot"><span class="label">Walkthrough video · ~20 min</span><div class="video-frame"><div class="video-placeholder">Video embed goes here.</div></div></div>
+
+<div class="ticket" id="ticket">
+<div class="t-head"><strong>🎟️ Exit ticket</strong><span class="sub">Four quick questions.</span></div>
+<div class="t-body">
+<div class="q-card" id="card-q1">
+<p class="qtext"><span class="num">Q1.</span> At the apex of a vertical launch, the velocity is...</p>
+<div class="q-opts">
+<label><input type="radio" name="q1" value="a"> Zero</label>
+<label><input type="radio" name="q1" value="b"> Maximum</label>
+<label><input type="radio" name="q1" value="c"> Equal to g</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q2">
+<p class="qtext"><span class="num">Q2.</span> If upward is positive, the acceleration g = −9.8 m/s² during the whole flight points...</p>
+<div class="q-opts">
+<label><input type="radio" name="q2" value="a"> Upward, same as launch</label>
+<label><input type="radio" name="q2" value="b"> Downward, opposite the launch</label>
+<label><input type="radio" name="q2" value="c"> Sideways</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q3">
+<p class="qtext"><span class="num">Q3.</span> A rocket has a flight time of 4 s. What is its initial velocity (m/s)? (v<sub>i</sub> = −g·t/2, g = −9.8 m/s²)</p>
+<div class="q-num"><input type="number" id="q3input" step="any"></div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q4">
+<p class="qtext"><span class="num">Q4.</span> Compared to speed, velocity additionally carries information about...</p>
+<div class="q-opts">
+<label><input type="radio" name="q4" value="a"> Direction</label>
+<label><input type="radio" name="q4" value="b"> Mass</label>
+<label><input type="radio" name="q4" value="c"> Time</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="actions"><button class="btn primary" id="ticketCheck">Check my answers</button><button class="btn" id="ticketReset">Clear</button></div>
+<div class="score" id="ticketScore" role="status"></div>
+</div>
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">Before the video</span><span class="name">Guided notes — blank (PDF)</span><span class="hint">Print or open on a tablet and fill it in as you follow along.</span></a>
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">Released when Module 1 closes.</span></a>
+</div>
+
+<footer>Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151</footer>
+</div>
+
+<script>
+(function(){
+  document.getElementById('revealPreamble').addEventListener('click', function(){
+    var box = document.getElementById('preambleAnswers');
+    box.classList.toggle('show');
+    this.textContent = box.classList.contains('show') ? 'Hide model answers' : 'Reveal model answers';
+  });
+  document.getElementById('q8check').addEventListener('click', function(){
+    var v = parseFloat(document.getElementById('q8input').value);
+    var fb = document.getElementById('q8fb');
+    if(Math.abs(v-(-30))<0.1){ fb.style.color='#134a29'; fb.textContent='✓ Correct: −30 m/s.'; }
+    else { fb.style.color='#c0392b'; fb.textContent='✗ v_f,ground = −v_i = −30 m/s.'; }
+  });
+})();
+
+(function(){
+  var g = -9.8;
+  var flightT = document.getElementById('flightT');
+  var apexT = document.getElementById('apexT'), viOut = document.getElementById('viOut'), hOut = document.getElementById('hOut');
+  function calc(){
+    var t = parseFloat(flightT.value);
+    if(isNaN(t) || t<0){ apexT.textContent='—'; viOut.textContent='—'; hOut.textContent='—'; return; }
+    var ta = t/2;
+    var vi = -g*ta;
+    var h = -(vi*vi)/(2*g);
+    apexT.textContent = ta.toFixed(2);
+    viOut.textContent = vi.toFixed(2);
+    hOut.textContent = h.toFixed(2);
+  }
+  flightT.addEventListener('input', calc);
+  calc();
+
+  document.querySelectorAll('#labTable tr[data-row]').forEach(function(row){
+    var t1 = row.querySelector('.t1'), t2 = row.querySelector('.t2'), t3 = row.querySelector('.t3');
+    var avgCell = row.querySelector('.avg'), viCell = row.querySelector('.vi'), hCell = row.querySelector('.h');
+    function update(){
+      var vals = [t1.value, t2.value, t3.value].map(parseFloat).filter(function(v){ return !isNaN(v); });
+      if(vals.length===0){ avgCell.textContent='—'; viCell.textContent='—'; hCell.textContent='—'; return; }
+      var avg = vals.reduce(function(a,b){return a+b;},0)/vals.length;
+      var ta = avg/2, vi = -g*ta, h = -(vi*vi)/(2*g);
+      avgCell.textContent = avg.toFixed(2);
+      viCell.textContent = vi.toFixed(2);
+      hCell.textContent = h.toFixed(2);
+    }
+    [t1,t2,t3].forEach(function(inp){ inp.addEventListener('input', update); });
+  });
+})();
+
+(function(){
+  var probe = document.getElementById('probe');
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){ this.classList.add('correct'); fb.style.color='#134a29'; fb.textContent='✓ Right — v_i is proportional to t, and max height is proportional to v_i². Double t → double v_i → height ×4.'; }
+      else { this.classList.add('wrong'); probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); }); fb.style.color='#c0392b'; fb.textContent='✗ v_i scales with t (double time → double v_i), but height scales with v_i² — so height scales with t²: double time means quadruple height.'; }
+    });
+  });
+})();
+
+(function(){
+  var ticket = document.getElementById('ticket');
+  var mc = { q1:'a', q2:'b', q4:'a' };
+  var expl = {
+    q1:'the rocket momentarily stops moving upward and starts moving downward, so velocity passes through zero.',
+    q2:'gravity always pulls downward, opposite the upward launch direction — that\'s the negative sign.',
+    q4:'velocity = speed + direction; speed alone has no direction.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok?'right':'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct=0, total=4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value===mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — '+expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v-19.6)<0.15){ correct++; markCard('card-q3', true, '✓ Correct: v_i = −g·t/2 = 9.8×2 = 19.6 m/s.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number.'); }
+    else { markCard('card-q3', false, '✗ v_i = −g·(t/2) = −(−9.8)(2) = 19.6 m/s.'); }
+    var tail = correct===total ? "Nice — you're ready to move on!" : correct>=2 ? 'Good start — revisit the ones you missed.' : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked=false; });
+    document.getElementById('q3input').value='';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent=''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent='';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>

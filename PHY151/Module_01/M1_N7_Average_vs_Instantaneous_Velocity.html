@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N7 — Average Velocity vs. Instantaneous Velocity</title>
+<style>
+:root{
+  --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+  --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62; --axis:#1f5fbf; --sec:#c0392b; --tan:#8e44ad;
+}
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:Charter,"Bitstream Charter",Georgia,"Times New Roman",serif; font-size:1.06rem; line-height:1.65; }
+.note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+.eyebrow{ font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em; border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+.eyebrow strong{ color:var(--green); font-weight:600; }
+h1{ font-size:1.7rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+.synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+.synopsis .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem; }
+.pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+.pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; }
+.pe .head strong{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); }
+.pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+.pe li{ display:flex; gap:.7rem; padding:.5rem .6rem; }
+.pe li + li{ border-top:1px solid var(--rule); }
+.pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; font-weight:700; }
+h2{ font-size:1.22rem; margin:1.9rem 0 .8rem; font-weight:700; }
+.preamble{ border:1px solid var(--rule); border-radius:10px; padding:1rem 1.1rem; margin:1.2rem 0; background:#fbfdfc; }
+.pq{ margin:0 0 1rem; }
+.pq:last-child{ margin-bottom:0; }
+.pq textarea{ width:100%; min-height:2.6rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; border:1px solid var(--rule); border-radius:6px; padding:.5rem .6rem; resize:vertical; }
+.reveal-btn{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.4rem .85rem; border-radius:6px; cursor:pointer; margin-top:.6rem; }
+.reveal-box{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; background:var(--green-soft); border:1px solid var(--rule); border-radius:6px; padding:.6rem .8rem; margin-top:.6rem; display:none; }
+.reveal-box.show{ display:block; }
+.sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+.sim .sim-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; }
+.sim canvas{ display:block; width:100%; height:auto; background:#fff; }
+.sim .panel{ padding:1rem 1.1rem 1.15rem; }
+.presets{ display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.8rem; }
+.presets button{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.78rem; font-weight:600; border:1px solid var(--rule); background:#fff; color:var(--green-deep); padding:.35rem .8rem; border-radius:20px; cursor:pointer; }
+.presets button.active{ background:var(--green); border-color:var(--green); color:#fff; }
+.ctrl label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; font-weight:600; color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem; }
+.ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+.readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+.readout .chip{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; background:var(--green-soft); border:1px solid var(--rule); border-radius:20px; padding:.3rem .8rem; }
+.readout .chip.sec{ border-color:var(--sec); color:var(--sec); }
+.readout .chip.tan{ border-color:var(--tan); color:var(--tan); }
+.readout .chip b{ color:inherit; }
+.legend{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; display:flex; gap:1rem; flex-wrap:wrap; margin-top:.5rem; color:var(--muted); }
+.legend span::before{ content:''; display:inline-block; width:1rem; height:2px; margin-right:.35rem; vertical-align:middle; }
+.legend .l-sec::before{ background:var(--sec); }
+.legend .l-tan::before{ background:var(--tan); }
+.ask-row{ display:flex; flex-wrap:wrap; gap:.8rem; align-items:center; margin-top:.7rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.88rem; }
+.ask-row label{ font-weight:600; color:var(--green-deep); }
+.ask-row input[type=number]{ font:inherit; width:6.5rem; padding:.35rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.ask-fb{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.84rem; margin-top:.4rem; min-height:1.1em; }
+.probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+.probe .q{ font-weight:700; margin:0 0 .7rem; }
+.probe .opts{ display:grid; gap:.5rem; }
+.probe .opt{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; }
+.probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+.probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+.probe .feedback{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+.video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+.video-slot .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem; }
+.video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.video-placeholder{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cfe4d7; font-family:"Segoe UI",system-ui,sans-serif; font-size:.95rem; text-align:center; padding:1rem; }
+.btn{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+.btn.primary{ background:var(--green); color:#fff; }
+.ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+.ticket .t-head{ background:linear-gradient(90deg,var(--green),var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI",system-ui,sans-serif; }
+.ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+.ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+.q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+.q-card.right{ border-left-color:var(--green); }
+.q-card.wrong{ border-left-color:#c0392b; }
+.q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+.q-card .qtext .num{ color:var(--green); }
+.q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-opts label{ display:flex; gap:.55rem; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+.q-num{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-num input[type=number]{ font:inherit; width:8rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.q-card .qfb{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+.q-card.right .qfb{ color:var(--green-deep); }
+.q-card.wrong .qfb{ color:#c0392b; }
+.ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+.ticket .score{ font-family:"Segoe UI",system-ui,sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+.ticket .score.show{ display:block; }
+.downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+@media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+.dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+.dl-card .kind{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+.dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+.dl-card .hint{ font-size:.88rem; color:var(--muted); }
+footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 · Measurements and Motion</span><span>Note 7</span></div>
+<h1>Velocities From Distance vs. Time Graphs — Average Velocity and Instantaneous Velocity</h1>
+
+<div class="synopsis">
+<span class="label">Synopsis</span>
+Real motion almost always involves acceleration. With constant acceleration (like freefall, a = g = −9.8 m/s²), velocity increases linearly with time, and that's what curves the distance-vs-time graph. This note teaches two ways to read velocity off a curved distance-vs-time graph: the <em>average velocity</em> over a time interval (slope of a <strong>secant</strong> line connecting two points), and the <em>instantaneous velocity</em> at one instant (slope of the <strong>tangent</strong> line touching a single point).
+</div>
+
+<div class="pe">
+<div class="head"><strong>Performance Expectations</strong></div>
+<ul>
+<li><span class="tick">PE1</span>Define average velocity and instantaneous velocity.</li>
+<li><span class="tick">PE2</span>Extract average velocity from the secant line and instantaneous velocity from the tangent line on a distance-vs-time graph.</li>
+</ul>
+</div>
+
+<h2>Preamble</h2>
+<div class="preamble">
+<div class="pq"><p><strong>1)</strong> Why is the slope of the velocity-vs-time graph zero in constant-speed motion?</p><textarea placeholder="Your answer..."></textarea></div>
+<div class="pq"><p><strong>2)</strong> Using your knowledge of linear equations, explain why the plot of v<sub>f</sub> as a function of time has slope equal to the acceleration.</p><textarea placeholder="Your answer..."></textarea></div>
+<button class="reveal-btn" id="revealPreamble">Reveal model answers</button>
+<div class="reveal-box" id="preambleAnswers">
+<strong>1)</strong> In constant-speed motion, acceleration = 0, and slope of v–t IS the acceleration — so the slope must be zero (a flat line).<br>
+<strong>2)</strong> v<sub>f</sub> = v<sub>i</sub> + at has the form y = b + mx, a straight line where the slope m is a (the acceleration) and the y-intercept b is v<sub>i</sub>.
+</div>
+</div>
+
+<h2>Instructions: real freefall data</h2>
+<p>Below is the actual distance-vs-time data from a freefalling object (ticker-tape timer, 0.025 s intervals). Use the sliders to draw a <strong style="color:#c0392b;">secant</strong> line (average velocity over an interval) and see the <strong style="color:#8e44ad;">tangent</strong> line (instantaneous velocity) at the center time.</p>
+
+<div class="sim" id="sim">
+<div class="sim-head"><span>▶</span> Interactive · Secant vs. Tangent on Real Freefall Data</div>
+<canvas id="simCanvas" width="720" height="380" role="img" aria-label="Distance vs time graph of a freefalling object with secant and tangent lines."></canvas>
+<div class="panel">
+<div class="presets">
+<button class="active" data-c="0.3">Center at t = 0.3 s</button>
+<button data-c="0.6">Center at t = 0.6 s</button>
+</div>
+<div class="ctrl">
+<label for="centerSlider">Center time <span class="val"><span id="centerVal">0.300</span> s</span></label>
+<input type="range" id="centerSlider" min="0.05" max="0.575" step="0.005" value="0.3">
+</div>
+<div class="ctrl" style="margin-top:.8rem;">
+<label for="hwSlider">Secant half-width (interval size) <span class="val"><span id="hwVal">0.150</span> s</span></label>
+<input type="range" id="hwSlider" min="0.025" max="0.3" step="0.025" value="0.15">
+</div>
+<div class="legend"><span class="l-sec">Secant (average velocity)</span><span class="l-tan">Tangent (instantaneous velocity)</span></div>
+<div class="readout">
+<span class="chip sec">Secant interval: <b id="secInterval">0.150–0.450 s</b></span>
+<span class="chip sec">Average velocity = <b id="avgOut">2.83</b> m/s</span>
+<span class="chip tan">Instantaneous velocity at center = <b id="instOut">2.81</b> m/s</span>
+</div>
+</div>
+</div>
+<p style="font-size:.92rem;color:var(--muted);">Try shrinking the half-width slider toward its minimum — watch the secant (average velocity) converge onto the tangent (instantaneous velocity) at the center time.</p>
+
+<div class="ask-row">
+<label>Q) Average velocity at t = 0.3 s (m/s)</label><input type="number" id="q_avg03" step="any"><button class="btn" data-check="avg03">Check</button>
+</div>
+<div class="ask-fb" id="avg03Fb"></div>
+<div class="ask-row">
+<label>Q) Instantaneous velocity at t = 0.3 s (m/s)</label><input type="number" id="q_inst03" step="any"><button class="btn" data-check="inst03">Check</button>
+</div>
+<div class="ask-fb" id="inst03Fb"></div>
+<div class="ask-row">
+<label>Q) Instantaneous velocity at t = 0.6 s (m/s)</label><input type="number" id="q_inst06" step="any"><button class="btn" data-check="inst06">Check</button>
+</div>
+<div class="ask-fb" id="inst06Fb"></div>
+
+<div class="probe" id="probe">
+<p class="q">Predict first: examine the average and instantaneous velocities at 0.3 s and 0.6 s. What is the numerical relationship between them?</p>
+<div class="opts">
+<button class="opt" data-correct="false">The average velocity is always larger than the instantaneous velocity.</button>
+<button class="opt" data-correct="true">The instantaneous velocity at the center of an interval nearly equals the average velocity over that interval.</button>
+<button class="opt" data-correct="false">There is no relationship — they measure unrelated things.</button>
+</div>
+<div class="feedback" id="probeFb" role="status"></div>
+</div>
+
+<h2>Watch: working through the note</h2>
+<div class="video-slot"><span class="label">Walkthrough video · ~16 min</span><div class="video-frame"><div class="video-placeholder">Video embed goes here.</div></div></div>
+
+<div class="ticket" id="ticket">
+<div class="t-head"><strong>🎟️ Exit ticket</strong><span class="sub">Four quick questions.</span></div>
+<div class="t-body">
+<div class="q-card" id="card-q1">
+<p class="qtext"><span class="num">Q1.</span> Average velocity over a time interval is the slope of the...</p>
+<div class="q-opts">
+<label><input type="radio" name="q1" value="a"> Tangent line</label>
+<label><input type="radio" name="q1" value="b"> Secant line</label>
+<label><input type="radio" name="q1" value="c"> Acceleration line</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q2">
+<p class="qtext"><span class="num">Q2.</span> Instantaneous velocity at one moment is the slope of the...</p>
+<div class="q-opts">
+<label><input type="radio" name="q2" value="a"> Secant line</label>
+<label><input type="radio" name="q2" value="b"> Tangent line</label>
+<label><input type="radio" name="q2" value="c"> Horizontal axis</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q3">
+<p class="qtext"><span class="num">Q3.</span> An object travels from 2 m at t = 1 s to 10 m at t = 3 s. What is its average velocity (m/s)?</p>
+<div class="q-num"><input type="number" id="q3input" step="any"></div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q4">
+<p class="qtext"><span class="num">Q4.</span> As the two points of a secant line get closer together, the secant line's slope approaches the...</p>
+<div class="q-opts">
+<label><input type="radio" name="q4" value="a"> Average of all velocities</label>
+<label><input type="radio" name="q4" value="b"> Tangent line's slope (instantaneous velocity)</label>
+<label><input type="radio" name="q4" value="c"> Acceleration</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="actions"><button class="btn primary" id="ticketCheck">Check my answers</button><button class="btn" id="ticketReset">Clear</button></div>
+<div class="score" id="ticketScore" role="status"></div>
+</div>
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">Before the video</span><span class="name">Guided notes — blank (PDF)</span><span class="hint">Print or open on a tablet and fill it in as you follow along.</span></a>
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">Released when Module 1 closes.</span></a>
+</div>
+
+<footer>Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151</footer>
+</div>
+
+<script>
+(function(){
+  document.getElementById('revealPreamble').addEventListener('click', function(){
+    var box = document.getElementById('preambleAnswers');
+    box.classList.toggle('show');
+    this.textContent = box.classList.contains('show') ? 'Hide model answers' : 'Reveal model answers';
+  });
+})();
+
+(function(){
+  var AXIS='#1f5fbf', GREEN='#1e6b3c', GRIDLINE='#d7e2da', INK='#1d2b23', MUTED='#5c6b62', SEC='#c0392b', TAN='#8e44ad';
+  var data = [];
+  var yvals = [0,0.0135,0.031,0.056,0.084,0.1165,0.154,0.1965,0.244,0.2965,0.354,0.4165,0.4845,0.557,0.6355,0.72,0.81,0.905,1.006,1.113,1.2245,1.3415,1.464,1.593,1.727,1.894];
+  for(var i=0;i<yvals.length;i++){ data.push({t: +(i*0.025).toFixed(3), d: yvals[i]}); }
+  var T_MAX = 0.625, D_MAX = 1.95;
+
+  function dAt(t){
+    // linear interpolation between nearest grid points
+    var idx = t/0.025;
+    var i0 = Math.floor(idx), i1 = Math.min(i0+1, data.length-1);
+    var frac = idx - i0;
+    if(i0 >= data.length-1) return data[data.length-1].d;
+    return data[i0].d + frac*(data[i1].d - data[i0].d);
+  }
+
+  var cv = document.getElementById('simCanvas'); var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var gx0=55, gx1=W-25, gy0=20, gy1=H-40;
+  function X(t){ return gx0 + (t/T_MAX)*(gx1-gx0); }
+  function Y(d){ return gy1 - (d/D_MAX)*(gy1-gy0); }
+
+  var centerSlider = document.getElementById('centerSlider');
+  var hwSlider = document.getElementById('hwSlider');
+  var centerVal = document.getElementById('centerVal');
+  var hwVal = document.getElementById('hwVal');
+  var secInterval = document.getElementById('secInterval');
+  var avgOut = document.getElementById('avgOut');
+  var instOut = document.getElementById('instOut');
+
+  function draw(){
+    var c = parseFloat(centerSlider.value);
+    var hwRequested = parseFloat(hwSlider.value);
+    var hw = Math.min(hwRequested, c, T_MAX-c);
+    if(hw < 0.0125) hw = 0.0125;
+    var t1 = c-hw, t2 = c+hw;
+
+    ctx.clearRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=AXIS; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(gx0,gy0); ctx.lineTo(gx0,gy1); ctx.lineTo(gx1,gy1); ctx.stroke();
+    ctx.fillStyle=INK; ctx.font='12px Segoe UI, sans-serif';
+    ctx.fillText('Distance (m)', gx0, gy0-6);
+    ctx.fillText('t (s)', gx1-20, gy1+26);
+    ctx.font='10.5px Segoe UI, sans-serif'; ctx.fillStyle=MUTED;
+    for(var tt=0; tt<=T_MAX+0.001; tt+=0.1){
+      var x = X(tt);
+      ctx.strokeStyle=GRIDLINE; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x,gy0); ctx.lineTo(x,gy1); ctx.stroke();
+      ctx.fillStyle=MUTED; ctx.fillText(tt.toFixed(2), x-10, gy1+14);
+    }
+    // data curve
+    ctx.strokeStyle=GREEN; ctx.lineWidth=2.5; ctx.beginPath();
+    data.forEach(function(p,i){ var x=X(p.t), y=Y(p.d); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+    ctx.stroke();
+
+    var d1 = dAt(t1), d2 = dAt(t2);
+    var avgV = (d2-d1)/(t2-t1);
+    var instHW = 0.0125;
+    var it1 = Math.max(0, c-instHW), it2 = Math.min(T_MAX, c+instHW);
+    var instV = (dAt(it2)-dAt(it1))/(it2-it1);
+
+    // secant line
+    ctx.strokeStyle=SEC; ctx.lineWidth=2.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(X(t1),Y(d1)); ctx.lineTo(X(t2),Y(d2)); ctx.stroke();
+    ctx.fillStyle=SEC;
+    [ [t1,d1], [t2,d2] ].forEach(function(pt){ ctx.beginPath(); ctx.arc(X(pt[0]),Y(pt[1]),4,0,7); ctx.fill(); });
+
+    // tangent line (extended visually across a small span for clarity)
+    var tanSpan = 0.09;
+    var dc = dAt(c);
+    var tx1 = Math.max(0, c-tanSpan), tx2 = Math.min(T_MAX, c+tanSpan);
+    var ty1 = dc + instV*(tx1-c), ty2 = dc + instV*(tx2-c);
+    ctx.strokeStyle=TAN; ctx.lineWidth=2.5; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(X(tx1),Y(ty1)); ctx.lineTo(X(tx2),Y(ty2)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=TAN; ctx.beginPath(); ctx.arc(X(c),Y(dc),4,0,7); ctx.fill();
+
+    centerVal.textContent = c.toFixed(3);
+    hwVal.textContent = hw.toFixed(3);
+    secInterval.textContent = t1.toFixed(3)+'–'+t2.toFixed(3)+' s';
+    avgOut.textContent = avgV.toFixed(2);
+    instOut.textContent = instV.toFixed(2);
+  }
+  centerSlider.addEventListener('input', function(){
+    document.querySelectorAll('.presets button').forEach(function(b){ b.classList.remove('active'); });
+    draw();
+  });
+  hwSlider.addEventListener('input', draw);
+  document.querySelectorAll('.presets button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.presets button').forEach(function(b){ b.classList.remove('active'); });
+      this.classList.add('active');
+      centerSlider.value = this.getAttribute('data-c');
+      draw();
+    });
+  });
+  draw();
+
+  var answers = { avg03: 2.83, inst03: 2.81, inst06: 6.02 };
+  document.querySelectorAll('[data-check]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = this.getAttribute('data-check');
+      var inputId = key==='avg03'?'q_avg03': key==='inst03'?'q_inst03':'q_inst06';
+      var val = parseFloat(document.getElementById(inputId).value);
+      var fb = document.getElementById(key+'Fb');
+      var target = answers[key];
+      if(isNaN(val)){ fb.style.color='#c0392b'; fb.textContent='Enter a number.'; return; }
+      if(Math.abs(val-target) < 0.4){ fb.style.color='#134a29'; fb.textContent='✓ Close enough — about '+target+' m/s, read from the data.'; }
+      else { fb.style.color='#c0392b'; fb.textContent='✗ Use the interactive above to re-measure the slope near this time (target ≈ '+target+' m/s).'; }
+    });
+  });
+})();
+
+(function(){
+  var probe = document.getElementById('probe');
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){ this.classList.add('correct'); fb.style.color='#134a29'; fb.textContent='✓ Right — for constant acceleration, the instantaneous velocity at the midpoint of an interval equals the average velocity over that interval.'; }
+      else { this.classList.add('wrong'); probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); }); fb.style.color='#c0392b'; fb.textContent='✗ Try the interactive: shrink the half-width and watch the secant slope (average) land right on the tangent slope (instantaneous) at the center.'; }
+    });
+  });
+})();
+
+(function(){
+  var ticket = document.getElementById('ticket');
+  var mc = { q1:'b', q2:'b', q4:'b' };
+  var expl = {
+    q1:'average velocity is the slope of the secant line connecting the interval\'s two endpoints.',
+    q2:'instantaneous velocity is the slope of the tangent line touching a single point.',
+    q4:'as the two secant points merge, the secant line becomes the tangent line — average velocity becomes instantaneous velocity.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok?'right':'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct=0, total=4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value===mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — '+expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v-4)<0.05){ correct++; markCard('card-q3', true, '✓ Correct: (10−2)/(3−1) = 4 m/s.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number.'); }
+    else { markCard('card-q3', false, '✗ average velocity = Δd/Δt = (10−2)/(3−1) = 4 m/s.'); }
+    var tail = correct===total ? "Nice — you're ready to move on!" : correct>=2 ? 'Good start — revisit the ones you missed.' : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked=false; });
+    document.getElementById('q3input').value='';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent=''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent='';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>

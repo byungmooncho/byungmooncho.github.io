@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N2 — Handling Very Large and Small Numbers</title>
+<style>
+:root{
+  --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+  --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+}
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:Charter,"Bitstream Charter",Georgia,"Times New Roman",serif; font-size:1.06rem; line-height:1.65; }
+.note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+.eyebrow{ font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em; border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+.eyebrow strong{ color:var(--green); font-weight:600; }
+h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+.synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+.synopsis .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem; }
+.prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+.prior .head{ background:linear-gradient(90deg,var(--green),var(--green-deep)); color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem; }
+.prior .head .spark{ font-size:1.15rem; line-height:1; }
+.prior .head strong{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.95rem; }
+.prior .body{ padding:1rem 1.1rem 1.15rem; }
+.prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+@media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+.case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+.case .emoji{ font-size:1.5rem; display:block; margin-bottom:.35rem; }
+.case b{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; display:block; }
+.case small{ color:var(--muted); font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; }
+.pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+.pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; }
+.pe .head strong{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); }
+.pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+.pe li{ display:flex; gap:.7rem; padding:.5rem .6rem; }
+.pe li + li{ border-top:1px solid var(--rule); }
+.pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; font-weight:700; }
+h2{ font-size:1.25rem; margin:1.8rem 0 .8rem; font-weight:700; }
+ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; }
+ol.questions li{ margin:.5rem 0; }
+.sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+.sim .sim-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; }
+.sim .panel{ padding:1.1rem 1.1rem 1.2rem; }
+.sim input[type=text]{ font:inherit; font-size:1.3rem; width:100%; box-sizing:border-box; padding:.6rem .8rem; border:1px solid var(--rule); border-radius:8px; text-align:center; }
+.sn-out{ display:grid; gap:.7rem; grid-template-columns:1fr; margin-top:1rem; }
+@media (min-width:560px){ .sn-out{ grid-template-columns:1fr 1fr; } }
+.sn-card{ background:var(--green-soft); border-radius:8px; padding:.8rem 1rem; text-align:center; }
+.sn-card .lbl{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--green-deep); }
+.sn-card .val{ font-size:1.35rem; font-weight:700; margin-top:.25rem; font-variant-numeric:tabular-nums; }
+.probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+.probe .q{ font-weight:700; margin:0 0 .7rem; }
+.probe .opts{ display:grid; gap:.5rem; }
+.probe .opt{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; }
+.probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+.probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+.probe .feedback{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+.datatable{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+.datatable table{ width:100%; border-collapse:collapse; font-family:"Segoe UI",system-ui,sans-serif; font-size:.88rem; }
+.datatable th,.datatable td{ text-align:left; padding:.55rem .7rem; border-bottom:1px solid var(--rule); }
+.datatable th{ background:var(--green-soft); color:var(--green-deep); font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; }
+.datatable tr:last-child td{ border-bottom:0; }
+.datatable input[type=text]{ width:100%; box-sizing:border-box; font:inherit; padding:.3rem .5rem; border:1px solid var(--rule); border-radius:5px; }
+.datatable .given{ color:var(--muted); font-style:italic; }
+.toggle-row{ padding:.6rem .75rem; background:#fbfdfc; }
+.btn{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+.btn.primary{ background:var(--green); color:#fff; }
+.video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+.video-slot .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem; }
+.video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.video-placeholder{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cfe4d7; font-family:"Segoe UI",system-ui,sans-serif; font-size:.95rem; text-align:center; padding:1rem; }
+.ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+.ticket .t-head{ background:linear-gradient(90deg,var(--green),var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI",system-ui,sans-serif; }
+.ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+.ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+.q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+.q-card.right{ border-left-color:var(--green); }
+.q-card.wrong{ border-left-color:#c0392b; }
+.q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+.q-card .qtext .num{ color:var(--green); }
+.q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-opts label{ display:flex; gap:.55rem; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+.q-num{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-num input[type=number]{ font:inherit; width:8rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.q-card .qfb{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+.q-card.right .qfb{ color:var(--green-deep); }
+.q-card.wrong .qfb{ color:#c0392b; }
+.ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+.ticket .score{ font-family:"Segoe UI",system-ui,sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+.ticket .score.show{ display:block; }
+.preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:.9rem 0 0; font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; line-height:1.55; }
+.downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+@media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+.dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+.dl-card .kind{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+.dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+.dl-card .hint{ font-size:.88rem; color:var(--muted); }
+footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 · Measurements and Motion</span><span>Note 2</span></div>
+<h1>Handling Very Large and Small Numbers</h1>
+
+<div class="synopsis">
+<span class="label">Synopsis</span>
+Physics is a quantitative science — we put numbers to things, and those numbers range from the enormous (Earth's mass: 5,980,000,000,000,000,000,000,000 kg) to the tiny (an atom's diameter: 0.0000000001 m). Writing all those zeros is unworkable, so we use <b>powers of 10</b> and <b>scientific notation</b>, and we learn to use the calculator's <b>EE button</b> to input these numbers correctly.
+</div>
+
+<div class="pe">
+<div class="head"><strong>Performance Expectations</strong></div>
+<ul>
+<li><span class="tick">PE1</span>Write numbers in powers-of-10 notation and scientific notation.</li>
+<li><span class="tick">PE2</span>Recognize significant figures in a written number.</li>
+<li><span class="tick">PE3</span>Use the EE button on a calculator for large/small-number calculations.</li>
+</ul>
+</div>
+
+<div class="prior">
+<div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+<div class="body">
+<div class="cases">
+<div class="case"><span class="emoji">📱</span><b>Storage sizes</b><small>1 GB = 10⁹ bytes — you already use powers-of-10 prefixes without thinking about it.</small></div>
+<div class="case"><span class="emoji">💰</span><b>"Six figures"</b><small>Counting digits to describe scale is exactly what significant figures do, just for measurements.</small></div>
+<div class="case"><span class="emoji">🔢</span><b>Calculator "E"</b><small>Ever seen "1.5E9" on a calculator display? That's scientific notation already — you've seen it before.</small></div>
+</div>
+</div>
+</div>
+
+<h2>Play with it: scientific notation converter</h2>
+<p>Type any number (e.g. <code>598000000000000000000000</code> or <code>0.0024</code>) and watch it convert live.</p>
+<div class="sim">
+<div class="sim-head"><span>▶</span> Interactive · Notation Converter</div>
+<div class="panel">
+<input type="text" id="numIn" placeholder="Type a number, e.g. 45000 or 0.00230" inputmode="decimal">
+<div class="sn-out">
+<div class="sn-card"><div class="lbl">Scientific notation</div><div class="val" id="sciOut">—</div></div>
+<div class="sn-card"><div class="lbl">Significant figures</div><div class="val" id="sfOut">—</div></div>
+</div>
+</div>
+</div>
+
+<div class="probe" id="probe">
+<p class="q">Predict first: which of these has the <em>most</em> significant figures?</p>
+<div class="opts">
+<button class="opt" data-correct="false">4500 m</button>
+<button class="opt" data-correct="true">204.200 kg</button>
+<button class="opt" data-correct="false">0.0023 m</button>
+</div>
+<div class="feedback" id="probeFb" role="status"></div>
+</div>
+
+<h2>Zeros are tricky</h2>
+<ol class="questions">
+<li>All <em>leading</em> zeros are not significant, e.g. 0.00234 m = 2.34×10⁻³ m (3 sig figs).</li>
+<li>Trailing zeros <em>are</em> significant only when there's a decimal point, e.g. 100.00 kg (5 sig figs).</li>
+<li>Trailing zeros are <em>not</em> significant without a decimal point, e.g. 142000 s (3 sig figs).</li>
+<li>Zeros sandwiched between nonzero digits are always significant, e.g. 1004 m (4 sig figs).</li>
+</ol>
+<p><b>Q1)</b> Why are trailing zeros significant in "100.00 kg" but not in "142000 s"?</p>
+
+<h2>Practice: write in scientific notation</h2>
+<p>Use the converter above to check yourself, then fill in the table (don't forget units).</p>
+<div class="datatable">
+<table>
+<thead><tr><th>Number</th><th>Scientific notation</th><th>Sig figs</th></tr></thead>
+<tbody id="practiceTable"></tbody>
+</table>
+</div>
+
+<h2>Practice: EE-button calculations</h2>
+<p>When inputting scientific notation, use the <b>EE</b> button (2nd → , on many calculators), not ^ or 10ˣ. Example: 1.56×10⁻⁷ is typed <code>1.56 EE (-) 7</code>, shown as <code>1.56E-7</code>.</p>
+<div class="datatable">
+<table>
+<thead><tr><th>#</th><th>What you're solving for</th><th>Answer (3 s.f.)</th></tr></thead>
+<tbody>
+<tr><td>i</td><td>All my mass converted to energy (J)</td><td class="given">6.3 × 10¹⁸ J (given)</td></tr>
+<tr><td>ii</td><td>g<sub>E</sub>, acceleration due to Earth's gravity (m/s²)</td><td><input type="text" placeholder="your answer"></td></tr>
+<tr><td>iii</td><td>My weight on Earth (N)</td><td><input type="text" placeholder="your answer"></td></tr>
+<tr><td>iv</td><td>g<sub>M</sub>, acceleration due to Moon's gravity (m/s²)</td><td><input type="text" placeholder="your answer"></td></tr>
+<tr><td>v</td><td>My weight on the Moon (N)</td><td><input type="text" placeholder="your answer"></td></tr>
+<tr><td>vi</td><td>Gravitational attraction, Earth &amp; Sun (N)</td><td><input type="text" placeholder="your answer"></td></tr>
+<tr><td>vii</td><td>Gravitational attraction, Earth &amp; Moon (N)</td><td><input type="text" placeholder="your answer"></td></tr>
+<tr><td>viii</td><td>Attractive force, electron &amp; proton in hydrogen (N)</td><td><input type="text" placeholder="your answer"></td></tr>
+<tr><td>ix</td><td>Energy in a single photon of blue light (J)</td><td><input type="text" placeholder="your answer"></td></tr>
+<tr><td>x</td><td>Energy released in proton-antiproton annihilation (J)</td><td><input type="text" placeholder="your answer"></td></tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:.85rem;color:var(--muted)">Worked example (given): 1.56E-7 x² × 3.241E23 ÷ 5.21E-2³ ÷ 6.35E-7⁻⁴ = 9.067967585×10⁻¹² — notice the two ÷'s and that only exponent buttons (not EE) use the ^ key.</p>
+
+<h2>Watch: working through the note</h2>
+<div class="video-slot"><span class="label">Walkthrough video · ~15 min</span><div class="video-frame"><div class="video-placeholder">Video embed goes here.</div></div></div>
+
+<p class="preview-note"><strong>Looking ahead:</strong> Note 2a builds directly on this — you'll learn the sig-fig rules for adding, subtracting, multiplying, and dividing measured numbers, plus unit conversion and unit tracking.</p>
+
+<div class="ticket" id="ticket">
+<div class="t-head"><strong>🎟️ Exit ticket</strong><span class="sub">Four quick questions.</span></div>
+<div class="t-body">
+<div class="q-card" id="card-q1">
+<p class="qtext"><span class="num">Q1.</span> How many significant figures does 4500 m have (no decimal point)?</p>
+<div class="q-opts">
+<label><input type="radio" name="q1" value="a"> 2</label>
+<label><input type="radio" name="q1" value="b"> 3</label>
+<label><input type="radio" name="q1" value="c"> 4</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q2">
+<p class="qtext"><span class="num">Q2.</span> Write 0.000452 in scientific notation (just the exponent, e.g. for 1.2×10⁻³ enter -3).</p>
+<div class="q-num"><input type="number" id="q2input" step="1"> <span style="color:var(--muted)">×10^__</span></div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q3">
+<p class="qtext"><span class="num">Q3.</span> Which calculator button should you use to enter 1.5 × 10⁻⁴?</p>
+<div class="q-opts">
+<label><input type="radio" name="q3" value="a"> The ^ (exponent) button</label>
+<label><input type="radio" name="q3" value="b"> The EE button</label>
+<label><input type="radio" name="q3" value="c"> The − (subtraction) button</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q4">
+<p class="qtext"><span class="num">Q4.</span> 100.00 kg has how many significant figures?</p>
+<div class="q-opts">
+<label><input type="radio" name="q4" value="a"> 1</label>
+<label><input type="radio" name="q4" value="b"> 3</label>
+<label><input type="radio" name="q4" value="c"> 5</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="actions"><button class="btn primary" id="ticketCheck">Check my answers</button><button class="btn" id="ticketReset">Clear</button></div>
+<div class="score" id="ticketScore" role="status"></div>
+</div>
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">Before the video</span><span class="name">Guided notes — blank (PDF)</span><span class="hint">Print or open on a tablet and fill it in as you follow along.</span></a>
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">Released when Module 1 closes.</span></a>
+</div>
+
+<footer>Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151</footer>
+</div>
+
+<script>
+function toSci(numStr){
+  numStr = numStr.trim();
+  if(numStr === '' || isNaN(Number(numStr))) return null;
+  var neg = numStr.startsWith('-');
+  if(neg) numStr = numStr.slice(1);
+  var raw = numStr.replace(/[^0-9.]/g,'');
+  var hasDecimal = raw.indexOf('.') !== -1;
+  var digitsOnly = raw.replace('.', '');
+  var firstNonZero = digitsOnly.search(/[1-9]/);
+  if(firstNonZero === -1) return {sci:'0', sf:0};
+  // significant figure counting per stated rules (simplified)
+  var intPart = raw.split('.')[0] || '';
+  var fracPart = raw.split('.')[1] || '';
+  var sig = 0;
+  if(hasDecimal){
+    var combined = (intPart + fracPart).replace(/^0+/, '');
+    sig = combined.length === 0 ? 1 : combined.length;
+  } else {
+    var trimmedTrailing = intPart.replace(/0+$/, '');
+    sig = trimmedTrailing.replace(/^0+/, '').length || 1;
+  }
+  var num = parseFloat(numStr);
+  var exp = Math.floor(Math.log10(Math.abs(num)));
+  var mantissa = num / Math.pow(10, exp);
+  mantissa = Math.round(mantissa * 1e6) / 1e6;
+  var sciStr = (neg?'-':'') + mantissa + ' × 10' + toSup(exp);
+  return {sci:sciStr, sf:sig};
+}
+function toSup(n){
+  var map = {'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+  return String(n).split('').map(function(c){ return map[c] || c; }).join('');
+}
+(function(){
+  var input = document.getElementById('numIn');
+  var sciOut = document.getElementById('sciOut');
+  var sfOut = document.getElementById('sfOut');
+  input.addEventListener('input', function(){
+    var r = toSci(input.value);
+    if(!r){ sciOut.textContent='—'; sfOut.textContent='—'; return; }
+    sciOut.textContent = r.sci;
+    sfOut.textContent = r.sf + (r.sf===1?' fig':' figs');
+  });
+})();
+
+(function(){
+  var probe = document.getElementById('probe');
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){ this.classList.add('correct'); fb.style.color='#134a29'; fb.textContent='✓ Right — 204.200 kg has 6 significant figures (the decimal point makes all trailing zeros count).'; }
+      else { this.classList.add('wrong'); probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); }); fb.style.color='#c0392b'; fb.textContent='✗ 204.200 kg wins with 6 sig figs — the decimal point locks in every trailing zero.'; }
+    });
+  });
+})();
+
+(function(){
+  var rows = [
+    ["340 kg","3.4 × 10²","2"], ["340. kg","3.40 × 10²","3"], ["0.45 m","4.5 × 10⁻¹","2"],
+    ["25082 kg","2.5082 × 10⁴","5"], ["0.02050 s","2.050 × 10⁻²","4"], ["3600 s","3.6 × 10³","2"],
+    ["123.32 m","1.2332 × 10²","5"], ["532.130 kg","5.32130 × 10²","6"], ["1000 m","1 × 10³","1"],
+    ["1000. m","1.000 × 10³","4"], ["1000.0 m","1.0000 × 10³","5"], ["1000.000 m","1.000000 × 10³","7"],
+    ["0.00002340920 s","2.340920 × 10⁻⁵","7"], ["13.450 × 10 kg","1.3450 × 10²","5"],
+    ["299792458 m/s","2.99792458 × 10⁸","9 (exact)"], ["1.000100000 m","1.000100000 × 10⁰","9"]
+  ];
+  var tbody = document.getElementById('practiceTable');
+  rows.forEach(function(r, i){
+    var tr = document.createElement('tr');
+    var td0 = document.createElement('td'); td0.textContent = r[0];
+    var td1 = document.createElement('td');
+    var inp = document.createElement('input'); inp.type='text'; inp.placeholder='e.g. 3.4 × 10²'; inp.id='row_'+i; inp.dataset.ans = r[1];
+    td1.appendChild(inp);
+    var td2 = document.createElement('td');
+    var inp2 = document.createElement('input'); inp2.type='text'; inp2.placeholder='#'; inp2.id='sf_'+i; inp2.dataset.ans = r[2];
+    td2.appendChild(inp2);
+    tr.appendChild(td0); tr.appendChild(td1); tr.appendChild(td2);
+    tbody.appendChild(tr);
+  });
+})();
+
+(function(){
+  var ticket = document.getElementById('ticket');
+  var mc = { q1:'b', q3:'b', q4:'c' };
+  var expl = {
+    q1:'no decimal point means the trailing zero (after "45") is just a placeholder → 3 sig figs.',
+    q3:'the EE button lets you type scientific notation without parentheses; ^ is for arbitrary exponents.',
+    q4:'the decimal point makes every digit, including trailing zeros, significant → 5 sig figs.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok?'right':'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct=0, total=4;
+    ['q1','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value===mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — '+expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q2input').value);
+    if(v === -4){ correct++; markCard('card-q2', true, '✓ Correct: 0.000452 = 4.52 × 10⁻⁴.'); }
+    else if(isNaN(v)){ markCard('card-q2', false, 'Enter the exponent.'); }
+    else { markCard('card-q2', false, '✗ 0.000452 = 4.52 × 10⁻⁴, so the exponent is -4.'); }
+    var tail = correct===total ? "Nice — you're ready to move on!" : correct>=2 ? 'Good start — revisit the ones you missed.' : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked=false; });
+    document.getElementById('q2input').value='';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent=''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent='';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
