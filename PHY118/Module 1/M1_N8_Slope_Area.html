@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N8 — Slope and Area Under the Curve</title>
+<style>
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.85rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+
+  .arrowchain{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; gap:.6rem; flex-wrap:wrap; }
+  .arrowchain span{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:700; font-size:.85rem; padding:.25rem .6rem; border-radius:6px; background:var(--green-soft); color:var(--green-deep); }
+  .arrowchain .arrow{ background:none; color:var(--green); font-size:1.1rem; padding:0; }
+  .arrowchain small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+  .pe li .txt b{ font-weight:600; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; margin-bottom:.9rem; }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+  .sim .caveat{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.76rem; color:var(--muted); margin-top:.5rem; font-style:italic; }
+
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .translate th, .translate td{ text-align:left; padding:.55rem .75rem; border-bottom:1px solid var(--rule); }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; color:var(--green); }
+
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Note 8</span>
+  </div>
+
+  <h1>Slope and Area Under the Curve of Motion Graphs</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    You've already seen that the <b>slope</b> of a distance–time graph is speed, and the slope of a
+    velocity–time graph is acceleration. Now flip the direction: the <b>area under the curve</b> of
+    an acceleration–time graph is the <em>change in velocity</em>, and the area under the curve of a
+    velocity–time graph is the <em>change in distance</em>. Slope and area are two sides of the same
+    coin, connecting distance, velocity, and acceleration graphs in both directions.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Calculate velocity change</b> from the area under the curve of an acceleration–time graph.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Calculate distance change</b> from the area under the curve of a velocity–time graph.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Recognize the shape of each area</b>: a rectangle (a &times; t) under a constant acceleration–time graph, and a triangle (&frac12; &times; t &times; v<sub>f</sub>) under a velocity–time graph starting from rest.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Connect slope and area as inverse operations</b> across the distance &rarr; velocity &rarr; acceleration graph chain.</span></li>
+    </ul>
+  </div>
+
+  <div class="arrowchain" aria-hidden="true">
+    <span>distance</span><span class="arrow">⇄</span><span>velocity</span><span class="arrow">⇄</span><span>acceleration</span>
+    <small>slope goes right, area goes left</small>
+  </div>
+
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>You already compute totals as "rate &times; time" — that's exactly what area under a rate graph means:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🚰</span>
+          <b>Filling a bucket at a steady rate</b>
+          <small>Total water = (liters per minute) &times; minutes — the area under a flat rate graph.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">💰</span>
+          <b>Getting paid by the hour</b>
+          <small>Total pay = wage &times; hours worked — same rectangle-area idea.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🏎️</span>
+          <b>A car accelerating from a stoplight</b>
+          <small>The distance gained as it speeds up builds like a triangle under the velocity–time graph.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we work through</h2>
+  <ol class="questions">
+    <li>How do I find velocity change from an acceleration–time graph?</li>
+    <li>How do I find distance change from a velocity–time graph?</li>
+    <li>What shape is each area, and why?</li>
+    <li>How do slope and area work together across distance, velocity, and acceleration graphs?</li>
+  </ol>
+
+  <!-- ============ INTERACTIVE: AREA-UNDER-THE-CURVE CALCULATOR ============ -->
+  <h2>Play with it: the area-under-the-curve calculator</h2>
+  <p>An object accelerates at a constant 9.8 m/s² (free fall) from rest. Drag the slider to choose
+  how long it falls, and watch the shaded areas build the velocity change and distance change.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>📐</span> Interactive · Area-Under-the-Curve Calculator</div>
+    <div class="stage">
+      <canvas id="simCanvas" width="720" height="320" role="img"
+        aria-label="Two stacked graphs, acceleration versus time and velocity versus time, with shaded areas representing velocity change and distance change."></canvas>
+    </div>
+    <div class="panel">
+      <div class="ctrl">
+        <label for="tSlider">Time t <span class="val"><span id="tval">0.6</span> s</span></label>
+        <input type="range" id="tSlider" min="0.1" max="2.0" step="0.05" value="0.6">
+      </div>
+      <div class="readout">
+        <span class="chip">area under a–t (Δv) = <b id="dvOut">5.88</b> m/s</span>
+        <span class="chip">area under v–t (Δd) = <b id="ddOut">1.76</b> m</span>
+      </div>
+      <div class="hint-row" id="simHint">The a–t area is a rectangle (a×t); the v–t area is a triangle (½×t×v_f), since it starts from rest.</div>
+      <div class="caveat">Uses the theoretical g = 9.8 m/s². Real measured data (like a line of best fit from an experiment) typically comes out a little different — that's the %error you calculated in Note&nbsp;2a.</div>
+    </div>
+  </div>
+
+  <!-- predict-first probe -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first: an object accelerates at 9.8 m/s² for 0.6 s, starting from rest. Using the area under the acceleration–time graph, what is its velocity change?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">9.8 m/s</button>
+      <button class="opt" data-correct="true">5.88 m/s</button>
+      <button class="opt" data-correct="false">16.3 m/s</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~15 min</span>
+    <!-- Replace the placeholder with your embed:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M1 N8 walkthrough with Dr. Cho"></iframe></div> -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ INSTRUCTIONS (from original note) ============ -->
+  <h2>Instructions (from your guided notes)</h2>
+  <p>Your handout shows real free-fall data: an acceleration–time graph (flat at ~9.8 m/s², same for
+  any falling object), a velocity–time graph with a line of best fit through the data points, and a
+  distance–time graph of the same measurement. Because it's <em>measured</em> data, the best-fit
+  slope won't land exactly on 9.8 m/s² — that small difference is the %error from Note&nbsp;2a.
+  Work through the area calculations on your actual graphs; the calculator above lets you check the
+  <em>theoretical</em> values first.</p>
+  <p>The math behind each area:</p>
+  <ul class="questions">
+    <li>Area under acceleration–time = a &times; t = &Delta;v (rearranged from v<sub>f</sub> = v<sub>i</sub> + at)</li>
+    <li>Area under velocity–time (triangle, from rest) = &frac12; &times; t &times; v<sub>f</sub> = &Delta;d</li>
+  </ul>
+
+  <h2>Slope vs. area, side by side</h2>
+  <div class="translate">
+    <table>
+      <thead><tr><th>Operation</th><th>Applied to&hellip;</th><th>Gives you&hellip;</th></tr></thead>
+      <tbody>
+        <tr><td>Slope</td><td>Distance–time graph</td><td><span class="tag">Speed</span></td></tr>
+        <tr><td>Slope</td><td>Velocity–time graph</td><td><span class="tag">Acceleration</span></td></tr>
+        <tr><td>Area under the curve</td><td>Velocity–time graph</td><td><span class="tag">Distance change</span></td></tr>
+        <tr><td>Area under the curve</td><td>Acceleration–time graph</td><td><span class="tag">Velocity change</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> notice the distance–time graph in accelerated
+  motion is curved, so you can't (yet) take its slope directly to double-check your velocity — that
+  requires calculus, and Note&nbsp;7's secant/tangent approach is the workaround. For now, trust that
+  slope and area are consistent: a distance–time graph's slope should match the velocity you found
+  from the area under acceleration–time.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> An object accelerates at 4 m/s² for 3 s, starting from rest. Using the area under the acceleration–time graph, what is its velocity change?</p>
+        <div class="q-num">
+          <input type="number" id="q1input" step="any" inputmode="decimal" aria-label="velocity change in meters per second">
+          <span class="unit">m/s</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> The area under a constant acceleration–time graph forms a&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> Rectangle</label>
+          <label><input type="radio" name="q2" value="b"> Triangle</label>
+          <label><input type="radio" name="q2" value="c"> Circle</label>
+          <label><input type="radio" name="q2" value="d"> Trapezoid</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> For that same object (4 m/s² for 3 s from rest), use the area under the velocity–time graph (a triangle) to find its distance change.</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="distance change in meters">
+          <span class="unit">m</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> The area under a velocity–time graph, starting from rest with constant acceleration, forms a&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> Rectangle</label>
+          <label><input type="radio" name="q4" value="b"> Triangle</label>
+          <label><input type="radio" name="q4" value="c"> Circle</label>
+          <label><input type="radio" name="q4" value="d"> Trapezoid</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print or open on a tablet and work the area calculations as you follow along.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 1 closes — check your own work against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   Area-Under-the-Curve Calculator — self-contained, no dependencies.
+   Constant acceleration a = 9.8 m/s^2, starting from rest.
+   Panel 1: acceleration vs time (flat line), shaded rectangle = a*t = Δv
+   Panel 2: velocity vs time (rising line), shaded triangle = ½*t*v_f = Δd
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var a = 9.8;
+  var T_MAX = 2.0;
+
+  var padL = 70, padR = 20, gap = 18;
+  var panelH = (H - gap - 10) / 2;
+  function panelTop(i){ return 6 + i*(panelH + gap); }
+  var x0 = padL, x1 = W - padR;
+  function tx(tt){ return x0 + (tt / T_MAX) * (x1 - x0); }
+
+  var slider = document.getElementById('tSlider');
+  var tval = document.getElementById('tval');
+  var dvOut = document.getElementById('dvOut');
+  var ddOut = document.getElementById('ddOut');
+
+  function drawAccelPanel(t){
+    var top = panelTop(0), bot = top + panelH;
+    var aMax = a * 1.2;
+    function yy(val){ return bot - (val/aMax) * (bot-top); }
+
+    ctx.strokeStyle = '#2c5a3f'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0, top-2); ctx.lineTo(x0, bot); ctx.lineTo(x1, bot); ctx.stroke();
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('acceleration a (m/s²)', 6, top+12);
+
+    // shaded rectangle area 0..t
+    ctx.fillStyle = 'rgba(103,183,255,0.35)';
+    ctx.fillRect(tx(0), yy(a), tx(t)-tx(0), bot-yy(a));
+
+    // flat line across full range
+    ctx.strokeStyle = '#7fd1a0'; ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.moveTo(tx(0), yy(a)); ctx.lineTo(tx(T_MAX), yy(a)); ctx.stroke();
+
+    // marker at t
+    ctx.fillStyle = '#fff2d6';
+    ctx.beginPath(); ctx.arc(tx(t), yy(a), 4, 0, Math.PI*2); ctx.fill();
+  }
+
+  function drawVelPanel(t){
+    var top = panelTop(1), bot = top + panelH;
+    var vMax = a * T_MAX * 1.1;
+    function yy(val){ return bot - (val/vMax) * (bot-top); }
+    function vAt(tt){ return a*tt; }
+
+    ctx.strokeStyle = '#2c5a3f'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0, top-2); ctx.lineTo(x0, bot); ctx.lineTo(x1, bot); ctx.stroke();
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('velocity v (m/s)', 6, top+12);
+    ctx.textAlign = 'right';
+    ctx.fillText('time t (s) →', x1, H-6);
+    ctx.textAlign = 'left';
+
+    // shaded triangle area 0..t
+    ctx.fillStyle = 'rgba(255,179,127,0.35)';
+    ctx.beginPath();
+    ctx.moveTo(tx(0), bot);
+    ctx.lineTo(tx(t), bot);
+    ctx.lineTo(tx(t), yy(vAt(t)));
+    ctx.closePath();
+    ctx.fill();
+
+    // line across full range
+    ctx.strokeStyle = '#67b7ff'; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(tx(0), yy(0));
+    ctx.lineTo(tx(T_MAX), yy(vAt(T_MAX)));
+    ctx.stroke();
+
+    // marker at t
+    ctx.fillStyle = '#fff2d6';
+    ctx.beginPath(); ctx.arc(tx(t), yy(vAt(t)), 4, 0, Math.PI*2); ctx.fill();
+  }
+
+  function update(){
+    var t = parseFloat(slider.value);
+    tval.textContent = t.toFixed(2);
+    var dv = a * t;
+    var dd = 0.5 * t * (a*t);
+    dvOut.textContent = dv.toFixed(2);
+    ddOut.textContent = dd.toFixed(2);
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
+    drawAccelPanel(t);
+    drawVelPanel(t);
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+
+/* ---------- predict-first probe ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = '✓ Right. Area of the rectangle = a × t = 9.8 × 0.6 = 5.88 m/s.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite — the area under a flat a–t line up to time t is a × t = 9.8 × 0.6 = 5.88 m/s.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q2:'a', q4:'b' };
+  var expl = {
+    q2:'a constant (flat) acceleration line traces out a rectangle over time.',
+    q4:'starting from rest, velocity rises linearly from zero, so the area under it is a triangle.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0, total = 4;
+    var v1 = parseFloat(document.getElementById('q1input').value);
+    if(Math.abs(v1 - 12) < 0.3){ correct++; markCard('card-q1', true, '✓ Correct: Δv = a×t = 4×3 = 12 m/s.'); }
+    else if(isNaN(v1)){ markCard('card-q1', false, 'Enter a number (m/s).'); }
+    else { markCard('card-q1', false, '✗ Use Δv = a×t = 4×3 = 12 m/s.'); }
+
+    ['q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+
+    var v3 = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v3 - 18) < 0.3){ correct++; markCard('card-q3', true, '✓ Correct: Δd = ½×t×v_f = 0.5×3×12 = 18 m.'); }
+    else if(isNaN(v3)){ markCard('card-q3', false, 'Enter a number (m).'); }
+    else { markCard('card-q3', false, '✗ Use Δd = ½×t×v_f = 0.5×3×12 = 18 m.'); }
+
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q1input').value = '';
+    document.getElementById('q3input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
