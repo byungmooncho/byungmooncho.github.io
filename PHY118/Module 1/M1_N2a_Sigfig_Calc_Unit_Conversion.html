@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N2a — Sig Figs in Calculations, Unit Conversion, Unit Tracking</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template (enhanced)
+     Body/serif for reading, green accent to match course shell.
+     All styles + scripts self-contained; no external dependencies.
+     Upload via Manage Files and insert as a full page so the inline
+     <script> blocks survive (the HTML editor strips scripts).
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --green-deep:#134a29;
+    --amber:#c77b1f;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .sans{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.85rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+
+  /* --- ruler-tick divider -------------------------------------------- */
+  .rulerdots{ display:flex; align-items:flex-end; margin:2.2rem 0 1.6rem; gap:6px; }
+  .rulerdots span{ width:2px; background:var(--green); flex:none; }
+  .rulerdots span:nth-child(odd){ height:14px; }
+  .rulerdots span:nth-child(even){ height:8px; }
+  .rulerdots small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- "you already know this" callout ------------------------------ */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; letter-spacing:.01em; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  /* --- performance expectations ------------------------------------- */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+  .pe li .txt b{ font-weight:600; }
+
+  /* --- guiding questions -------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* --- interactive: two-mode calculator ------------------------------ */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .mode-toggle{ display:flex; gap:.5rem; padding:.9rem 1.1rem 0; }
+  .mode-btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--rule); background:#fff; color:var(--muted);
+    padding:.5rem 1rem; border-radius:20px; cursor:pointer; flex:1;
+  }
+  .mode-btn.active{ background:var(--green); color:#fff; border-color:var(--green); }
+  .sim .panel{ padding:1rem 1.1rem 1.2rem; }
+  .calc-row{ display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; margin-bottom:.7rem; }
+  .calc-row label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--green-deep); font-weight:600; }
+  .calc-row input[type=text], .calc-row select{
+    font:1.05rem/1.3 "Segoe UI", system-ui, sans-serif; padding:.45rem .6rem; border:1px solid var(--rule);
+    border-radius:6px; width:7.5rem; font-variant-numeric:tabular-nums;
+  }
+  .calc-row select{ width:auto; }
+  .result-card{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem; margin-top:.7rem;
+  }
+  .result-card .rlabel{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--green-deep); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .result-card .rval{ font-family:Cambria, "Cambria Math", Georgia, serif; font-size:1.2rem; font-weight:600; }
+  .result-card .rsub{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); margin-top:.3rem; }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.7rem; }
+  .calc-mode{ display:none; }
+  .calc-mode.active{ display:block; }
+
+  /* --- buttons -------------------------------------------------------- */
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+
+  /* --- predict-first self check ------------------------------------- */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* --- exit ticket (short self-scoring quiz) ------------------------ */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff;
+    padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- words-to-physics table --------------------------------------- */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; color:var(--green); }
+
+  /* --- looking-ahead signpost --------------------------------------- */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* --- key relationships (equation-style list) ----------------------- */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{ display:flex; align-items:center; gap:1rem; padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0; }
+  .eq-list li::before{
+    counter-increment:eq; content:"Rel. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; color:var(--green); font-weight:600; flex:none; width:3.6em;
+  }
+  .eq-list .icon{ font-size:1.3rem; flex:none; width:1.6em; text-align:center; }
+  .eq-list .expr{ font-family:Cambria, "Cambria Math", Georgia, serif; font-size:1.05rem; font-weight:600; white-space:nowrap; }
+  .eq-list .use{ margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); text-align:right; max-width:15em; }
+  @media (max-width:560px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.6em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding: .9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Note 2a</span>
+  </div>
+
+  <h1>Sig Figs in Calculations, Unit Conversion, and Unit Tracking</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Every measurement carries some <b>uncertainty</b> — how precisely your instrument can
+    read a value. This note covers how to find that uncertainty, report it as <b>%error</b>
+    (precision error from an instrument, or accuracy error against an expected value), and how
+    significant figures survive (or don't) when you add, subtract, multiply, or divide measured
+    numbers. It finishes with <b>unit conversion</b> and <b>unit tracking</b> — using
+    conversion factors and checking that a formula's units make sense.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li>
+        <span class="tick">PE1</span>
+        <span class="txt"><b>Determine measurement uncertainty</b> from an instrument's smallest marked interval, and compute the resulting precision %error.</span>
+      </li>
+      <li>
+        <span class="tick">PE2</span>
+        <span class="txt"><b>Distinguish precision from accuracy</b>, and compute accuracy %error by comparing a measured value to an expected (theoretical) value.</span>
+      </li>
+      <li>
+        <span class="tick">PE3</span>
+        <span class="txt"><b>Apply sig-fig rules in calculations</b>: match the smallest sig-fig count for multiplication/division, and match the least precise decimal place for addition/subtraction.</span>
+      </li>
+      <li>
+        <span class="tick">PE4</span>
+        <span class="txt"><b>Convert a measured quantity between units</b> using a conversion factor.</span>
+      </li>
+      <li>
+        <span class="tick">PE5</span>
+        <span class="txt"><b>Track units through a formula</b> to confirm a derived unit is correct (e.g., verify that N reduces to kg&middot;m/s&sup2;).</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ruler-tick divider -->
+  <div class="rulerdots" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>every measurement has an uncertainty</small>
+  </div>
+
+  <!-- ============ PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>You already round results to match your least-precise input, even if you've never named the rule:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🌡️</span>
+          <b>A thermometer marked every 2&deg;</b>
+          <small>You'd estimate to the nearest degree, not claim tenths of a degree you can't actually read.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🍳</span>
+          <b>"A pinch" of salt in a recipe</b>
+          <small>Even with an exact cup of flour, the whole recipe's precision is limited by the vaguest ingredient.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">📶</span>
+          <b>A GPS "accurate to &plusmn;5 m" circle</b>
+          <small>That's the app reporting its own uncertainty — exactly like a %error.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we answer four questions</h2>
+  <ol class="questions">
+    <li>How do we determine the uncertainty of a measurement from an instrument's smallest markings?</li>
+    <li>What's the difference between precision error and accuracy error?</li>
+    <li>How do sig-fig rules change between addition/subtraction and multiplication/division?</li>
+    <li>How do we convert units and verify that a formula's units are correct?</li>
+  </ol>
+
+  <!-- ============ INTERACTIVE SIMULATOR ============ -->
+  <h2>Play with it: precision &amp; calculation tools</h2>
+  <p>Switch between the two tools below. The %error tool covers precision (instrument) and
+  accuracy (expected-vs-measured) error. The arithmetic tool shows exactly how sig figs survive
+  addition/subtraction versus multiplication/division.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>🧮</span> Interactive · Precision &amp; Calculation Tools</div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeErrorBtn">% Error</button>
+      <button class="mode-btn" id="modeArithBtn">Sig-Fig Arithmetic</button>
+    </div>
+    <div class="panel">
+
+      <div class="calc-mode active" id="errorMode">
+        <div class="calc-row">
+          <label for="errType">Type:</label>
+          <select id="errType">
+            <option value="accuracy">Accuracy (Expected vs. Measured)</option>
+            <option value="precision">Precision (Measurement &amp; Uncertainty)</option>
+          </select>
+        </div>
+        <div class="calc-row" id="errRowA">
+          <label id="errLabelA" for="errA">Expected value:</label>
+          <input type="text" id="errA" value="9.8" inputmode="decimal">
+          <label id="errLabelB" for="errB">Measured value:</label>
+          <input type="text" id="errB" value="10.2" inputmode="decimal">
+        </div>
+        <div class="result-card">
+          <span class="rlabel">% Error</span>
+          <span class="rval" id="errOut">4.08%</span>
+          <span class="rsub" id="errSub">|9.8 &minus; 10.2| / 9.8 &times; 100</span>
+        </div>
+      </div>
+
+      <div class="calc-mode" id="arithMode">
+        <div class="calc-row">
+          <label for="numA">A:</label>
+          <input type="text" id="numA" value="59.893" inputmode="decimal">
+          <select id="opSelect">
+            <option value="+">+</option>
+            <option value="-">&minus;</option>
+            <option value="*" selected>&times;</option>
+            <option value="/">&divide;</option>
+          </select>
+          <label for="numB">B:</label>
+          <input type="text" id="numB" value="34.32" inputmode="decimal">
+        </div>
+        <div class="result-card">
+          <span class="rlabel">Correctly rounded result</span>
+          <span class="rval" id="arithOut">2056</span>
+          <span class="rsub" id="arithSub">raw = 2055.52776; rounded to 4 sig figs (smaller of A's 5, B's 4)</span>
+        </div>
+      </div>
+
+      <div class="hint-row" id="simHint">Multiplication/division rounds to the fewest sig figs; addition/subtraction rounds to the least precise decimal place.</div>
+    </div>
+  </div>
+
+  <!-- ============ PREDICT-FIRST SELF CHECK ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first: a ruler reads a length as 12.35 cm &plusmn; 0.05 cm. What's the (precision) %error?</p>
+    <div class="opts">
+      <button class="opt" data-correct="true">about 0.4%</button>
+      <button class="opt" data-correct="false">about 4%</button>
+      <button class="opt" data-correct="false">about 40%</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~15 min</span>
+    <!-- ================================================================
+         REPLACE the placeholder div below with your video embed iframe.
+         Ensia / YouTube / Panopto embed codes all drop in the same way:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M1 N2a walkthrough with Dr. Cho"></iframe></div>
+         ================================================================ -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ INSTRUCTIONS (from original note) ============ -->
+  <h2>Instructions and questions</h2>
+  <p>Using a ruler with 1 mm markings, you can only measure to about &plusmn;0.5 mm precision — that's
+  where the "estimate one digit past the smallest marking" rule comes from. Work through the
+  precision-vs-accuracy distinction, then practice the field-area problem (W = 59.893 m,
+  L = 34.32 m — find the area and perimeter, respecting sig-fig rules for each operation).
+  Finish with the unit-conversion example (1.76 miles to meters) and the unit-tracking questions
+  (confirming that F = ma gives units of kg&middot;m/s&sup2;, and similarly for distance, time, and work).</p>
+
+  <div class="rulerdots" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>×÷ matches sig figs · +− matches decimal places</small>
+  </div>
+
+  <h2>Two different rules, side by side</h2>
+  <div class="translate">
+    <table>
+      <thead><tr><th>Operation</th><th>Rule</th><th>Worked example</th></tr></thead>
+      <tbody>
+        <tr><td>Multiplication / division</td><td>Result gets the <span class="tag">smallest sig-fig count</span> of the inputs</td><td>59.893 m &times; 34.32 m = 2056 m&sup2; (4 s.f.)</td></tr>
+        <tr><td>Addition / subtraction</td><td>Result matches the <span class="tag">least precise decimal place</span> of the inputs</td><td>2(59.893 m + 34.32 m) = 188.43 m (2 decimal places)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> the ratio-of-scale reasoning from
+  Note&nbsp;1 and the sig-fig rules from Note&nbsp;2 both come together here in real calculations.
+  Note&nbsp;2b puts this into practice with hands-on guesstimation-vs-measurement labs, where
+  you'll compute real %error from your own data.</p>
+
+  <h2>Key relationships for this note</h2>
+  <ul class="eq-list">
+    <li>
+      <span class="icon" title="Precision error">📏</span>
+      <span class="expr">%error = (uncertainty / measurement) &times; 100</span>
+      <span class="use">precision error — from an instrument's smallest marking</span>
+    </li>
+    <li>
+      <span class="icon" title="Accuracy error">🎯</span>
+      <span class="expr">%error = |expected &minus; measured| / expected &times; 100</span>
+      <span class="use">accuracy error — comparing to a theoretical/expected value</span>
+    </li>
+    <li>
+      <span class="icon" title="Unit conversion">🔄</span>
+      <span class="expr">value &times; (desired unit / starting unit)</span>
+      <span class="use">unit conversion — multiply by a conversion factor equal to 1</span>
+    </li>
+    <li>
+      <span class="icon" title="Unit tracking">✅</span>
+      <span class="expr">substitute base units into the formula</span>
+      <span class="use">unit tracking — confirm a derived unit (e.g., N = kg&middot;m/s&sup2;)</span>
+    </li>
+  </ul>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> A ruler's smallest markings are 1 mm apart. What uncertainty (in mm) should you report?</p>
+        <div class="q-num">
+          <input type="number" id="q1input" step="any" inputmode="decimal" aria-label="uncertainty in mm">
+          <span class="unit">mm</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> You multiply a 3-sig-fig number by a 5-sig-fig number. How many sig figs should the answer have?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> 3</label>
+          <label><input type="radio" name="q2" value="b"> 4</label>
+          <label><input type="radio" name="q2" value="c"> 5</label>
+          <label><input type="radio" name="q2" value="d"> 8</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> You add 12.4 (1 decimal place) and 3.67 (2 decimal places). How many decimal places should the sum have?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> 0</label>
+          <label><input type="radio" name="q3" value="b"> 1</label>
+          <label><input type="radio" name="q3" value="c"> 2</label>
+          <label><input type="radio" name="q3" value="d"> 3</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Starting from F = ma, which correctly shows that force units (N) reduce to base units?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> N = kg &divide; (m/s&sup2;)</label>
+          <label><input type="radio" name="q4" value="b"> N = kg &times; m/s&sup2;</label>
+          <label><input type="radio" name="q4" value="c"> N = kg + m/s&sup2;</label>
+          <label><input type="radio" name="q4" value="d"> N = kg / m / s&sup2;</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <!-- Point these hrefs at the files uploaded to this course's Manage Files
+         area (Insert Quicklink → Course File), NOT at external storage. -->
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print or open on a tablet and fill it in as you follow along.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 1 closes — check your own work against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<script>
+/* ---------- shared sig-fig helpers ---------- */
+function decimalPlacesOf(str){
+  str = String(str).trim();
+  if(str.indexOf('.') === -1) return 0;
+  return str.split('.')[1].length;
+}
+function sigFigsOf(str){
+  str = String(str).trim();
+  var hasDecimal = str.indexOf('.') !== -1;
+  var parts = str.split('.');
+  var intPart = parts[0] || '0';
+  var fracPart = parts.length > 1 ? parts[1] : '';
+  var fullDigits = intPart.replace('-','') + fracPart;
+  var firstNonZeroIdx = -1;
+  for(var i = 0; i < fullDigits.length; i++){
+    if(fullDigits[i] !== '0'){ firstNonZeroIdx = i; break; }
+  }
+  if(firstNonZeroIdx === -1) return 1;
+  var lastSigIdx;
+  if(hasDecimal){
+    lastSigIdx = fullDigits.length - 1;
+  } else {
+    lastSigIdx = firstNonZeroIdx;
+    for(var j = fullDigits.length - 1; j > firstNonZeroIdx; j--){
+      if(fullDigits[j] !== '0'){ lastSigIdx = j; break; }
+    }
+  }
+  return lastSigIdx - firstNonZeroIdx + 1;
+}
+
+/* ---------- mode toggle ---------- */
+(function(){
+  var errBtn = document.getElementById('modeErrorBtn');
+  var arithBtn = document.getElementById('modeArithBtn');
+  var errMode = document.getElementById('errorMode');
+  var arithMode = document.getElementById('arithMode');
+  var hint = document.getElementById('simHint');
+
+  errBtn.addEventListener('click', function(){
+    errBtn.classList.add('active'); arithBtn.classList.remove('active');
+    errMode.classList.add('active'); arithMode.classList.remove('active');
+    hint.textContent = 'Accuracy compares to an expected/theoretical value; precision compares to an instrument\'s uncertainty.';
+  });
+  arithBtn.addEventListener('click', function(){
+    arithBtn.classList.add('active'); errBtn.classList.remove('active');
+    arithMode.classList.add('active'); errMode.classList.remove('active');
+    hint.textContent = 'Multiplication/division rounds to the fewest sig figs; addition/subtraction rounds to the least precise decimal place.';
+  });
+})();
+
+/* ---------- % error calculator ---------- */
+(function(){
+  var typeSel = document.getElementById('errType');
+  var labelA = document.getElementById('errLabelA');
+  var labelB = document.getElementById('errLabelB');
+  var inputA = document.getElementById('errA');
+  var inputB = document.getElementById('errB');
+  var out = document.getElementById('errOut');
+  var sub = document.getElementById('errSub');
+
+  function update(){
+    var a = parseFloat(inputA.value);
+    var b = parseFloat(inputB.value);
+    if(isNaN(a) || isNaN(b) || a === 0){
+      out.textContent = '—'; sub.textContent = 'Enter valid numbers.';
+      return;
+    }
+    var pct;
+    if(typeSel.value === 'accuracy'){
+      pct = Math.abs(a - b) / a * 100;
+      sub.textContent = '|' + a + ' \u2212 ' + b + '| / ' + a + ' \u00d7 100';
+    } else {
+      pct = (b / a) * 100;
+      sub.textContent = b + ' / ' + a + ' \u00d7 100';
+    }
+    out.textContent = pct.toFixed(2) + '%';
+  }
+
+  typeSel.addEventListener('change', function(){
+    if(typeSel.value === 'accuracy'){
+      labelA.textContent = 'Expected value:';
+      labelB.textContent = 'Measured value:';
+      inputA.value = '9.8'; inputB.value = '10.2';
+    } else {
+      labelA.textContent = 'Measurement:';
+      labelB.textContent = 'Uncertainty:';
+      inputA.value = '59.8'; inputB.value = '0.5';
+    }
+    update();
+  });
+  inputA.addEventListener('input', update);
+  inputB.addEventListener('input', update);
+  update();
+})();
+
+/* ---------- sig-fig arithmetic calculator ---------- */
+(function(){
+  var numA = document.getElementById('numA');
+  var numB = document.getElementById('numB');
+  var opSelect = document.getElementById('opSelect');
+  var out = document.getElementById('arithOut');
+  var sub = document.getElementById('arithSub');
+
+  function update(){
+    var aStr = numA.value.trim();
+    var bStr = numB.value.trim();
+    var a = parseFloat(aStr);
+    var b = parseFloat(bStr);
+    var op = opSelect.value;
+    if(isNaN(a) || isNaN(b)){ out.textContent = '—'; sub.textContent = 'Enter valid numbers.'; return; }
+
+    var raw, rounded, ruleText;
+    if(op === '+'){ raw = a + b; }
+    else if(op === '-'){ raw = a - b; }
+    else if(op === '*'){ raw = a * b; }
+    else { raw = a / b; }
+
+    if(op === '+' || op === '-'){
+      var decimals = Math.min(decimalPlacesOf(aStr), decimalPlacesOf(bStr));
+      rounded = raw.toFixed(decimals);
+      ruleText = 'raw = ' + raw + '; rounded to ' + decimals + ' decimal place' + (decimals===1?'':'s') +
+        ' (A has ' + decimalPlacesOf(aStr) + ', B has ' + decimalPlacesOf(bStr) + ')';
+    } else {
+      var sig = Math.min(sigFigsOf(aStr), sigFigsOf(bStr));
+      rounded = Number(raw.toPrecision(sig));
+      ruleText = 'raw = ' + raw + '; rounded to ' + sig + ' sig fig' + (sig===1?'':'s') +
+        ' (A has ' + sigFigsOf(aStr) + ', B has ' + sigFigsOf(bStr) + ')';
+    }
+    out.textContent = rounded;
+    sub.textContent = ruleText;
+  }
+
+  numA.addEventListener('input', update);
+  numB.addEventListener('input', update);
+  opSelect.addEventListener('change', update);
+  update();
+})();
+
+/* ---------- predict-first self check ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct');
+        fb.style.color = '#134a29';
+        fb.textContent = '✓ Exactly. 0.05 / 12.35 \u00d7 100 \u2248 0.4%.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite — divide the uncertainty by the measurement, then \u00d7100: 0.05 / 12.35 \u00d7 100.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q2:'a', q3:'b', q4:'b' };
+  var expl = {
+    q2:'multiplication/division rounds to the smallest sig-fig count among the inputs — that\'s 3.',
+    q3:'addition/subtraction rounds to the least precise decimal place — that\'s 1 (from 12.4).',
+    q4:'F = ma multiplies mass (kg) by acceleration (m/s\u00b2), so N = kg \u00d7 m/s\u00b2.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong');
+    card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+
+  function grade(){
+    var correct = 0, total = 4;
+    var v1 = parseFloat(document.getElementById('q1input').value);
+    if(Math.abs(v1 - 0.5) < 0.05){ correct++; markCard('card-q1', true, '✓ Correct: half the smallest interval is 0.5 mm.'); }
+    else if(isNaN(v1)){ markCard('card-q1', false, 'Enter a number.'); }
+    else { markCard('card-q1', false, '✗ The uncertainty is half of the smallest marked interval: 0.5 mm.'); }
+
+    ['q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q1input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
