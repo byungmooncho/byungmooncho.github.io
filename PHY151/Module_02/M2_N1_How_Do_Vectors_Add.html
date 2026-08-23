@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 N1 — How Do Vectors Add?</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — Module 2 (matches M1 N3/N4 template)
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+
+  /* strobe divider */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+  @keyframes strobePulse{ 0%,100%{ transform:scale(1); opacity:.55; } 35%{ transform:scale(1.9); opacity:1; } }
+  .strobe.animate span{ animation:strobePulse 2.4s ease-in-out infinite; }
+  .strobe.animate span:nth-child(1){ animation-delay:0s; }
+  .strobe.animate span:nth-child(2){ animation-delay:.16s; }
+  .strobe.animate span:nth-child(3){ animation-delay:.32s; }
+  .strobe.animate span:nth-child(4){ animation-delay:.48s; }
+  .strobe.animate span:nth-child(5){ animation-delay:.64s; }
+  .strobe.animate span:nth-child(6){ animation-delay:.80s; }
+  @media (prefers-reduced-motion: reduce){ .strobe.animate span{ animation:none; } }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* "you already know this" */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* interactive simulator */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .controls{ display:grid; gap:.9rem 1.4rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .controls{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn.toggle{ border-radius:6px; }
+  .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .seg{ display:inline-flex; border:1px solid var(--green); border-radius:6px; overflow:hidden; }
+  .seg button{ border:0; background:#fff; color:var(--green); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600; padding:.42rem .8rem; cursor:pointer; }
+  .seg button[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* looking-ahead signpost */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* summary table */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; }
+  .translate td .tag.up{ color:var(--green); }
+  .translate td .tag.zero{ color:var(--muted); }
+
+  /* key equations */
+  .eqs{ display:grid; gap:.8rem; grid-template-columns:1fr; margin:1rem 0 0; }
+  @media (min-width:600px){ .eqs{ grid-template-columns:1fr 1fr 1fr; } }
+  .eq-card{ border:1px solid var(--rule); border-radius:8px; padding:.85rem .9rem; background:#fff; }
+  .eq-card .icon{ font-size:1.4rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .eq-card .formula{
+    font-family:Charter, Georgia, serif; font-size:1.08rem; font-weight:700;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .eq-card small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  /* video slot */
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Vectors and Projectile Motion</span>
+    <span>Note 1</span>
+  </div>
+
+  <h1>How Do Vectors Add?</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Displacement and velocity are vector quantities — they need both a magnitude and a direction, and each is
+    the vector "counterpart" of a scalar you already know (distance and speed). Scalars add like ordinary
+    numbers. A vector is like an <em>arrow</em>: it has a length and points somewhere, and arrows do add,
+    subtract, and multiply (never divide — vector division doesn't exist), just not the way numbers do.
+    The rule is <em>head-to-tail</em>: join the head of one vector to the tail of the next, and the sum —
+    the <b>resultant</b> — runs from the tail of the first vector to the head of the last. A negative sign
+    simply flips a vector's head and tail, so subtraction is addition with one arrow reversed.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Distinguish scalar from vector quantities</b> and give examples of each — and recognize that an arrow's length is the magnitude and its head is the direction.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Add vectors head-to-tail</b> — join the head of one vector to the tail of the next, keeping each vector's orientation.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Draw the resultant vector</b> from the tail of the first vector to the head of the last, and determine it diagrammatically with a ruler and protractor.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Subtract vectors</b> by flipping the negative vector's head and tail (it points the opposite way), then adding head-to-tail as usual.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Rejoin vectors that are drawn tail-to-tail or separated in space</b> — move them without rotating them until they connect head-to-tail, <em>then</em> add.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Relate the joint angle to the resultant's length</b> — vectors pointing the same way give the longest resultant; doubled back gives the shortest.</span></li>
+    </ul>
+  </div>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>arrows join head to tail</small>
+  </div>
+
+  <!-- ============ CONNECTING PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>You've been adding vectors your whole life — you just never drew the arrows:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🚶</span>
+          <b>Walking directions</b>
+          <small>"Three blocks east, then four blocks north." Two legs of a trip, joined end to end — your total displacement is the straight arrow from start to finish.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🪢</span>
+          <b>Tug-of-war</b>
+          <small>Two teams pull in opposite directions. Equal pulls cancel to nothing; direction matters, not just effort.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">✈️</span>
+          <b>Crosswind</b>
+          <small>A plane aims north while the wind pushes east — it actually travels along the diagonal. Two motions combine into one.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we work through</h2>
+  <ol class="questions">
+    <li>What is the difference between scalar and vector quantities? What are examples of each?</li>
+    <li>How do scalar quantities add?</li>
+    <li>Vectors are like "arrows" — they have length (magnitude) and direction. How do arrows add?</li>
+    <li>What is the resultant vector, and how do we draw it?</li>
+    <li>How does the angle where two vectors join change the resultant's length?</li>
+    <li>How do we add vectors that are drawn joined at the tails — or separated in space?</li>
+    <li>Which pairs of vectors produce identical resultants?</li>
+  </ol>
+
+  <!-- ============ INTERACTIVE: HEAD-TO-TAIL LAB ============ -->
+  <h2>Play with it: the head-to-tail lab</h2>
+  <p>Two vectors, <b style="color:#7fd1a0">A</b> and <b style="color:#67b7ff">B</b>, start out separated in
+  space — the way force vectors are often drawn. Press <b>Join head-to-tail</b> to slide B (without rotating
+  it!) until its tail sits on A's head, then press <b>Show resultant</b>. Try <b>A − B</b> and watch the
+  negative sign flip B around.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>▶</span> Interactive · Head-to-Tail Vector Addition</div>
+    <div class="stage">
+      <canvas id="simCanvas" width="720" height="400" role="img"
+        aria-label="Two vectors on grid paper that slide together head-to-tail, with the resultant drawn from the tail of the first to the head of the last."></canvas>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl">
+          <label for="magA">Length of A <span class="val"><span id="magAval">4.0</span> units</span></label>
+          <input type="range" id="magA" min="1" max="6" step="0.5" value="4">
+        </div>
+        <div class="ctrl">
+          <label for="dirA">Direction of A <span class="val"><span id="dirAval">0</span>°</span></label>
+          <input type="range" id="dirA" min="0" max="360" step="5" value="0">
+        </div>
+        <div class="ctrl">
+          <label for="magB">Length of B <span class="val"><span id="magBval">3.0</span> units</span></label>
+          <input type="range" id="magB" min="1" max="6" step="0.5" value="3">
+        </div>
+        <div class="ctrl">
+          <label for="dirB">Direction of B <span class="val"><span id="dirBval">90</span>°</span></label>
+          <input type="range" id="dirB" min="0" max="360" step="5" value="90">
+        </div>
+      </div>
+      <div class="buttons">
+        <span class="seg" role="group" aria-label="operation">
+          <button id="opAdd" aria-pressed="true">A + B</button>
+          <button id="opSub" aria-pressed="false">A − B</button>
+        </span>
+        <button class="btn primary" id="joinBtn">→← Join head-to-tail</button>
+        <button class="btn toggle" id="resBtn" aria-pressed="false">Show resultant</button>
+        <button class="btn" id="resetBtn">↺ Reset</button>
+      </div>
+      <div class="readout">
+        <span class="chip">|A| = <b id="aOut">4.0</b></span>
+        <span class="chip">|B| = <b id="bOut">3.0</b></span>
+        <span class="chip">joint angle = <b id="jOut">—</b></span>
+        <span class="chip">|resultant| = <b id="rOut">—</b></span>
+      </div>
+      <div class="hint-row" id="simHint">Vectors separated in space can't be added as drawn — slide one (keeping its orientation!) until they connect head-to-tail.</div>
+    </div>
+  </div>
+
+  <!-- predict-first probe -->
+  <div class="probe" id="probe"
+    data-right-msg="✓ Right. Straight ahead (joint angle 180°) gives 3 + 4 = 7; doubled back gives 4 − 3 = 1; every angle in between gives something in between — including 5 at a right angle."
+    data-wrong-msg="✗ Not quite — the resultant's length depends on the joint angle. Same way: 7. Doubled back: 1. In between: everything in between. Try it in the lab above.">
+    <p class="q">Predict first: a 3-unit vector and a 4-unit vector are added head-to-tail. What lengths can the
+    resultant have, depending on the angle where they join?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Always 7 — lengths simply add.</button>
+      <button class="opt" data-correct="false">Always 5 — it's a 3-4-5 triangle.</button>
+      <button class="opt" data-correct="true">Anywhere from 1 to 7, depending on the joint angle.</button>
+      <button class="opt" data-correct="false">Anywhere from 0 to 12.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~12 min</span>
+    <!-- Replace the placeholder with your embed:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M2 N1 walkthrough with Dr. Cho"></iframe></div> -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ SUMMARY TABLE ============ -->
+  <h2>The joint angle at a glance</h2>
+  <p>When two vectors of lengths <em>a</em> and <em>b</em> connect head-to-tail, the angle at the joint sets
+  the resultant's length. (Remember the note's convention: a straight-ahead connection makes a joint angle
+  of 180°.)</p>
+  <div class="translate">
+    <table>
+      <thead>
+        <tr><th>How they join</th><th>Joint angle</th><th>Resultant length</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Straight ahead</b> — same direction</td><td>180°</td><td><span class="tag up">a + b</span> — the longest possible</td></tr>
+        <tr><td><b>At a corner</b> — perpendicular</td><td>90°</td><td>between the extremes (diagonal of the corner)</td></tr>
+        <tr><td><b>Doubled back</b> — opposite direction</td><td>0°</td><td><span class="tag zero">a − b</span> — the shortest possible</td></tr>
+        <tr><td><b>Doubled back, equal lengths</b></td><td>0°</td><td><span class="tag zero">zero</span> — you end where you started</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> here we add vectors by <em>drawing</em> — ruler,
+  protractor, grid paper. In Note&nbsp;2 we run the rule in reverse and <em>resolve</em> one vector into
+  horizontal and vertical pieces, and in Note&nbsp;2a trigonometry turns those drawings into calculations.
+  Master the picture first; the math is just the picture with numbers.</p>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>tail of the first → head of the last</small>
+  </div>
+
+  <!-- ============ KEY RULES ============ -->
+  <h2>Three rules to remember</h2>
+  <div class="eqs">
+    <div class="eq-card">
+      <span class="icon">🔗</span>
+      <span class="formula">Head-to-tail</span>
+      <small>Join the head of one vector to the tail of the next — rejoining them if they're drawn tail-to-tail or apart, without rotating them.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">🎯</span>
+      <span class="formula">R: first tail → last head</span>
+      <small>The resultant starts at the tail of the first vector and ends at the head of the last.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">↔️</span>
+      <span class="formula">−B flips B</span>
+      <small>A negative sign swaps head and tail — the vector points the opposite way. Subtraction is just addition of the flipped vector.</small>
+    </div>
+  </div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> To add two vectors, you join them&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> Tail-to-tail; the resultant connects the two heads.</label>
+          <label><input type="radio" name="q1" value="b"> Head-to-tail; the resultant runs from the tail of the first to the head of the last.</label>
+          <label><input type="radio" name="q1" value="c"> Head-to-head; the resultant connects the two tails.</label>
+          <label><input type="radio" name="q1" value="d"> Side by side; the resultant is the longer of the two.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> A negative sign on a vector means&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> Its magnitude becomes negative.</label>
+          <label><input type="radio" name="q2" value="b"> It is removed from the sum.</label>
+          <label><input type="radio" name="q2" value="c"> The head and tail flip — it points in the opposite direction.</label>
+          <label><input type="radio" name="q2" value="d"> It becomes a scalar.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> A 3 m displacement and a 4 m displacement join head-to-tail
+        pointing the <em>same way</em> (joint angle 180° — straight ahead). How long is the resultant?</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="resultant length in meters">
+          <span class="unit">m</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Two force vectors are drawn joined at their <em>tails</em>. Before adding them, you must&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> Add them exactly as drawn.</label>
+          <label><input type="radio" name="q4" value="b"> Flip one of them over.</label>
+          <label><input type="radio" name="q4" value="c"> Measure the angle between them first.</label>
+          <label><input type="radio" name="q4" value="d"> Separate them and rejoin them head-to-tail, keeping each vector's orientation.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before class</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print it — you'll need the grid page, a ruler, and a protractor to draw the resultants.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 2 closes — check your drawings against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   Head-to-Tail Vector Addition Lab — self-contained, no dependencies.
+   Two vectors A, B start separated on grid paper. "Join" animates B's
+   tail sliding onto A's head (orientation preserved). Resultant is
+   drawn from A's tail to B's head. Subtract mode flips B first.
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var GRID = 34;                       // px per unit
+  var magA = 4, dirA = 0, magB = 3, dirB = 90;
+  var subtract = false;
+  var joinT = 0;                       // 0 = separated, 1 = joined
+  var joining = false, showRes = false, lastTs = null;
+
+  var el = {
+    magA: document.getElementById('magA'), dirA: document.getElementById('dirA'),
+    magB: document.getElementById('magB'), dirB: document.getElementById('dirB'),
+    magAval: document.getElementById('magAval'), dirAval: document.getElementById('dirAval'),
+    magBval: document.getElementById('magBval'), dirBval: document.getElementById('dirBval'),
+    aOut: document.getElementById('aOut'), bOut: document.getElementById('bOut'),
+    jOut: document.getElementById('jOut'), rOut: document.getElementById('rOut'),
+    opAdd: document.getElementById('opAdd'), opSub: document.getElementById('opSub'),
+    join: document.getElementById('joinBtn'), res: document.getElementById('resBtn'),
+    reset: document.getElementById('resetBtn'), hint: document.getElementById('simHint')
+  };
+
+  function rad(d){ return d * Math.PI / 180; }
+  function vecA(){ return { x: magA * Math.cos(rad(dirA)), y: magA * Math.sin(rad(dirA)) }; }
+  function vecB(){                      // flipped if subtracting
+    var s = subtract ? -1 : 1;
+    return { x: s * magB * Math.cos(rad(dirB)), y: s * magB * Math.sin(rad(dirB)) };
+  }
+
+  // anchor points (grid units, y up); A's tail near left-center, B parked lower-right
+  var Atail = { x: -4.5, y: -1.5 };
+  var BtailPark = { x: 1.5, y: -3.5 };
+
+  function toPx(p){ return { x: W/2 + p.x * GRID, y: H/2 - p.y * GRID }; }
+
+  function arrow(from, to, color, width, dash, label){
+    var f = toPx(from), t = toPx(to);
+    ctx.save();
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width;
+    if(dash) ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo(t.x, t.y); ctx.stroke();
+    ctx.setLineDash([]);
+    var ang = Math.atan2(t.y - f.y, t.x - f.x), hl = 11;
+    ctx.beginPath();
+    ctx.moveTo(t.x, t.y);
+    ctx.lineTo(t.x - hl * Math.cos(ang - 0.42), t.y - hl * Math.sin(ang - 0.42));
+    ctx.lineTo(t.x - hl * Math.cos(ang + 0.42), t.y - hl * Math.sin(ang + 0.42));
+    ctx.closePath(); ctx.fill();
+    if(label){
+      ctx.font = 'bold 15px Segoe UI, sans-serif';
+      ctx.fillText(label, (f.x + t.x)/2 + 10, (f.y + t.y)/2 - 8);
+    }
+    ctx.restore();
+  }
+
+  function jointAngle(){
+    // note convention: straight-ahead joint = 180°, doubled-back = 0°
+    var a = vecA(), b = vecB();
+    var la = Math.hypot(a.x, a.y), lb = Math.hypot(b.x, b.y);
+    if(la === 0 || lb === 0) return null;
+    var dot = (a.x * b.x + a.y * b.y) / (la * lb);
+    dot = Math.max(-1, Math.min(1, dot));
+    var between = Math.acos(dot) * 180 / Math.PI;  // 0 = same way
+    return 180 - between;
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0, 0, W, H);
+
+    // grid
+    ctx.strokeStyle = '#1c3527'; ctx.lineWidth = 1;
+    for(var gx = W/2 % GRID; gx < W; gx += GRID){ ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
+    for(var gy = H/2 % GRID; gy < H; gy += GRID){ ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
+
+    var a = vecA(), b = vecB();
+    var Ahead = { x: Atail.x + a.x, y: Atail.y + a.y };
+
+    // B's tail interpolates from its parking spot to A's head
+    var Btail = {
+      x: BtailPark.x + (Ahead.x - BtailPark.x) * joinT,
+      y: BtailPark.y + (Ahead.y - BtailPark.y) * joinT
+    };
+    var Bhead = { x: Btail.x + b.x, y: Btail.y + b.y };
+
+    // vectors
+    arrow(Atail, Ahead, '#7fd1a0', 3, null, 'A');
+    arrow(Btail, Bhead, '#67b7ff', 3, null, subtract ? '−B' : 'B');
+
+    // ghost of original +B when subtracting (joined view only, faint)
+    if(subtract){
+      var g = { x: magB * Math.cos(rad(dirB)), y: magB * Math.sin(rad(dirB)) };
+      arrow(Btail, { x: Btail.x + g.x, y: Btail.y + g.y }, 'rgba(103,183,255,0.28)', 2, [4,4], '+B');
+    }
+
+    // resultant
+    if(showRes && joinT >= 1){
+      arrow(Atail, Bhead, '#ffd479', 3.5, [7,5], subtract ? 'A−B' : 'A+B');
+      var f = toPx(Atail);
+      ctx.fillStyle = '#ffd479'; ctx.font = '11px Segoe UI, sans-serif';
+      ctx.fillText('tail of first → head of last', f.x, f.y + 18);
+    }
+
+    // caption
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillText(joinT < 1 ? 'separated in space — not yet addable' : 'joined head-to-tail ✓', 10, 16);
+  }
+
+  function readout(){
+    el.aOut.textContent = magA.toFixed(1);
+    el.bOut.textContent = magB.toFixed(1);
+    if(joinT >= 1){
+      var j = jointAngle();
+      el.jOut.textContent = j === null ? '—' : Math.round(j) + '°';
+    } else { el.jOut.textContent = '—'; }
+    if(showRes && joinT >= 1){
+      var a = vecA(), b = vecB();
+      el.rOut.textContent = Math.hypot(a.x + b.x, a.y + b.y).toFixed(1);
+    } else { el.rOut.textContent = '—'; }
+  }
+
+  function hint(){
+    if(joinT < 1){
+      el.hint.textContent = 'Vectors separated in space can’t be added as drawn — slide one (keeping its orientation!) until they connect head-to-tail.';
+    } else if(!showRes){
+      el.hint.textContent = 'Joined! Now show the resultant: it runs from the tail of A to the head of ' + (subtract ? '−B.' : 'B.');
+    } else {
+      var j = jointAngle();
+      if(j !== null && j >= 172) el.hint.textContent = 'Straight ahead (joint ≈ 180°): the lengths simply add — the longest resultant possible.';
+      else if(j !== null && j <= 8) el.hint.textContent = 'Doubled back (joint ≈ 0°): the resultant is the difference of the lengths — the shortest possible. Equal lengths would cancel to zero.';
+      else if(j !== null && Math.abs(j - 90) <= 8) el.hint.textContent = 'A right-angle joint: the resultant is the diagonal — between the two extremes.';
+      else el.hint.textContent = 'Change a direction slider and watch the joint angle reshape the resultant.';
+    }
+  }
+
+  function animate(ts){
+    if(!joining) return;
+    if(lastTs === null) lastTs = ts;
+    var dt = Math.min((ts - lastTs) / 1000, 0.05); lastTs = ts;
+    joinT = Math.min(1, joinT + dt * 1.6);
+    if(joinT >= 1){ joining = false; }
+    draw(); readout(); hint();
+    if(joining) requestAnimationFrame(animate);
+  }
+
+  function refresh(){ draw(); readout(); hint(); }
+
+  function separate(){
+    joinT = 0; joining = false; showRes = false; lastTs = null;
+    el.res.setAttribute('aria-pressed', 'false');
+    refresh();
+  }
+
+  el.magA.addEventListener('input', function(){ magA = parseFloat(this.value); el.magAval.textContent = magA.toFixed(1); refresh(); });
+  el.magB.addEventListener('input', function(){ magB = parseFloat(this.value); el.magBval.textContent = magB.toFixed(1); refresh(); });
+  el.dirA.addEventListener('input', function(){ dirA = parseFloat(this.value); el.dirAval.textContent = dirA.toFixed(0); refresh(); });
+  el.dirB.addEventListener('input', function(){ dirB = parseFloat(this.value); el.dirBval.textContent = dirB.toFixed(0); refresh(); });
+
+  el.opAdd.addEventListener('click', function(){ subtract = false; el.opAdd.setAttribute('aria-pressed','true'); el.opSub.setAttribute('aria-pressed','false'); refresh(); });
+  el.opSub.addEventListener('click', function(){ subtract = true; el.opSub.setAttribute('aria-pressed','true'); el.opAdd.setAttribute('aria-pressed','false'); refresh(); });
+
+  el.join.addEventListener('click', function(){
+    if(joinT >= 1) return;
+    if(reduceMotion){ joinT = 1; refresh(); return; }
+    joining = true; lastTs = null; requestAnimationFrame(animate);
+  });
+  el.res.addEventListener('click', function(){
+    if(joinT < 1){ el.hint.textContent = 'Join the vectors head-to-tail first — the resultant only exists once they’re connected.'; return; }
+    showRes = !showRes;
+    this.setAttribute('aria-pressed', showRes ? 'true' : 'false');
+    refresh();
+  });
+  el.reset.addEventListener('click', separate);
+
+  separate();
+})();
+
+window.TICKET = {
+  mc: {
+    q1: { ans:'b', why:'the head-to-tail rule: join head to tail, then draw the resultant from the tail of the first vector to the head of the last.' },
+    q2: { ans:'c', why:'a negative sign flips the head and tail — the vector points the opposite way; its length never becomes negative.' },
+    q4: { ans:'d', why:'tail-to-tail vectors can’t be added as drawn — slide them (without rotating) until they connect head-to-tail.' }
+  },
+  num: {
+    q3: { ans:7, tol:0.05, unit:'m',
+          right:'Correct: pointing the same way, the lengths simply add — 3 + 4 = 7 m, the longest resultant possible.',
+          wrong:'Straight ahead means the magnitudes just add: 3 m + 4 m = 7 m.' }
+  }
+};
+/* ---------- predict-first probe (shared) ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  var rightMsg = probe.getAttribute('data-right-msg') || '✓ Right.';
+  var wrongMsg = probe.getAttribute('data-wrong-msg') || '✗ Not quite.';
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = rightMsg;
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = wrongMsg;
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring (shared; page defines window.TICKET) ----------
+   window.TICKET = {
+     mc:   { q1:{ans:'b', why:'...'}, ... },
+     num:  { q3:{ans:3, tol:0.05, unit:'m/s', right:'...', wrong:'...'} , ... }
+   }
+--------------------------------------------------------------------------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket || !window.TICKET) return;
+  var cfg = window.TICKET;
+  var mcIds = Object.keys(cfg.mc || {});
+  var numIds = Object.keys(cfg.num || {});
+  var total = mcIds.length + numIds.length;
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById('card-' + id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0;
+    mcIds.forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(sel && sel.value === cfg.mc[q].ans){ correct++; markCard(q, true, '✓ Correct.'); }
+      else if(sel){ markCard(q, false, '✗ Not quite — ' + cfg.mc[q].why); }
+      else { markCard(q, false, 'Pick an answer above.'); }
+    });
+    numIds.forEach(function(q){
+      var n = cfg.num[q];
+      var v = parseFloat(document.getElementById(q + 'input').value);
+      if(!isNaN(v) && Math.abs(v - n.ans) <= n.tol){ correct++; markCard(q, true, '✓ ' + n.right); }
+      else if(isNaN(v)){ markCard(q, false, 'Enter a number (' + n.unit + ').'); }
+      else { markCard(q, false, '✗ ' + n.wrong); }
+    });
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= Math.ceil(total/2) ? 'Good start — revisit the ones you missed.'
+             : 'Work back through the note, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    numIds.forEach(function(q){ document.getElementById(q + 'input').value = ''; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+
+</script>
+</body>
+</html>

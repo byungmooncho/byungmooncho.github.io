@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 N2a — Trig Definitions</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — Module 2 (matches M1 N3/N4 template)
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+
+  /* strobe divider */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+  @keyframes strobePulse{ 0%,100%{ transform:scale(1); opacity:.55; } 35%{ transform:scale(1.9); opacity:1; } }
+  .strobe.animate span{ animation:strobePulse 2.4s ease-in-out infinite; }
+  .strobe.animate span:nth-child(1){ animation-delay:0s; }
+  .strobe.animate span:nth-child(2){ animation-delay:.16s; }
+  .strobe.animate span:nth-child(3){ animation-delay:.32s; }
+  .strobe.animate span:nth-child(4){ animation-delay:.48s; }
+  .strobe.animate span:nth-child(5){ animation-delay:.64s; }
+  .strobe.animate span:nth-child(6){ animation-delay:.80s; }
+  @media (prefers-reduced-motion: reduce){ .strobe.animate span{ animation:none; } }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* "you already know this" */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* interactive simulator */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .controls{ display:grid; gap:.9rem 1.4rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .controls{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn.toggle{ border-radius:6px; }
+  .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .seg{ display:inline-flex; border:1px solid var(--green); border-radius:6px; overflow:hidden; }
+  .seg button{ border:0; background:#fff; color:var(--green); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600; padding:.42rem .8rem; cursor:pointer; }
+  .seg button[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* looking-ahead signpost */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* summary table */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; }
+  .translate td .tag.up{ color:var(--green); }
+  .translate td .tag.zero{ color:var(--muted); }
+
+  /* key equations */
+  .eqs{ display:grid; gap:.8rem; grid-template-columns:1fr; margin:1rem 0 0; }
+  @media (min-width:600px){ .eqs{ grid-template-columns:1fr 1fr 1fr; } }
+  .eq-card{ border:1px solid var(--rule); border-radius:8px; padding:.85rem .9rem; background:#fff; }
+  .eq-card .icon{ font-size:1.4rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .eq-card .formula{
+    font-family:Charter, Georgia, serif; font-size:1.08rem; font-weight:700;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .eq-card small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  /* video slot */
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Vectors and Projectile Motion</span>
+    <span>Note 2a</span>
+  </div>
+
+  <h1>Trig Definitions: From Drawings to Calculations</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In Note 2 we resolved vectors by drawing and counting grid squares. Trigonometry lets us skip the grid:
+    in a right triangle with angle θ, <b>sin θ = opp/hyp</b>, <b>cos θ = adj/hyp</b>, and
+    <b>tan θ = opp/adj</b> — so the opposite side is (hyp)(sin θ) and the adjacent side is (hyp)(cos θ).
+    A vector and its two components form exactly this triangle: the vector is the hypotenuse, the
+    x-component is the adjacent side, and the y-component is the opposite side. That gives the two most-used
+    equations of this module: <b>F<sub>x</sub> = F cos θ</b> and <b>F<sub>y</sub> = F sin θ</b>.
+    One warning before you compute anything: put your calculator in <em>degree mode</em>.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Name the sides of a right triangle relative to θ</b> — hypotenuse, opposite, adjacent — and recognize that "opposite" and "adjacent" swap if you pick the other angle.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>State the trig definitions</b> — sin θ = opp/hyp, cos θ = adj/hyp, tan θ = opp/adj (SOH-CAH-TOA).</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Compute the sides from the hypotenuse and angle</b> — opp = (hyp)(sin θ) and adj = (hyp)(cos θ), with the calculator in degree mode.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Resolve a vector with trig</b> — F<sub>x</sub> = F cos θ and F<sub>y</sub> = F sin θ for a vector of magnitude F at angle θ above the +x axis.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Recombine components into a vector</b> — magnitude |F| = √(F<sub>x</sub>² + F<sub>y</sub>²) and direction θ = tan⁻¹(F<sub>y</sub>/F<sub>x</sub>).</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Check answers with friendly triangles</b> — recognize the 3-4-5 and 6-8-10 patterns and the sanity checks at 0°, 45°, and 90°.</span></li>
+    </ul>
+  </div>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>SOH · CAH · TOA</small>
+  </div>
+
+  <!-- ============ CONNECTING PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>Right triangles with a known angle are hiding all around you:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🪜</span>
+          <b>Ladder against a wall</b>
+          <small>Same ladder, steeper angle → it reaches higher up (more "opposite") but its foot sits closer in (less "adjacent").</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🌤️</span>
+          <b>Shadows</b>
+          <small>Your height, the shadow's length, and the sun's angle form a right triangle — that's tan θ in the wild.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🛣️</span>
+          <b>Road grade signs</b>
+          <small>"6% grade" is rise over run — the tangent of the road's angle, posted on a highway sign.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we work through</h2>
+  <ol class="questions">
+    <li>Relative to the angle θ, which side of a right triangle is the hypotenuse, the opposite, and the adjacent?</li>
+    <li>What are the definitions of sin θ, cos θ, and tan θ?</li>
+    <li>How do we compute the opposite and adjacent sides from the hypotenuse and θ?</li>
+    <li>How does trig resolve a vector — where do F<sub>x</sub> = F cos θ and F<sub>y</sub> = F sin θ come from?</li>
+    <li>How do we go backwards — from components to a magnitude and a direction?</li>
+  </ol>
+
+  <!-- ============ INTERACTIVE: TRIG TRIANGLE ============ -->
+  <h2>Play with it: the living triangle</h2>
+  <p>Drag the sliders and watch the right triangle reshape itself. Start in <b>Triangle view</b> to see
+  hyp–opp–adj; then switch to <b>Vector view</b> — same triangle, new names: the hypotenuse becomes the
+  vector F, the adjacent side becomes F<sub>x</sub>, the opposite side becomes F<sub>y</sub>.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>▶</span> Interactive · SOH-CAH-TOA Lab</div>
+    <div class="stage">
+      <canvas id="simCanvas" width="720" height="400" role="img"
+        aria-label="A right triangle whose angle and hypotenuse are adjustable, showing how the opposite and adjacent sides — or the x and y components of a vector — change with the angle."></canvas>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl">
+          <label for="hyp">Hypotenuse (vector magnitude F) <span class="val"><span id="hypval">10.0</span></span></label>
+          <input type="range" id="hyp" min="2" max="12" step="0.5" value="10">
+        </div>
+        <div class="ctrl">
+          <label for="ang">Angle θ <span class="val"><span id="angval">30</span>°</span></label>
+          <input type="range" id="ang" min="0" max="90" step="1" value="30">
+        </div>
+      </div>
+      <div class="buttons">
+        <span class="seg" role="group" aria-label="view">
+          <button id="viewTri" aria-pressed="true">Triangle view</button>
+          <button id="viewVec" aria-pressed="false">Vector view</button>
+        </span>
+        <button class="btn" id="resetBtn">↺ Reset</button>
+      </div>
+      <div class="readout">
+        <span class="chip">sin θ = <b id="sinOut">0.500</b></span>
+        <span class="chip">cos θ = <b id="cosOut">0.866</b></span>
+        <span class="chip">tan θ = <b id="tanOut">0.577</b></span>
+        <span class="chip"><span id="oppLbl">opp</span> = <b id="oppOut">5.0</b></span>
+        <span class="chip"><span id="adjLbl">adj</span> = <b id="adjOut">8.7</b></span>
+      </div>
+      <div class="hint-row" id="simHint">opp = (hyp)(sin θ) and adj = (hyp)(cos θ). Check: 10 × sin 30° = 5 — a calculator in degree mode agrees.</div>
+    </div>
+  </div>
+
+  <!-- predict-first probe -->
+  <div class="probe" id="probe"
+    data-right-msg="✓ Right. The x-component is the side adjacent to θ, and adj = (hyp)(cos θ) = 10 × cos 30° ≈ 8.7 m/s. The y-component gets the sine: 10 × sin 30° = 5.0 m/s."
+    data-wrong-msg="✗ Not quite — the x-component lies along the adjacent side, so it takes the cosine: Fx = F cos θ = 10 × cos 30° ≈ 8.7 m/s. (Fy = F sin θ = 5.0 m/s.)">
+    <p class="q">Predict first: a velocity of 10 m/s points 30° above the +x axis. What is its x-component?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">10 × sin 30° = 5.0 m/s</button>
+      <button class="opt" data-correct="true">10 × cos 30° ≈ 8.7 m/s</button>
+      <button class="opt" data-correct="false">10 × tan 30° ≈ 5.8 m/s</button>
+      <button class="opt" data-correct="false">Exactly 10 m/s — components keep the full magnitude.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~10 min</span>
+    <!-- Replace the placeholder with your embed:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M2 N2a walkthrough with Dr. Cho"></iframe></div> -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ SUMMARY TABLE ============ -->
+  <h2>Which trig function do I use?</h2>
+  <p>Read your problem, find what you have and what you want, and the table picks the function for you:</p>
+  <div class="translate">
+    <table>
+      <thead>
+        <tr><th>You have</th><th>You want</th><th>Use</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>hyp and θ</td><td>the <b>opposite</b> side (F<sub>y</sub>)</td><td><span class="tag up">opp = (hyp)(sin θ)</span></td></tr>
+        <tr><td>hyp and θ</td><td>the <b>adjacent</b> side (F<sub>x</sub>)</td><td><span class="tag up">adj = (hyp)(cos θ)</span></td></tr>
+        <tr><td>opp and adj</td><td>the <b>angle</b> θ</td><td><span class="tag up">θ = tan⁻¹(opp/adj)</span></td></tr>
+        <tr><td>both components</td><td>the <b>magnitude</b></td><td><span class="tag up">|F| = √(F<sub>x</sub>² + F<sub>y</sub>²)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> these two lines — F<sub>x</sub> = F cos θ and
+  F<sub>y</sub> = F sin θ — are the launch codes for everything that follows. In Notes 3 and 4 they split a
+  cannonball's velocity into a horizontal part that never changes and a vertical part that gravity owns; in
+  Note 5 you'll run them backwards to aim at real targets. And keep that calculator in degree mode — it is
+  the #1 error source in this module.</p>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>degree mode — always check</small>
+  </div>
+
+  <!-- ============ KEY EQUATIONS ============ -->
+  <h2>Three equations to remember</h2>
+  <div class="eqs">
+    <div class="eq-card">
+      <span class="icon">↔️</span>
+      <span class="formula">F<sub>x</sub> = F cos θ</span>
+      <small>The horizontal component is the side <em>adjacent</em> to θ — CAH.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">↕️</span>
+      <span class="formula">F<sub>y</sub> = F sin θ</span>
+      <small>The vertical component is the side <em>opposite</em> θ — SOH.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">🧭</span>
+      <span class="formula">|F| = √(F<sub>x</sub>² + F<sub>y</sub>²)</span>
+      <small>Going backwards: Pythagoras for the magnitude, θ = tan⁻¹(F<sub>y</sub>/F<sub>x</sub>) for the direction — TOA.</small>
+    </div>
+  </div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — calculator in degree mode!</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> In a right triangle with angle θ, the side <em>opposite</em> θ equals&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> (hyp)(sin θ)</label>
+          <label><input type="radio" name="q1" value="b"> (hyp)(cos θ)</label>
+          <label><input type="radio" name="q1" value="c"> (hyp)(tan θ)</label>
+          <label><input type="radio" name="q1" value="d"> (adj)(sin θ)</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> tan θ equals&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> adj/opp</label>
+          <label><input type="radio" name="q2" value="b"> opp/hyp</label>
+          <label><input type="radio" name="q2" value="c"> opp/adj</label>
+          <label><input type="radio" name="q2" value="d"> adj/hyp</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> A vector has magnitude 10.0 m/s at 30° above the +x axis.
+        Calculate its x-component. (Degree mode!)</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="x-component in meters per second">
+          <span class="unit">m/s</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> A vector has components (6 m, 8 m). Its magnitude is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> 14 m</label>
+          <label><input type="radio" name="q4" value="b"> 10 m</label>
+          <label><input type="radio" name="q4" value="c"> 48 m</label>
+          <label><input type="radio" name="q4" value="d"> 7 m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before class</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print it and label the triangle as you follow along — and set your calculator to degree mode now.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 2 closes — check your work against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   SOH-CAH-TOA Lab — self-contained, no dependencies.
+   A right triangle with adjustable hypotenuse and angle; triangle
+   view labels hyp/opp/adj, vector view relabels F, Fx, Fy with an
+   arrowhead on the hypotenuse and dashed components.
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+
+  var hyp = 10, ang = 30, view = 'tri';
+  var SCALE = 26;                       // px per unit
+  var OX = 130, OY = H - 70;            // triangle corner (angle θ)
+
+  var el = {
+    hyp: document.getElementById('hyp'), ang: document.getElementById('ang'),
+    hypval: document.getElementById('hypval'), angval: document.getElementById('angval'),
+    sinOut: document.getElementById('sinOut'), cosOut: document.getElementById('cosOut'),
+    tanOut: document.getElementById('tanOut'),
+    oppOut: document.getElementById('oppOut'), adjOut: document.getElementById('adjOut'),
+    oppLbl: document.getElementById('oppLbl'), adjLbl: document.getElementById('adjLbl'),
+    viewTri: document.getElementById('viewTri'), viewVec: document.getElementById('viewVec'),
+    reset: document.getElementById('resetBtn'), hint: document.getElementById('simHint')
+  };
+
+  function rad(d){ return d * Math.PI / 180; }
+
+  function line(x1, y1, x2, y2, color, width, dash){
+    ctx.save();
+    ctx.strokeStyle = color; ctx.lineWidth = width;
+    if(dash) ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.restore();
+  }
+  function head(x1, y1, x2, y2, color){
+    var a = Math.atan2(y2 - y1, x2 - x1), hl = 11;
+    ctx.save(); ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - hl * Math.cos(a - 0.42), y2 - hl * Math.sin(a - 0.42));
+    ctx.lineTo(x2 - hl * Math.cos(a + 0.42), y2 - hl * Math.sin(a + 0.42));
+    ctx.closePath(); ctx.fill(); ctx.restore();
+  }
+  function label(txt, x, y, color, size){
+    ctx.save();
+    ctx.fillStyle = color; ctx.font = 'bold ' + (size || 14) + 'px Segoe UI, sans-serif';
+    ctx.fillText(txt, x, y);
+    ctx.restore();
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0, 0, W, H);
+
+    var adj = hyp * Math.cos(rad(ang)) * SCALE;
+    var opp = hyp * Math.sin(rad(ang)) * SCALE;
+    var ax = OX + adj, ay = OY;          // right-angle corner
+    var hx = OX + adj, hy = OY - opp;    // top vertex (hyp head)
+
+    // vector view: faint axes
+    if(view === 'vec'){
+      line(OX - 60, OY, W - 30, OY, '#2c5a3f', 1.2);
+      line(OX, OY + 40, OX, 30, '#2c5a3f', 1.2);
+      label('x', W - 26, OY + 4, '#9fc4ad', 11);
+      label('y', OX - 14, 40, '#9fc4ad', 11);
+    }
+
+    // right-angle marker
+    if(ang > 2 && ang < 88){
+      ctx.strokeStyle = '#9fc4ad'; ctx.lineWidth = 1.2;
+      ctx.strokeRect(ax - 14, ay - 14, 14, 14);
+    }
+
+    // angle arc
+    ctx.strokeStyle = '#ffd479'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(OX, OY, 34, -rad(ang), 0); ctx.stroke();
+    label('θ = ' + ang + '°', OX + 42, OY - 10, '#ffd479', 13);
+
+    if(view === 'tri'){
+      line(OX, OY, hx, hy, '#7fd1a0', 3.2);                 // hyp
+      line(OX, OY, ax, ay, '#67b7ff', 3);                   // adj
+      line(ax, ay, hx, hy, '#ff9a9a', 3);                   // opp
+      label('hyp', OX + adj/2 - 44, OY - opp/2 - 12, '#7fd1a0');
+      label('adj', OX + adj/2 - 12, OY + 22, '#67b7ff');
+      label('opp', ax + 10, ay - opp/2, '#ff9a9a');
+    } else {
+      line(OX, OY, ax, ay, '#67b7ff', 2.4, [6,5]);          // Fx dashed
+      head(OX, OY, ax, ay, '#67b7ff');
+      line(ax, ay, hx, hy, '#ff9a9a', 2.4, [6,5]);          // Fy dashed
+      head(ax, ay, hx, hy, '#ff9a9a');
+      line(OX, OY, hx, hy, '#7fd1a0', 3.4);                 // F solid arrow
+      head(OX, OY, hx, hy, '#7fd1a0');
+      label('F', OX + adj/2 - 40, OY - opp/2 - 14, '#7fd1a0', 16);
+      label('Fx = F cos θ', OX + adj/2 - 40, OY + 24, '#67b7ff', 12.5);
+      label('Fy = F sin θ', ax + 10, ay - opp/2, '#ff9a9a', 12.5);
+    }
+  }
+
+  function readout(){
+    var s = Math.sin(rad(ang)), c = Math.cos(rad(ang));
+    el.sinOut.textContent = s.toFixed(3);
+    el.cosOut.textContent = c.toFixed(3);
+    el.tanOut.textContent = ang === 90 ? '∞' : Math.tan(rad(ang)).toFixed(3);
+    el.oppOut.textContent = (hyp * s).toFixed(1);
+    el.adjOut.textContent = (hyp * c).toFixed(1);
+    el.oppLbl.textContent = view === 'tri' ? 'opp' : 'Fy';
+    el.adjLbl.textContent = view === 'tri' ? 'adj' : 'Fx';
+  }
+
+  function hint(){
+    if(ang === 0) el.hint.textContent = 'θ = 0°: the "triangle" collapses flat — opp = 0 and adj = the whole hypotenuse. A perfectly horizontal vector has no y-component.';
+    else if(ang === 90) el.hint.textContent = 'θ = 90°: straight up — adj = 0 and opp = the whole hypotenuse. A vertical vector has no x-component.';
+    else if(ang === 45) el.hint.textContent = 'θ = 45°: sin and cos are equal, so the two components match exactly — remember this one for Note 4.';
+    else el.hint.textContent = 'opp = (hyp)(sin θ) and adj = (hyp)(cos θ). Check one on your calculator — in degree mode — and confirm it matches the chips.';
+  }
+
+  function refresh(){ draw(); readout(); hint(); }
+
+  el.hyp.addEventListener('input', function(){ hyp = parseFloat(this.value); el.hypval.textContent = hyp.toFixed(1); refresh(); });
+  el.ang.addEventListener('input', function(){ ang = parseFloat(this.value); el.angval.textContent = ang.toFixed(0); refresh(); });
+  el.viewTri.addEventListener('click', function(){ view = 'tri'; el.viewTri.setAttribute('aria-pressed','true'); el.viewVec.setAttribute('aria-pressed','false'); refresh(); });
+  el.viewVec.addEventListener('click', function(){ view = 'vec'; el.viewVec.setAttribute('aria-pressed','true'); el.viewTri.setAttribute('aria-pressed','false'); refresh(); });
+  el.reset.addEventListener('click', function(){
+    hyp = 10; ang = 30; view = 'tri';
+    el.hyp.value = 10; el.ang.value = 30;
+    el.hypval.textContent = '10.0'; el.angval.textContent = '30';
+    el.viewTri.setAttribute('aria-pressed','true'); el.viewVec.setAttribute('aria-pressed','false');
+    refresh();
+  });
+
+  refresh();
+})();
+
+window.TICKET = {
+  mc: {
+    q1: { ans:'a', why:'SOH: sin θ = opp/hyp, so opp = (hyp)(sin θ).' },
+    q2: { ans:'c', why:'TOA: tan θ = opp/adj.' },
+    q4: { ans:'b', why:'|F| = √(6² + 8²) = √100 = 10 m — the 6-8-10 friendly triangle.' }
+  },
+  num: {
+    q3: { ans:8.66, tol:0.15, unit:'m/s',
+          right:'Correct: Fx = F cos θ = 10.0 × cos 30° ≈ 8.7 m/s.',
+          wrong:'Fx = F cos θ = 10.0 × cos 30° ≈ 8.7 m/s. If you got 5.0, you used sin — that’s the y-component. If you got something strange, check degree mode.' }
+  }
+};
+/* ---------- predict-first probe (shared) ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  var rightMsg = probe.getAttribute('data-right-msg') || '✓ Right.';
+  var wrongMsg = probe.getAttribute('data-wrong-msg') || '✗ Not quite.';
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = rightMsg;
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = wrongMsg;
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring (shared; page defines window.TICKET) ----------
+   window.TICKET = {
+     mc:   { q1:{ans:'b', why:'...'}, ... },
+     num:  { q3:{ans:3, tol:0.05, unit:'m/s', right:'...', wrong:'...'} , ... }
+   }
+--------------------------------------------------------------------------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket || !window.TICKET) return;
+  var cfg = window.TICKET;
+  var mcIds = Object.keys(cfg.mc || {});
+  var numIds = Object.keys(cfg.num || {});
+  var total = mcIds.length + numIds.length;
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById('card-' + id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0;
+    mcIds.forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(sel && sel.value === cfg.mc[q].ans){ correct++; markCard(q, true, '✓ Correct.'); }
+      else if(sel){ markCard(q, false, '✗ Not quite — ' + cfg.mc[q].why); }
+      else { markCard(q, false, 'Pick an answer above.'); }
+    });
+    numIds.forEach(function(q){
+      var n = cfg.num[q];
+      var v = parseFloat(document.getElementById(q + 'input').value);
+      if(!isNaN(v) && Math.abs(v - n.ans) <= n.tol){ correct++; markCard(q, true, '✓ ' + n.right); }
+      else if(isNaN(v)){ markCard(q, false, 'Enter a number (' + n.unit + ').'); }
+      else { markCard(q, false, '✗ ' + n.wrong); }
+    });
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= Math.ceil(total/2) ? 'Good start — revisit the ones you missed.'
+             : 'Work back through the note, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    numIds.forEach(function(q){ document.getElementById(q + 'input').value = ''; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+
+</script>
+</body>
+</html>

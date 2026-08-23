@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 N5 — Determining Launch Parameters to Hit Targets</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — Module 2 (matches M1 N3/N4 template)
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+
+  /* strobe divider */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+  @keyframes strobePulse{ 0%,100%{ transform:scale(1); opacity:.55; } 35%{ transform:scale(1.9); opacity:1; } }
+  .strobe.animate span{ animation:strobePulse 2.4s ease-in-out infinite; }
+  .strobe.animate span:nth-child(1){ animation-delay:0s; }
+  .strobe.animate span:nth-child(2){ animation-delay:.16s; }
+  .strobe.animate span:nth-child(3){ animation-delay:.32s; }
+  .strobe.animate span:nth-child(4){ animation-delay:.48s; }
+  .strobe.animate span:nth-child(5){ animation-delay:.64s; }
+  .strobe.animate span:nth-child(6){ animation-delay:.80s; }
+  @media (prefers-reduced-motion: reduce){ .strobe.animate span{ animation:none; } }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* "you already know this" */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* interactive simulator */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .controls{ display:grid; gap:.9rem 1.4rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .controls{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn.toggle{ border-radius:6px; }
+  .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .seg{ display:inline-flex; border:1px solid var(--green); border-radius:6px; overflow:hidden; }
+  .seg button{ border:0; background:#fff; color:var(--green); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600; padding:.42rem .8rem; cursor:pointer; }
+  .seg button[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* looking-ahead signpost */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* summary table */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; }
+  .translate td .tag.up{ color:var(--green); }
+  .translate td .tag.zero{ color:var(--muted); }
+
+  /* key equations */
+  .eqs{ display:grid; gap:.8rem; grid-template-columns:1fr; margin:1rem 0 0; }
+  @media (min-width:600px){ .eqs{ grid-template-columns:1fr 1fr 1fr; } }
+  .eq-card{ border:1px solid var(--rule); border-radius:8px; padding:.85rem .9rem; background:#fff; }
+  .eq-card .icon{ font-size:1.4rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .eq-card .formula{
+    font-family:Charter, Georgia, serif; font-size:1.08rem; font-weight:700;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .eq-card small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  /* video slot */
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Vectors and Projectile Motion</span>
+    <span>Note 5 · Exam bonus activity</span>
+  </div>
+
+  <h1>Determining Launch Parameters to Hit Targets</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    So far we've launched first and asked where the projectile lands. Real ballistics runs the problem
+    <em>backwards</em>: the target is given, and you must determine the launch parameters — velocity and
+    angle — that hit it. In this activity your launcher fires from the bench table at targets placed
+    1 m, 2 m, and 3 m away. First you'll <b>measure the launch velocity</b> (and check your method against
+    the photogate), then <b>calculate the launch angles</b> from the launch velocity, launch height, and
+    target distances — and then fire for the record. <b>Hitting your targets earns 10% bonus credit on the
+    Module 2 Exam.</b>
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this activity, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Describe and apply a method to determine the launch velocity</b> of a real launcher using only what Module 2 has taught you.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Compare your measured velocity with the photogate's</b> and argue which measurement is more reliable, and why.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Set up the inverse problem</b> — identify the knowns (launch velocity, launch height, target distance) and the unknown (launch angle).</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Calculate launch angles</b> to hit targets at 1 m, 2 m, and 3 m, showing the calculation for each.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Recognize that a reachable target usually admits two solutions</b> — a low, fast arc and a high, lobbed arc.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Verify by firing</b> — compare the predicted and actual landing points and account for the difference.</span></li>
+    </ul>
+  </div>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>measure — calculate — fire</small>
+  </div>
+
+  <!-- ============ CONNECTING PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>Solving for the launch instead of the landing is something you already do by feel:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🗑️</span>
+          <b>The office trash shot</b>
+          <small>You don't compute where the paper ball lands — you pick the arc that lands it <em>in the bin</em>. That's an inverse problem.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">⛳</span>
+          <b>Club selection</b>
+          <small>A golfer knows the ball's speed off each club; the question is which loft covers <em>this</em> distance.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🎪</span>
+          <b>Cornhole & free throws</b>
+          <small>Underhand lob or flat toss — two very different arcs can drop into the same hole.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this activity, we work through</h2>
+  <ol class="questions">
+    <li>Describe a method to determine the launcher's launch velocity — then apply it.</li>
+    <li>The launcher's photogate independently reports the launch velocity. Compare the two values: which measurement is more reliable, and why?</li>
+    <li>How does the launch <em>height</em> (the bench table) enter the calculation?</li>
+    <li>Calculate the launch angles needed to hit targets at 1 m, 2 m, and 3 m.</li>
+    <li>Why can two different angles hit the same target?</li>
+    <li>Fire for the record — how close were your predictions, and what explains the difference?</li>
+  </ol>
+
+  <!-- predict-first probe -->
+  <div class="probe" id="probe"
+    data-right-msg="✓ Right. Launched from a bench, the ball gets extra falling time after it passes its launch height — and the horizontal motion uses every bit of that time, carrying it farther than the same shot from the floor."
+    data-wrong-msg="✗ Not quite — think about the flight time. From a bench, the ball keeps flying below its launch height until it reaches the floor. More air time × the same horizontal velocity = a longer shot. That's why launch height must be in your calculation.">
+    <p class="q">Predict first: the same launcher fires at the same speed and angle — once from the floor,
+    once from the bench table. Compared with the floor shot, the bench shot lands&hellip;</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">At the same distance — height doesn't matter.</button>
+      <button class="opt" data-correct="true">Farther — the extra fall time gives the horizontal motion longer to run.</button>
+      <button class="opt" data-correct="false">Shorter — gravity has more time to pull it back.</button>
+      <button class="opt" data-correct="false">It depends on the ball's mass.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <!-- ============ INTERACTIVE: TARGET RANGE ============ -->
+  <h2>Practice range: hit the targets</h2>
+  <p>This is a rehearsal for the real bench. The launch speed is what you measured (check it against the
+  photogate chip); the bench height is set. Choose an angle, <b>Fire</b>, and try to hit all three targets —
+  then find <em>two different angles</em> that hit the 2 m target. Do your calculated angles agree with what
+  works here?</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>▶</span> Interactive · Bench-Top Target Range</div>
+    <div class="stage">
+      <canvas id="simCanvas" width="720" height="400" role="img"
+        aria-label="A launcher on a bench firing at targets on the floor at one, two, and three meters, with adjustable launch angle and speed."></canvas>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl">
+          <label for="spd">Launch velocity (your measurement) <span class="val"><span id="spdval">4.5</span> m/s</span></label>
+          <input type="range" id="spd" min="3" max="7" step="0.1" value="4.5">
+        </div>
+        <div class="ctrl">
+          <label for="ang">Launch angle <span class="val"><span id="angval">30</span>°</span></label>
+          <input type="range" id="ang" min="0" max="75" step="1" value="30">
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="runBtn">▶ Fire</button>
+        <button class="btn" id="resetBtn">↺ Reset targets</button>
+      </div>
+      <div class="readout">
+        <span class="chip">photogate: <b id="pgOut">4.5</b> m/s</span>
+        <span class="chip">bench height = <b>1.00</b> m</span>
+        <span class="chip">landing at <b id="landOut">—</b> m</span>
+        <span class="chip">targets hit: <b id="hitOut">0 / 3</b></span>
+      </div>
+      <div class="hint-row" id="simHint">The photogate agrees with your slider — in the real lab, that's the check on your measured velocity.</div>
+    </div>
+  </div>
+
+  <h2>Watch: working through the activity</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~8 min</span>
+    <!-- Replace the placeholder with your embed:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M2 N5 walkthrough with Dr. Cho"></iframe></div> -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the activity sheet below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ SUMMARY TABLE ============ -->
+  <h2>The lab workflow at a glance</h2>
+  <div class="translate">
+    <table>
+      <thead>
+        <tr><th>Step</th><th>What you do</th><th>What it gives you</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>1 · Measure</b></td><td>Determine the launch velocity with your own method; read the photogate as a check</td><td><span class="tag up">V</span> — a constant of your launcher</td></tr>
+        <tr><td><b>2 · Record</b></td><td>Measure the launch height off the bench</td><td><span class="tag up">h</span> — sets the vertical landing condition</td></tr>
+        <tr><td><b>3 · Calculate</b></td><td>Solve for the angle that lands V<sub>x</sub>·t<sub>flight</sub> on each target (1 m, 2 m, 3 m)</td><td><span class="tag up">θ</span> for each target — often two per target</td></tr>
+        <tr><td><b>4 · Verify</b></td><td>Fire for the record and compare predicted vs. actual landing point</td><td>your bonus credit — and your error analysis</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> this activity closes Module 2 — vectors, components,
+  and projectile motion working as one toolkit on a real device. In Module&nbsp;3 we ask the question these
+  notes kept postponing: <em>why</em> does motion change? Forces — and Newton — take the stage, and every
+  force will be a vector you already know how to resolve.</p>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>predict — then verify</small>
+  </div>
+
+  <!-- ============ KEY EQUATIONS ============ -->
+  <h2>Three equations that aim the launcher</h2>
+  <div class="eqs">
+    <div class="eq-card">
+      <span class="icon">✂️</span>
+      <span class="formula">V<sub>x</sub> = V cos θ · V<sub>y</sub> = V sin θ</span>
+      <small>Resolve the measured launch velocity at your trial angle — Note 2a, as always.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">⏱️</span>
+      <span class="formula">−h = V<sub>y</sub>t − ½gt²</span>
+      <small>The landing condition: the ball ends a height h <em>below</em> the bench-top launch point. Solve for the flight time t.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">🎯</span>
+      <span class="formula">d<sub>x</sub> = V<sub>x</sub>·t</span>
+      <small>Where it lands. Choose θ so this equals your target distance — 1 m, 2 m, or 3 m.</small>
+    </div>
+  </div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions before you fire for the record.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> To calculate the launch <em>angle</em> needed to hit a target, you must first know&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> Only the distance to the target.</label>
+          <label><input type="radio" name="q1" value="b"> The launch velocity and the launch height — measure or determine these before solving for the angle.</label>
+          <label><input type="radio" name="q1" value="c"> Only the target's size.</label>
+          <label><input type="radio" name="q1" value="d"> Nothing — the angle is always 45°.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> In general, a target at a comfortably reachable distance can be hit by&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> Exactly one launch angle.</label>
+          <label><input type="radio" name="q2" value="b"> Only 45°.</label>
+          <label><input type="radio" name="q2" value="c"> Two different launch angles — a low arc and a high arc.</label>
+          <label><input type="radio" name="q2" value="d"> Any angle at all.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> Sanity check on a flat floor (launch and landing at the same
+        height): at V = 5.0 m/s and θ = 45°, the range is d<sub>x</sub> = V²/g. Calculate it.</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="range in meters">
+          <span class="unit">m</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Your stopwatch method and the photogate disagree slightly on the launch velocity. The photogate is generally more reliable because&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> It measures the speed directly over a tiny, well-defined interval, instead of depending on human reaction time over the whole flight.</label>
+          <label><input type="radio" name="q4" value="b"> It measures the angle too.</label>
+          <label><input type="radio" name="q4" value="c"> Stopwatches always run slow.</label>
+          <label><input type="radio" name="q4" value="d"> It eliminates gravity from the measurement.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your activity sheet</h2>
+  <div class="downloads">
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before the lab</span>
+      <span class="name">Activity sheet — blank (PDF)</span>
+      <span class="hint">Print it — record your launch velocity, launch height, and the calculation for each target angle.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Worked solution (PDF)</span>
+      <span class="hint">Released when Module 2 closes — compare your method and calculated angles against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   Bench-Top Target Range — self-contained, no dependencies.
+   Launcher on a 1.00 m bench fires at floor targets at 1, 2, 3 m.
+   Landing solved from -h = Vy t - ½ g t²; hit within ±7 cm.
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var G = 9.8, BENCH = 1.0;
+  var V = 4.5, A = 30;
+  var TARGETS = [1, 2, 3], HIT_TOL = 0.07;
+  var hits = [false, false, false];
+  var t = 0, running = false, lastTs = null, lastLanding = null;
+
+  var el = {
+    spd: document.getElementById('spd'), ang: document.getElementById('ang'),
+    spdval: document.getElementById('spdval'), angval: document.getElementById('angval'),
+    pgOut: document.getElementById('pgOut'), landOut: document.getElementById('landOut'),
+    hitOut: document.getElementById('hitOut'),
+    run: document.getElementById('runBtn'), reset: document.getElementById('resetBtn'),
+    hint: document.getElementById('simHint')
+  };
+
+  function rad(d){ return d * Math.PI / 180; }
+  function vx(){ return V * Math.cos(rad(A)); }
+  function vy(){ return V * Math.sin(rad(A)); }
+  function tFlight(){ return (vy() + Math.sqrt(vy() * vy() + 2 * G * BENCH)) / G; }
+  function landing(){ return vx() * tFlight(); }
+  function pos(tt){ return { x: vx() * tt, y: BENCH + vy() * tt - 0.5 * G * tt * tt }; }
+
+  // world: x 0..3.6 m, y 0..2.2 m
+  var WX = 3.6, WY = 2.2, PADL = 50, PADR = 14, PADT = 16, PADB = 40;
+  function sx(x){ return PADL + x / WX * (W - PADL - PADR); }
+  function sy(y){ return H - PADB - y / WY * (H - PADT - PADB); }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0, 0, W, H);
+
+    // floor
+    ctx.fillStyle = '#1c3527'; ctx.fillRect(0, sy(0), W, H - sy(0));
+    ctx.strokeStyle = '#2c5a3f'; ctx.beginPath(); ctx.moveTo(0, sy(0)); ctx.lineTo(W, sy(0)); ctx.stroke();
+
+    // meter ticks
+    ctx.fillStyle = '#6f9c81'; ctx.font = '10px Segoe UI, sans-serif';
+    for(var m = 0.5; m <= 3.5; m += 0.5){
+      ctx.fillRect(sx(m), sy(0), 1, 4);
+      if(m % 1 === 0) ctx.fillText(m.toFixed(0) + ' m', sx(m) - 8, sy(0) + 16);
+    }
+
+    // bench
+    ctx.fillStyle = '#24402f';
+    ctx.fillRect(sx(-0.0) - 40, sy(BENCH), 44, sy(0) - sy(BENCH));
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '10px Segoe UI, sans-serif';
+    ctx.fillText('bench', sx(0) - 38, sy(BENCH) - 6);
+
+    // launcher barrel
+    var bx = sx(0), by = sy(BENCH);
+    ctx.save();
+    ctx.translate(bx, by); ctx.rotate(-rad(A));
+    ctx.fillStyle = '#67b7ff'; ctx.fillRect(0, -4, 30, 8);
+    ctx.restore();
+
+    // targets
+    TARGETS.forEach(function(d, i){
+      var X = sx(d);
+      ctx.fillStyle = hits[i] ? '#7fd1a0' : '#ff9a9a';
+      ctx.beginPath(); ctx.arc(X, sy(0), 8, Math.PI, 0); ctx.fill();
+      ctx.fillStyle = hits[i] ? '#7fd1a0' : '#ff9a9a';
+      ctx.font = 'bold 11px Segoe UI, sans-serif';
+      ctx.fillText(hits[i] ? '✓' : (i + 1) + ' m', X - 8, sy(0) - 12);
+    });
+
+    // trajectory traced so far
+    var tf = tFlight();
+    ctx.strokeStyle = '#ffd479'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    var T = Math.min(t, tf);
+    for(var i = 0; i <= 50; i++){
+      var tt = T * i / 50, p = pos(tt);
+      if(i === 0) ctx.moveTo(sx(p.x), sy(p.y)); else ctx.lineTo(sx(p.x), sy(Math.max(0, p.y)));
+    }
+    ctx.stroke();
+
+    // ball
+    var pc = pos(Math.min(t, tf));
+    ctx.fillStyle = '#ffd479';
+    ctx.beginPath(); ctx.arc(sx(pc.x), sy(Math.max(0, pc.y)), 6, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillText('θ = ' + A + '°, V = ' + V.toFixed(1) + ' m/s', 10, 16);
+  }
+
+  function readout(){
+    el.pgOut.textContent = V.toFixed(1);
+    el.hitOut.textContent = hits.filter(Boolean).length + ' / 3';
+    el.landOut.textContent = lastLanding === null ? '—' : lastLanding.toFixed(2);
+  }
+
+  function land(){
+    lastLanding = landing();
+    var hitAny = false;
+    TARGETS.forEach(function(d, i){
+      if(Math.abs(lastLanding - d) <= HIT_TOL){ hits[i] = true; hitAny = true; }
+    });
+    if(hitAny){
+      var n = hits.filter(Boolean).length;
+      el.hint.textContent = n === 3
+        ? '🎯 All three targets — that’s the bonus run. Now find a second angle that hits the 2 m target.'
+        : '🎯 Hit at ' + lastLanding.toFixed(2) + ' m! ' + (3 - n) + ' to go. Log the angle that worked — does it match your calculation?';
+    } else {
+      var nearest = TARGETS.reduce(function(a, b){ return Math.abs(b - lastLanding) < Math.abs(a - lastLanding) ? b : a; });
+      el.hint.textContent = 'Landed at ' + lastLanding.toFixed(2) + ' m — ' +
+        (lastLanding > nearest ? 'past' : 'short of') + ' the ' + nearest + ' m target. ' +
+        (lastLanding > nearest ? 'Try a steeper angle (or is there a flatter one that also works?).' : 'Give it more arc — or check your calculated angle.');
+    }
+  }
+
+  function loop(ts){
+    if(!running) return;
+    if(lastTs === null) lastTs = ts;
+    var dt = Math.min((ts - lastTs) / 1000, 0.05); lastTs = ts;
+    t += dt * 0.6;
+    var tf = tFlight();
+    if(t >= tf){ t = tf; running = false; land(); }
+    draw(); readout();
+    if(running) requestAnimationFrame(loop);
+  }
+
+  function fire(){
+    if(running) return;
+    t = 0; lastTs = null; running = true;
+    if(reduceMotion){ t = tFlight(); running = false; land(); draw(); readout(); }
+    else requestAnimationFrame(loop);
+  }
+
+  function resetTargets(){
+    hits = [false, false, false]; t = 0; running = false; lastLanding = null;
+    el.hint.textContent = 'The photogate agrees with your slider — in the real lab, that’s the check on your measured velocity.';
+    draw(); readout();
+  }
+
+  el.spd.addEventListener('input', function(){ V = parseFloat(this.value); el.spdval.textContent = V.toFixed(1); t = 0; running = false; draw(); readout(); });
+  el.ang.addEventListener('input', function(){ A = parseFloat(this.value); el.angval.textContent = A.toFixed(0); t = 0; running = false; draw(); readout(); });
+  el.run.addEventListener('click', fire);
+  el.reset.addEventListener('click', resetTargets);
+
+  resetTargets();
+})();
+
+window.TICKET = {
+  mc: {
+    q1: { ans:'b', why:'the angle calculation needs the launch velocity and launch height as inputs — measure them first.' },
+    q2: { ans:'c', why:'a low arc and a high arc can both land on the same target — your calculation will often return two valid angles.' },
+    q4: { ans:'a', why:'the photogate times the ball over a tiny, fixed interval right at the muzzle; a stopwatch run folds in your reaction time twice.' }
+  },
+  num: {
+    q3: { ans:2.55, tol:0.06, unit:'m',
+          right:'Correct: d_x = V²/g = 25/9.8 ≈ 2.55 m. On the bench (1 m up) the same shot lands farther — the extra fall time is why height belongs in your calculation.',
+          wrong:'d_x = V²/g = (5.0)²/9.8 = 25/9.8 ≈ 2.55 m. (At 45°, sin 2θ = 1, so the level-ground range formula reduces to V²/g.)' }
+  }
+};
+/* ---------- predict-first probe (shared) ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  var rightMsg = probe.getAttribute('data-right-msg') || '✓ Right.';
+  var wrongMsg = probe.getAttribute('data-wrong-msg') || '✗ Not quite.';
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = rightMsg;
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = wrongMsg;
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring (shared; page defines window.TICKET) ----------
+   window.TICKET = {
+     mc:   { q1:{ans:'b', why:'...'}, ... },
+     num:  { q3:{ans:3, tol:0.05, unit:'m/s', right:'...', wrong:'...'} , ... }
+   }
+--------------------------------------------------------------------------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket || !window.TICKET) return;
+  var cfg = window.TICKET;
+  var mcIds = Object.keys(cfg.mc || {});
+  var numIds = Object.keys(cfg.num || {});
+  var total = mcIds.length + numIds.length;
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById('card-' + id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0;
+    mcIds.forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(sel && sel.value === cfg.mc[q].ans){ correct++; markCard(q, true, '✓ Correct.'); }
+      else if(sel){ markCard(q, false, '✗ Not quite — ' + cfg.mc[q].why); }
+      else { markCard(q, false, 'Pick an answer above.'); }
+    });
+    numIds.forEach(function(q){
+      var n = cfg.num[q];
+      var v = parseFloat(document.getElementById(q + 'input').value);
+      if(!isNaN(v) && Math.abs(v - n.ans) <= n.tol){ correct++; markCard(q, true, '✓ ' + n.right); }
+      else if(isNaN(v)){ markCard(q, false, 'Enter a number (' + n.unit + ').'); }
+      else { markCard(q, false, '✗ ' + n.wrong); }
+    });
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= Math.ceil(total/2) ? 'Good start — revisit the ones you missed.'
+             : 'Work back through the note, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    numIds.forEach(function(q){ document.getElementById(q + 'input').value = ''; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+
+</script>
+</body>
+</html>

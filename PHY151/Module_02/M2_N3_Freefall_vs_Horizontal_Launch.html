@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 N3 — Freefall vs. Horizontal Launch</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — Module 2 (matches M1 N3/N4 template)
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+
+  /* strobe divider */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+  @keyframes strobePulse{ 0%,100%{ transform:scale(1); opacity:.55; } 35%{ transform:scale(1.9); opacity:1; } }
+  .strobe.animate span{ animation:strobePulse 2.4s ease-in-out infinite; }
+  .strobe.animate span:nth-child(1){ animation-delay:0s; }
+  .strobe.animate span:nth-child(2){ animation-delay:.16s; }
+  .strobe.animate span:nth-child(3){ animation-delay:.32s; }
+  .strobe.animate span:nth-child(4){ animation-delay:.48s; }
+  .strobe.animate span:nth-child(5){ animation-delay:.64s; }
+  .strobe.animate span:nth-child(6){ animation-delay:.80s; }
+  @media (prefers-reduced-motion: reduce){ .strobe.animate span{ animation:none; } }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* "you already know this" */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* interactive simulator */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .controls{ display:grid; gap:.9rem 1.4rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .controls{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn.toggle{ border-radius:6px; }
+  .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .seg{ display:inline-flex; border:1px solid var(--green); border-radius:6px; overflow:hidden; }
+  .seg button{ border:0; background:#fff; color:var(--green); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600; padding:.42rem .8rem; cursor:pointer; }
+  .seg button[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* looking-ahead signpost */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* summary table */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; }
+  .translate td .tag.up{ color:var(--green); }
+  .translate td .tag.zero{ color:var(--muted); }
+
+  /* key equations */
+  .eqs{ display:grid; gap:.8rem; grid-template-columns:1fr; margin:1rem 0 0; }
+  @media (min-width:600px){ .eqs{ grid-template-columns:1fr 1fr 1fr; } }
+  .eq-card{ border:1px solid var(--rule); border-radius:8px; padding:.85rem .9rem; background:#fff; }
+  .eq-card .icon{ font-size:1.4rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .eq-card .formula{
+    font-family:Charter, Georgia, serif; font-size:1.08rem; font-weight:700;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .eq-card small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  /* video slot */
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Vectors and Projectile Motion</span>
+    <span>Note 3</span>
+  </div>
+
+  <h1>Freefall vs. Horizontal Launch: How Do the Fall Times Compare?</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Imagine a cannon at the top of a tower, aimed <em>perfectly horizontally</em>. At the instant it fires,
+    an identical cannonball is simply dropped from the same height. The fired ball sails out over the ground;
+    the dropped ball falls straight down. Which one hits the ground first — or do they land together, and if
+    so, why? This note is a <b>CER exercise</b>: you will commit to a <b>Claim</b>, back it with
+    <b>Evidence</b> from your own experience, defend it with <b>Reasoning</b> built on the vector nature of
+    velocity and force — and then test it against the real experiment. The result is the doorway to all of
+    projectile motion.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Perform a CER exercise</b> — state a claim about the fall times, support it with evidence from experience, and justify it with reasoning.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Use the vector nature of velocity, acceleration, and force</b> in your reasoning — the launched ball's velocity is horizontal, while gravity pulls only vertically.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Compare the observed fall times</b> of a dropped ball and a horizontally launched ball, and state the result: they land at the same time.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Revise and refine your explanation</b> after the observation, drawing velocity vectors at regular intervals along both trajectories.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Explain trajectory C</b> — the straight-line path the ball would follow if fired in space with no gravity, and why real paths bend away from it.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Recognize that horizontal and vertical motion are independent</b> — the launched ball is <em>freefalling vertically the whole time</em>. (You'll apply this fully to angled launches in Note&nbsp;4.)</span></li>
+    </ul>
+  </div>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>same clock, same fall</small>
+  </div>
+
+  <!-- ============ CONNECTING PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>You've watched this experiment in miniature many times — you just never timed it:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🪙</span>
+          <b>Two coins off a table</b>
+          <small>Flick one coin off the edge while nudging another straight off. Listen: the two clicks on the floor come… when?</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🚿</span>
+          <b>Water from a hose</b>
+          <small>Aim a hose horizontally and the stream arcs down — moving forward steadily while falling the whole time.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🎯</span>
+          <b>Why archers aim high</b>
+          <small>An arrow starts dropping the instant it leaves the string — flying fast forward doesn't excuse it from falling.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we work through</h2>
+  <ol class="questions">
+    <li><b>Claim</b> — are the fall times different or the same?</li>
+    <li><b>Evidence</b> — what previous experiences and observations relate to this situation?</li>
+    <li><b>Reasoning</b> — use velocity, acceleration, and force (especially their <em>vector</em> nature) to justify your claim.</li>
+    <li><b>Observe</b> — the launcher device pushes one steel ball horizontally while simultaneously dropping another. How do the fall times compare?</li>
+    <li><b>Explain</b> — revise your reasoning, draw the velocity vectors along trajectories A and B at regular intervals, and explain why the no-gravity path C looks the way it does.</li>
+  </ol>
+
+  <!-- predict-first probe (the CLAIM — commit before you run the experiment) -->
+  <div class="probe" id="probe"
+    data-right-msg="✓ That's the claim the experiment supports. Gravity pulls straight down on both balls equally, and the fired ball's horizontal velocity has no vertical part — it can't help the ball stay up or make it fall faster. Now run the experiment below and watch the heights match at every instant."
+    data-wrong-msg="✗ That's a very common claim — now test it. Run the experiment below and watch the two balls' heights at each strobe instant. Gravity is a vertical force; the fired ball's velocity is horizontal. The vertical motions are identical.">
+    <p class="q">Make your claim first (this is the C in CER): the cannon fires perfectly horizontally at the
+    same instant the other ball is dropped. Which ball hits the ground first?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">The dropped ball — it has the shorter path.</button>
+      <button class="opt" data-correct="false">The fired ball — it's moving faster.</button>
+      <button class="opt" data-correct="true">They land at the same time — the horizontal velocity doesn't affect the vertical fall.</button>
+      <button class="opt" data-correct="false">It depends on how fast the cannon fires.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <!-- ============ INTERACTIVE: THE EXPERIMENT ============ -->
+  <h2>Run the experiment: drop vs. launch</h2>
+  <p>Ball <b style="color:#f5a623">A</b> is dropped; ball <b style="color:#7fd1a0">B</b> is fired perfectly
+  horizontally at the same instant. Strobe dots mark both balls at equal time intervals — watch the dashed
+  line connecting them stay <em>perfectly level</em> all the way down. Turn on <b>Path C</b> to see where B
+  would go with gravity switched off, and <b>velocity vectors</b> to see why the paths bend.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>▶</span> Interactive · Simultaneous Drop &amp; Launch</div>
+    <div class="stage">
+      <canvas id="simCanvas" width="720" height="400" role="img"
+        aria-label="A tower with two balls: one dropped and one launched horizontally at the same instant, leaving strobe marks that stay at equal heights until both land together."></canvas>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl">
+          <label for="spd">Launch speed of B <span class="val"><span id="spdval">6.0</span> m/s</span></label>
+          <input type="range" id="spd" min="2" max="12" step="0.5" value="6">
+        </div>
+        <div class="ctrl">
+          <label for="ht">Tower height <span class="val"><span id="htval">20</span> m</span></label>
+          <input type="range" id="ht" min="5" max="40" step="5" value="20">
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="runBtn">▶ Fire &amp; drop</button>
+        <button class="btn toggle" id="vecBtn" aria-pressed="false">Velocity vectors</button>
+        <button class="btn toggle" id="pathCBtn" aria-pressed="false">Path C (no gravity)</button>
+        <button class="btn" id="resetBtn">↺ Reset</button>
+      </div>
+      <div class="readout">
+        <span class="chip">t = <b id="tOut">0.00</b> s</span>
+        <span class="chip">height of A = <b id="haOut">20.0</b> m</span>
+        <span class="chip">height of B = <b id="hbOut">20.0</b> m</span>
+        <span class="chip">landed: <b id="landOut">—</b></span>
+      </div>
+      <div class="hint-row" id="simHint">Fire, then watch the dashed connector: A and B are at the same height at every instant — one shared vertical motion.</div>
+    </div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~10 min</span>
+    <!-- Replace the placeholder with your embed:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M2 N3 walkthrough with Dr. Cho"></iframe></div> -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ SUMMARY TABLE ============ -->
+  <h2>The launched ball's two lives</h2>
+  <p>The horizontally launched ball runs two completely independent motions on one shared clock:</p>
+  <div class="translate">
+    <table>
+      <thead>
+        <tr><th>Direction</th><th>What happens</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Horizontal (x)</b></td><td>Constant velocity — equal strobe spacings sideways</td><td><span class="tag up">no horizontal force</span> — nothing speeds it up or slows it down</td></tr>
+        <tr><td><b>Vertical (y)</b></td><td>Freefall — identical to the dropped ball, starting from v<sub>y</sub> = 0</td><td><span class="tag up">gravity is vertical</span> — it pulls both balls down the same way</td></tr>
+        <tr><td><b>Path C (no gravity)</b></td><td>A straight horizontal line at constant velocity</td><td><span class="tag zero">no force at all</span> — nothing changes the motion, so nothing bends the path</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> here the launch was perfectly horizontal, so the
+  vertical motion started from rest — pure freefall. In Note&nbsp;4 we tilt the cannon: the launch velocity
+  then has <em>both</em> components (F<sub>x</sub> = V cos θ from Note 2a returns!), and the vertical motion
+  becomes the vertical rocket from Module&nbsp;1, Note&nbsp;9. Everything you need is already on your desk.</p>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>equal times — equal heights</small>
+  </div>
+
+  <!-- ============ KEY IDEAS ============ -->
+  <h2>Three ideas to remember</h2>
+  <div class="eqs">
+    <div class="eq-card">
+      <span class="icon">⏱️</span>
+      <span class="formula">t<sub>fall</sub> is the same</span>
+      <small>Dropped or launched horizontally from the same height — both start with v<sub>y</sub> = 0 and fall with the same g.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">✂️</span>
+      <span class="formula">x ⟂ y — independent</span>
+      <small>Gravity (vertical) can't touch the horizontal velocity; the horizontal velocity can't slow the fall.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">🚀</span>
+      <span class="formula">No force → straight line</span>
+      <small>Path C: fired in space with no gravity, the ball keeps its velocity forever — straight and steady.</small>
+    </div>
+  </div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> A ball is fired perfectly horizontally from a tower at the same
+        instant an identical ball is dropped from the same height. Which hits the ground first?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> The dropped ball.</label>
+          <label><input type="radio" name="q1" value="b"> The fired ball.</label>
+          <label><input type="radio" name="q1" value="c"> They land at the same time.</label>
+          <label><input type="radio" name="q1" value="d"> It depends on the firing speed.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> <em>Why</em> do they land together?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> Air resistance pushes the fired ball down harder.</label>
+          <label><input type="radio" name="q2" value="b"> The vertical motion is independent of the horizontal motion — both balls start with v<sub>y</sub> = 0 and fall with the same g.</label>
+          <label><input type="radio" name="q2" value="c"> The fired ball becomes lighter in flight.</label>
+          <label><input type="radio" name="q2" value="d"> Gravity acts only on falling objects.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> Both balls start 4.9 m above the floor. Using
+        d = ½gt² with g = 9.8 m/s², calculate the fall time — for <em>either</em> ball.</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="fall time in seconds">
+          <span class="unit">s</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> If the cannonball were fired horizontally in deep space (no gravity), its path would be&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> A curve that eventually falls.</label>
+          <label><input type="radio" name="q4" value="b"> A straight line that gradually slows down.</label>
+          <label><input type="radio" name="q4" value="c"> A circle.</label>
+          <label><input type="radio" name="q4" value="d"> A straight horizontal line at constant velocity — nothing changes its motion.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">Before class</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print it — you'll write your CER and draw velocity vectors on the cannon diagram.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 2 closes — compare your CER and vector diagrams against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   Simultaneous Drop & Launch — self-contained, no dependencies.
+   Ball A drops; ball B leaves horizontally at the same instant.
+   Strobe marks at fixed intervals; a dashed connector shows A and B
+   at equal heights. Optional: velocity vectors, no-gravity path C.
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var G = 9.8;
+  var v0 = 6, h0 = 20;
+  var t = 0, running = false, lastTs = null, landedShown = false;
+  var showVec = false, showC = false;
+  var STROBE_N = 8;                       // strobe marks over the fall
+
+  var el = {
+    spd: document.getElementById('spd'), ht: document.getElementById('ht'),
+    spdval: document.getElementById('spdval'), htval: document.getElementById('htval'),
+    tOut: document.getElementById('tOut'), haOut: document.getElementById('haOut'),
+    hbOut: document.getElementById('hbOut'), landOut: document.getElementById('landOut'),
+    run: document.getElementById('runBtn'), vec: document.getElementById('vecBtn'),
+    pathC: document.getElementById('pathCBtn'), reset: document.getElementById('resetBtn'),
+    hint: document.getElementById('simHint')
+  };
+
+  // world → screen. Ground at bottom; tower at left.
+  var PADL = 90, PADR = 20, PADT = 30, PADB = 34;
+  function tFall(){ return Math.sqrt(2 * h0 / G); }
+  function worldW(){ return Math.max(v0 * tFall() * 1.15, 10); }
+  function sx(x){ return PADL + x / worldW() * (W - PADL - PADR); }
+  function sy(y){ return PADT + (1 - y / (h0 * 1.08)) * (H - PADT - PADB); }
+
+  function yOf(tt){ return Math.max(0, h0 - 0.5 * G * tt * tt); }
+
+  function ball(x, y, color){
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(sx(x), sy(y), 7, 0, Math.PI * 2); ctx.fill();
+  }
+  function dot(x, y, color){
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(sx(x), sy(y), 3.5, 0, Math.PI * 2); ctx.fill();
+  }
+  function vecArrow(x, y, vx, vy, color){
+    var s = 0.16;                          // px per (m/s) scaling handled in world units
+    var x2 = x + vx * s * worldW() / 10, y2 = y + vy * s * h0 / 10;
+    var f = { x: sx(x), y: sy(y) }, h = { x: sx(x2), y: sy(y2) };
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo(h.x, h.y); ctx.stroke();
+    var a = Math.atan2(h.y - f.y, h.x - f.x), hl = 7;
+    ctx.beginPath();
+    ctx.moveTo(h.x, h.y);
+    ctx.lineTo(h.x - hl * Math.cos(a - 0.45), h.y - hl * Math.sin(a - 0.45));
+    ctx.lineTo(h.x - hl * Math.cos(a + 0.45), h.y - hl * Math.sin(a + 0.45));
+    ctx.closePath(); ctx.fill();
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0, 0, W, H);
+
+    // ground & tower
+    ctx.fillStyle = '#1c3527'; ctx.fillRect(0, sy(0), W, H - sy(0));
+    ctx.strokeStyle = '#2c5a3f'; ctx.beginPath(); ctx.moveTo(0, sy(0)); ctx.lineTo(W, sy(0)); ctx.stroke();
+    ctx.fillStyle = '#24402f'; ctx.fillRect(PADL - 46, sy(h0), 42, sy(0) - sy(h0));
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillText(h0 + ' m tower', 8, sy(h0) - 8);
+
+    var tf = tFall();
+
+    // path C (no gravity): straight horizontal dashed line
+    if(showC){
+      ctx.strokeStyle = '#67b7ff'; ctx.setLineDash([5, 5]); ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(sx(0), sy(h0)); ctx.lineTo(W - PADR, sy(h0)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#67b7ff'; ctx.font = '11px Segoe UI, sans-serif';
+      ctx.fillText('C — no gravity: straight, constant velocity', sx(0) + 10, sy(h0) - 8);
+      // blue strobes along C, equally spaced
+      for(var i = 1; i <= STROBE_N; i++){
+        var tc = tf * i / STROBE_N;
+        if(tc <= t) dot(v0 * tc, h0, '#67b7ff');
+      }
+    }
+
+    // strobe marks up to current t
+    for(var i = 1; i <= STROBE_N; i++){
+      var ti = tf * i / STROBE_N;
+      if(ti <= t + 1e-9){
+        var yi = yOf(ti);
+        dot(0, yi, '#f5a623');                     // A drops along tower face
+        dot(v0 * ti, yi, '#7fd1a0');               // B arcs out
+        // level dashed connector for the latest pair
+        if(i === Math.floor(t / (tf / STROBE_N))){
+          ctx.strokeStyle = 'rgba(255,242,214,0.4)'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(sx(0), sy(yi)); ctx.lineTo(sx(v0 * ti), sy(yi)); ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+    }
+
+    // current balls
+    var tc = Math.min(t, tf), yc = yOf(tc);
+    ball(0, yc, '#f5a623');
+    ball(v0 * tc, yc, '#7fd1a0');
+    ctx.fillStyle = '#f5a623'; ctx.font = 'bold 12px Segoe UI, sans-serif';
+    ctx.fillText('A', sx(0) - 22, sy(yc) + 4);
+    ctx.fillStyle = '#7fd1a0';
+    ctx.fillText('B', sx(v0 * tc) + 12, sy(yc) + 4);
+
+    // velocity vectors
+    if(showVec){
+      var vy = -G * tc;
+      vecArrow(0, yc, 0, vy, '#ff9a9a');                 // A: vertical only
+      vecArrow(v0 * tc, yc, v0, 0, '#67b7ff');           // B: constant horizontal part
+      vecArrow(v0 * tc, yc, 0, vy, '#ff9a9a');           // B: growing vertical part
+    }
+  }
+
+  function readout(){
+    var tf = tFall(), tc = Math.min(t, tf), yc = yOf(tc);
+    el.tOut.textContent = tc.toFixed(2);
+    el.haOut.textContent = yc.toFixed(1);
+    el.hbOut.textContent = yc.toFixed(1);
+    el.landOut.textContent = t >= tf ? 'both at t = ' + tf.toFixed(2) + ' s — together' : '—';
+  }
+
+  function reset(){
+    running = false; t = 0; lastTs = null; landedShown = false;
+    el.hint.textContent = 'Fire, then watch the dashed connector: A and B are at the same height at every instant — one shared vertical motion.';
+    draw(); readout();
+  }
+
+  function loop(ts){
+    if(!running) return;
+    if(lastTs === null) lastTs = ts;
+    var dt = Math.min((ts - lastTs) / 1000, 0.05); lastTs = ts;
+    t += dt * 0.55;                        // slow motion for readability
+    var tf = tFall();
+    if(t >= tf){
+      t = tf; running = false;
+      el.hint.textContent = 'Both landed at t = ' + tf.toFixed(2) + ' s. Change the launch speed and fire again — B lands farther away, but never later.';
+    }
+    draw(); readout();
+    if(running) requestAnimationFrame(loop);
+  }
+
+  el.spd.addEventListener('input', function(){ v0 = parseFloat(this.value); el.spdval.textContent = v0.toFixed(1); reset(); });
+  el.ht.addEventListener('input', function(){ h0 = parseFloat(this.value); el.htval.textContent = h0.toFixed(0); reset(); });
+  el.vec.addEventListener('click', function(){
+    showVec = !showVec; this.setAttribute('aria-pressed', showVec ? 'true' : 'false');
+    if(showVec) el.hint.textContent = 'Red arrows: the growing downward velocity — identical for A and B. Blue arrow: B’s horizontal velocity — never changes.';
+    draw();
+  });
+  el.pathC.addEventListener('click', function(){
+    showC = !showC; this.setAttribute('aria-pressed', showC ? 'true' : 'false');
+    if(showC) el.hint.textContent = 'Path C: with no gravity, no force acts — B would keep its launch velocity forever in a straight line. Gravity is what bends the real path away from C.';
+    draw();
+  });
+  el.run.addEventListener('click', function(){
+    if(t >= tFall()) reset();
+    if(running) return;
+    running = true; lastTs = null;
+    if(reduceMotion){ t = tFall(); running = false; draw(); readout(); el.landOut.textContent = 'both at t = ' + tFall().toFixed(2) + ' s — together'; }
+    else requestAnimationFrame(loop);
+  });
+  el.reset.addEventListener('click', reset);
+
+  reset();
+})();
+
+window.TICKET = {
+  mc: {
+    q1: { ans:'c', why:'the horizontal velocity has no vertical part — both balls run identical vertical freefalls and land together.' },
+    q2: { ans:'b', why:'horizontal and vertical motions are independent; gravity gives both balls the same vertical motion from v_y = 0.' },
+    q4: { ans:'d', why:'with no force at all, nothing changes the ball’s motion — it keeps its launch velocity in a straight line forever.' }
+  },
+  num: {
+    q3: { ans:1.0, tol:0.05, unit:'s',
+          right:'Correct: 4.9 = ½(9.8)t² → t² = 1 → t = 1.0 s — for both balls.',
+          wrong:'Solve 4.9 = ½(9.8)t²: t² = 2(4.9)/9.8 = 1, so t = 1.0 s. The firing speed never enters the vertical equation.' }
+  }
+};
+/* ---------- predict-first probe (shared) ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  var rightMsg = probe.getAttribute('data-right-msg') || '✓ Right.';
+  var wrongMsg = probe.getAttribute('data-wrong-msg') || '✗ Not quite.';
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = rightMsg;
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = wrongMsg;
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring (shared; page defines window.TICKET) ----------
+   window.TICKET = {
+     mc:   { q1:{ans:'b', why:'...'}, ... },
+     num:  { q3:{ans:3, tol:0.05, unit:'m/s', right:'...', wrong:'...'} , ... }
+   }
+--------------------------------------------------------------------------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket || !window.TICKET) return;
+  var cfg = window.TICKET;
+  var mcIds = Object.keys(cfg.mc || {});
+  var numIds = Object.keys(cfg.num || {});
+  var total = mcIds.length + numIds.length;
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById('card-' + id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0;
+    mcIds.forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(sel && sel.value === cfg.mc[q].ans){ correct++; markCard(q, true, '✓ Correct.'); }
+      else if(sel){ markCard(q, false, '✗ Not quite — ' + cfg.mc[q].why); }
+      else { markCard(q, false, 'Pick an answer above.'); }
+    });
+    numIds.forEach(function(q){
+      var n = cfg.num[q];
+      var v = parseFloat(document.getElementById(q + 'input').value);
+      if(!isNaN(v) && Math.abs(v - n.ans) <= n.tol){ correct++; markCard(q, true, '✓ ' + n.right); }
+      else if(isNaN(v)){ markCard(q, false, 'Enter a number (' + n.unit + ').'); }
+      else { markCard(q, false, '✗ ' + n.wrong); }
+    });
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= Math.ceil(total/2) ? 'Good start — revisit the ones you missed.'
+             : 'Work back through the note, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    numIds.forEach(function(q){ document.getElementById(q + 'input').value = ''; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+
+</script>
+</body>
+</html>
