@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N2 — Handling Large and Small Numbers</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template (enhanced)
+     Body/serif for reading, green accent to match course shell.
+     All styles + scripts self-contained; no external dependencies.
+     Upload via Manage Files and insert as a full page so the inline
+     <script> blocks survive (the HTML editor strips scripts).
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --green-deep:#134a29;
+    --amber:#c77b1f;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .sans{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+
+  /* --- digit-shrink divider: large number collapsing to few digits - */
+  .digitdots{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; gap:.5rem; }
+  .digitdots span{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:700; color:var(--green);
+    background:var(--green-soft); border-radius:5px; padding:.15rem .5rem; font-size:.85rem;
+  }
+  .digitdots small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- "you already know this" callout ------------------------------ */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; letter-spacing:.01em; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  /* --- performance expectations ------------------------------------- */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+  .pe li .txt b{ font-weight:600; }
+
+  /* --- guiding questions -------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* --- interactive: sig-fig / sci-notation analyzer ------------------ */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1.1rem 1.1rem 1.2rem; }
+  .analyzer-input-row{ display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; margin-bottom:.9rem; }
+  .analyzer-input-row input[type=text]{
+    font:1.15rem/1.3 "Segoe UI", system-ui, sans-serif; padding:.5rem .7rem; border:1px solid var(--rule);
+    border-radius:6px; width:12rem; font-variant-numeric:tabular-nums;
+  }
+  .analyzer-input-row select{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; padding:.5rem .6rem;
+    border:1px solid var(--rule); border-radius:6px; background:#fff; color:var(--ink);
+  }
+  .digit-display{
+    background:#0f1f16; border-radius:8px; padding:1rem 1.1rem; margin-bottom:1rem;
+    font-family:"Cambria Math", Cambria, Georgia, serif; font-size:1.6rem; letter-spacing:.03em;
+    text-align:center; color:#8fb59d;
+  }
+  .digit-display .sig{ color:#e8a33d; font-weight:700; }
+  .digit-display .not-sig{ color:#4a6659; }
+  .analyzer-results{ display:grid; gap:.6rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .analyzer-results{ grid-template-columns:1fr 1fr; } }
+  .result-card{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px; padding:.7rem .9rem;
+  }
+  .result-card .rlabel{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--green-deep); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .result-card .rval{ font-family:Cambria, "Cambria Math", Georgia, serif; font-size:1.1rem; font-weight:600; }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.9rem; }
+  .sim .caveat{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.76rem; color:var(--muted); margin-top:.5rem; font-style:italic; }
+
+  /* --- buttons -------------------------------------------------------- */
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+
+  /* --- predict-first self check ------------------------------------- */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* --- exit ticket (short self-scoring quiz) ------------------------ */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff;
+    padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- words-to-physics table --------------------------------------- */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; color:var(--green); }
+  .translate td .tag.down{ color:#c0392b; }
+
+  /* --- looking-ahead signpost --------------------------------------- */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* --- key relationships (equation-style list) ----------------------- */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{ display:flex; align-items:center; gap:1rem; padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0; }
+  .eq-list li::before{
+    counter-increment:eq; content:"Rel. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; color:var(--green); font-weight:600; flex:none; width:3.6em;
+  }
+  .eq-list .icon{ font-size:1.3rem; flex:none; width:1.6em; text-align:center; }
+  .eq-list .expr{ font-family:Cambria, "Cambria Math", Georgia, serif; font-size:1.1rem; font-weight:600; white-space:nowrap; }
+  .eq-list .use{ margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); text-align:right; max-width:15em; }
+  @media (max-width:560px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.6em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding: .9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Note 2</span>
+  </div>
+
+  <h1>Handling Large and Small Numbers</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Physics is a quantitative science, and the numbers involved range from the enormous (the mass
+    of the Earth: 5,980,000,000,000,000,000,000,000 kg) to the tiny (the diameter of an atom:
+    0.0000000001 m). Writing all those zeros is unworkable, so we use <b>powers-of-10 notation</b>
+    and <b>scientific notation</b> instead — keeping only the meaningful (significant) digits
+    and expressing the rest as a power of ten. This note also covers how to enter these numbers
+    correctly on your calculator using the <b>EE button</b>.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li>
+        <span class="tick">PE1</span>
+        <span class="txt"><b>Write a number in powers-of-10 notation</b>, keeping only the meaningful digits and expressing the rest as a power of ten.</span>
+      </li>
+      <li>
+        <span class="tick">PE2</span>
+        <span class="txt"><b>Convert powers-of-10 notation into standard scientific notation</b> (a single nonzero digit before the decimal point).</span>
+      </li>
+      <li>
+        <span class="tick">PE3</span>
+        <span class="txt"><b>Apply the zero rules to count significant figures</b> correctly: leading zeros never count, trailing zeros count only with an explicit decimal point, and zeros sandwiched between nonzero digits always count.</span>
+      </li>
+      <li>
+        <span class="tick">PE4</span>
+        <span class="txt"><b>Enter numbers in scientific notation on a calculator using the EE button</b> (not the ^ or 10ˣ buttons), including for multiplication, division, and powers.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- digit-shrink divider -->
+  <div class="digitdots" aria-hidden="true">
+    <span>5,980,000,...,000</span>
+    <span>&rarr;</span>
+    <span>5.98 &times; 10&sup2;&#8308;</span>
+    <small>same number, meaningful digits only</small>
+  </div>
+
+  <!-- ============ PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>You already treat trailing zeros differently depending on context, even if you've never named the rule:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">💰</span>
+          <b>$340 vs. $340.00</b>
+          <small>A price tag "$340.00" feels more exact than "about $340" — the decimal signals precision.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">📏</span>
+          <b>A tape measure with fine markings</b>
+          <small>You round to the smallest line you can read — you don't invent extra precision you don't have.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🔋</span>
+          <b>"47%" vs. "47.0%" battery</b>
+          <small>"47.0%" implies a more precise reading than a rounded "47%" — same idea as sig figs.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we answer four questions</h2>
+  <ol class="questions">
+    <li>Why do we need powers-of-10 and scientific notation?</li>
+    <li>Which zeros in a number are meaningful, and which are just placeholders?</li>
+    <li>How do we convert powers-of-10 notation into standard scientific notation?</li>
+    <li>How do we enter these numbers correctly on a calculator?</li>
+  </ol>
+
+  <!-- ============ INTERACTIVE SIMULATOR ============ -->
+  <h2>Play with it: the sig-fig &amp; scientific-notation analyzer</h2>
+  <p>Type a number the way you'd write it on paper (decimal point included if there is one), or pick
+  an example. The tool highlights which digits are significant and shows the powers-of-10 form,
+  scientific notation, and the calculator EE-button keystrokes.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>🔢</span> Interactive · Sig-Fig &amp; Scientific-Notation Analyzer</div>
+    <div class="panel">
+      <div class="analyzer-input-row">
+        <input type="text" id="numInput" value="340." inputmode="decimal" aria-label="Enter a number">
+        <select id="presetSelect" aria-label="Example numbers">
+          <option value="">Try an example&hellip;</option>
+          <option value="340">340</option>
+          <option value="340.">340.</option>
+          <option value="0.45">0.45</option>
+          <option value="25082">25082</option>
+          <option value="0.02050">0.02050</option>
+          <option value="3600">3600</option>
+          <option value="123.32">123.32</option>
+          <option value="532.130">532.130</option>
+          <option value="1000">1000</option>
+          <option value="1000.">1000.</option>
+          <option value="1000.0">1000.0</option>
+          <option value="1000.000">1000.000</option>
+          <option value="0.00002340920">0.00002340920</option>
+          <option value="299792458">299792458</option>
+          <option value="1.000100000">1.000100000</option>
+        </select>
+      </div>
+      <div class="digit-display" id="digitDisplay">340.</div>
+      <div class="analyzer-results">
+        <div class="result-card">
+          <span class="rlabel">Significant figures</span>
+          <span class="rval" id="sfOut">3</span>
+        </div>
+        <div class="result-card">
+          <span class="rlabel">Powers-of-10 form</span>
+          <span class="rval" id="powOut">340 &times; 10&#8304;</span>
+        </div>
+        <div class="result-card">
+          <span class="rlabel">Scientific notation</span>
+          <span class="rval" id="sciOut">3.40 &times; 10&sup2;</span>
+        </div>
+        <div class="result-card">
+          <span class="rlabel">Calculator EE keystrokes</span>
+          <span class="rval" id="eeOut">3.40E2</span>
+        </div>
+      </div>
+      <div class="hint-row" id="simHint">Orange digits are significant; gray digits are placeholders only.</div>
+      <div class="caveat">Assumes a positive, non-zero decimal number (as in the worksheet examples) — no exponent or sign entry needed.</div>
+    </div>
+  </div>
+
+  <!-- ============ PREDICT-FIRST SELF CHECK ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first: which of these has the <em>most</em> significant figures?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">4500</button>
+      <button class="opt" data-correct="false">4500.</button>
+      <button class="opt" data-correct="true">4500.0</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~12 min</span>
+    <!-- ================================================================
+         REPLACE the placeholder div below with your video embed iframe.
+         Ensia / YouTube / Panopto embed codes all drop in the same way:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M1 N2 walkthrough with Dr. Cho"></iframe></div>
+         ================================================================ -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ INSTRUCTIONS (from original note) ============ -->
+  <h2>Instructions and questions</h2>
+  <p>Write the numbers in your guided notes using scientific notation (don't forget the units!) and
+  state the number of significant figures for each. Then, practice entering scientific notation on
+  your calculator using the <b>EE button</b> (accessed via <b>2nd</b> then <b>,</b>) &mdash; never the
+  <b>^</b> or <b>10ˣ</b> buttons for this. You'll finish with real physics calculations (mass-energy
+  equivalence, gravitational force, photon energy, and more) using EE-button entry throughout.</p>
+
+  <div class="digitdots" aria-hidden="true">
+    <span>1.56E&minus;7</span>
+    <span>&rarr;</span>
+    <span>no parentheses needed</span>
+  </div>
+
+  <h2>Zero rules at a glance</h2>
+  <p>Four rules cover every case you'll see in this note:</p>
+  <div class="translate">
+    <table>
+      <thead><tr><th>Zero type</th><th>Example</th><th>Significant?</th></tr></thead>
+      <tbody>
+        <tr><td>Leading zeros</td><td>0.00234 m</td><td><span class="tag down">Never</span></td></tr>
+        <tr><td>Trailing, no decimal point</td><td>142000 s</td><td><span class="tag down">Never</span></td></tr>
+        <tr><td>Trailing, with decimal point</td><td>100.00 kg</td><td><span class="tag">Always</span></td></tr>
+        <tr><td>Sandwiched between nonzero digits</td><td>1004 m</td><td><span class="tag">Always</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> here you're learning to write and count
+  digits in scientific notation. In Note&nbsp;2a, you'll use these same sig-fig rules inside actual
+  calculations (multiplication, division, addition, subtraction) and learn how measurement precision
+  translates into %error. The EE-button skill you practice here becomes essential once those
+  calculations involve real physics formulas.</p>
+
+  <h2>Key relationships for this note</h2>
+  <ul class="eq-list">
+    <li>
+      <span class="icon" title="Powers of 10">🔟</span>
+      <span class="expr">meaningful digits &times; 10<sup>n</sup></span>
+      <span class="use">powers-of-10 notation — keep only significant digits, push the rest into the exponent</span>
+    </li>
+    <li>
+      <span class="icon" title="Scientific notation">🔬</span>
+      <span class="expr">d.ddd &times; 10<sup>n</sup></span>
+      <span class="use">scientific notation — exactly one nonzero digit before the decimal point</span>
+    </li>
+    <li>
+      <span class="icon" title="Calculator entry">🧮</span>
+      <span class="expr">d.dddEn</span>
+      <span class="use">calculator EE-button entry — same value, no parentheses required</span>
+    </li>
+  </ul>
+
+  <div class="digitdots" aria-hidden="true">
+    <span>2nd</span><span>,</span><span>=</span><span>EE</span>
+    <small>the calculator shortcut for scientific notation</small>
+  </div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> How many significant figures does <b>500.</b> cm have?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> 1</label>
+          <label><input type="radio" name="q1" value="b"> 2</label>
+          <label><input type="radio" name="q1" value="c"> 3</label>
+          <label><input type="radio" name="q1" value="d"> 4</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> Why does the trailing zero in "340." count as significant, but the trailing zero in "340" does not?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> The decimal point explicitly shows the measurement was precise enough to include that digit.</label>
+          <label><input type="radio" name="q2" value="b"> Trailing zeros are always significant no matter what.</label>
+          <label><input type="radio" name="q2" value="c"> Trailing zeros are never significant.</label>
+          <label><input type="radio" name="q2" value="d"> It depends on whether the number is even or odd.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> How many significant figures are in <b>0.0500</b>?</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="number of significant figures">
+          <span class="unit">sig figs</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Which calculator button should you use to correctly enter 4.2 &times; 10&#8315;&#8309;?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> The ^ button</label>
+          <label><input type="radio" name="q4" value="b"> The 10ˣ button</label>
+          <label><input type="radio" name="q4" value="c"> The EE button (2nd, then ,)</label>
+          <label><input type="radio" name="q4" value="d"> Just type "10^-5" using the minus key</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <!-- Point these hrefs at the files uploaded to this course's Manage Files
+         area (Insert Quicklink → Course File), NOT at external storage. -->
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/M1_N2_Handling_large_and_small_numbers_and_significant_figures.pdf" target="_blank" rel="noopener">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print or open on a tablet and fill it in as you follow along.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 1 closes — check your own work against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<script>
+/* ---------- sig-fig / scientific-notation analyzer ---------- */
+(function(){
+  var input = document.getElementById('numInput');
+  var preset = document.getElementById('presetSelect');
+  var digitDisplay = document.getElementById('digitDisplay');
+  var sfOut = document.getElementById('sfOut');
+  var powOut = document.getElementById('powOut');
+  var sciOut = document.getElementById('sciOut');
+  var eeOut = document.getElementById('eeOut');
+  var hint = document.getElementById('simHint');
+
+  function toSuper(n){
+    var map = {'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+    return String(n).split('').map(function(c){ return map[c] || c; }).join('');
+  }
+
+  function analyze(str){
+    str = str.trim();
+    var hasDecimal = str.indexOf('.') !== -1;
+    var parts = str.split('.');
+    var intPart = parts[0] || '0';
+    var fracPart = parts.length > 1 ? parts[1] : '';
+    var fullDigits = intPart + fracPart;
+    var decimalPosition = intPart.length; // number of digits before the decimal
+
+    var firstNonZeroIdx = -1;
+    for(var i = 0; i < fullDigits.length; i++){
+      if(fullDigits[i] !== '0'){ firstNonZeroIdx = i; break; }
+    }
+    if(firstNonZeroIdx === -1) return null; // all zero / invalid
+
+    var lastSigIdx;
+    if(hasDecimal){
+      lastSigIdx = fullDigits.length - 1;
+    } else {
+      lastSigIdx = firstNonZeroIdx;
+      for(var j = fullDigits.length - 1; j > firstNonZeroIdx; j--){
+        if(fullDigits[j] !== '0'){ lastSigIdx = j; break; }
+      }
+    }
+
+    var significantDigits = fullDigits.slice(firstNonZeroIdx, lastSigIdx + 1);
+    var sigFigCount = significantDigits.length;
+
+    var powExponent = (decimalPosition - 1) - lastSigIdx;
+    var sciExponent = (decimalPosition - 1) - firstNonZeroIdx;
+    var sciCoeff = significantDigits.length > 1
+      ? significantDigits[0] + '.' + significantDigits.slice(1)
+      : significantDigits;
+
+    return {
+      hasDecimal: hasDecimal, fullDigits: fullDigits, decimalPosition: decimalPosition,
+      firstNonZeroIdx: firstNonZeroIdx, lastSigIdx: lastSigIdx,
+      sigFigCount: sigFigCount, significantDigits: significantDigits,
+      powCoeff: significantDigits, powExponent: powExponent,
+      sciCoeff: sciCoeff, sciExponent: sciExponent
+    };
+  }
+
+  function renderDigitDisplay(str, res){
+    // walk the original string, tracking digit index to decide sig vs not
+    var out = '';
+    var digitIdx = 0;
+    for(var i = 0; i < str.length; i++){
+      var c = str[i];
+      if(/[0-9]/.test(c)){
+        var isSig = digitIdx >= res.firstNonZeroIdx && digitIdx <= res.lastSigIdx;
+        out += '<span class="' + (isSig ? 'sig' : 'not-sig') + '">' + c + '</span>';
+        digitIdx++;
+      } else {
+        out += c;
+      }
+    }
+    return out;
+  }
+
+  function update(){
+    var str = input.value;
+    var res = analyze(str);
+    if(!res){
+      digitDisplay.textContent = 'Enter a positive number (e.g., 340. or 0.0024)';
+      sfOut.textContent = '—'; powOut.textContent = '—'; sciOut.textContent = '—'; eeOut.textContent = '—';
+      hint.textContent = 'Try one of the example numbers from the dropdown to get started.';
+      return;
+    }
+    digitDisplay.innerHTML = renderDigitDisplay(str, res);
+    sfOut.textContent = res.sigFigCount;
+    powOut.innerHTML = res.powCoeff + ' &times; 10' + toSuper(res.powExponent);
+    sciOut.innerHTML = res.sciCoeff + ' &times; 10' + toSuper(res.sciExponent);
+    eeOut.textContent = res.sciCoeff + 'E' + res.sciExponent;
+    hint.textContent = 'Orange digits are significant; gray digits are placeholders only.';
+  }
+
+  input.addEventListener('input', update);
+  preset.addEventListener('change', function(){
+    if(preset.value){ input.value = preset.value; update(); }
+  });
+
+  update();
+})();
+
+/* ---------- predict-first self check ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct');
+        fb.style.color = '#134a29';
+        fb.textContent = '✓ Exactly. "4500.0" has an explicit decimal, so all 5 digits count — the most of the three.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite — check which version has a decimal point holding every trailing zero significant.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q1:'c', q2:'a', q4:'c' };
+  var expl = {
+    q1:'"500." has an explicit decimal point, so all three digits (5, 0, 0) are significant.',
+    q2:'the decimal point is what tells you the zero was actually measured, not just a placeholder.',
+    q4:'the EE button (2nd, then ,) is built for scientific notation entry — no parentheses needed.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong');
+    card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v - 3) < 0.5){ correct++; markCard('card-q3', true, '✓ Correct: leading zeros drop, and the decimal point keeps the trailing zero — "500" = 3 sig figs.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number.'); }
+    else { markCard('card-q3', false, '✗ Drop the leading zeros; the decimal point keeps the rest — that leaves 3 sig figs.'); }
+
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q3input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
