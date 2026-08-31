@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Significant Digit Rules</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — Significant Digit Rules note page (PHY 105).
+     Converted from a slide presentation by Dr. H. Trevor
+     Johnson-Steigelman (CC BY-NC-SA 4.0). Same design system as the
+     module note pages; hosted on GitHub Pages, embedded in Brightspace.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;
+    --green-soft:#eaf3ed;
+    --green-deep:#134a29;
+    --amber:#c77b1f;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--muted); margin:0 0 1rem;
+  }
+  .byline a{ color:var(--green); }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  ol.objectives{ margin:.6rem 0 0 1.2rem; padding:0; }
+  ol.objectives li{ margin-bottom:.3rem; }
+
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0;
+    font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+
+  code, .mono{
+    font-family:Consolas, "SF Mono", Menlo, monospace; font-size:.92em;
+    background:var(--green-soft); padding:.05em .35em; border-radius:4px;
+  }
+
+  table.data{
+    border-collapse:collapse; margin:1rem auto;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+  }
+  table.data caption{
+    caption-side:top; font-weight:600; padding-bottom:.4rem; color:var(--green-deep);
+  }
+  table.data th, table.data td{
+    border:1px solid var(--rule); padding:.4rem .9rem; text-align:left;
+  }
+  table.data th{ background:var(--green-soft); color:var(--green-deep); }
+  table.data td.num{ text-align:center; white-space:nowrap; }
+
+  .mathblock{
+    border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0;
+  }
+  .mathblock .head{
+    background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem;
+  }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{
+    font-family:Consolas, "SF Mono", Menlo, monospace; font-size:1em;
+    line-height:1.9; white-space:pre;
+  }
+  .why{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted);
+    margin:.4rem 0 0; white-space:normal;
+  }
+
+  .refs{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted);
+  }
+  .refs a{ color:var(--green); word-break:break-all; }
+
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+  footer a{ color:var(--green); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>PHY 105 · Physics of Sound</span>
+    <span>Significant Digit Rules</span>
+  </div>
+
+  <h1>Significant Digit Rules</h1>
+  <p class="byline">A lesson by Dr. H. Trevor Johnson-Steigelman, adapted for PHY&nbsp;105.</p>
+
+  <div class="synopsis">
+    <span class="label">Why this matters</span>
+    Following the rules of significant digits will help make sure that you
+    don't over- or understate the precision of your measurements. In this
+    course, you can lose points for misstating the significant digits in your
+    answers. In &ldquo;real life,&rdquo; overspecifying the tolerance of a
+    piece of equipment can cost you significant amounts of money: a
+    220&nbsp;ohm resistor is relatively cheap, but a 220.00&nbsp;ohm resistor
+    (with a tolerance of 0.01&nbsp;ohm) is insanely expensive.
+  </div>
+
+  <p><strong>By the end of this lesson, you will be able&hellip;</strong></p>
+  <ol class="objectives">
+    <li>To explain what significant digits and/or significant figures mean.</li>
+    <li>To determine the significant digits in a given measurement.</li>
+    <li>To determine the significant digits for a given calculation.</li>
+    <li>To use significant digits properly.</li>
+  </ol>
+
+  <h2>Rules for counting significant digits</h2>
+  <table class="data">
+    <caption>The counting rules, with examples — [&nbsp;] shows the count</caption>
+    <thead>
+      <tr><th>Rule</th><th>Examples</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>All non-zero digits are significant.</td>
+        <td class="num"><span class="mono">12.34 cm</span> [4]<br><span class="mono">12345 g</span> [5]</td>
+      </tr>
+      <tr>
+        <td>Zeros <em>between</em> other significant figures are significant.</td>
+        <td class="num"><span class="mono">12.04 cm</span> [4]<br><span class="mono">12045 g</span> [5]</td>
+      </tr>
+      <tr>
+        <td>Zeros to the right of a decimal point <em>and</em> to the right of
+            a number are significant.</td>
+        <td class="num"><span class="mono">12.40 cm</span> [4]<br><span class="mono">12.000 g</span> [5]</td>
+      </tr>
+      <tr>
+        <td>A zero standing alone to the left of a decimal point is not
+            significant. Zeros to the right of the decimal but to the
+            <em>left</em> of a number are not significant.</td>
+        <td class="num"><span class="mono">0.04 cm</span> [1]<br><span class="mono">0.010 g</span> [2]</td>
+      </tr>
+      <tr>
+        <td>Zeros to the right of the last number <em>may or may not</em> be
+            significant. If there is a decimal point, the zeros are
+            significant; if there is no decimal point, they are not.</td>
+        <td class="num"><span class="mono">30530 cm</span> [4]<br><span class="mono">12000 g</span> [2]<br><span class="mono">12000. cm</span> [5]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Adding or subtracting numbers</h2>
+  <p>When adding or subtracting two (or more) numbers, the number with the
+     significant digit <strong>furthest to the left</strong> (the least
+     precise decimal place) determines the number of significant digits in the
+     sum:</p>
+
+  <div class="mathblock">
+    <div class="head">Line up the decimal places</div>
+    <div class="body">
+      <div class="mathline">   12.40   g  [4]
++  12.0001 g  [7]
+─────────────────
+   24.4001
+   24.40   g  [4]</div>
+      <p class="why">The 12.40 is only known to the hundredths place, so the
+      answer can't claim anything past the hundredths place either.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Three more sums — watch how the least precise number rules</div>
+    <div class="body">
+      <div class="mathline">  154.3̲2 cm        15̲0   cm        150.̲  cm
++  43.1  cm      +  43.1 cm      +  43.1 cm
+───────────      ──────────      ──────────
+  197.42 cm        193.1 cm        193.1 cm
+
+= 197.4  cm      = 190   cm      = 193   cm</div>
+      <p class="why">154.32's partner is precise to tenths → keep tenths.
+      Plain 150 is only precise to the tens place → round to 190. But
+      &ldquo;150.&rdquo; (with the decimal point) is precise to the ones
+      place → 193.</p>
+    </div>
+  </div>
+
+  <h2>Multiplying or dividing numbers</h2>
+  <p>When multiplying or dividing, the number with the <strong>smaller number
+     of significant digits</strong> determines the significant digits of the
+     result:</p>
+  <div class="mathblock">
+    <div class="head">245 × 23</div>
+    <div class="body">
+      <div class="mathline">245 × 23 = 5636
+         = 5600</div>
+      <p class="why">23 has only two significant digits, so the answer keeps
+      only two.</p>
+    </div>
+  </div>
+  <p>Why does this make sense? Suppose each factor of 27&nbsp;×&nbsp;8 is
+     uncertain by ±1. Wiggle each number and watch the product swing:</p>
+  <div class="mathblock">
+    <div class="head">27 × 8 = 216 — but how much of that is trustworthy?</div>
+    <div class="body">
+      <div class="mathline">27 × 7 = 189      26 × 8 = 208
+27 × 8 = 216      27 × 8 = 216
+27 × 9 = 243      28 × 8 = 224</div>
+      <div class="mathline">27 × 8 = 216 → 200</div>
+      <p class="why">The product ranges from below 200 to above 240 — only the
+      leading digit or so deserves any confidence. These rules don't always
+      &ldquo;feel&rdquo; right, but you should follow them.</p>
+    </div>
+  </div>
+
+  <h2>&ldquo;Exact numbers&rdquo;</h2>
+  <p>If you have a number that is &ldquo;exact,&rdquo; <strong>don't use it to
+     determine the answer's significant digits</strong>. For example, the ½ in
+     the kinematics equation is exact, and the 2 in the
+     <span class="mono">v² = v₀² + 2a(x − x₀)</span> equation is exact — they
+     are pure numbers, not measurements.</p>
+
+  <h2>Rounding errors — wait till the end to round</h2>
+  <p>The last digit in a calculated number may vary: depending on how it is
+     calculated, rounding off <em>insignificant</em> digits along the way may
+     cause <em>major</em> problems.</p>
+  <div class="mathblock">
+    <div class="head">Example: 8% tax on a $2.21 + $1.35 purchase</div>
+    <div class="body">
+      <div class="mathline">Tax at the end:          Tax on each item first:
+   $ 2.21                  $2.21 + 8% = $2.3868 → $ 2.39
++  $ 1.35                  $1.35 + 8% = $1.458  → $ 1.46
+─────────                                        ─────────
+   $ 3.56                                        = $ 3.85
++  $ 0.2848   (3.56 × .08)
+─────────
+   $ 3.8448
+ = $ 3.84</div>
+      <p class="why">Round early and the totals disagree by a penny. Keep the
+      extra digits through the calculation and round once, at the end.</p>
+    </div>
+  </div>
+
+  <h2>Online homework will check your significant figures</h2>
+  <p>Online homework systems (such as WebAssign) check the significant figures
+     of your answers. For example: if your speedometer has an uncertainty of
+     2.7&nbsp;km/h at a speed of 93&nbsp;km/h, the percent uncertainty is
+     2.9032258&hellip;% on your calculator — but an answer entered with all
+     those digits gets flagged with &ldquo;Check the number of significant
+     figures.&rdquo; Expressed properly, the answer is
+     <strong>2.9%</strong>.</p>
+  <div class="tip">
+    <span class="label">Grading note</span>
+    You might receive partial credit if you give the correct value with
+    <em>more</em> than the required significant figures — but no credit is
+    awarded if you give too few. Also be aware that textbooks and homework
+    systems sometimes count significant figures in slightly different ways
+    than you were taught.
+  </div>
+
+  <h2>Data tables in Excel</h2>
+  <p>Sometimes divisions cause cells to have lots of decimal places
+     (0.33333, 0.66667, 1.33333&hellip;). <strong>Excel doesn't adjust these
+     automatically — make sure that you do.</strong> Select the cells and use
+     the decrease-decimal command icon in the Number group of the Home tab, so
+     the table shows an appropriate 0.33, 0.67, 1.33, &hellip;</p>
+
+  <h2>Review</h2>
+  <ul>
+    <li>There are very specific rules on how to determine the number of
+        significant digits for a number.</li>
+    <li>Using too many significant digits suggests that your answer is much
+        more precise than it should be.</li>
+  </ul>
+
+  <h2>References</h2>
+  <p class="refs">
+    Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax,
+    Houston, TX, Jun 21, 2012.<br>
+    <a href="https://openstax.org/books/college-physics/pages/1-3-accuracy-precision-and-significant-figures" target="_blank" rel="noopener">https://openstax.org/books/college-physics/pages/1-3-accuracy-precision-and-significant-figures</a>
+  </p>
+  <p class="refs">
+    Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics</em>,
+    OpenStax, Houston, TX, Oct 6, 2016.<br>
+    <a href="https://openstax.org/books/university-physics-volume-1/pages/1-6-significant-figures" target="_blank" rel="noopener">https://openstax.org/books/university-physics-volume-1/pages/1-6-significant-figures</a>
+  </p>
+
+  <footer>
+    This page is adapted from the presentation <em>Significant Figures
+    Rules</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Dr. H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative
+    Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>,
+    and is shared under the same license ·
+    Adapted for PHY 105 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+</body>
+</html>
