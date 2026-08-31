@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphing Activity — Hand Plot vs. Excel Plot</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — Graphing Activity instruction page.
+     Same design system as the module note pages. Self-contained;
+     upload via Manage Files and embed as an iframe.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;
+    --green-soft:#eaf3ed;
+    --green-deep:#134a29;
+    --amber:#c77b1f;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .sans{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+  h2 .stepno{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:1.7em; height:1.7em; border-radius:50%; background:var(--green);
+    color:#fff; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.8em; margin-right:.5em; vertical-align:.05em;
+  }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* data table */
+  table.data{
+    border-collapse:collapse; margin:1rem auto;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+  }
+  table.data caption{
+    caption-side:top; font-weight:600; padding-bottom:.4rem; color:var(--green-deep);
+  }
+  table.data th, table.data td{
+    border:1px solid var(--rule); padding:.35rem .9rem; text-align:center;
+  }
+  table.data th{ background:var(--green-soft); color:var(--green-deep); }
+
+  /* numbered step list */
+  ol.steps{ counter-reset:step; list-style:none; margin:1rem 0; padding:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+    border-left:2px solid var(--rule); margin-left:.9rem;
+  }
+  ol.steps > li:last-child{ border-left-color:transparent; }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+    width:1.8rem; height:1.8rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.85rem; font-weight:600;
+  }
+  ol.steps b.lead{ font-family:"Segoe UI", system-ui, sans-serif; }
+
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0;
+    font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+
+  code, .mono{
+    font-family:Consolas, "SF Mono", Menlo, monospace; font-size:.92em;
+    background:var(--green-soft); padding:.05em .35em; border-radius:4px;
+  }
+
+  /* slope figure */
+  .figure{
+    border:1px solid var(--rule); border-radius:10px; padding:1rem;
+    margin:1.4rem 0; text-align:center;
+  }
+  .figure figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    color:var(--muted); margin-top:.5rem; text-align:left;
+  }
+
+  /* checklist */
+  .checklist{
+    border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0;
+  }
+  .checklist .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.6rem 1.1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem;
+  }
+  .checklist .body{ padding:.6rem 1.1rem .9rem; }
+  .checklist label{
+    display:flex; gap:.6rem; align-items:flex-start; padding:.35rem 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; cursor:pointer;
+  }
+  .checklist input{ margin-top:.3rem; accent-color:var(--green); }
+  .checklist label.done{ color:var(--muted); text-decoration:line-through; }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; margin:1.2rem 0; }
+  @media (min-width:560px){ .downloads{ grid-template-columns:1fr 1fr 1fr; } }
+  .dl-card{
+    display:block; border:1px solid var(--rule); border-radius:10px;
+    padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+    background:#fff; transition:border-color .15s, box-shadow .15s;
+  }
+  .dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+  .dl-card .kind{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--green); font-weight:700;
+  }
+  .dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+  .dl-card .hint{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.83rem; color:var(--muted);
+  }
+
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Lab Skills</span>
+    <span>Graphing Activity</span>
+  </div>
+
+  <h1>Graphing Activity — Hand Plot vs. Excel Plot</h1>
+
+  <div class="synopsis">
+    <span class="label">Goal</span>
+    You will plot the same position-vs-time data twice — once <em>by hand</em> on
+    grid paper, and once <em>in Excel</em> — find the slope of the best-fit line
+    both ways, and compare the two results in a short write-up. The slope of a
+    position-vs-time graph is the <strong>speed</strong>, so both methods should
+    give you nearly the same number.
+  </div>
+
+  <h2>The data</h2>
+  <p>Use this measured position data for <strong>both</strong> plots. It is also
+     in the Excel data file below, so you do not need to retype it.</p>
+
+  <table class="data">
+    <caption>Sample Position Data (measured)</caption>
+    <thead>
+      <tr><th>Time (s)</th><th>Position (m)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>0.10</td><td>0.27</td></tr>
+      <tr><td>0.20</td><td>0.46</td></tr>
+      <tr><td>0.30</td><td>0.60</td></tr>
+      <tr><td>0.40</td><td>0.84</td></tr>
+      <tr><td>0.50</td><td>0.99</td></tr>
+      <tr><td>0.60</td><td>1.17</td></tr>
+      <tr><td>0.70</td><td>1.32</td></tr>
+      <tr><td>0.80</td><td>1.52</td></tr>
+      <tr><td>0.90</td><td>1.67</td></tr>
+      <tr><td>1.00</td><td>1.85</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="stepno">1</span>Hand plot on grid paper</h2>
+  <p>You will receive a sheet of grid paper in class (a printable copy is linked
+     below). Work in pencil first, then darken your final line.</p>
+
+  <ol class="steps">
+    <li><b class="lead">Set up your axes.</b> Look at the data table and decide
+        the range each axis must cover: time runs from 0 to 1.00&nbsp;s, position
+        from 0 to about 2.0&nbsp;m. Choose a scale that spreads the data across
+        <em>most of the page</em> — a tiny graph squeezed into one corner is hard
+        to read and hard to grade. Time goes on the horizontal axis; position on
+        the vertical axis.</li>
+    <li><b class="lead">Label both axes with units.</b> Write
+        <em>Time&nbsp;(s)</em> along the horizontal axis and
+        <em>Position&nbsp;(m)</em> along the vertical axis, and mark evenly
+        spaced tick values (0.1, 0.2, 0.3, … on the time axis, for example).</li>
+    <li><b class="lead">Give the graph a title.</b> Write a descriptive title at
+        the top, such as <em>Position (m) vs. Time (s)</em>.</li>
+    <li><b class="lead">Plot the data as a scatter plot.</b> Place a small, neat
+        point (a dot or ×) at each of the ten data pairs. Do <em>not</em> connect
+        the dots point-to-point.</li>
+    <li><b class="lead">Draw the best-fit line with a ruler.</b> The best-fit
+        line is a single <em>straight</em> line drawn through the cloud of
+        points so that the points scatter evenly above and below it. It does
+        <em>not</em> have to pass through any particular data point — it
+        represents the overall trend.</li>
+    <li><b class="lead">Find the slope — and show your work on the plot.</b>
+        Pick two points <em>on your line</em> (not data points!) that are far
+        apart. Circle them, label them (x₁,&nbsp;y₁) and (x₂,&nbsp;y₂), and draw
+        the rise-and-run triangle on the graph, just like the figure below. Then
+        compute
+        <br><span class="mono">slope = rise / run = (y₂ − y₁) / (x₂ − x₁)</span><br>
+        and write the result <strong>with its unit</strong> next to the triangle.
+        Since rise is in meters and run is in seconds, your slope is in
+        <strong>m/s</strong> — it is the speed.</li>
+  </ol>
+
+  <figure class="figure">
+    <svg viewBox="0 0 460 300" width="100%" style="max-width:460px" role="img"
+         aria-label="Example plot showing a best-fit line with two circled points far apart, a rise-and-run triangle drawn between them, and the slope computed as rise over run.">
+      <!-- axes -->
+      <line x1="55" y1="255" x2="430" y2="255" stroke="#1d2b23" stroke-width="1.5"/>
+      <line x1="55" y1="255" x2="55" y2="25" stroke="#1d2b23" stroke-width="1.5"/>
+      <text x="240" y="288" font-family="Segoe UI, sans-serif" font-size="13" text-anchor="middle">Time (s)</text>
+      <text x="18" y="140" font-family="Segoe UI, sans-serif" font-size="13" text-anchor="middle" transform="rotate(-90 18 140)">Position (m)</text>
+      <text x="240" y="18" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600" text-anchor="middle">Position (m) vs. Time (s)</text>
+      <!-- data points scattered around line y from (75,235) to (410,45) -->
+      <g fill="#1e6b3c">
+        <circle cx="90"  cy="229" r="3"/>
+        <circle cx="125" cy="204" r="3"/>
+        <circle cx="160" cy="192" r="3"/>
+        <circle cx="195" cy="163" r="3"/>
+        <circle cx="230" cy="151" r="3"/>
+        <circle cx="265" cy="128" r="3"/>
+        <circle cx="300" cy="112" r="3"/>
+        <circle cx="335" cy="86"  r="3"/>
+        <circle cx="370" cy="73"  r="3"/>
+        <circle cx="405" cy="50"  r="3"/>
+      </g>
+      <!-- best fit line -->
+      <line x1="70" y1="243" x2="418" y2="42" stroke="#c0392b" stroke-width="2"/>
+      <!-- slope points on the line -->
+      <circle cx="105" cy="222.8" r="9" fill="none" stroke="#5b2d8e" stroke-width="2"/>
+      <circle cx="385" cy="61" r="9" fill="none" stroke="#5b2d8e" stroke-width="2"/>
+      <text x="92" y="212" font-family="Segoe UI, sans-serif" font-size="12" fill="#5b2d8e">(x₁, y₁)</text>
+      <text x="350" y="50" font-family="Segoe UI, sans-serif" font-size="12" fill="#5b2d8e">(x₂, y₂)</text>
+      <!-- rise/run triangle -->
+      <line x1="105" y1="222.8" x2="385" y2="222.8" stroke="#1e6b3c" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <line x1="385" y1="222.8" x2="385" y2="61" stroke="#1e6b3c" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <text x="245" y="240" font-family="Segoe UI, sans-serif" font-size="12" fill="#1e6b3c" text-anchor="middle">run = x₂ − x₁</text>
+      <text x="392" y="145" font-family="Segoe UI, sans-serif" font-size="12" fill="#1e6b3c">rise</text>
+      <text x="392" y="161" font-family="Segoe UI, sans-serif" font-size="12" fill="#1e6b3c">= y₂ − y₁</text>
+    </svg>
+    <figcaption>Show your slope work <em>on the plot</em>: circle two well-separated
+      points on the line, draw the rise-and-run triangle, and write
+      slope&nbsp;=&nbsp;rise/run with the unit m/s.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Why two far-apart points?</span>
+    Reading two points that are close together magnifies small reading errors.
+    Points near the two ends of your line give the most reliable slope.
+  </div>
+
+  <div class="checklist" id="handChecklist">
+    <div class="head">Hand-plot checklist — every item is graded</div>
+    <div class="body">
+      <label><input type="checkbox"> Axes set to a scale that fills most of the page</label>
+      <label><input type="checkbox"> Both axes labeled <em>with units</em>: Time (s), Position (m)</label>
+      <label><input type="checkbox"> Descriptive title at the top of the graph</label>
+      <label><input type="checkbox"> All ten data points plotted as a scatter plot (not connected)</label>
+      <label><input type="checkbox"> A single straight best-fit line drawn with a ruler</label>
+      <label><input type="checkbox"> Two circled points <em>on the line</em>, rise-and-run triangle drawn</label>
+      <label><input type="checkbox"> Slope computed and written on the plot <em>with the unit m/s</em></label>
+    </div>
+  </div>
+
+  <h2><span class="stepno">2</span>Excel plot of the same data</h2>
+  <p>Now make Excel do the same job. Download the Excel data file below — it
+     already contains the data table — and follow the instructions on the
+     sheet:</p>
+
+  <ol class="steps">
+    <li><b class="lead">Select the data.</b> Highlight the two columns,
+        including the <em>Time (s)</em> and <em>Position (m)</em> headers.</li>
+    <li><b class="lead">Insert a scatter chart.</b> Go to
+        <span class="mono">Insert → Charts → Scatter</span> and choose the plain
+        scatter (markers only, no connecting lines).</li>
+    <li><b class="lead">Add title and axis labels.</b> Use
+        <span class="mono">Chart Design → Add Chart Element</span> to add axis
+        titles with units and a chart title, matching your hand plot.</li>
+    <li><b class="lead">Add a linear trendline.</b> Right-click a data point and
+        choose <span class="mono">Add Trendline…</span>. Select
+        <em>Linear</em>, and check both
+        <em>Display Equation on chart</em> and
+        <em>Display R-squared value on chart</em>.</li>
+    <li><b class="lead">Read off the slope.</b> The equation appears in the form
+        <span class="mono">y = mx + b</span>. The number multiplying
+        <span class="mono">x</span> is the slope — attach the unit
+        <strong>m/s</strong> when you report it.</li>
+  </ol>
+
+  <div class="tip">
+    <span class="label">Check yourself</span>
+    Your hand-plot slope and Excel's slope should agree to within a few percent.
+    If they are wildly different, one of the two plots has a problem — find it
+    before you write up your results.
+  </div>
+
+  <h2><span class="stepno">3</span>Write up and submit</h2>
+  <p>Download the Word template below. It has four sections — fill them in
+     <em>in order</em>, replacing the italic instructions in each:</p>
+
+  <ol class="steps">
+    <li><b class="lead">Hand Plot.</b> Take a photo of your grid-paper plot
+        with your cell phone — hold the phone flat over the page in good light
+        so the title, the axis labels with units, your best-fit line, and the
+        rise-and-run slope work are all clearly legible. Send the photo to
+        yourself (email or OneDrive), then insert it in the
+        <em>Hand&nbsp;Plot</em> section via
+        <span class="mono">Insert → Pictures</span>. Click the inserted image,
+        open the small icon at its top right, and choose
+        <em>In Line with Text</em>.</li>
+    <li><b class="lead">Excel Table and Graph.</b> In Excel, select the data
+        table, right-click, and choose <em>Copy</em>. In the template's
+        <em>Excel Table and Graph</em> section, right-click and choose
+        <em>Paste as Picture</em> (the option with the mountain icon). Do the
+        same for the chart, placing the graph <em>beside</em> the table, not
+        under it, and set each image to <em>In Line with Text</em>. Do not
+        link the table or graph — linking causes problems.</li>
+    <li><b class="lead">Observe and Comment.</b> Write a few sentences: state
+        the Excel best-fit equation, report the slope (the speed) from Excel
+        and the slope from your hand plot — both with units — and describe how
+        the two compare.</li>
+    <li><b class="lead">Neaten, save, and submit.</b> Keep the document to
+        <strong>two pages</strong>. Delete all italic instruction text,
+        spell-check, and put your name and the date in the heading. Save the
+        file as a PDF named
+        <span class="mono">Graphing Activity - Your Name.pdf</span> (using your
+        own first and last name) and submit it to the assignment folder in
+        Brightspace. We submit PDFs because embedded graphs in .docx files
+        often break in the LMS.</li>
+  </ol>
+
+  <h2>Files for this activity</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/Grid_paper.pdf">
+      <span class="kind">Print</span>
+      <span class="name">Grid paper (PDF)</span>
+      <span class="hint">For the hand plot — a copy is also handed out in class.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/Graphing_Activity_Data_File.xlsx">
+      <span class="kind">Open in Excel</span>
+      <span class="name">Data file (XLSX)</span>
+      <span class="hint">Contains the data table — plot and fit it in Excel.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/Graphing_and_Submitting_-_Word_Template.docx">
+      <span class="kind">Write up</span>
+      <span class="name">Word template (DOCX)</span>
+      <span class="hint">Insert both plots and your comparison, then save as PDF.</span>
+    </a>
+  </div>
+
+  <footer>
+    Adapted from materials by H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0) ·
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<script>
+/* Strike through checklist items as they're ticked. */
+(function(){
+  var boxes = document.querySelectorAll("#handChecklist input[type=checkbox]");
+  for (var i = 0; i < boxes.length; i++){
+    boxes[i].addEventListener("change", function(){
+      this.parentNode.classList.toggle("done", this.checked);
+    });
+  }
+})();
+</script>
+</body>
+</html>
