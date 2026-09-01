@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M0 — Comparing Trendlines and Models</title>
+<style>
+:root{
+  --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+  --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+}
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:Charter,"Bitstream Charter",Georgia,"Times New Roman",serif; font-size:1.06rem; line-height:1.65; }
+.note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+.eyebrow{ font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em; border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+.eyebrow strong{ color:var(--green); font-weight:600; }
+h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+.byline{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.88rem; color:var(--muted); margin:.2rem 0 0; }
+.byline a{ color:var(--green); }
+.synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+.synopsis .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem; }
+.pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+.pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; }
+.pe .head strong{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); }
+.pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+.pe li{ display:flex; gap:.7rem; padding:.5rem .6rem; }
+.pe li + li{ border-top:1px solid var(--rule); }
+.pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; font-weight:700; }
+h2{ font-size:1.25rem; margin:1.8rem 0 .8rem; font-weight:700; }
+h3{ font-size:1.02rem; margin:1.2rem 0 .5rem; font-weight:700; font-family:"Segoe UI",system-ui,sans-serif; color:var(--green-deep); }
+ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; }
+ol.questions li{ margin:.5rem 0; }
+.chart{ border:1px solid var(--rule); border-radius:10px; padding:1rem 1rem .6rem; background:#fbfdfc; margin:1rem 0; }
+.chart .caption{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; color:var(--muted); text-align:center; margin:.4rem 0 .2rem; }
+.chart .fitlabel{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; text-align:center; margin:.1rem 0 0; }
+.chart .fitlabel .swatch{ display:inline-block; width:1.4em; height:0; border-top:3px solid var(--green); vertical-align:middle; margin-right:.4em; }
+.chart .fitlabel .swatch.dashed{ border-top-style:dashed; border-top-color:var(--amber); }
+.datatable{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+.datatable table{ width:100%; border-collapse:collapse; font-family:"Segoe UI",system-ui,sans-serif; font-size:.88rem; }
+.datatable th,.datatable td{ text-align:left; padding:.55rem .7rem; border-bottom:1px solid var(--rule); }
+.datatable th{ background:var(--green-soft); color:var(--green-deep); font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; }
+.datatable tr:last-child td{ border-bottom:0; }
+.datatable input[type=text]{ width:100%; box-sizing:border-box; font:inherit; padding:.3rem .5rem; border:1px solid var(--rule); border-radius:5px; }
+.tip{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:.8rem 1.1rem; margin:1.4rem 0; background:#fffdf8; }
+.tip .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.2rem; }
+.probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+.probe .q{ font-weight:700; margin:0 0 .7rem; }
+.probe .opts{ display:grid; gap:.5rem; }
+.probe .opt{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; }
+.probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+.probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+.probe .feedback{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+.video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+.video-slot .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem; }
+.video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+.video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.video-placeholder{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cfe4d7; font-family:"Segoe UI",system-ui,sans-serif; font-size:.95rem; text-align:center; padding:1rem; }
+.btn{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+.btn.primary{ background:var(--green); color:#fff; }
+.ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+.ticket .t-head{ background:linear-gradient(90deg,var(--green),var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI",system-ui,sans-serif; }
+.ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+.ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+.q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+.q-card.right{ border-left-color:var(--green); }
+.q-card.wrong{ border-left-color:#c0392b; }
+.q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+.q-card .qtext .num{ color:var(--green); }
+.q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-opts label{ display:flex; gap:.55rem; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+.q-num{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+.q-num input[type=number]{ font:inherit; width:8rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+.q-card .qfb{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+.q-card.right .qfb{ color:var(--green-deep); }
+.q-card.wrong .qfb{ color:#c0392b; }
+.ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+.ticket .score{ font-family:"Segoe UI",system-ui,sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+.ticket .score.show{ display:block; }
+.downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+@media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+.dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+.dl-card .kind{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+.dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+.dl-card .hint{ font-size:.88rem; color:var(--muted); }
+footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; color:var(--muted); }
+footer a{ color:var(--green); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 0 · Graphing &amp; Lab Skills</span><span>Notes</span></div>
+<h1>Comparing Trendlines and Models</h1>
+<p class="byline">Adapted from the lecture deck by Dr. H. Trevor Johnson-Steigelman · <a href="https://www.physicsthisweek.com" target="_blank" rel="noopener">physicsthisweek.com</a></p>
+
+<div class="synopsis">
+<span class="label">Synopsis</span>
+A big part of physics is creating and exploring equations (<b>models</b>) that describe the behavior of systems. In lab, we gather data, graph it, and fit a <b>trendline</b> — and the trendline must be compared to the model equation. A rookie mistake is to fit any data with a trendline and assume the slope is "the answer." This note shows how to pick the right trendline for the model you are testing, and how to extract physical quantities from the fit.
+</div>
+
+<div class="pe">
+<div class="head"><strong>Performance Expectations</strong></div>
+<ul>
+<li><span class="tick">PE1</span>Pick the trendline type that matches the form of the model equation being tested.</li>
+<li><span class="tick">PE2</span>Match trendline constants (slope, intercept, prefactor, exponent) to model constants and extract physical quantities from them.</li>
+<li><span class="tick">PE3</span>Analyze the same data two ways — linearizing vs. fitting directly — and use the comparison (including the fitted exponent) to judge how well the model describes the data.</li>
+</ul>
+</div>
+
+<h2>Trendlines vs. models</h2>
+<p><b>Trendlines</b> are the "fits" that we add to a graph. <b>Models</b> are the equations that describe physical situations. Spreadsheet software offers several trendline types, each with its own equation form:</p>
+<div class="datatable">
+<table><thead><tr><th>Trendline type</th><th>Equation form</th><th>A physics model with this form</th></tr></thead>
+<tbody>
+<tr><td>Linear</td><td><code>y = m x + b</code></td><td>Hooke's law: Δx = (1/k) F</td></tr>
+<tr><td>Polynomial</td><td><code>y = A x² + B x + C</code></td><td>Kinematics: x = ½at² + v₀t + x₀</td></tr>
+<tr><td>Power</td><td><code>y = A x<sup>B</sup></code></td><td>Oscillation period: T = (2π/√k) m<sup>0.5</sup></td></tr>
+<tr><td>Exponential</td><td><code>y = A e<sup>Bx</sup></code></td><td>RC discharge: V = V₀e<sup>−t/RC</sup></td></tr>
+<tr><td>Logarithmic</td><td><code>y = A ln x + B</code></td><td>Sound level vs. intensity</td></tr>
+</tbody></table>
+</div>
+<p style="margin-top:1rem"><b>The trendline you pick should represent the model you are testing.</b> The fit's job is not to look pretty or maximize R² — it is to put your data in the same mathematical form as the model, so you can read physical quantities out of the fit constants.</p>
+
+<h2>Worked example 1 — stretching a spring (static)</h2>
+<p>Hang masses from a spring and record the stretch Δy for each applied force F. The model is <b>Hooke's law</b>: <code>F = k Δx</code>. Solved for what we graphed (stretch vs. force): <code>Δx = (1/k) F</code> — a straight line through the origin whose <em>slope is 1/k</em>, not k.</p>
+<div class="datatable">
+<table><thead><tr><th>Force (N)</th><th>Δy (m)</th></tr></thead>
+<tbody>
+<tr><td>0.4751</td><td>0.009</td></tr>
+<tr><td>0.7886</td><td>0.020</td></tr>
+<tr><td>0.9502</td><td>0.025</td></tr>
+<tr><td>1.2637</td><td>0.039</td></tr>
+<tr><td>1.4253</td><td>0.047</td></tr>
+<tr><td>1.7388</td><td>0.059</td></tr>
+<tr><td>1.9004</td><td>0.066</td></tr>
+<tr><td>2.2139</td><td>0.080</td></tr>
+<tr><td>2.3755</td><td>0.086</td></tr>
+<tr><td>2.6890</td><td>0.099</td></tr>
+</tbody></table>
+</div>
+<div class="chart">
+<svg viewBox="0 0 520 330" width="100%" role="img" aria-label="Scatter plot of spring displacement versus applied force with a linear trendline, y equals 0.0414 x minus 0.0125, R squared 0.9989">
+<g font-family="Segoe UI, sans-serif" font-size="11" fill="#5c6b62">
+<line x1="56" y1="286.0" x2="506" y2="286.0" stroke="#9db3a6" stroke-width="1"/>
+<text x="50" y="289.5" text-anchor="end">0.00</text>
+<line x1="56" y1="240.7" x2="506" y2="240.7" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="244.2" text-anchor="end">0.02</text>
+<line x1="56" y1="195.3" x2="506" y2="195.3" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="198.8" text-anchor="end">0.04</text>
+<line x1="56" y1="150.0" x2="506" y2="150.0" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="153.5" text-anchor="end">0.06</text>
+<line x1="56" y1="104.7" x2="506" y2="104.7" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="108.2" text-anchor="end">0.08</text>
+<line x1="56" y1="59.3" x2="506" y2="59.3" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="62.8" text-anchor="end">0.10</text>
+<line x1="56" y1="14.0" x2="506" y2="14.0" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="17.5" text-anchor="end">0.12</text>
+<text x="56.0" y="302" text-anchor="middle">0</text>
+<line x1="131.0" y1="14" x2="131.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="131.0" y="302" text-anchor="middle">0.5</text>
+<line x1="206.0" y1="14" x2="206.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="206.0" y="302" text-anchor="middle">1</text>
+<line x1="281.0" y1="14" x2="281.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="281.0" y="302" text-anchor="middle">1.5</text>
+<line x1="356.0" y1="14" x2="356.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="356.0" y="302" text-anchor="middle">2</text>
+<line x1="431.0" y1="14" x2="431.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="431.0" y="302" text-anchor="middle">2.5</text>
+<line x1="506.0" y1="14" x2="506.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="506.0" y="302" text-anchor="middle">3</text>
+<line x1="56" y1="14" x2="56" y2="286" stroke="#9db3a6" stroke-width="1"/>
+<text x="281" y="324" text-anchor="middle" font-size="12" fill="#1d2b23">Force F (N)</text>
+<text x="14" y="150" text-anchor="middle" font-size="12" fill="#1d2b23" transform="rotate(-90 14 150)">Displacement Δy (m)</text>
+</g>
+<path d="M101.3 286.0 L107.8 281.9 L114.3 277.9 L120.8 273.8 L127.3 269.7 L133.8 265.7 L140.3 261.6 L146.8 257.6 L153.3 253.5 L159.8 249.4 L166.2 245.4 L172.7 241.3 L179.2 237.2 L185.7 233.2 L192.2 229.1 L198.7 225.0 L205.2 221.0 L211.7 216.9 L218.2 212.9 L224.7 208.8 L231.2 204.7 L237.7 200.7 L244.2 196.6 L250.7 192.5 L257.2 188.5 L263.7 184.4 L270.2 180.3 L276.7 176.3 L283.2 172.2 L289.7 168.2 L296.1 164.1 L302.6 160.0 L309.1 156.0 L315.6 151.9 L322.1 147.8 L328.6 143.8 L335.1 139.7 L341.6 135.7 L348.1 131.6 L354.6 127.5 L361.1 123.5 L367.6 119.4 L374.1 115.3 L380.6 111.3 L387.1 107.2 L393.6 103.1 L400.1 99.1 L406.6 95.0 L413.1 91.0 L419.6 86.9 L426.1 82.8 L432.5 78.8 L439.0 74.7 L445.5 70.6 L452.0 66.6 L458.5 62.5 L465.0 58.5 L471.5 54.4 L478.0 50.3 L484.5 46.3 L491.0 42.2" fill="none" stroke="#1e6b3c" stroke-width="2" stroke-dasharray="5 4"/>
+<circle cx="127.3" cy="265.6" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="174.3" cy="240.7" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="198.5" cy="229.3" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="245.6" cy="197.6" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="269.8" cy="179.5" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="316.8" cy="152.3" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="341.1" cy="136.4" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="388.1" cy="104.7" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="412.3" cy="91.1" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="459.3" cy="61.6" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+</svg>
+<p class="fitlabel"><span class="swatch"></span><code>y = 0.0414x − 0.0125</code> · R² = 0.9989</p>
+<p class="caption">Stretching of spring: displacement vs. applied force with a linear trendline.</p>
+</div>
+<p>Now line the trendline up with the model, term by term:</p>
+<div class="datatable">
+<table><thead><tr><th>Trendline</th><th>Model</th><th>So…</th></tr></thead>
+<tbody>
+<tr><td><code>y</code></td><td><code>Δx</code></td><td>vertical axis is the stretch</td></tr>
+<tr><td><code>x</code></td><td><code>F</code></td><td>horizontal axis is the force</td></tr>
+<tr><td>slope <code>m</code> = 0.0414 m/N</td><td><code>1/k</code></td><td><b>k = 1/slope</b></td></tr>
+<tr><td>intercept <code>b</code> = −0.0125 m</td><td>0</td><td>should be near zero — and it is small</td></tr>
+</tbody></table>
+</div>
+<p style="margin-top:1rem"><code>k = 1/(slope) = 1/(0.0414 m/N) = <b>24.15 N/m</b></code></p>
+<div class="tip">
+<span class="label">Watch out</span>
+The slope itself (0.0414) is <em>not</em> the spring constant — its units are m/N, the reciprocal of what k should be (N/m). Matching the trendline to the model is what tells you to take the reciprocal. Always carry the units through.
+</div>
+
+<div class="probe" id="probe">
+<p class="q">Check yourself: a different spring gives the fit Δx = 0.0250·F − 0.001 (SI units). What is its spring constant?</p>
+<div class="opts">
+<button class="opt" data-correct="false">k = 0.0250 N/m — the slope is the answer</button>
+<button class="opt" data-correct="true">k = 40 N/m — the slope is 1/k, so k = 1/0.0250</button>
+<button class="opt" data-correct="false">k = 0.001 N/m — the intercept is the answer</button>
+</div>
+<div class="feedback" id="probeFb" role="status"></div>
+</div>
+
+<h2>Worked example 2 — oscillating spring (dynamic)</h2>
+<p>Now hang a mass on the same kind of spring and let it oscillate. The model for the period is <code>T = 2π√(m/k)</code>. Measure the period T for several masses:</p>
+<div class="datatable">
+<table><thead><tr><th>m (kg)</th><th>T (s)</th><th>T² (s²)</th></tr></thead>
+<tbody>
+<tr><td>0.04848</td><td>0.245</td><td>0.060</td></tr>
+<tr><td>0.09696</td><td>0.408</td><td>0.167</td></tr>
+<tr><td>0.14544</td><td>0.493</td><td>0.243</td></tr>
+<tr><td>0.19392</td><td>0.567</td><td>0.321</td></tr>
+<tr><td>0.24240</td><td>0.630</td><td>0.396</td></tr>
+</tbody></table>
+</div>
+<p>The model is not linear in m — so there are <b>two ways to graph the data</b>.</p>
+
+<h3>Way 1 — linearize: graph T² vs. m</h3>
+<p>Square both sides of the model: <code>T² = (2π)²(m/k) = (4π²/k)·m</code>. Graphed as T² vs. m, this <em>is</em> the form <code>y = mx + b</code> — so a linear trendline is now the right choice.</p>
+<div class="chart">
+<svg viewBox="0 0 520 330" width="100%" role="img" aria-label="Scatter plot of period squared versus mass with a linear trendline, y equals 1.7062 x minus 0.0106, R squared 0.9947">
+<g font-family="Segoe UI, sans-serif" font-size="11" fill="#5c6b62">
+<line x1="56" y1="286.0" x2="506" y2="286.0" stroke="#9db3a6" stroke-width="1"/>
+<text x="50" y="289.5" text-anchor="end">0.00</text>
+<line x1="56" y1="255.8" x2="506" y2="255.8" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="259.3" text-anchor="end">0.05</text>
+<line x1="56" y1="225.6" x2="506" y2="225.6" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="229.1" text-anchor="end">0.10</text>
+<line x1="56" y1="195.3" x2="506" y2="195.3" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="198.8" text-anchor="end">0.15</text>
+<line x1="56" y1="165.1" x2="506" y2="165.1" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="168.6" text-anchor="end">0.20</text>
+<line x1="56" y1="134.9" x2="506" y2="134.9" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="138.4" text-anchor="end">0.25</text>
+<line x1="56" y1="104.7" x2="506" y2="104.7" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="108.2" text-anchor="end">0.30</text>
+<line x1="56" y1="74.4" x2="506" y2="74.4" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="77.9" text-anchor="end">0.35</text>
+<line x1="56" y1="44.2" x2="506" y2="44.2" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="47.7" text-anchor="end">0.40</text>
+<line x1="56" y1="14.0" x2="506" y2="14.0" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="17.5" text-anchor="end">0.45</text>
+<text x="56.0" y="302" text-anchor="middle">0.00</text>
+<line x1="131.0" y1="14" x2="131.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="131.0" y="302" text-anchor="middle">0.05</text>
+<line x1="206.0" y1="14" x2="206.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="206.0" y="302" text-anchor="middle">0.10</text>
+<line x1="281.0" y1="14" x2="281.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="281.0" y="302" text-anchor="middle">0.15</text>
+<line x1="356.0" y1="14" x2="356.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="356.0" y="302" text-anchor="middle">0.20</text>
+<line x1="431.0" y1="14" x2="431.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="431.0" y="302" text-anchor="middle">0.25</text>
+<line x1="506.0" y1="14" x2="506.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="506.0" y="302" text-anchor="middle">0.30</text>
+<line x1="56" y1="14" x2="56" y2="286" stroke="#9db3a6" stroke-width="1"/>
+<text x="281" y="324" text-anchor="middle" font-size="12" fill="#1d2b23">Mass m (kg)</text>
+<text x="14" y="150" text-anchor="middle" font-size="12" fill="#1d2b23" transform="rotate(-90 14 150)">Period² T² (s²)</text>
+</g>
+<path d="M65.8 285.7 L72.7 280.9 L79.7 276.1 L86.6 271.3 L93.6 266.6 L100.6 261.8 L107.5 257.0 L114.5 252.2 L121.4 247.4 L128.4 242.6 L135.4 237.8 L142.3 233.0 L149.3 228.3 L156.3 223.5 L163.2 218.7 L170.2 213.9 L177.2 209.1 L184.1 204.3 L191.1 199.5 L198.0 194.8 L205.0 190.0 L212.0 185.2 L218.9 180.4 L225.9 175.6 L232.8 170.8 L239.8 166.0 L246.8 161.2 L253.7 156.5 L260.7 151.7 L267.7 146.9 L274.6 142.1 L281.6 137.3 L288.6 132.5 L295.5 127.7 L302.5 122.9 L309.4 118.2 L316.4 113.4 L323.4 108.6 L330.3 103.8 L337.3 99.0 L344.2 94.2 L351.2 89.4 L358.2 84.7 L365.1 79.9 L372.1 75.1 L379.1 70.3 L386.0 65.5 L393.0 60.7 L399.9 55.9 L406.9 51.1 L413.9 46.4 L420.8 41.6 L427.8 36.8 L434.8 32.0 L441.7 27.2 L448.7 22.4 L455.6 17.6" fill="none" stroke="#1e6b3c" stroke-width="2" stroke-dasharray="5 4"/>
+<circle cx="128.7" cy="249.7" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="201.4" cy="185.1" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="274.2" cy="139.1" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="346.9" cy="92.0" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="419.6" cy="46.6" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+</svg>
+<p class="fitlabel"><span class="swatch"></span><code>y = 1.7062x − 0.0106</code> · R² = 0.9947</p>
+<p class="caption">Period squared vs. mass with a linear trendline.</p>
+</div>
+<p>Matching trendline to model: <code>slope = 4π²/k</code>, so</p>
+<p><code>k = 4π²/(slope) = 4π²/(1.7062 s²/kg) = <b>23.14 kg/s² = 23.14 N/m</b></code></p>
+
+<h3>Way 2 — fit directly: graph T vs. m with a power trendline</h3>
+<p>Rewrite the model as a power law: <code>T = (2π/√k)·√m = (2π/√k)·m<sup>0.5</sup></code>. This matches the power trendline form <code>y = A x<sup>B</sup></code>, with <code>A = 2π/√k</code> and the model predicting <code>B = 0.5</code>.</p>
+<div class="chart">
+<svg viewBox="0 0 520 330" width="100%" role="img" aria-label="Scatter plot of period versus mass with two power-law trendlines: green solid, y equals 1.4833 x to the 0.581, R squared 0.9869; amber dashed, y equals 1.2308 x to the 0.4733">
+<g font-family="Segoe UI, sans-serif" font-size="11" fill="#5c6b62">
+<line x1="56" y1="286.0" x2="506" y2="286.0" stroke="#9db3a6" stroke-width="1"/>
+<text x="50" y="289.5" text-anchor="end">0.0</text>
+<line x1="56" y1="247.1" x2="506" y2="247.1" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="250.6" text-anchor="end">0.1</text>
+<line x1="56" y1="208.3" x2="506" y2="208.3" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="211.8" text-anchor="end">0.2</text>
+<line x1="56" y1="169.4" x2="506" y2="169.4" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="172.9" text-anchor="end">0.3</text>
+<line x1="56" y1="130.6" x2="506" y2="130.6" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="134.1" text-anchor="end">0.4</text>
+<line x1="56" y1="91.7" x2="506" y2="91.7" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="95.2" text-anchor="end">0.5</text>
+<line x1="56" y1="52.9" x2="506" y2="52.9" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="56.4" text-anchor="end">0.6</text>
+<line x1="56" y1="14.0" x2="506" y2="14.0" stroke="#d7e2da" stroke-width="1"/>
+<text x="50" y="17.5" text-anchor="end">0.7</text>
+<text x="56.0" y="302" text-anchor="middle">0.00</text>
+<line x1="131.0" y1="14" x2="131.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="131.0" y="302" text-anchor="middle">0.05</text>
+<line x1="206.0" y1="14" x2="206.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="206.0" y="302" text-anchor="middle">0.10</text>
+<line x1="281.0" y1="14" x2="281.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="281.0" y="302" text-anchor="middle">0.15</text>
+<line x1="356.0" y1="14" x2="356.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="356.0" y="302" text-anchor="middle">0.20</text>
+<line x1="431.0" y1="14" x2="431.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="431.0" y="302" text-anchor="middle">0.25</text>
+<line x1="506.0" y1="14" x2="506.0" y2="286" stroke="#eef4f0" stroke-width="1"/>
+<text x="506.0" y="302" text-anchor="middle">0.30</text>
+<line x1="56" y1="14" x2="56" y2="286" stroke="#9db3a6" stroke-width="1"/>
+<text x="281" y="324" text-anchor="middle" font-size="12" fill="#1d2b23">Mass m (kg)</text>
+<text x="14" y="150" text-anchor="middle" font-size="12" fill="#1d2b23" transform="rotate(-90 14 150)">Period T (s)</text>
+</g>
+<path d="M86.0 226.6 L92.6 219.3 L99.2 212.6 L105.9 206.2 L112.5 200.2 L119.1 194.5 L125.8 189.1 L132.4 183.8 L139.0 178.8 L145.6 173.9 L152.2 169.1 L158.9 164.5 L165.5 160.0 L172.1 155.6 L178.8 151.4 L185.4 147.2 L192.0 143.1 L198.6 139.1 L205.2 135.2 L211.9 131.3 L218.5 127.5 L225.1 123.8 L231.8 120.2 L238.4 116.6 L245.0 113.0 L251.6 109.5 L258.2 106.1 L264.9 102.7 L271.5 99.3 L278.1 96.0 L284.8 92.7 L291.4 89.5 L298.0 86.3 L304.6 83.1 L311.2 80.0 L317.9 76.9 L324.5 73.9 L331.1 70.8 L337.8 67.8 L344.4 64.9 L351.0 61.9 L357.6 59.0 L364.2 56.2 L370.9 53.3 L377.5 50.5 L384.1 47.7 L390.7 44.9 L397.4 42.1 L404.0 39.4 L410.6 36.7 L417.2 34.0 L423.9 31.3 L430.5 28.6 L437.1 26.0 L443.7 23.4 L450.4 20.8 L457.0 18.2 L463.6 15.6" fill="none" stroke="#1e6b3c" stroke-width="2"/>
+<path d="M86.0 210.9 L92.6 203.5 L99.2 196.7 L105.9 190.5 L112.5 184.7 L119.1 179.2 L125.8 174.1 L132.4 169.2 L139.0 164.5 L145.6 160.0 L152.2 155.6 L158.9 151.5 L165.5 147.4 L172.1 143.5 L178.8 139.7 L185.4 136.0 L192.0 132.5 L198.6 129.0 L205.2 125.6 L211.9 122.2 L218.5 119.0 L225.1 115.8 L231.8 112.7 L238.4 109.6 L245.0 106.6 L251.6 103.6 L258.2 100.7 L264.9 97.9 L271.5 95.1 L278.1 92.3 L284.8 89.6 L291.4 86.9 L298.0 84.3 L304.6 81.7 L311.2 79.2 L317.9 76.6 L324.5 74.1 L331.1 71.7 L337.8 69.3 L344.4 66.9 L351.0 64.5 L357.6 62.2 L364.2 59.8 L370.9 57.6 L377.5 55.3 L384.1 53.1 L390.7 50.8 L397.4 48.6 L404.0 46.5 L410.6 44.3 L417.2 42.2 L423.9 40.1 L430.5 38.0 L437.1 35.9 L443.7 33.9 L450.4 31.9 L457.0 29.9 L463.6 27.9 L470.2 25.9 L476.9 23.9 L483.5 22.0" fill="none" stroke="#c77b1f" stroke-width="2" stroke-dasharray="6 4"/>
+<circle cx="128.7" cy="190.8" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="201.4" cy="127.5" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="274.2" cy="94.4" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="346.9" cy="65.7" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+<circle cx="419.6" cy="41.2" r="4.5" fill="#fff" stroke="#1e6b3c" stroke-width="2"/>
+</svg>
+<p class="fitlabel"><span class="swatch"></span><code>y = 1.4833x<sup>0.581</sup></code> · R² = 0.9869&nbsp;&nbsp;&nbsp;<span class="swatch dashed"></span><code>y = 1.2308x<sup>0.4733</sup></code></p>
+<p class="caption">Period vs. mass with two power-law trendlines (as in the original lecture).</p>
+</div>
+<p>Matching the prefactor to the model, <code>A = 2π/√k</code>, so <code>k = (2π)²/A² = 4π²/A²</code>. Using A = 1.2308:</p>
+<p><code>k = 4π²/(1.2308)² = <b>26.06 kg/s² = 26.06 N/m</b></code></p>
+<div class="tip">
+<span class="label">Model check</span>
+The fitted exponent is a free bonus check: the model says B should be 0.5, and the fits give 0.4733–0.581. Close, but not exact — real data has scatter. And notice the three k values for the same spring: <b>24.15</b> (static), <b>23.14</b> (linearized), <b>26.06</b> (power fit). No single fit hands you "the answer" — comparing methods, exponents, and units is what tells you whether to trust a result. A high R² alone does not mean the model is right.
+</div>
+
+<h2>Review</h2>
+<ol class="questions">
+<li><b>Pick the trendline from the model, not from habit.</b> Rearrange the model until it matches one of the trendline forms; that form is the fit to use.</li>
+<li><b>The slope is rarely "the answer."</b> Match fit constants to model constants (slope = 1/k, slope = 4π²/k, A = 2π/√k, …) and solve for the physical quantity — units included.</li>
+<li><b>Cross-check.</b> Linearizing and direct fitting should give consistent values, and a fitted exponent near the predicted one is evidence the model actually describes your data.</li>
+</ol>
+
+<h2>Practice</h2>
+<div class="datatable">
+<table><thead><tr><th>Question</th><th>Your answer</th></tr></thead>
+<tbody>
+<tr><td>1. A Δx vs. F graph for a spring fits y = 0.0520x − 0.0031. Find k (with units).</td><td><input type="text" placeholder="answer"></td></tr>
+<tr><td>2. A T² vs. m graph fits y = 2.10x + 0.004. Find k.</td><td><input type="text" placeholder="answer"></td></tr>
+<tr><td>3. A T vs. m power fit gives y = 1.40x<sup>0.49</sup>. Does the T = 2π√(m/k) model hold? Find k.</td><td><input type="text" placeholder="answer"></td></tr>
+<tr><td>4. What units must the slope of a T² vs. m graph have? Show they make 4π²/slope come out in N/m.</td><td><input type="text" placeholder="answer"></td></tr>
+</tbody></table>
+</div>
+
+<h2>Watch: working through the note</h2>
+<div class="video-slot"><span class="label">Walkthrough video · coming soon</span><div class="video-frame"><div class="video-placeholder">Video embed goes here.</div></div></div>
+
+<div class="ticket" id="ticket">
+<div class="t-head"><strong>🎟️ Exit ticket</strong><span class="sub">Four quick questions.</span></div>
+<div class="t-body">
+<div class="q-card" id="card-q1">
+<p class="qtext"><span class="num">Q1.</span> How should you choose which trendline type to fit?</p>
+<div class="q-opts">
+<label><input type="radio" name="q1" value="a"> Whichever gives R² closest to 1</label>
+<label><input type="radio" name="q1" value="b"> The one whose equation has the same form as the model being tested</label>
+<label><input type="radio" name="q1" value="c"> Linear — it always works if the data looks straight</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q2">
+<p class="qtext"><span class="num">Q2.</span> A T² vs. m fit has slope 1.9739 s²/kg. What is k in N/m? (k = 4π²/slope)</p>
+<div class="q-num"><input type="number" id="q2input" step="0.1"></div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q3">
+<p class="qtext"><span class="num">Q3.</span> A power fit to T vs. m returns an exponent of 0.58 where the model predicts 0.5. What does that tell you?</p>
+<div class="q-opts">
+<label><input type="radio" name="q3" value="a"> Nothing — only R² matters</label>
+<label><input type="radio" name="q3" value="b"> The data deviates somewhat from the model — treat the extracted k with care</label>
+<label><input type="radio" name="q3" value="c"> The model is confirmed exactly</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="q-card" id="card-q4">
+<p class="qtext"><span class="num">Q4.</span> For the Δx = (1/k)F model, the fit's y-intercept should ideally be…</p>
+<div class="q-opts">
+<label><input type="radio" name="q4" value="a"> equal to k</label>
+<label><input type="radio" name="q4" value="b"> equal to 1/k</label>
+<label><input type="radio" name="q4" value="c"> close to zero</label>
+</div>
+<div class="qfb"></div>
+</div>
+<div class="actions"><button class="btn primary" id="ticketCheck">Check my answers</button><button class="btn" id="ticketReset">Clear</button></div>
+<div class="score" id="ticketScore" role="status"></div>
+</div>
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+<a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/M0_Comparing_Trendlines_and_Models.pdf" target="_blank" rel="noopener"><span class="kind">Before the video</span><span class="name">Guided notes — blank (PDF)</span><span class="hint">Print or open on a tablet and fill it in as you follow along.</span></a>
+<a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">Released when Module 0 closes.</span></a>
+</div>
+
+<footer>
+Adapted from the lecture deck <em>“Comparing Models and Trendlines”</em> by H. Trevor Johnson-Steigelman (<a href="https://www.physicsthisweek.com" target="_blank" rel="noopener">physicsthisweek.com</a>), licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. This adaptation copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics, and is likewise shared under CC BY-NC-SA 4.0.<br>
+References: Urone &amp; Hinrichs, <a href="https://openstax.org/books/college-physics/pages/preface" target="_blank" rel="noopener"><em>College Physics</em></a>, OpenStax; Ling, Moebs &amp; Sanny, <a href="https://openstax.org/books/university-physics-volume-1/pages/1-introduction" target="_blank" rel="noopener"><em>University Physics</em></a>, OpenStax.
+</footer>
+</div>
+
+<script>
+(function(){
+  var probe = document.getElementById('probe');
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){ this.classList.add('correct'); fb.style.color='#134a29'; fb.textContent='✓ Right — the model says Δx = (1/k)F, so the slope is 1/k and k = 1/0.0250 = 40 N/m.'; }
+      else { this.classList.add('wrong'); probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); }); fb.style.color='#c0392b'; fb.textContent='✗ Match the fit to the model first: Δx = (1/k)F means slope = 1/k, so k = 1/0.0250 = 40 N/m.'; }
+    });
+  });
+})();
+
+(function(){
+  var ticket = document.getElementById('ticket');
+  var mc = { q1:'b', q3:'b', q4:'c' };
+  var expl = {
+    q1:'the trendline must have the same mathematical form as the model you are testing.',
+    q3:'an exponent off from the predicted value flags a real deviation from the model — R² alone can still look great.',
+    q4:'Δx = (1/k)F has no constant term, so a good fit should have an intercept near zero.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok?'right':'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct=0, total=4;
+    ['q1','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value===mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — '+expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q2input').value);
+    if(!isNaN(v) && Math.abs(v - 20.0) <= 0.5){ correct++; markCard('card-q2', true, '✓ Correct: k = 4π²/1.9739 ≈ 20.0 N/m.'); }
+    else if(isNaN(v)){ markCard('card-q2', false, 'Enter a number.'); }
+    else { markCard('card-q2', false, '✗ k = 4π²/(slope) = 39.478/1.9739 ≈ 20.0 N/m.'); }
+    var tail = correct===total ? "Nice — you're ready to move on!" : correct>=2 ? 'Good start — revisit the ones you missed.' : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked=false; });
+    document.getElementById('q2input').value='';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent=''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent='';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
