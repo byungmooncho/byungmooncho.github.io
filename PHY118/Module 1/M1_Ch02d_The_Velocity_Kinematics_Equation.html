@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch02d — The Velocity Kinematics Equation</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 1 · Chapter 2 slides 02d
+     "The Velocity Kinematics Equation" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:320px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .clicker{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.4rem 0; background:#fbfdfc; }
+  .clicker .c-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .clicker .c-body{ padding:.9rem 1rem 1rem; }
+  .clicker .part{ display:grid; grid-template-columns:1fr; gap:.4rem .8rem; padding:.55rem 0; border-top:1px solid var(--rule); align-items:start; }
+  .clicker .part:first-child{ border-top:0; padding-top:0; }
+  @media (min-width:600px){ .clicker .part{ grid-template-columns:minmax(0,1fr) auto; } }
+  .clicker .ptext{ font-size:1rem; }
+  .clicker .ptext b{ color:var(--green-deep); font-family:"Segoe UI", system-ui, sans-serif; margin-right:.3rem; }
+  .clicker .choices{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .cbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; font-weight:600; border:1.5px solid var(--rule); background:#fff; color:var(--ink); border-radius:20px; padding:.25rem .7rem; cursor:pointer; }
+  .cbtn:hover{ border-color:var(--green); }
+  .cbtn.correct{ border-color:var(--green); background:var(--green-soft); }
+  .cbtn.wrong{ border-color:var(--red); background:#fdecea; }
+  .clicker .pfb{ grid-column:1 / -1; font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; color:var(--green-deep); min-height:1em; }
+  .clicker .pfb.bad{ color:var(--red); }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+  /* --- 02b specifics --- */
+  .cx{ color:#2457b8; } .cv{ color:#1e8a3c; } .ca{ color:#8e4bc9; } .ct{ color:#d9740f; }
+  .know{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin:1rem 0 .5rem; }
+  .k-cell{ border:1px solid var(--rule); border-radius:10px; padding:.75rem .9rem; background:#fbfdfc; }
+  .k-cell b{ font-family:"Segoe UI", system-ui, sans-serif; display:block; font-size:.95rem; }
+  .k-cell small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; line-height:1.45; display:block; margin-top:.2rem; }
+  .k-center{ grid-column:1 / -1; position:relative; text-align:center; padding:1.1rem .9rem; background:var(--green-soft); border-color:var(--green); }
+  .k-title{ font-size:1.5rem; font-weight:700; line-height:1.15; display:block; color:var(--green-deep); }
+  .k-side{ position:absolute; top:50%; transform:translateY(-50%); font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); }
+  .k-left{ left:1rem; } .k-right{ right:1rem; }
+  .k-wide{ grid-column:1 / -1; border-color:var(--amber); background:#fffdf8; }
+  .k-und b{ color:var(--amber); }
+  ol.three{ margin:.2rem 0 1rem; padding-left:1.4rem; }
+  ol.three li{ margin:.45rem 0; }
+  .legend{ display:flex; flex-wrap:wrap; gap:.5rem 1.2rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin:1rem 0 .4rem; }
+  .sw{ display:inline-block; width:.8em; height:.8em; border-radius:3px; background:currentColor; vertical-align:-.1em; margin-right:.3em; }
+  .eqcard{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0; }
+  .eq-head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.55rem 1rem; display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .eq-head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--green-deep); }
+  .eq-toggle{ display:flex; gap:.4rem; }
+  .btn.small{ font-size:.78rem; padding:.3rem .7rem; }
+  .eq-body{ padding:.9rem 1rem 1rem; text-align:center; }
+  .plain{ font-size:.92rem; color:var(--muted); text-align:left; margin:0 0 .6rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .bigeq{ font-size:2rem; line-height:1.3; margin:.2rem 0 .4rem; white-space:nowrap; overflow-x:auto; }
+  .bigeq .op{ font-style:normal; margin:0 .3em; color:var(--ink); }
+  .bigeq .up{ font-style:normal; color:var(--ink); }
+  .bigeq .half{ font-size:.7em; vertical-align:.15em; }
+  @media (max-width:520px){ .bigeq{ font-size:1.5rem; } }
+  .eq-labels{ display:none; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; line-height:1.2; font-weight:600; justify-content:center; gap:.9rem; flex-wrap:wrap; margin-bottom:.35rem; }
+  .eq-labels span:empty{ display:none; }
+  .eq-units{ display:none; font-size:1.05rem; margin:.4rem 0 .2rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; }
+  .eq-units .op{ margin:0 .3em; color:var(--ink); font-weight:400; }
+  .eq-units .up{ color:var(--ink); }
+  .eq-units .chk{ display:block; font-size:.82rem; color:var(--green-deep); font-weight:600; margin-top:.35rem; }
+  .eqcard.show-vars .eq-labels{ display:flex; }
+  .eqcard.show-units .eq-units{ display:block; }
+  .constraint{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); text-align:left; margin:.8rem 0 0; border-top:1px dashed var(--rule); padding-top:.6rem; }
+  .constraint b{ color:var(--amber); }
+
+  /* --- 02d specifics --- */
+  .problem{ border:1px solid var(--rule); border-left:4px solid var(--green); border-radius:0 8px 8px 0; padding:.8rem 1.1rem; margin:1rem 0; background:#fbfdfc; font-size:1.08rem; }
+  .problem p{ margin:.3rem 0; }
+  table.known{ border-collapse:collapse; width:100%; font-size:.98rem; }
+  table.known th{ text-align:left; font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:var(--green); padding:.5rem .4rem .15rem; }
+  table.known td{ padding:.15rem .4rem; border-bottom:1px dashed var(--rule); }
+  table.known td:first-child{ width:2.5rem; text-align:right; }
+  table.known small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; }
+  .steps{ display:grid; gap:.5rem; margin:1rem 0; }
+  .step{ border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .step .reveal{ width:100%; text-align:left; background:var(--green-soft); border:0; padding:.6rem .9rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.9rem; color:var(--green-deep); cursor:pointer; }
+  .step .reveal::before{ content:"▸ "; }
+  .step.open .reveal::before{ content:"▾ "; }
+  .step .content{ display:none; padding:.7rem 1rem .8rem; font-size:1.08rem; }
+  .step.open .content{ display:block; }
+  .step .content .why{ margin-top:.4rem; }
+  .boxed{ display:inline-block; border:2px solid var(--blue); border-radius:6px; padding:.25rem .7rem; font-weight:700; }
+  .choices .num{ width:6.5rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; padding:.3rem .5rem; border:1.5px solid var(--rule); border-radius:6px; }
+  .fig-grid figure svg{ max-width:320px; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Chapter 2 · Slides 02d</span>
+  </div>
+
+  <h1>The Velocity Kinematics Equation</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    One worked example, done carefully. A runner accelerates out of the blocks and then holds a
+    steady speed. The velocity equation <span class="m">v = v<sub>0</sub> + a&Delta;t</span> answers
+    &ldquo;how fast at 2.0&nbsp;s?&rdquo; and &ldquo;how fast at the end?&rdquo; — but only after you
+    list what you know, sketch the motion, and notice that the race has <em>two</em> segments with
+    different accelerations.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Write down</b> the kinematics equations.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Identify the variables</b> in each of the kinematics equations.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine the units</b> in each term of the kinematics equations.</span></li>
+    </ul>
+  </div>
+
+  <h2>Example problem</h2>
+  <div class="problem">
+    <p>At the starting gun, a runner accelerates at 1.9&nbsp;m/s&sup2; for 5.2&nbsp;s. The runner's
+    acceleration is zero for the rest of the race.</p>
+    <p>What is the speed of the runner at <b>(a)</b> 2.0&nbsp;s, and <b>(b)</b> at the end of the race?</p>
+  </div>
+
+  <div class="fig-grid">
+    <figure>
+      <svg viewBox="0 0 320 200" role="img" aria-label="Sketch of velocity versus time: a straight rise from zero until 5.2 s, then flat">
+        <g id="sketch"></g>
+      </svg>
+      <figcaption>Sketch first: velocity rises steadily until 5.2 s, then stays constant.</figcaption>
+    </figure>
+    <div>
+      <h3>Step 1 — List what you know</h3>
+      <table class="known">
+        <tr><th colspan="2">During the acceleration</th></tr>
+        <tr><td class="m">a</td><td>= 1.9 m/s&sup2;</td></tr>
+        <tr><td class="m">t</td><td>= 5.2 s</td></tr>
+        <tr><td class="m">v<sub>0</sub></td><td>= 0 m/s <small>(starts from rest)</small></td></tr>
+        <tr><td class="m">t<sub>0</sub></td><td>= 0 s</td></tr>
+        <tr><th colspan="2">After 5.2 s</th></tr>
+        <tr><td class="m">a</td><td>= 0 m/s&sup2;</td></tr>
+        <tr><th colspan="2">Asked</th></tr>
+        <tr><td class="m">v</td><td>= ? m/s at <span class="m">t</span> = 2.0 s, and at the end</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Why the sketch matters</span>
+    The graph shows two different motions glued together. Part (a) happens <em>during</em> the
+    acceleration, so <span class="m">a</span> = 1.9&nbsp;m/s&sup2; applies. Part (b) asks about the
+    end of the race — long after the acceleration has stopped. Reading the graph tells you the speed
+    at the end is the same as the speed at 5.2&nbsp;s.
+  </div>
+
+  <h2>Part (a): speed at <span class="m">t</span> = 2.0 s</h2>
+  <p>Try each step yourself before revealing it.</p>
+  <div class="steps" id="stepsA">
+    <div class="step">
+      <button class="reveal">Step 1 · Choose the equation</button>
+      <div class="content"><span class="m">v = v<sub>0</sub> + a&thinsp;t</span>
+        <p class="why">We know <span class="m">v<sub>0</sub></span>, <span class="m">a</span>, and the time; we want <span class="m">v</span>. This equation has exactly those four variables and nothing else.</p></div>
+    </div>
+    <div class="step">
+      <button class="reveal">Step 2 · Substitute with units</button>
+      <div class="content"><span class="m">v</span> = 0 <span class="frac"><span class="top">m</span><span class="bot">s</span></span> + 1.9 <span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span> (2.0 s &minus; 0.0 s)
+        <p class="why">Write the units with every number. Notice the time interval is written out as <span class="m">t &minus; t<sub>0</sub></span>, even though <span class="m">t<sub>0</sub></span> is zero.</p></div>
+    </div>
+    <div class="step">
+      <button class="reveal">Step 3 · Multiply and simplify the units</button>
+      <div class="content"><span class="m">v</span> = 3.8 <span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span> &middot; s = 3.8 <span class="frac"><span class="top">m</span><span class="bot">s</span></span>
+        <p class="why">(m/s&sup2;)&middot;s: one power of seconds cancels, leaving m/s — the unit a speed must have. If it hadn't, something was wrong.</p></div>
+    </div>
+    <div class="step">
+      <button class="reveal">Step 4 · State the answer</button>
+      <div class="content"><span class="boxed"><span class="m">v</span> = 3.8 m/s at <span class="m">t</span> = 2.0 s</span>
+        <p class="why">Two significant digits, matching the data (1.9 and 2.0).</p></div>
+    </div>
+  </div>
+
+  <h2>Part (b): speed at the end of the race</h2>
+  <div class="steps" id="stepsB">
+    <div class="step">
+      <button class="reveal">Step 1 · Which time goes in?</button>
+      <div class="content">Use the full acceleration time, <span class="m">t</span> = 5.2 s.
+        <p class="why">The runner speeds up only until 5.2 s. After that, <span class="m">a</span> = 0, so the velocity stops changing. Whatever speed the runner has at 5.2 s is the speed for the rest of the race.</p></div>
+    </div>
+    <div class="step">
+      <button class="reveal">Step 2 · Substitute</button>
+      <div class="content"><span class="m">v</span> = 0 <span class="frac"><span class="top">m</span><span class="bot">s</span></span> + 1.9 <span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span> (5.2 s &minus; 0.0 s)</div>
+    </div>
+    <div class="step">
+      <button class="reveal">Step 3 · Multiply</button>
+      <div class="content"><span class="m">v</span> = 9.88 <span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span> &middot; s = 9.88 <span class="frac"><span class="top">m</span><span class="bot">s</span></span>
+        <p class="why">Keep the extra digit while you work; round at the end.</p></div>
+    </div>
+    <div class="step">
+      <button class="reveal">Step 4 · State the answer</button>
+      <div class="content"><span class="boxed"><span class="m">v</span> = 9.9 m/s at the end</span>
+        <p class="why">This is the velocity at <span class="m">t</span> = 5.2 s — but since <span class="m">a</span> = 0 for the rest of the race, it is also the velocity at the end.</p></div>
+    </div>
+  </div>
+
+  <h2>All together</h2>
+  <div class="fig-grid">
+    <div class="mathblock" style="margin:0;">
+      <div class="head">(a) At <span class="m">t</span> = 2.0 s</div>
+      <div class="body">
+        <div class="mathline"><span class="m">v = v<sub>0</sub> + a&thinsp;t</span></div>
+        <div class="mathline"><span class="m">v</span> = 0 m/s + (1.9 m/s&sup2;)(2.0 s)</div>
+        <div class="mathline"><span class="m">v</span> = 3.8 (m/s&sup2;)&middot;s</div>
+        <div class="mathline"><span class="boxed"><span class="m">v</span> = 3.8 m/s</span></div>
+      </div>
+    </div>
+    <div class="mathblock" style="margin:0;">
+      <div class="head">(b) At the end (<span class="m">t</span> &ge; 5.2 s)</div>
+      <div class="body">
+        <div class="mathline"><span class="m">v = v<sub>0</sub> + a&thinsp;t</span></div>
+        <div class="mathline"><span class="m">v</span> = 0 m/s + (1.9 m/s&sup2;)(5.2 s)</div>
+        <div class="mathline"><span class="m">v</span> = 9.88 (m/s&sup2;)&middot;s</div>
+        <div class="mathline"><span class="boxed"><span class="m">v</span> = 9.9 m/s</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Play with it: the same runner, other moments</h2>
+  <p>Use the same numbers (<span class="m">a</span> = 1.9 m/s&sup2; for 5.2 s, then <span class="m">a</span> = 0).
+  Enter your answer to two significant digits.</p>
+  <div class="clicker" id="numq">
+    <div class="c-head"><span>Interactive · Same runner, different times</span><span id="nqscore">0 / 3</span></div>
+    <div class="c-body">
+      <div class="part" data-ans="7.6" data-tol="0.15" data-fb="v = 0 + (1.9 m/s²)(4.0 s) = 7.6 m/s. Still inside the acceleration phase.">
+        <div class="ptext"><b>A)</b> Speed at <span class="m">t</span> = 4.0 s?</div>
+        <div class="choices"><input class="num" type="number" step="0.1" placeholder="m/s"><button class="cbtn check">Check</button></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-ans="9.9" data-tol="0.15" data-fb="8.0 s is after the acceleration ended, so the speed is the same as at 5.2 s: 9.9 m/s. Plugging 8.0 s into the equation would wrongly give 15 m/s.">
+        <div class="ptext"><b>B)</b> Speed at <span class="m">t</span> = 8.0 s?</div>
+        <div class="choices"><input class="num" type="number" step="0.1" placeholder="m/s"><button class="cbtn check">Check</button></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-ans="2.6" data-tol="0.15" data-fb="Solve v = v₀ + at for t: t = (v − v₀)/a = (5.0 m/s)/(1.9 m/s²) = 2.6 s. Units: (m/s)/(m/s²) = s.">
+        <div class="ptext"><b>C)</b> At what time does the runner reach 5.0 m/s? (answer in s)</div>
+        <div class="choices"><input class="num" type="number" step="0.1" placeholder="s"><button class="cbtn check">Check</button></div><div class="pfb"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Concept question</span>
+      A student answers part (b) by plugging the whole race time, say 12 s, into <span class="m">v = v<sub>0</sub> + a&thinsp;t</span> with <span class="m">a</span> = 1.9 m/s&sup2;. What went wrong?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Nothing — that gives the correct end speed.</button>
+      <button class="opt" data-correct="true">The acceleration was not 1.9 m/s&sup2; for the whole 12 s; the equation only applies while <span class="m">a</span> is constant, so it must be used one segment at a time.</button>
+      <button class="opt" data-correct="false">The student should have used the position equation instead.</button>
+      <button class="opt" data-correct="false">The student should have used <span class="m">a</span> = 0 for the whole race.</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> multi-segment motion — accelerate, then coast,
+  then brake — comes up constantly. The habit to build now: sketch the velocity graph, split it where
+  the acceleration changes, and apply the equations to one straight segment at a time.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> In this problem, why is <span class="m">v<sub>0</sub></span> = 0 m/s?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> Because the acceleration is constant</label>
+          <label><input type="radio" name="q1" value="b"> Because the runner starts from rest at the starting gun</label>
+          <label><input type="radio" name="q1" value="c"> Because <span class="m">t<sub>0</sub></span> = 0 s</label>
+          <label><input type="radio" name="q1" value="d"> Because the race is on a flat track</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> What are the units of (1.9 m/s&sup2;)(2.0 s) before simplifying, and after?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> (m/s&sup2;)&middot;s &rarr; m/s</label>
+          <label><input type="radio" name="q2" value="b"> (m/s&sup2;)&middot;s &rarr; m</label>
+          <label><input type="radio" name="q2" value="c"> (m/s&sup2;)&middot;s &rarr; m/s&sup3;</label>
+          <label><input type="radio" name="q2" value="d"> (m/s&sup2;)&middot;s &rarr; m/s&sup2;</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> A runner accelerates from rest at 2.5 m/s&sup2; for 3.0 s. Her speed at 3.0 s is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> 0.83 m/s</label>
+          <label><input type="radio" name="q3" value="b"> 5.5 m/s</label>
+          <label><input type="radio" name="q3" value="c"> 7.5 m/s</label>
+          <label><input type="radio" name="q3" value="d"> 11 m/s</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> If that same runner then keeps <span class="m">a</span> = 0 for 10 more seconds, her speed at <span class="m">t</span> = 13 s is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> 0 m/s</label>
+          <label><input type="radio" name="q4" value="b"> 7.5 m/s</label>
+          <label><input type="radio" name="q4" value="c"> 25 m/s</label>
+          <label><input type="radio" name="q4" value="d"> 33 m/s</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>Start every problem by listing the knowns with units, then sketch the motion — here a
+        velocity&ndash;time graph with two segments.</li>
+    <li><span class="m">v = v<sub>0</sub> + a&thinsp;t</span> applies only while <span class="m">a</span>
+        is constant. Use it segment by segment: 1.9&nbsp;m/s&sup2; for the first 5.2&nbsp;s, then
+        <span class="m">a</span> = 0 (speed unchanged) afterward.</li>
+    <li>Carry units through every line — (m/s&sup2;)&middot;s = m/s confirms you computed a speed —
+        and round to the data's significant digits at the end: 3.8&nbsp;m/s at 2.0&nbsp;s,
+        9.9&nbsp;m/s at the end of the race.</li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>The Velocity Kinematics Equation</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 ·
+    Adapted for PHY 118 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- v-t sketch ---------- */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag, attrs, text){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
+  var g=document.getElementById('sketch'); if(!g) return;
+  var L=40, B=160, W=280, T=30; var x52=L+ (5.2/10)*(W-L), x20=L+(2.0/10)*(W-L), yTop=60;
+  var SANS='"Segoe UI", system-ui, sans-serif';
+  g.appendChild(el('line',{x1:L,y1:B,x2:W+20,y2:B,stroke:'#e0801a','stroke-width':2}));
+  g.appendChild(el('line',{x1:L,y1:B,x2:L,y2:T,stroke:'#e0801a','stroke-width':2}));
+  g.appendChild(el('text',{x:L-10,y:T+6,'text-anchor':'end','font-size':'14','font-style':'italic','font-family':'Georgia, serif',fill:'#1d2b23'},'v'));
+  g.appendChild(el('text',{x:W+22,y:B+16,'font-size':'14','font-style':'italic','font-family':'Georgia, serif',fill:'#1d2b23'},'t'));
+  [[x20,'2.0 s'],[x52,'5.2 s']].forEach(function(p){
+    g.appendChild(el('line',{x1:p[0],y1:B,x2:p[0],y2:T,stroke:'#5c6b62','stroke-width':1.3,'stroke-dasharray':'4 3'}));
+    g.appendChild(el('text',{x:p[0],y:B+16,'text-anchor':'middle','font-size':'11','font-family':SANS,fill:'#5c6b62'},p[1]));
+  });
+  g.appendChild(el('polyline',{points:L+','+B+' '+x52+','+yTop+' '+(W+10)+','+yTop,fill:'none',stroke:'#2457b8','stroke-width':2.4}));
+  var y20 = B - (B-yTop)*(2.0/5.2);
+  g.appendChild(el('circle',{cx:x20,cy:y20,r:4,fill:'#1e8a3c'}));
+  g.appendChild(el('text',{x:x20-8,y:y20-6,'text-anchor':'end','font-size':'11','font-family':SANS,fill:'#1e8a3c'},'3.8 m/s'));
+  g.appendChild(el('circle',{cx:x52,cy:yTop,r:4,fill:'#1e8a3c'}));
+  g.appendChild(el('text',{x:x52+8,y:yTop-8,'font-size':'11','font-family':SANS,fill:'#1e8a3c'},'9.9 m/s'));
+  g.appendChild(el('text',{x:L+6,y:T+14,'font-size':'10','font-family':SANS,fill:'#8e4bc9'},'a = 1.9 m/s²'));
+  g.appendChild(el('text',{x:(x52+W)/2+8,y:yTop-20,'text-anchor':'middle','font-size':'10','font-family':SANS,fill:'#8e4bc9'},'a = 0'));
+})();
+
+/* ---------- reveal steps ---------- */
+(function(){
+  document.querySelectorAll('.step .reveal').forEach(function(b){
+    b.addEventListener('click', function(){
+      var s = b.parentNode; var on = s.classList.toggle('open');
+      b.setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+  });
+})();
+
+/* ---------- numeric answers ---------- */
+(function(){
+  var clk = document.getElementById('numq'); if(!clk) return;
+  var parts = clk.querySelectorAll('.part'), done = {}, scoreEl = document.getElementById('nqscore');
+  parts.forEach(function(part, idx){
+    var ans = parseFloat(part.getAttribute('data-ans')), tol = parseFloat(part.getAttribute('data-tol'));
+    var inp = part.querySelector('input'), fb = part.querySelector('.pfb'), btn = part.querySelector('.check');
+    function check(){
+      var v = parseFloat(inp.value);
+      if(isNaN(v)){ fb.className='pfb bad'; fb.textContent='Type a number first.'; return; }
+      if(Math.abs(v-ans) <= tol){ fb.className='pfb'; fb.innerHTML='✓ '+part.getAttribute('data-fb'); done[idx]=true; btn.classList.add('correct'); btn.classList.remove('wrong'); }
+      else { fb.className='pfb bad'; fb.textContent='✗ Not quite — check which segment of the motion you are in, and carry the units.'; btn.classList.add('wrong'); btn.classList.remove('correct'); }
+      scoreEl.textContent = Object.keys(done).length+' / '+parts.length;
+    }
+    btn.addEventListener('click', check);
+    inp.addEventListener('keydown', function(e){ if(e.key==='Enter') check(); });
+  });
+})();
+
+/* ---------- concept question ---------- */
+(function(){
+  var probe = document.getElementById('probe1'); if(!probe) return;
+  var fb = probe.querySelector('.feedback');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = '✓ Right. With a = 1.9 m/s² for 12 s you would get 23 m/s — faster than any human. The acceleration was only 1.9 m/s² for 5.2 s.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite. The equation is fine and v₀ = 0 is fine; the mistake is using one acceleration across two segments that have different accelerations.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket'); if(!ticket) return;
+  var mc = { q1:'b', q2:'a', q3:'c', q4:'b' };
+  var expl = {
+    q1:'"at the starting gun" tells you the runner begins from rest, so the initial velocity is zero.',
+    q2:'(m/s²)·s cancels one second, leaving m/s — the units of a speed.',
+    q3:'v = 0 + (2.5 m/s²)(3.0 s) = 7.5 m/s.',
+    q4:'with a = 0 the velocity does not change, so she is still at 7.5 m/s.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Work back through the example steps, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
