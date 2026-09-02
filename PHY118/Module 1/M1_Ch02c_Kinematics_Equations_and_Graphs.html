@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch02c — Kinematics Equations and Graphs</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 1 · Chapter 2 slides 02c
+     "Kinematics Equations and Graphs" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:320px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .clicker{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.4rem 0; background:#fbfdfc; }
+  .clicker .c-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .clicker .c-body{ padding:.9rem 1rem 1rem; }
+  .clicker .part{ display:grid; grid-template-columns:1fr; gap:.4rem .8rem; padding:.55rem 0; border-top:1px solid var(--rule); align-items:start; }
+  .clicker .part:first-child{ border-top:0; padding-top:0; }
+  @media (min-width:600px){ .clicker .part{ grid-template-columns:minmax(0,1fr) auto; } }
+  .clicker .ptext{ font-size:1rem; }
+  .clicker .ptext b{ color:var(--green-deep); font-family:"Segoe UI", system-ui, sans-serif; margin-right:.3rem; }
+  .clicker .choices{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .cbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; font-weight:600; border:1.5px solid var(--rule); background:#fff; color:var(--ink); border-radius:20px; padding:.25rem .7rem; cursor:pointer; }
+  .cbtn:hover{ border-color:var(--green); }
+  .cbtn.correct{ border-color:var(--green); background:var(--green-soft); }
+  .cbtn.wrong{ border-color:var(--red); background:#fdecea; }
+  .clicker .pfb{ grid-column:1 / -1; font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; color:var(--green-deep); min-height:1em; }
+  .clicker .pfb.bad{ color:var(--red); }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+  /* --- 02b specifics --- */
+  .cx{ color:#2457b8; } .cv{ color:#1e8a3c; } .ca{ color:#8e4bc9; } .ct{ color:#d9740f; }
+  .know{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin:1rem 0 .5rem; }
+  .k-cell{ border:1px solid var(--rule); border-radius:10px; padding:.75rem .9rem; background:#fbfdfc; }
+  .k-cell b{ font-family:"Segoe UI", system-ui, sans-serif; display:block; font-size:.95rem; }
+  .k-cell small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; line-height:1.45; display:block; margin-top:.2rem; }
+  .k-center{ grid-column:1 / -1; position:relative; text-align:center; padding:1.1rem .9rem; background:var(--green-soft); border-color:var(--green); }
+  .k-title{ font-size:1.5rem; font-weight:700; line-height:1.15; display:block; color:var(--green-deep); }
+  .k-side{ position:absolute; top:50%; transform:translateY(-50%); font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); }
+  .k-left{ left:1rem; } .k-right{ right:1rem; }
+  .k-wide{ grid-column:1 / -1; border-color:var(--amber); background:#fffdf8; }
+  .k-und b{ color:var(--amber); }
+  ol.three{ margin:.2rem 0 1rem; padding-left:1.4rem; }
+  ol.three li{ margin:.45rem 0; }
+  .legend{ display:flex; flex-wrap:wrap; gap:.5rem 1.2rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin:1rem 0 .4rem; }
+  .sw{ display:inline-block; width:.8em; height:.8em; border-radius:3px; background:currentColor; vertical-align:-.1em; margin-right:.3em; }
+  .eqcard{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0; }
+  .eq-head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.55rem 1rem; display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .eq-head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--green-deep); }
+  .eq-toggle{ display:flex; gap:.4rem; }
+  .btn.small{ font-size:.78rem; padding:.3rem .7rem; }
+  .eq-body{ padding:.9rem 1rem 1rem; text-align:center; }
+  .plain{ font-size:.92rem; color:var(--muted); text-align:left; margin:0 0 .6rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .bigeq{ font-size:2rem; line-height:1.3; margin:.2rem 0 .4rem; white-space:nowrap; overflow-x:auto; }
+  .bigeq .op{ font-style:normal; margin:0 .3em; color:var(--ink); }
+  .bigeq .up{ font-style:normal; color:var(--ink); }
+  .bigeq .half{ font-size:.7em; vertical-align:.15em; }
+  @media (max-width:520px){ .bigeq{ font-size:1.5rem; } }
+  .eq-labels{ display:none; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; line-height:1.2; font-weight:600; justify-content:center; gap:.9rem; flex-wrap:wrap; margin-bottom:.35rem; }
+  .eq-labels span:empty{ display:none; }
+  .eq-units{ display:none; font-size:1.05rem; margin:.4rem 0 .2rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; }
+  .eq-units .op{ margin:0 .3em; color:var(--ink); font-weight:400; }
+  .eq-units .up{ color:var(--ink); }
+  .eq-units .chk{ display:block; font-size:.82rem; color:var(--green-deep); font-weight:600; margin-top:.35rem; }
+  .eqcard.show-vars .eq-labels{ display:flex; }
+  .eqcard.show-units .eq-units{ display:block; }
+  .constraint{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); text-align:left; margin:.8rem 0 0; border-top:1px dashed var(--rule); padding-top:.6rem; }
+  .constraint b{ color:var(--amber); }
+
+  /* --- 02c specifics --- */
+  .charts3{ display:grid; grid-template-columns:1fr; gap:.6rem; margin:1rem 0; }
+  @media (min-width:560px){ .charts3{ grid-template-columns:1fr 1fr 1fr; } }
+  .charts2{ display:grid; grid-template-columns:1fr; gap:.8rem; margin:1rem 0; }
+  @media (min-width:560px){ .charts2{ grid-template-columns:1fr 1fr; } }
+  .charts3 figure, .charts2 figure{ margin:0; }
+  .chart svg{ display:block; width:100%; height:auto; }
+  .charts3 figcaption{ font-size:.95rem; color:var(--ink); }
+  .match{ display:grid; gap:.3rem; margin:.8rem auto 0; max-width:420px; text-align:left; }
+  .mrow{ display:flex; justify-content:space-between; align-items:baseline; gap:1rem; font-size:1.1rem; border-top:1px dashed var(--rule); padding-top:.35rem; }
+  .mrow small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; color:var(--muted); text-align:right; }
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .sim .panel{ padding:1rem 1.1rem 1.1rem; }
+  .sim .chart{ max-width:420px; margin:0 auto; }
+  .sliders{ display:grid; gap:.5rem; grid-template-columns:1fr; margin:.8rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  @media (min-width:560px){ .sliders{ grid-template-columns:1fr 1fr; } }
+  .sliders label{ display:flex; align-items:center; gap:.5rem; }
+  .sliders input{ flex:1; accent-color:var(--green); }
+  .areas{ display:grid; gap:.6rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .areas{ grid-template-columns:1fr 1fr 1fr; } }
+  .abox{ border-radius:8px; padding:.6rem .75rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; display:flex; flex-direction:column; gap:.2rem; }
+  .abox b{ font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .abox .m{ font-size:1rem; }
+  .abox.rect{ background:#dfe9f8; } .abox.tri{ background:#eef3fc; } .abox.tot{ background:var(--green-soft); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.7rem; }
+  .derive{ display:grid; gap:1rem; grid-template-columns:1fr; margin:1rem 0; }
+  @media (min-width:600px){ .derive{ grid-template-columns:1fr 1fr; } }
+  .dcol{ border:1px solid var(--rule); border-radius:10px; padding:.6rem 1rem .9rem; }
+  .dcol h3{ margin:.2rem 0 .4rem; }
+  .dl{ padding:.3rem 0; border-bottom:1px dashed var(--rule); font-size:1.02rem; }
+  .dl small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; color:var(--muted); }
+  .dl.result{ border-bottom:0; font-weight:700; color:var(--green-deep); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Chapter 2 · Slides 02c</span>
+  </div>
+
+  <h1>Kinematics Equations and Graphs</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    The kinematics equations are not arbitrary formulas — each one is the <em>shape of a graph</em>.
+    The position equation is a parabola, the velocity equation is a straight line, and constant
+    acceleration is a flat line. Better still, the position equation can be <em>read off</em> a
+    velocity&ndash;time graph as the area &ldquo;under&rdquo; the line: a rectangle plus a triangle.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Identify the parameters</b> for the kinematics equations from motion graphs.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Identify the variables</b> in each of the kinematics equations.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine the units</b> in each term of the kinematics equations.</span></li>
+    </ul>
+  </div>
+
+  <h2>When studying phenomena, graphs are very useful</h2>
+  <p>Here is one motion — an object starting at 5.0&nbsp;m, moving at 2.0&nbsp;m/s, and speeding up at
+  1.5&nbsp;m/s&sup2; — shown three ways. Each graph is one of the kinematics equations in picture form.</p>
+  <div class="charts3">
+    <figure><div class="chart" id="chPos"></div><figcaption><span class="m">x = x<sub>0</sub> + v<sub>0</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span></figcaption></figure>
+    <figure><div class="chart" id="chVel"></div><figcaption><span class="m">v = v<sub>0</sub> + a&Delta;t</span></figcaption></figure>
+    <figure><div class="chart" id="chAcc"></div><figcaption>constant <span class="m">a</span></figcaption></figure>
+  </div>
+
+  <div class="legend">
+    <span><i class="sw cx"></i> position</span>
+    <span><i class="sw cv"></i> speed / velocity</span>
+    <span><i class="sw ca"></i> acceleration</span>
+    <span><i class="sw ct"></i> time interval</span>
+  </div>
+
+  <!-- ===== position ===== -->
+  <div class="eqcard" id="eq2">
+    <div class="eq-head"><strong>Kinematics equation for position — a parabola</strong>
+      <span class="eq-toggle"><button class="btn small" data-show="vars">Show variables</button><button class="btn small" data-show="units">Show units</button></span>
+    </div>
+    <div class="eq-body">
+      <div class="eq-labels wide">
+        <span class="lbl cx">Final<br>position</span><span></span><span class="lbl cx">Initial<br>position</span><span></span><span class="lbl cv">Initial<br>speed</span><span class="lbl ct">Time<br>interval</span><span></span><span class="lbl ca">Acceleration</span><span class="lbl ct">Time<br>interval</span>
+      </div>
+      <div class="bigeq m">
+        <span class="cx">x</span><span class="op">=</span><span class="cx">x<sub>0</sub></span><span class="op">+</span><span class="cv">v<sub>0</sub></span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)</span><span class="op">+</span><span class="up half">&frac12;</span><span class="ca">a</span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)&sup2;</span>
+      </div>
+      <div class="eq-units">
+        <span class="cx">m</span><span class="op">=</span><span class="cx">m</span><span class="op">+</span><span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">&middot;</span><span class="ct">s</span><span class="op">+</span><span class="up">[1]</span><span class="op">&middot;</span><span class="ca"><span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span></span><span class="op">&middot;</span><span class="ct">s&sup2;</span>
+        <span class="chk">&nbsp;&nbsp;&#8594;&nbsp; m on every term &#10003;</span>
+      </div>
+      <div class="match">
+        <div class="mrow"><span class="m">x = <span class="ca">&frac12;a</span>(&Delta;t)&sup2; + <span class="cv">v<sub>0</sub></span>(&Delta;t) + <span class="cx">x<sub>0</sub></span></span><small>reordered, highest power first</small></div>
+        <div class="mrow"><span class="m">y = <span class="ca">A</span>x&sup2; + <span class="cv">B</span>x + <span class="cx">C</span></span><small>the quadratic your spreadsheet fits</small></div>
+      </div>
+      <p class="constraint"><b>Read the parameters off the trendline:</b> <span class="m">A</span> = &frac12;<span class="m">a</span> (so <span class="m">a</span> = 2<span class="m">A</span>), <span class="m">B</span> = <span class="m">v<sub>0</sub></span>, <span class="m">C</span> = <span class="m">x<sub>0</sub></span>. For the graph above, <span class="m">A</span> = 0.75 gives <span class="m">a</span> = 1.5&nbsp;m/s&sup2;.</p>
+    </div>
+  </div>
+
+  <!-- ===== velocity ===== -->
+  <div class="eqcard" id="eq1">
+    <div class="eq-head"><strong>Kinematics equation for velocity — a straight line</strong>
+      <span class="eq-toggle"><button class="btn small" data-show="vars">Show variables</button><button class="btn small" data-show="units">Show units</button></span>
+    </div>
+    <div class="eq-body">
+      <div class="eq-labels">
+        <span class="lbl cv">Final<br>speed</span><span></span><span class="lbl cv">Initial<br>speed</span><span></span><span class="lbl ca">Acceleration</span><span class="lbl ct">Time<br>interval</span>
+      </div>
+      <div class="bigeq m">
+        <span class="cv">v</span><span class="op">=</span><span class="cv">v<sub>0</sub></span><span class="op">+</span><span class="ca">a</span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)</span>
+      </div>
+      <div class="eq-units">
+        <span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">=</span><span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">+</span><span class="ca"><span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span></span><span class="op">&middot;</span><span class="ct">s</span>
+        <span class="chk">&nbsp;&nbsp;&#8594;&nbsp; m/s on every term &#10003;</span>
+      </div>
+      <div class="match">
+        <div class="mrow"><span class="m">v = <span class="ca">a</span>(<span class="ct">&Delta;t</span>) + <span class="cv">v<sub>0</sub></span></span><small>reordered</small></div>
+        <div class="mrow"><span class="m">y = <span class="ca">m</span><span class="ct">x</span> + <span class="cv">b</span></span><small>slope&ndash;intercept form</small></div>
+      </div>
+      <p class="constraint"><b>Read the parameters off the trendline:</b> slope <span class="m">m</span> = <span class="m">a</span>, intercept <span class="m">b</span> = <span class="m">v<sub>0</sub></span>. The acceleration <span class="m ca">a</span> must be constant — that is what makes this a straight line.</p>
+    </div>
+  </div>
+
+  <h2>Acceleration vs. time graph</h2>
+  <p>In Physics I, we usually treat the acceleration as constant. In reality, it usually isn't — a car
+  doesn't jump instantly to full acceleration, and air resistance changes as things speed up. But
+  constant acceleration is a good approximation for a lot of motion, and it is the only case the three
+  kinematics equations describe.</p>
+
+  <h2>Look at the area &ldquo;under&rdquo; the graph</h2>
+  <p>Pick two moments <span class="m">t<sub>1</sub></span> and <span class="m">t<sub>2</sub></span> on the
+  velocity graph. The area between the line and the time axis splits into a <b>rectangle</b> (height
+  <span class="m">v<sub>1</sub></span>) and a <b>triangle</b> on top (height
+  <span class="m">v<sub>2</sub> &minus; v<sub>1</sub></span>). Drag the sliders and watch the pieces.</p>
+
+  <div class="sim" id="areaSim">
+    <div class="sim-head"><span>Interactive · Area under the velocity graph</span><span id="simTag"></span></div>
+    <div class="panel">
+      <div class="chart" id="chArea"></div>
+      <div class="sliders">
+        <label><span class="m">t<sub>1</sub></span> = <b id="t1val">2.0</b> s <input type="range" id="t1" min="0" max="9" step="0.5" value="2"></label>
+        <label><span class="m">t<sub>2</sub></span> = <b id="t2val">9.0</b> s <input type="range" id="t2" min="1" max="10" step="0.5" value="9"></label>
+      </div>
+      <div class="areas">
+        <div class="abox rect"><b>Rectangle</b><span class="m">A<sub>&#9645;</sub> = v<sub>1</sub>&Delta;t</span><span id="aRect"></span></div>
+        <div class="abox tri"><b>Triangle</b><span class="m">A<sub>&#9651;</sub> = &frac12;a(&Delta;t)&sup2;</span><span id="aTri"></span></div>
+        <div class="abox tot"><b>Total = &Delta;x</b><span class="m">x<sub>2</sub> &minus; x<sub>1</sub></span><span id="aTot"></span></div>
+      </div>
+      <div class="hint-row" id="simHint">The total area always equals the change in position read from the position graph — that is the point.</div>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">&ldquo;Area&rdquo; units — why area on this graph is a distance</div>
+    <div class="body">
+      <div class="mathline">base &times; height &nbsp;&#8594;&nbsp; <span class="ct">s</span> &times; <span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span> = <span class="cx">m</span></div>
+      <p class="why">Seconds cancel, meters remain. The &ldquo;area&rdquo; on a velocity&ndash;time graph is not a geometric area at all — it is a displacement.</p>
+    </div>
+  </div>
+
+  <div class="derive">
+    <div class="dcol">
+      <h3>Rectangle</h3>
+      <div class="dl"><span class="m">A<sub>&#9645;</sub></span> = base &times; height</div>
+      <div class="dl"><span class="m">A<sub>&#9645;</sub> = (t<sub>2</sub> &minus; t<sub>1</sub>) &times; (v<sub>1</sub> &minus; 0)</span></div>
+      <div class="dl"><span class="m">A<sub>&#9645;</sub> = &Delta;t &times; v<sub>1</sub></span></div>
+      <div class="dl result"><span class="m">A<sub>&#9645;</sub> = v<sub>1</sub>&Delta;t</span></div>
+    </div>
+    <div class="dcol">
+      <h3>Triangle</h3>
+      <div class="dl"><span class="m">A<sub>&#9651;</sub></span> = &frac12; base &times; height</div>
+      <div class="dl"><span class="m">A<sub>&#9651;</sub> = &frac12;(t<sub>2</sub> &minus; t<sub>1</sub>) &times; (v<sub>2</sub> &minus; v<sub>1</sub>)</span></div>
+      <div class="dl"><span class="m">A<sub>&#9651;</sub> = &frac12;&Delta;t&thinsp;&Delta;v</span></div>
+      <div class="dl"><span class="m">A<sub>&#9651;</sub> = &frac12;&Delta;t&thinsp;&Delta;v &times; <span class="frac"><span class="top">&Delta;t</span><span class="bot">&Delta;t</span></span></span> <small>(multiply by 1)</small></div>
+      <div class="dl"><span class="m">A<sub>&#9651;</sub> = &frac12; <span class="frac"><span class="top">&Delta;v</span><span class="bot">&Delta;t</span></span> (&Delta;t)&sup2;</span> <small>and &Delta;<span class="m">v</span>/&Delta;<span class="m">t</span> is the acceleration</small></div>
+      <div class="dl result"><span class="m">A<sub>&#9651;</sub> = &frac12;a(&Delta;t)&sup2;</span></div>
+    </div>
+  </div>
+
+  <h2>Finding the total area &ldquo;under&rdquo; the graph</h2>
+  <div class="mathblock">
+    <div class="head">Total area = the position equation</div>
+    <div class="body">
+      <div class="mathline"><span class="m">A<sub>T</sub> = A<sub>&#9645;</sub> + A<sub>&#9651;</sub></span></div>
+      <div class="mathline"><span class="m">A<sub>T</sub> = v<sub>1</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span></div>
+      <div class="mathline"><span class="m">&Delta;x = v<sub>1</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span> <small class="why" style="display:inline">(the area is the displacement)</small></div>
+      <div class="mathline"><span class="m">x &minus; x<sub>0</sub> = v<sub>1</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span></div>
+      <div class="mathline"><b><span class="m">x = x<sub>0</sub> + v<sub>1</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span></b></div>
+      <p class="why">Here <span class="m">v<sub>1</sub></span> is the velocity at the <em>start</em> of the interval — the same thing the position equation calls <span class="m">v<sub>0</sub></span>. The kinematics equation for position is nothing more than &ldquo;rectangle plus triangle.&rdquo;</p>
+    </div>
+  </div>
+
+  <h2>Graphs where an object travels up and then down</h2>
+  <p>Throw something upward: it rises, stops, and falls back past where it started. The position graph
+  is an upside-down parabola; the velocity graph is a straight line that crosses through zero.</p>
+  <div class="charts2">
+    <figure><div class="chart" id="chUpPos"></div><figcaption>Position (m) vs. time (s)</figcaption></figure>
+    <figure><div class="chart" id="chUpVel"></div><figcaption>Velocity (m/s) vs. time (s) — <span class="cx">+A</span> above the axis, <span class="cx">&minus;A</span> below</figcaption></figure>
+  </div>
+  <p>The area &ldquo;under the graph&rdquo; is really the area <em>between the function and the
+  time axis</em>. Where the velocity is positive the area counts as positive displacement; where the
+  velocity is negative the area counts as negative displacement — the object is moving back toward
+  (and past) where it started.</p>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Concept question</span>
+      On the velocity graph above, the positive area from 0 to 10 s and the negative area from 10 to 20 s are the same size. What is the object's displacement over the first 20 s?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Twice the area — it moved that far up and that far down.</button>
+      <button class="opt" data-correct="true">Zero — the positive and negative areas cancel; it is back where it started.</button>
+      <button class="opt" data-correct="false">Equal to the positive area only; negative areas don't count.</button>
+      <button class="opt" data-correct="false">It can't be found from a velocity graph.</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Displacement vs. distance, again</span>
+    Adding the areas <em>with</em> their signs gives the displacement (zero at 20&nbsp;s). Adding their
+    <em>sizes</em> gives the distance traveled (up 25&nbsp;m and back down 25&nbsp;m = 50&nbsp;m). Same graph,
+    two different questions — exactly the distinction from slides&nbsp;02a.
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> Notes&nbsp;4&ndash;8 practice exactly these
+  skills — reading slopes and areas off motion graphs — with real data from motion sensors. The
+  &ldquo;rectangle plus triangle&rdquo; picture is worth keeping in your head for all of them.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> A spreadsheet fits a position&ndash;time graph with <span class="m">y = 2.0x&sup2; + 3.0x + 1.0</span>. What is the acceleration?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> 1.0 m/s&sup2;</label>
+          <label><input type="radio" name="q1" value="b"> 2.0 m/s&sup2;</label>
+          <label><input type="radio" name="q1" value="c"> 3.0 m/s&sup2;</label>
+          <label><input type="radio" name="q1" value="d"> 4.0 m/s&sup2;</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> On a velocity&ndash;time graph, what does the slope of the line represent?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> The position</label>
+          <label><input type="radio" name="q2" value="b"> The displacement</label>
+          <label><input type="radio" name="q2" value="c"> The acceleration</label>
+          <label><input type="radio" name="q2" value="d"> The initial velocity</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> The area between a velocity&ndash;time line and the time axis has units of (m/s)&middot;s = m. What quantity is it?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> The change in position (displacement)</label>
+          <label><input type="radio" name="q3" value="b"> The average speed</label>
+          <label><input type="radio" name="q3" value="c"> The acceleration</label>
+          <label><input type="radio" name="q3" value="d"> The elapsed time</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> In <span class="m">x = x<sub>0</sub> + v<sub>0</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span>, the term <span class="m">&frac12;a(&Delta;t)&sup2;</span> corresponds to which part of the velocity graph's area?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> The rectangle of height <span class="m">v<sub>0</sub></span></label>
+          <label><input type="radio" name="q4" value="b"> The triangle on top of the rectangle — the extra distance due to acceleration</label>
+          <label><input type="radio" name="q4" value="c"> The whole area</label>
+          <label><input type="radio" name="q4" value="d"> The part of the graph below the time axis</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <p>The position equation, <span class="m">x &minus; x<sub>0</sub> = v<sub>1</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span>, is made up of the&hellip;</p>
+  <ul>
+    <li>Initial starting position (distance from <span class="m">x</span> = 0) — <span class="m">x<sub>0</sub></span>.</li>
+    <li>Distance travelled if it had moved at a constant velocity — the <b>rectangle</b>, <span class="m">v<sub>1</sub>&Delta;t</span>.</li>
+    <li>Extra distance due to acceleration — the <b>triangle</b>, <span class="m">&frac12;a(&Delta;t)&sup2;</span>.</li>
+  </ul>
+  <p>The area &ldquo;under&rdquo; the velocity vs. time graph is the change in position.</p>
+  <ul>
+    <li>Areas above the time axis are positive.</li>
+    <li>Areas below the time axis are negative.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 —
+      <a href="https://openstax.org/books/college-physics/pages/2-8-graphical-analysis-of-one-dimensional-motion" target="_blank" rel="noopener">2.8 Graphical Analysis of One-Dimensional Motion</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 —
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/3-2-instantaneous-velocity-and-speed" target="_blank" rel="noopener">3.2 Instantaneous Velocity and Speed</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Kinematics Equations and Graphs</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 ·
+    Adapted for PHY 118 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- tiny SVG chart helper ---------- */
+(function(){
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, text){
+    var e = document.createElementNS(NS, tag);
+    for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+    if(text !== undefined){ e.textContent = text; }
+    return e;
+  }
+  var SANS = '"Segoe UI", system-ui, sans-serif';
+
+  /* opts: {title, ylabel, xmax, ymin, ymax, ystep, xstep, color, fn, marker:'circle'|'diamond'|'tri', dashed, points}
+     returns {svg, X, Y, plot(g)} */
+  window.makeChart = function(id, o){
+    var host = document.getElementById(id); if(!host) return null;
+    host.innerHTML = '';
+    var W = 300, H = 250, L = 46, R = 12, T = 30, B = 40;
+    var svg = el('svg', {viewBox:'0 0 '+W+' '+H, role:'img', 'aria-label':o.title});
+    function X(t){ return L + (t/o.xmax)*(W-L-R); }
+    function Y(v){ return T + (o.ymax - v)/(o.ymax - o.ymin)*(H-T-B); }
+    svg.appendChild(el('rect', {x:L, y:T, width:W-L-R, height:H-T-B, fill:'#fff', stroke:'#c9d3cc'}));
+    for(var t=0; t<=o.xmax+1e-9; t+=o.xstep){
+      svg.appendChild(el('line', {x1:X(t), y1:T, x2:X(t), y2:H-B, stroke:'#e4ebe6'}));
+      svg.appendChild(el('text', {x:X(t), y:H-B+14, 'text-anchor':'middle', 'font-size':'9', 'font-family':SANS, fill:'#5c6b62'}, t.toFixed(o.xdec||0)));
+    }
+    for(var v=o.ymin; v<=o.ymax+1e-9; v+=o.ystep){
+      svg.appendChild(el('line', {x1:L, y1:Y(v), x2:W-R, y2:Y(v), stroke:'#e4ebe6'}));
+      svg.appendChild(el('text', {x:L-5, y:Y(v)+3, 'text-anchor':'end', 'font-size':'9', 'font-family':SANS, fill:'#5c6b62'}, (Math.abs(v)<1e-9?0:v).toFixed(o.ydec||0)));
+    }
+    if(o.ymin < 0){ svg.appendChild(el('line', {x1:L, y1:Y(0), x2:W-R, y2:Y(0), stroke:'#1d2b23', 'stroke-width':1.2})); }
+    svg.appendChild(el('text', {x:L+(W-L-R)/2, y:16, 'text-anchor':'middle', 'font-size':'11', 'font-weight':'600', 'font-family':SANS, fill:'#1d2b23'}, o.title));
+    svg.appendChild(el('text', {x:L+(W-L-R)/2, y:H-6, 'text-anchor':'middle', 'font-size':'9.5', 'font-family':SANS, fill:'#5c6b62'}, 'Time (s)'));
+    var fillLayer = el('g', {}); svg.appendChild(fillLayer);
+    // curve
+    var d = '';
+    for(var i=0;i<=100;i++){ var tt=o.xmax*i/100; d += (i?' L':'M') + X(tt).toFixed(1)+','+Y(o.fn(tt)).toFixed(1); }
+    svg.appendChild(el('path', {d:d, fill:'none', stroke:o.color, 'stroke-width':1.4, 'stroke-dasharray':o.dashed?'3 3':'none'}));
+    // markers
+    var step = o.mstep || 1;
+    for(var t2=0; t2<=o.xmax+1e-9; t2+=step){
+      var cx=X(t2), cy=Y(o.fn(t2));
+      if(o.marker==='diamond') svg.appendChild(el('polygon', {points:cx+','+(cy-3.5)+' '+(cx+3.5)+','+cy+' '+cx+','+(cy+3.5)+' '+(cx-3.5)+','+cy, fill:'#fff', stroke:o.color, 'stroke-width':1.2}));
+      else if(o.marker==='tri') svg.appendChild(el('polygon', {points:cx+','+(cy-3.5)+' '+(cx+3.5)+','+(cy+3)+' '+(cx-3.5)+','+(cy+3), fill:'#fff', stroke:o.color, 'stroke-width':1.2}));
+      else if(o.marker==='dot') svg.appendChild(el('circle', {cx:cx, cy:cy, r:1.8, fill:o.color}));
+      else svg.appendChild(el('circle', {cx:cx, cy:cy, r:3.2, fill:'#fff', stroke:o.color, 'stroke-width':1.2}));
+    }
+    if(o.eqn){
+      var bx = L+12, by = T+8;
+      svg.appendChild(el('rect', {x:bx, y:by, width:o.eqn.length*5.6+10, height:16, fill:'#fff', stroke:'#9aa9a0', rx:2}));
+      svg.appendChild(el('text', {x:bx+5, y:by+11.5, 'font-size':'9', 'font-family':SANS, fill:'#1d2b23'}, o.eqn));
+    }
+    host.appendChild(svg);
+    return {svg:svg, X:X, Y:Y, fills:fillLayer, el:el};
+  };
+
+  var x0=5, v0=2, a=1.5;
+  makeChart('chPos', {title:'Position (m)', xmax:10, ymin:0, ymax:120, ystep:20, xstep:2, color:'#2457b8', fn:function(t){return x0+v0*t+0.5*a*t*t;}, marker:'circle', dashed:true, eqn:'y = 0.75x² + 2.0x + 5.0'});
+  makeChart('chVel', {title:'Velocity (m/s)', xmax:10, ymin:0, ymax:18, ystep:2, xstep:2, color:'#1e8a3c', fn:function(t){return v0+a*t;}, marker:'diamond', dashed:true, eqn:'y = 1.5x + 2.0'});
+  makeChart('chAcc', {title:'Acceleration (m/s²)', xmax:10, ymin:0, ymax:2, ystep:0.2, ydec:1, xstep:2, color:'#8e4bc9', fn:function(){return a;}, marker:'tri', dashed:true, eqn:'y = 1.5'});
+
+  /* up-and-down */
+  makeChart('chUpPos', {title:'Position (m)', xmax:30, ymin:-100, ymax:40, ystep:20, xstep:10, color:'#2457b8', fn:function(t){return 5*t-0.25*t*t;}, marker:'dot', dashed:true, mstep:1});
+  var up = makeChart('chUpVel', {title:'Velocity (m/s)', xmax:30, ymin:-15, ymax:10, ystep:5, xstep:10, color:'#2457b8', fn:function(t){return 5-0.5*t;}, marker:'dot', dashed:true, mstep:1});
+  if(up){
+    var X=up.X, Y=up.Y;
+    up.fills.appendChild(el('polygon', {points:X(0)+','+Y(0)+' '+X(0)+','+Y(5)+' '+X(10)+','+Y(0), fill:'#b9cff0', opacity:.75}));
+    up.fills.appendChild(el('polygon', {points:X(10)+','+Y(0)+' '+X(30)+','+Y(0)+' '+X(30)+','+Y(-10), fill:'#b9cff0', opacity:.75}));
+    up.fills.appendChild(el('polygon', {points:X(20)+','+Y(0)+' '+X(30)+','+Y(0)+' '+X(30)+','+Y(-5)+' '+X(20)+','+Y(-5), fill:'#7fa6e6', opacity:.7}));
+    up.svg.appendChild(el('text', {x:X(1.2), y:Y(2.2), 'font-size':'11', 'font-style':'italic', fill:'#2457b8'}, '+A'));
+    up.svg.appendChild(el('text', {x:X(23), y:Y(-2.2), 'font-size':'11', 'font-style':'italic', fill:'#2457b8'}, '−A'));
+  }
+
+  /* ---------- area interactive ---------- */
+  (function(){
+    var t1El = document.getElementById('t1'), t2El = document.getElementById('t2');
+    if(!t1El) return;
+    var vfn = function(t){ return v0+a*t; }, xfn = function(t){ return x0+v0*t+0.5*a*t*t; };
+    function draw(){
+      var t1 = parseFloat(t1El.value), t2 = parseFloat(t2El.value);
+      if(t2 <= t1){ t2 = t1 + 0.5; t2El.value = t2; }
+      document.getElementById('t1val').textContent = t1.toFixed(1);
+      document.getElementById('t2val').textContent = t2.toFixed(1);
+      var c = makeChart('chArea', {title:'Velocity (m/s)', xmax:10, ymin:0, ymax:18, ystep:2, xstep:2, color:'#1e8a3c', fn:vfn, marker:'diamond', dashed:true, eqn:'y = 1.5x + 2.0'});
+      var X=c.X, Y=c.Y, v1=vfn(t1), v2=vfn(t2), dt=t2-t1;
+      c.fills.appendChild(el('rect', {x:X(t1), y:Y(v1), width:X(t2)-X(t1), height:Y(0)-Y(v1), fill:'#7fa6e6', opacity:.7}));
+      c.fills.appendChild(el('polygon', {points:X(t1)+','+Y(v1)+' '+X(t2)+','+Y(v1)+' '+X(t2)+','+Y(v2), fill:'#b9cff0', opacity:.85}));
+      [[t1,v1],[t2,v2]].forEach(function(p){ c.svg.appendChild(el('circle', {cx:X(p[0]), cy:Y(p[1]), r:3.5, fill:'#e02020', stroke:'#7a0000'})); });
+      [[t1,0],[t2,0],[t2,v1]].forEach(function(p){ c.svg.appendChild(el('circle', {cx:X(p[0]), cy:Y(p[1]), r:3, fill:'#5b2c8a'})); });
+      c.svg.appendChild(el('text', {x:X(t1)-4, y:Y(v1)-5, 'text-anchor':'end', 'font-size':'9', 'font-style':'italic', fill:'#1d2b23'}, '(t₁, v₁)'));
+      c.svg.appendChild(el('text', {x:X(t2)+4, y:Y(v2)-2, 'font-size':'9', 'font-style':'italic', fill:'#1d2b23'}, '(t₂, v₂)'));
+      var aR = v1*dt, aT = 0.5*a*dt*dt, dx = xfn(t2)-xfn(t1);
+      document.getElementById('aRect').textContent = v1.toFixed(1)+' m/s × '+dt.toFixed(1)+' s = '+aR.toFixed(2)+' m';
+      document.getElementById('aTri').textContent = '½ × 1.5 m/s² × ('+dt.toFixed(1)+' s)² = '+aT.toFixed(2)+' m';
+      document.getElementById('aTot').textContent = (aR+aT).toFixed(2)+' m  =  x('+t2.toFixed(1)+') − x('+t1.toFixed(1)+') = '+dx.toFixed(2)+' m ✓';
+      document.getElementById('simTag').textContent = 'Δt = '+dt.toFixed(1)+' s';
+    }
+    t1El.addEventListener('input', draw); t2El.addEventListener('input', draw);
+    draw();
+  })();
+})();
+
+/* ---------- equation cards ---------- */
+(function(){
+  document.querySelectorAll('.eqcard').forEach(function(card){
+    card.querySelectorAll('.eq-toggle .btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        var what = b.getAttribute('data-show');
+        var on = card.classList.toggle('show-' + what);
+        b.classList.toggle('primary', on);
+        b.textContent = (on ? 'Hide ' : 'Show ') + (what === 'vars' ? 'variables' : 'units');
+      });
+    });
+  });
+})();
+
+/* ---------- concept question ---------- */
+(function(){
+  var probe = document.getElementById('probe1'); if(!probe) return;
+  var fb = probe.querySelector('.feedback');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = '✓ Right. +25 m of area, then −25 m of area: net displacement zero. Check the position graph — it is back at 0 m at t = 20 s.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite. Area below the axis is negative displacement. Equal positive and negative areas add to zero — the position graph confirms it returns to 0 m at 20 s.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket'); if(!ticket) return;
+  var mc = { q1:'d', q2:'c', q3:'a', q4:'b' };
+  var expl = {
+    q1:'the x² coefficient A equals ½a, so a = 2A = 2(2.0) = 4.0 m/s². (3.0 is v₀ and 1.0 is x₀.)',
+    q2:'v = v₀ + aΔt has the form y = mx + b, so the slope m is the acceleration a.',
+    q3:'(m/s)·s = m; the area between the velocity line and the time axis is the displacement Δx.',
+    q4:'the rectangle v₀Δt is the distance at constant velocity; the triangle ½a(Δt)² is the extra distance from speeding up.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Look back at the area interactive, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
