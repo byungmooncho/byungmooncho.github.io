@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHY 105 &mdash; The Oscillator as a Wave Source</title>
+<style>
+  :root{
+    --green:#1e6b3c;
+    --green-soft:#e8f3ec;
+    --amber-soft:#fdf3df;
+    --amber-edge:#e0a93e;
+    --ink:#1a1a1a;
+    --rule:#d8d8d8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,"Segoe UI",serif;
+    color:var(--ink);
+    background:#ffffff;
+    line-height:1.55;
+  }
+  .note-wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:1.5rem 1.2rem 2.5rem;
+  }
+  h1{
+    font-size:1.5rem;
+    color:var(--green);
+    margin:0 0 .25rem;
+    font-weight:700;
+  }
+  .subtitle{
+    margin:0 0 1.2rem;
+    font-size:.95rem;
+    color:#555;
+  }
+  .anim-frame{
+    border:1.5px solid var(--green);
+    border-radius:8px;
+    background:#fcfdfc;
+    overflow:hidden;
+  }
+  canvas{display:block;width:100%;height:auto;}
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:1rem 2rem;
+    align-items:center;
+    padding: .8rem 1rem;
+    border-top:1px solid var(--rule);
+    background:var(--green-soft);
+  }
+  .ctrl{
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    font-size:.9rem;
+  }
+  .ctrl label{font-weight:700;color:var(--green);white-space:nowrap;}
+  .ctrl input[type=range]{width:130px;accent-color:var(--green);}
+  .ctrl .val{
+    font-variant-numeric:tabular-nums;
+    min-width:4.4em;
+    text-align:left;
+  }
+  .btn{
+    font-family:inherit;
+    font-size:.9rem;
+    font-weight:700;
+    color:#fff;
+    background:var(--green);
+    border:2px solid var(--green);
+    border-radius:5px;
+    padding:.3rem .9rem;
+    cursor:pointer;
+  }
+  .btn:hover{background:#175230;border-color:#175230;}
+  .btn-outline{
+    color:var(--green);
+    background:#fff;
+  }
+  .btn-outline:hover{background:var(--green-soft);}
+  .btn:disabled{
+    opacity:.45;
+    cursor:default;
+  }
+  .btn-outline:disabled:hover{background:#fff;}
+  .readout{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.4rem 1.6rem;
+    padding:.6rem 1rem;
+    font-size:.92rem;
+    border-top:1px solid var(--rule);
+    background:#fff;
+  }
+  .readout span{font-variant-numeric:tabular-nums;}
+  .readout b{color:var(--green);}
+  .tip{
+    margin-top:1.1rem;
+    background:var(--amber-soft);
+    border-left:4px solid var(--amber-edge);
+    padding:.7rem 1rem;
+    font-size:.93rem;
+    border-radius:0 6px 6px 0;
+  }
+  .caption{
+    margin-top:1.1rem;
+    font-size:.93rem;
+  }
+  .caption b{color:var(--green);}
+  footer{
+    margin-top:2rem;
+    padding-top:.8rem;
+    border-top:2px solid var(--green);
+    font-size:.85rem;
+    color:#555;
+  }
+  @media (prefers-reduced-motion: reduce){
+    /* nothing animates until the user presses Start */
+  }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+  <h1>The Oscillator as a Wave Source</h1>
+  <p class="subtitle">Module 0 &middot; Lab 1 companion &mdash; a bobbing mass takes the place of the plucked guitar string in Fig.&nbsp;1 of Note&nbsp;1.</p>
+
+  <div class="anim-frame">
+    <canvas id="cv" width="1440" height="470" aria-label="Animation of a mass bobbing on a spring, launching a sound-like wave of compressions through the air toward an ear."></canvas>
+    <div class="controls">
+      <div class="ctrl">
+        <label for="fSlider">Frequency&nbsp;f</label>
+        <input type="range" id="fSlider" min="0.5" max="2.0" step="0.05" value="1.0">
+        <span class="val" id="fVal">1.00&nbsp;Hz</span>
+      </div>
+      <div class="ctrl">
+        <label>Amplitude&nbsp;A</label>
+        <span class="val" id="aVal">&mdash;</span>
+        <span style="font-size:.83rem;color:#555;">(grab the mass and pull)</span>
+      </div>
+      <button id="startBtn" type="button" class="btn">Start</button>
+      <button id="pauseBtn" type="button" class="btn btn-outline" disabled>Pause</button>
+    </div>
+    <div class="readout">
+      <span><b>v</b> (set by the medium) = fixed</span>
+      <span><b>T</b> = 1/f = <span id="tVal">1.00 s</span></span>
+      <span><b>&lambda;</b> = v / f = <span id="lVal">&mdash;</span></span>
+    </div>
+  </div>
+
+  <p class="caption"><b>Watch what each knob does.</b> Turn the <b>frequency</b> up: the mass bobs faster and the repeats crowd together &mdash; the wavelength <em>shrinks</em>, because the medium refuses to change its speed. Now grab the mass and pull it farther before letting go: the <b>amplitude</b> grows &mdash; bigger swings, stronger disturbances &mdash; but the spacing between repeats does not move. Pushing up instead of pulling down works too; the wave simply starts on the opposite half of its cycle. The source sets f. The medium sets v. Nobody chooses &lambda; &mdash; it is whatever v/f says it must be.</p>
+
+  <div class="tip">
+    <b>Too slow to hear.</b> The air really would carry this pattern exactly as shown &mdash; but a mass bobbing once or twice per second is far below the roughly 20 repeats per second your ear needs before it calls a vibration &ldquo;sound.&rdquo; A guitar string does the same thing this mass does, just hundreds of times per second. Same physics, different frequency &mdash; and audibility itself is a frequency question. More on that in Unit&nbsp;3.
+  </div>
+
+  <footer>
+    FLCC Physics &mdash; PHY 105: Physics of Sound<br>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho
+  </footer>
+</div>
+
+<script>
+(function(){
+  var cv = document.getElementById('cv');
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+
+  // ---- layout (canvas coordinates) ----
+  var srcX = 190;              // x of the spring-mass line / wave origin
+  var earX = W - 130;          // x of the ear
+  var midY = 300;              // vertical center of wave region
+  var dotsTop = 210, dotsBot = 390;      // molecule band
+  var sineY = 300;             // sinusoid centerline (drawn over the band)
+  var labelY = 445;            // baseline for the source label / support post
+
+  // ---- physics (display units) ----
+  var v = 260;                 // wave speed, px/s -- fixed by the "medium"
+  var f = 1.0;                 // Hz
+  var A = 0.7;                 // 0 - 1, set by how far the mass is pulled
+  var sgn = 1;                 // +1: released from below rest (pulled down); -1: pushed up
+  var maxDrag = 120;           // px: full-amplitude pull distance
+  var t = 0;                   // sim time, s
+  var running = false;         // false: mass sits at equilibrium, no wave yet
+  var paused = false;
+  var last = null;
+  // drag state
+  var dragging = false;
+  var dragY = 0;               // current displacement of the mass from rest, px (canvas +down)
+
+  // motion only begins on the user's Start click, which satisfies
+  // prefers-reduced-motion: nothing animates unrequested
+
+  // static molecule jitter (fixed per dot so the field doesn't shimmer)
+  var dots = [];
+  (function seedDots(){
+    var rng = mulberry32(105);
+    var cols = 150, rows = 14;
+    for (var i=0;i<cols;i++){
+      for (var j=0;j<rows;j++){
+        var x0 = srcX + 8 + (earX - srcX - 30) * (i + rng()) / cols;
+        var y0 = dotsTop + (dotsBot - dotsTop) * (j + rng()) / rows;
+        dots.push({x0:x0, y0:y0});
+      }
+    }
+  })();
+
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t2 = Math.imul(a ^ a >>> 15, 1 | a);
+      t2 = t2 + Math.imul(t2 ^ t2 >>> 7, 61 | t2) ^ t2;
+      return ((t2 ^ t2 >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  // wave phase at position x, time tt: only defined behind the front
+  function phase(x, tt){
+    return 2*Math.PI*f*(tt - (x - srcX)/v);
+  }
+  function inWave(x, tt){
+    return (x >= srcX) && (x <= srcX + v*tt);
+  }
+
+  var css = getComputedStyle(document.documentElement);
+  var GREEN = css.getPropertyValue('--green').trim() || '#1e6b3c';
+  var INK = '#1a1a1a';
+  var RED = '#b03a2e';
+  var BLUE = '#2e6da4';
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.save();
+
+    var lam = v / f;
+    var frontX = Math.min(srcX + v*t, earX + 60);
+
+    // ---- support + spring + mass (the source) ----
+    var springTopY = 60;
+    var restY = 225;                       // mass rest position
+    var massHalf = 26;
+    var ampPx = maxDrag * A;               // px swing of mass
+    // dragging: mass follows the hand. running: released from the extreme,
+    // y = rest + sgn * ampPx * cos(2*pi*f*t). idle: sit at equilibrium.
+    var massY;
+    if (dragging)      massY = restY + dragY;
+    else if (running)  massY = restY + sgn * ampPx * Math.cos(2*Math.PI*f*t);
+    else               massY = restY;
+    // support arm
+    ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(srcX-95, springTopY-14); ctx.lineTo(srcX+40, springTopY-14); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(srcX-95, springTopY-14); ctx.lineTo(srcX-95, labelY-25); ctx.stroke();
+    // hatch on arm
+    ctx.lineWidth = 2;
+    for (var hx = srcX-60; hx <= srcX+36; hx += 14){
+      ctx.beginPath(); ctx.moveTo(hx, springTopY-14); ctx.lineTo(hx-8, springTopY-28); ctx.stroke();
+    }
+    // spring: zigzag from springTopY to massY - massHalf
+    var coils = 9;
+    var sTop = springTopY, sBot = massY - massHalf;
+    ctx.strokeStyle = GREEN; ctx.lineWidth = 3.5; ctx.lineJoin='round';
+    ctx.beginPath();
+    ctx.moveTo(srcX, sTop);
+    var seg = (sBot - sTop) / (coils*2 + 2);
+    ctx.lineTo(srcX, sTop + seg);
+    for (var c=0;c<coils*2;c++){
+      var xx = srcX + ((c%2===0)? 16 : -16);
+      ctx.lineTo(xx, sTop + seg*(c+1.5));
+    }
+    ctx.lineTo(srcX, sBot);
+    ctx.stroke();
+    // mass block
+    ctx.fillStyle = GREEN;
+    ctx.fillRect(srcX - massHalf, massY - massHalf, massHalf*2, massHalf*2);
+    ctx.fillStyle = '#fff';
+    ctx.font = '700 20px Charter, Cambria, serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('m', srcX, massY+1);
+    // rest-position dashed line + amplitude bracket
+    ctx.strokeStyle = '#888'; ctx.lineWidth=1.5; ctx.setLineDash([6,5]);
+    ctx.beginPath(); ctx.moveTo(srcX - 70, restY); ctx.lineTo(srcX + 70, restY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#555';
+    ctx.font = 'italic 16px Charter, Cambria, serif';
+    ctx.textAlign='right';
+    ctx.fillText('rest', srcX - 76, restY);
+
+    // label under source
+    ctx.fillStyle = INK;
+    ctx.font = 'italic 17px Charter, Cambria, serif';
+    ctx.textAlign='center';
+    ctx.fillText('the oscillator: repeats in time (f, A)', srcX+8, labelY);
+
+    // ---- ear (right) ----
+    drawEar(earX, midY);
+    ctx.fillStyle = INK;
+    ctx.font = 'italic 17px Charter, Cambria, serif';
+    ctx.textAlign='center';
+    ctx.fillText('listener', earX, midY+95);
+
+    // ---- wavefront arcs ----
+    // arcs on each compression: sgn*cos(phase) = 1. for sgn=+1 that is
+    // x_c = front - lam*k; for sgn=-1 crests sit half a wavelength back.
+    var off = (sgn > 0) ? 0 : 0.5;
+    ctx.strokeStyle = BLUE; ctx.lineWidth = 2.2;
+    for (var k=0;k<60;k++){
+      var xc = srcX + v*t - lam*(k + off);
+      if (xc < srcX + 6) break;
+      if (xc > earX + 40) continue;
+      var alpha = 0.85;
+      ctx.globalAlpha = alpha;
+      ctx.beginPath();
+      // arcs are centered at (srcX+30, midY); radius measured from that center
+      // so each arc crosses the centerline exactly at x = xc (the compression)
+      var r = xc - (srcX + 30);
+      if (r < 4) continue;
+      // draw arc segment centered at source, clipped to the band
+      var halfAng = Math.min(0.62, Math.asin(Math.min(1,(dotsBot-midY+40)/Math.max(r,1))));
+      ctx.arc(srcX + 30, midY, r, -halfAng, halfAng);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // ---- molecule dots (compressions) ----
+    for (var d=0; d<dots.length; d++){
+      var p = dots[d];
+      var dx = 0;
+      if (running && inWave(p.x0, t)){
+        dx = (lam*0.11) * A * sgn * Math.sin(phase(p.x0, t));
+      }
+      var x = p.x0 + dx;
+      // density shading via dot size: bigger where compressed
+      var comp = (running && inWave(p.x0,t)) ? sgn * Math.cos(phase(p.x0,t)) : 0;
+      var rr = 2.1 + 1.5*A*Math.max(0,comp);
+      ctx.fillStyle = 'rgba(30,30,30,' + (0.35 + 0.4*A*Math.max(0,comp)) + ')';
+      ctx.beginPath(); ctx.arc(x, p.y0, rr, 0, 2*Math.PI); ctx.fill();
+    }
+
+    // ---- sinusoid over the band ----
+    // NOTE: dot bunching (density) goes as sgn*cos(phase), so the curve uses
+    // the same signed cosine to keep every peak sitting exactly on a compression.
+    if (running){
+      ctx.strokeStyle = RED; ctx.lineWidth = 3;
+      ctx.beginPath();
+      var started = false;
+      for (var x = srcX+6; x <= Math.min(frontX, earX+30); x += 3){
+        var y = sineY - (62*A) * sgn * Math.cos(phase(x, t));
+        if (!started){ ctx.moveTo(x,y); started = true; }
+        else ctx.lineTo(x,y);
+      }
+      if (started) ctx.stroke();
+    }
+
+    // wavelength bracket on the sinusoid (between two adjacent crests, if visible)
+    if (running && v*t > lam*(2 + off)){
+      var xcA = srcX + v*t - lam*(2 + off);
+      var xcB = xcA + lam;
+      if (xcA > srcX+20 && xcB < earX-20){
+        ctx.strokeStyle = INK; ctx.lineWidth = 1.6;
+        var by = sineY - 62*A - 18;
+        ctx.beginPath();
+        ctx.moveTo(xcA, by+8); ctx.lineTo(xcA, by);
+        ctx.lineTo(xcB, by); ctx.lineTo(xcB, by+8);
+        ctx.stroke();
+        ctx.fillStyle = INK;
+        ctx.font = 'italic 19px Charter, Cambria, serif';
+        ctx.textAlign='center';
+        ctx.fillText('\u03BB = v / f', (xcA+xcB)/2, by-8);
+      }
+    }
+
+    // front marker
+    if (running && frontX < earX - 10){
+      ctx.strokeStyle = '#999'; ctx.lineWidth=1.2; ctx.setLineDash([4,5]);
+      ctx.beginPath(); ctx.moveTo(frontX, dotsTop-14); ctx.lineTo(frontX, dotsBot+14); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // ---- tracked crest star on the live sinusoid ----
+    if (running && v*t > lam*(1 + off)){
+      var xStar = srcX + v*t - lam*(1 + off);    // first full crest behind the front
+      while (xStar > earX - 50) xStar -= lam;    // hand off to a fresh crest as it exits
+      if (xStar > srcX + 12){
+        drawStar(xStar, sineY - 62*A, 9);
+      }
+      ctx.fillStyle = INK;
+      ctx.font = 'italic 16px Charter, Cambria, serif';
+      ctx.textAlign='right';
+      ctx.fillText('follow the \u2605 : the pattern moves \u2192 while the air stays put', earX + 40, labelY);
+    }
+
+    // hint before the oscillation starts
+    if (!running){
+      ctx.fillStyle = '#555';
+      ctx.font = 'italic 19px Charter, Cambria, serif';
+      ctx.textAlign='center';
+      var hint = dragging
+        ? 'let go to release it'
+        : 'grab the mass and pull it down (or push it up), then let go \u2014 or press Start';
+      ctx.fillText(hint, (srcX + earX)/2, midY - 8);
+    }
+
+    ctx.restore();
+  }
+
+  function drawStar(x, y, r){
+    ctx.fillStyle = '#e0a93e';
+    ctx.strokeStyle = '#8a6414';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (var i=0;i<10;i++){
+      var ang = -Math.PI/2 + i*Math.PI/5;
+      var rr = (i%2===0)? r : r*0.45;
+      var px = x + rr*Math.cos(ang), py = y + rr*Math.sin(ang);
+      if (i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+
+  function drawEar(x, y){
+    ctx.strokeStyle = INK; ctx.lineWidth = 4; ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.arc(x, y-10, 42, -Math.PI*0.75, Math.PI*0.55);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(x-6, y+6, 20, -Math.PI*0.6, Math.PI*0.5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(x+2, y+30, 10, Math.PI, Math.PI*2.2);
+    ctx.stroke();
+  }
+
+  // ---- controls ----
+  var fSlider = document.getElementById('fSlider');
+  var fVal = document.getElementById('fVal');
+  var aVal = document.getElementById('aVal');
+  var tValEl = document.getElementById('tVal');
+  var lValEl = document.getElementById('lVal');
+  var pauseBtn = document.getElementById('pauseBtn');
+  var startBtn = document.getElementById('startBtn');
+
+  function refreshReadout(){
+    fVal.textContent = f.toFixed(2) + ' Hz';
+    aVal.textContent = (running || dragging)
+      ? Math.round((dragging ? Math.abs(dragY)/maxDrag : A)*100) + '%'
+      : '\u2014';
+    tValEl.textContent = (1/f).toFixed(2) + ' s';
+    lValEl.textContent = (v/f).toFixed(0) + ' px  (shorter when f is higher)';
+  }
+
+  function setRunning(on){
+    running = on;
+    paused = false;
+    t = 0;
+    last = null;
+    startBtn.textContent = on ? 'Reset' : 'Start';
+    pauseBtn.disabled = !on;
+    pauseBtn.textContent = 'Pause';
+    refreshReadout();
+  }
+
+  fSlider.addEventListener('input', function(){
+    // keep the field continuous: re-zero time so already-launched pattern
+    // doesn't tear (simple approach: restart the wave)
+    f = parseFloat(fSlider.value);
+    t = Math.min(t, 0.6*(earX-srcX)/v + 2/f); // cap so front re-forms quickly
+    refreshReadout();
+    if (!running || paused) draw();
+  });
+  startBtn.addEventListener('click', function(){
+    if (!running){
+      // standard release: pulled down to 70%
+      A = 0.7; sgn = 1;
+      setRunning(true);
+      requestAnimationFrame(loop);
+    } else {
+      setRunning(false);
+      draw();
+    }
+  });
+  pauseBtn.addEventListener('click', function(){
+    if (!running) return;
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'Play' : 'Pause';
+    if (!paused){ last = null; requestAnimationFrame(loop); }
+  });
+
+  // ---- grab the mass: pointer drag to set amplitude and direction ----
+  var restYc = 225, massHalfc = 26;   // must match draw()'s layout values
+
+  function canvasPos(ev){
+    var r = cv.getBoundingClientRect();
+    return { x: (ev.clientX - r.left) * (W / r.width),
+             y: (ev.clientY - r.top)  * (H / r.height) };
+  }
+  function currentMassY(){
+    if (dragging) return restYc + dragY;
+    if (running)  return restYc + sgn * (maxDrag*A) * Math.cos(2*Math.PI*f*t);
+    return restYc;
+  }
+  function overMass(p){
+    return Math.abs(p.x - srcX) < massHalfc + 16 &&
+           Math.abs(p.y - currentMassY()) < massHalfc + 16;
+  }
+
+  cv.addEventListener('pointerdown', function(ev){
+    var p = canvasPos(ev);
+    if (!overMass(p)) return;
+    // grabbing stops any oscillation and clears the wave
+    running = false;
+    paused = false;
+    dragging = true;
+    dragY = Math.max(-maxDrag, Math.min(maxDrag, p.y - restYc));
+    t = 0; last = null;
+    startBtn.textContent = 'Start';
+    pauseBtn.disabled = true;
+    pauseBtn.textContent = 'Pause';
+    cv.setPointerCapture(ev.pointerId);
+    cv.style.cursor = 'grabbing';
+    refreshReadout();
+    draw();
+    ev.preventDefault();
+  });
+  cv.addEventListener('pointermove', function(ev){
+    var p = canvasPos(ev);
+    if (dragging){
+      dragY = Math.max(-maxDrag, Math.min(maxDrag, p.y - restYc));
+      refreshReadout();
+      draw();
+    } else {
+      cv.style.cursor = overMass(p) ? 'grab' : 'default';
+    }
+  });
+  function releaseDrag(ev){
+    if (!dragging) return;
+    dragging = false;
+    cv.style.cursor = 'default';
+    if (Math.abs(dragY) < 8){
+      // let go too close to rest: nothing to release
+      setRunning(false);
+      draw();
+      return;
+    }
+    A = Math.abs(dragY) / maxDrag;
+    sgn = (dragY > 0) ? 1 : -1;
+    setRunning(true);
+    requestAnimationFrame(loop);
+  }
+  cv.addEventListener('pointerup', releaseDrag);
+  cv.addEventListener('pointercancel', releaseDrag);
+
+  function loop(ts){
+    if (!running || paused) return;
+    if (last === null) last = ts;
+    var dt = Math.min(0.05, (ts - last)/1000);
+    last = ts;
+    t += dt;
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  refreshReadout();
+  draw();
+})();
+</script>
+</body>
+</html>
