@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N7 — Average vs. Instantaneous Velocity</title>
+<style>
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.6rem; line-height:1.3; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+
+  .lineddots{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; gap:.7rem; }
+  .lineddots span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:700; padding:.2rem .55rem; border-radius:5px; }
+  .lineddots .secant{ background:#67b7ff; color:#04263f; }
+  .lineddots .tangent{ background:#ffb37f; color:#3f2404; }
+  .lineddots small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+  .pe li .txt b{ font-weight:600; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; margin-bottom:.9rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 .8rem; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+  .sim .caveat{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.76rem; color:var(--muted); margin-top:.5rem; font-style:italic; }
+
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; color:var(--green); }
+
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Note 7</span>
+  </div>
+
+  <h1>Velocities from Distance–Time Graphs: Average and Instantaneous Velocity</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Most real motion isn't constant speed forever — things speed up, slow down, and change.
+    In free fall, velocity changes continuously with time (v = v<sub>i</sub> + at), so "velocity"
+    at one instant is different from the next. This note teaches two ways to pull velocity out of a
+    <b>curved</b> distance–time graph: the <b>secant line</b> (connecting two points) gives
+    <b>average velocity</b>, and the <b>tangent line</b> (touching one point) gives
+    <b>instantaneous velocity</b>.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Define average velocity</b> as the slope of a secant line connecting two points on a distance–time graph.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Define instantaneous velocity</b> as the slope of a tangent line at a single point on a distance–time graph.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Extract average and instantaneous velocity</b> from a curved distance–time graph using secant and tangent lines, respectively.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Recognize the numerical relationship</b>: for constant acceleration starting from rest, average velocity over an interval equals half the instantaneous velocity at the end of that interval.</span></li>
+    </ul>
+  </div>
+
+  <div class="lineddots" aria-hidden="true">
+    <span class="secant">secant → average</span>
+    <span class="tangent">tangent → instantaneous</span>
+    <small>same curve, two different lines</small>
+  </div>
+
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>You already distinguish "overall" from "right now" without thinking about it:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🚗</span>
+          <b>A road trip's average speed</b>
+          <small>Total distance ÷ total time — versus what your speedometer reads at this exact moment.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">📈</span>
+          <b>A stock chart's overall trend</b>
+          <small>The line from open to close (secant) vs. how steeply it's moving right now (tangent).</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🏃</span>
+          <b>Your race pace vs. your finish-line sprint</b>
+          <small>Your average pace for the whole race is very different from your speed in the final stride.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we work through</h2>
+  <ol class="questions">
+    <li>What is average velocity, and how do you find it from a graph?</li>
+    <li>What is instantaneous velocity, and how do you find it from a graph?</li>
+    <li>How are the secant and tangent lines different, and what does each represent?</li>
+    <li>What's the numerical relationship between average and instantaneous velocity, starting from rest under constant acceleration?</li>
+  </ol>
+
+  <!-- ============ INTERACTIVE: SECANT/TANGENT EXPLORER ============ -->
+  <h2>Play with it: the secant &amp; tangent explorer</h2>
+  <p>Drag the slider to pick a moment <i>t</i> on a free-fall distance–time curve (d = &frac12;gt&sup2;,
+  starting from rest). The secant line runs from t&nbsp;=&nbsp;0 to your chosen t (average velocity);
+  the tangent line touches the curve exactly at t (instantaneous velocity).</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>📐</span> Interactive · Secant &amp; Tangent Explorer</div>
+    <div class="stage">
+      <canvas id="simCanvas" width="720" height="320" role="img"
+        aria-label="A curved distance-versus-time graph for free fall, with a secant line from the start to a chosen point, and a tangent line at that point."></canvas>
+    </div>
+    <div class="panel">
+      <div class="ctrl">
+        <label for="tSlider">Time t <span class="val"><span id="tval">0.5</span> s</span></label>
+        <input type="range" id="tSlider" min="0.1" max="1.0" step="0.05" value="0.5">
+      </div>
+      <div class="readout">
+        <span class="chip">d(t) = <b id="dOut">1.23</b> m</span>
+        <span class="chip">average v (secant) = <b id="avgOut">2.45</b> m/s</span>
+        <span class="chip">instantaneous v (tangent) = <b id="instOut">4.90</b> m/s</span>
+        <span class="chip">ratio = <b id="ratioOut">0.50</b></span>
+      </div>
+      <div class="hint-row" id="simHint">Notice: the average velocity is always exactly half the instantaneous velocity here — that's the constant-acceleration-from-rest relationship.</div>
+      <div class="caveat">Uses g = 9.8 m/s² and a generic free-fall curve for practice — not your instructor's specific handout graph.</div>
+    </div>
+  </div>
+
+  <!-- predict-first probe -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first: an object falls from rest. At t = 1 s, its instantaneous velocity is g&times;1 = 9.8 m/s. What is its <em>average</em> velocity from t = 0 to t = 1 s?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">9.8 m/s</button>
+      <button class="opt" data-correct="true">4.9 m/s</button>
+      <button class="opt" data-correct="false">19.6 m/s</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~14 min</span>
+    <!-- Replace the placeholder with your embed:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M1 N7 walkthrough with Dr. Cho"></iframe></div> -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ PREAMBLE (from original note) ============ -->
+  <h2>Preamble: work through these first</h2>
+  <ol class="questions">
+    <li>Why is the slope of the velocity–time graph zero in constant-speed motion? (Hint: what does "constant speed" mean about how velocity changes?)</li>
+    <li>Using your knowledge of linear equations, explain why the plot of v<sub>f</sub> vs. time has a slope equal to the acceleration.</li>
+  </ol>
+
+  <h2>Instructions (from your guided notes)</h2>
+  <p>Your handout shows the distance–time graph of a free-falling object. At a chosen instant, draw
+  the secant line (from the start to that instant) and the tangent line (touching only that instant),
+  then estimate the average and instantaneous velocity from each line's slope. Repeat at a second
+  instant, and compare: is there a numerical relationship between the two velocities? The explorer
+  above lets you test this relationship at any instant you choose.</p>
+
+  <h2>Secant vs. tangent, side by side</h2>
+  <div class="translate">
+    <table>
+      <thead><tr><th>Line</th><th>Connects</th><th>Slope gives you&hellip;</th></tr></thead>
+      <tbody>
+        <tr><td>Secant</td><td>Two points on the curve</td><td><span class="tag">Average velocity</span> over that interval</td></tr>
+        <tr><td>Tangent</td><td>One point (touches, doesn't cross)</td><td><span class="tag">Instantaneous velocity</span> at that instant</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> Note&nbsp;8 formalizes the other half of this
+  relationship: the <em>area</em> under a velocity–time or acceleration–time graph. Together, slope
+  and area let you move between distance, velocity, and acceleration graphs in either direction.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> Which line's slope gives you instantaneous velocity?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> Secant line</label>
+          <label><input type="radio" name="q1" value="b"> Tangent line</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> Which line's slope gives you average velocity?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> Secant line</label>
+          <label><input type="radio" name="q2" value="b"> Tangent line</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> An object falls from rest. What is its instantaneous velocity at t = 2 s? (use g = 9.8 m/s²)</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="instantaneous velocity in meters per second">
+          <span class="unit">m/s</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> For that same object, what is its average velocity from t = 0 to t = 2 s?</p>
+        <div class="q-num">
+          <input type="number" id="q4input" step="any" inputmode="decimal" aria-label="average velocity in meters per second">
+          <span class="unit">m/s</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/M1_N7_Average_vs_Instantaneous_Velocity.pdf" target="_blank" rel="noopener">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print or open on a tablet and draw the secant/tangent lines as you follow along.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 1 closes — check your own work against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   Secant & Tangent Explorer — self-contained, no dependencies.
+   Free-fall distance curve: d(t) = 0.5 * g * t^2, from rest.
+   Secant: 0 to t  (average velocity = d(t)/t = 0.5*g*t)
+   Tangent: at t   (instantaneous velocity = g*t, exact derivative)
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var g = 9.8;
+  var T_MAX = 1.0;
+
+  function d(tt){ return 0.5 * g * tt * tt; }
+  function vInst(tt){ return g * tt; }
+  function vAvg(tt){ return tt === 0 ? 0 : d(tt) / tt; }
+
+  var padL = 60, padR = 20, padT = 20, padB = 40;
+  var x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
+  var dMax = d(T_MAX) * 1.15;
+
+  function tx(tt){ return x0 + (tt / T_MAX) * (x1 - x0); }
+  function ty(dd){ return y1 - (dd / dMax) * (y1 - y0); }
+
+  var slider = document.getElementById('tSlider');
+  var tval = document.getElementById('tval');
+  var dOut = document.getElementById('dOut');
+  var avgOut = document.getElementById('avgOut');
+  var instOut = document.getElementById('instOut');
+  var ratioOut = document.getElementById('ratioOut');
+
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
+
+    // axes
+    ctx.strokeStyle = '#2c5a3f'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0, y0-4); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('distance d (m)', 6, 14);
+    ctx.textAlign = 'right';
+    ctx.fillText('time t (s) →', x1, H - 8);
+    ctx.textAlign = 'left';
+
+    // curve d(t) = 0.5 g t^2
+    ctx.strokeStyle = '#7fd1a0'; ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    for(var i=0;i<=60;i++){
+      var tt = T_MAX * i/60;
+      var X = tx(tt), Y = ty(d(tt));
+      if(i===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y);
+    }
+    ctx.stroke();
+
+    // secant line: from (0,0) to (t, d(t))
+    ctx.strokeStyle = '#67b7ff'; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(tx(0), ty(0));
+    ctx.lineTo(tx(t), ty(d(t)));
+    ctx.stroke();
+
+    // tangent line: at t, slope = g*t, drawn as short segment centered at (t, d(t))
+    var slope = vInst(t);
+    var halfSpan = 0.14;
+    var t1 = Math.max(0, t - halfSpan), t2 = Math.min(T_MAX, t + halfSpan);
+    var d1 = d(t) + slope*(t1 - t), d2 = d(t) + slope*(t2 - t);
+    ctx.strokeStyle = '#ffb37f'; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(tx(t1), ty(d1));
+    ctx.lineTo(tx(t2), ty(d2));
+    ctx.stroke();
+
+    // point marker
+    ctx.fillStyle = '#fff2d6';
+    ctx.beginPath(); ctx.arc(tx(t), ty(d(t)), 4.5, 0, Math.PI*2); ctx.fill();
+
+    // legend
+    ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillStyle = '#67b7ff'; ctx.fillText('— secant (average v)', x0+8, y0+14);
+    ctx.fillStyle = '#ffb37f'; ctx.fillText('— tangent (instantaneous v)', x0+8, y0+30);
+  }
+
+  function update(){
+    var t = parseFloat(slider.value);
+    tval.textContent = t.toFixed(2);
+    dOut.textContent = d(t).toFixed(2);
+    avgOut.textContent = vAvg(t).toFixed(2);
+    instOut.textContent = vInst(t).toFixed(2);
+    ratioOut.textContent = (vAvg(t) / vInst(t)).toFixed(2);
+    draw(t);
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+
+/* ---------- predict-first probe ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = '✓ Right. Starting from rest with constant acceleration, average velocity is always exactly half the final instantaneous velocity: 9.8 / 2 = 4.9 m/s.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite — average velocity = total distance ÷ total time = d(1)/1 = 4.9 m/s, which is half the instantaneous velocity.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q1:'b', q2:'a' };
+  var expl = {
+    q1:'a tangent touches the curve at a single point, giving the velocity at that exact instant.',
+    q2:'a secant connects two points, giving the overall (average) rate of change between them.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v3 = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v3 - 19.6) < 0.3){ correct++; markCard('card-q3', true, '✓ Correct: v = gt = 9.8 × 2 = 19.6 m/s.'); }
+    else if(isNaN(v3)){ markCard('card-q3', false, 'Enter a number (m/s).'); }
+    else { markCard('card-q3', false, '✗ Use v = gt = 9.8 × 2 = 19.6 m/s.'); }
+
+    var v4 = parseFloat(document.getElementById('q4input').value);
+    if(Math.abs(v4 - 9.8) < 0.3){ correct++; markCard('card-q4', true, '✓ Correct: average velocity is half the instantaneous velocity — 19.6 ÷ 2 = 9.8 m/s.'); }
+    else if(isNaN(v4)){ markCard('card-q4', false, 'Enter a number (m/s).'); }
+    else { markCard('card-q4', false, '✗ Starting from rest, average velocity = half the final instantaneous velocity: 19.6 ÷ 2 = 9.8 m/s.'); }
+
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q3input').value = '';
+    document.getElementById('q4input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>

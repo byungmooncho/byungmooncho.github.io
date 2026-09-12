@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch02a — Position, Displacement, Distance</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 1 · Chapter 2 slides 02a
+     "Position, Displacement, Distance" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:320px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .clicker{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.4rem 0; background:#fbfdfc; }
+  .clicker .c-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .clicker .c-body{ padding:.9rem 1rem 1rem; }
+  .clicker .part{ display:grid; grid-template-columns:1fr; gap:.4rem .8rem; padding:.55rem 0; border-top:1px solid var(--rule); align-items:start; }
+  .clicker .part:first-child{ border-top:0; padding-top:0; }
+  @media (min-width:600px){ .clicker .part{ grid-template-columns:minmax(0,1fr) auto; } }
+  .clicker .ptext{ font-size:1rem; }
+  .clicker .ptext b{ color:var(--green-deep); font-family:"Segoe UI", system-ui, sans-serif; margin-right:.3rem; }
+  .clicker .choices{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .cbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; font-weight:600; border:1.5px solid var(--rule); background:#fff; color:var(--ink); border-radius:20px; padding:.25rem .7rem; cursor:pointer; }
+  .cbtn:hover{ border-color:var(--green); }
+  .cbtn.correct{ border-color:var(--green); background:var(--green-soft); }
+  .cbtn.wrong{ border-color:var(--red); background:#fdecea; }
+  .clicker .pfb{ grid-column:1 / -1; font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; color:var(--green-deep); min-height:1em; }
+  .clicker .pfb.bad{ color:var(--red); }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Chapter 2 · Slides 02a</span>
+  </div>
+
+  <h1>Position, Displacement, Distance</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Everyday English uses <em>position</em>, <em>distance</em>, and <em>displacement</em> almost
+    interchangeably. Physics doesn't. <b>Position</b> is <em>where</em> something is; <b>distance</b>
+    is <em>how much ground</em> it covered; <b>displacement</b> is the <em>change</em> in position —
+    final minus initial. The Greek letter <b>&Delta;</b> (delta) is the shorthand for
+    &ldquo;change in,&rdquo; and it shows up in every kinematics equation from here on.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Define</b> the terms position, displacement, and distance.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Explain the differences</b> between displacement and distance.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Explain the use of the delta symbol, &Delta;</b>, as &ldquo;change in&rdquo; a quantity.</span></li>
+    </ul>
+  </div>
+
+  <h2>Think about this&hellip;</h2>
+  <div class="fig-grid">
+    <figure>
+      <svg class="sq" viewBox="0 0 300 300" role="img" aria-label="Grid with a circle at (3, 3) and a triangle at (7, 3)">
+        <g id="grid1"></g>
+      </svg>
+    </figure>
+    <div>
+      <p style="margin-top:.4rem;">Where is the circle?</p>
+      <p>Where is the triangle?</p>
+      <p>How far apart are they?</p>
+      <p class="why">Notice that to answer the first two questions you need a <em>coordinate system</em>
+      (the grid), but the third answer — 4 units — doesn't depend on where you put the origin.</p>
+    </div>
+  </div>
+
+  <h2>Position, distance, displacement</h2>
+  <p>Scientists attempt to use words with precise meanings. This doesn't always work, but we try.</p>
+  <table class="defs">
+    <tr><td class="term">Position</td><td class="eq">&equiv;</td><td>Coordinate where an object is located</td></tr>
+    <tr><td class="term">Distance</td><td class="eq">&equiv;</td><td>Total length of travel</td></tr>
+    <tr><td class="term">Displacement</td><td class="eq">&equiv;</td><td>Change in position<br><em>Final position &minus; Initial position</em></td></tr>
+  </table>
+
+  <div class="mathblock">
+    <div class="head">Displacement, written with a delta</div>
+    <div class="body">
+      <div class="mathline"><span class="m">&Delta;x = x<sub>f</sub> &minus; x<sub>i</sub></span></div>
+      <div class="mathline"><span class="m">&Delta;</span> &equiv; &ldquo;change in&rdquo; &nbsp;&nbsp;— the symbol is the Greek capital letter <em>delta</em></div>
+      <div class="mathline"><span class="m">x<sub>i</sub></span> &equiv; initial position &nbsp;&nbsp;&nbsp; <span class="m">x<sub>f</sub></span> &equiv; final position</div>
+      <p class="why">Subscripts are useful for labeling variables: the letter tells you <em>what kind</em> of quantity
+      (a position, <span class="m">x</span>), and the subscript tells you <em>which one</em> (initial or final).</p>
+    </div>
+  </div>
+
+  <h2>Disappearing deltas</h2>
+  <p>You will see the same idea written several ways, depending on the book:</p>
+  <div class="mathblock">
+    <div class="head">Four ways to write the same two ideas</div>
+    <div class="body">
+      <div class="mathline"><span class="m">&Delta;x = x<sub>f</sub> &minus; x<sub>i</sub></span></div>
+      <div class="mathline"><span class="m">&Delta;x = x &minus; x<sub>o</sub></span> &nbsp;<span class="why" style="display:inline">(&ldquo;<span class="m">x</span>-naught&rdquo; is the starting position; plain <span class="m">x</span> is the final one)</span></div>
+      <div class="mathline"><span class="m">&Delta;t = t &minus; t<sub>o</sub></span></div>
+      <div class="mathline"><span class="m">&Delta;t = t</span></div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Warning</span>
+    Make sure you know what the variable <em>means</em>. The letter might mean different things in
+    different parts of the book — and different books use different symbols.
+  </div>
+  <div class="tip">
+    <span class="label">Warning</span>
+    Textbooks almost always &ldquo;reset the clock&rdquo; for different segments of the motion.
+    Thus <span class="m">t<sub>o</sub></span> = 0&nbsp;s, and
+    <span class="m">&Delta;t = t &minus; 0 = t</span>. That is why the delta on
+    <span class="m">t</span> so often &ldquo;disappears.&rdquo;
+  </div>
+
+  <h2>Keep it simple — start out with one dimension</h2>
+  <p>An object starts at position &minus;3&nbsp;m and ends at position +2&nbsp;m.</p>
+  <figure>
+    <svg viewBox="0 0 720 130" role="img" aria-label="Number line from -6 to 6 with an arrow from -3 m to +2 m">
+      <g id="nl1"></g>
+    </svg>
+    <figcaption>Displacement is the arrow from the initial position to the final position.</figcaption>
+  </figure>
+  <div class="mathblock">
+    <div class="head">Displacement in one dimension</div>
+    <div class="body">
+      <div class="mathline"><span class="m">&Delta;x</span> = (+2&nbsp;m) &minus; (&minus;3&nbsp;m) = <b>+5&nbsp;m</b></div>
+      <p class="why">The sign carries the direction: positive means the object ended up farther along the
+      +<span class="m">x</span> direction than it started. Watch the double negative — subtracting a negative
+      position <em>adds</em>.</p>
+    </div>
+  </div>
+
+  <h2>Two dimensions</h2>
+  <p>Consider these two ways to get from point A to point B.</p>
+  <figure>
+    <svg class="sq" viewBox="0 0 300 300" role="img" aria-label="Grid with points A at (2, 2) and B at (7, 7); a straight arrow and a wandering dashed path both connect them">
+      <g id="grid2"></g>
+    </svg>
+    <figcaption>Straight arrow: the displacement from A to B. Dashed curve: one possible path actually traveled.</figcaption>
+  </figure>
+  <p>Both trips have <em>exactly the same displacement</em> — they start at A and end at B. But the
+  dashed trip covers far more ground, so its <em>distance</em> is much larger. Displacement only cares
+  about the endpoints; distance cares about the whole route.</p>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Concept question</span>
+      An object moves from one position to another. After it arrives at its destination, its displacement is&hellip;</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Either greater than or equal to the distance it traveled</button>
+      <button class="opt" data-correct="false">Always greater than the distance it traveled</button>
+      <button class="opt" data-correct="false">Always equal to the distance it traveled</button>
+      <button class="opt" data-correct="true">Always less than or equal to the distance it traveled</button>
+      <button class="opt" data-correct="false">Always less than the distance it traveled</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>Looking at motion</h2>
+  <p>The red dots show where an object is at each second. Read its position from the number line
+  below, then answer each part.</p>
+  <figure>
+    <svg viewBox="0 0 720 150" role="img" aria-label="Number line from -6 to 6 with dots at -4, -2, 0, 2, 4 labeled 0 s through 4 s">
+      <g id="nl2"></g>
+    </svg>
+  </figure>
+
+  <div class="clicker" id="clicker1">
+    <div class="c-head"><span>Interactive · Looking at motion</span><span id="c1score">0 / 5</span></div>
+    <div class="c-body">
+      <div class="part" data-answer="-4 m" data-fb="At t = 0 s the dot sits at &minus;4 m.">
+        <div class="ptext"><b>A)</b> What is the object's position at <span class="m">t</span> = 0.0 s?</div>
+        <div class="choices" data-set="pos"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="-2 m" data-fb="At t = 1 s the dot is at &minus;2 m.">
+        <div class="ptext"><b>B)</b> What is the object's position at <span class="m">t</span> = 1.0 s?</div>
+        <div class="choices" data-set="pos"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="2 m" data-fb="&Delta;x = x&lt;sub&gt;f&lt;/sub&gt; &minus; x&lt;sub&gt;i&lt;/sub&gt; = (&minus;2 m) &minus; (&minus;4 m) = +2 m. Position and displacement are different questions!">
+        <div class="ptext"><b>C)</b> What is the object's displacement between <span class="m">t</span> = 0 s and <span class="m">t</span> = 1.0 s?</div>
+        <div class="choices" data-set="pos"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="No" data-fb="At 1 s it is at &minus;2 m; at 3 s it is at +2 m. Different positions.">
+        <div class="ptext"><b>D)</b> Is the object in the same position at 1 s and 3 s?</div>
+        <div class="choices" data-set="yn"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="No" data-fb="After 1 s it has moved 2 m; after 3 s it has moved 6 m (2 m each second, always the same way).">
+        <div class="ptext"><b>E)</b> Has it moved the same distance after 1 s and after 3 s?</div>
+        <div class="choices" data-set="yn"></div><div class="pfb"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Motion that backtracks</h2>
+  <p><em>Motion is plotted as a curve for clarity. The object really moves only on the
+  <span class="m">x</span>-axis.</em> It starts at 0&nbsp;m, moves right, turns around, and heads back
+  to the left.</p>
+  <figure>
+    <svg viewBox="0 0 720 170" role="img" aria-label="Number line with an object at 0 m at 0 s, 3 m at 1 s, 4 m at 2 s, 3 m at 3 s, and -5 m at 4 s, drawn as a curve that loops back">
+      <g id="nl3"></g>
+    </svg>
+  </figure>
+
+  <div class="clicker" id="clicker2">
+    <div class="c-head"><span>Interactive · Motion that backtracks</span><span id="c2score">0 / 5</span></div>
+    <div class="c-body">
+      <div class="part" data-answer="0 m" data-fb="The 0 s dot sits right at the origin.">
+        <div class="ptext"><b>A)</b> What is the object's position at <span class="m">t</span> = 0.0 s?</div>
+        <div class="choices" data-set="pos2"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="3 m" data-fb="At 1 s the dot is above the 3 m mark.">
+        <div class="ptext"><b>B)</b> What is the object's position at <span class="m">t</span> = 1.0 s?</div>
+        <div class="choices" data-set="pos2"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="3 m" data-fb="&Delta;x = 3 m &minus; 0 m = +3 m. Here displacement happens to equal position because the object started at the origin — that will not always be true.">
+        <div class="ptext"><b>C)</b> What is the object's displacement between <span class="m">t</span> = 0 s and <span class="m">t</span> = 1.0 s?</div>
+        <div class="choices" data-set="pos2"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="Yes" data-fb="Both the 1 s and 3 s dots sit over 3 m — it went out to 4 m and came back through 3 m.">
+        <div class="ptext"><b>D)</b> Is the object in the same position at 1 s and 3 s?</div>
+        <div class="choices" data-set="yn"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="No" data-fb="Same position, different distance: after 1 s it has traveled 3 m; after 3 s it has traveled 3 + 1 + 1 = 5 m. Distance never shrinks when you backtrack — displacement does.">
+        <div class="ptext"><b>E)</b> Has it moved the same distance after 1 s and after 3 s?</div>
+        <div class="choices" data-set="yn"></div><div class="pfb"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Which way is the motion?</h2>
+  <p>Same motion as above. Using only the snapshots, decide which way the object is moving at each instant.</p>
+  <div class="clicker" id="clicker3">
+    <div class="c-head"><span>Interactive · Which way?</span><span id="c3score">0 / 5</span></div>
+    <div class="c-body">
+      <div class="part" data-answer="To the right" data-fb="Between 0 s and 2 s the position keeps increasing, so at 1 s it is moving toward +x — to the right.">
+        <div class="ptext"><b>A)</b> Which direction is the object moving at <span class="m">t</span> = 1.0 s?</div>
+        <div class="choices" data-set="dir"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="It is stopped|We can't tell for sure" data-fb="2 s is the turnaround: it was moving right before and left after, so at that instant it is momentarily stopped. (From snapshots alone you could also argue we can't be certain exactly when it turned — both answers are defensible.)">
+        <div class="ptext"><b>B)</b> Which direction is the object moving at <span class="m">t</span> = 2.0 s?</div>
+        <div class="choices" data-set="dir"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="To the left" data-fb="From 2 s to 4 s the position decreases (4 m &rarr; 3 m &rarr; &minus;5 m), so at 3 s it is moving to the left.">
+        <div class="ptext"><b>C)</b> Which direction is the object moving at <span class="m">t</span> = 3.0 s?</div>
+        <div class="choices" data-set="dir"></div><div class="pfb"></div>
+      </div>
+      <div class="part data-last" data-answer="To the left|We can't tell for sure" data-fb="It arrives at &minus;5 m moving left. But 4 s is the last snapshot — we have no information about what happens next, so &ldquo;we can't tell for sure&rdquo; is also a fair answer.">
+        <div class="ptext"><b>D)</b> Which direction is the object moving at <span class="m">t</span> = 4.0 s?</div>
+        <div class="choices" data-set="dir"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="To the right|We can't tell for sure" data-fb="Its first move is to the right — but 0 s is the first snapshot, so we don't know if it was already moving or started from rest. Either &ldquo;to the right&rdquo; or &ldquo;we can't tell for sure&rdquo; is reasonable.">
+        <div class="ptext"><b>E)</b> Which direction is the object moving at <span class="m">t</span> = 0.0 s?</div>
+        <div class="choices" data-set="dir"></div><div class="pfb"></div>
+      </div>
+    </div>
+  </div>
+  <div class="tip">
+    <span class="label">Snapshots have limits</span>
+    A set of positions at whole seconds tells you a lot, but not everything. Between snapshots the
+    object could speed up, slow down, or turn around. That is why physics will soon want
+    <em>instantaneous</em> quantities, not just before-and-after ones.
+  </div>
+
+  <h2>Looking ahead: average velocity, average acceleration</h2>
+  <p>Displacement is the first of a family of &ldquo;change in&rdquo; quantities. Divide a displacement
+  by the time it took and you get <b>average velocity</b>; divide a change in velocity by the time it
+  took and you get <b>average acceleration</b>.</p>
+  <figure>
+    <svg viewBox="0 0 640 110" role="img" aria-label="Positions x0, x1, x2, x3 on a line with displacement arrows between them">
+      <g id="disp"></g>
+    </svg>
+    <figcaption>Each displacement is an arrow from one position to a later one.</figcaption>
+  </figure>
+  <div class="mathblock">
+    <div class="head">Average velocity and average acceleration</div>
+    <div class="body">
+      <div class="mathline"><span class="m">v<sub>ave</sub></span> =
+        <span class="frac"><span class="top"><span class="m">&Delta;x</span></span><span class="bot"><span class="m">&Delta;t</span></span></span> =
+        <span class="frac"><span class="top"><span class="m">x<sub>f</sub> &minus; x<sub>i</sub></span></span><span class="bot"><span class="m">t<sub>f</sub> &minus; t<sub>i</sub></span></span></span>
+        &nbsp;&nbsp;&nbsp; e.g. &nbsp;
+        <span class="frac"><span class="top"><span class="m">x<sub>2</sub> &minus; x<sub>1</sub></span></span><span class="bot"><span class="m">t<sub>2</sub> &minus; t<sub>1</sub></span></span></span>
+        &nbsp; or &nbsp;
+        <span class="frac"><span class="top"><span class="m">x<sub>3</sub> &minus; x<sub>2</sub></span></span><span class="bot"><span class="m">t<sub>3</sub> &minus; t<sub>2</sub></span></span></span>
+      </div>
+      <div class="mathline"><span class="m">a<sub>ave</sub></span> =
+        <span class="frac"><span class="top"><span class="m">&Delta;v</span></span><span class="bot"><span class="m">&Delta;t</span></span></span> =
+        <span class="frac"><span class="top"><span class="m">v<sub>b</sub> &minus; v<sub>a</sub></span></span><span class="bot"><span class="m">t<sub>b</sub> &minus; t<sub>a</sub></span></span></span>
+      </div>
+      <p class="why">Position, velocity, and acceleration have <em>different units</em> (m, m/s, m/s&sup2;).
+      Comparing their &ldquo;actual size&rdquo; is nearly meaningless — a displacement arrow and a
+      velocity arrow drawn on the same picture can't be compared by length.</p>
+    </div>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> the &Delta; notation you met here is the whole
+  language of Notes&nbsp;4&ndash;8. Every slope on a motion graph is a &ldquo;change in something&rdquo;
+  divided by a &ldquo;change in time.&rdquo;</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> An object moves from <span class="m">x<sub>i</sub></span> = +6 m to <span class="m">x<sub>f</sub></span> = &minus;2 m. What is its displacement?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> +8 m</label>
+          <label><input type="radio" name="q1" value="b"> &minus;8 m</label>
+          <label><input type="radio" name="q1" value="c"> +4 m</label>
+          <label><input type="radio" name="q1" value="d"> &minus;4 m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> A runner completes one full lap of a 400 m track, finishing where she started. Distance and displacement?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> Distance = 400 m, displacement = 400 m</label>
+          <label><input type="radio" name="q2" value="b"> Distance = 400 m, displacement = 0 m</label>
+          <label><input type="radio" name="q2" value="c"> Distance = 0 m, displacement = 400 m</label>
+          <label><input type="radio" name="q2" value="d"> Both are 0 m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> What does the symbol &Delta; mean in <span class="m">&Delta;x</span>?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> The total distance traveled</label>
+          <label><input type="radio" name="q3" value="b"> The change in <span class="m">x</span>: final value minus initial value</label>
+          <label><input type="radio" name="q3" value="c"> A small triangle-shaped area</label>
+          <label><input type="radio" name="q3" value="d"> The initial value of <span class="m">x</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Why do textbooks often write <span class="m">&Delta;t = t</span> instead of <span class="m">t &minus; t<sub>o</sub></span>?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> Because time never changes</label>
+          <label><input type="radio" name="q4" value="b"> Because they reset the clock so that <span class="m">t<sub>o</sub></span> = 0 s at the start of each segment</label>
+          <label><input type="radio" name="q4" value="c"> Because the delta symbol only applies to position</label>
+          <label><input type="radio" name="q4" value="d"> Because <span class="m">t<sub>o</sub></span> is always negative</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>Position and displacement are related, but not quite the same. Position is a coordinate;
+        displacement is the <em>change</em> in that coordinate, <span class="m">&Delta;x = x<sub>f</sub> &minus; x<sub>i</sub></span>.</li>
+    <li>The distance traveled is always greater than or equal to the size of the displacement.
+        They are equal only when the object never turns around.</li>
+    <li>&Delta; means &ldquo;change in&rdquo;: final minus initial. Know what each letter and subscript
+        stands for in <em>your</em> textbook, and expect the clock to be reset so that
+        <span class="m">&Delta;t = t</span>.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 —
+      <a href="https://openstax.org/books/college-physics/pages/2-1-displacement" target="_blank" rel="noopener">2.1 Displacement</a> ·
+      <a href="https://openstax.org/books/college-physics/pages/2-3-time-velocity-and-speed" target="_blank" rel="noopener">2.3 Time, Velocity, and Speed</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 —
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/3-1-position-displacement-and-average-velocity" target="_blank" rel="noopener">3.1 Position, Displacement, and Average Velocity</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Position, Displacement, Distance</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 ·
+    Adapted for PHY 118 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- tiny SVG helpers ---------- */
+(function(){
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, text){
+    var e = document.createElementNS(NS, tag);
+    for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+    if(text !== undefined){ e.textContent = text; }
+    return e;
+  }
+  var SERIF = 'Charter, Georgia, "Times New Roman", serif';
+  var SANS = '"Segoe UI", system-ui, sans-serif';
+
+  /* --- 8x8 coordinate grid (300x300 viewBox) --- */
+  function grid(id, draw){
+    var g = document.getElementById(id); if(!g) return;
+    var ox = 40, oy = 260, s = 28;          // origin and cell size
+    function X(x){ return ox + x*s; } function Y(y){ return oy - y*s; }
+    g.appendChild(el('rect', {x:8, y:8, width:284, height:284, fill:'#fff', stroke:'#9db7de', 'stroke-width':1}));
+    for(var i=0;i<=8;i++){
+      g.appendChild(el('line', {x1:X(i), y1:8, x2:X(i), y2:292, stroke:'#9db7de', 'stroke-width':1}));
+      g.appendChild(el('line', {x1:8, y1:Y(i), x2:292, y2:Y(i), stroke:'#9db7de', 'stroke-width':1}));
+      if(i>0){
+        g.appendChild(el('text', {x:X(i), y:oy+20, 'text-anchor':'middle', fill:'#2457b8', 'font-size':'13', 'font-family':SERIF}, i));
+        g.appendChild(el('text', {x:ox-8, y:Y(i)+4, 'text-anchor':'end', fill:'#2457b8', 'font-size':'13', 'font-family':SERIF}, i));
+      }
+    }
+    g.appendChild(el('line', {x1:X(0), y1:8, x2:X(0), y2:292, stroke:'#e0801a', 'stroke-width':2}));
+    g.appendChild(el('line', {x1:8, y1:Y(0), x2:292, y2:Y(0), stroke:'#e0801a', 'stroke-width':2}));
+    draw(g, X, Y);
+  }
+
+  grid('grid1', function(g, X, Y){
+    g.appendChild(el('circle', {cx:X(3), cy:Y(3), r:9, fill:'#e6d8f0', stroke:'#7d3fa0', 'stroke-width':2}));
+    var t = X(7), u = Y(3);
+    g.appendChild(el('polygon', {points:(t)+','+(u-10)+' '+(t-10)+','+(u+8)+' '+(t+10)+','+(u+8), fill:'#dff0e3', stroke:'#1d2b23', 'stroke-width':2}));
+  });
+
+  grid('grid2', function(g, X, Y){
+    var defs = el('defs', {});
+    var mk = el('marker', {id:'arrowB', viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto-start-reverse'});
+    mk.appendChild(el('path', {d:'M0,0 L10,5 L0,10 z', fill:'#2457b8'}));
+    defs.appendChild(mk);
+    var mk2 = el('marker', {id:'arrowP', viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:'6', markerHeight:'6', orient:'auto-start-reverse'});
+    mk2.appendChild(el('path', {d:'M0,0 L10,5 L0,10 z', fill:'#7d3fa0'}));
+    defs.appendChild(mk2);
+    g.appendChild(defs);
+    // wandering path A -> B
+    var d = 'M'+X(2)+','+Y(2)+' C '+X(2.2)+','+Y(4.5)+' '+X(3.4)+','+Y(5.2)+' '+X(4.3)+','+Y(4.2)+
+            ' C '+X(5.4)+','+Y(3.2)+' '+X(6.6)+','+Y(3.8)+' '+X(6.3)+','+Y(5.0)+
+            ' C '+X(6.0)+','+Y(6.2)+' '+X(6.2)+','+Y(7.4)+' '+X(7)+','+Y(7);
+    g.appendChild(el('path', {d:d, fill:'none', stroke:'#7d3fa0', 'stroke-width':1.8, 'stroke-dasharray':'5 4', 'marker-end':'url(#arrowP)'}));
+    g.appendChild(el('line', {x1:X(2), y1:Y(2), x2:X(7)-6, y2:Y(7)+6, stroke:'#2457b8', 'stroke-width':2.2, 'marker-end':'url(#arrowB)'}));
+    g.appendChild(el('circle', {cx:X(2), cy:Y(2), r:9, fill:'#cfe0f7', stroke:'#2457b8', 'stroke-width':1.5}));
+    g.appendChild(el('circle', {cx:X(7), cy:Y(7), r:9, fill:'#cfe0f7', stroke:'#2457b8', 'stroke-width':1.5}));
+    g.appendChild(el('text', {x:X(2)-4, y:Y(2)+26, fill:'#1d2b23', 'font-size':'15', 'font-family':SERIF}, 'A'));
+    g.appendChild(el('text', {x:X(7)+10, y:Y(7)+18, fill:'#1d2b23', 'font-size':'15', 'font-family':SERIF}, 'B'));
+  });
+
+  /* --- number line from -6 to 6 (640 wide) --- */
+  function numberLine(id, axisY, draw){
+    var g = document.getElementById(id); if(!g) return;
+    var x0 = 40, s = 44;                      // -6 at x0; 44 px per meter
+    function X(v){ return x0 + (v+6)*s; }
+    g.appendChild(el('line', {x1:x0-16, y1:axisY, x2:X(6)+16, y2:axisY, stroke:'#e0801a', 'stroke-width':2}));
+    for(var v=-6; v<=6; v++){
+      g.appendChild(el('line', {x1:X(v), y1:axisY-(v===0?11:7), x2:X(v), y2:axisY+(v===0?11:7), stroke:'#e0801a', 'stroke-width':v===0?2.5:1.5}));
+      g.appendChild(el('text', {x:X(v), y:axisY+26, 'text-anchor':'middle', fill:'#1d2b23', 'font-size':'14', 'font-family':SERIF}, (v<0?'−'+(-v):v)));
+    }
+    g.appendChild(el('text', {x:X(6)+22, y:axisY+5, fill:'#e0801a', 'font-size':'14', 'font-style':'italic', 'font-family':SERIF}, 'Position (m)'));
+    draw(g, X);
+  }
+
+  numberLine('nl1', 70, function(g, X){
+    var defs = el('defs', {});
+    var mk = el('marker', {id:'arrowB1', viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto'});
+    mk.appendChild(el('path', {d:'M0,0 L10,5 L0,10 z', fill:'#2457b8'}));
+    defs.appendChild(mk); g.appendChild(defs);
+    var y = 34;
+    g.appendChild(el('line', {x1:X(-3), y1:y, x2:X(2)-8, y2:y, stroke:'#2457b8', 'stroke-width':2.2, 'marker-end':'url(#arrowB1)'}));
+    g.appendChild(el('circle', {cx:X(-3), cy:y, r:5, fill:'#2457b8'}));
+    g.appendChild(el('circle', {cx:X(2), cy:y, r:5, fill:'#2457b8'}));
+    g.appendChild(el('text', {x:X(-3)-10, y:y+5, 'text-anchor':'end', fill:'#1d2b23', 'font-size':'14', 'font-family':SERIF}, 'Position −3 m'));
+    g.appendChild(el('text', {x:X(2)+10, y:y+5, fill:'#1d2b23', 'font-size':'14', 'font-family':SERIF}, 'Position +2 m'));
+  });
+
+  numberLine('nl2', 90, function(g, X){
+    var y = 50, pts = [-4,-2,0,2,4];
+    g.appendChild(el('line', {x1:X(-4), y1:y, x2:X(4), y2:y, stroke:'#2457b8', 'stroke-width':2}));
+    pts.forEach(function(p, i){
+      g.appendChild(el('circle', {cx:X(p), cy:y, r:5.5, fill:'#e02020'}));
+      g.appendChild(el('text', {x:X(p), y:y-14, 'text-anchor':'middle', fill:'#1d2b23', 'font-size':'14', 'font-family':SERIF}, i+' s'));
+    });
+  });
+
+  numberLine('nl3', 118, function(g, X){
+    // positions: 0s:0, 1s:3, 2s:4, 3s:3, 4s:-5 ; drawn as a curve above the axis
+    var yLow = 88, yMid = 66, yHigh = 30;
+    var d = 'M'+X(0)+','+yLow+' L'+X(3)+','+yLow+' Q'+X(4.6)+','+yLow+' '+X(4)+','+yMid+' Q'+X(3.5)+','+yHigh+' '+X(3)+','+yHigh+' L'+X(-5)+','+yHigh;
+    g.appendChild(el('path', {d:d, fill:'none', stroke:'#2457b8', 'stroke-width':2}));
+    var dots = [[0,yLow,'0 s',0,-12],[3,yLow,'1 s',12,14],[4,yMid,'2 s',14,4],[3,yHigh,'3 s',0,-12],[-5,yHigh,'4 s',0,20]];
+    dots.forEach(function(p){
+      g.appendChild(el('circle', {cx:X(p[0]), cy:p[1], r:5.5, fill:'#e02020'}));
+      g.appendChild(el('text', {x:X(p[0])+p[3], y:p[1]+p[4], 'text-anchor':p[3]>0?'start':'middle', fill:'#1d2b23', 'font-size':'14', 'font-family':SERIF}, p[2]));
+    });
+  });
+
+  /* --- displacement arrows x0..x3 --- */
+  (function(){
+    var g = document.getElementById('disp'); if(!g) return;
+    var defs = el('defs', {});
+    [['aD','#2457b8'],['aL','#7fa6e6']].forEach(function(m){
+      var mk = el('marker', {id:m[0], viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:'6', markerHeight:'6', orient:'auto'});
+      mk.appendChild(el('path', {d:'M0,0 L10,5 L0,10 z', fill:m[1]})); defs.appendChild(mk);
+    });
+    g.appendChild(defs);
+    var xs = [60, 170, 290, 560], y = 70;
+    g.appendChild(el('line', {x1:xs[0], y1:y, x2:xs[3], y2:y, stroke:'#d7e2da', 'stroke-width':1.5}));
+    xs.forEach(function(x,i){
+      g.appendChild(el('circle', {cx:x, cy:y, r:5.5, fill:'#1d2b23'}));
+      var t = el('text', {x:x, y:y+30, 'text-anchor':'middle', fill:'#1d2b23', 'font-size':'16', 'font-style':'italic', 'font-family':SERIF}, 'x');
+      var sub = el('tspan', {'baseline-shift':'sub', 'font-size':'11'}, i); t.appendChild(sub); g.appendChild(t);
+    });
+    g.appendChild(el('line', {x1:xs[0], y1:y-30, x2:xs[3]-8, y2:y-30, stroke:'#2457b8', 'stroke-width':2, 'marker-end':'url(#aD)'}));
+    g.appendChild(el('line', {x1:xs[0], y1:y-16, x2:xs[2]-8, y2:y-16, stroke:'#7fa6e6', 'stroke-width':2, 'marker-end':'url(#aL)'}));
+    g.appendChild(el('line', {x1:xs[0], y1:y+10, x2:xs[1]-8, y2:y+10, stroke:'#b9cff0', 'stroke-width':2, 'marker-end':'url(#aL)'}));
+    g.appendChild(el('text', {x:20, y:y-40, fill:'#2457b8', 'font-size':'15', 'font-family':SANS}, 'Displacements'));
+  })();
+})();
+
+/* ---------- single concept question ---------- */
+(function(){
+  var probe = document.getElementById('probe1'); if(!probe) return;
+  var fb = probe.querySelector('.feedback');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = '✓ Right. The straight-line displacement is the shortest possible trip; any wandering makes the distance larger, and only a perfectly straight, one-way trip makes them equal.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite. Think of the two paths from A to B: same displacement, but the wandering path has a larger distance. Distance can equal the displacement (straight one-way trip) but can never be smaller.';
+      }
+    });
+  });
+})();
+
+/* ---------- clicker sets ---------- */
+(function(){
+  var sets = {
+    pos:  ['-4 m','-2 m','0 m','2 m','4 m'],
+    pos2: ['1 m','0 m','3 m','4 m','-4 m'],
+    yn:   ['Yes','No'],
+    dir:  ['To the left','To the right','It is stopped',"We can't tell for sure"]
+  };
+  document.querySelectorAll('.clicker').forEach(function(clk){
+    var scoreEl = clk.querySelector('.c-head span:last-child');
+    var parts = clk.querySelectorAll('.part');
+    var done = {};
+    function updateScore(){ scoreEl.textContent = Object.keys(done).length + ' / ' + parts.length; }
+    parts.forEach(function(part, idx){
+      var answers = part.getAttribute('data-answer').split('|');
+      var fbText = part.getAttribute('data-fb');
+      var box = part.querySelector('.choices');
+      var fb = part.querySelector('.pfb');
+      sets[box.getAttribute('data-set')].forEach(function(label){
+        var b = document.createElement('button');
+        b.className = 'cbtn'; b.type = 'button';
+        b.textContent = label.replace(/^-/, '−');
+        b.addEventListener('click', function(){
+          box.querySelectorAll('.cbtn').forEach(function(x){ x.classList.remove('correct','wrong'); });
+          if(answers.indexOf(label) !== -1){
+            b.classList.add('correct'); fb.classList.remove('bad');
+            fb.innerHTML = '✓ ' + fbText;
+            done[idx] = true; updateScore();
+          } else {
+            b.classList.add('wrong'); fb.classList.add('bad');
+            fb.innerHTML = '✗ Not quite — look at the figure again and try another choice.';
+          }
+        });
+        box.appendChild(b);
+      });
+    });
+    updateScore();
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket'); if(!ticket) return;
+  var mc = { q1:'b', q2:'b', q3:'b', q4:'b' };
+  var expl = {
+    q1:'Δx = x_f − x_i = (−2 m) − (+6 m) = −8 m. The minus sign says it moved in the −x direction.',
+    q2:'she covered 400 m of track (distance), but finished exactly where she started, so her displacement is 0 m.',
+    q3:'Δ means "change in": always the final value minus the initial value.',
+    q4:'books restart the stopwatch at the beginning of each segment, so t_o = 0 s and Δt = t − 0 = t.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Reread the definitions above, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>

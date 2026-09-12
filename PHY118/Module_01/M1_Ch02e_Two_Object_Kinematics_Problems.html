@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch02e — Two-Object Kinematics Problems</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 1 · Chapter 2 slides 02e
+     "Two-Object Kinematics Problems" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (© 2015).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:320px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .clicker{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.4rem 0; background:#fbfdfc; }
+  .clicker .c-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .clicker .c-body{ padding:.9rem 1rem 1rem; }
+  .clicker .part{ display:grid; grid-template-columns:1fr; gap:.4rem .8rem; padding:.55rem 0; border-top:1px solid var(--rule); align-items:start; }
+  .clicker .part:first-child{ border-top:0; padding-top:0; }
+  @media (min-width:600px){ .clicker .part{ grid-template-columns:minmax(0,1fr) auto; } }
+  .clicker .ptext{ font-size:1rem; }
+  .clicker .ptext b{ color:var(--green-deep); font-family:"Segoe UI", system-ui, sans-serif; margin-right:.3rem; }
+  .clicker .choices{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .cbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; font-weight:600; border:1.5px solid var(--rule); background:#fff; color:var(--ink); border-radius:20px; padding:.25rem .7rem; cursor:pointer; }
+  .cbtn:hover{ border-color:var(--green); }
+  .cbtn.correct{ border-color:var(--green); background:var(--green-soft); }
+  .cbtn.wrong{ border-color:var(--red); background:#fdecea; }
+  .clicker .pfb{ grid-column:1 / -1; font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; color:var(--green-deep); min-height:1em; }
+  .clicker .pfb.bad{ color:var(--red); }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+  /* --- 02b specifics --- */
+  .cx{ color:#2457b8; } .cv{ color:#1e8a3c; } .ca{ color:#8e4bc9; } .ct{ color:#d9740f; }
+  .know{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin:1rem 0 .5rem; }
+  .k-cell{ border:1px solid var(--rule); border-radius:10px; padding:.75rem .9rem; background:#fbfdfc; }
+  .k-cell b{ font-family:"Segoe UI", system-ui, sans-serif; display:block; font-size:.95rem; }
+  .k-cell small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; line-height:1.45; display:block; margin-top:.2rem; }
+  .k-center{ grid-column:1 / -1; position:relative; text-align:center; padding:1.1rem .9rem; background:var(--green-soft); border-color:var(--green); }
+  .k-title{ font-size:1.5rem; font-weight:700; line-height:1.15; display:block; color:var(--green-deep); }
+  .k-side{ position:absolute; top:50%; transform:translateY(-50%); font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); }
+  .k-left{ left:1rem; } .k-right{ right:1rem; }
+  .k-wide{ grid-column:1 / -1; border-color:var(--amber); background:#fffdf8; }
+  .k-und b{ color:var(--amber); }
+  ol.three{ margin:.2rem 0 1rem; padding-left:1.4rem; }
+  ol.three li{ margin:.45rem 0; }
+  .legend{ display:flex; flex-wrap:wrap; gap:.5rem 1.2rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin:1rem 0 .4rem; }
+  .sw{ display:inline-block; width:.8em; height:.8em; border-radius:3px; background:currentColor; vertical-align:-.1em; margin-right:.3em; }
+  .eqcard{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0; }
+  .eq-head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.55rem 1rem; display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .eq-head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--green-deep); }
+  .eq-toggle{ display:flex; gap:.4rem; }
+  .btn.small{ font-size:.78rem; padding:.3rem .7rem; }
+  .eq-body{ padding:.9rem 1rem 1rem; text-align:center; }
+  .plain{ font-size:.92rem; color:var(--muted); text-align:left; margin:0 0 .6rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .bigeq{ font-size:2rem; line-height:1.3; margin:.2rem 0 .4rem; white-space:nowrap; overflow-x:auto; }
+  .bigeq .op{ font-style:normal; margin:0 .3em; color:var(--ink); }
+  .bigeq .up{ font-style:normal; color:var(--ink); }
+  .bigeq .half{ font-size:.7em; vertical-align:.15em; }
+  @media (max-width:520px){ .bigeq{ font-size:1.5rem; } }
+  .eq-labels{ display:none; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; line-height:1.2; font-weight:600; justify-content:center; gap:.9rem; flex-wrap:wrap; margin-bottom:.35rem; }
+  .eq-labels span:empty{ display:none; }
+  .eq-units{ display:none; font-size:1.05rem; margin:.4rem 0 .2rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; }
+  .eq-units .op{ margin:0 .3em; color:var(--ink); font-weight:400; }
+  .eq-units .up{ color:var(--ink); }
+  .eq-units .chk{ display:block; font-size:.82rem; color:var(--green-deep); font-weight:600; margin-top:.35rem; }
+  .eqcard.show-vars .eq-labels{ display:flex; }
+  .eqcard.show-units .eq-units{ display:block; }
+  .constraint{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); text-align:left; margin:.8rem 0 0; border-top:1px dashed var(--rule); padding-top:.6rem; }
+  .constraint b{ color:var(--amber); }
+
+  /* --- 02d specifics --- */
+  .problem{ border:1px solid var(--rule); border-left:4px solid var(--green); border-radius:0 8px 8px 0; padding:.8rem 1.1rem; margin:1rem 0; background:#fbfdfc; font-size:1.08rem; }
+  .problem p{ margin:.3rem 0; }
+  table.known{ border-collapse:collapse; width:100%; font-size:.98rem; }
+  table.known th{ text-align:left; font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:var(--green); padding:.5rem .4rem .15rem; }
+  table.known td{ padding:.15rem .4rem; border-bottom:1px dashed var(--rule); }
+  table.known td:first-child{ width:2.5rem; text-align:right; }
+  table.known small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; }
+  .steps{ display:grid; gap:.5rem; margin:1rem 0; }
+  .step{ border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .step .reveal{ width:100%; text-align:left; background:var(--green-soft); border:0; padding:.6rem .9rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.9rem; color:var(--green-deep); cursor:pointer; }
+  .step .reveal::before{ content:"▸ "; }
+  .step.open .reveal::before{ content:"▾ "; }
+  .step .content{ display:none; padding:.7rem 1rem .8rem; font-size:1.08rem; }
+  .step.open .content{ display:block; }
+  .step .content .why{ margin-top:.4rem; }
+  .boxed{ display:inline-block; border:2px solid var(--blue); border-radius:6px; padding:.25rem .7rem; font-weight:700; }
+  .choices .num{ width:6.5rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; padding:.3rem .5rem; border:1.5px solid var(--rule); border-radius:6px; }
+  .fig-grid figure svg{ max-width:320px; }
+
+  /* --- 02e specifics --- */
+  .chart svg{ display:block; width:100%; height:auto; }
+  .fig-grid figure{ margin:0; }
+  .fig-grid .known{ align-self:start; }
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .sim .panel{ padding:1rem 1.1rem 1.1rem; }
+  .sim .chart{ max-width:420px; margin:0 auto; }
+  .sliders{ display:grid; gap:.5rem; grid-template-columns:1fr; margin:.8rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  @media (min-width:560px){ .sliders{ grid-template-columns:1fr 1fr; } }
+  .sliders label{ display:flex; align-items:center; gap:.5rem; }
+  .sliders input{ flex:1; accent-color:var(--green); }
+  .areas{ display:grid; gap:.6rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .areas{ grid-template-columns:1fr 1fr 1fr; } }
+  .abox{ border-radius:8px; padding:.6rem .75rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; display:flex; flex-direction:column; gap:.2rem; }
+  .abox b{ font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .abox .m{ font-size:1rem; }
+  .abox.rect{ background:#dfe9f8; } .abox.tri{ background:#eef3fc; } .abox.tot{ background:var(--green-soft); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.7rem; }
+
+  .cA{ color:#c0392b; } .cB{ color:#2457b8; } .cC{ color:#8e4bc9; }
+  .mathline.result{ font-weight:700; color:var(--green-deep); }
+  .verdict{ border-radius:10px; padding:.8rem 1rem; font-size:.98rem; }
+  .verdict b{ display:block; font-family:"Segoe UI", system-ui, sans-serif; margin-bottom:.3rem; }
+  .verdict p{ margin:0; }
+  .verdict.good{ background:var(--green-soft); border:1px solid var(--green); }
+  .verdict.good b{ color:var(--green-deep); }
+  .verdict.bad{ background:#fdecea; border:1px solid #e3a09a; }
+  .verdict.bad b{ color:#c0392b; }
+  .step .content .frac{ font-size:.95rem; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Chapter 2 · Slides 02e</span>
+  </div>
+
+  <h1>Two-Object Kinematics Problems</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman,
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Two objects are moving independently, and we want to determine where they meet each other.
+    The trick is to write a <em>separate copy</em> of the kinematics equations for each object,
+    tagged with subscripts, and then use what the two objects <em>share</em> — the same position
+    at the same instant — to link the copies together. A police car chasing a speeder is the classic
+    example, and it ends with a quadratic equation that has two roots. Only one of them makes sense.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Set up and solve</b> one-dimensional kinematics problems involving two objects.</span></li>
+    </ul>
+  </div>
+
+  <h2>Two-object problems</h2>
+  <p>Two objects are moving independently, and we want to determine where they meet each other. Typical
+  examples: running to catch a train; a police car and a speeder.</p>
+  <p>Use multiple &ldquo;versions&rdquo; of the equations, using subscripts to keep track of them:</p>
+  <div class="fig-grid">
+    <div class="mathblock" style="margin:0;">
+      <div class="head">Speeder (subscript <span class="m">s</span>)</div>
+      <div class="body"><div class="mathline"><span class="m">x<sub>s</sub> = x<sub>os</sub> + v<sub>os</sub>&thinsp;t + &frac12;a<sub>s</sub>t&sup2;</span></div></div>
+    </div>
+    <div class="mathblock" style="margin:0;">
+      <div class="head">Police (subscript <span class="m">p</span>)</div>
+      <div class="body"><div class="mathline"><span class="m">x<sub>p</sub> = x<sub>op</sub> + v<sub>op</sub>&thinsp;t + &frac12;a<sub>p</sub>t&sup2;</span></div></div>
+    </div>
+  </div>
+  <p>Often, one or more of the variables is <b>&ldquo;shared&rdquo;</b> by each object:</p>
+  <ul>
+    <li>Initial and/or final position — they start together, or they end up at the same spot.</li>
+    <li>Meeting time — &ldquo;catching up&rdquo; means being at the same place at the same instant.</li>
+  </ul>
+  <div class="tip">
+    <span class="label">The key move</span>
+    A shared variable lets you set two equations equal to each other. If both objects are at
+    <span class="m">x<sub>f</sub></span> at time <span class="m">t<sub>f</sub></span>, then
+    <span class="m">x<sub>s</sub>(t<sub>f</sub>) = x<sub>p</sub>(t<sub>f</sub>)</span> — one equation in one unknown.
+  </div>
+
+  <h2>Example problem — catching a speeder</h2>
+  <div class="problem">
+    <p>A motorist (the Speeder) is driving at a constant rate of 35&nbsp;m/s. He drives past a patrol
+    car, but doesn't see it. The driver of the patrol car (the Police) takes 5&nbsp;seconds to start
+    moving, and then begins to follow.</p>
+    <p>Assuming that the patrol car accelerates smoothly at 3.0&nbsp;m/s&sup2; for the entire chase, how
+    long does it take for the Police to catch up to the Speeder?</p>
+  </div>
+
+  <h3>Write down known data</h3>
+  <div class="fig-grid">
+    <table class="known">
+      <tr><th colspan="2">Speeder</th></tr>
+      <tr><td class="m">x<sub>os</sub></td><td>= 0 m</td></tr>
+      <tr><td class="m">v<sub>os</sub></td><td>= 35 m/s</td></tr>
+      <tr><td class="m">a<sub>s</sub></td><td>= 0 m/s&sup2; <small>(constant speed)</small></td></tr>
+      <tr><th colspan="2">Police</th></tr>
+      <tr><td class="m">x<sub>op</sub></td><td>= 0 m</td></tr>
+      <tr><td class="m">v<sub>op</sub></td><td>= 0 m/s <small>(starts from rest)</small></td></tr>
+      <tr><td class="m">a<sub>p</sub></td><td>= 3 m/s&sup2;</td></tr>
+      <tr><th colspan="2">Shared</th></tr>
+      <tr><td class="m">t<sub>5</sub></td><td>= 5 s <small>(police start moving)</small></td></tr>
+      <tr><td class="m">x<sub>f</sub>, t<sub>f</sub></td><td>= same for both at the catch</td></tr>
+    </table>
+    <figure>
+      <div class="chart" id="chSketch"></div>
+      <figcaption>Draw a sketch. The Speeder's line and the Police's parabola cross at <span class="m">(t<sub>f</sub>, x<sub>f</sub>)</span>. The police clock starts at <span class="m">t<sub>5</sub></span>, so their time interval is <span class="m">t<sub>f</sub> &minus; t<sub>5</sub></span>.</figcaption>
+    </figure>
+  </div>
+
+  <h3>Set up equations</h3>
+  <div class="fig-grid">
+    <div class="mathblock" style="margin:0;">
+      <div class="head">Speeder</div>
+      <div class="body">
+        <div class="mathline"><span class="m">x<sub>f</sub> = x<sub>os</sub> + v<sub>os</sub>&Delta;t<sub>f</sub> + &frac12;a<sub>s</sub>&Delta;t<sub>f</sub>&sup2;</span></div>
+        <div class="mathline"><span class="m">x<sub>f</sub> = 0 + v<sub>os</sub>&Delta;t<sub>f</sub> + 0</span></div>
+        <div class="mathline result"><span class="m">x<sub>f</sub> = v<sub>os</sub>&thinsp;t<sub>f</sub></span></div>
+      </div>
+    </div>
+    <div class="mathblock" style="margin:0;">
+      <div class="head">Police</div>
+      <div class="body">
+        <div class="mathline"><span class="m">x<sub>f</sub> = x<sub>op</sub> + v<sub>op</sub>(t<sub>f</sub> &minus; t<sub>5</sub>) + &frac12;a<sub>p</sub>(t<sub>f</sub> &minus; t<sub>5</sub>)&sup2;</span></div>
+        <div class="mathline"><span class="m">x<sub>f</sub> = 0 + 0 + &frac12;a<sub>p</sub>(t<sub>f</sub> &minus; t<sub>5</sub>)&sup2;</span></div>
+        <div class="mathline result"><span class="m">x<sub>f</sub> = &frac12;a<sub>p</sub>(t<sub>f</sub> &minus; t<sub>5</sub>)&sup2;</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tip">
+    <span class="label">Watch the time interval</span>
+    The speeder has been moving since <span class="m">t</span> = 0, so its interval is just
+    <span class="m">t<sub>f</sub></span>. The police car only starts at <span class="m">t<sub>5</sub></span>, so
+    <em>its</em> interval is <span class="m">(t<sub>f</sub> &minus; t<sub>5</sub>) = &Delta;t</span>. Forgetting
+    this is the most common error in the whole problem.</div>
+
+  <h3>Combine equations — catch up at <span class="m">x<sub>f</sub></span></h3>
+  <p>Try each step yourself before revealing it.</p>
+  <div class="steps" id="stepsA">
+    <div class="step"><button class="reveal">Step 1 · Set the two positions equal</button>
+      <div class="content"><span class="m">v<sub>os</sub>&thinsp;t<sub>f</sub> = x<sub>f</sub> = &frac12;a<sub>p</sub>(t<sub>f</sub> &minus; t<sub>5</sub>)&sup2;</span>
+        <p class="why">Both cars are at the same place at the same time — that is what &ldquo;catch up&rdquo; means.</p></div></div>
+    <div class="step"><button class="reveal">Step 2 · Clear the &frac12; and expand the square</button>
+      <div class="content"><span class="m">2v<sub>os</sub>&thinsp;t<sub>f</sub> = a<sub>p</sub>(t<sub>f</sub> &minus; t<sub>5</sub>)&sup2;</span><br>
+        <span class="m">2v<sub>os</sub>&thinsp;t<sub>f</sub> = a<sub>p</sub>(t<sub>f</sub>&sup2; &minus; 2t<sub>f</sub>t<sub>5</sub> + t<sub>5</sub>&sup2;)</span><br>
+        <span class="m">2v<sub>os</sub>&thinsp;t<sub>f</sub> = a<sub>p</sub>t<sub>f</sub>&sup2; &minus; 2a<sub>p</sub>t<sub>f</sub>t<sub>5</sub> + a<sub>p</sub>t<sub>5</sub>&sup2;</span></div></div>
+    <div class="step"><button class="reveal">Step 3 · Move everything to one side and group by powers of <span class="m">t<sub>f</sub></span></button>
+      <div class="content"><span class="m">0 = a<sub>p</sub>t<sub>f</sub>&sup2; &minus; 2a<sub>p</sub>t<sub>f</sub>t<sub>5</sub> &minus; 2v<sub>os</sub>t<sub>f</sub> + a<sub>p</sub>t<sub>5</sub>&sup2;</span><br>
+        <span class="m">0 = <span class="cA">a<sub>p</sub></span>t<sub>f</sub>&sup2; <span class="cB">&minus; 2(a<sub>p</sub>t<sub>5</sub> + v<sub>os</sub>)</span>t<sub>f</sub> + <span class="cC">a<sub>p</sub>t<sub>5</sub>&sup2;</span></span><br>
+        <span class="m">0 = <span class="cA">A</span>t&sup2; + <span class="cB">B</span>t + <span class="cC">C</span></span>
+        <p class="why">A quadratic in <span class="m">t<sub>f</sub></span>. Identify <span class="cA">A</span>, <span class="cB">B</span>, <span class="cC">C</span> — including their signs — before reaching for the formula.</p></div></div>
+    <div class="step"><button class="reveal">Step 4 · Put in the numbers</button>
+      <div class="content"><span class="m">0 = <span class="cA">3 m/s&sup2;</span>&thinsp;t<sub>f</sub>&sup2; <span class="cB">&minus; 2{(3 m/s&sup2;)(5 s) + 35 m/s}</span>&thinsp;t<sub>f</sub> + <span class="cC">3 m/s&sup2; (5 s)&sup2;</span></span><br>
+        <span class="m">0 = <span class="cA">3 m/s&sup2;</span>&thinsp;t<sub>f</sub>&sup2; + <span class="cB">{&minus;100 m/s}</span>&thinsp;t<sub>f</sub> + <span class="cC">75 m</span></span>
+        <p class="why">It is okay to enter numbers <em>before</em> using the quadratic formula — in fact it is much cleaner. Keep the units attached.</p></div></div>
+    <div class="step"><button class="reveal">Step 5 · Quadratic formula</button>
+      <div class="content">
+        <span class="m">t<sub>f</sub></span> = <span class="frac"><span class="top">&minus;<span class="cB">B</span> &plusmn; &radic;(<span class="cB">B</span>&sup2; &minus; 4<span class="cA">A</span><span class="cC">C</span>)</span><span class="bot">2<span class="cA">A</span></span></span>
+        = <span class="frac"><span class="top">&minus;{&minus;100 m/s} &plusmn; &radic;((&minus;100 m/s)&sup2; &minus; 4 &middot; 3 m/s&sup2; &middot; 75 m)</span><span class="bot">2 (3 m/s&sup2;)</span></span><br>
+        <span class="m">t<sub>f</sub></span> = <span class="frac"><span class="top">100 m/s &plusmn; &radic;(10000 m&sup2;/s&sup2; &minus; 900 m&sup2;/s&sup2;)</span><span class="bot">6 m/s&sup2;</span></span>
+        = <span class="frac"><span class="top">100 m/s &plusmn; &radic;(9100 m&sup2;/s&sup2;)</span><span class="bot">6 m/s&sup2;</span></span>
+        <p class="why">Check the units under the root: (m/s)&sup2; and (m/s&sup2;)(m) = m&sup2;/s&sup2; agree, so the subtraction is legal. And (m/s)/(m/s&sup2;) = s, as a time must be.</p></div></div>
+    <div class="step"><button class="reveal">Step 6 · Two answers</button>
+      <div class="content"><span class="boxed"><span class="m">t<sub>f+</sub></span> = 32.6 s</span> &nbsp; or &nbsp; <span class="boxed"><span class="m">t<sub>f&minus;</sub></span> = 0.77 s</span>
+        <p class="why">The quadratic equation always produces two answers. Which one is the physics?</p></div></div>
+  </div>
+
+  <h2>Choosing between the two solutions</h2>
+  <p>The quadratic equation always produces two answers. You need to think about the situation and
+  choose the most applicable of the two.</p>
+  <figure>
+    <div class="chart" id="chChoose" style="max-width:520px;margin:0 auto;"></div>
+    <figcaption>Position vs. time for both cars, with the two roots marked.</figcaption>
+  </figure>
+  <div class="fig-grid">
+    <div class="verdict good">
+      <b><span class="m">t<sub>f+</sub></span> = 32.6 s — better answer</b>
+      <p>They meet down the road, after the police car has actually been moving for 27.6&nbsp;s. This is the catch.</p>
+    </div>
+    <div class="verdict bad">
+      <b><span class="m">t<sub>f&minus;</sub></span> = 0.77 s — not a good answer</b>
+      <p>This &ldquo;meeting&rdquo; happens <em>before</em> the patrol car moved. It would be possible only if the patrol car had followed the same parabola for the whole time of the problem — the dashed extension of the curve to the left of <span class="m">t<sub>5</sub></span>, which never happened.</p>
+    </div>
+  </div>
+  <div class="tip">
+    <span class="label">Make sure you measure relative to the right starting point</span>
+    Both roots are perfectly good <em>mathematics</em>: they are where the line and the full parabola
+    intersect. Only one is good <em>physics</em>, because the police equation is only valid for
+    <span class="m">t &ge; t<sub>5</sub></span>.
+  </div>
+
+  <h2>Play with it: change the chase</h2>
+  <p>Adjust the patrol car's acceleration and its delay. Watch where the curves cross and how long the
+  catch takes.</p>
+  <div class="sim" id="chaseSim">
+    <div class="sim-head"><span>Interactive · Police chase</span><span id="chaseTag"></span></div>
+    <div class="panel">
+      <div class="chart" id="chChase" style="max-width:520px;margin:0 auto;"></div>
+      <div class="sliders">
+        <label><span class="m">a<sub>p</sub></span> = <b id="apVal">3.0</b> m/s&sup2; <input type="range" id="ap" min="1" max="6" step="0.5" value="3"></label>
+        <label><span class="m">t<sub>5</sub></span> = <b id="t5Val">5</b> s <input type="range" id="t5" min="0" max="12" step="1" value="5"></label>
+      </div>
+      <div class="areas">
+        <div class="abox rect"><b>Catch time</b><span id="cT"></span></div>
+        <div class="abox tri"><b>Catch position</b><span id="cX"></span></div>
+        <div class="abox tot"><b>Police speed at the catch</b><span id="cV"></span></div>
+      </div>
+      <div class="hint-row">The speeder holds 35 m/s throughout. Notice how quickly the catch distance grows when the patrol car waits longer or accelerates less.</div>
+    </div>
+  </div>
+
+  <h2>Alternative methods</h2>
+  <p>You do not have to keep <span class="m">t<sub>5</sub></span> inside the equations. Another route:</p>
+  <ul>
+    <li>Find the speeder's position at 5&nbsp;s: (35&nbsp;m/s)(5&nbsp;s) = 175&nbsp;m. That is the speeder's new &ldquo;starting position&rdquo; when the chase begins.</li>
+    <li>Have both moving for the remaining time <span class="m">&Delta;t</span>: <span class="m">175 m + (35 m/s)&Delta;t = &frac12;(3 m/s&sup2;)&Delta;t&sup2;</span>, which gives <span class="m">&Delta;t</span> = 27.6&nbsp;s.</li>
+    <li>May need to add 5&nbsp;s to the resulting time: 27.6&nbsp;s + 5&nbsp;s = 32.6&nbsp;s — the same answer.</li>
+  </ul>
+  <div class="tip">
+    <span class="label">Same physics, different clock</span>
+    Resetting the clock to the moment the police start makes the algebra shorter, but you must
+    remember to move the speeder ahead by 175&nbsp;m and to add the 5&nbsp;s back at the end if the question
+    asks for time since the speeder passed.
+  </div>
+
+  <h2>If you stick with the variables, it can get ugly&hellip;</h2>
+  <p>Carrying the symbols all the way through the quadratic formula looks like this:</p>
+  <div class="mathblock">
+    <div class="head">Symbolic solution (for comparison)</div>
+    <div class="body" style="font-size:.98rem;">
+      <div class="mathline"><span class="m">t<sub>f</sub></span> = <span class="frac"><span class="top">2(a<sub>p</sub>t<sub>5</sub> + v<sub>os</sub>) &plusmn; &radic;(4(a<sub>p</sub>t<sub>5</sub> + v<sub>os</sub>)&sup2; &minus; 4a<sub>p</sub>&sup2;t<sub>5</sub>&sup2;)</span><span class="bot">2a<sub>p</sub></span></span></div>
+      <div class="mathline"><span class="m">t<sub>f</sub></span> = <span class="frac"><span class="top">(50 m/s) &plusmn; &radic;(2500 (m/s)&sup2; &minus; 225 (m/s)&sup2;)</span><span class="bot">3 m/s&sup2;</span></span>
+        = <span class="frac"><span class="top">50 &plusmn; &radic;2275</span><span class="bot">3</span></span> s</div>
+      <div class="mathline"><span class="boxed"><span class="m">t<sub>f+</sub></span> = 32.6 s</span> &nbsp; or &nbsp; <span class="boxed"><span class="m">t<sub>f&minus;</sub></span> = 0.77 s</span></div>
+      <p class="why">Same answers, more places to slip. It is okay to enter numbers before using the quadratic equation.</p>
+    </div>
+  </div>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Concept question</span>
+      At the moment the police catch the speeder (32.6 s), how does the patrol car's <em>speed</em> compare with the speeder's 35 m/s?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Equal — that is what &ldquo;catching up&rdquo; means.</button>
+      <button class="opt" data-correct="true">Much faster — about 83 m/s. Catching up means equal <em>position</em>, not equal speed.</button>
+      <button class="opt" data-correct="false">Slower — the police car started from rest.</button>
+      <button class="opt" data-correct="false">It cannot be determined.</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>Play with it: numbers from the same chase</h2>
+  <div class="clicker" id="numq">
+    <div class="c-head"><span>Interactive · Check the details</span><span id="nqscore">0 / 3</span></div>
+    <div class="c-body">
+      <div class="part" data-ans="175" data-tol="3" data-fb="x = (35 m/s)(5 s) = 175 m. The speeder has a 175 m head start when the chase begins.">
+        <div class="ptext"><b>A)</b> How far ahead is the speeder when the police start moving? (m)</div>
+        <div class="choices"><input class="num" type="number" step="1" placeholder="m"><button class="cbtn check">Check</button></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-ans="1141" data-tol="15" data-fb="x = v·t = (35 m/s)(32.6 s) ≈ 1140 m — over a kilometer down the road. Check: ½(3)(27.6)² ≈ 1143 m for the police, the same within rounding.">
+        <div class="ptext"><b>B)</b> How far from the patrol car's starting point does the catch happen? (m)</div>
+        <div class="choices"><input class="num" type="number" step="1" placeholder="m"><button class="cbtn check">Check</button></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-ans="83" data-tol="2" data-fb="v = a·Δt = (3 m/s²)(27.6 s) ≈ 83 m/s — about 185 mph. Real chases are not like this; that is why the assumption “accelerates for the entire chase” is unrealistic.">
+        <div class="ptext"><b>C)</b> How fast is the patrol car going at the catch? (m/s)</div>
+        <div class="choices"><input class="num" type="number" step="1" placeholder="m/s"><button class="cbtn check">Check</button></div><div class="pfb"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> the same &ldquo;one equation per object, link
+  them through what they share&rdquo; strategy solves the ball-thrown-up-while-another-drops problems in
+  Module&nbsp;2, and later the two-body force problems in Module&nbsp;3.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> In a two-object &ldquo;catch-up&rdquo; problem, which quantities are shared by both objects at the moment of the catch?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> Their velocities</label>
+          <label><input type="radio" name="q1" value="b"> Their accelerations</label>
+          <label><input type="radio" name="q1" value="c"> Their position and the time</label>
+          <label><input type="radio" name="q1" value="d"> Their initial positions</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> Why is the police car's time interval written as <span class="m">(t<sub>f</sub> &minus; t<sub>5</sub>)</span> rather than <span class="m">t<sub>f</sub></span>?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> Because the police car is slower</label>
+          <label><input type="radio" name="q2" value="b"> Because the police car only starts moving at <span class="m">t<sub>5</sub></span>, so it has been accelerating for less time than the speeder has been driving</label>
+          <label><input type="radio" name="q2" value="c"> Because acceleration always requires a subtraction</label>
+          <label><input type="radio" name="q2" value="d"> It shouldn't be — this is a mistake in the slides</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> The quadratic gives <span class="m">t</span> = 32.6 s and <span class="m">t</span> = 0.77 s. Why is 0.77 s rejected?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> Because it is less than 1 s</label>
+          <label><input type="radio" name="q3" value="b"> Because negative roots are always rejected</label>
+          <label><input type="radio" name="q3" value="c"> Because it is before the police car started moving, when its equation does not apply</label>
+          <label><input type="radio" name="q3" value="d"> Because the speeder had not yet passed the police car</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Using the alternative method (restart the clock when the police move), what must you remember to do?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> Give the speeder a 175 m head start, and add the 5 s back at the end</label>
+          <label><input type="radio" name="q4" value="b"> Set the speeder's speed to zero</label>
+          <label><input type="radio" name="q4" value="c"> Double the police acceleration</label>
+          <label><input type="radio" name="q4" value="d"> Nothing — the answer comes out the same automatically</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review — the procedure</h2>
+  <ol class="three">
+    <li><b>Write down known data</b>, with a separate subscript for each object.</li>
+    <li><b>Draw a sketch</b> — a position&ndash;time graph with both objects; the meeting is where the curves cross.</li>
+    <li><b>Set up equations</b> — one copy of the kinematics equation per object, each with its own time interval.</li>
+    <li><b>Combine equations</b> through the shared variable (same <span class="m">x<sub>f</sub></span> at the same <span class="m">t<sub>f</sub></span>).</li>
+    <li><b>Solve for the unknown</b> — here a quadratic; put numbers in first.</li>
+    <li><b>Check answers</b> — reject roots that fall outside the time when an equation is valid, and sanity-check the sizes.</li>
+  </ol>
+
+  <footer>
+    This page is adapted from the presentation <em>Two-Object Kinematics Problems</em>,
+    &copy;&nbsp;2015 H. Trevor Johnson-Steigelman, FLCC Physics ·
+    Adapted for PHY 118 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- chart helper (position–time, two series) ---------- */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag, attrs, text){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
+  var SANS='"Segoe UI", system-ui, sans-serif';
+  var V=35;
+  function xs(t){ return V*t; }
+  function xp(t, a, t5){ return t<t5 ? 0 : 0.5*a*(t-t5)*(t-t5); }
+  function roots(a, t5){ var b=a*t5+V, disc=b*b-a*a*t5*t5; var r=Math.sqrt(disc); return [(b-r)/a, (b+r)/a]; }
+
+  window.chaseChart = function(id, o){
+    var host=document.getElementById(id); if(!host) return null; host.innerHTML='';
+    var W=420, H=300, L=52, R=14, T=24, B=42;
+    var xmax=o.xmax, ymax=o.ymax;
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'Position versus time for the speeder and the police car'});
+    function X(t){ return L+(t/xmax)*(W-L-R); } function Y(x){ return T+(ymax-x)/ymax*(H-T-B); }
+    svg.appendChild(el('rect',{x:L,y:T,width:W-L-R,height:H-T-B,fill:'#fff',stroke:'#c9d3cc'}));
+    for(var t=0;t<=xmax+1e-9;t+=o.xstep){ svg.appendChild(el('line',{x1:X(t),y1:T,x2:X(t),y2:H-B,stroke:'#e4ebe6'})); svg.appendChild(el('text',{x:X(t),y:H-B+14,'text-anchor':'middle','font-size':'10','font-family':SANS,fill:'#5c6b62'},t)); }
+    for(var v=0;v<=ymax+1e-9;v+=o.ystep){ svg.appendChild(el('line',{x1:L,y1:Y(v),x2:W-R,y2:Y(v),stroke:'#e4ebe6'})); svg.appendChild(el('text',{x:L-5,y:Y(v)+3,'text-anchor':'end','font-size':'10','font-family':SANS,fill:'#5c6b62'},v)); }
+    svg.appendChild(el('text',{x:L+(W-L-R)/2,y:H-6,'text-anchor':'middle','font-size':'10.5','font-family':SANS,fill:'#5c6b62'},'Time (s)'));
+    svg.appendChild(el('text',{x:14,y:T+(H-T-B)/2,'text-anchor':'middle','font-size':'10.5','font-family':SANS,fill:'#5c6b62',transform:'rotate(-90 14 '+(T+(H-T-B)/2)+')'},'Position (m)'));
+    var a=o.a, t5=o.t5;
+    // speeder line
+    svg.appendChild(el('line',{x1:X(0),y1:Y(0),x2:X(Math.min(xmax,ymax/V)),y2:Y(Math.min(xmax*V,ymax)),stroke:'#2457b8','stroke-width':2}));
+    // police parabola (solid from t5), dashed extension before t5 if requested
+    var d='',first=true;
+    for(var i=0;i<=200;i++){ var tt=t5+(xmax-t5)*i/200; var y=0.5*a*(tt-t5)*(tt-t5); if(y>ymax){ break; } d+=(first?'M':' L')+X(tt).toFixed(1)+','+Y(y).toFixed(1); first=false; }
+    svg.appendChild(el('path',{d:d,fill:'none',stroke:'#e0801a','stroke-width':2}));
+    if(t5>0){ svg.appendChild(el('line',{x1:X(0),y1:Y(0),x2:X(t5),y2:Y(0),stroke:'#e0801a','stroke-width':2})); }
+    if(o.ghost && t5>0){
+      var g='';first=true;
+      for(var j=0;j<=60;j++){ var tg=t5*j/60; var yg=0.5*a*(tg-t5)*(tg-t5); g+=(first?'M':' L')+X(tg).toFixed(1)+','+Y(yg).toFixed(1); first=false; }
+      svg.appendChild(el('path',{d:g,fill:'none',stroke:'#e0801a','stroke-width':1.3,'stroke-dasharray':'4 3',opacity:.7}));
+    }
+    // legend
+    svg.appendChild(el('line',{x1:L+10,y1:T+12,x2:L+30,y2:T+12,stroke:'#2457b8','stroke-width':2}));
+    svg.appendChild(el('text',{x:L+34,y:T+15,'font-size':'10','font-family':SANS,fill:'#1d2b23'},'Speeder'));
+    svg.appendChild(el('line',{x1:L+10,y1:T+26,x2:L+30,y2:T+26,stroke:'#e0801a','stroke-width':2}));
+    svg.appendChild(el('text',{x:L+34,y:T+29,'font-size':'10','font-family':SANS,fill:'#1d2b23'},'Police'));
+    // markers
+    (o.marks||[]).forEach(function(m){
+      var tx=m.t, xx=xs(tx);
+      if(tx<=xmax && xx<=ymax){
+        svg.appendChild(el('line',{x1:X(tx),y1:Y(0),x2:X(tx),y2:Y(xx),stroke:'#1d2b23','stroke-dasharray':'3 3'}));
+        if(m.h) svg.appendChild(el('line',{x1:X(0),y1:Y(xx),x2:X(tx),y2:Y(xx),stroke:'#1d2b23','stroke-dasharray':'3 3'}));
+        svg.appendChild(el('circle',{cx:X(tx),cy:Y(xx),r:4,fill:m.color||'#1e8a3c'}));
+        svg.appendChild(el('text',{x:X(tx)+(m.dx||0),y:H-B+28,'text-anchor':'middle','font-size':'11','font-style':'italic','font-family':'Georgia, serif',fill:'#1d2b23'},m.label));
+      }
+    });
+    if(t5>0){ svg.appendChild(el('line',{x1:X(t5),y1:Y(0),x2:X(t5),y2:T,stroke:'#5c6b62','stroke-dasharray':'3 3'})); svg.appendChild(el('text',{x:X(t5),y:H-B+28,'text-anchor':'middle','font-size':'11','font-style':'italic','font-family':'Georgia, serif',fill:'#1d2b23'},'t₅')); }
+    host.appendChild(svg);
+    return {svg:svg};
+  };
+
+  var r=roots(3,5);
+  chaseChart('chSketch',{xmax:40,ymax:1600,xstep:5,ystep:400,a:3,t5:5,marks:[{t:r[1],label:'tf',h:true}]});
+  chaseChart('chChoose',{xmax:40,ymax:1800,xstep:5,ystep:200,a:3,t5:5,ghost:true,marks:[{t:r[0],label:'0.77 s',color:'#c0392b',dx:-22},{t:r[1],label:'32.6 s',h:true}]});
+
+  /* interactive chase */
+  var apEl=document.getElementById('ap'), t5El=document.getElementById('t5');
+  function draw(){
+    var a=parseFloat(apEl.value), t5=parseFloat(t5El.value);
+    document.getElementById('apVal').textContent=a.toFixed(1); document.getElementById('t5Val').textContent=t5;
+    var rr=roots(a,t5), tf=rr[1], xf=xs(tf), vf=a*(tf-t5);
+    var xmax=Math.max(20, Math.ceil(tf*1.25/10)*10), ymax=Math.ceil(xmax*V/1000)*1000, xstep=xmax<=40?5:(xmax<=80?10:20);
+    chaseChart('chChase',{xmax:xmax,ymax:ymax,xstep:xstep,ystep:ymax/4,a:a,t5:t5,marks:[{t:tf,label:'catch',h:true}]});
+    document.getElementById('cT').textContent='t = ' + tf.toFixed(1)+' s  (police moving for '+(tf-t5).toFixed(1)+' s)';
+    document.getElementById('cX').textContent=xf.toFixed(0)+' m  ('+(xf/1000).toFixed(2)+' km down the road)';
+    document.getElementById('cV').textContent=vf.toFixed(0)+' m/s  ≈ '+(vf*2.237).toFixed(0)+' mph';
+    document.getElementById('chaseTag').textContent='a = '+a.toFixed(1)+' m/s², t₅ = '+t5+' s';
+  }
+  apEl.addEventListener('input',draw); t5El.addEventListener('input',draw); draw();
+})();
+
+/* ---------- reveal steps ---------- */
+(function(){
+  document.querySelectorAll('.step .reveal').forEach(function(b){
+    b.addEventListener('click', function(){ var on=b.parentNode.classList.toggle('open'); b.setAttribute('aria-expanded', on?'true':'false'); });
+  });
+})();
+
+/* ---------- numeric answers ---------- */
+(function(){
+  var clk=document.getElementById('numq'); if(!clk) return;
+  var parts=clk.querySelectorAll('.part'), done={}, scoreEl=document.getElementById('nqscore');
+  parts.forEach(function(part, idx){
+    var ans=parseFloat(part.getAttribute('data-ans')), tol=parseFloat(part.getAttribute('data-tol'));
+    var inp=part.querySelector('input'), fb=part.querySelector('.pfb'), btn=part.querySelector('.check');
+    function check(){
+      var v=parseFloat(inp.value);
+      if(isNaN(v)){ fb.className='pfb bad'; fb.textContent='Type a number first.'; return; }
+      if(Math.abs(v-ans)<=tol){ fb.className='pfb'; fb.innerHTML='✓ '+part.getAttribute('data-fb'); done[idx]=true; btn.classList.add('correct'); btn.classList.remove('wrong'); }
+      else { fb.className='pfb bad'; fb.textContent='✗ Not quite — which object, which time interval, which equation?'; btn.classList.add('wrong'); btn.classList.remove('correct'); }
+      scoreEl.textContent=Object.keys(done).length+' / '+parts.length;
+    }
+    btn.addEventListener('click',check); inp.addEventListener('keydown',function(e){ if(e.key==='Enter') check(); });
+  });
+})();
+
+/* ---------- concept question ---------- */
+(function(){
+  var probe=document.getElementById('probe1'); if(!probe) return;
+  var fb=probe.querySelector('.feedback');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right=this.getAttribute('data-correct')==='true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){ this.classList.add('correct'); fb.style.color='#134a29'; fb.textContent='✓ Right. v = a·Δt = (3 m/s²)(27.6 s) ≈ 83 m/s. Equal position at one instant says nothing about equal speed — the police car is still gaining fast.'; }
+      else { this.classList.add('wrong'); probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); }); fb.style.color='#c0392b'; fb.textContent='✗ Not quite. "Catching up" is about position. The police car has been accelerating for 27.6 s, so its speed is a·Δt ≈ 83 m/s — far above 35 m/s.'; }
+    });
+  });
+})();
+
+/* ---------- exit ticket ---------- */
+(function(){
+  var ticket=document.getElementById('ticket'); if(!ticket) return;
+  var mc={q1:'c',q2:'b',q3:'c',q4:'a'};
+  var expl={
+    q1:'"catching up" means both objects are at the same position at the same instant; their speeds and accelerations are generally different.',
+    q2:'the police car sits still until t₅ = 5 s, so its acceleration has only acted for (t − t₅).',
+    q3:'0.77 s is before the police car started (t₅ = 5 s), when its equation is not valid — it is an intersection with the imaginary extension of the parabola.',
+    q4:'restarting the clock changes the speeder\'s starting position to 175 m and shifts every time by 5 s.'
+  };
+  var scoreEl=document.getElementById('ticketScore');
+  function markCard(id, ok, msg){ var c=document.getElementById(id); c.classList.remove('right','wrong'); c.classList.add(ok?'right':'wrong'); c.querySelector('.qfb').textContent=msg; }
+  function grade(){
+    var correct=0,total=4;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel=ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel&&sel.value===mc[q]){ correct++; markCard('card-'+q,true,'✓ Correct.'); }
+      else if(sel){ markCard('card-'+q,false,'✗ Not quite — '+expl[q]); }
+      else { markCard('card-'+q,false,'Pick an answer above.'); }
+    });
+    var tail=correct===total?"Nice — you're ready to move on!":correct>=2?'Good start — revisit the ones you missed.':'Work back through the six steps, then try again.';
+    scoreEl.textContent='You got '+correct+' of '+total+'. '+tail; scoreEl.classList.add('show');
+  }
+  function clear(){ ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked=false; }); ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent=''; }); scoreEl.classList.remove('show'); scoreEl.textContent=''; }
+  document.getElementById('ticketCheck').addEventListener('click',grade);
+  document.getElementById('ticketReset').addEventListener('click',clear);
+})();
+</script>
+</body>
+</html>

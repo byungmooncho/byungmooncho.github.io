@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch02b — Understanding the Kinematics Equations</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 1 · Chapter 2 slides 02b
+     "Understanding the Kinematics Equations" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:320px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .clicker{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.4rem 0; background:#fbfdfc; }
+  .clicker .c-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .clicker .c-body{ padding:.9rem 1rem 1rem; }
+  .clicker .part{ display:grid; grid-template-columns:1fr; gap:.4rem .8rem; padding:.55rem 0; border-top:1px solid var(--rule); align-items:start; }
+  .clicker .part:first-child{ border-top:0; padding-top:0; }
+  @media (min-width:600px){ .clicker .part{ grid-template-columns:minmax(0,1fr) auto; } }
+  .clicker .ptext{ font-size:1rem; }
+  .clicker .ptext b{ color:var(--green-deep); font-family:"Segoe UI", system-ui, sans-serif; margin-right:.3rem; }
+  .clicker .choices{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .cbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; font-weight:600; border:1.5px solid var(--rule); background:#fff; color:var(--ink); border-radius:20px; padding:.25rem .7rem; cursor:pointer; }
+  .cbtn:hover{ border-color:var(--green); }
+  .cbtn.correct{ border-color:var(--green); background:var(--green-soft); }
+  .cbtn.wrong{ border-color:var(--red); background:#fdecea; }
+  .clicker .pfb{ grid-column:1 / -1; font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; color:var(--green-deep); min-height:1em; }
+  .clicker .pfb.bad{ color:var(--red); }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+  /* --- 02b specifics --- */
+  .cx{ color:#2457b8; } .cv{ color:#1e8a3c; } .ca{ color:#8e4bc9; } .ct{ color:#d9740f; }
+  .know{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin:1rem 0 .5rem; }
+  .k-cell{ border:1px solid var(--rule); border-radius:10px; padding:.75rem .9rem; background:#fbfdfc; }
+  .k-cell b{ font-family:"Segoe UI", system-ui, sans-serif; display:block; font-size:.95rem; }
+  .k-cell small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; line-height:1.45; display:block; margin-top:.2rem; }
+  .k-center{ grid-column:1 / -1; position:relative; text-align:center; padding:1.1rem .9rem; background:var(--green-soft); border-color:var(--green); }
+  .k-title{ font-size:1.5rem; font-weight:700; line-height:1.15; display:block; color:var(--green-deep); }
+  .k-side{ position:absolute; top:50%; transform:translateY(-50%); font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); }
+  .k-left{ left:1rem; } .k-right{ right:1rem; }
+  .k-wide{ grid-column:1 / -1; border-color:var(--amber); background:#fffdf8; }
+  .k-und b{ color:var(--amber); }
+  ol.three{ margin:.2rem 0 1rem; padding-left:1.4rem; }
+  ol.three li{ margin:.45rem 0; }
+  .legend{ display:flex; flex-wrap:wrap; gap:.5rem 1.2rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin:1rem 0 .4rem; }
+  .sw{ display:inline-block; width:.8em; height:.8em; border-radius:3px; background:currentColor; vertical-align:-.1em; margin-right:.3em; }
+  .eqcard{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0; }
+  .eq-head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.55rem 1rem; display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .eq-head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--green-deep); }
+  .eq-toggle{ display:flex; gap:.4rem; }
+  .btn.small{ font-size:.78rem; padding:.3rem .7rem; }
+  .eq-body{ padding:.9rem 1rem 1rem; text-align:center; }
+  .plain{ font-size:.92rem; color:var(--muted); text-align:left; margin:0 0 .6rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .bigeq{ font-size:2rem; line-height:1.3; margin:.2rem 0 .4rem; white-space:nowrap; overflow-x:auto; }
+  .bigeq .op{ font-style:normal; margin:0 .3em; color:var(--ink); }
+  .bigeq .up{ font-style:normal; color:var(--ink); }
+  .bigeq .half{ font-size:.7em; vertical-align:.15em; }
+  @media (max-width:520px){ .bigeq{ font-size:1.5rem; } }
+  .eq-labels{ display:none; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; line-height:1.2; font-weight:600; justify-content:center; gap:.9rem; flex-wrap:wrap; margin-bottom:.35rem; }
+  .eq-labels span:empty{ display:none; }
+  .eq-units{ display:none; font-size:1.05rem; margin:.4rem 0 .2rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; }
+  .eq-units .op{ margin:0 .3em; color:var(--ink); font-weight:400; }
+  .eq-units .up{ color:var(--ink); }
+  .eq-units .chk{ display:block; font-size:.82rem; color:var(--green-deep); font-weight:600; margin-top:.35rem; }
+  .eqcard.show-vars .eq-labels{ display:flex; }
+  .eqcard.show-units .eq-units{ display:block; }
+  .constraint{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); text-align:left; margin:.8rem 0 0; border-top:1px dashed var(--rule); padding-top:.6rem; }
+  .constraint b{ color:var(--amber); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Chapter 2 · Slides 02b</span>
+  </div>
+
+  <h1>Understanding the Kinematics Equations</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    &ldquo;Knowing&rdquo; a physics equation is not the same as having memorized it. To
+    <em>understand</em> an equation you should be able to say what each <b>variable</b> stands for,
+    what <b>units</b> each term carries (and check that they all match), and what
+    <b>constraints</b> limit when the equation may be used. This page walks through the three
+    constant-acceleration kinematics equations with that checklist.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Write down</b> the kinematics equations.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Identify the variables</b> in each of the kinematics equations.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine the units</b> in each term of the kinematics equations.</span></li>
+    </ul>
+  </div>
+
+  <h2>&ldquo;Knowing the equations&rdquo;</h2>
+  <p>There is more than one way to &ldquo;know&rdquo; an equation, and they are not equally useful:</p>
+  <div class="know">
+    <div class="k-cell k-mem"><b>Memorizing</b><small>You can recite it. Useful, but fragile — one swapped letter and it's wrong.</small></div>
+    <div class="k-cell k-rec"><b>Recognizing</b><small>You know it when you see it on a formula sheet. Necessary, not sufficient.</small></div>
+    <div class="k-cell k-center">
+      <span class="k-title">Physics<br>Equations</span>
+      <span class="k-side k-left">variables</span>
+      <span class="k-side k-right">units</span>
+    </div>
+    <div class="k-cell k-und k-wide"><b>Understanding</b><small>You know what every symbol means, what units each term carries, and when the equation is allowed. This is the goal.</small></div>
+  </div>
+
+  <h2>Notes on notation</h2>
+  <table class="defs">
+    <tr>
+      <td class="term">Subscripts</td><td class="eq"></td>
+      <td>Allow us to &ldquo;tag&rdquo; variables that might be used in multiple ways.<br>
+          <span class="m">v</span> represents the final velocity or speed;
+          <span class="m">v<sub>0</sub></span> (&ldquo;<span class="m">v</span>-naught&rdquo;) represents the initial speed.</td>
+    </tr>
+    <tr>
+      <td class="term">Deltas</td><td class="eq"></td>
+      <td>&Delta; represents a difference: <span class="m">&Delta;x = x &minus; x<sub>0</sub></span>.</td>
+    </tr>
+    <tr>
+      <td class="term">&Delta;<span class="m">t</span> vs. <span class="m">t</span></td><td class="eq"></td>
+      <td>Dr. Johnson-Steigelman tends to write &Delta;<span class="m">t</span> rather than
+          <span class="m">t</span>. They are the same thing whenever the clock starts at zero:<br>
+          <span class="m">&Delta;t = t &minus; t<sub>0</sub> = t &minus; 0 = t</span>.</td>
+    </tr>
+  </table>
+  <div class="tip">
+    <span class="label">Why keep the delta?</span>
+    Writing &Delta;<span class="m">t</span> reminds you that it is a <em>time interval</em> — how long
+    the motion lasted — not a clock reading. Textbooks usually drop it, so be ready to read
+    <span class="m">t</span> as &ldquo;elapsed time.&rdquo;
+  </div>
+
+  <h2>Understanding equations: three questions</h2>
+  <p>In order to properly understand a physics equation, you should consider the following:</p>
+  <ol class="three">
+    <li><b>What are the variables?</b> What physical quantity does each letter stand for?</li>
+    <li><b>What are the units of each variable?</b> Every term added together must carry the same units.</li>
+    <li><b>Are there any constraints on the equation?</b> When is it allowed — and when is it not?</li>
+  </ol>
+
+  <div class="legend">
+    <span><i class="sw cx"></i> position</span>
+    <span><i class="sw cv"></i> speed / velocity</span>
+    <span><i class="sw ca"></i> acceleration</span>
+    <span><i class="sw ct"></i> time interval</span>
+  </div>
+
+  <!-- ===== Equation 1 ===== -->
+  <div class="eqcard" id="eq1">
+    <div class="eq-head"><strong>Kinematics equation for velocity</strong>
+      <span class="eq-toggle"><button class="btn small" data-show="vars">Show variables</button><button class="btn small" data-show="units">Show units</button></span>
+    </div>
+    <div class="eq-body">
+      <div class="eq-labels">
+        <span class="lbl cv">Final<br>speed</span><span></span><span class="lbl cv">Initial<br>speed</span><span></span><span class="lbl ca">Acceleration</span><span class="lbl ct">Time<br>interval</span>
+      </div>
+      <div class="bigeq m">
+        <span class="cv">v</span><span class="op">=</span><span class="cv">v<sub>0</sub></span><span class="op">+</span><span class="ca">a</span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)</span>
+      </div>
+      <div class="eq-units">
+        <span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">=</span><span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">+</span><span class="ca"><span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span></span><span class="op">&middot;</span><span class="ct">s</span>
+        <span class="chk">&nbsp;&nbsp;&#8594;&nbsp; m/s on every term &#10003;</span>
+      </div>
+      <p class="constraint"><b>Constraint:</b> the acceleration <span class="m ca">a</span> must be constant.</p>
+    </div>
+  </div>
+
+  <!-- ===== Equation 2 ===== -->
+  <div class="eqcard" id="eq2">
+    <div class="eq-head"><strong>Kinematics equation for position</strong>
+      <span class="eq-toggle"><button class="btn small" data-show="vars">Show variables</button><button class="btn small" data-show="units">Show units</button></span>
+    </div>
+    <div class="eq-body">
+      <p class="plain">Plain-text version: <span class="m">x = x<sub>0</sub> + v<sub>0</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span></p>
+      <div class="eq-labels wide">
+        <span class="lbl cx">Final<br>position</span><span></span><span class="lbl cx">Initial<br>position</span><span></span><span class="lbl cv">Initial<br>speed</span><span class="lbl ct">Time<br>interval</span><span></span><span class="lbl ca">Acceleration</span><span class="lbl ct">Time<br>interval</span>
+      </div>
+      <div class="bigeq m">
+        <span class="cx">x</span><span class="op">=</span><span class="cx">x<sub>0</sub></span><span class="op">+</span><span class="cv">v<sub>0</sub></span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)</span><span class="op">+</span><span class="up half">&frac12;</span><span class="ca">a</span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)&sup2;</span>
+      </div>
+      <div class="eq-units">
+        <span class="cx">m</span><span class="op">=</span><span class="cx">m</span><span class="op">+</span><span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">&middot;</span><span class="ct">s</span><span class="op">+</span><span class="up">[1]</span><span class="op">&middot;</span><span class="ca"><span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span></span><span class="op">&middot;</span><span class="ct">s&sup2;</span>
+        <span class="chk">&nbsp;&nbsp;&#8594;&nbsp; m on every term &#10003;</span>
+      </div>
+      <p class="constraint"><b>Constraint:</b> again, <span class="m ca">a</span> must be constant. The &frac12; is a pure number — written as [1] in the unit line because it carries no units.</p>
+    </div>
+  </div>
+
+  <!-- ===== Equation 3 ===== -->
+  <div class="eqcard" id="eq3">
+    <div class="eq-head"><strong>Kinematics equation for velocity squared</strong>
+      <span class="eq-toggle"><button class="btn small" data-show="vars">Show variables</button><button class="btn small" data-show="units">Show units</button></span>
+    </div>
+    <div class="eq-body">
+      <p class="plain">Plain-text version: <span class="m">v&sup2; = v<sub>0</sub>&sup2; + 2a(x &minus; x<sub>0</sub>)</span></p>
+      <div class="eq-labels">
+        <span class="lbl cv">Final<br>speed</span><span></span><span class="lbl cv">Initial<br>speed</span><span></span><span class="lbl ca">Acceleration</span><span class="lbl cx">Final &minus; initial<br>position</span>
+      </div>
+      <div class="bigeq m">
+        <span class="cv">v&sup2;</span><span class="op">=</span><span class="cv">v<sub>0</sub>&sup2;</span><span class="op">+</span><span class="up">2</span><span class="ca">a</span><span class="up">(</span><span class="cx">x &minus; x<sub>0</sub></span><span class="up">)</span>
+      </div>
+      <div class="eq-units">
+        <span class="cv">(<span class="frac"><span class="top">m</span><span class="bot">s</span></span>)&sup2;</span><span class="op">=</span><span class="cv">(<span class="frac"><span class="top">m</span><span class="bot">s</span></span>)&sup2;</span><span class="op">+</span><span class="up">[1]</span><span class="op">&middot;</span><span class="ca"><span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span></span><span class="op">&middot;</span><span class="cx">m</span>
+        <span class="chk">&nbsp;&nbsp;&#8594;&nbsp; m&sup2;/s&sup2; on every term &#10003;</span>
+      </div>
+      <p class="constraint"><b>Constraint:</b> constant <span class="m ca">a</span>. Notice there is no time in this equation at all — that is exactly when you reach for it.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">The unit check is a free error detector</span>
+    Before you plug in numbers, write the units of each term. If one term comes out in m/s and
+    another in m, you have remembered the equation wrong (or mixed up a variable) — and you caught it
+    before it cost you points.
+  </div>
+
+  <h2>Play with it: units of each term</h2>
+  <p>For each highlighted piece of an equation, pick the unit it carries. Every term in an equation
+  must end up with the same units as the left-hand side.</p>
+
+  <div class="clicker" id="clicker1">
+    <div class="c-head"><span>Interactive · Match the units</span><span id="c1score">0 / 6</span></div>
+    <div class="c-body">
+      <div class="part" data-answer="m/s" data-fb="a is an acceleration, m/s&sup2;; multiplied by a time (s) gives m/s — the same as v and v&#8320;.">
+        <div class="ptext"><b>A)</b> In <span class="m">v = v<sub>0</sub> + a&Delta;t</span>, what are the units of the term <span class="m"><span class="ca">a</span><span class="ct">&Delta;t</span></span>?</div>
+        <div class="choices" data-set="u"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="m" data-fb="(m/s)&middot;s = m. A speed times a time is a distance.">
+        <div class="ptext"><b>B)</b> In the position equation, what are the units of <span class="m"><span class="cv">v<sub>0</sub></span><span class="ct">&Delta;t</span></span>?</div>
+        <div class="choices" data-set="u"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="m" data-fb="(m/s&sup2;)&middot;s&sup2; = m. The s&sup2; cancels, leaving meters — as it must, to be added to x&#8320;.">
+        <div class="ptext"><b>C)</b> In the position equation, what are the units of <span class="m">&frac12;<span class="ca">a</span>(<span class="ct">&Delta;t</span>)&sup2;</span>?</div>
+        <div class="choices" data-set="u"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="no units" data-fb="&frac12; is a pure number. Pure numbers (and counting numbers like the 2 in 2a) carry no units — that is why the slides write [1].">
+        <div class="ptext"><b>D)</b> What are the units of the &frac12; in <span class="m">&frac12;a(&Delta;t)&sup2;</span>?</div>
+        <div class="choices" data-set="u"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="m²/s²" data-fb="(m/s&sup2;)&middot;m = m&sup2;/s&sup2; — which is (m/s)&sup2;, matching v&sup2; on the left.">
+        <div class="ptext"><b>E)</b> In <span class="m">v&sup2; = v<sub>0</sub>&sup2; + 2a(x &minus; x<sub>0</sub>)</span>, what are the units of <span class="m">2<span class="ca">a</span>(<span class="cx">x &minus; x<sub>0</sub></span>)</span>?</div>
+        <div class="choices" data-set="u"></div><div class="pfb"></div>
+      </div>
+      <div class="part" data-answer="m/s²" data-fb="Rearranging v = v&#8320; + a&Delta;t gives a = (v &minus; v&#8320;)/&Delta;t: (m/s)/s = m/s&sup2;.">
+        <div class="ptext"><b>F)</b> Solve the velocity equation for <span class="m ca">a</span>. What units must <span class="m ca">a</span> have?</div>
+        <div class="choices" data-set="u"></div><div class="pfb"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Concept question</span>
+      A car's acceleration changes smoothly from 0 to 3 m/s&sup2; during a 5-second interval. Can you use
+      <span class="m">v = v<sub>0</sub> + a&Delta;t</span> with a single value of <span class="m">a</span> for that whole interval?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Yes — just use the final acceleration, 3 m/s&sup2;.</button>
+      <button class="opt" data-correct="false">Yes — the equation works for any motion.</button>
+      <button class="opt" data-correct="true">No — the equation requires the acceleration to be constant over the interval.</button>
+      <button class="opt" data-correct="false">No — the equation only works when the acceleration is zero.</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> in Notes&nbsp;6&ndash;8 you will see where these
+  equations come from — the slope and area of velocity&ndash;time graphs. The &ldquo;constant
+  <span class="m">a</span>&rdquo; constraint is what makes those graphs straight lines.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> In <span class="m">x = x<sub>0</sub> + v<sub>0</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span>, what does <span class="m">v<sub>0</sub></span> represent?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> The final velocity</label>
+          <label><input type="radio" name="q1" value="b"> The initial velocity</label>
+          <label><input type="radio" name="q1" value="c"> The average velocity</label>
+          <label><input type="radio" name="q1" value="d"> The change in velocity</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> Which set of units makes <em>every</em> term of <span class="m">v = v<sub>0</sub> + a&Delta;t</span> consistent?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> m = m + (m/s)&middot;s</label>
+          <label><input type="radio" name="q2" value="b"> m/s = m/s + (m/s&sup2;)&middot;s</label>
+          <label><input type="radio" name="q2" value="c"> m/s = m/s + (m/s&sup2;)&middot;s&sup2;</label>
+          <label><input type="radio" name="q2" value="d"> m/s&sup2; = m/s + m/s</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> What constraint applies to all three kinematics equations on this page?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> The object must start from rest</label>
+          <label><input type="radio" name="q3" value="b"> The object must start at <span class="m">x<sub>0</sub></span> = 0</label>
+          <label><input type="radio" name="q3" value="c"> The acceleration must be constant</label>
+          <label><input type="radio" name="q3" value="d"> The time interval must be exactly 1 s</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Why is the &frac12; written as [1] in the unit check for the position equation?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> Because &frac12; rounds to 1</label>
+          <label><input type="radio" name="q4" value="b"> Because pure numbers carry no units, so they don't affect the unit check</label>
+          <label><input type="radio" name="q4" value="c"> Because the units of &frac12; are seconds</label>
+          <label><input type="radio" name="q4" value="d"> Because &frac12; is actually an acceleration</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>Understanding an equation means that you know its <b>variables</b>, <b>units</b>, and <b>form</b>.</li>
+    <li>You also know any <b>limitations</b> on the equation. For all three kinematics equations,
+        the acceleration <span class="m">a</span> must be constant.</li>
+    <li>The three equations:
+        <span class="m">v = v<sub>0</sub> + a&Delta;t</span>;&nbsp;
+        <span class="m">x = x<sub>0</sub> + v<sub>0</sub>&Delta;t + &frac12;a(&Delta;t)&sup2;</span>;&nbsp;
+        <span class="m">v&sup2; = v<sub>0</sub>&sup2; + 2a(x &minus; x<sub>0</sub>)</span>.
+        Unit check: m/s, m, and m&sup2;/s&sup2; on every term, respectively.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 —
+      <a href="https://openstax.org/books/college-physics/pages/preface" target="_blank" rel="noopener">openstax.org/books/college-physics</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 2</em>, OpenStax, Houston, TX, Oct 6, 2016 —
+      <a href="https://openstax.org/books/university-physics-volume-2/pages/1-introduction" target="_blank" rel="noopener">openstax.org/books/university-physics-volume-2</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Understanding the Kinematics Equations</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 ·
+    Adapted for PHY 118 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- equation cards: toggle variable labels / unit line ---------- */
+(function(){
+  document.querySelectorAll('.eqcard').forEach(function(card){
+    var btns = card.querySelectorAll('.eq-toggle .btn');
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        var what = b.getAttribute('data-show');
+        var on = card.classList.toggle('show-' + what);
+        b.classList.toggle('primary', on);
+        b.textContent = (on ? 'Hide ' : 'Show ') + (what === 'vars' ? 'variables' : 'units');
+      });
+    });
+  });
+})();
+
+/* ---------- single concept question ---------- */
+(function(){
+  var probe = document.getElementById('probe1'); if(!probe) return;
+  var fb = probe.querySelector('.feedback');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = '✓ Right. Each equation was derived assuming a does not change during Δt. With a changing acceleration you would have to break the motion into pieces (or use calculus).';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite. The constraint on every equation here is "a must be constant" — not zero, and not "anything goes."';
+      }
+    });
+  });
+})();
+
+/* ---------- clicker sets ---------- */
+(function(){
+  var sets = { u: ['m','m/s','m/s²','s','m²/s²','no units'] };
+  document.querySelectorAll('.clicker').forEach(function(clk){
+    var scoreEl = clk.querySelector('.c-head span:last-child');
+    var parts = clk.querySelectorAll('.part');
+    var done = {};
+    function updateScore(){ scoreEl.textContent = Object.keys(done).length + ' / ' + parts.length; }
+    parts.forEach(function(part, idx){
+      var answers = part.getAttribute('data-answer').split('|');
+      var fbText = part.getAttribute('data-fb');
+      var box = part.querySelector('.choices');
+      var fb = part.querySelector('.pfb');
+      sets[box.getAttribute('data-set')].forEach(function(label){
+        var b = document.createElement('button');
+        b.className = 'cbtn'; b.type = 'button'; b.textContent = label;
+        b.addEventListener('click', function(){
+          box.querySelectorAll('.cbtn').forEach(function(x){ x.classList.remove('correct','wrong'); });
+          if(answers.indexOf(label) !== -1){
+            b.classList.add('correct'); fb.classList.remove('bad');
+            fb.innerHTML = '✓ ' + fbText;
+            done[idx] = true; updateScore();
+          } else {
+            b.classList.add('wrong'); fb.classList.add('bad');
+            fb.innerHTML = '✗ Not quite — multiply out the units of each factor and try again.';
+          }
+        });
+        box.appendChild(b);
+      });
+    });
+    updateScore();
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket'); if(!ticket) return;
+  var mc = { q1:'b', q2:'b', q3:'c', q4:'b' };
+  var expl = {
+    q1:'the subscript 0 ("naught") tags the initial value — v₀ is the velocity at the start of the interval.',
+    q2:'v and v₀ are m/s; a is m/s² and Δt is s, so aΔt is (m/s²)·s = m/s. Every term matches.',
+    q3:'all three equations were derived for constant acceleration; nothing requires starting from rest or from the origin.',
+    q4:'½ is a pure number with no units, so it is shown as [1] — it does not change the units of the term.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Reread the equation cards above, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>

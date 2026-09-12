@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch02g — Kinematics Equations Review</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 1 · Chapter 2 slides 02g
+     "Kinematics Equations" (review) — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:320px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .clicker{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.4rem 0; background:#fbfdfc; }
+  .clicker .c-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .clicker .c-body{ padding:.9rem 1rem 1rem; }
+  .clicker .part{ display:grid; grid-template-columns:1fr; gap:.4rem .8rem; padding:.55rem 0; border-top:1px solid var(--rule); align-items:start; }
+  .clicker .part:first-child{ border-top:0; padding-top:0; }
+  @media (min-width:600px){ .clicker .part{ grid-template-columns:minmax(0,1fr) auto; } }
+  .clicker .ptext{ font-size:1rem; }
+  .clicker .ptext b{ color:var(--green-deep); font-family:"Segoe UI", system-ui, sans-serif; margin-right:.3rem; }
+  .clicker .choices{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .cbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; font-weight:600; border:1.5px solid var(--rule); background:#fff; color:var(--ink); border-radius:20px; padding:.25rem .7rem; cursor:pointer; }
+  .cbtn:hover{ border-color:var(--green); }
+  .cbtn.correct{ border-color:var(--green); background:var(--green-soft); }
+  .cbtn.wrong{ border-color:var(--red); background:#fdecea; }
+  .clicker .pfb{ grid-column:1 / -1; font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; color:var(--green-deep); min-height:1em; }
+  .clicker .pfb.bad{ color:var(--red); }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+  /* --- 02b specifics --- */
+  .cx{ color:#2457b8; } .cv{ color:#1e8a3c; } .ca{ color:#8e4bc9; } .ct{ color:#d9740f; }
+  .know{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin:1rem 0 .5rem; }
+  .k-cell{ border:1px solid var(--rule); border-radius:10px; padding:.75rem .9rem; background:#fbfdfc; }
+  .k-cell b{ font-family:"Segoe UI", system-ui, sans-serif; display:block; font-size:.95rem; }
+  .k-cell small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; line-height:1.45; display:block; margin-top:.2rem; }
+  .k-center{ grid-column:1 / -1; position:relative; text-align:center; padding:1.1rem .9rem; background:var(--green-soft); border-color:var(--green); }
+  .k-title{ font-size:1.5rem; font-weight:700; line-height:1.15; display:block; color:var(--green-deep); }
+  .k-side{ position:absolute; top:50%; transform:translateY(-50%); font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); }
+  .k-left{ left:1rem; } .k-right{ right:1rem; }
+  .k-wide{ grid-column:1 / -1; border-color:var(--amber); background:#fffdf8; }
+  .k-und b{ color:var(--amber); }
+  ol.three{ margin:.2rem 0 1rem; padding-left:1.4rem; }
+  ol.three li{ margin:.45rem 0; }
+  .legend{ display:flex; flex-wrap:wrap; gap:.5rem 1.2rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin:1rem 0 .4rem; }
+  .sw{ display:inline-block; width:.8em; height:.8em; border-radius:3px; background:currentColor; vertical-align:-.1em; margin-right:.3em; }
+  .eqcard{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0; }
+  .eq-head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.55rem 1rem; display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .eq-head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--green-deep); }
+  .eq-toggle{ display:flex; gap:.4rem; }
+  .btn.small{ font-size:.78rem; padding:.3rem .7rem; }
+  .eq-body{ padding:.9rem 1rem 1rem; text-align:center; }
+  .plain{ font-size:.92rem; color:var(--muted); text-align:left; margin:0 0 .6rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .bigeq{ font-size:2rem; line-height:1.3; margin:.2rem 0 .4rem; white-space:nowrap; overflow-x:auto; }
+  .bigeq .op{ font-style:normal; margin:0 .3em; color:var(--ink); }
+  .bigeq .up{ font-style:normal; color:var(--ink); }
+  .bigeq .half{ font-size:.7em; vertical-align:.15em; }
+  @media (max-width:520px){ .bigeq{ font-size:1.5rem; } }
+  .eq-labels{ display:none; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; line-height:1.2; font-weight:600; justify-content:center; gap:.9rem; flex-wrap:wrap; margin-bottom:.35rem; }
+  .eq-labels span:empty{ display:none; }
+  .eq-units{ display:none; font-size:1.05rem; margin:.4rem 0 .2rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; }
+  .eq-units .op{ margin:0 .3em; color:var(--ink); font-weight:400; }
+  .eq-units .up{ color:var(--ink); }
+  .eq-units .chk{ display:block; font-size:.82rem; color:var(--green-deep); font-weight:600; margin-top:.35rem; }
+  .eqcard.show-vars .eq-labels{ display:flex; }
+  .eqcard.show-units .eq-units{ display:block; }
+  .constraint{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); text-align:left; margin:.8rem 0 0; border-top:1px dashed var(--rule); padding-top:.6rem; }
+  .constraint b{ color:var(--amber); }
+
+  /* --- 02c specifics --- */
+  .charts3{ display:grid; grid-template-columns:1fr; gap:.6rem; margin:1rem 0; }
+  @media (min-width:560px){ .charts3{ grid-template-columns:1fr 1fr 1fr; } }
+  .charts2{ display:grid; grid-template-columns:1fr; gap:.8rem; margin:1rem 0; }
+  @media (min-width:560px){ .charts2{ grid-template-columns:1fr 1fr; } }
+  .charts3 figure, .charts2 figure{ margin:0; }
+  .chart svg{ display:block; width:100%; height:auto; }
+  .charts3 figcaption{ font-size:.95rem; color:var(--ink); }
+  .match{ display:grid; gap:.3rem; margin:.8rem auto 0; max-width:420px; text-align:left; }
+  .mrow{ display:flex; justify-content:space-between; align-items:baseline; gap:1rem; font-size:1.1rem; border-top:1px dashed var(--rule); padding-top:.35rem; }
+  .mrow small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; color:var(--muted); text-align:right; }
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{ background:var(--green); color:#fff; padding:.6rem 1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; gap:.5rem; }
+  .sim .panel{ padding:1rem 1.1rem 1.1rem; }
+  .sim .chart{ max-width:420px; margin:0 auto; }
+  .sliders{ display:grid; gap:.5rem; grid-template-columns:1fr; margin:.8rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  @media (min-width:560px){ .sliders{ grid-template-columns:1fr 1fr; } }
+  .sliders label{ display:flex; align-items:center; gap:.5rem; }
+  .sliders input{ flex:1; accent-color:var(--green); }
+  .areas{ display:grid; gap:.6rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .areas{ grid-template-columns:1fr 1fr 1fr; } }
+  .abox{ border-radius:8px; padding:.6rem .75rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; display:flex; flex-direction:column; gap:.2rem; }
+  .abox b{ font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .abox .m{ font-size:1rem; }
+  .abox.rect{ background:#dfe9f8; } .abox.tri{ background:#eef3fc; } .abox.tot{ background:var(--green-soft); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.7rem; }
+  .derive{ display:grid; gap:1rem; grid-template-columns:1fr; margin:1rem 0; }
+  @media (min-width:600px){ .derive{ grid-template-columns:1fr 1fr; } }
+  .dcol{ border:1px solid var(--rule); border-radius:10px; padding:.6rem 1rem .9rem; }
+  .dcol h3{ margin:.2rem 0 .4rem; }
+  .dl{ padding:.3rem 0; border-bottom:1px dashed var(--rule); font-size:1.02rem; }
+  .dl small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; color:var(--muted); }
+  .dl.result{ border-bottom:0; font-weight:700; color:var(--green-deep); }
+
+  /* --- 02g specifics --- */
+  .trend-eqs{ display:grid; gap:.6rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .trend-eqs{ grid-template-columns:1fr 1fr; } }
+  .teq{ background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.6rem .8rem; display:flex; flex-direction:column; gap:.25rem; }
+  .teq b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:var(--green-deep); }
+  .teq .m{ font-size:1.15rem; }
+  .num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; width:7.5rem; padding:.3rem .5rem; border:1.5px solid var(--rule); border-radius:6px; }
+  .num:focus{ outline:none; border-color:var(--green); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Chapter 2 · Slides 02g</span>
+  </div>
+
+  <h1>Kinematics Equations Review</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A closing review of Chapter&nbsp;2: the three constant-acceleration equations, what each symbol
+    means, the units on every term — and one new skill that ties it all together. When a motion
+    sensor records a cart rolling down an incline, the spreadsheet's <em>trendline</em> is literally the
+    kinematics equation with numbers filled in. Slope and intercept of a velocity graph, or the
+    quadratic coefficients of a position graph, hand you <span class="m">a</span>, <span class="m">v<sub>0</sub></span>,
+    and <span class="m">x<sub>0</sub></span> directly.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Write down</b> the kinematics equations.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Identify the variables</b> in each of the kinematics equations.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine the units</b> in each term of the kinematics equations.</span></li>
+    </ul>
+  </div>
+
+  <h2>Understanding equations</h2>
+  <p>In order to properly understand a physics equation, you should consider the following:</p>
+  <ol class="three">
+    <li><b>What are the variables?</b></li>
+    <li><b>What are the units of each variable?</b></li>
+    <li><b>Are there any constraints on the equation?</b></li>
+  </ol>
+  <div class="know">
+    <div class="k-cell k-mem"><b>Memorizing</b><small>Reciting it — fragile.</small></div>
+    <div class="k-cell k-rec"><b>Recognizing</b><small>Knowing it when you see it — necessary, not sufficient.</small></div>
+    <div class="k-cell k-center">
+      <span class="k-title">Physics<br>Equations</span>
+      <span class="k-side k-left">variables</span>
+      <span class="k-side k-right">units</span>
+    </div>
+    <div class="k-cell k-und k-wide"><b>Understanding</b><small>Variables, units, form, and limitations — and the ability to use pieces of information to reconstruct other information.</small></div>
+  </div>
+
+  <div class="legend">
+    <span><i class="sw cx"></i> position</span>
+    <span><i class="sw cv"></i> speed / velocity</span>
+    <span><i class="sw ca"></i> acceleration</span>
+    <span><i class="sw ct"></i> time interval</span>
+  </div>
+
+  <div class="eqcard" id="eq1">
+    <div class="eq-head"><strong>The velocity kinematics equation</strong>
+      <span class="eq-toggle"><button class="btn small" data-show="vars">Show variables</button><button class="btn small" data-show="units">Show units</button></span>
+    </div>
+    <div class="eq-body">
+      <div class="eq-labels">
+        <span class="lbl cv">Final<br>speed</span><span></span><span class="lbl cv">Initial<br>speed</span><span></span><span class="lbl ca">Acceleration</span><span class="lbl ct">Time<br>interval</span>
+      </div>
+      <div class="bigeq m">
+        <span class="cv">v</span><span class="op">=</span><span class="cv">v<sub>0</sub></span><span class="op">+</span><span class="ca">a</span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)</span>
+      </div>
+      <div class="eq-units">
+        <span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">=</span><span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">+</span><span class="ca"><span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span></span><span class="op">&middot;</span><span class="ct">s</span>
+        <span class="chk">&nbsp;&nbsp;&#8594;&nbsp; m/s on every term &#10003;</span>
+      </div>
+      <p class="constraint"><b>Constraint:</b> the acceleration <span class="m ca">a</span> must be constant.</p>
+    </div>
+  </div>
+
+  <div class="eqcard" id="eq2">
+    <div class="eq-head"><strong>Kinematics equation for position</strong>
+      <span class="eq-toggle"><button class="btn small" data-show="vars">Show variables</button><button class="btn small" data-show="units">Show units</button></span>
+    </div>
+    <div class="eq-body">
+      <div class="eq-labels wide">
+        <span class="lbl cx">Final<br>position</span><span></span><span class="lbl cx">Initial<br>position</span><span></span><span class="lbl cv">Initial<br>speed</span><span class="lbl ct">Time<br>interval</span><span></span><span class="lbl ca">Acceleration</span><span class="lbl ct">Time<br>interval</span>
+      </div>
+      <div class="bigeq m">
+        <span class="cx">x</span><span class="op">=</span><span class="cx">x<sub>0</sub></span><span class="op">+</span><span class="cv">v<sub>0</sub></span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)</span><span class="op">+</span><span class="up half">&frac12;</span><span class="ca">a</span><span class="up">(</span><span class="ct">&Delta;t</span><span class="up">)&sup2;</span>
+      </div>
+      <div class="eq-units">
+        <span class="cx">m</span><span class="op">=</span><span class="cx">m</span><span class="op">+</span><span class="cv"><span class="frac"><span class="top">m</span><span class="bot">s</span></span></span><span class="op">&middot;</span><span class="ct">s</span><span class="op">+</span><span class="up">[1]</span><span class="op">&middot;</span><span class="ca"><span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span></span><span class="op">&middot;</span><span class="ct">s&sup2;</span>
+        <span class="chk">&nbsp;&nbsp;&#8594;&nbsp; m on every term &#10003;</span>
+      </div>
+      <p class="constraint"><b>Constraint:</b> constant <span class="m ca">a</span>. The &frac12; carries no units — hence [1].</p>
+    </div>
+  </div>
+
+  <div class="eqcard" id="eq3">
+    <div class="eq-head"><strong>Kinematics equation for velocity squared</strong>
+      <span class="eq-toggle"><button class="btn small" data-show="vars">Show variables</button><button class="btn small" data-show="units">Show units</button></span>
+    </div>
+    <div class="eq-body">
+      <div class="eq-labels">
+        <span class="lbl cv">Final<br>speed</span><span></span><span class="lbl cv">Initial<br>speed</span><span></span><span class="lbl ca">Acceleration</span><span class="lbl cx">Final &minus; initial<br>position</span>
+      </div>
+      <div class="bigeq m">
+        <span class="cv">v&sup2;</span><span class="op">=</span><span class="cv">v<sub>0</sub>&sup2;</span><span class="op">+</span><span class="up">2</span><span class="ca">a</span><span class="up">(</span><span class="cx">x &minus; x<sub>0</sub></span><span class="up">)</span>
+      </div>
+      <div class="eq-units">
+        <span class="cv">(<span class="frac"><span class="top">m</span><span class="bot">s</span></span>)&sup2;</span><span class="op">=</span><span class="cv">(<span class="frac"><span class="top">m</span><span class="bot">s</span></span>)&sup2;</span><span class="op">+</span><span class="up">[1]</span><span class="op">&middot;</span><span class="ca"><span class="frac"><span class="top">m</span><span class="bot">s&sup2;</span></span></span><span class="op">&middot;</span><span class="cx">m</span>
+        <span class="chk">&nbsp;&nbsp;&#8594;&nbsp; m&sup2;/s&sup2; on every term &#10003;</span>
+      </div>
+      <p class="constraint"><b>Constraint:</b> constant <span class="m ca">a</span>. No time in this equation — use it when you don't know or don't need <span class="m">&Delta;t</span>.</p>
+    </div>
+  </div>
+
+  <h2>Velocity of a cart on an incline</h2>
+  <p>A motion sensor tracked a cart rolling down a ramp. Here is the cart's velocity vs. time, with the
+  spreadsheet's linear trendline.</p>
+  <div class="fig-grid">
+    <figure><div class="chart" id="chVel"></div><figcaption>Velocity of cart. Trendline: <span class="m">y</span> = 1.0564<span class="m">x</span> &minus; 0.0493, <span class="m">R</span>&sup2; = 0.9997.</figcaption></figure>
+    <div>
+      <p>This graph is mostly linear. (Note that the first few and last few data points aren't quite
+      linear — the release and the catch.)</p>
+      <div class="match">
+        <div class="mrow"><span class="m">y = <span class="ca">m</span>&thinsp;x + <span class="cv">b</span></span><small>spreadsheet: slope, intercept</small></div>
+        <div class="mrow"><span class="m">v = <span class="ca">a</span>&thinsp;&Delta;t + <span class="cv">v<sub>0</sub></span></span><small>physics, reordered</small></div>
+      </div>
+      <p><b>The slope gives us the acceleration:</b> <span class="m">a</span> = 1.0564&nbsp;m/s&sup2;.</p>
+      <p><b>The intercept gives us the speed at time zero</b> (almost): <span class="m">v<sub>0</sub></span> = &minus;0.0493&nbsp;m/s.</p>
+    </div>
+  </div>
+  <div class="tip">
+    <span class="label">Why &ldquo;almost&rdquo;?</span>
+    The cart was released from rest, so the true <span class="m">v<sub>0</sub></span> is 0. The fit gives
+    &minus;0.05&nbsp;m/s because the first few points (the hand letting go) don't quite follow the line.
+    A small, physically sensible discrepancy like this is a sign the model is right; a large one would
+    mean something else is going on.
+  </div>
+
+  <h2>Position of a cart on an incline</h2>
+  <div class="fig-grid">
+    <figure><div class="chart" id="chPos"></div><figcaption>Position of cart. Trendline: <span class="m">y</span> = 0.5271<span class="m">x</span>&sup2; &minus; 0.0479<span class="m">x</span> &minus; 0.0018, <span class="m">R</span>&sup2; = 1.</figcaption></figure>
+    <div>
+      <p>This graph is parabolic.</p>
+      <div class="match">
+        <div class="mrow"><span class="m">y = <span class="ca">A</span>&thinsp;x&sup2; + <span class="cv">B</span>&thinsp;x + <span class="cx">C</span></span><small>spreadsheet quadratic</small></div>
+        <div class="mrow"><span class="m">x = <span class="ca">&frac12;a</span>(&Delta;t)&sup2; + <span class="cv">v<sub>0</sub></span>&Delta;t + <span class="cx">x<sub>0</sub></span></span><small>physics, reordered</small></div>
+      </div>
+      <div class="mathblock" style="margin:.8rem 0 0;">
+        <div class="body">
+          <div class="mathline"><span class="m">A = &frac12;a</span> &nbsp;&#8594;&nbsp; <span class="m">a</span> = 2<span class="m">A</span> = 2 &times; 0.5271 m/s&sup2; = <b>1.052 m/s&sup2;</b></div>
+          <div class="mathline"><span class="m">v<sub>0</sub></span> = <span class="m">B</span> = <b>&minus;0.0479 m/s</b></div>
+          <div class="mathline"><span class="m">x<sub>0</sub></span> = <span class="m">C</span> = <b>&minus;0.0018 m</b></div>
+          <p class="why">Two independent fits — the velocity slope (1.056 m/s&sup2;) and twice the position coefficient (1.052 m/s&sup2;) — agree to within half a percent. That is &ldquo;using pieces of info to reconstruct other info.&rdquo;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Play with it: read the parameters off a trendline</h2>
+  <p>Each round gives you a fresh set of spreadsheet trendlines for a different cart run. Read off
+  <span class="m">a</span>, <span class="m">v<sub>0</sub></span>, and <span class="m">x<sub>0</sub></span>. Enter three significant digits or so.</p>
+  <div class="sim" id="trendSim">
+    <div class="sim-head"><span>Interactive · Trendline to kinematics</span><span id="roundTag">Round 1</span></div>
+    <div class="panel">
+      <div class="trend-eqs">
+        <div class="teq"><b>Velocity vs. time trendline</b><span class="m" id="tVel"></span></div>
+        <div class="teq"><b>Position vs. time trendline</b><span class="m" id="tPos"></span></div>
+      </div>
+      <div class="clicker" style="margin:.8rem 0 0; background:#fff;">
+        <div class="c-body">
+          <div class="part">
+            <div class="ptext"><b>A)</b> Acceleration <span class="m">a</span> from the <em>velocity</em> trendline (m/s&sup2;)</div>
+            <div class="choices"><input class="num" id="inA1" type="number" step="0.001" placeholder="m/s²"><button class="cbtn check" data-k="a1">Check</button></div><div class="pfb" id="fbA1"></div>
+          </div>
+          <div class="part">
+            <div class="ptext"><b>B)</b> Initial velocity <span class="m">v<sub>0</sub></span> from the <em>velocity</em> trendline (m/s)</div>
+            <div class="choices"><input class="num" id="inV" type="number" step="0.001" placeholder="m/s"><button class="cbtn check" data-k="v">Check</button></div><div class="pfb" id="fbV"></div>
+          </div>
+          <div class="part">
+            <div class="ptext"><b>C)</b> Acceleration <span class="m">a</span> from the <em>position</em> trendline (m/s&sup2;)</div>
+            <div class="choices"><input class="num" id="inA2" type="number" step="0.001" placeholder="m/s²"><button class="cbtn check" data-k="a2">Check</button></div><div class="pfb" id="fbA2"></div>
+          </div>
+          <div class="part">
+            <div class="ptext"><b>D)</b> Initial position <span class="m">x<sub>0</sub></span> from the <em>position</em> trendline (m)</div>
+            <div class="choices"><input class="num" id="inX" type="number" step="0.001" placeholder="m"><button class="cbtn check" data-k="x">Check</button></div><div class="pfb" id="fbX"></div>
+          </div>
+        </div>
+      </div>
+      <div class="buttons" style="margin-top:.8rem;"><button class="btn primary" id="newRound">↻ New run</button></div>
+      <div class="hint-row">Remember: the <span class="m">x</span>&sup2; coefficient is <em>half</em> the acceleration. The two accelerations you read should agree closely but not perfectly — real data.</div>
+    </div>
+  </div>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Concept question</span>
+      A student fits a position&ndash;time graph and reports &ldquo;<span class="m">a</span> = 0.5271 m/s&sup2;&rdquo; straight from the <span class="m">x</span>&sup2; coefficient. What went wrong?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Nothing — the coefficient of <span class="m">x</span>&sup2; is the acceleration.</button>
+      <button class="opt" data-correct="true">The coefficient is &frac12;<span class="m">a</span>, so the acceleration is twice that: 1.05 m/s&sup2;.</button>
+      <button class="opt" data-correct="false">The units should be m/s, not m/s&sup2;.</button>
+      <button class="opt" data-correct="false">Acceleration can't be read from a position graph at all.</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> this is exactly what you do in the Module&nbsp;1
+  labs (Notes&nbsp;4&ndash;9): collect position or velocity data, fit a trendline, and translate its
+  coefficients into <span class="m">a</span>, <span class="m">v<sub>0</sub></span>, and <span class="m">x<sub>0</sub></span>
+  with the right units. Free fall is the case where <span class="m">a</span> should come out near
+  9.8&nbsp;m/s&sup2;.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> A velocity&ndash;time trendline reads <span class="m">y</span> = 2.45<span class="m">x</span> + 0.30. What are <span class="m">a</span> and <span class="m">v<sub>0</sub></span>?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> <span class="m">a</span> = 0.30 m/s&sup2;, <span class="m">v<sub>0</sub></span> = 2.45 m/s</label>
+          <label><input type="radio" name="q1" value="b"> <span class="m">a</span> = 2.45 m/s&sup2;, <span class="m">v<sub>0</sub></span> = 0.30 m/s</label>
+          <label><input type="radio" name="q1" value="c"> <span class="m">a</span> = 4.90 m/s&sup2;, <span class="m">v<sub>0</sub></span> = 0.30 m/s</label>
+          <label><input type="radio" name="q1" value="d"> <span class="m">a</span> = 1.225 m/s&sup2;, <span class="m">v<sub>0</sub></span> = 0.30 m/s</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> A position&ndash;time trendline reads <span class="m">y</span> = 4.9<span class="m">x</span>&sup2; + 0.0<span class="m">x</span> + 1.2. The acceleration is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> 4.9 m/s&sup2;</label>
+          <label><input type="radio" name="q2" value="b"> 2.45 m/s&sup2;</label>
+          <label><input type="radio" name="q2" value="c"> 9.8 m/s&sup2;</label>
+          <label><input type="radio" name="q2" value="d"> 1.2 m/s&sup2;</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> Which units check is correct for <span class="m">v&sup2; = v<sub>0</sub>&sup2; + 2a(x &minus; x<sub>0</sub>)</span>?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> m/s = m/s + (m/s&sup2;)&middot;m</label>
+          <label><input type="radio" name="q3" value="b"> (m/s)&sup2; = (m/s)&sup2; + (m/s&sup2;)&middot;m</label>
+          <label><input type="radio" name="q3" value="c"> (m/s)&sup2; = (m/s)&sup2; + (m/s&sup2;)&middot;s</label>
+          <label><input type="radio" name="q3" value="d"> m&sup2; = m&sup2; + (m/s&sup2;)&middot;m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> The one constraint shared by all three kinematics equations is that&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> the object starts from rest</label>
+          <label><input type="radio" name="q4" value="b"> the acceleration is constant</label>
+          <label><input type="radio" name="q4" value="c"> the motion is downward</label>
+          <label><input type="radio" name="q4" value="d"> time is measured in seconds</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>Understanding the equations is very important in physics.</li>
+    <li>Know the units, forms, and variables of each equation.</li>
+    <li>Use pieces of info to reconstruct other info — a trendline's slope, intercept, or coefficients
+        <em>are</em> the kinematics parameters, once you match the forms.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 —
+      <a href="https://openstax.org/books/college-physics/pages/preface" target="_blank" rel="noopener">openstax.org/books/college-physics</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 2</em>, OpenStax, Houston, TX, Oct 6, 2016 —
+      <a href="https://openstax.org/books/university-physics-volume-2/pages/1-introduction" target="_blank" rel="noopener">openstax.org/books/university-physics-volume-2</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Kinematics Equations</em> (review) by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 ·
+    Adapted for PHY 118 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- charts ---------- */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag, attrs, text){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
+  var SANS='"Segoe UI", system-ui, sans-serif';
+  function chart(id, o){
+    var host=document.getElementById(id); if(!host) return; host.innerHTML='';
+    var W=340,H=280,L=52,R=12,T=28,B=44;
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':o.title});
+    function X(t){ return L+(t/o.xmax)*(W-L-R); } function Y(v){ return T+(o.ymax-v)/(o.ymax-o.ymin)*(H-T-B); }
+    svg.appendChild(el('rect',{x:L,y:T,width:W-L-R,height:H-T-B,fill:'#fff',stroke:'#c9d3cc'}));
+    for(var t=0;t<=o.xmax+1e-9;t+=o.xstep){ svg.appendChild(el('line',{x1:X(t),y1:T,x2:X(t),y2:H-B,stroke:'#e4ebe6'})); svg.appendChild(el('text',{x:X(t),y:H-B+14,'text-anchor':'middle','font-size':'9.5','font-family':SANS,fill:'#5c6b62'},t.toFixed(2))); }
+    for(var v=o.ymin;v<=o.ymax+1e-9;v+=o.ystep){ svg.appendChild(el('line',{x1:L,y1:Y(v),x2:W-R,y2:Y(v),stroke:'#e4ebe6'})); svg.appendChild(el('text',{x:L-5,y:Y(v)+3,'text-anchor':'end','font-size':'9.5','font-family':SANS,fill:'#5c6b62'},v.toFixed(o.ydec))); }
+    svg.appendChild(el('line',{x1:L,y1:Y(0),x2:W-R,y2:Y(0),stroke:'#e0801a','stroke-width':1.5}));
+    svg.appendChild(el('line',{x1:X(0),y1:T,x2:X(0),y2:H-B,stroke:'#e0801a','stroke-width':1.5}));
+    svg.appendChild(el('text',{x:L+(W-L-R)/2,y:16,'text-anchor':'middle','font-size':'11','font-weight':'600','font-family':SANS,fill:'#1d2b23'},o.title));
+    svg.appendChild(el('text',{x:L+(W-L-R)/2,y:H-8,'text-anchor':'middle','font-size':'10','font-family':SANS,fill:'#5c6b62'},'Time (s)'));
+    svg.appendChild(el('text',{x:13,y:T+(H-T-B)/2,'text-anchor':'middle','font-size':'10','font-family':SANS,fill:'#5c6b62',transform:'rotate(-90 13 '+(T+(H-T-B)/2)+')'},o.ylabel));
+    // fit line
+    var d='';
+    for(var i=0;i<=80;i++){ var tt=o.tmax*i/80; d+=(i?' L':'M')+X(tt).toFixed(1)+','+Y(o.fit(tt)).toFixed(1); }
+    svg.appendChild(el('path',{d:d,fill:'none',stroke:o.color,'stroke-width':1.3,'stroke-dasharray':'4 3'}));
+    // data points (fit + small noise, plus end effects)
+    var seed=7; function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280-0.5; }
+    for(var t2=0;t2<=o.tmax+1e-9;t2+=0.05){
+      var v2=o.fit(t2)+rnd()*o.noise; if(t2<0.1) v2=o.fit(t2)*0.6+0.5*o.fit(0.1)*(t2/0.1)*0; // release effect
+      var cx=X(t2),cy=Y(v2);
+      if(o.marker==='tri') svg.appendChild(el('polygon',{points:cx+','+(cy-3)+' '+(cx+3)+','+(cy+2.5)+' '+(cx-3)+','+(cy+2.5),fill:o.color}));
+      else svg.appendChild(el('circle',{cx:cx,cy:cy,r:2.6,fill:'#fff',stroke:o.color,'stroke-width':1.2}));
+    }
+    var bx=L+14,by=T+10;
+    svg.appendChild(el('rect',{x:bx,y:by,width:o.eqn.length*5.4+10,height:28,fill:'#fff',stroke:'#9aa9a0',rx:2}));
+    svg.appendChild(el('text',{x:bx+5,y:by+11,'font-size':'9','font-family':SANS,fill:'#1d2b23'},o.eqn));
+    svg.appendChild(el('text',{x:bx+5,y:by+23,'font-size':'9','font-family':SANS,fill:'#1d2b23'},o.r2));
+    host.appendChild(svg);
+  }
+  chart('chVel',{title:'Velocity of Cart',ylabel:'Velocity (m/s)',xmax:2,xstep:0.5,ymin:-0.5,ymax:2,ystep:0.5,ydec:3,tmax:1.8,color:'#1e8a3c',marker:'tri',noise:0.02,fit:function(t){return 1.0564*t-0.0493;},eqn:'y = 1.0564x − 0.0493',r2:'R² = 0.9997'});
+  chart('chPos',{title:'Position of Cart',ylabel:'Position (m)',xmax:2,xstep:0.5,ymin:-0.2,ymax:2,ystep:0.2,ydec:4,tmax:1.9,color:'#2457b8',marker:'circle',noise:0.004,fit:function(t){return 0.5271*t*t-0.0479*t-0.0018;},eqn:'y = 0.5271x² − 0.0479x − 0.0018',r2:'R² = 1'});
+})();
+
+/* ---------- equation cards ---------- */
+(function(){
+  document.querySelectorAll('.eqcard').forEach(function(card){
+    card.querySelectorAll('.eq-toggle .btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        var what=b.getAttribute('data-show'); var on=card.classList.toggle('show-'+what);
+        b.classList.toggle('primary',on); b.textContent=(on?'Hide ':'Show ')+(what==='vars'?'variables':'units');
+      });
+    });
+  });
+})();
+
+/* ---------- trendline interactive ---------- */
+(function(){
+  var round=0, cur;
+  function fmt(n,d){ var s=Math.abs(n).toFixed(d); return (n<0?'− ':'+ ')+s; }
+  function newRound(){
+    round++;
+    var a=+(0.4+Math.random()*2.4).toFixed(3), v0=+((Math.random()-0.5)*0.6).toFixed(3), x0=+((Math.random()-0.5)*0.4).toFixed(3);
+    var a2=+(a*(1+(Math.random()-0.5)*0.01)).toFixed(3); // slightly different from the position fit
+    cur={a1:a, v:v0, a2:a2, x:x0};
+    document.getElementById('tVel').textContent='y = '+a.toFixed(4)+'x '+fmt(v0,4);
+    document.getElementById('tPos').textContent='y = '+(a2/2).toFixed(4)+'x² '+fmt(v0*(1+(Math.random()-0.5)*0.02),4)+'x '+fmt(x0,4);
+    document.getElementById('roundTag').textContent='Round '+round;
+    ['inA1','inV','inA2','inX'].forEach(function(id){ document.getElementById(id).value=''; });
+    ['fbA1','fbV','fbA2','fbX'].forEach(function(id){ var f=document.getElementById(id); f.textContent=''; f.className='pfb'; });
+    document.querySelectorAll('#trendSim .check').forEach(function(b){ b.classList.remove('correct','wrong'); });
+  }
+  var map={a1:{inp:'inA1',fb:'fbA1',tol:0.02,msg:'The slope of v vs. t is the acceleration.'},
+           v:{inp:'inV',fb:'fbV',tol:0.02,msg:'The intercept of v vs. t is v₀ (velocity at t = 0).'},
+           a2:{inp:'inA2',fb:'fbA2',tol:0.02,msg:'a = 2A — twice the x² coefficient.'},
+           x:{inp:'inX',fb:'fbX',tol:0.01,msg:'The constant term C of the position fit is x₀.'}};
+  document.querySelectorAll('#trendSim .check').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k=b.getAttribute('data-k'), m=map[k], v=parseFloat(document.getElementById(m.inp).value), f=document.getElementById(m.fb);
+      if(isNaN(v)){ f.className='pfb bad'; f.textContent='Type a number first.'; return; }
+      var ok=Math.abs(v-cur[k])<=Math.max(m.tol, Math.abs(cur[k])*0.02);
+      f.className=ok?'pfb':'pfb bad'; f.textContent=(ok?'✓ ':'✗ Not quite — ')+m.msg+(ok?'':' Expected about '+cur[k].toFixed(3)+'.');
+      b.classList.toggle('correct',ok); b.classList.toggle('wrong',!ok);
+    });
+  });
+  document.getElementById('newRound').addEventListener('click',newRound);
+  newRound();
+})();
+
+/* ---------- concept question ---------- */
+(function(){
+  var probe=document.getElementById('probe1'); if(!probe) return;
+  var fb=probe.querySelector('.feedback');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right=this.getAttribute('data-correct')==='true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){ this.classList.add('correct'); fb.style.color='#134a29'; fb.textContent='✓ Right. Matching x = ½a(Δt)² + v₀Δt + x₀ to y = Ax² + Bx + C gives A = ½a, so a = 2A = 1.054 m/s².'; }
+      else { this.classList.add('wrong'); probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); }); fb.style.color='#c0392b'; fb.textContent='✗ Not quite. The x² coefficient is ½a. Forgetting the factor of 2 is the classic slip when reading acceleration from a position fit.'; }
+    });
+  });
+})();
+
+/* ---------- exit ticket ---------- */
+(function(){
+  var ticket=document.getElementById('ticket'); if(!ticket) return;
+  var mc={q1:'b',q2:'c',q3:'b',q4:'b'};
+  var expl={
+    q1:'v = aΔt + v₀ matches y = mx + b: slope = a = 2.45 m/s², intercept = v₀ = 0.30 m/s.',
+    q2:'the x² coefficient is ½a, so a = 2(4.9) = 9.8 m/s² — this cart was in free fall.',
+    q3:'v² has units (m/s)²; a(x − x₀) has (m/s²)(m) = m²/s² = (m/s)². Every term agrees.',
+    q4:'each equation was derived for constant acceleration; nothing else is required.'
+  };
+  var scoreEl=document.getElementById('ticketScore');
+  function markCard(id, ok, msg){ var c=document.getElementById(id); c.classList.remove('right','wrong'); c.classList.add(ok?'right':'wrong'); c.querySelector('.qfb').textContent=msg; }
+  function grade(){
+    var correct=0,total=4;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel=ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel&&sel.value===mc[q]){ correct++; markCard('card-'+q,true,'✓ Correct.'); }
+      else if(sel){ markCard('card-'+q,false,'✗ Not quite — '+expl[q]); }
+      else { markCard('card-'+q,false,'Pick an answer above.'); }
+    });
+    var tail=correct===total?"Nice — you're ready for Module 2!":correct>=2?'Good start — revisit the ones you missed.':'Reread the equation cards and the cart example, then try again.';
+    scoreEl.textContent='You got '+correct+' of '+total+'. '+tail; scoreEl.classList.add('show');
+  }
+  function clear(){ ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked=false; }); ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent=''; }); scoreEl.classList.remove('show'); scoreEl.textContent=''; }
+  document.getElementById('ticketCheck').addEventListener('click',grade);
+  document.getElementById('ticketReset').addEventListener('click',clear);
+})();
+</script>
+</body>
+</html>

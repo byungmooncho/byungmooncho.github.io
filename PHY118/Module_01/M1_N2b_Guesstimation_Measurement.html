@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N2b — Guesstimation and Measurement</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template (enhanced)
+     Body/serif for reading, green accent to match course shell.
+     All styles + scripts self-contained; no external dependencies.
+     Upload via Manage Files and insert as a full page so the inline
+     <script> blocks survive (the HTML editor strips scripts).
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --green-deep:#134a29;
+    --amber:#c77b1f;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .sans{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+
+  /* --- MKS divider ---------------------------------------------------- */
+  .mksdots{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; gap:.6rem; }
+  .mksdots span{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:700; color:#fff;
+    background:var(--green); border-radius:6px; padding:.25rem .6rem; font-size:.85rem;
+  }
+  .mksdots small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- "you already know this" callout ------------------------------ */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; letter-spacing:.01em; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  /* --- performance expectations ------------------------------------- */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+  .pe li .txt b{ font-weight:600; }
+
+  /* --- guiding questions -------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* --- interactive: guesstimation trainer ---------------------------- */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1.1rem 1.1rem 1.2rem; }
+  .item-card{
+    background:#0f1f16; border-radius:10px; padding:1.4rem 1.1rem; text-align:center; margin-bottom:1rem;
+  }
+  .item-card .icon{ font-size:2.6rem; line-height:1; display:block; margin-bottom:.5rem; }
+  .item-card .name{ font-family:"Segoe UI", system-ui, sans-serif; font-size:1.1rem; font-weight:600; color:#eaf3ed; }
+  .item-card .category{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; color:#8fb59d; letter-spacing:.05em; text-transform:uppercase; margin-top:.3rem; }
+  .guess-row{ display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; margin-bottom:.9rem; justify-content:center; }
+  .guess-row input[type=text]{
+    font:1.15rem/1.3 "Segoe UI", system-ui, sans-serif; padding:.5rem .7rem; border:1px solid var(--rule);
+    border-radius:6px; width:8rem; font-variant-numeric:tabular-nums; text-align:center;
+  }
+  .guess-row .unitlabel{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; color:var(--green-deep); }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 .8rem; justify-content:center; }
+  .result-card{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem; display:none;
+  }
+  .result-card.show{ display:block; }
+  .result-card .rlabel{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--green-deep); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .result-card .rval{ font-family:Cambria, "Cambria Math", Georgia, serif; font-size:1.15rem; font-weight:600; }
+  .result-card .rsub{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); margin-top:.3rem; }
+  .sim .caveat{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.76rem; color:var(--muted); margin-top:.8rem; font-style:italic; text-align:center; }
+
+  /* --- buttons -------------------------------------------------------- */
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+
+  /* --- predict-first self check ------------------------------------- */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* --- exit ticket (short self-scoring quiz) ------------------------ */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff;
+    padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- lab table preview --------------------------------------------- */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .translate th, .translate td{ text-align:left; padding:.55rem .75rem; border-bottom:1px solid var(--rule); }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td.fillin{ color:var(--muted); font-style:italic; }
+
+  /* --- looking-ahead signpost --------------------------------------- */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* --- key relationships (equation-style list) ----------------------- */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{ display:flex; align-items:center; gap:1rem; padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0; }
+  .eq-list li::before{
+    counter-increment:eq; content:"Rel. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; color:var(--green); font-weight:600; flex:none; width:3.6em;
+  }
+  .eq-list .icon{ font-size:1.3rem; flex:none; width:1.6em; text-align:center; }
+  .eq-list .expr{ font-family:Cambria, "Cambria Math", Georgia, serif; font-size:1.05rem; font-weight:600; white-space:nowrap; }
+  .eq-list .use{ margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); text-align:right; max-width:15em; }
+  @media (max-width:560px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.6em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding: .9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Note 2b</span>
+  </div>
+
+  <h1>Guesstimation and Measurement of Length, Mass, and Time</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Length (m), mass (kg), and time (s) are the three fundamental quantities that combine to build
+    every other physical quantity — velocity is length/time, acceleration is velocity/time,
+    force is mass&middot;acceleration, and energy is force&middot;distance. In this hands-on lab, you'll
+    build an intuitive "feel" for how long, massive, and fast everyday things really are: first
+    guess in meters, kilograms, and seconds (MKS units), then check yourself with a ruler, balance,
+    and stopwatch. Physicists lean on this kind of intuition constantly to sanity-check calculations.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li>
+        <span class="tick">PE1</span>
+        <span class="txt"><b>Know the rough ranges of lengths and masses</b> of typical objects and the time durations of events around us.</span>
+      </li>
+      <li>
+        <span class="tick">PE2</span>
+        <span class="txt"><b>Guesstimate then measure</b> a quantity, and compute the %error between your guess and the measured value.</span>
+      </li>
+      <li>
+        <span class="tick">PE3</span>
+        <span class="txt"><b>Determine a walking speed</b> from a measured distance and time, then use it to predict the time for a new distance.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- MKS divider -->
+  <div class="mksdots" aria-hidden="true">
+    <span>m</span><span>kg</span><span>s</span>
+    <small>every other unit is built from these three</small>
+  </div>
+
+  <!-- ============ PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>You already guesstimate constantly, even without a ruler, scale, or stopwatch in hand:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">🚶</span>
+          <b>Counting strides down a hallway</b>
+          <small>An informal but genuinely useful way to estimate a distance without a tape measure.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🎒</span>
+          <b>"How much does this bag weigh?"</b>
+          <small>You heft it and guess a number before ever putting it on a scale.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">⏱️</span>
+          <b>"That took about 10 seconds"</b>
+          <small>You estimate elapsed time constantly, then check your phone to see how close you were.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we answer four questions</h2>
+  <ol class="questions">
+    <li>Why is it useful to build an intuitive feel for scales instead of always measuring?</li>
+    <li>How do we guesstimate lengths, masses, and durations of everyday objects?</li>
+    <li>How do we calculate %error between a guess and a measurement?</li>
+    <li>How can guesstimation help you plan a real task, like timing a walk?</li>
+  </ol>
+
+  <!-- ============ INTERACTIVE SIMULATOR ============ -->
+  <h2>Play with it: guesstimation trainer</h2>
+  <p>This trainer uses general everyday objects (not your classroom's specific items — save those
+  for the in-person lab below). Guess the length, mass, or time, then reveal the typical value and
+  see your %error.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>🎯</span> Interactive · Guesstimation Trainer</div>
+    <div class="panel">
+      <div class="item-card">
+        <span class="icon" id="itemIcon">🚪</span>
+        <span class="name" id="itemName">Height of a standard interior door</span>
+        <span class="category" id="itemCategory">Length</span>
+      </div>
+      <div class="guess-row">
+        <span class="unitlabel">Your guess:</span>
+        <input type="text" id="guessInput" inputmode="decimal" placeholder="0">
+        <span class="unitlabel" id="unitOut">m</span>
+        <button class="btn primary" id="revealBtn">Reveal &amp; check</button>
+      </div>
+      <div class="result-card" id="resultCard">
+        <span class="rlabel">Typical value &amp; your %error</span>
+        <span class="rval" id="resultVal">—</span>
+        <span class="rsub" id="resultSub"></span>
+      </div>
+      <div class="buttons">
+        <button class="btn" id="nextBtn">🎲 Next object</button>
+      </div>
+      <div class="caveat">Values are typical/approximate — useful for building intuition, not precise specifications.</div>
+    </div>
+  </div>
+
+  <!-- ============ PREDICT-FIRST SELF CHECK ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first: which is the most reasonable guesstimate for the mass of a full-grown adult?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">7 kg</button>
+      <button class="opt" data-correct="true">70 kg</button>
+      <button class="opt" data-correct="false">700 kg</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~10 min</span>
+    <!-- ================================================================
+         REPLACE the placeholder div below with your video embed iframe.
+         Ensia / YouTube / Panopto embed codes all drop in the same way:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M1 N2b walkthrough with Dr. Cho"></iframe></div>
+         ================================================================ -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ IN-CLASS LAB (from original note) ============ -->
+  <h2>In-class lab: your classroom's own measurements</h2>
+  <p>The trainer above is just warm-up. The real lab happens with your actual classroom: guesstimate
+  each item below in MKS units, then measure it with a tape rule, balance, or stopwatch, and compute
+  %error. Your guided notes have the full tables — here's the shape of what you're filling in:</p>
+  <div class="translate">
+    <table>
+      <thead><tr><th>Length</th><th>Guessed (m)</th><th>Measured (m)</th><th>% error</th></tr></thead>
+      <tbody>
+        <tr><td>Length of workbench</td><td class="fillin">your guess</td><td class="fillin">your measurement</td><td class="fillin">calculate</td></tr>
+        <tr><td>Width of classroom door</td><td class="fillin">your guess</td><td class="fillin">your measurement</td><td class="fillin">calculate</td></tr>
+        <tr><td>Dr. Cho's height</td><td class="fillin">your guess</td><td class="fillin">your measurement</td><td class="fillin">calculate</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Masses (cell phone, wallet, textbook, laptop, your own mass&hellip;) and time durations (a ball
+  dropped from the workbench edge vs. the ceiling, walking across the room&hellip;) follow the same
+  guess-then-measure-then-%error pattern in your notes.</p>
+
+  <h2>Putting it together: the elevator walk</h2>
+  <p>Using your average stride length, estimate the distance from your classroom to the elevator.
+  Then measure your walking speed by timing yourself across the known length of the classroom.
+  Use that speed to <em>predict</em> how long the walk to the elevator will take — then time
+  yourself walking there and compute the %error between your prediction and the real result.</p>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> the %error formula here is exactly the one
+  from Note&nbsp;2a, and the walking-speed calculation is your first real use of
+  <i>distance = velocity &times; time</i> — the same relationship that anchors Note&nbsp;3's
+  introduction to kinematics.</p>
+
+  <h2>Key relationships for this note</h2>
+  <ul class="eq-list">
+    <li>
+      <span class="icon" title="Percent error">🎯</span>
+      <span class="expr">%error = |guess &minus; measured| / measured &times; 100</span>
+      <span class="use">how far off your guesstimate was, as a percentage</span>
+    </li>
+    <li>
+      <span class="icon" title="Speed">🚶</span>
+      <span class="expr">speed = distance / time</span>
+      <span class="use">measure your own walking speed across a known distance</span>
+    </li>
+    <li>
+      <span class="icon" title="Predicted time">⏱️</span>
+      <span class="expr">time = distance / speed</span>
+      <span class="use">use your measured speed to predict a new travel time</span>
+    </li>
+  </ul>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> Which is the most reasonable guesstimate for the height of a standard classroom door?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> 0.5 m</label>
+          <label><input type="radio" name="q1" value="b"> 2 m</label>
+          <label><input type="radio" name="q1" value="c"> 5 m</label>
+          <label><input type="radio" name="q1" value="d"> 20 m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> Which is the most reasonable guesstimate for the mass of a physics textbook?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> 0.02 kg</label>
+          <label><input type="radio" name="q2" value="b"> 2 kg</label>
+          <label><input type="radio" name="q2" value="c"> 20 kg</label>
+          <label><input type="radio" name="q2" value="d"> 200 kg</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> You guess a pen's mass as 20 g. The measured mass is 16 g. What's the %error (to 1 decimal place)?</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="percent error">
+          <span class="unit">%</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> You measured your walking speed across the classroom. What do you need to predict the time to walk a new distance?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> Just the new distance</label>
+          <label><input type="radio" name="q4" value="b"> The new distance and your measured speed</label>
+          <label><input type="radio" name="q4" value="c"> Just your measured speed</label>
+          <label><input type="radio" name="q4" value="d"> Nothing — just guess directly</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <!-- Point these hrefs at the files uploaded to this course's Manage Files
+         area (Insert Quicklink → Course File), NOT at external storage. -->
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/M1_N2b_Guesstimation_and_Measurement.pdf" target="_blank" rel="noopener">
+      <span class="kind">Before the lab</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print or open on a tablet; bring a ruler, balance, and stopwatch/phone.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 1 closes — check your own work against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<script>
+/* ---------- guesstimation trainer ---------- */
+(function(){
+  var items = [
+    { name:'Height of a standard interior door', category:'Length', icon:'🚪', value:2.03, unit:'m' },
+    { name:'Length of an adult bicycle', category:'Length', icon:'🚲', value:1.75, unit:'m' },
+    { name:'Height of a kitchen counter', category:'Length', icon:'🍽️', value:0.9, unit:'m' },
+    { name:'Length of a school bus', category:'Length', icon:'🚌', value:12, unit:'m' },
+    { name:'Diameter of a basketball hoop', category:'Length', icon:'🏀', value:0.457, unit:'m' },
+    { name:'Mass of a gallon of milk', category:'Mass', icon:'🥛', value:3.8, unit:'kg' },
+    { name:'Mass of a basketball', category:'Mass', icon:'🏀', value:0.62, unit:'kg' },
+    { name:'Mass of a laptop computer', category:'Mass', icon:'💻', value:1.8, unit:'kg' },
+    { name:'Mass of a bowling ball', category:'Mass', icon:'🎳', value:7, unit:'kg' },
+    { name:'Mass of a full-grown adult', category:'Mass', icon:'🧍', value:70, unit:'kg' },
+    { name:'Time for a coin dropped from ~3 m (ceiling height) to hit the floor', category:'Time', icon:'🪙', value:0.78, unit:'s' },
+    { name:'Time for a sneeze', category:'Time', icon:'🤧', value:0.5, unit:'s' },
+    { name:'Time to walk across an average classroom', category:'Time', icon:'🚶', value:6, unit:'s' },
+    { name:'Time for a heartbeat at rest', category:'Time', icon:'❤️', value:0.86, unit:'s' }
+  ];
+  var current = items[0];
+
+  var itemIcon = document.getElementById('itemIcon');
+  var itemName = document.getElementById('itemName');
+  var itemCategory = document.getElementById('itemCategory');
+  var unitOut = document.getElementById('unitOut');
+  var guessInput = document.getElementById('guessInput');
+  var resultCard = document.getElementById('resultCard');
+  var resultVal = document.getElementById('resultVal');
+  var resultSub = document.getElementById('resultSub');
+
+  function showItem(item){
+    current = item;
+    itemIcon.textContent = item.icon;
+    itemName.textContent = item.name;
+    itemCategory.textContent = item.category;
+    unitOut.textContent = item.unit;
+    guessInput.value = '';
+    resultCard.classList.remove('show');
+  }
+
+  function reveal(){
+    var guess = parseFloat(guessInput.value);
+    if(isNaN(guess)){
+      resultVal.textContent = 'Enter a guess first';
+      resultSub.textContent = '';
+      resultCard.classList.add('show');
+      return;
+    }
+    var pct = Math.abs(guess - current.value) / current.value * 100;
+    resultVal.textContent = current.value + ' ' + current.unit + ' (typical) — your %error: ' + pct.toFixed(1) + '%';
+    resultSub.textContent = '|' + guess + ' \u2212 ' + current.value + '| / ' + current.value + ' \u00d7 100';
+    resultCard.classList.add('show');
+  }
+
+  document.getElementById('revealBtn').addEventListener('click', reveal);
+  document.getElementById('nextBtn').addEventListener('click', function(){
+    var next = items[Math.floor(Math.random() * items.length)];
+    showItem(next);
+  });
+
+  showItem(items[0]);
+})();
+
+/* ---------- predict-first self check ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct');
+        fb.style.color = '#134a29';
+        fb.textContent = '✓ Exactly. About 70 kg is typical for an adult human.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite — think in the tens of kilograms range for an adult body.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q1:'b', q2:'b', q4:'b' };
+  var expl = {
+    q1:'a standard interior door is about 2 m tall.',
+    q2:'a physics textbook is on the order of a couple kilograms.',
+    q4:'time = distance / speed, so you need both the new distance and your measured speed.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong');
+    card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v - 25) < 0.5){ correct++; markCard('card-q3', true, '✓ Correct: |20 \u2212 16| / 16 \u00d7 100 = 25.0%.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number.'); }
+    else { markCard('card-q3', false, '✗ Use |guess \u2212 measured| / measured \u00d7 100 = |20 \u2212 16| / 16 \u00d7 100 = 25.0%.'); }
+
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q3input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>

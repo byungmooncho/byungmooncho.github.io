@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N4 — Constant Speed Motion: Graphs</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — N4 (matches N3 template)
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+
+  /* strobe divider */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+  @keyframes strobePulse{ 0%,100%{ transform:scale(1); opacity:.55; } 35%{ transform:scale(1.9); opacity:1; } }
+  .strobe.animate span{ animation:strobePulse 2.4s ease-in-out infinite; }
+  .strobe.animate span:nth-child(1){ animation-delay:0s; }
+  .strobe.animate span:nth-child(2){ animation-delay:.16s; }
+  .strobe.animate span:nth-child(3){ animation-delay:.32s; }
+  .strobe.animate span:nth-child(4){ animation-delay:.48s; }
+  .strobe.animate span:nth-child(5){ animation-delay:.64s; }
+  .strobe.animate span:nth-child(6){ animation-delay:.80s; }
+  @media (prefers-reduced-motion: reduce){ .strobe.animate span{ animation:none; } }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* "you already know this" */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* interactive simulator */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .controls{ display:grid; gap:.9rem 1.4rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .controls{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn.toggle{ border-radius:6px; }
+  .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .seg{ display:inline-flex; border:1px solid var(--green); border-radius:6px; overflow:hidden; }
+  .seg button{ border:0; background:#fff; color:var(--green); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600; padding:.42rem .8rem; cursor:pointer; }
+  .seg button[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* looking-ahead signpost */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* summary table */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:600; }
+  .translate td .tag.up{ color:var(--green); }
+  .translate td .tag.zero{ color:var(--muted); }
+
+  /* video slot */
+  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Scale</span>
+    <span>Note 4</span>
+  </div>
+
+  <h1>Constant Speed Motion: Graphs of Constant Speed Motion</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    We describe motion two ways: distance vs. time (position as a function of time) and speed vs. time.
+    In constant-speed motion the distance–time graph is a straight line whose <em>slope is the speed</em> —
+    the faster you go, the steeper the line — and because the slope never changes, there is no acceleration.
+    The speed–time graph is a flat, horizontal line, and the acceleration–time graph sits on zero the whole time.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Recognize that constant-speed motion has zero acceleration</b> — the velocity does not change over time.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Interpret a distance–time graph</b> as a straight line whose constant (non-zero) slope is the speed, and read that slope as rise over run.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Recognize the speed–time graph</b> for constant speed as a flat, horizontal line (zero slope) sitting at a non-zero speed.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Recognize the acceleration–time graph</b> for constant speed as a flat line on zero for all time.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Sketch all three graphs</b> (distance, speed, acceleration vs. time) for a described constant-speed scenario.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Connect the slope idea to algebra</b> — in <em>y = mx</em>, the slope <em>m</em> = Δd/Δt is exactly the speed.</span></li>
+    </ul>
+  </div>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>constant speed — equal steps each second</small>
+  </div>
+
+  <!-- ============ CONNECTING PRIOR EXPERIENCE ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
+    <div class="body">
+      <p>The slope of a distance–time graph isn't new physics — it's the algebra you already know,
+      dressed up with units:</p>
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">📈</span>
+          <b>y = mx from algebra</b>
+          <small>The slope m is rise over run. Here that's Δd/Δt — meters per second — which is speed.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🚗</span>
+          <b>Cruise control</b>
+          <small>Steady on the highway: the speedometer holds one number, so speed–time is a flat line.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">🏃</span>
+          <b>A steady jog</b>
+          <small>Same pace the whole way — no speeding up or slowing down means zero acceleration.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>In this note, we work through</h2>
+  <ol class="questions">
+    <li>What does the distance–time graph of constant-speed motion look like?</li>
+    <li>What does its slope mean, and why doesn't the slope change?</li>
+    <li>What do the speed–time and acceleration–time graphs look like?</li>
+    <li>How do we sketch all three graphs for a given motion scenario?</li>
+  </ol>
+
+  <!-- ============ INTERACTIVE: GRAPH TRIO ============ -->
+  <h2>Play with it: the constant-speed graph trio</h2>
+  <p>Set a speed and a starting distance, then press <b>Sweep</b> to watch a moving object trace out all
+  three graphs at once. Notice how the distance–time <em>slope</em> matches the speed, while the speed–time
+  and acceleration–time graphs stay flat.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>▶</span> Interactive · Constant-Speed Graph Trio</div>
+    <div class="stage">
+      <canvas id="simCanvas" width="720" height="380" role="img"
+        aria-label="Three stacked motion graphs — distance, speed, and acceleration versus time — updating together as speed changes."></canvas>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl">
+          <label for="spd">Speed <span class="val"><span id="spdval">3.0</span> m/s</span></label>
+          <input type="range" id="spd" min="0" max="6" step="0.5" value="3">
+        </div>
+        <div class="ctrl">
+          <label for="d0">Starting distance <span class="val"><span id="d0val">0</span> m</span></label>
+          <input type="range" id="d0" min="0" max="8" step="1" value="0">
+        </div>
+      </div>
+      <div class="buttons">
+        <span class="seg" role="group" aria-label="direction">
+          <button id="dirFwd" aria-pressed="true">Forward →</button>
+          <button id="dirBack" aria-pressed="false">← Backward</button>
+        </span>
+        <button class="btn primary" id="runBtn">▶ Sweep</button>
+        <button class="btn" id="resetBtn">↺ Reset</button>
+      </div>
+      <div class="readout">
+        <span class="chip">t = <b id="tOut">0.0</b> s</span>
+        <span class="chip">d = <b id="dOut">0.0</b> m</span>
+        <span class="chip">speed = <b id="vOut">3.0</b> m/s</span>
+        <span class="chip">a = <b id="aOut">0.0</b> m/s²</span>
+      </div>
+      <div class="hint-row" id="simHint">The distance–time line is straight because the speed never changes — that's what "constant" means.</div>
+    </div>
+  </div>
+
+  <!-- predict-first probe -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first: two runners move at constant speed, but runner A's distance–time line is
+    steeper than runner B's. What does that tell you?</p>
+    <div class="opts">
+      <button class="opt" data-correct="true">A is faster than B — a steeper slope means a bigger speed.</button>
+      <button class="opt" data-correct="false">A is accelerating and B is not.</button>
+      <button class="opt" data-correct="false">A started farther from the origin.</button>
+      <button class="opt" data-correct="false">Nothing — slope has no physical meaning here.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~12 min</span>
+    <!-- Replace the placeholder with your embed:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M1 N4 walkthrough with Dr. Cho"></iframe></div> -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ THE THREE GRAPHS AT A GLANCE ============ -->
+  <h2>The three graphs at a glance</h2>
+  <p>For constant-speed motion, each graph has a signature shape. If you can picture these three, you can read
+  or sketch any constant-speed scenario.</p>
+  <div class="translate">
+    <table>
+      <thead>
+        <tr><th>Graph</th><th>Shape for constant speed</th><th>What its slope tells you</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Distance vs. time</b></td><td>Straight line, tilted up (or down if moving back)</td><td><span class="tag up">slope = speed</span> (constant, non-zero)</td></tr>
+        <tr><td><b>Speed vs. time</b></td><td>Flat, horizontal line at the speed value</td><td><span class="tag zero">slope = 0</span> → speed isn't changing</td></tr>
+        <tr><td><b>Acceleration vs. time</b></td><td>Flat line sitting on zero</td><td><span class="tag zero">a = 0</span> for all time</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> here every graph is a straight line because the speed
+  never changes. Starting in Note&nbsp;6 we let the speed change — and the distance–time graph curves, the
+  speed–time graph tilts, and the acceleration–time graph lifts off zero. Master the straight-line case first;
+  it's the anchor everything else is measured against.</p>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>constant velocity — equal steps</small>
+  </div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>🎟️ Exit ticket</strong>
+      <span class="sub">Four quick questions — check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> For an object moving at constant speed, the distance–time graph is a&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> Curve that gets steeper over time.</label>
+          <label><input type="radio" name="q1" value="b"> Straight line with a constant, non-zero slope.</label>
+          <label><input type="radio" name="q1" value="c"> Flat horizontal line.</label>
+          <label><input type="radio" name="q1" value="d"> Line that sits on zero.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> On a distance–time graph, what does the slope represent?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> The speed (rate of change of distance).</label>
+          <label><input type="radio" name="q2" value="b"> The acceleration.</label>
+          <label><input type="radio" name="q2" value="c"> The starting position.</label>
+          <label><input type="radio" name="q2" value="d"> The total distance travelled.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> An object covers 12 m in 4 s at constant speed. Reading the distance–time slope, what is its speed?</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="speed in meters per second">
+          <span class="unit">m/s</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> For that same constant-speed trip, the acceleration–time graph is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> A rising straight line.</label>
+          <label><input type="radio" name="q4" value="b"> A flat line at the speed value.</label>
+          <label><input type="radio" name="q4" value="c"> A flat line sitting on zero.</label>
+          <label><input type="radio" name="q4" value="d"> Impossible to tell.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/M1_N4_Constant_Speed_Motion.pdf" target="_blank" rel="noopener">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Print or open on a tablet and sketch the three graphs as you follow along.</span>
+    </a>
+    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 1 closes — check your sketches against it.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   Constant-Speed Graph Trio — self-contained, no dependencies.
+   Three stacked graphs sharing a time axis:
+     (1) distance d(t) = d0 + v*t   -> sloped straight line
+     (2) speed  v(t)   = v          -> flat line
+     (3) accel  a(t)   = 0          -> flat line on zero
+   A "sweep" animation moves a time cursor across all three.
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var speed = 3, dir = 1, d0 = 0;        // dir: +1 forward, -1 backward
+  var T_MAX = 8, t = 0, running = false, lastTs = null;
+
+  var el = {
+    spd: document.getElementById('spd'), d0: document.getElementById('d0'),
+    spdval: document.getElementById('spdval'), d0val: document.getElementById('d0val'),
+    tOut: document.getElementById('tOut'), dOut: document.getElementById('dOut'),
+    vOut: document.getElementById('vOut'), aOut: document.getElementById('aOut'),
+    dirFwd: document.getElementById('dirFwd'), dirBack: document.getElementById('dirBack'),
+    run: document.getElementById('runBtn'), reset: document.getElementById('resetBtn'),
+    hint: document.getElementById('simHint')
+  };
+
+  function vSigned(){ return dir * speed; }
+  function dist(tt){ return d0 + vSigned()*tt; }
+
+  // panel geometry
+  var padL = 92, padR = 18, gap = 14;
+  var panelH = (H - gap*2 - 10) / 3;
+  function panelTop(i){ return 6 + i*(panelH + gap); }
+  var x0 = padL, x1 = W - padR;
+  function tx(tt){ return x0 + (tt/T_MAX)*(x1 - x0); }
+
+  function niceRange(lo, hi){
+    if(lo === hi){ lo -= 1; hi += 1; }
+    var pad = (hi - lo)*0.15 + 0.5;
+    return [lo - pad, hi + pad];
+  }
+
+  function drawPanel(i, label, color, valueAt, opts){
+    opts = opts || {};
+    var top = panelTop(i), bot = top + panelH;
+    // y-range
+    var vEnd = valueAt(T_MAX), vStart = valueAt(0);
+    var lo = Math.min(0, vStart, vEnd), hi = Math.max(0, vStart, vEnd);
+    if(opts.fixed){ lo = opts.lo; hi = opts.hi; }
+    var r = niceRange(lo, hi); lo = r[0]; hi = r[1];
+    function yy(val){ return bot - ((val - lo)/(hi - lo))*(bot - top); }
+
+    // frame
+    ctx.strokeStyle = '#2c5a3f'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0, top-2); ctx.lineTo(x0, bot); ctx.lineTo(x1, bot); ctx.stroke();
+    // zero line if within range
+    if(lo < 0 && hi > 0){
+      ctx.strokeStyle = '#24402f'; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(x0, yy(0)); ctx.lineTo(x1, yy(0)); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    // axis label
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(label, 6, top + 12);
+    if(opts.sublabel){ ctx.fillStyle = '#6f9c81'; ctx.fillText(opts.sublabel, 6, top + 28); }
+
+    // the line across full time
+    ctx.strokeStyle = color; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(tx(0), yy(valueAt(0))); ctx.lineTo(tx(T_MAX), yy(valueAt(T_MAX))); ctx.stroke();
+
+    // progress overlay up to current t (brighter)
+    if(t > 0){
+      ctx.strokeStyle = opts.hot || '#eafaf0'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(tx(0), yy(valueAt(0))); ctx.lineTo(tx(t), yy(valueAt(t))); ctx.stroke();
+      // moving dot
+      ctx.fillStyle = '#fff2d6';
+      ctx.beginPath(); ctx.arc(tx(t), yy(valueAt(t)), 4, 0, Math.PI*2); ctx.fill();
+    }
+    return { top:top, bot:bot };
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
+
+    drawPanel(0, 'distance d (m)', '#7fd1a0', dist, { sublabel:'slope = speed' });
+    drawPanel(1, 'speed (m/s)', '#67b7ff', function(){ return vSigned(); }, { sublabel:'flat = not changing' });
+    drawPanel(2, 'accel a (m/s²)', '#ff9a9a', function(){ return 0; }, { fixed:true, lo:-1, hi:1, sublabel:'a = 0 always' });
+
+    // shared time cursor
+    if(t > 0){
+      ctx.strokeStyle = 'rgba(255,242,214,0.35)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(tx(t), panelTop(0)-2); ctx.lineTo(tx(t), panelTop(2)+panelH); ctx.stroke();
+    }
+    // x-axis caption
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('time t (s) →', x1, H - 2);
+    ctx.textAlign = 'left';
+  }
+
+  function readout(){
+    el.tOut.textContent = t.toFixed(1);
+    el.dOut.textContent = dist(t).toFixed(1);
+    el.vOut.textContent = vSigned().toFixed(1);
+    el.aOut.textContent = '0.0';
+  }
+
+  function reset(){ running = false; t = 0; lastTs = null; draw(); readout(); }
+
+  function loop(ts){
+    if(!running) return;
+    if(lastTs === null) lastTs = ts;
+    var dt = Math.min((ts - lastTs)/1000, 0.05); lastTs = ts;
+    t += dt;
+    if(t >= T_MAX){ t = T_MAX; running = false; }
+    draw(); readout();
+    if(running) requestAnimationFrame(loop);
+  }
+
+  function syncLabels(){
+    el.spdval.textContent = speed.toFixed(1);
+    el.d0val.textContent = d0.toFixed(0);
+    if(speed === 0) el.hint.textContent = 'Speed is 0 → the object sits still. The distance–time line is flat too.';
+    else if(dir > 0) el.hint.textContent = 'Moving forward at a steady speed → distance climbs in a straight line; speed and acceleration stay flat.';
+    else el.hint.textContent = 'Moving backward → the distance–time line slopes down, but the speed–time line is still flat and a is still 0.';
+  }
+
+  el.spd.addEventListener('input', function(){ speed = parseFloat(this.value); syncLabels(); reset(); });
+  el.d0.addEventListener('input', function(){ d0 = parseFloat(this.value); syncLabels(); reset(); });
+  el.dirFwd.addEventListener('click', function(){ dir = 1; el.dirFwd.setAttribute('aria-pressed','true'); el.dirBack.setAttribute('aria-pressed','false'); syncLabels(); reset(); });
+  el.dirBack.addEventListener('click', function(){ dir = -1; el.dirBack.setAttribute('aria-pressed','true'); el.dirFwd.setAttribute('aria-pressed','false'); syncLabels(); reset(); });
+
+  el.run.addEventListener('click', function(){
+    if(t >= T_MAX) reset();
+    if(running) return;
+    running = true; lastTs = null;
+    if(reduceMotion){ t = T_MAX; running = false; draw(); readout(); }
+    else requestAnimationFrame(loop);
+  });
+  el.reset.addEventListener('click', reset);
+
+  syncLabels();
+  reset();
+})();
+
+/* ---------- predict-first probe ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = '✓ Right. Both lines are straight (constant speed), but a steeper distance–time slope means more metres per second — a bigger speed.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '✗ Not quite — a straight line still means constant speed. The steeper slope simply means A moves faster.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q1:'b', q2:'a', q4:'c' };
+  var expl = {
+    q1:'constant speed gives a straight line with a steady, non-zero slope.',
+    q2:'slope on a distance–time graph is Δd/Δt — the speed.',
+    q4:'constant speed means no change in speed, so acceleration is zero the whole time.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v - 3) < 0.05){ correct++; markCard('card-q3', true, '✓ Correct: slope = 12 m ÷ 4 s = 3 m/s.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number (m/s).'); }
+    else { markCard('card-q3', false, '✗ Slope = Δd/Δt = 12 ÷ 4 = 3 m/s.'); }
+
+    var tail = correct === total ? "Nice — you're ready to move on!"
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Rewatch the walkthrough, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q3input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+</body>
+</html>
