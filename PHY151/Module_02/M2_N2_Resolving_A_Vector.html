@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>M2 N2 — Resolving a Vector</title>
+<title>M2 N2 — Resolving A Vector</title>
 <style>
   /* ==================================================================
-     FLCC Physics note page — Module 2 (matches M1 N3/N4 template)
+     FLCC Physics note page — Module 2, Note 2 (matches M2 N1 template)
      Self-contained; no external dependencies. Upload via Manage Files
      and insert as a full page so the inline <script> survives.
      ================================================================== */
@@ -32,24 +32,6 @@
   .eyebrow strong{ color:var(--green); font-weight:600; }
   h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
   h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
-
-  /* strobe divider */
-  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
-  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
-  .strobe.uniform span + span{ margin-left:26px; }
-  .strobe small{
-    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
-    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
-  }
-  @keyframes strobePulse{ 0%,100%{ transform:scale(1); opacity:.55; } 35%{ transform:scale(1.9); opacity:1; } }
-  .strobe.animate span{ animation:strobePulse 2.4s ease-in-out infinite; }
-  .strobe.animate span:nth-child(1){ animation-delay:0s; }
-  .strobe.animate span:nth-child(2){ animation-delay:.16s; }
-  .strobe.animate span:nth-child(3){ animation-delay:.32s; }
-  .strobe.animate span:nth-child(4){ animation-delay:.48s; }
-  .strobe.animate span:nth-child(5){ animation-delay:.64s; }
-  .strobe.animate span:nth-child(6){ animation-delay:.80s; }
-  @media (prefers-reduced-motion: reduce){ .strobe.animate span{ animation:none; } }
 
   .synopsis{
     background:var(--green-soft); border-left:4px solid var(--green);
@@ -132,9 +114,6 @@
   .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
   .btn:hover{ filter:brightness(.96); }
   .btn:active{ transform:translateY(1px); }
-  .seg{ display:inline-flex; border:1px solid var(--green); border-radius:6px; overflow:hidden; }
-  .seg button{ border:0; background:#fff; color:var(--green); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600; padding:.42rem .8rem; cursor:pointer; }
-  .seg button[aria-pressed="true"]{ background:var(--green); color:#fff; }
   .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
   .readout .chip{
     font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
@@ -159,48 +138,6 @@
   .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
   .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
   .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
-
-  /* looking-ahead signpost */
-  .preview-note{
-    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
-    padding:.7rem 1rem; margin:.9rem 0 0;
-    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
-  }
-  .preview-note strong{ color:var(--amber); }
-
-  /* summary table */
-  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
-  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
-  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top; }
-  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
-  .translate tr:last-child td{ border-bottom:0; }
-  .translate td .tag{ font-weight:600; }
-  .translate td .tag.up{ color:var(--green); }
-  .translate td .tag.zero{ color:var(--muted); }
-
-  /* key equations */
-  .eqs{ display:grid; gap:.8rem; grid-template-columns:1fr; margin:1rem 0 0; }
-  @media (min-width:600px){ .eqs{ grid-template-columns:1fr 1fr 1fr; } }
-  .eq-card{ border:1px solid var(--rule); border-radius:8px; padding:.85rem .9rem; background:#fff; }
-  .eq-card .icon{ font-size:1.4rem; line-height:1; display:block; margin-bottom:.35rem; }
-  .eq-card .formula{
-    font-family:Charter, Georgia, serif; font-size:1.08rem; font-weight:700;
-    color:var(--green-deep); display:block; margin-bottom:.25rem;
-  }
-  .eq-card small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
-
-  /* video slot */
-  .video-slot{ border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc; }
-  .video-slot .label{
-    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;
-  }
-  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
-  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-  .video-placeholder{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
-  }
 
   /* exit ticket */
   .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
@@ -241,7 +178,6 @@
   .dl-card .hint{ font-size:.88rem; color:var(--muted); }
 
   footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
-
 </style>
 </head>
 <body>
@@ -249,20 +185,21 @@
 
   <div class="eyebrow">
     <span><strong>FLCC Physics</strong></span>
-    <span>Module 2 · Vectors and Projectile Motion</span>
+    <span>Module 2 · Motion In Two Dimensions</span>
     <span>Note 2</span>
   </div>
 
-  <h1>Resolving a Vector</h1>
+  <h1>Resolving A Vector</h1>
 
   <div class="synopsis">
     <span class="label">Synopsis</span>
-    We can add vectors with the head-to-tail rule. Now we run that rule <em>in reverse</em>: any vector can be
-    <b>resolved</b> — split up — into a horizontal component (along x) and a vertical component (along y) that,
-    added head-to-tail, rebuild the original exactly. Resolving is the single most useful move in this module,
-    because of a quiet miracle you'll discover in this note: <em>components add like ordinary numbers</em>.
-    If A and B add to the resultant C, then C's horizontal component is just A's plus B's — and the same
-    holds vertically. Vector addition becomes arithmetic, done separately along x and along y.
+    Head-to-tail addition joins two vectors into one. <em>Resolving</em> a vector is that process
+    in reverse: instead of combining two vectors into a resultant, we split <em>one</em> vector into
+    two perpendicular parts — a <em>horizontal component</em> and a <em>vertical component</em> — that,
+    added head-to-tail, reconstruct the original vector exactly. A vector that already lies flat along
+    an axis needs no resolving at all: it's entirely one component and zero the other. Resolving is the
+    tool that lets us add vectors algebraically instead of just diagrammatically — add the horizontal
+    parts together, add the vertical parts together, and reassemble.
   </div>
 
   <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
@@ -272,40 +209,34 @@
       <span>By the end of this note, you will be able to&hellip;</span>
     </div>
     <ul>
-      <li><span class="tick">PE1</span><span class="txt"><b>Explain what resolving a vector means</b> — splitting it into horizontal and vertical components that together have the same effect as the original.</span></li>
-      <li><span class="tick">PE2</span><span class="txt"><b>Resolve a vector by drawing</b> — use a ruler to construct its component along x and its component along y on grid paper.</span></li>
-      <li><span class="tick">PE3</span><span class="txt"><b>Assign the correct signs</b> to components from the vector's direction (e.g., up-and-left → x negative, y positive).</span></li>
-      <li><span class="tick">PE4</span><span class="txt"><b>Resolve special cases</b> — a vector lying along an axis has one component equal to the whole vector and the other equal to zero.</span></li>
-      <li><span class="tick">PE5</span><span class="txt"><b>Show that components add</b> — if A + B = C, then C<sub>x</sub> = A<sub>x</sub> + B<sub>x</sub> and C<sub>y</sub> = A<sub>y</sub> + B<sub>y</sub>.</span></li>
-      <li><span class="tick">PE6</span><span class="txt"><b>Recognize the payoff</b> — components turn vector addition into ordinary number addition, one axis at a time.</span></li>
+      <li><span class="tick">PE1</span><span class="txt"><b>Recognize resolving as the reverse of head-to-tail addition</b> — splitting one vector into two perpendicular parts instead of combining two into one.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Resolve a vector into its horizontal (x) and vertical (y) components</b> by drawing a right triangle: the component legs run along the axes, and the original vector is the hypotenuse.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Recognize when a vector needs no resolving</b> — a vector already lying along the x-axis or y-axis is entirely one component; its other component is zero.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Resolve two or more vectors, then add their components separately</b> — sum all the x-components together, and all the y-components together.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>State the component-addition rule</b> — C<sub>x</sub> = A<sub>x</sub> + B<sub>x</sub> and C<sub>y</sub> = A<sub>y</sub> + B<sub>y</sub> — and explain why adding components independently gives the same resultant as head-to-tail addition.</span></li>
     </ul>
-  </div>
-
-  <div class="strobe uniform animate" aria-hidden="true">
-    <span></span><span></span><span></span><span></span><span></span><span></span>
-    <small>one arrow — two shadows</small>
   </div>
 
   <!-- ============ CONNECTING PRIOR EXPERIENCE ============ -->
   <div class="prior">
     <div class="head"><span class="spark">💡</span><strong>You already know this</strong></div>
     <div class="body">
-      <p>Splitting one motion into "how much sideways" and "how much up" is something you do by instinct:</p>
+      <p>Splitting one diagonal thing into two straight parts isn't new — you've done it before:</p>
       <div class="cases">
         <div class="case">
-          <span class="emoji">🥾</span>
-          <b>Hiking northeast</b>
-          <small>Walk 5 km northeast and you've gone <em>some</em> east and <em>some</em> north — two separate answers hiding in one arrow.</small>
+          <span class="emoji">📺</span>
+          <b>TV screen size</b>
+          <small>A "55-inch" TV is measured along the diagonal, but the screen really has a width and a height. The diagonal is one number standing in for two perpendicular ones.</small>
         </div>
         <div class="case">
-          <span class="emoji">🛒</span>
-          <b>Pushing a cart handle</b>
-          <small>Push down a tilted handle: part of your push drives the cart forward, part presses it into the floor. One force, two jobs.</small>
+          <span class="emoji">🚶</span>
+          <b>Cutting across a field</b>
+          <small>Walk diagonally across a rectangular field instead of around the two edges — you still end up some distance east and some distance north, just covered both at once instead of one leg at a time.</small>
         </div>
         <div class="case">
-          <span class="emoji">🪜</span>
-          <b>A leaning ladder</b>
-          <small>A 3 m ladder against a wall reaches less than 3 m up — how much less depends on how far its foot sits out. Length splits into across + up.</small>
+          <span class="emoji">🎮</span>
+          <b>Pushing a joystick diagonally</b>
+          <small>Push a game controller stick diagonally and the game doesn't see "diagonal" — it resolves your push into an x-push and a y-push and moves your character by both, separately.</small>
         </div>
       </div>
     </div>
@@ -313,135 +244,68 @@
 
   <h2>In this note, we work through</h2>
   <ol class="questions">
-    <li>What does it mean to resolve (split up) a vector into horizontal and vertical components?</li>
-    <li>How do we draw the components with a ruler on grid paper?</li>
-    <li>If vectors A and B add to the resultant C, how do the components of A and B compare with the components of C?</li>
-    <li>What is the great advantage of working with components?</li>
+    <li>What does it mean to "resolve" a vector, and how is that head-to-tail addition in reverse?</li>
+    <li>How do we find a vector's horizontal and vertical components?</li>
+    <li>What happens when we add two vectors' components separately — do we get the same resultant as adding the vectors head-to-tail?</li>
+    <li>Why does a vector already lying along an axis need no resolving?</li>
   </ol>
 
-  <!-- ============ INTERACTIVE: RESOLVING LAB ============ -->
-  <h2>Play with it: the resolving lab</h2>
-  <p>Start in <b>One vector</b> mode: aim the arrow anywhere and press <b>Show components</b> to see its
-  horizontal and vertical pieces (count the grid squares!). Then switch to <b>A + B = C</b> mode and watch
-  the discovery of this note: the components of C are exactly the components of A plus the components of B.</p>
+  <!-- ============ INTERACTIVE: COMPONENT RESOLVER ============ -->
+  <h2>Play with it: resolve a vector into components</h2>
+  <p>Set vector <b>A</b>'s length and angle. <b>A</b>x is how far it reaches horizontally; <b>A</b>y is
+  how far it reaches vertically. Together they form a right triangle with A itself as the hypotenuse.
+  Try dragging the angle to exactly 0° or 90° — watch one component disappear.</p>
 
   <div class="sim" id="sim">
-    <div class="sim-head"><span>▶</span> Interactive · Resolving Vectors</div>
+    <div class="sim-head"><span>▶</span> Interactive · Vector Component Resolver</div>
     <div class="stage">
-      <canvas id="simCanvas" width="720" height="400" role="img"
-        aria-label="A vector on grid paper resolved into dashed horizontal and vertical components; a second mode shows two vectors adding to a resultant with all components displayed."></canvas>
+      <canvas id="simCanvas" width="720" height="420" role="img"
+        aria-label="A grid showing vector A drawn from the origin, with its horizontal component Ax and vertical component Ay forming a right triangle underneath it."></canvas>
     </div>
     <div class="panel">
       <div class="controls">
         <div class="ctrl">
-          <label for="magA">Length of A <span class="val"><span id="magAval">5.0</span> units</span></label>
+          <label for="magA">Vector A — length <span class="val"><span id="magAval">5.0</span> m</span></label>
           <input type="range" id="magA" min="1" max="6" step="0.5" value="5">
         </div>
         <div class="ctrl">
-          <label for="dirA">Direction of A <span class="val"><span id="dirAval">37</span>°</span></label>
-          <input type="range" id="dirA" min="0" max="360" step="1" value="37">
-        </div>
-        <div class="ctrl" id="ctrlMagB">
-          <label for="magB">Length of B <span class="val"><span id="magBval">3.0</span> units</span></label>
-          <input type="range" id="magB" min="1" max="6" step="0.5" value="3">
-        </div>
-        <div class="ctrl" id="ctrlDirB">
-          <label for="dirB">Direction of B <span class="val"><span id="dirBval">120</span>°</span></label>
-          <input type="range" id="dirB" min="0" max="360" step="1" value="120">
+          <label for="angA">Vector A — angle <span class="val"><span id="angAval">40</span>&deg;</span></label>
+          <input type="range" id="angA" min="0" max="360" step="5" value="40">
         </div>
       </div>
       <div class="buttons">
-        <span class="seg" role="group" aria-label="mode">
-          <button id="modeOne" aria-pressed="true">One vector</button>
-          <button id="modeSum" aria-pressed="false">A + B = C</button>
-        </span>
-        <button class="btn toggle primary" id="compBtn" aria-pressed="false">Show components</button>
+        <button class="btn toggle" id="componentsBtn" aria-pressed="false">Show components</button>
         <button class="btn" id="resetBtn">↺ Reset</button>
       </div>
-      <div class="readout" id="chipsOne">
-        <span class="chip">A<sub>x</sub> = <b id="axOut">4.0</b></span>
-        <span class="chip">A<sub>y</sub> = <b id="ayOut">3.0</b></span>
-        <span class="chip">signs: <b id="signOut">(+, +)</b></span>
+      <div class="readout">
+        <span class="chip">A<sub>x</sub> ≈ <b id="axOut">—</b></span>
+        <span class="chip">A<sub>y</sub> ≈ <b id="ayOut">—</b></span>
       </div>
-      <div class="readout" id="chipsSum" style="display:none">
-        <span class="chip">A<sub>x</sub>+B<sub>x</sub> = <b id="sumxOut">—</b></span>
-        <span class="chip">C<sub>x</sub> = <b id="cxOut">—</b></span>
-        <span class="chip">A<sub>y</sub>+B<sub>y</sub> = <b id="sumyOut">—</b></span>
-        <span class="chip">C<sub>y</sub> = <b id="cyOut">—</b></span>
-      </div>
-      <div class="hint-row" id="simHint">Aim the vector, then show its components — the two dashed "shadows" along the axes.</div>
+      <div class="hint-row" id="simHint">Predict Ax and Ay in your head first, then press "Show components" to check.</div>
     </div>
   </div>
 
   <!-- predict-first probe -->
-  <div class="probe" id="probe"
-    data-right-msg="✓ Right. A vector along the +y axis is already vertical — there is nothing horizontal about it. Its x-component is zero and its y-component is the whole vector."
-    data-wrong-msg="✗ Not quite — a vector lying exactly on the +y axis points straight up. There's nothing horizontal to split off: x-component zero, y-component the whole vector.">
-    <p class="q">Predict first: a vector lies exactly along the +y axis. What does resolving it give?</p>
+  <div class="probe" id="probe">
+    <p class="q">Predict first: a vector 5 m long points straight up, along the +y axis (90°).
+    What is its horizontal (x) component?</p>
     <div class="opts">
-      <button class="opt" data-correct="false">Two equal components, one along each axis.</button>
-      <button class="opt" data-correct="true">An x-component of zero and a y-component equal to the whole vector.</button>
-      <button class="opt" data-correct="false">A y-component of zero and an x-component equal to the whole vector.</button>
-      <button class="opt" data-correct="false">Both components zero.</button>
+      <button class="opt" data-correct="false">5 m</button>
+      <button class="opt" data-correct="true">0 m</button>
+      <button class="opt" data-correct="false">2.5 m</button>
+      <button class="opt" data-correct="false">It depends on the y-component</button>
     </div>
     <div class="feedback" id="probeFb" role="status"></div>
   </div>
 
   <h2>Watch: working through the note</h2>
-  <div class="video-slot">
-    <span class="label">Walkthrough video · ~10 min</span>
+  <div class="video-slot" style="border:1.5px dashed var(--rule); border-radius:8px; padding:1rem 1.1rem; background:#fbfdfc;">
+    <span style="font-family:'Segoe UI', system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.5rem;">Walkthrough video · ~10 min</span>
     <!-- Replace the placeholder with your embed:
          <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
               title="M2 N2 walkthrough with Dr. Cho"></iframe></div> -->
-    <div class="video-frame">
-      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
-    </div>
-  </div>
-
-  <!-- ============ SUMMARY TABLE ============ -->
-  <h2>Component signs at a glance</h2>
-  <p>Before you compute anything, read the signs straight off the arrow's direction:</p>
-  <div class="translate">
-    <table>
-      <thead>
-        <tr><th>The vector points&hellip;</th><th>x-component</th><th>y-component</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><b>Up and to the right</b> ↗</td><td><span class="tag up">+</span></td><td><span class="tag up">+</span></td></tr>
-        <tr><td><b>Up and to the left</b> ↖</td><td><span class="tag zero">−</span></td><td><span class="tag up">+</span></td></tr>
-        <tr><td><b>Down and to the right</b> ↘</td><td><span class="tag up">+</span></td><td><span class="tag zero">−</span></td></tr>
-        <tr><td><b>Down and to the left</b> ↙</td><td><span class="tag zero">−</span></td><td><span class="tag zero">−</span></td></tr>
-        <tr><td><b>Exactly along an axis</b> → or ↑</td><td colspan="2">one component is the whole vector; the other is zero</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <p class="preview-note"><strong>Looking ahead:</strong> in this note we resolve vectors by <em>drawing and
-  counting grid squares</em>. In Note&nbsp;2a, trigonometry (SOH-CAH-TOA) tells us the exact component lengths
-  for any angle — no grid required. That's the tool the projectile notes (N3–N5) run on.</p>
-
-  <div class="strobe uniform animate" aria-hidden="true">
-    <span></span><span></span><span></span><span></span><span></span><span></span>
-    <small>components add along each axis</small>
-  </div>
-
-  <!-- ============ KEY RULES ============ -->
-  <h2>Three rules to remember</h2>
-  <div class="eqs">
-    <div class="eq-card">
-      <span class="icon">✂️</span>
-      <span class="formula">V → V<sub>x</sub> + V<sub>y</sub></span>
-      <small>Resolving splits one vector into a horizontal piece and a vertical piece that rebuild it head-to-tail.</small>
-    </div>
-    <div class="eq-card">
-      <span class="icon">➕</span>
-      <span class="formula">C<sub>x</sub> = A<sub>x</sub> + B<sub>x</sub></span>
-      <small>Components of the resultant are the sums of the components — the same along y: C<sub>y</sub> = A<sub>y</sub> + B<sub>y</sub>.</small>
-    </div>
-    <div class="eq-card">
-      <span class="icon">🔢</span>
-      <span class="formula">Vectors → numbers</span>
-      <small>The payoff: with components, vector addition becomes ordinary addition, done separately along x and along y.</small>
+    <div style="position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16;">
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cfe4d7; font-family:'Segoe UI', system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;">Video embed goes here — print the guided notes below before you press play.</div>
     </div>
   </div>
 
@@ -454,45 +318,43 @@
     <div class="t-body">
 
       <div class="q-card" id="card-q1">
-        <p class="qtext"><span class="num">Q1.</span> Resolving a vector means&hellip;</p>
+        <p class="qtext"><span class="num">Q1.</span> Resolving a vector into components means&hellip;</p>
         <div class="q-opts">
-          <label><input type="radio" name="q1" value="a"> Halving its magnitude.</label>
-          <label><input type="radio" name="q1" value="b"> Rotating it until it lies on the x-axis.</label>
-          <label><input type="radio" name="q1" value="c"> Splitting it into horizontal and vertical components that together have the same effect.</label>
-          <label><input type="radio" name="q1" value="d"> Finding the vector that cancels it.</label>
+          <label><input type="radio" name="q1" value="a"> Rotating it 90°.</label>
+          <label><input type="radio" name="q1" value="b"> Splitting it into a horizontal part and a vertical part that add back to the original vector.</label>
+          <label><input type="radio" name="q1" value="c"> Doubling its length.</label>
+          <label><input type="radio" name="q1" value="d"> Combining it with another vector.</label>
         </div>
         <div class="qfb"></div>
       </div>
 
       <div class="q-card" id="card-q2">
-        <p class="qtext"><span class="num">Q2.</span> A vector points up and to the <em>left</em>. The signs of its (x, y) components are&hellip;</p>
+        <p class="qtext"><span class="num">Q2.</span> A vector lies exactly along the +x axis. Its vertical (y) component is&hellip;</p>
         <div class="q-opts">
-          <label><input type="radio" name="q2" value="a"> (+, +)</label>
-          <label><input type="radio" name="q2" value="b"> (−, +)</label>
-          <label><input type="radio" name="q2" value="c"> (+, −)</label>
-          <label><input type="radio" name="q2" value="d"> (−, −)</label>
+          <label><input type="radio" name="q2" value="a"> Equal to its magnitude.</label>
+          <label><input type="radio" name="q2" value="b"> Zero.</label>
+          <label><input type="radio" name="q2" value="c"> Impossible to determine.</label>
+          <label><input type="radio" name="q2" value="d"> Always negative.</label>
         </div>
         <div class="qfb"></div>
       </div>
 
       <div class="q-card" id="card-q3">
-        <p class="qtext"><span class="num">Q3.</span> Vector A has a horizontal component of 3 squares; vector B has a
-        horizontal component of 2 squares. They add to the resultant C. Reading straight from this note's discovery,
-        what is C's horizontal component?</p>
+        <p class="qtext"><span class="num">Q3.</span> Vector A has A<sub>x</sub> = 6 m and vector B has B<sub>x</sub> = −2 m. If C = A + B, what is C<sub>x</sub>?</p>
         <div class="q-num">
-          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="horizontal component of C in squares">
-          <span class="unit">squares</span>
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="Cx in meters">
+          <span class="unit">m</span>
         </div>
         <div class="qfb"></div>
       </div>
 
       <div class="q-card" id="card-q4">
-        <p class="qtext"><span class="num">Q4.</span> The great advantage of components is that&hellip;</p>
+        <p class="qtext"><span class="num">Q4.</span> Adding vectors by components — C<sub>x</sub> = A<sub>x</sub> + B<sub>x</sub> and C<sub>y</sub> = A<sub>y</sub> + B<sub>y</sub> — works because&hellip;</p>
         <div class="q-opts">
-          <label><input type="radio" name="q4" value="a"> Vectors become scalars.</label>
-          <label><input type="radio" name="q4" value="b"> Direction no longer matters.</label>
-          <label><input type="radio" name="q4" value="c"> Magnitudes always increase.</label>
-          <label><input type="radio" name="q4" value="d"> Vector addition becomes ordinary number addition, done separately along x and along y.</label>
+          <label><input type="radio" name="q4" value="a"> The horizontal and vertical directions are independent of each other, so components along each axis add like ordinary numbers.</label>
+          <label><input type="radio" name="q4" value="b"> It's a shortcut that only works for right angles between A and B.</label>
+          <label><input type="radio" name="q4" value="c"> It only works when A and B point the same way.</label>
+          <label><input type="radio" name="q4" value="d"> Vectors don't actually add — only their components do.</label>
         </div>
         <div class="qfb"></div>
       </div>
@@ -507,15 +369,15 @@
 
   <h2>Your notes</h2>
   <div class="downloads">
-    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
-      <span class="kind">Before class</span>
-      <span class="name">Guided notes — blank (PDF)</span>
-      <span class="hint">Print it — you'll resolve the vectors on the grid pages with a ruler.</span>
+    <a class="dl-card" href="./M2_N2_Resolving_A_Vector.pdf">
+      <span class="kind">Read anytime</span>
+      <span class="name">This note (PDF)</span>
+      <span class="hint">A print-friendly PDF of this page, for offline reading or a quick reference while you work the guided notes.</span>
     </a>
-    <a class="dl-card" href="REPLACE-WITH-COURSE-FILE-LINK">
+    <a class="dl-card" href="#">
       <span class="kind">After the module</span>
       <span class="name">Completed notes (PDF)</span>
-      <span class="hint">Released when Module 2 closes — check your drawings against it.</span>
+      <span class="hint">Released when Module 2 closes — check your work against it.</span>
     </a>
   </div>
 
@@ -527,268 +389,204 @@
 
 <script>
 /* ==================================================================
-   Resolving Vectors Lab — self-contained, no dependencies.
-   Mode 1: one vector A with dashed x/y component projections.
-   Mode 2: A + B = C head-to-tail; components of all three shown,
-           demonstrating Cx = Ax + Bx and Cy = Ay + By.
+   Vector Component Resolver — self-contained, no dependencies.
+   Draws vector A from the origin, and (when toggled) its horizontal
+   component Ax along the x-axis and vertical component Ay completing
+   the right triangle up to A's head.
    ================================================================== */
 (function(){
   var cv = document.getElementById('simCanvas');
   if(!cv || !cv.getContext) return;
   var ctx = cv.getContext('2d');
   var W = cv.width, H = cv.height;
+  var cx = W/2 - 60, cy = H/2 + 60;
+  var scale = 34; // px per meter
 
-  var GRID = 34;
-  var magA = 5, dirA = 37, magB = 3, dirB = 120;
-  var mode = 'one', showComp = false;
+  var magA = 5, angA = 40, showComponents = false;
 
   var el = {
-    magA: document.getElementById('magA'), dirA: document.getElementById('dirA'),
-    magB: document.getElementById('magB'), dirB: document.getElementById('dirB'),
-    magAval: document.getElementById('magAval'), dirAval: document.getElementById('dirAval'),
-    magBval: document.getElementById('magBval'), dirBval: document.getElementById('dirBval'),
-    ctrlMagB: document.getElementById('ctrlMagB'), ctrlDirB: document.getElementById('ctrlDirB'),
-    modeOne: document.getElementById('modeOne'), modeSum: document.getElementById('modeSum'),
-    comp: document.getElementById('compBtn'), reset: document.getElementById('resetBtn'),
-    chipsOne: document.getElementById('chipsOne'), chipsSum: document.getElementById('chipsSum'),
+    magA: document.getElementById('magA'), angA: document.getElementById('angA'),
+    magAval: document.getElementById('magAval'), angAval: document.getElementById('angAval'),
+    components: document.getElementById('componentsBtn'), reset: document.getElementById('resetBtn'),
     axOut: document.getElementById('axOut'), ayOut: document.getElementById('ayOut'),
-    signOut: document.getElementById('signOut'),
-    sumxOut: document.getElementById('sumxOut'), cxOut: document.getElementById('cxOut'),
-    sumyOut: document.getElementById('sumyOut'), cyOut: document.getElementById('cyOut'),
     hint: document.getElementById('simHint')
   };
 
-  function rad(d){ return d * Math.PI / 180; }
-  function vA(){ return { x: magA * Math.cos(rad(dirA)), y: magA * Math.sin(rad(dirA)) }; }
-  function vB(){ return { x: magB * Math.cos(rad(dirB)), y: magB * Math.sin(rad(dirB)) }; }
-  function toPx(p){ return { x: W/2 + p.x * GRID, y: H/2 - p.y * GRID }; }
+  function toXY(mag, angDeg){
+    var rad = angDeg * Math.PI/180;
+    return { x: mag*Math.cos(rad), y: -mag*Math.sin(rad) }; // screen y flips
+  }
 
-  function arrow(from, to, color, width, dash, label, labelOff){
-    var f = toPx(from), t = toPx(to);
-    if(Math.abs(f.x - t.x) < 0.5 && Math.abs(f.y - t.y) < 0.5) return;
+  function drawGrid(){
+    ctx.strokeStyle = 'rgba(159,196,173,0.25)'; ctx.lineWidth = 1;
+    for(var gx = cx % scale; gx < W; gx += scale){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+    for(var gy = cy % scale; gy < H; gy += scale){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(159,196,173,0.55)';
+    ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(W,cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,H); ctx.stroke();
+  }
+
+  function arrow(x0,y0,x1,y1,color,width,dashed){
     ctx.save();
-    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width;
-    if(dash) ctx.setLineDash(dash);
-    ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo(t.x, t.y); ctx.stroke();
-    ctx.setLineDash([]);
-    var ang = Math.atan2(t.y - f.y, t.x - f.x), hl = 10;
-    ctx.beginPath();
-    ctx.moveTo(t.x, t.y);
-    ctx.lineTo(t.x - hl * Math.cos(ang - 0.42), t.y - hl * Math.sin(ang - 0.42));
-    ctx.lineTo(t.x - hl * Math.cos(ang + 0.42), t.y - hl * Math.sin(ang + 0.42));
-    ctx.closePath(); ctx.fill();
-    if(label){
-      ctx.font = 'bold 14px Segoe UI, sans-serif';
-      var off = labelOff || { x: 10, y: -8 };
-      ctx.fillText(label, (f.x + t.x)/2 + off.x, (f.y + t.y)/2 + off.y);
-    }
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width || 3;
+    if(dashed) ctx.setLineDash([7,6]);
+    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
     ctx.restore();
+    var ang = Math.atan2(y1-y0, x1-x0);
+    var hlen = 12;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x1 - hlen*Math.cos(ang-0.35), y1 - hlen*Math.sin(ang-0.35));
+    ctx.lineTo(x1 - hlen*Math.cos(ang+0.35), y1 - hlen*Math.sin(ang+0.35));
+    ctx.closePath(); ctx.fill();
   }
 
-  function components(tail, vec, color){
-    // dashed L: horizontal piece then vertical piece
-    var corner = { x: tail.x + vec.x, y: tail.y };
-    var head = { x: tail.x + vec.x, y: tail.y + vec.y };
-    if(Math.abs(vec.x) > 0.05) arrow(tail, corner, color, 2, [5,4], null);
-    if(Math.abs(vec.y) > 0.05) arrow(corner, head, color, 2, [5,4], null);
-  }
-
-  function grid(){
-    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0, 0, W, H);
-    ctx.strokeStyle = '#1c3527'; ctx.lineWidth = 1;
-    for(var gx = W/2 % GRID; gx < W; gx += GRID){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
-    for(var gy = H/2 % GRID; gy < H; gy += GRID){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
-    // axes through origin
-    ctx.strokeStyle = '#2c5a3f'; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(0, H/2); ctx.lineTo(W, H/2); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(W/2, 0); ctx.lineTo(W/2, H); ctx.stroke();
-    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif';
-    ctx.fillText('x', W - 14, H/2 - 6);
-    ctx.fillText('y', W/2 + 8, 14);
+  function label(text, x, y, color){
+    ctx.font = '600 13px Segoe UI, sans-serif'; ctx.fillStyle = color;
+    ctx.fillText(text, x, y);
   }
 
   function draw(){
-    grid();
-    var a = vA(), b = vB();
-    if(mode === 'one'){
-      var tail = { x: 0, y: 0 };
-      arrow(tail, a, '#7fd1a0', 3, null, 'A');
-      if(showComp){
-        components(tail, a, '#ffd479');
-        var c = toPx({ x: a.x, y: 0 });
-        ctx.fillStyle = '#ffd479'; ctx.font = '12px Segoe UI, sans-serif';
-        if(Math.abs(a.x) > 0.05) ctx.fillText('Ax', (toPx(tail).x + c.x)/2 - 8, toPx(tail).y + (a.y >= 0 ? 16 : -8));
-        if(Math.abs(a.y) > 0.05) ctx.fillText('Ay', c.x + 8, (c.y + toPx(a).y)/2);
-      }
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
+    drawGrid();
+
+    var v = toXY(magA, angA);
+    var x0 = cx, y0 = cy;
+    var x1 = x0 + v.x*scale, y1 = y0 + v.y*scale;
+    var xFoot = x0 + v.x*scale, yFoot = y0; // point on x-axis under/over the head
+
+    if(showComponents){
+      // horizontal component Ax: origin -> foot on x-axis
+      arrow(x0,y0,xFoot,yFoot, '#67b7ff', 3, false);
+      label('Ax', (x0+xFoot)/2 - 6, y0 + (v.y<0? -10 : 22), '#67b7ff');
+      // vertical component Ay: foot -> head, completing the triangle
+      arrow(xFoot,yFoot,x1,y1, '#ffd27a', 3, false);
+      label('Ay', xFoot + (v.x<0? -34 : 10), (yFoot+y1)/2, '#ffd27a');
+      // faint construction line closing the triangle (dashed, same as vector A path)
+    }
+
+    // vector A itself (drawn on top)
+    arrow(x0,y0,x1,y1, '#7fd1a0', 3.5, false);
+    label('A', x1 + (v.x>=0?8:-22), y1 - 8, '#7fd1a0');
+
+    // origin dot
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x0,y0,3.5,0,Math.PI*2); ctx.fill();
+
+    var ax = v.x, ay = -v.y; // true math-convention components (y up positive)
+    if(showComponents){
+      el.axOut.textContent = ax.toFixed(1) + ' m';
+      el.ayOut.textContent = ay.toFixed(1) + ' m';
     } else {
-      var Atail = { x: -3, y: -2 };
-      var Bt = { x: Atail.x + a.x, y: Atail.y + a.y };
-      var Ch = { x: Bt.x + b.x, y: Bt.y + b.y };
-      arrow(Atail, Bt, '#7fd1a0', 3, null, 'A');
-      arrow(Bt, Ch, '#67b7ff', 3, null, 'B');
-      arrow(Atail, Ch, '#ff9a9a', 3, [7,5], 'C', { x: -26, y: 14 });
-      if(showComp){
-        components(Atail, a, '#7fd1a0');
-        components(Bt, b, '#67b7ff');
-        components(Atail, { x: a.x + b.x, y: a.y + b.y }, '#ffd479');
-      }
+      el.axOut.textContent = '—';
+      el.ayOut.textContent = '—';
     }
   }
 
-  function fmt(n){ return (Math.abs(n) < 0.05 ? 0 : n).toFixed(1); }
-
-  function readout(){
-    var a = vA(), b = vB();
-    if(mode === 'one'){
-      el.axOut.textContent = fmt(a.x);
-      el.ayOut.textContent = fmt(a.y);
-      var sx = Math.abs(a.x) < 0.05 ? '0' : (a.x > 0 ? '+' : '−');
-      var sy = Math.abs(a.y) < 0.05 ? '0' : (a.y > 0 ? '+' : '−');
-      el.signOut.textContent = '(' + sx + ', ' + sy + ')';
+  function syncLabels(){
+    el.magAval.textContent = magA.toFixed(1);
+    el.angAval.textContent = angA.toFixed(0);
+    if(angA % 90 === 0){
+      el.hint.textContent = 'At ' + angA.toFixed(0) + '°, A lies exactly on an axis — one component is zero, nothing left to resolve.';
     } else {
-      el.sumxOut.textContent = fmt(a.x + b.x);
-      el.cxOut.textContent = fmt(a.x + b.x);
-      el.sumyOut.textContent = fmt(a.y + b.y);
-      el.cyOut.textContent = fmt(a.y + b.y);
+      el.hint.textContent = 'Predict Ax and Ay in your head first, then press "Show components" to check.';
     }
   }
 
-  function hint(){
-    if(mode === 'one'){
-      if(!showComp) el.hint.textContent = 'Aim the vector, then show its components — the two dashed "shadows" along the axes.';
-      else if(Math.abs(vA().x) < 0.05) el.hint.textContent = 'Straight up or down: the x-component is zero — the vector is already vertical, nothing more to do.';
-      else if(Math.abs(vA().y) < 0.05) el.hint.textContent = 'Exactly horizontal: the y-component is zero — the whole vector lies along x.';
-      else el.hint.textContent = 'Count grid squares: the horizontal dashes are the x-component, the vertical dashes the y-component. Watch the signs as you swing past 90°, 180°, 270°.';
-    } else {
-      el.hint.textContent = showComp
-        ? 'Compare the chips: Ax + Bx equals Cx, and Ay + By equals Cy — every time, for any angles. That’s the discovery of this note.'
-        : 'A and B add head-to-tail to the resultant C. Now press Show components to see why components make this easy.';
-    }
-  }
-
-  function refresh(){ draw(); readout(); hint(); }
-
-  function setMode(m){
-    mode = m;
-    el.modeOne.setAttribute('aria-pressed', m === 'one' ? 'true' : 'false');
-    el.modeSum.setAttribute('aria-pressed', m === 'sum' ? 'true' : 'false');
-    el.chipsOne.style.display = m === 'one' ? '' : 'none';
-    el.chipsSum.style.display = m === 'sum' ? '' : 'none';
-    el.ctrlMagB.style.opacity = m === 'sum' ? '1' : '.35';
-    el.ctrlDirB.style.opacity = m === 'sum' ? '1' : '.35';
-    refresh();
-  }
-
-  el.magA.addEventListener('input', function(){ magA = parseFloat(this.value); el.magAval.textContent = magA.toFixed(1); refresh(); });
-  el.dirA.addEventListener('input', function(){ dirA = parseFloat(this.value); el.dirAval.textContent = dirA.toFixed(0); refresh(); });
-  el.magB.addEventListener('input', function(){ magB = parseFloat(this.value); el.magBval.textContent = magB.toFixed(1); refresh(); });
-  el.dirB.addEventListener('input', function(){ dirB = parseFloat(this.value); el.dirBval.textContent = dirB.toFixed(0); refresh(); });
-  el.modeOne.addEventListener('click', function(){ setMode('one'); });
-  el.modeSum.addEventListener('click', function(){ setMode('sum'); });
-  el.comp.addEventListener('click', function(){
-    showComp = !showComp;
-    this.setAttribute('aria-pressed', showComp ? 'true' : 'false');
-    refresh();
+  el.magA.addEventListener('input', function(){ magA = parseFloat(this.value); syncLabels(); draw(); });
+  el.angA.addEventListener('input', function(){ angA = parseFloat(this.value); syncLabels(); draw(); });
+  el.components.addEventListener('click', function(){
+    showComponents = !showComponents;
+    el.components.setAttribute('aria-pressed', showComponents ? 'true' : 'false');
+    draw();
   });
   el.reset.addEventListener('click', function(){
-    magA = 5; dirA = 37; magB = 3; dirB = 120; showComp = false;
-    el.magA.value = 5; el.dirA.value = 37; el.magB.value = 3; el.dirB.value = 120;
-    el.magAval.textContent = '5.0'; el.dirAval.textContent = '37';
-    el.magBval.textContent = '3.0'; el.dirBval.textContent = '120';
-    el.comp.setAttribute('aria-pressed', 'false');
-    setMode('one');
+    magA=5; angA=40; showComponents=false;
+    el.magA.value=5; el.angA.value=40;
+    el.components.setAttribute('aria-pressed','false');
+    syncLabels(); draw();
   });
 
-  setMode('one');
+  syncLabels(); draw();
 })();
 
-window.TICKET = {
-  mc: {
-    q1: { ans:'c', why:'resolving splits one vector into horizontal and vertical components that together have the same effect as the original.' },
-    q2: { ans:'b', why:'up-and-left means leftward (negative x) and upward (positive y): (−, +).' },
-    q4: { ans:'d', why:'components turn vector addition into ordinary arithmetic — add the x’s together, add the y’s together, separately.' }
-  },
-  num: {
-    q3: { ans:5, tol:0.05, unit:'squares',
-          right:'Correct: horizontal components simply add — Cx = Ax + Bx = 3 + 2 = 5 squares.',
-          wrong:'Components of the resultant are the sums of the components: Cx = 3 + 2 = 5 squares.' }
-  }
-};
-/* ---------- predict-first probe (shared) ---------- */
+/* ---------- predict-first probe ---------- */
 (function(){
   var probe = document.getElementById('probe');
   if(!probe) return;
   var fb = document.getElementById('probeFb');
-  var rightMsg = probe.getAttribute('data-right-msg') || '✓ Right.';
-  var wrongMsg = probe.getAttribute('data-wrong-msg') || '✗ Not quite.';
   probe.querySelectorAll('.opt').forEach(function(btn){
     btn.addEventListener('click', function(){
       var right = this.getAttribute('data-correct') === 'true';
       probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
       if(right){
         this.classList.add('correct'); fb.style.color = '#134a29';
-        fb.textContent = rightMsg;
+        fb.textContent = '✓ Right. A vector pointing straight along the y-axis has no "sideways" part at all — its x-component is 0 m. All 5 m of it is vertical.';
       } else {
         this.classList.add('wrong');
         probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
         fb.style.color = '#c0392b';
-        fb.textContent = wrongMsg;
+        fb.textContent = '✗ Not quite — drop a perpendicular from the vector\'s head to the x-axis. At 90°, that perpendicular lands right back at the origin, so the horizontal component is 0 m.';
       }
     });
   });
 })();
 
-/* ---------- exit ticket scoring (shared; page defines window.TICKET) ----------
-   window.TICKET = {
-     mc:   { q1:{ans:'b', why:'...'}, ... },
-     num:  { q3:{ans:3, tol:0.05, unit:'m/s', right:'...', wrong:'...'} , ... }
-   }
---------------------------------------------------------------------------- */
+/* ---------- exit ticket scoring ---------- */
 (function(){
   var ticket = document.getElementById('ticket');
-  if(!ticket || !window.TICKET) return;
-  var cfg = window.TICKET;
-  var mcIds = Object.keys(cfg.mc || {});
-  var numIds = Object.keys(cfg.num || {});
-  var total = mcIds.length + numIds.length;
+  if(!ticket) return;
+  var mc = { q1:'b', q2:'b', q4:'a' };
+  var expl = {
+    q1:'resolving splits a vector into a horizontal part and a vertical part that, added head-to-tail, rebuild the original vector exactly.',
+    q2:'a vector lying flat along the x-axis has no "rise" — its vertical component is zero.',
+    q4:'the horizontal and vertical directions don\'t interact, so you can add everything happening along x separately from everything happening along y, like ordinary numbers.'
+  };
   var scoreEl = document.getElementById('ticketScore');
 
   function markCard(id, ok, msg){
-    var card = document.getElementById('card-' + id);
+    var card = document.getElementById(id);
     card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
     card.querySelector('.qfb').textContent = msg;
   }
   function grade(){
-    var correct = 0;
-    mcIds.forEach(function(q){
-      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
-      if(sel && sel.value === cfg.mc[q].ans){ correct++; markCard(q, true, '✓ Correct.'); }
-      else if(sel){ markCard(q, false, '✗ Not quite — ' + cfg.mc[q].why); }
-      else { markCard(q, false, 'Pick an answer above.'); }
+    var correct = 0, total = 4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '✓ Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '✗ Not quite — ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
     });
-    numIds.forEach(function(q){
-      var n = cfg.num[q];
-      var v = parseFloat(document.getElementById(q + 'input').value);
-      if(!isNaN(v) && Math.abs(v - n.ans) <= n.tol){ correct++; markCard(q, true, '✓ ' + n.right); }
-      else if(isNaN(v)){ markCard(q, false, 'Enter a number (' + n.unit + ').'); }
-      else { markCard(q, false, '✗ ' + n.wrong); }
-    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v - 4) < 0.05){ correct++; markCard('card-q3', true, '✓ Correct: Cx = Ax + Bx = 6 m + (−2 m) = 4 m — components add on their own, like ordinary numbers.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number (m).'); }
+    else { markCard('card-q3', false, '✗ Add the x-components directly: Cx = Ax + Bx = 6 + (−2) = 4 m.'); }
+
     var tail = correct === total ? "Nice — you're ready to move on!"
-             : correct >= Math.ceil(total/2) ? 'Good start — revisit the ones you missed.'
-             : 'Work back through the note, then try again.';
+             : correct >= 2 ? 'Good start — revisit the ones you missed.'
+             : 'Reread the note above, then try again.';
     scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
     scoreEl.classList.add('show');
   }
   function clear(){
     ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
-    numIds.forEach(function(q){ document.getElementById(q + 'input').value = ''; });
+    document.getElementById('q3input').value = '';
     ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
     scoreEl.classList.remove('show'); scoreEl.textContent = '';
   }
   document.getElementById('ticketCheck').addEventListener('click', grade);
   document.getElementById('ticketReset').addEventListener('click', clear);
 })();
-
 </script>
+  <script>
+    /* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (no inner scrollbar). Harmless when viewed standalone. */
+    function reportHeight(){
+      parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*");
+    }
+    window.addEventListener("load", reportHeight);
+    window.addEventListener("resize", reportHeight);
+    new ResizeObserver(reportHeight).observe(document.body);
+  </script>
 </body>
 </html>
