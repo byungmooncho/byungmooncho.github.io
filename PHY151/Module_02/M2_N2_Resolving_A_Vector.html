@@ -511,13 +511,42 @@
   var ctx = cv.getContext('2d');
   var W = cv.width, H = cv.height;
 
-  /* per-mode origin: the single vector sits low-left of centre so the
-     first quadrant has room; the A+B=C build starts further down-left
-     so the head-to-tail chain stays on the grid. */
-  var GEO = {
-    one: { x: W/2 - 60,  y: H/2 + 60, scale: 34 },
-    sum: { x: W/2 - 120, y: H/2 + 78, scale: 30 }
-  };
+  /* The figure is FITTED to the canvas each draw instead of pinned to a fixed
+     origin. The old fixed origins (sum started its chain at grid (-3,-2)) pushed
+     the drawing into the lower-left corner and left the right half of the canvas
+     empty, and they put the A+B=C component row below the x-axis instead of on
+     it. Both chains now start at the origin, and the view is centred on whatever
+     the sliders produce.
+
+     Scale stays at the preferred value so a metre keeps a constant size on
+     screen; it only shrinks when the figure would otherwise overflow, and the
+     origin is always kept in frame so the axes remain visible. */
+  /* Scale is quantised: the largest step that still fits is used, so the figure
+     fills the canvas instead of sitting small in a corner, while the zoom level
+     changes only in occasional visible jumps rather than sliding continuously
+     under the slider. */
+  var SCALE_STEPS = [60, 52, 44, 38, 32, 27, 22, 18, 15];
+
+  var curGeo = { x: W/2, y: H/2, scale: 38 };
+
+  function fitGeo(pts){
+    var pad = 0.85;
+    var xs = pts.map(function(p){ return p.x; }), ys = pts.map(function(p){ return p.y; });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+    var y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    /* keep the origin, and so both axes, inside the frame */
+    x0 = Math.min(x0, 0) - pad; x1 = Math.max(x1, 0) + pad;
+    y0 = Math.min(y0, 0) - pad; y1 = Math.max(y1, 0) + pad;
+    var availW = W - 30, availH = H - 30;
+    var s = SCALE_STEPS[SCALE_STEPS.length - 1];
+    for(var i = 0; i < SCALE_STEPS.length; i++){
+      if((x1 - x0) * SCALE_STEPS[i] <= availW && (y1 - y0) * SCALE_STEPS[i] <= availH){
+        s = SCALE_STEPS[i]; break;
+      }
+    }
+    var mx = (x0 + x1)/2, my = (y0 + y1)/2;
+    return { x: W/2 - mx*s, y: H/2 + my*s, scale: s };
+  }
 
   var COL = {
     A: '#7fd1a0', B: '#67b7ff', C: '#ff9a9a',
@@ -542,7 +571,7 @@
     hint: document.getElementById('simHint')
   };
 
-  function geo(){ return GEO[mode]; }
+  function geo(){ return curGeo; }
 
   /* grid coordinates: x right, y UP (maths convention) */
   function comp(mag, angDeg){
@@ -702,11 +731,19 @@
 
   function draw(){
     placedLabels = [];
+    var a = comp(magA, angA), b = comp(magB, angB);
+
+    /* work out the framing before anything is painted */
+    if(mode === 'one'){
+      curGeo = fitGeo([{x:0,y:0}, a, {x:a.x, y:0}]);
+    } else {
+      var cc = { x: a.x + b.x, y: a.y + b.y };
+      curGeo = fitGeo([{x:0,y:0}, a, cc, {x:cc.x, y:0}, {x:a.x, y:0}]);
+    }
+
     ctx.clearRect(0,0,W,H);
     ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
     drawGrid();
-
-    var a = comp(magA, angA), b = comp(magB, angB);
 
     if(mode === 'one'){
       var O = { x:0, y:0 };
@@ -716,7 +753,7 @@
       label('A', h.x + (a.x >= 0 ? 8 : -22), h.y - 8, COL.A);
       dot(O);
     } else {
-      var At = { x:-3, y:-2 };
+      var At = { x:0, y:0 };   /* the chain starts at the origin, so Cx lies ON the x-axis */
       var Bt = { x: At.x + a.x, y: At.y + a.y };
       var Ch = { x: Bt.x + b.x, y: Bt.y + b.y };
       var c  = { x: a.x + b.x, y: a.y + b.y };
