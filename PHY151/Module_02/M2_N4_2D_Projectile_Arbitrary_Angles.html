@@ -297,7 +297,7 @@
       <div class="controls">
         <div class="ctrl">
           <label for="v0">Launch speed V<sub>0</sub> <span class="val"><span id="v0val">10.0</span> m/s</span></label>
-          <input type="range" id="v0" min="4" max="20" step="0.5" value="10">
+          <input type="range" id="v0" min="4" max="12" step="0.5" value="10">
         </div>
         <div class="ctrl">
           <label for="ang">Launch angle &theta; <span class="val"><span id="angval">25</span>&deg;</span></label>
@@ -305,7 +305,7 @@
         </div>
         <div class="ctrl">
           <label for="hgt">Cliff height H <span class="val"><span id="hgtval">1.5</span> m</span></label>
-          <input type="range" id="hgt" min="0" max="8" step="0.5" value="1.5">
+          <input type="range" id="hgt" min="0" max="5" step="0.5" value="1.5">
         </div>
       </div>
       <div class="buttons">
@@ -586,15 +586,20 @@
        horizontally: a 45 degree launch did not look like 45 degrees.
 
        Now: one isotropic scale, a ground line pinned to a constant pixel row, both
-       sized once from the slider limits (v0 <= 20 m/s, angle 5-80 deg, height <= 8 m):
-         max range = 48.3 m at v0 20, height 8, angle ~40   -> 50 m
-         max apex  = (20 sin80)^2 / 2g = 19.8 m             -> 20 m
-         max drop  = launch-height slider maximum           ->  8 m
-       A 10 m shot now draws one fifth the length of a 50 m shot, which is the
-       point. */
+       sized once from the slider limits (v0 <= 12 m/s, angle 5-80 deg, height <= 5 m):
+         max range = 19.1 m at v0 12, height 5, angle ~38   -> 20 m
+         max apex  = (12 sin80)^2 / 2g = 7.13 m             ->  7.5 m
+         max drop  = launch-height slider maximum           ->  5 m
+       The slider maxima were cut from 20 m/s and 8 m on 2026-09-18. The envelope
+       they allowed was 50 m x 28 m, which at this canvas size gave 12.5 px/m and
+       left the default 10 m/s shot using about a fifth of the frame. Cutting them
+       to 12 m/s and 5 m more than doubles the scale to 28 px/m while still
+       covering every setting the sliders can now reach. The worked examples and
+       the exit-ticket question all use v0 = 10 m/s and a 1.5 m cliff, so nothing
+       in the note falls outside the new range. */
     var padL = 60, padR = 30, padT = 30, padB = 40;
     var plotW = W - padL - padR, plotH = H_ - padT - padB;
-    var MAX_X = 50, MAX_UP = 20, MAX_DOWN = 8;
+    var MAX_X = 20, MAX_UP = 7.5, MAX_DOWN = 5;
     var s = Math.min(plotW / MAX_X, plotH / (MAX_UP + MAX_DOWN));
     var sx = s, sy = s;                 /* isotropic: angles are true on screen */
     /* World y = 0 is the LAUNCH point in this sim and the ground is at y = -hgt,
