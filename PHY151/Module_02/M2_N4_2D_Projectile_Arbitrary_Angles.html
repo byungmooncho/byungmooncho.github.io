@@ -571,16 +571,40 @@
 
   function layout(p){
     // world -> screen mapping, fit trajectory + cliff drop with margins
-    var maxX = Math.max(p.range, 1) * 1.15;
-    var maxYup = Math.max(p.dyMax, 0.5) * 1.25;
-    var maxYdown = Math.max(hgt, 0.5) * 1.25;
+    /* FIXED world -> screen mapping.
+
+       This used to fit the view to each shot:
+         maxX     from the current range      x1.15
+         maxYup   from the current apex       x1.25
+         maxYdown from the current launch height x1.25
+         baseY    = padT + plotH * maxYup/(maxYup+maxYdown)
+       Three things went wrong with that. The scale changed on every drag, so a
+       longer shot did not look longer. The GROUND LINE moved vertically whenever
+       the launch height or the apex changed, so raising the launch height did not
+       visibly raise the launch point - the whole frame re-proportioned around it.
+       And sx was computed separately from sy, so the trajectory was stretched
+       horizontally: a 45 degree launch did not look like 45 degrees.
+
+       Now: one isotropic scale, a ground line pinned to a constant pixel row, both
+       sized once from the slider limits (v0 <= 20 m/s, angle 5-80 deg, height <= 8 m):
+         max range = 48.3 m at v0 20, height 8, angle ~40   -> 50 m
+         max apex  = (20 sin80)^2 / 2g = 19.8 m             -> 20 m
+         max drop  = launch-height slider maximum           ->  8 m
+       A 10 m shot now draws one fifth the length of a 50 m shot, which is the
+       point. */
     var padL = 60, padR = 30, padT = 30, padB = 40;
     var plotW = W - padL - padR, plotH = H_ - padT - padB;
-    var sx = plotW / maxX;
-    var syUp = (plotH * (maxYup/(maxYup+maxYdown))) / maxYup;
-    var syDown = (plotH * (maxYdown/(maxYup+maxYdown))) / maxYdown;
-    var sy = Math.min(syUp, syDown);
-    var baseY = padT + plotH * (maxYup/(maxYup+maxYdown));
+    var MAX_X = 50, MAX_UP = 20, MAX_DOWN = 8;
+    var s = Math.min(plotW / MAX_X, plotH / (MAX_UP + MAX_DOWN));
+    var sx = s, sy = s;                 /* isotropic: angles are true on screen */
+    /* World y = 0 is the LAUNCH point in this sim and the ground is at y = -hgt,
+       so pinning y = 0 to a constant row would pin the launcher and let the
+       ground slide down as the height rises - the reverse of what you want.
+       Pin the GROUND instead: it stays on one pixel row for every setting, and
+       the launch point visibly climbs above it as the height slider moves. The
+       scale is untouched by this, so it is a pan, not a zoom. */
+    var GROUND_ROW = padT + (MAX_UP + MAX_DOWN) * s;
+    var baseY = GROUND_ROW - hgt * s;   /* pixel row of world y = 0 (the launch point) */
     var originX = padL;
     function toXY(x, y){ return { x: originX + x*sx, y: baseY - y*sy }; }
     return { toXY:toXY, originX:originX, baseY:baseY, sx:sx, sy:sy };

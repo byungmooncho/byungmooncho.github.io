@@ -550,9 +550,18 @@
        launch visibly flies further and higher.
          width  : D_max + 0.8           = 4.0 + 0.8
          height : H_max + V0_max^2/(2g) = 2.0 + 100/19.6 + 0.3  */
-    var D_SLIDER_MAX = 4.0, V0_SLIDER_MAX = 10, H_SLIDER_MAX = 2.0;
-    var sceneW = D_SLIDER_MAX + 0.8;
-    var maxY   = H_SLIDER_MAX + (V0_SLIDER_MAX*V0_SLIDER_MAX)/(2*G) + 0.3;
+    var D_SLIDER_MAX = 4.0, H_SLIDER_MAX = 2.0;
+    var sceneW = D_SLIDER_MAX + 0.8;    /* 4.8 m - the full width the target slider allows */
+    /* The vertical window is capped rather than taken from V0_max^2/(2g) = 5.1 m of
+       apex. That full envelope is 4.8 m wide by 7.4 m tall, while the canvas is
+       620 x 330 px - almost 2:1 the other way - so fitting it left the figure a
+       narrow column using about a third of the width. Capping the window at 3.2 m
+       fills roughly 80% of the width instead, at the cost of clipping the top of a
+       near-vertical high-angle solution at large V0. Clipping one absurd arc is
+       better than shrinking every ordinary shot, and the landing point - the thing
+       the note is about - stays visible either way. Still FIXED: it does not move
+       when a slider moves. */
+    var maxY = 3.2;
     var marginL = 70, marginR = 30, marginT = 30, marginB = 60;
     var scale = Math.min((W - marginL - marginR)/sceneW, (H_PX - marginT - marginB)/maxY);
 
