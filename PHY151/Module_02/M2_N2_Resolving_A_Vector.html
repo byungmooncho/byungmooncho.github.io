@@ -703,25 +703,52 @@
     label(text, x, y, color);
   }
 
-  function componentLadder(tail, a, c, vecSegs){
-    var cx = tail.x + c.x;
-    var row = [{x:tail.x, y:tail.y}, {x:tail.x + a.x, y:tail.y}, {x:cx, y:tail.y}];
-    var col = [{x:cx, y:tail.y}, {x:cx, y:tail.y + a.y}, {x:cx, y:tail.y + c.y}];
-    var haveAx = Math.abs(a.x) > 0.05, haveBx = Math.abs(c.x - a.x) > 0.05;
-    var haveAy = Math.abs(a.y) > 0.05, haveBy = Math.abs(c.y - a.y) > 0.05;
-    if(haveAx) arrow(row[0], row[1], COL.A, 3, false);
-    if(haveBx) arrow(row[1], row[2], COL.B, 3, false);
-    if(haveAy) arrow(col[0], col[1], COL.A, 3, false);
-    if(haveBy) arrow(col[1], col[2], COL.B, 3, false);
-    var sAx = [px(row[0]), px(row[1])], sBx = [px(row[1]), px(row[2])];
-    var sAy = [px(col[0]), px(col[1])], sBy = [px(col[1]), px(col[2])];
-    var all = vecSegs.concat([sAx, sBx, sAy, sBy]);
+  /* ---- Components of A, B and C, after Cho's hand-drawn figure ------------
+     Every vector carries its OWN right triangle in its own colour, so a student
+     can read Ax, Bx, Ay and By off the grid separately and add them:
+
+       A  x-first  : Ax along the x-axis, then Ay up the line x = Ax
+       B  y-first  : By continues up that same line, then Bx across at y = Cy
+       C  offset   : Cy set out to the left of everything, Cx set out below it
+
+     Ay and By therefore stack end-to-end on one vertical line and visibly total
+     Cy, while Ax and Bx sit on different rows and are added numerically - which
+     is exactly what the note's questions ask for. C's pair is deliberately held
+     OUTSIDE the figure as dimension lines: they are totals to compare against,
+     not part of the construction, and out there they cannot be mistaken for it
+     or collide with it. */
+  function componentsOfEach(a, b, c, vecSegs){
+    var O  = { x:0,    y:0    };
+    var Ax = { x:a.x,  y:0    };
+    var Ah = { x:a.x,  y:a.y  };          /* A's head, = B's tail */
+    var Bv = { x:a.x,  y:c.y  };          /* after By */
+    var Ch = { x:c.x,  y:c.y  };          /* C's head */
+
+    /* C's dimension lines, clear of every point the figure occupies */
+    var gap = 0.95;
+    var leftX = Math.min(0, a.x, c.x) - gap;
+    var botY  = Math.min(0, a.y, c.y) - gap;
+    var cyA = { x:leftX, y:0 },   cyB = { x:leftX, y:c.y };
+    var cxA = { x:0, y:botY },    cxB = { x:c.x,  y:botY };
+
+    if(Math.abs(a.x) > 0.05)       arrow(O,  Ax, COL.A, 2.5, false);
+    if(Math.abs(a.y) > 0.05)       arrow(Ax, Ah, COL.A, 2.5, false);
+    if(Math.abs(c.y - a.y) > 0.05) arrow(Ah, Bv, COL.B, 2.5, false);
+    if(Math.abs(c.x - a.x) > 0.05) arrow(Bv, Ch, COL.B, 2.5, false);
+    if(Math.abs(c.y) > 0.05)       arrow(cyA, cyB, COL.sum, 2.5, false);
+    if(Math.abs(c.x) > 0.05)       arrow(cxA, cxB, COL.sum, 2.5, false);
+
+    var segs = [[px(O),px(Ax)], [px(Ax),px(Ah)], [px(Ah),px(Bv)], [px(Bv),px(Ch)],
+                [px(cyA),px(cyB)], [px(cxA),px(cxB)]];
+    var all = vecSegs.concat(segs);
     function others(own){ return all.filter(function(g){ return g !== own; }); }
-    if(haveAx && Math.abs(a.x) > 0.35)       labelOnLine(sAx[0], sAx[1], 'Ax', COL.A, others(sAx));
-    if(haveBx && Math.abs(c.x - a.x) > 0.35) labelOnLine(sBx[0], sBx[1], 'Bx', COL.B, others(sBx));
-    if(haveAy && Math.abs(a.y) > 0.35)       labelOnLine(sAy[0], sAy[1], 'Ay', COL.A, others(sAy));
-    if(haveBy && Math.abs(c.y - a.y) > 0.35) labelOnLine(sBy[0], sBy[1], 'By', COL.B, others(sBy));
-    return [sAx, sBx, sAy, sBy];
+    if(Math.abs(a.x) > 0.3)       labelOnLine(segs[0][0], segs[0][1], 'Ax', COL.A, others(segs[0]));
+    if(Math.abs(a.y) > 0.3)       labelOnLine(segs[1][0], segs[1][1], 'Ay', COL.A, others(segs[1]));
+    if(Math.abs(c.y - a.y) > 0.3) labelOnLine(segs[2][0], segs[2][1], 'By', COL.B, others(segs[2]));
+    if(Math.abs(c.x - a.x) > 0.3) labelOnLine(segs[3][0], segs[3][1], 'Bx', COL.B, others(segs[3]));
+    if(Math.abs(c.y) > 0.3)       labelOnLine(segs[4][0], segs[4][1], 'Cy', COL.sum, others(segs[4]));
+    if(Math.abs(c.x) > 0.3)       labelOnLine(segs[5][0], segs[5][1], 'Cx', COL.sum, others(segs[5]));
+    return segs;
   }
 
   function dot(p){
@@ -738,7 +765,9 @@
       curGeo = fitGeo([{x:0,y:0}, a, {x:a.x, y:0}]);
     } else {
       var cc = { x: a.x + b.x, y: a.y + b.y };
-      curGeo = fitGeo([{x:0,y:0}, a, cc, {x:cc.x, y:0}, {x:a.x, y:0}]);
+      var gapX = Math.min(0, a.x, cc.x) - 0.95, gapY = Math.min(0, a.y, cc.y) - 0.95;
+      curGeo = fitGeo([{x:0,y:0}, a, cc, {x:cc.x, y:0}, {x:a.x, y:0},
+                       {x:gapX, y:0}, {x:gapX, y:cc.y}, {x:0, y:gapY}, {x:cc.x, y:gapY}]);
     }
 
     ctx.clearRect(0,0,W,H);
@@ -758,7 +787,7 @@
       var Ch = { x: Bt.x + b.x, y: Bt.y + b.y };
       var c  = { x: a.x + b.x, y: a.y + b.y };
       var segs = [[px(At), px(Bt)], [px(Bt), px(Ch)], [px(At), px(Ch)]];
-      var ladder = showComponents ? componentLadder(At, a, c, segs) : [];
+      var ladder = showComponents ? componentsOfEach(a, b, c, segs) : [];
       arrow(At, Bt, COL.A, 3.5, false);
       arrow(Bt, Ch, COL.B, 3.5, false);
       arrow(At, Ch, COL.C, 3, true);
@@ -805,7 +834,7 @@
       }
     } else {
       el.hint.textContent = showComponents
-        ? 'Compare the chips: Ax + Bx equals Cx, and Ay + By equals Cy — every time, at any two angles. The whole row along the bottom is Cx - green Ax then blue Bx, laid end to end - and the whole column at its far end is Cy. Read their totals off the chips.'
+        ? 'Compare the chips: Ax + Bx equals Cx, and Ay + By equals Cy — every time, at any two angles. Each vector carries its own right triangle. Add Ax + Bx and compare with the gold Cx set out below the figure; do the same for Ay + By against the gold Cy at the left. Ay and By stack on one line, so their total IS Cy.'
         : 'A and B are joined head-to-tail; the dashed arrow is the resultant C. Press "Show components" to see why components make this easy.';
     }
   }
