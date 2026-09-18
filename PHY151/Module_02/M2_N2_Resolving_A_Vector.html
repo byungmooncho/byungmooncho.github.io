@@ -501,8 +501,8 @@
      horizontal component Ax along x and vertical component Ay
      completing the right triangle up to A's head.
    Mode "sum": A and B joined head-to-tail with the resultant C drawn
-     dashed from A's tail to B's head. With components shown, the gold
-     L from A's tail to C's head is visibly Ax+Bx across and Ay+By up —
+     dashed from A's tail to B's head. With components shown, the row from
+     A's tail is Cx as green Ax + blue Bx, and the column at its end is Cy —
      the discovery of this note.
    ================================================================== */
 (function(){
@@ -565,8 +565,14 @@
   }
 
   function label(text, x, y, color){
-    ctx.font = '600 13px Segoe UI, sans-serif'; ctx.fillStyle = color;
-    ctx.fillText(text, x, y);
+    ctx.save();
+    ctx.font = '600 13px Segoe UI, sans-serif';
+    /* dark halo: these labels sit in a busy figure and would otherwise be
+       unreadable wherever they cross a vector or a gridline */
+    ctx.lineWidth = 3.5; ctx.strokeStyle = '#0f1f16'; ctx.lineJoin = 'round';
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = color; ctx.fillText(text, x, y);
+    ctx.restore();
   }
 
   /* arrow between two GRID points */
@@ -618,12 +624,84 @@
     }
   }
 
+  /* ---- A + B = C components -------------------------------------------------
+     Cx and Cy are drawn on their TRUE construction lines: the row starting at
+     A's tail IS Cx, and the column at that row's end IS Cy. Each is split into
+     the A part and the B part laid head-to-tail, so Cx = Ax + Bx is something
+     you can see rather than something the caption claims.
+
+     The earlier version offset the resultant's legs onto a "lane" 0.45 units out
+     to stop them hiding under A's legs. That displaced the horizontal leg in y
+     and the vertical leg in x independently, so the two legs no longer met each
+     other and neither met the dashed C - the gold L floated free of the figure.
+     Colour separates the parts here instead of displacement. */
+  /* distance from a pixel point to a pixel segment - used to keep labels off
+     the vectors instead of guessing a side that only works at one angle */
+  function distToSeg(p, u, v){
+    var dx = v.x-u.x, dy = v.y-u.y, L2 = dx*dx + dy*dy;
+    var t = L2 ? Math.max(0, Math.min(1, ((p.x-u.x)*dx + (p.y-u.y)*dy) / L2)) : 0;
+    var qx = u.x + t*dx, qy = u.y + t*dy;
+    return Math.hypot(p.x-qx, p.y-qy);
+  }
+  function clearest(cands, segs){
+    var best = cands[0], bestD = -1;
+    for(var i=0;i<cands.length;i++){
+      var d = Infinity;
+      for(var j=0;j<segs.length;j++) d = Math.min(d, distToSeg(cands[i], segs[j][0], segs[j][1]));
+      if(d > bestD){ bestD = d; best = cands[i]; }
+    }
+    return best;
+  }
+
+  /* Place a label along a pixel segment, on whichever side and at whichever
+     position along it sits farthest from everything else being drawn. Fixed
+     offsets cannot work here: which side is free depends on both angles. */
+  var placedLabels = [];
+  function labelOnLine(u, v, text, color, obstacles){
+    var dx = v.x-u.x, dy = v.y-u.y, L = Math.hypot(dx,dy) || 1;
+    var nx = -dy/L, ny = dx/L, cands = [];
+    [0.3, 0.45, 0.6, 0.75].forEach(function(t){
+      [24, -24].forEach(function(o){
+        cands.push({ x: u.x + dx*t + nx*o, y: u.y + dy*t + ny*o });
+      });
+    });
+    /* already-placed labels count as obstacles too, as zero-length segments */
+    var obs = obstacles.concat(placedLabels.map(function(q){ return [q, q]; }));
+    var c = clearest(cands, obs);
+    placedLabels.push(c);
+    var x = Math.min(Math.max(c.x - 9, 14), W - 32);
+    var y = Math.min(Math.max(c.y + 5, 18), H - 8);
+    label(text, x, y, color);
+  }
+
+  function componentLadder(tail, a, c, vecSegs){
+    var cx = tail.x + c.x;
+    var row = [{x:tail.x, y:tail.y}, {x:tail.x + a.x, y:tail.y}, {x:cx, y:tail.y}];
+    var col = [{x:cx, y:tail.y}, {x:cx, y:tail.y + a.y}, {x:cx, y:tail.y + c.y}];
+    var haveAx = Math.abs(a.x) > 0.05, haveBx = Math.abs(c.x - a.x) > 0.05;
+    var haveAy = Math.abs(a.y) > 0.05, haveBy = Math.abs(c.y - a.y) > 0.05;
+    if(haveAx) arrow(row[0], row[1], COL.A, 3, false);
+    if(haveBx) arrow(row[1], row[2], COL.B, 3, false);
+    if(haveAy) arrow(col[0], col[1], COL.A, 3, false);
+    if(haveBy) arrow(col[1], col[2], COL.B, 3, false);
+    var sAx = [px(row[0]), px(row[1])], sBx = [px(row[1]), px(row[2])];
+    var sAy = [px(col[0]), px(col[1])], sBy = [px(col[1]), px(col[2])];
+    var all = vecSegs.concat([sAx, sBx, sAy, sBy]);
+    function others(own){ return all.filter(function(g){ return g !== own; }); }
+    if(haveAx && Math.abs(a.x) > 0.35)       labelOnLine(sAx[0], sAx[1], 'Ax', COL.A, others(sAx));
+    if(haveBx && Math.abs(c.x - a.x) > 0.35) labelOnLine(sBx[0], sBx[1], 'Bx', COL.B, others(sBx));
+    if(haveAy && Math.abs(a.y) > 0.35)       labelOnLine(sAy[0], sAy[1], 'Ay', COL.A, others(sAy));
+    if(haveBy && Math.abs(c.y - a.y) > 0.35) labelOnLine(sBy[0], sBy[1], 'By', COL.B, others(sBy));
+    return [sAx, sBx, sAy, sBy];
+  }
+
   function dot(p){
     var q = px(p);
     ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(q.x, q.y, 3.5, 0, Math.PI*2); ctx.fill();
   }
 
   function draw(){
+    placedLabels = [];
     ctx.clearRect(0,0,W,H);
     ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
     drawGrid();
@@ -642,22 +720,19 @@
       var Bt = { x: At.x + a.x, y: At.y + a.y };
       var Ch = { x: Bt.x + b.x, y: Bt.y + b.y };
       var c  = { x: a.x + b.x, y: a.y + b.y };
-      if(showComponents){
-        /* A's and B's own right triangles, on the true construction lines */
-        legs(At, a, COL.A, COL.A, 'A', { width: 2.5, labels: false });
-        legs(Bt, b, COL.B, COL.B, 'B', { width: 2.5, labels: false });
-        /* the resultant's components, one lane out so both stay visible */
-        legs(At, c, COL.sum, COL.sum, 'C', { lane: 0.45, width: 3 });
-      }
+      var segs = [[px(At), px(Bt)], [px(Bt), px(Ch)], [px(At), px(Ch)]];
+      var ladder = showComponents ? componentLadder(At, a, c, segs) : [];
       arrow(At, Bt, COL.A, 3.5, false);
       arrow(Bt, Ch, COL.B, 3.5, false);
       arrow(At, Ch, COL.C, 3, true);
       var ma = px({ x:(At.x+Bt.x)/2, y:(At.y+Bt.y)/2 });
       var mb = px({ x:(Bt.x+Ch.x)/2, y:(Bt.y+Ch.y)/2 });
       var mc = px({ x:(At.x+Ch.x)/2, y:(At.y+Ch.y)/2 });
-      label('A', ma.x - 18, ma.y - 6, COL.A);
-      label('B', mb.x - 18, mb.y - 6, COL.B);
-      label('C', mc.x + 10, mc.y + 16, COL.C);
+      /* name each vector on whichever side of its own line is clear */
+      var obst = ladder.concat(segs);
+      labelOnLine(segs[0][0], segs[0][1], 'A', COL.A, obst.filter(function(g){ return g !== segs[0]; }));
+      labelOnLine(segs[1][0], segs[1][1], 'B', COL.B, obst.filter(function(g){ return g !== segs[1]; }));
+      labelOnLine(segs[2][0], segs[2][1], 'C', COL.C, obst.filter(function(g){ return g !== segs[2]; }));
       dot(At);
     }
 
@@ -693,7 +768,7 @@
       }
     } else {
       el.hint.textContent = showComponents
-        ? 'Compare the chips: Ax + Bx equals Cx, and Ay + By equals Cy — every time, at any two angles. The gold triangle from A\'s tail is exactly the green legs plus the blue legs.'
+        ? 'Compare the chips: Ax + Bx equals Cx, and Ay + By equals Cy — every time, at any two angles. The whole row along the bottom is Cx - green Ax then blue Bx, laid end to end - and the whole column at its far end is Cy. Read their totals off the chips.'
         : 'A and B are joined head-to-tail; the dashed arrow is the resultant C. Press "Show components" to see why components make this easy.';
     }
   }
@@ -801,13 +876,32 @@
 })();
 </script>
   <script>
-    /* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (no inner scrollbar). Harmless when viewed standalone. */
-    function reportHeight(){
-      parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*");
-    }
-    window.addEventListener("load", reportHeight);
-    window.addEventListener("resize", reportHeight);
-    new ResizeObserver(reportHeight).observe(document.body);
-  </script>
+        /* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+           V4 (2026-09-17). V3 reported document.documentElement.scrollHeight, which has a
+           FLOOR equal to the iframe's own viewport height. So the moment the parent set the
+           iframe taller than the content, this page reported the BOX height straight back,
+           the parent applied it, and the value ratcheted upward without bound - measured at
+           box 12000px -> reported 12000px. That is the compounding loop behind the
+           4.1943e+07px iframe of the PHY118 incident; it was never D2L's ReadSpeaker.
+
+           Measuring the content element instead is viewport-independent, so the reported
+           height is the note's real height at whatever width the pane happens to be, and it
+           can come back DOWN as well as up. Verified: box 800 / 6000 / 12000px all report
+           the same height. */
+        function flccContentHeight(){
+          var el = document.querySelector('.note-wrap') || document.body;
+          var cs = getComputedStyle(document.body);
+          return Math.ceil(el.getBoundingClientRect().height
+            + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+            + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+        }
+        function reportHeight(){
+          parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*");
+        }
+        window.addEventListener("load", reportHeight);
+        window.addEventListener("resize", reportHeight);
+        new ResizeObserver(reportHeight).observe(document.body);
+      </script>
 </body>
 </html>
