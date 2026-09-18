@@ -595,7 +595,25 @@
 })();
 </script>
 <script>
-function reportHeight(){ parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*"); }
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). V3 sent document.documentElement.scrollHeight, whose FLOOR is the
+   iframe's own viewport height -- so a box taller than the content reported the BOX
+   height back, the parent applied it, and the value ratcheted upward without bound
+   (measured: box 12000px -> reported 12000px). That is the compounding loop behind the
+   PHY118 4.1943e+07px incident; it was never D2L's ReadSpeaker.
+
+   Measuring the content element is viewport-independent, so the reported height is the
+   note's real height at whatever width the pane is, and it can come back DOWN as well
+   as up. Verified: box 800 / 6000 / 12000px all report the same height. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
 window.addEventListener("load", reportHeight);
 window.addEventListener("resize", reportHeight);
 new ResizeObserver(reportHeight).observe(document.body);
