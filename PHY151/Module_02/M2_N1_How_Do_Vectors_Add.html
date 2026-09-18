@@ -114,6 +114,13 @@
   .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
   .btn:hover{ filter:brightness(.96); }
   .btn:active{ transform:translateY(1px); }
+  .seg{ display:inline-flex; border:1px solid var(--green); border-radius:6px; overflow:hidden; }
+  .seg button{
+    border:0; background:#fff; color:var(--green);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    padding:.42rem .8rem; cursor:pointer;
+  }
+  .seg button[aria-pressed="true"]{ background:var(--green); color:#fff; }
   .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
   .readout .chip{
     font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
@@ -168,6 +175,55 @@
   }
   .ticket .score.show{ display:block; }
 
+  /* strobe divider */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+  @keyframes strobePulse{ 0%,100%{ transform:scale(1); opacity:.55; } 35%{ transform:scale(1.9); opacity:1; } }
+  .strobe.animate span{ animation:strobePulse 2.4s ease-in-out infinite; }
+  .strobe.animate span:nth-child(1){ animation-delay:0s; }
+  .strobe.animate span:nth-child(2){ animation-delay:.16s; }
+  .strobe.animate span:nth-child(3){ animation-delay:.32s; }
+  .strobe.animate span:nth-child(4){ animation-delay:.48s; }
+  .strobe.animate span:nth-child(5){ animation-delay:.64s; }
+  .strobe.animate span:nth-child(6){ animation-delay:.80s; }
+  @media (prefers-reduced-motion: reduce){ .strobe.animate span{ animation:none; } }
+
+  /* looking-ahead signpost */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:1.2rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* joint-angle summary table */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td.ang{ font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .translate td .tag{ font-weight:700; }
+  .translate td .tag.long{ color:var(--green); }
+  .translate td .tag.short{ color:var(--amber); }
+  .translate .note-row td{ background:#fbfdfc; color:var(--muted); font-size:.84rem; }
+
+  /* key rules */
+  .eqs{ display:grid; gap:.8rem; grid-template-columns:1fr; margin:1rem 0 0; }
+  @media (min-width:600px){ .eqs{ grid-template-columns:1fr 1fr 1fr; } }
+  .eq-card{ border:1px solid var(--rule); border-radius:8px; padding:.85rem .9rem; background:#fff; }
+  .eq-card .icon{ font-size:1.4rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .eq-card .formula{
+    font-family:Charter, Georgia, serif; font-size:1.08rem; font-weight:700;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .eq-card small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
   /* downloads */
   .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
   @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
@@ -215,6 +271,7 @@
       <li><span class="tick">PE4</span><span class="txt"><b>Draw the resultant vector</b> — from the tail of the first vector to the head of the last — for two or more vectors joined head-to-tail.</span></li>
       <li><span class="tick">PE5</span><span class="txt"><b>Determine a resultant's magnitude and direction by measurement</b> (ruler and protractor) for vectors joined at any angle.</span></li>
       <li><span class="tick">PE6</span><span class="txt"><b>Recognize when vectors must be rejoined</b> — two vectors drawn joined at the tail (or head), or separated in space, must be moved head-to-tail before you can add them.</span></li>
+      <li><span class="tick">PE7</span><span class="txt"><b>Relate the angle at the joint to the resultant's length</b> — straight ahead gives the longest resultant, doubled back the shortest, and every angle between gives something in between.</span></li>
     </ul>
   </div>
 
@@ -249,19 +306,33 @@
     <li>How do vectors add — and why can't we just add their lengths like numbers?</li>
     <li>What is the head-to-tail rule, and what does a negative sign do to a vector?</li>
     <li>How do we find a resultant vector's magnitude and direction?</li>
+    <li>How do we add vectors that are drawn joined at the tails — or separated in space?</li>
+    <li>How does the angle where two vectors join change the resultant's length?</li>
+    <li>Which pairs of vectors produce identical resultants?</li>
   </ol>
 
   <!-- ============ INTERACTIVE: HEAD-TO-TAIL ADDER ============ -->
-  <h2>Play with it: head-to-tail vector adder</h2>
-  <p>Set the length and angle of vector <b>A</b> and vector <b>B</b>. <b>B</b> is drawn starting at the
-  head of <b>A</b> — head-to-tail — and the resultant <b>C</b> runs from the tail of A to the head of B.
-  Try swapping the order: does the resultant change?</p>
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>arrows join head to tail</small>
+  </div>
+
+  <h2>Play with it: the head-to-tail lab</h2>
+  <p><b style="color:#2f8f5b">A</b> and <b style="color:#2b7fc0">B</b> start out <b>separated in space</b> —
+  the way force vectors are usually drawn on a diagram. They can't be added as they sit there. Press
+  <b>Join head-to-tail</b> to slide the second one across (watch it — it never rotates) until its tail
+  meets the first one's head, then press <b>Show resultant</b>.</p>
+
+  <p>Three things to try. Switch to <b>A − B</b> and watch the negative sign flip B right around — a ghost
+  of the old +B stays behind so you can see the flip. Press <b>Swap order</b> to draw B first instead: the
+  resultant lands in exactly the same place, every time. And swing a direction slider while watching the
+  <b>joint angle</b> chip — that angle is what decides how long the resultant comes out.</p>
 
   <div class="sim" id="sim">
-    <div class="sim-head"><span>▶</span> Interactive · Head-to-Tail Vector Adder</div>
+    <div class="sim-head"><span>▶</span> Interactive · Head-to-Tail Vector Addition</div>
     <div class="stage">
       <canvas id="simCanvas" width="720" height="420" role="img"
-        aria-label="A grid showing vector A, vector B drawn head-to-tail from A's head, and the resultant vector C from the tail of A to the head of B."></canvas>
+        aria-label="A grid showing vectors A and B separated in space, which slide together head-to-tail on request, with the resultant drawn from the tail of the first vector to the head of the last. A subtraction mode flips B and leaves a faint ghost of the original."></canvas>
     </div>
     <div class="panel">
       <div class="controls">
@@ -283,15 +354,27 @@
         </div>
       </div>
       <div class="buttons">
-        <button class="btn" id="swapBtn">⇄ Swap order (draw B first)</button>
+        <span class="seg" role="group" aria-label="Operation">
+          <button id="opAdd" aria-pressed="true">A + B</button>
+          <button id="opSub" aria-pressed="false">A − B</button>
+        </span>
+        <button class="btn primary" id="joinBtn">→← Join head-to-tail</button>
+        <button class="btn toggle" id="resBtn" aria-pressed="false">Show resultant</button>
+        <button class="btn" id="swapBtn">⇄ Swap order</button>
         <button class="btn toggle" id="measureBtn" aria-pressed="false">Show measurement</button>
         <button class="btn" id="resetBtn">↺ Reset</button>
+      </div>
+      <div class="readout">
+        <span class="chip">|A| = <b id="aOut">4.0</b></span>
+        <span class="chip">|B| = <b id="bOut">3.0</b></span>
+        <span class="chip">joint angle = <b id="jOut">—</b></span>
+        <span class="chip">angle between A and B = <b id="btwOut">—</b></span>
       </div>
       <div class="readout">
         <span class="chip">Resultant length ≈ <b id="cMagOut">—</b></span>
         <span class="chip">Resultant angle ≈ <b id="cAngOut">—</b></span>
       </div>
-      <div class="hint-row" id="simHint">Notice: swapping which vector you draw first never changes where the resultant ends up.</div>
+      <div class="hint-row" id="simHint">Vectors separated in space can't be added as drawn — slide one across (keeping its orientation!) until they connect head-to-tail.</div>
     </div>
   </div>
 
@@ -316,6 +399,82 @@
               title="M2 N1 walkthrough with Dr. Cho"></iframe></div> -->
     <div style="position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16;">
       <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cfe4d7; font-family:'Segoe UI', system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ JOINT ANGLE TABLE ============ -->
+  <h2>The joint angle at a glance</h2>
+  <p>When two vectors of lengths <em>a</em> and <em>b</em> connect head-to-tail, the angle at the joint is
+  what sets the resultant's length. Two different angles get quoted for the same picture, so the table lists
+  both — read the column that matches the question you're answering:</p>
+  <div class="translate">
+    <table>
+      <thead>
+        <tr>
+          <th>How they join</th>
+          <th>Joint angle<br><span style="font-weight:400; text-transform:none; letter-spacing:0">at the corner</span></th>
+          <th>Angle between<br><span style="font-weight:400; text-transform:none; letter-spacing:0">A and B</span></th>
+          <th>Resultant length</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Straight ahead</b> — same direction</td>
+          <td class="ang">180°</td><td class="ang">0°</td>
+          <td><span class="tag long">a + b</span> — the longest possible</td>
+        </tr>
+        <tr>
+          <td><b>At a corner</b> — perpendicular</td>
+          <td class="ang">90°</td><td class="ang">90°</td>
+          <td>the diagonal of the corner — between the two extremes</td>
+        </tr>
+        <tr>
+          <td><b>Doubled back</b> — opposite directions</td>
+          <td class="ang">0°</td><td class="ang">180°</td>
+          <td><span class="tag short">a − b</span> — the shortest possible</td>
+        </tr>
+        <tr>
+          <td><b>Doubled back, equal lengths</b></td>
+          <td class="ang">0°</td><td class="ang">180°</td>
+          <td><span class="tag short">zero</span> — you end where you started</td>
+        </tr>
+        <tr class="note-row">
+          <td colspan="4">The <b>joint angle</b> is the one you measure on the diagram, at the corner where
+          the arrows meet — that's the convention used in our guided notes and in the lab above. The
+          <b>angle between A and B</b> is the one most textbooks and WebAssign quote; it's the supplement
+          of the joint angle, so the two always add to 180°.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> here we add vectors by <em>drawing</em> — ruler,
+  protractor, grid paper. In Note&nbsp;2 we run the rule in reverse and <em>resolve</em> one vector into a
+  horizontal and a vertical piece, and in Note&nbsp;2a trigonometry turns those drawings into calculations.
+  Master the picture first; the math is just the picture with numbers.</p>
+
+  <div class="strobe uniform animate" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>tail of the first → head of the last</small>
+  </div>
+
+  <!-- ============ KEY RULES ============ -->
+  <h2>Three rules to remember</h2>
+  <div class="eqs">
+    <div class="eq-card">
+      <span class="icon">🔗</span>
+      <span class="formula">Head-to-tail</span>
+      <small>Join the head of one vector to the tail of the next — rejoining them first if they're drawn tail-to-tail or apart, and never rotating them.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">🎯</span>
+      <span class="formula">C: first tail → last head</span>
+      <small>The resultant starts at the tail of the first vector and ends at the head of the last — whichever order you draw them in.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">↔️</span>
+      <span class="formula">−B flips B</span>
+      <small>A negative sign swaps a vector's head and tail; its length never changes. Subtraction is just addition of the flipped vector.</small>
     </div>
   </div>
 
@@ -399,63 +558,110 @@
 
 <script>
 /* ==================================================================
-   Head-to-Tail Vector Adder — self-contained, no dependencies.
-   Draws vector A from the origin, vector B starting at A's head
-   (head-to-tail), and the resultant C from the tail of A to the
-   head of B. "Swap order" draws B first, then A from B's head,
-   to show the resultant is the same either way.
+   Head-to-Tail Vector Addition Lab — self-contained, no dependencies.
+
+   A and B start separated in space, the way force vectors are drawn on
+   a diagram: not addable as they sit. "Join head-to-tail" animates the
+   second vector's tail sliding onto the first one's head, orientation
+   preserved. The resultant runs from the tail of the first to the head
+   of the last. "A - B" flips B and leaves a faint ghost of +B behind.
+   "Swap order" draws the other vector first, landing the resultant in
+   the same place. Two angles are reported: the joint angle measured at
+   the corner (our guided-notes convention, 180 = straight ahead) and
+   the angle between A and B (the textbook convention); they are
+   supplements of each other.
    ================================================================== */
 (function(){
   var cv = document.getElementById('simCanvas');
   if(!cv || !cv.getContext) return;
   var ctx = cv.getContext('2d');
   var W = cv.width, H = cv.height;
-  var cx = W/2, cy = H/2 + 40;
-  var scale = 34; // px per meter
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var ORIGIN = { x: W/2, y: H/2 + 30 };
+  var SCALE = 30;                          // px per metre
+  var COL = { A:'#7fd1a0', B:'#67b7ff', R:'#ffd27a', ghost:'rgba(103,183,255,0.30)', faint:'#9fc4ad' };
+
+  /* where the first vector's tail sits, and where the second one is parked */
+  var FIRST_TAIL = { x:-4, y:-2 };
+  var PARK_TAIL  = { x: 2.2, y:-3.2 };
 
   var magA = 4, angA = 0, magB = 3, angB = 90;
-  var swapped = false, showMeasure = false;
+  var subtract = false, swapped = false, showRes = false, showMeasure = false;
+  var joinT = 0, joining = false, lastTs = null;
 
   var el = {
     magA: document.getElementById('magA'), angA: document.getElementById('angA'),
     magB: document.getElementById('magB'), angB: document.getElementById('angB'),
     magAval: document.getElementById('magAval'), angAval: document.getElementById('angAval'),
     magBval: document.getElementById('magBval'), angBval: document.getElementById('angBval'),
+    opAdd: document.getElementById('opAdd'), opSub: document.getElementById('opSub'),
+    join: document.getElementById('joinBtn'), res: document.getElementById('resBtn'),
     swap: document.getElementById('swapBtn'), measure: document.getElementById('measureBtn'),
     reset: document.getElementById('resetBtn'),
+    aOut: document.getElementById('aOut'), bOut: document.getElementById('bOut'),
+    jOut: document.getElementById('jOut'), btwOut: document.getElementById('btwOut'),
     cMagOut: document.getElementById('cMagOut'), cAngOut: document.getElementById('cAngOut'),
     hint: document.getElementById('simHint')
   };
 
-  function toXY(mag, angDeg){
-    var rad = angDeg * Math.PI/180;
-    return { x: mag*Math.cos(rad), y: -mag*Math.sin(rad) }; // screen y flips
+  /* grid coordinates: x right, y UP */
+  function rad(d){ return d * Math.PI/180; }
+  function vecA(){ return { x: magA*Math.cos(rad(angA)), y: magA*Math.sin(rad(angA)) }; }
+  function vecB(){                                   /* flipped when subtracting */
+    var s = subtract ? -1 : 1;
+    return { x: s*magB*Math.cos(rad(angB)), y: s*magB*Math.sin(rad(angB)) };
   }
-
-  function drawGrid(){
-    ctx.strokeStyle = 'rgba(159,196,173,0.25)'; ctx.lineWidth = 1;
-    for(var gx = cx % scale; gx < W; gx += scale){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
-    for(var gy = cy % scale; gy < H; gy += scale){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
-    ctx.strokeStyle = 'rgba(159,196,173,0.55)';
-    ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(W,cy); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,H); ctx.stroke();
-  }
-
-  function arrow(x0,y0,x1,y1,color,width){
-    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width || 3;
-    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
-    var ang = Math.atan2(y1-y0, x1-x0);
-    var hlen = 12;
-    ctx.beginPath();
-    ctx.moveTo(x1,y1);
-    ctx.lineTo(x1 - hlen*Math.cos(ang-0.35), y1 - hlen*Math.sin(ang-0.35));
-    ctx.lineTo(x1 - hlen*Math.cos(ang+0.35), y1 - hlen*Math.sin(ang+0.35));
-    ctx.closePath(); ctx.fill();
-  }
+  function px(p){ return { x: ORIGIN.x + p.x*SCALE, y: ORIGIN.y - p.y*SCALE }; }
 
   function label(text, x, y, color){
     ctx.font = '600 13px Segoe UI, sans-serif'; ctx.fillStyle = color;
     ctx.fillText(text, x, y);
+  }
+
+  function arrow(from, to, color, width, dash, text){
+    var f = px(from), t = px(to);
+    if(Math.abs(f.x-t.x) < 0.5 && Math.abs(f.y-t.y) < 0.5) return;
+    ctx.save();
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width || 3;
+    if(dash) ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(f.x,f.y); ctx.lineTo(t.x,t.y); ctx.stroke();
+    ctx.restore();
+    var ang = Math.atan2(t.y-f.y, t.x-f.x), hl = 12;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(t.x,t.y);
+    ctx.lineTo(t.x - hl*Math.cos(ang-0.35), t.y - hl*Math.sin(ang-0.35));
+    ctx.lineTo(t.x - hl*Math.cos(ang+0.35), t.y - hl*Math.sin(ang+0.35));
+    ctx.closePath(); ctx.fill();
+    if(text) label(text, (f.x+t.x)/2 + 10, (f.y+t.y)/2 - 8, color);
+  }
+
+  function drawGrid(){
+    ctx.strokeStyle = 'rgba(159,196,173,0.25)'; ctx.lineWidth = 1;
+    for(var gx = ORIGIN.x % SCALE; gx < W; gx += SCALE){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+    for(var gy = ORIGIN.y % SCALE; gy < H; gy += SCALE){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(159,196,173,0.55)';
+    ctx.beginPath(); ctx.moveTo(0,ORIGIN.y); ctx.lineTo(W,ORIGIN.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ORIGIN.x,0); ctx.lineTo(ORIGIN.x,H); ctx.stroke();
+  }
+
+  /* which vector is drawn first depends on the swap toggle */
+  function operands(){
+    var a = { v: vecA(), color: COL.A, name: 'A', isB: false };
+    var b = { v: vecB(), color: COL.B, name: subtract ? '−B' : 'B', isB: true };
+    return swapped ? [b, a] : [a, b];
+  }
+
+  /* the angle at the corner where the arrows meet: 180 = straight ahead */
+  function angles(){
+    var a = vecA(), b = vecB();
+    var la = Math.hypot(a.x,a.y), lb = Math.hypot(b.x,b.y);
+    if(la === 0 || lb === 0) return null;
+    var dot = (a.x*b.x + a.y*b.y) / (la*lb);
+    dot = Math.max(-1, Math.min(1, dot));
+    var between = Math.acos(dot) * 180/Math.PI;      /* 0 = same direction */
+    return { between: between, joint: 180 - between };
   }
 
   function draw(){
@@ -463,71 +669,176 @@
     ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
     drawGrid();
 
-    var first  = swapped ? {mag:magB, ang:angB, color:'#67b7ff', name:'B'} : {mag:magA, ang:angA, color:'#7fd1a0', name:'A'};
-    var second = swapped ? {mag:magA, ang:angA, color:'#7fd1a0', name:'A'} : {mag:magB, ang:angB, color:'#67b7ff', name:'B'};
+    var ops = operands();
+    var first = ops[0], second = ops[1];
 
-    var v1 = toXY(first.mag, first.ang);
-    var v2 = toXY(second.mag, second.ang);
+    var firstHead = { x: FIRST_TAIL.x + first.v.x, y: FIRST_TAIL.y + first.v.y };
+    /* the second vector's tail slides from its parking spot onto the first one's head */
+    var secondTail = {
+      x: PARK_TAIL.x + (firstHead.x - PARK_TAIL.x) * joinT,
+      y: PARK_TAIL.y + (firstHead.y - PARK_TAIL.y) * joinT
+    };
+    var secondHead = { x: secondTail.x + second.v.x, y: secondTail.y + second.v.y };
 
-    var x0 = cx, y0 = cy;
-    var x1 = x0 + v1.x*scale, y1 = y0 + v1.y*scale;
-    var x2 = x1 + v2.x*scale, y2 = y1 + v2.y*scale;
+    /* ghost of the un-flipped B, from whichever tail B is drawn at */
+    if(subtract){
+      var bTail = second.isB ? secondTail : FIRST_TAIL;
+      var g = { x: magB*Math.cos(rad(angB)), y: magB*Math.sin(rad(angB)) };
+      arrow(bTail, { x: bTail.x + g.x, y: bTail.y + g.y }, COL.ghost, 2, [4,4], '+B');
+    }
 
-    arrow(x0,y0,x1,y1, first.color, 3.5);
-    label(first.name, (x0+x1)/2 + 8, (y0+y1)/2 - 8, first.color);
+    arrow(FIRST_TAIL, firstHead, first.color, 3.5, null, first.name);
+    arrow(secondTail, secondHead, second.color, 3.5, null, second.name);
 
-    arrow(x1,y1,x2,y2, second.color, 3.5);
-    label(second.name, (x1+x2)/2 + 8, (y1+y2)/2 - 8, second.color);
+    if(showRes && joinT >= 1){
+      arrow(FIRST_TAIL, secondHead, COL.R, 3, [7,5], null);
+      var h = px(secondHead);
+      label('C (resultant)', h.x + 10, h.y - 4, COL.R);
+      var f = px(FIRST_TAIL);
+      ctx.font = '11px Segoe UI, sans-serif'; ctx.fillStyle = COL.R;
+      ctx.fillText('tail of the first → head of the last', f.x - 4, f.y + 26);
+    }
 
-    // resultant
-    arrow(x0,y0,x2,y2, '#ffd27a', 3);
-    label('C (resultant)', x2 + 10, y2 - 4, '#ffd27a');
+    /* origin dot on the first vector's tail */
+    var d = px(FIRST_TAIL);
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(d.x, d.y, 3.5, 0, Math.PI*2); ctx.fill();
 
-    // origin dot
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x0,y0,3.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = COL.faint; ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillText(joinT < 1 ? 'separated in space — not yet addable'
+                           : 'joined head-to-tail ✓  (drawing ' + first.name + ' first)', 10, 16);
+  }
 
-    var cx_ = v1.x + v2.x, cy_ = v1.y + v2.y;
-    var cMag = Math.sqrt(cx_*cx_ + cy_*cy_);
-    var cAng = Math.atan2(-cy_, cx_) * 180/Math.PI;
-    if(cAng < 0) cAng += 360;
+  function readout(){
+    el.aOut.textContent = magA.toFixed(1);
+    el.bOut.textContent = magB.toFixed(1);
 
-    if(showMeasure){
-      el.cMagOut.textContent = cMag.toFixed(1) + ' m';
-      el.cAngOut.textContent = cAng.toFixed(0) + '°';
+    var ang = angles();
+    el.btwOut.textContent = ang === null ? '—' : Math.round(ang.between) + '°';
+    el.jOut.textContent = (ang === null || joinT < 1) ? '—' : Math.round(ang.joint) + '°';
+
+    if(showMeasure && showRes && joinT >= 1){
+      var a = vecA(), b = vecB();
+      var rx = a.x + b.x, ry = a.y + b.y;
+      var deg = Math.atan2(ry, rx) * 180/Math.PI;
+      if(deg < 0) deg += 360;
+      el.cMagOut.textContent = Math.hypot(rx, ry).toFixed(1) + ' m';
+      el.cAngOut.textContent = deg.toFixed(0) + '°';
     } else {
       el.cMagOut.textContent = '—';
       el.cAngOut.textContent = '—';
     }
   }
 
-  function syncLabels(){
+  function hint(){
+    var ang = angles();
+    if(joinT < 1){
+      el.hint.textContent = 'Vectors separated in space can’t be added as drawn — slide one across (keeping its orientation!) until they connect head-to-tail.';
+    } else if(!showRes){
+      el.hint.textContent = 'Joined! Now show the resultant — it runs from the tail of the first arrow to the head of the last.';
+    } else if(ang && ang.joint >= 172){
+      el.hint.textContent = 'Straight ahead (joint ≈ 180°): the lengths simply add — the longest resultant possible.';
+    } else if(ang && ang.joint <= 8){
+      el.hint.textContent = 'Doubled back (joint ≈ 0°): the resultant is the difference of the lengths — the shortest possible. Equal lengths would cancel to zero.';
+    } else if(ang && Math.abs(ang.joint - 90) <= 8){
+      el.hint.textContent = 'A right-angle joint: the resultant is the diagonal of the corner — between the two extremes.';
+    } else if(swapped){
+      el.hint.textContent = 'Drawing ' + (subtract ? '−B' : 'B') + ' first instead — the resultant lands in exactly the same place. Order never matters.';
+    } else {
+      el.hint.textContent = 'Swing a direction slider and watch the joint angle reshape the resultant.';
+    }
+  }
+
+  function refresh(){
+    draw(); readout(); hint();
+    var done = joinT >= 1;                 /* Join is a no-op once joined — grey it out */
+    el.join.disabled = done;
+    el.join.style.opacity = done ? '.45' : '1';
+    el.join.style.cursor = done ? 'default' : 'pointer';
+  }
+
+  function animate(ts){
+    if(!joining) return;
+    if(lastTs === null) lastTs = ts;
+    var dt = Math.min((ts - lastTs)/1000, 0.05); lastTs = ts;
+    joinT = Math.min(1, joinT + dt*1.6);
+    if(joinT >= 1) joining = false;
+    refresh();
+    if(joining) requestAnimationFrame(animate);
+  }
+
+  /* changing an operand or the order pulls the vectors back apart */
+  function separate(){
+    joinT = 0; joining = false; showRes = false; lastTs = null;
+    el.res.setAttribute('aria-pressed','false');
+    refresh();
+  }
+
+  function onSlider(setter){
+    return function(){ setter(parseFloat(this.value)); syncVals(); refresh(); };
+  }
+  function syncVals(){
     el.magAval.textContent = magA.toFixed(1);
     el.angAval.textContent = angA.toFixed(0);
     el.magBval.textContent = magB.toFixed(1);
     el.angBval.textContent = angB.toFixed(0);
-    el.hint.textContent = swapped
-      ? 'Now drawing B first, then A from B’s head — watch the resultant land in the same place.'
-      : 'Notice: swapping which vector you draw first never changes where the resultant ends up.';
   }
 
-  el.magA.addEventListener('input', function(){ magA = parseFloat(this.value); syncLabels(); draw(); });
-  el.angA.addEventListener('input', function(){ angA = parseFloat(this.value); syncLabels(); draw(); });
-  el.magB.addEventListener('input', function(){ magB = parseFloat(this.value); syncLabels(); draw(); });
-  el.angB.addEventListener('input', function(){ angB = parseFloat(this.value); syncLabels(); draw(); });
-  el.swap.addEventListener('click', function(){ swapped = !swapped; syncLabels(); draw(); });
-  el.measure.addEventListener('click', function(){
-    showMeasure = !showMeasure;
-    el.measure.setAttribute('aria-pressed', showMeasure ? 'true' : 'false');
-    draw();
+  el.magA.addEventListener('input', onSlider(function(v){ magA = v; }));
+  el.angA.addEventListener('input', onSlider(function(v){ angA = v; }));
+  el.magB.addEventListener('input', onSlider(function(v){ magB = v; }));
+  el.angB.addEventListener('input', onSlider(function(v){ angB = v; }));
+
+  el.opAdd.addEventListener('click', function(){
+    subtract = false;
+    el.opAdd.setAttribute('aria-pressed','true'); el.opSub.setAttribute('aria-pressed','false');
+    refresh();
   });
-  el.reset.addEventListener('click', function(){
-    magA=4; angA=0; magB=3; angB=90; swapped=false; showMeasure=false;
-    el.magA.value=4; el.angA.value=0; el.magB.value=3; el.angB.value=90;
-    el.measure.setAttribute('aria-pressed','false');
-    syncLabels(); draw();
+  el.opSub.addEventListener('click', function(){
+    subtract = true;
+    el.opSub.setAttribute('aria-pressed','true'); el.opAdd.setAttribute('aria-pressed','false');
+    refresh();
   });
 
-  syncLabels(); draw();
+  el.join.addEventListener('click', function(){
+    if(joinT >= 1) return;
+    if(reduceMotion){ joinT = 1; refresh(); return; }
+    joining = true; lastTs = null; requestAnimationFrame(animate);
+  });
+  el.res.addEventListener('click', function(){
+    if(joinT < 1){
+      el.hint.textContent = 'Join the vectors head-to-tail first — the resultant only exists once they’re connected.';
+      return;
+    }
+    showRes = !showRes;
+    this.setAttribute('aria-pressed', showRes ? 'true' : 'false');
+    refresh();
+  });
+  el.swap.addEventListener('click', function(){
+    swapped = !swapped;
+    this.textContent = swapped ? '⇄ Swap back (draw A first)' : '⇄ Swap order';
+    separate();
+  });
+  el.measure.addEventListener('click', function(){
+    showMeasure = !showMeasure;
+    this.setAttribute('aria-pressed', showMeasure ? 'true' : 'false');
+    if(showMeasure && !(showRes && joinT >= 1)){
+      el.hint.textContent = 'Join the vectors and show the resultant — then there’s something to measure.';
+      readout();
+      return;
+    }
+    refresh();
+  });
+  el.reset.addEventListener('click', function(){
+    magA = 4; angA = 0; magB = 3; angB = 90;
+    subtract = false; swapped = false; showMeasure = false;
+    el.magA.value = 4; el.angA.value = 0; el.magB.value = 3; el.angB.value = 90;
+    el.opAdd.setAttribute('aria-pressed','true'); el.opSub.setAttribute('aria-pressed','false');
+    el.measure.setAttribute('aria-pressed','false');
+    el.swap.textContent = '⇄ Swap order';
+    syncVals(); separate();
+  });
+
+  syncVals(); separate();
 })();
 
 /* ---------- predict-first probe ---------- */
