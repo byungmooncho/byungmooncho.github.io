@@ -114,6 +114,14 @@
   .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
   .btn:hover{ filter:brightness(.96); }
   .btn:active{ transform:translateY(1px); }
+  .seg{ display:inline-flex; border:1px solid var(--green); border-radius:6px; overflow:hidden; }
+  .seg button{
+    border:0; background:#fff; color:var(--green);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    padding:.42rem .8rem; cursor:pointer;
+  }
+  .seg button[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .ctrl.dim{ opacity:.35; }
   .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
   .readout .chip{
     font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
@@ -167,6 +175,35 @@
     border:1px solid var(--rule); display:none;
   }
   .ticket .score.show{ display:block; }
+
+  /* looking-ahead signpost */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.7rem 1rem; margin:1.2rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+
+  /* component-signs summary table */
+  .translate{ margin:1rem 0 0; border:1px solid var(--rule); border-radius:8px; overflow:hidden; }
+  .translate table{ width:100%; border-collapse:collapse; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .translate th, .translate td{ text-align:left; padding:.6rem .85rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .translate th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+  .translate tr:last-child td{ border-bottom:0; }
+  .translate td .tag{ font-weight:700; }
+  .translate td .tag.pos{ color:var(--green); }
+  .translate td .tag.neg{ color:var(--amber); }
+
+  /* key rules */
+  .eqs{ display:grid; gap:.8rem; grid-template-columns:1fr; margin:1rem 0 0; }
+  @media (min-width:600px){ .eqs{ grid-template-columns:1fr 1fr 1fr; } }
+  .eq-card{ border:1px solid var(--rule); border-radius:8px; padding:.85rem .9rem; background:#fff; }
+  .eq-card .icon{ font-size:1.4rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .eq-card .formula{
+    font-family:Charter, Georgia, serif; font-size:1.08rem; font-weight:700;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .eq-card small{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
 
   /* downloads */
   .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
@@ -252,15 +289,22 @@
 
   <!-- ============ INTERACTIVE: COMPONENT RESOLVER ============ -->
   <h2>Play with it: resolve a vector into components</h2>
-  <p>Set vector <b>A</b>'s length and angle. <b>A</b>x is how far it reaches horizontally; <b>A</b>y is
-  how far it reaches vertically. Together they form a right triangle with A itself as the hypotenuse.
-  Try dragging the angle to exactly 0° or 90° — watch one component disappear.</p>
+  <p>Start in <b>One vector</b> mode. Set vector <b>A</b>'s length and angle. <b>A</b>x is how far it
+  reaches horizontally; <b>A</b>y is how far it reaches vertically. Together they form a right triangle
+  with A itself as the hypotenuse. Try dragging the angle to exactly 0° or 90° — watch one
+  component disappear.</p>
+
+  <p>Then switch to <b>A + B = C</b> mode. Two vectors are joined head-to-tail, exactly as in Note&nbsp;1,
+  and the resultant <b>C</b> is drawn dashed from A's tail to B's head. Show the components and compare the
+  chips: <b>A<sub>x</sub> + B<sub>x</sub></b> lands on <b>C<sub>x</sub></b>, and <b>A<sub>y</sub> + B<sub>y</sub></b>
+  lands on <b>C<sub>y</sub></b> — for <em>any</em> two vectors you can set. Change the lengths and angles and
+  try to break it.</p>
 
   <div class="sim" id="sim">
     <div class="sim-head"><span>▶</span> Interactive · Vector Component Resolver</div>
     <div class="stage">
       <canvas id="simCanvas" width="720" height="420" role="img"
-        aria-label="A grid showing vector A drawn from the origin, with its horizontal component Ax and vertical component Ay forming a right triangle underneath it."></canvas>
+        aria-label="A grid showing vector A drawn from the origin with its horizontal component Ax and vertical component Ay forming a right triangle; a second mode joins vectors A and B head-to-tail to a dashed resultant C and shows the components of all three."></canvas>
     </div>
     <div class="panel">
       <div class="controls">
@@ -272,14 +316,32 @@
           <label for="angA">Vector A — angle <span class="val"><span id="angAval">40</span>&deg;</span></label>
           <input type="range" id="angA" min="0" max="360" step="5" value="40">
         </div>
+        <div class="ctrl dim" id="ctrlMagB">
+          <label for="magB">Vector B — length <span class="val"><span id="magBval">3.0</span> m</span></label>
+          <input type="range" id="magB" min="1" max="6" step="0.5" value="3">
+        </div>
+        <div class="ctrl dim" id="ctrlAngB">
+          <label for="angB">Vector B — angle <span class="val"><span id="angBval">120</span>&deg;</span></label>
+          <input type="range" id="angB" min="0" max="360" step="5" value="120">
+        </div>
       </div>
       <div class="buttons">
+        <span class="seg" role="group" aria-label="Simulator mode">
+          <button id="modeOne" aria-pressed="true">One vector</button>
+          <button id="modeSum" aria-pressed="false">A + B = C</button>
+        </span>
         <button class="btn toggle" id="componentsBtn" aria-pressed="false">Show components</button>
         <button class="btn" id="resetBtn">↺ Reset</button>
       </div>
-      <div class="readout">
+      <div class="readout" id="chipsOne">
         <span class="chip">A<sub>x</sub> ≈ <b id="axOut">—</b></span>
         <span class="chip">A<sub>y</sub> ≈ <b id="ayOut">—</b></span>
+      </div>
+      <div class="readout" id="chipsSum" style="display:none">
+        <span class="chip">A<sub>x</sub> + B<sub>x</sub> ≈ <b id="sumxOut">—</b></span>
+        <span class="chip">C<sub>x</sub> ≈ <b id="cxOut">—</b></span>
+        <span class="chip">A<sub>y</sub> + B<sub>y</sub> ≈ <b id="sumyOut">—</b></span>
+        <span class="chip">C<sub>y</sub> ≈ <b id="cyOut">—</b></span>
       </div>
       <div class="hint-row" id="simHint">Predict Ax and Ay in your head first, then press "Show components" to check.</div>
     </div>
@@ -306,6 +368,50 @@
               title="M2 N2 walkthrough with Dr. Cho"></iframe></div> -->
     <div style="position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16;">
       <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cfe4d7; font-family:'Segoe UI', system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <!-- ============ COMPONENT SIGNS TABLE ============ -->
+  <h2>Component signs at a glance</h2>
+  <p>Before you compute anything, read the signs straight off the arrow's direction. Rightward and upward
+  are positive, exactly as in Module&nbsp;1:</p>
+  <div class="translate">
+    <table>
+      <thead>
+        <tr><th>The vector points&hellip;</th><th>x-component</th><th>y-component</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Up and to the right</b> ↗</td><td><span class="tag pos">+</span></td><td><span class="tag pos">+</span></td></tr>
+        <tr><td><b>Up and to the left</b> ↖</td><td><span class="tag neg">−</span></td><td><span class="tag pos">+</span></td></tr>
+        <tr><td><b>Down and to the right</b> ↘</td><td><span class="tag pos">+</span></td><td><span class="tag neg">−</span></td></tr>
+        <tr><td><b>Down and to the left</b> ↙</td><td><span class="tag neg">−</span></td><td><span class="tag neg">−</span></td></tr>
+        <tr><td><b>Exactly along an axis</b> → or ↑</td><td colspan="2">one component is the whole vector; the other is zero</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> in this note we resolve vectors by <em>drawing</em>
+  — building the right triangle and reading the legs off the grid. In Note&nbsp;2a, trigonometry
+  (SOH-CAH-TOA) gives the exact component lengths for any angle, no grid required. That's the tool the
+  projectile notes (N3–N5) run on.</p>
+
+  <!-- ============ KEY RULES ============ -->
+  <h2>Three rules to remember</h2>
+  <div class="eqs">
+    <div class="eq-card">
+      <span class="icon">✂️</span>
+      <span class="formula">A → A<sub>x</sub> + A<sub>y</sub></span>
+      <small>Resolving splits one vector into a horizontal part and a vertical part that rebuild it head-to-tail.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">➕</span>
+      <span class="formula">C<sub>x</sub> = A<sub>x</sub> + B<sub>x</sub></span>
+      <small>Components of the resultant are the sums of the components — and the same along y: C<sub>y</sub> = A<sub>y</sub> + B<sub>y</sub>.</small>
+    </div>
+    <div class="eq-card">
+      <span class="icon">🔢</span>
+      <span class="formula">Vectors → numbers</span>
+      <small>The payoff: with components, vector addition becomes ordinary addition, done separately along x and along y.</small>
     </div>
   </div>
 
@@ -390,56 +496,72 @@
 <script>
 /* ==================================================================
    Vector Component Resolver — self-contained, no dependencies.
-   Draws vector A from the origin, and (when toggled) its horizontal
-   component Ax along the x-axis and vertical component Ay completing
-   the right triangle up to A's head.
+
+   Mode "one": vector A from the origin, plus (when toggled) its
+     horizontal component Ax along x and vertical component Ay
+     completing the right triangle up to A's head.
+   Mode "sum": A and B joined head-to-tail with the resultant C drawn
+     dashed from A's tail to B's head. With components shown, the gold
+     L from A's tail to C's head is visibly Ax+Bx across and Ay+By up —
+     the discovery of this note.
    ================================================================== */
 (function(){
   var cv = document.getElementById('simCanvas');
   if(!cv || !cv.getContext) return;
   var ctx = cv.getContext('2d');
   var W = cv.width, H = cv.height;
-  var cx = W/2 - 60, cy = H/2 + 60;
-  var scale = 34; // px per meter
 
-  var magA = 5, angA = 40, showComponents = false;
+  /* per-mode origin: the single vector sits low-left of centre so the
+     first quadrant has room; the A+B=C build starts further down-left
+     so the head-to-tail chain stays on the grid. */
+  var GEO = {
+    one: { x: W/2 - 60,  y: H/2 + 60, scale: 34 },
+    sum: { x: W/2 - 120, y: H/2 + 78, scale: 30 }
+  };
+
+  var COL = {
+    A: '#7fd1a0', B: '#67b7ff', C: '#ff9a9a',
+    x: '#67b7ff', y: '#ffd27a', sum: '#ffd479'
+  };
+
+  var magA = 5, angA = 40, magB = 3, angB = 120;
+  var mode = 'one', showComponents = false;
 
   var el = {
     magA: document.getElementById('magA'), angA: document.getElementById('angA'),
+    magB: document.getElementById('magB'), angB: document.getElementById('angB'),
     magAval: document.getElementById('magAval'), angAval: document.getElementById('angAval'),
+    magBval: document.getElementById('magBval'), angBval: document.getElementById('angBval'),
+    ctrlMagB: document.getElementById('ctrlMagB'), ctrlAngB: document.getElementById('ctrlAngB'),
+    modeOne: document.getElementById('modeOne'), modeSum: document.getElementById('modeSum'),
     components: document.getElementById('componentsBtn'), reset: document.getElementById('resetBtn'),
+    chipsOne: document.getElementById('chipsOne'), chipsSum: document.getElementById('chipsSum'),
     axOut: document.getElementById('axOut'), ayOut: document.getElementById('ayOut'),
+    sumxOut: document.getElementById('sumxOut'), cxOut: document.getElementById('cxOut'),
+    sumyOut: document.getElementById('sumyOut'), cyOut: document.getElementById('cyOut'),
     hint: document.getElementById('simHint')
   };
 
-  function toXY(mag, angDeg){
-    var rad = angDeg * Math.PI/180;
-    return { x: mag*Math.cos(rad), y: -mag*Math.sin(rad) }; // screen y flips
+  function geo(){ return GEO[mode]; }
+
+  /* grid coordinates: x right, y UP (maths convention) */
+  function comp(mag, angDeg){
+    var r = angDeg * Math.PI/180;
+    return { x: mag*Math.cos(r), y: mag*Math.sin(r) };
   }
+  function px(p){ var g = geo(); return { x: g.x + p.x*g.scale, y: g.y - p.y*g.scale }; }
 
   function drawGrid(){
+    var g = geo();
     ctx.strokeStyle = 'rgba(159,196,173,0.25)'; ctx.lineWidth = 1;
-    for(var gx = cx % scale; gx < W; gx += scale){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
-    for(var gy = cy % scale; gy < H; gy += scale){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+    for(var gx = g.x % g.scale; gx < W; gx += g.scale){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+    for(var gy = g.y % g.scale; gy < H; gy += g.scale){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
     ctx.strokeStyle = 'rgba(159,196,173,0.55)';
-    ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(W,cy); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,H); ctx.stroke();
-  }
-
-  function arrow(x0,y0,x1,y1,color,width,dashed){
-    ctx.save();
-    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width || 3;
-    if(dashed) ctx.setLineDash([7,6]);
-    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
-    ctx.restore();
-    var ang = Math.atan2(y1-y0, x1-x0);
-    var hlen = 12;
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.moveTo(x1,y1);
-    ctx.lineTo(x1 - hlen*Math.cos(ang-0.35), y1 - hlen*Math.sin(ang-0.35));
-    ctx.lineTo(x1 - hlen*Math.cos(ang+0.35), y1 - hlen*Math.sin(ang+0.35));
-    ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(0,g.y); ctx.lineTo(W,g.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(g.x,0); ctx.lineTo(g.x,H); ctx.stroke();
+    ctx.font = '11px Segoe UI, sans-serif'; ctx.fillStyle = 'rgba(159,196,173,0.8)';
+    ctx.fillText('x', W - 14, g.y - 7);
+    ctx.fillText('y', g.x + 8, 14);
   }
 
   function label(text, x, y, color){
@@ -447,68 +569,167 @@
     ctx.fillText(text, x, y);
   }
 
+  /* arrow between two GRID points */
+  function arrow(from, to, color, width, dashed){
+    var f = px(from), t = px(to);
+    if(Math.abs(f.x - t.x) < 0.5 && Math.abs(f.y - t.y) < 0.5) return;
+    ctx.save();
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width || 3;
+    if(dashed) ctx.setLineDash([7,6]);
+    ctx.beginPath(); ctx.moveTo(f.x,f.y); ctx.lineTo(t.x,t.y); ctx.stroke();
+    ctx.restore();
+    var ang = Math.atan2(t.y-f.y, t.x-f.x), hlen = 12;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(t.x,t.y);
+    ctx.lineTo(t.x - hlen*Math.cos(ang-0.35), t.y - hlen*Math.sin(ang-0.35));
+    ctx.lineTo(t.x - hlen*Math.cos(ang+0.35), t.y - hlen*Math.sin(ang+0.35));
+    ctx.closePath(); ctx.fill();
+  }
+
+  /* The right triangle: across first, then up, from tail to head.
+     opt.lane shifts the pair onto its own lane (grid units) — used for the
+     resultant's components, which would otherwise hide underneath A's legs.
+     opt.labels = false draws the legs without text (keeps A+B=C uncluttered). */
+  function legs(tail, v, colX, colY, prefix, opt){
+    opt = opt || {};
+    var lane = opt.lane || 0;
+    var width = opt.width || 3;
+    var showText = opt.labels !== false;
+    /* horizontal leg drops below its row by `lane`; vertical leg shifts right by `lane` */
+    var hTail = { x: tail.x,        y: tail.y - lane };
+    var hHead = { x: tail.x + v.x,  y: tail.y - lane };
+    var vTail = { x: tail.x + v.x + lane, y: tail.y };
+    var vHead = { x: tail.x + v.x + lane, y: tail.y + v.y };
+    if(Math.abs(v.x) > 0.05){
+      arrow(hTail, hHead, colX, width, false);
+      if(showText){
+        var m = px({ x: tail.x + v.x*(lane ? 0.78 : 0.5), y: hTail.y });
+        label(prefix + 'x', m.x - 8, m.y + (v.y >= 0 ? 20 : -10), colX);
+      }
+    }
+    if(Math.abs(v.y) > 0.05){
+      arrow(vTail, vHead, colY, width, false);
+      if(showText){
+        /* three-quarters along the leg, so a lane-offset label clears the vectors */
+        var n = px({ x: vTail.x, y: tail.y + v.y*0.78 });
+        label(prefix + 'y', n.x + (v.x < 0 ? -32 : 10), n.y + 4, colY);
+      }
+    }
+  }
+
+  function dot(p){
+    var q = px(p);
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(q.x, q.y, 3.5, 0, Math.PI*2); ctx.fill();
+  }
+
   function draw(){
     ctx.clearRect(0,0,W,H);
     ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
     drawGrid();
 
-    var v = toXY(magA, angA);
-    var x0 = cx, y0 = cy;
-    var x1 = x0 + v.x*scale, y1 = y0 + v.y*scale;
-    var xFoot = x0 + v.x*scale, yFoot = y0; // point on x-axis under/over the head
+    var a = comp(magA, angA), b = comp(magB, angB);
 
-    if(showComponents){
-      // horizontal component Ax: origin -> foot on x-axis
-      arrow(x0,y0,xFoot,yFoot, '#67b7ff', 3, false);
-      label('Ax', (x0+xFoot)/2 - 6, y0 + (v.y<0? -10 : 22), '#67b7ff');
-      // vertical component Ay: foot -> head, completing the triangle
-      arrow(xFoot,yFoot,x1,y1, '#ffd27a', 3, false);
-      label('Ay', xFoot + (v.x<0? -34 : 10), (yFoot+y1)/2, '#ffd27a');
-      // faint construction line closing the triangle (dashed, same as vector A path)
+    if(mode === 'one'){
+      var O = { x:0, y:0 };
+      if(showComponents) legs(O, a, COL.x, COL.y, 'A', { width: 3 });
+      arrow(O, a, COL.A, 3.5, false);
+      var h = px(a);
+      label('A', h.x + (a.x >= 0 ? 8 : -22), h.y - 8, COL.A);
+      dot(O);
+    } else {
+      var At = { x:-3, y:-2 };
+      var Bt = { x: At.x + a.x, y: At.y + a.y };
+      var Ch = { x: Bt.x + b.x, y: Bt.y + b.y };
+      var c  = { x: a.x + b.x, y: a.y + b.y };
+      if(showComponents){
+        /* A's and B's own right triangles, on the true construction lines */
+        legs(At, a, COL.A, COL.A, 'A', { width: 2.5, labels: false });
+        legs(Bt, b, COL.B, COL.B, 'B', { width: 2.5, labels: false });
+        /* the resultant's components, one lane out so both stay visible */
+        legs(At, c, COL.sum, COL.sum, 'C', { lane: 0.45, width: 3 });
+      }
+      arrow(At, Bt, COL.A, 3.5, false);
+      arrow(Bt, Ch, COL.B, 3.5, false);
+      arrow(At, Ch, COL.C, 3, true);
+      var ma = px({ x:(At.x+Bt.x)/2, y:(At.y+Bt.y)/2 });
+      var mb = px({ x:(Bt.x+Ch.x)/2, y:(Bt.y+Ch.y)/2 });
+      var mc = px({ x:(At.x+Ch.x)/2, y:(At.y+Ch.y)/2 });
+      label('A', ma.x - 18, ma.y - 6, COL.A);
+      label('B', mb.x - 18, mb.y - 6, COL.B);
+      label('C', mc.x + 10, mc.y + 16, COL.C);
+      dot(At);
     }
 
-    // vector A itself (drawn on top)
-    arrow(x0,y0,x1,y1, '#7fd1a0', 3.5, false);
-    label('A', x1 + (v.x>=0?8:-22), y1 - 8, '#7fd1a0');
+    readout(a, b);
+  }
 
-    // origin dot
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x0,y0,3.5,0,Math.PI*2); ctx.fill();
+  function m(n){ return (Math.abs(n) < 0.05 ? 0 : n).toFixed(1) + ' m'; }
 
-    var ax = v.x, ay = -v.y; // true math-convention components (y up positive)
-    if(showComponents){
-      el.axOut.textContent = ax.toFixed(1) + ' m';
-      el.ayOut.textContent = ay.toFixed(1) + ' m';
+  function readout(a, b){
+    if(mode === 'one'){
+      el.axOut.textContent = showComponents ? m(a.x) : '—';
+      el.ayOut.textContent = showComponents ? m(a.y) : '—';
     } else {
-      el.axOut.textContent = '—';
-      el.ayOut.textContent = '—';
+      var cx = a.x + b.x, cy = a.y + b.y;
+      el.sumxOut.textContent = showComponents ? m(cx) : '—';
+      el.cxOut.textContent   = showComponents ? m(cx) : '—';
+      el.sumyOut.textContent = showComponents ? m(cy) : '—';
+      el.cyOut.textContent   = showComponents ? m(cy) : '—';
     }
   }
 
   function syncLabels(){
     el.magAval.textContent = magA.toFixed(1);
     el.angAval.textContent = angA.toFixed(0);
-    if(angA % 90 === 0){
-      el.hint.textContent = 'At ' + angA.toFixed(0) + '°, A lies exactly on an axis — one component is zero, nothing left to resolve.';
+    el.magBval.textContent = magB.toFixed(1);
+    el.angBval.textContent = angB.toFixed(0);
+
+    if(mode === 'one'){
+      if(angA % 90 === 0){
+        el.hint.textContent = 'At ' + angA.toFixed(0) + '°, A lies exactly on an axis — one component is zero, nothing left to resolve.';
+      } else {
+        el.hint.textContent = 'Predict Ax and Ay in your head first, then press "Show components" to check.';
+      }
     } else {
-      el.hint.textContent = 'Predict Ax and Ay in your head first, then press "Show components" to check.';
+      el.hint.textContent = showComponents
+        ? 'Compare the chips: Ax + Bx equals Cx, and Ay + By equals Cy — every time, at any two angles. The gold triangle from A\'s tail is exactly the green legs plus the blue legs.'
+        : 'A and B are joined head-to-tail; the dashed arrow is the resultant C. Press "Show components" to see why components make this easy.';
     }
+  }
+
+  function setMode(next){
+    mode = next;
+    el.modeOne.setAttribute('aria-pressed', next === 'one' ? 'true' : 'false');
+    el.modeSum.setAttribute('aria-pressed', next === 'sum' ? 'true' : 'false');
+    el.chipsOne.style.display = next === 'one' ? '' : 'none';
+    el.chipsSum.style.display = next === 'sum' ? '' : 'none';
+    el.ctrlMagB.className = next === 'sum' ? 'ctrl' : 'ctrl dim';
+    el.ctrlAngB.className = next === 'sum' ? 'ctrl' : 'ctrl dim';
+    el.magB.disabled = next !== 'sum';
+    el.angB.disabled = next !== 'sum';
+    syncLabels(); draw();
   }
 
   el.magA.addEventListener('input', function(){ magA = parseFloat(this.value); syncLabels(); draw(); });
   el.angA.addEventListener('input', function(){ angA = parseFloat(this.value); syncLabels(); draw(); });
+  el.magB.addEventListener('input', function(){ magB = parseFloat(this.value); syncLabels(); draw(); });
+  el.angB.addEventListener('input', function(){ angB = parseFloat(this.value); syncLabels(); draw(); });
+  el.modeOne.addEventListener('click', function(){ setMode('one'); });
+  el.modeSum.addEventListener('click', function(){ setMode('sum'); });
   el.components.addEventListener('click', function(){
     showComponents = !showComponents;
     el.components.setAttribute('aria-pressed', showComponents ? 'true' : 'false');
-    draw();
-  });
-  el.reset.addEventListener('click', function(){
-    magA=5; angA=40; showComponents=false;
-    el.magA.value=5; el.angA.value=40;
-    el.components.setAttribute('aria-pressed','false');
     syncLabels(); draw();
   });
+  el.reset.addEventListener('click', function(){
+    magA=5; angA=40; magB=3; angB=120; showComponents=false;
+    el.magA.value=5; el.angA.value=40; el.magB.value=3; el.angB.value=120;
+    el.components.setAttribute('aria-pressed','false');
+    setMode('one');
+  });
 
-  syncLabels(); draw();
+  setMode('one');
 })();
 
 /* ---------- predict-first probe ---------- */
