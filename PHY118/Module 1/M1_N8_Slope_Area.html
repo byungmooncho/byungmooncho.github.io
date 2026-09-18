@@ -277,8 +277,8 @@
   <div class="sim" id="sim">
     <div class="sim-head"><span>📐</span> Interactive · Area-Under-the-Curve Calculator</div>
     <div class="stage">
-      <canvas id="simCanvas" width="720" height="320" role="img"
-        aria-label="Two stacked graphs, acceleration versus time and velocity versus time, with shaded areas representing velocity change and distance change."></canvas>
+      <canvas id="simCanvas" width="720" height="480" role="img"
+        aria-label="Three stacked graphs against time: acceleration with a shaded rectangle equal to the velocity change, velocity with a shaded triangle equal to the distance travelled, and distance itself, whose height at any time equals that triangle's area."></canvas>
     </div>
     <div class="panel">
       <div class="ctrl">
@@ -430,7 +430,8 @@
    Area-Under-the-Curve Calculator — self-contained, no dependencies.
    Constant acceleration a = 9.8 m/s^2, starting from rest.
    Panel 1: acceleration vs time (flat line), shaded rectangle = a*t = Δv
-   Panel 2: velocity vs time (rising line), shaded triangle = ½*t*v_f = Δd
+   Panel 2: velocity vs time (rising line), shaded triangle = 1/2*t*v_f = Δd
+   Panel 3: distance vs time (parabola); its height at t equals that triangle
    ================================================================== */
 (function(){
   var cv = document.getElementById('simCanvas');
@@ -441,7 +442,7 @@
   var T_MAX = 2.0;
 
   var padL = 70, padR = 20, gap = 18;
-  var panelH = (H - gap - 10) / 2;
+  var panelH = (H - 2*gap - 10) / 3;
   function panelTop(i){ return 6 + i*(panelH + gap); }
   var x0 = padL, x1 = W - padR;
   function tx(tt){ return x0 + (tt / T_MAX) * (x1 - x0); }
@@ -484,9 +485,6 @@
     ctx.beginPath(); ctx.moveTo(x0, top-2); ctx.lineTo(x0, bot); ctx.lineTo(x1, bot); ctx.stroke();
     ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'left';
     ctx.fillText('velocity v (m/s)', 6, top+12);
-    ctx.textAlign = 'right';
-    ctx.fillText('time t (s) →', x1, H-6);
-    ctx.textAlign = 'left';
 
     // shaded triangle area 0..t
     ctx.fillStyle = 'rgba(255,179,127,0.35)';
@@ -509,6 +507,54 @@
     ctx.beginPath(); ctx.arc(tx(t), yy(vAt(t)), 4, 0, Math.PI*2); ctx.fill();
   }
 
+
+  function drawDistPanel(t){
+    /* Panel 3, added 2026-09-18. The velocity panel shades a triangle and the
+       caption calls it the distance travelled - but there was nowhere to see
+       that distance as a distance. This panel closes the loop: the height of
+       the d-t curve at time t IS the area of that triangle, and the dashed
+       guide carries it across to the axis so the two can be read together.
+       Axis is a FIXED ceiling from the constants (no auto-fit):
+         d_max = a*T_MAX^2/2 * 1.1 = 9.8*4/2 * 1.1 = 21.6 m  */
+    var top = panelTop(2), bot = top + panelH;
+    var dMax = 0.5 * a * T_MAX * T_MAX * 1.1;
+    function yy(val){ return bot - (val/dMax) * (bot-top); }
+    function dAt(tt){ return 0.5 * a * tt * tt; }
+
+    ctx.strokeStyle = '#2c5a3f'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0, top-2); ctx.lineTo(x0, bot); ctx.lineTo(x1, bot); ctx.stroke();
+    ctx.fillStyle = '#9fc4ad'; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('distance d (m)', 6, top+12);
+    ctx.textAlign = 'right';
+    ctx.fillText('time t (s) \u2192', x1, H-6);
+    ctx.textAlign = 'left';
+
+    /* the curve: d = a t^2 / 2, drawn across the whole fixed range */
+    ctx.strokeStyle = '#ffb37f'; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    for(var k = 0; k <= 60; k++){
+      var tt = T_MAX * k / 60, px = tx(tt), py = yy(dAt(tt));
+      if(k === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    /* dashed guides from the curve at t across to the axis and down to t */
+    var dy = yy(dAt(t)), dx = tx(t);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,179,127,0.65)'; ctx.lineWidth = 1.2; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(x0, dy); ctx.lineTo(dx, dy); ctx.lineTo(dx, bot); ctx.stroke();
+    ctx.restore();
+
+    /* marker and the value, so it can be compared with the shaded triangle above */
+    ctx.fillStyle = '#fff2d6';
+    ctx.beginPath(); ctx.arc(dx, dy, 4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#ffb37f'; ctx.font = '600 11px Segoe UI, sans-serif';
+    /* label pinned just right of the y-axis, above the guide line: stable at every
+       t, instead of chasing the marker into the panel's top-right corner */
+    var lbl = 'd = ' + dAt(t).toFixed(2) + ' m  = area of the triangle above';
+    ctx.fillText(lbl, x0 + 8, Math.max(dy - 7, top + 26));
+  }
+
   function update(){
     var t = parseFloat(slider.value);
     tval.textContent = t.toFixed(2);
@@ -521,6 +567,7 @@
     ctx.fillStyle = '#0f1f16'; ctx.fillRect(0,0,W,H);
     drawAccelPanel(t);
     drawVelPanel(t);
+    drawDistPanel(t);
   }
 
   slider.addEventListener('input', update);

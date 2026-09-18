@@ -164,7 +164,22 @@
     margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
     font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
   }
-</style>
+
+    /* ---- interactive (added 2026-09-18) ---------------------------------- */
+    .sim{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; background:var(--paper); }
+    .sim-head{ background:var(--green); color:#fff; padding:.6rem 1rem;
+      font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; }
+    .sim canvas{ display:block; width:100%; height:auto; }
+    .sim-panel{ padding:1rem 1.1rem; border-top:1px solid var(--rule); }
+    .ctrl label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; font-weight:600;
+      color:var(--green); display:flex; justify-content:space-between; gap:1rem; }
+    .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+    .ctrl + .ctrl{ margin-top:.8rem; }
+    .readout{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.9rem; }
+    .chip{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; background:var(--green-soft);
+      border:1px solid var(--rule); border-radius:20px; padding:.35rem .8rem; color:var(--ink); }
+    .sim-hint{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; color:var(--muted); margin-top:.7rem; }
+  </style>
 </head>
 <body>
 <div class="note-wrap">
@@ -211,6 +226,36 @@
     <p style="margin:0 0 .5rem;">The whole ladder is just derivatives going down, and integrals going back up:</p>
     <p style="margin:0 0 .5rem;text-align:center;font-size:1.05rem;">v = dx/dt &nbsp;&nbsp;&nbsp;&nbsp; a = dv/dt = d&sup2;x/dt&sup2; <span style="color:#5c6b62;font-size:.85rem;">(down the ladder)</span></p>
     <p style="margin:0;text-align:center;font-size:1.05rem;">&Delta;v = &int;a&nbsp;dt &nbsp;&nbsp;&nbsp;&nbsp; &Delta;d = &int;v&nbsp;dt <span style="color:#5c6b62;font-size:.85rem;">(up the ladder)</span></p>
+  </div>
+
+  
+  <h2>Play with it: read the slope, then read the area</h2>
+  <p>Motion from rest under a steady acceleration, shown on all three graphs at once. Drag
+  <b>acceleration</b> to change the motion and <b>time</b> to move the marker. Going <em>down</em> the
+  ladder, each graph's <b>slope</b> is the graph below it. Going <em>up</em>, each graph's shaded
+  <b>area</b> is the graph above it — and the chips let you check both readings against the numbers.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-head"><span>&#9654;</span> Interactive &middot; Slope And Area Explorer</div>
+    <canvas id="simCanvas" width="720" height="460" role="img"
+      aria-label="Three stacked graphs against time for motion from rest at constant acceleration: distance with a tangent line whose slope is the velocity, velocity with a shaded triangle whose area is the distance and a slope equal to the acceleration, and acceleration with a shaded rectangle whose area is the velocity change."></canvas>
+    <div class="sim-panel">
+      <div class="ctrl">
+        <label for="aSlider">Acceleration <span><span id="aVal">2.0</span> m/s&sup2;</span></label>
+        <input type="range" id="aSlider" min="0.5" max="5" step="0.1" value="2">
+      </div>
+      <div class="ctrl">
+        <label for="tSlider">Time marker <span><span id="tVal">2.00</span> s</span></label>
+        <input type="range" id="tSlider" min="0.1" max="4" step="0.05" value="2">
+      </div>
+      <div class="readout">
+        <span class="chip">slope of d&ndash;t = <b id="outSlopeD">4.0</b> m/s = v</span>
+        <span class="chip">slope of v&ndash;t = <b id="outSlopeV">2.0</b> m/s&sup2; = a</span>
+        <span class="chip">area under a&ndash;t = <b id="outAreaA">4.0</b> m/s = v</span>
+        <span class="chip">area under v&ndash;t = <b id="outAreaV">4.0</b> m = d</span>
+      </div>
+      <div class="sim-hint" id="simHint">Slope takes you down the ladder; area brings you back up.</div>
+    </div>
   </div>
 
   <h2>Your tasks in this note</h2>
@@ -328,5 +373,141 @@ window.addEventListener("load", reportHeight);
 window.addEventListener("resize", reportHeight);
 new ResizeObserver(reportHeight).observe(document.body);
 </script>
+
+<script>
+/* ==================================================================
+   Slope And Area Explorer - PHY 151 M1 N8. Added 2026-09-18.
+   Motion from rest, constant a. Three stacked panels, distance on top so the
+   layout matches the ladder diagram above: slope reads downward, area upward.
+     d-t : parabola, with the TANGENT at t drawn - its slope is v(t)
+     v-t : straight line; shaded triangle 0..t has area d(t); its slope is a
+     a-t : flat line;     shaded rectangle 0..t has area v(t)
+   Axes are FIXED ceilings from the slider limits (a <= 5 m/s^2, t <= 4 s), never
+   refitted to the current values, so a bigger acceleration really does draw a
+   steeper line and a larger area.
+   See Cross_Course_Notes/Interactive_Sim_Fixed_Scale_Principle.md
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+
+  var AXIS='#1f5fbf', GREEN='#1e6b3c', GRIDLINE='#d7e2da', INK='#1d2b23', MUTED='#5c6b62';
+  var ORANGE='#c8631b', BLUE='#1f5fbf';
+
+  var T_MAX = 4, A_MAX = 5;
+  var D_CEIL = 0.5*A_MAX*T_MAX*T_MAX * 1.06;   /* 40 m  -> 42.4 */
+  var V_CEIL = A_MAX*T_MAX * 1.06;             /* 20 m/s -> 21.2 */
+  var A_CEIL = A_MAX * 1.12;                   /* 5 m/s^2 -> 5.6 */
+
+  var padL = 74, padR = 22, gap = 16;
+  var panelH = (H - 2*gap - 12) / 3;
+  function panelTop(i){ return 8 + i*(panelH + gap); }
+  var x0 = padL, x1 = W - padR;
+  function tx(tt){ return x0 + (tt/T_MAX)*(x1 - x0); }
+
+  var el = {
+    a: document.getElementById('aSlider'), t: document.getElementById('tSlider'),
+    aVal: document.getElementById('aVal'), tVal: document.getElementById('tVal'),
+    slopeD: document.getElementById('outSlopeD'), slopeV: document.getElementById('outSlopeV'),
+    areaA: document.getElementById('outAreaA'), areaV: document.getElementById('outAreaV'),
+    hint: document.getElementById('simHint')
+  };
+
+  function frame(i, label, ceil){
+    var top = panelTop(i), bot = top + panelH;
+    ctx.strokeStyle = GRIDLINE; ctx.lineWidth = 1;
+    for(var k=1;k<=4;k++){ var gx = tx(T_MAX*k/4);
+      ctx.beginPath(); ctx.moveTo(gx, top); ctx.lineTo(gx, bot); ctx.stroke(); }
+    ctx.strokeStyle = AXIS; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(x0, top-2); ctx.lineTo(x0, bot); ctx.lineTo(x1, bot); ctx.stroke();
+    ctx.fillStyle = INK; ctx.font = '600 12px Segoe UI, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(label, 6, top + 11);
+    /* axis numbers right-aligned just left of the axis, and the ceiling dropped
+       below the title row - at x0-26 it ran straight through the panel label */
+    ctx.fillStyle = MUTED; ctx.font = '10.5px Segoe UI, sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('0', x0 - 7, bot + 3);
+    ctx.fillText(ceil.toFixed(0), x0 - 7, top + 24);
+    ctx.textAlign = 'left';
+    return { top: top, bot: bot, yy: function(v){ return bot - (v/ceil)*(bot - top); } };
+  }
+  function marker(x, y){
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = ORANGE; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  }
+  function tag(text, x, y, colour){
+    ctx.font = '600 11px Segoe UI, sans-serif';
+    var w = ctx.measureText(text).width;
+    x = Math.min(x, x1 - w - 4);
+    ctx.fillStyle = 'rgba(255,255,255,0.88)'; ctx.fillRect(x - 3, y - 11, w + 6, 15);
+    ctx.fillStyle = colour; ctx.textAlign = 'left'; ctx.fillText(text, x, y);
+  }
+
+  function draw(){
+    var a = parseFloat(el.a.value), t = parseFloat(el.t.value);
+    var v = a*t, d = 0.5*a*t*t;
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+
+    /* ---- panel 0: distance, with the tangent whose slope is v ---- */
+    var P = frame(0, 'distance  d (m)', D_CEIL);
+    ctx.strokeStyle = GREEN; ctx.lineWidth = 2.4; ctx.beginPath();
+    for(var k=0;k<=80;k++){ var tt = T_MAX*k/80, X = tx(tt), Y = P.yy(0.5*a*tt*tt);
+      if(k===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y); }
+    ctx.stroke();
+    var half = Math.min(0.9, t, T_MAX - t);            /* tangent: d = d0 + v*(tt-t) */
+    ctx.strokeStyle = ORANGE; ctx.lineWidth = 2; ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(tx(t-half), P.yy(Math.max(0, d - v*half)));
+    ctx.lineTo(tx(t+half), P.yy(Math.min(D_CEIL, d + v*half)));
+    ctx.stroke();
+    marker(tx(t), P.yy(d));
+    tag('slope of this tangent = v = ' + v.toFixed(1) + ' m/s', tx(t) + 10, P.yy(d) - 8, ORANGE);
+
+    /* ---- panel 1: velocity, shaded triangle = d, slope = a ---- */
+    var Q = frame(1, 'velocity  v (m/s)', V_CEIL);
+    ctx.fillStyle = 'rgba(30,107,60,0.20)';
+    ctx.beginPath(); ctx.moveTo(tx(0), Q.bot); ctx.lineTo(tx(t), Q.bot); ctx.lineTo(tx(t), Q.yy(v));
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = BLUE; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(tx(0), Q.yy(0)); ctx.lineTo(tx(T_MAX), Q.yy(a*T_MAX)); ctx.stroke();
+    marker(tx(t), Q.yy(v));
+    tag('shaded area = d = ' + d.toFixed(1) + ' m', tx(0) + 8, Q.bot - 8, GREEN);
+    tag('slope = a = ' + a.toFixed(1) + ' m/s\u00B2', tx(t) + 10, Q.yy(v) - 8, BLUE);
+
+    /* ---- panel 2: acceleration, shaded rectangle = v ---- */
+    var R = frame(2, 'acceleration  a (m/s\u00B2)', A_CEIL);
+    ctx.fillStyle = 'rgba(31,95,191,0.18)';
+    ctx.fillRect(tx(0), R.yy(a), tx(t) - tx(0), R.bot - R.yy(a));
+    ctx.strokeStyle = GREEN; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(tx(0), R.yy(a)); ctx.lineTo(tx(T_MAX), R.yy(a)); ctx.stroke();
+    marker(tx(t), R.yy(a));
+    /* at large a the flat line sits near the panel top, where a label above it
+       would land on the panel title - drop it inside the rectangle instead */
+    var aLabelY = R.yy(a) - 8 < R.top + 32 ? R.yy(a) + 17 : R.yy(a) - 8;
+    tag('shaded area = change in v = ' + v.toFixed(1) + ' m/s', tx(0) + 8, aLabelY, BLUE);
+    ctx.fillStyle = MUTED; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('time t (s) \u2192', x1, H - 4);
+    ctx.textAlign = 'left';
+
+    el.aVal.textContent = a.toFixed(1);
+    el.tVal.textContent = t.toFixed(2);
+    el.slopeD.textContent = v.toFixed(1);
+    el.slopeV.textContent = a.toFixed(1);
+    el.areaA.textContent = v.toFixed(1);
+    el.areaV.textContent = d.toFixed(1);
+    el.hint.textContent = 'At t = ' + t.toFixed(2) + ' s the tangent on d\u2013t has slope ' + v.toFixed(1)
+      + ' m/s, and that is exactly the height of the v\u2013t line. The triangle under v\u2013t has area '
+      + d.toFixed(1) + ' m, which is exactly the height of the d\u2013t curve.';
+  }
+
+  el.a.addEventListener('input', draw);
+  el.t.addEventListener('input', draw);
+  draw();
+})();
+</script>
+
 </body>
 </html>
