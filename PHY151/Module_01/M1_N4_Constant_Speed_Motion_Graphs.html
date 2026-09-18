@@ -202,7 +202,13 @@ In constant-speed motion, the distance-vs-time graph is a straight line — its 
     ctx.clearRect(0,0,W,H);
     ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
     var labels = ['Distance (m)','Speed (m/s)','Acceleration (m/s²)'];
-    var maxVals = [Math.max(v*T_MAX,1), 8, 4];
+    /* FIXED axes. This was [Math.max(v*T_MAX,1), 8, 4]: the distance ceiling was
+       proportional to the speed slider, so the d-t line had the SAME on-screen
+       slope at every speed - in a note whose whole point is that slope IS speed.
+       The ceiling is now what the slider's maximum can produce, so a slower speed
+       genuinely draws a shallower line and a faster one a steeper line. */
+    var V_SLIDER_MAX = 8;
+    var maxVals = [V_SLIDER_MAX*T_MAX, 8, 4];
     for(var i=0;i<3;i++){
       var y0 = panelY(i), gh = 100, gx0 = 60, gx1 = W-30;
       ctx.strokeStyle = AXIS; ctx.lineWidth = 1.5;

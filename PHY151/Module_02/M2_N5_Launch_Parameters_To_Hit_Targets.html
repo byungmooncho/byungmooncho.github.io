@@ -543,14 +543,16 @@
     if(res.ok){
       var r1 = theta1Apex(), r2 = 0;
     }
-    var sceneW = Math.max(D, 1) + 0.8;
-    var maxY = H + 0.6;
-    if(res.ok){
-      var rad1 = res.theta1*Math.PI/180;
-      if(Math.sin(rad1) > 0){ maxY = Math.max(maxY, H + (V0*Math.sin(rad1))*(V0*Math.sin(rad1))/(2*G) + 0.3); }
-      var rad2 = res.theta2*Math.PI/180;
-      if(Math.sin(rad2) > 0){ maxY = Math.max(maxY, H + (V0*Math.sin(rad2))*(V0*Math.sin(rad2))/(2*G) + 0.3); }
-    }
+    /* FIXED view. sceneW and maxY used to be measured off the current shot and the
+       scale below was fitted to them, so the whole trajectory re-scaled on every
+       drag and raising the launch speed produced an arc that looked much the same.
+       The view is now sized once from the limits the sliders allow, so a faster
+       launch visibly flies further and higher.
+         width  : D_max + 0.8           = 4.0 + 0.8
+         height : H_max + V0_max^2/(2g) = 2.0 + 100/19.6 + 0.3  */
+    var D_SLIDER_MAX = 4.0, V0_SLIDER_MAX = 10, H_SLIDER_MAX = 2.0;
+    var sceneW = D_SLIDER_MAX + 0.8;
+    var maxY   = H_SLIDER_MAX + (V0_SLIDER_MAX*V0_SLIDER_MAX)/(2*G) + 0.3;
     var marginL = 70, marginR = 30, marginT = 30, marginB = 60;
     var scale = Math.min((W - marginL - marginR)/sceneW, (H_PX - marginT - marginB)/maxY);
 

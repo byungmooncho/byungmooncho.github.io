@@ -288,11 +288,20 @@ A freefalling object does not fall at constant speed — it speeds up as it fall
     ctx.clearRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
     var dEnd = v0*T_MAX + 0.5*a*T_MAX*T_MAX;
     var vEnd = v0 + a*T_MAX;
-    var dMax = Math.max(Math.abs(dEnd), v0*T_MAX, 1) * 1.15 + 1;
-    var dMin = Math.min(0, dEnd) - 1;
-    var vMax = Math.max(Math.abs(vEnd), Math.abs(v0), 2) * 1.15;
-    var vMin = -vMax;
-    var aMax = Math.max(Math.abs(a), 2) * 1.3;
+    /* FIXED axes, sized from the slider limits rather than the current values.
+       These three were Math.max(...) of the live data x1.15-1.3, so every panel
+       re-scaled on every drag and the curves kept their shape while their values
+       changed. Now a small acceleration really does draw a nearly straight line
+       and a large one a steep curve, which is the point.
+         a in [-10,10], v0 in [0,8], over T_MAX = 8 s
+         d = v0*t + a*t^2/2 -> max 8*8 + 10*64/2 = 384, min -10*64/2 = -320
+         v = v0 + a*t       -> max 8 + 10*8 = 88,       min -80            */
+    var A_SLIDER_MAX = 10, V0_SLIDER_MAX = 8;
+    var dMax =  V0_SLIDER_MAX*T_MAX + 0.5*A_SLIDER_MAX*T_MAX*T_MAX;
+    var dMin = -0.5*A_SLIDER_MAX*T_MAX*T_MAX;
+    var vMax =  V0_SLIDER_MAX + A_SLIDER_MAX*T_MAX;
+    var vMin = -A_SLIDER_MAX*T_MAX;
+    var aMax =  A_SLIDER_MAX;
     var labels = ['Distance (m)','Speed (m/s)','Acceleration (m/s²)'];
     for(var i=0;i<3;i++){
       var y0 = panelY(i), gh = 100, gx0 = 60, gx1 = W-30;
