@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 Ch03d — Vector Addition Using Components</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 2 · Chapter 3 (College Physics) · Trevor slides 03d
+     "Vector Addition Using Components" — web-page version of the lecture
+     slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "03d-Vector Addition.pptx" (10 slides). Two slides were
+     image-only: a scanned textbook worked example ("tips on studying from
+     the textbook") and a closing slide of six crops of Trevor's handwritten
+     solution to the example problem. Both were converted to text — no
+     raster art survives here; every figure is hand-written inline SVG.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.9rem 0 .4rem; }
+  .chip{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; border:1px solid var(--green); color:var(--green-deep); background:var(--green-soft); border-radius:20px; padding:.25rem .75rem; }
+  .chip.scalar{ border-color:var(--rule); color:var(--muted); background:#f7f9f8; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .rad{ border-top:1.3px solid currentColor; padding:0 .15em; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opts.three{ grid-template-columns:1fr; }
+  @media (min-width:560px){ .probe .opts.three{ grid-template-columns:repeat(3,1fr); } }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt svg{ display:block; width:100%; height:auto; }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Motion In Two Dimensions</span>
+    <span>Chapter 3 · Slides 03d</span>
+  </div>
+
+  <h1>Vector Addition Using Components</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Adding vectors with a ruler and protractor works, but it is slow and only as accurate as your
+    drawing. There is an exact route. <b>Resolve</b> each vector into its <b>components</b>, and the
+    two-dimensional problem falls apart into two one-dimensional problems: every
+    <span class="m">x</span>-component lies along the same line, so any two of them are parallel or
+    antiparallel and therefore just <em>add as signed numbers</em>. Same for the
+    <span class="m">y</span>-components. Add the two columns, then rebuild one arrow from the two totals
+    &mdash; that arrow is the <b>resultant</b>, and you get its <b>magnitude</b> and <b>direction</b> from
+    a right triangle instead of from a protractor.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Determine</b> whether two vectors are parallel, antiparallel, or perpendicular.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Add</b> two or more vectors algebraically when they are parallel or antiparallel.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine</b> the magnitude and direction of a vector given its components.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Add</b> two or more vectors using components.</span></li>
+    </ul>
+    <div class="foot">Trevor's objectives 3 and 4 &mdash; defining and finding the components of a single
+      vector &mdash; are the previous page, 03c. The sign rules for vectors that point into the second,
+      third, and fourth quadrants are 03e. Objectives 7 and 8, applying the kinematics equations to each
+      dimension separately, arrive later in Module&nbsp;2.</div>
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    You have already done this with your hands. On grid paper in
+    N1 you added arrows <b>head-to-tail</b> and counted squares; in N2 you noticed that the squares
+    counted across for the resultant were exactly the squares counted across for the first arrow plus the
+    squares counted across for the second &mdash; that is,
+    <span class="m">C<sub>x</sub></span> = <span class="m">A<sub>x</sub></span> + <span class="m">B<sub>x</sub></span>
+    and <span class="m">C<sub>y</sub></span> = <span class="m">A<sub>y</sub></span> + <span class="m">B<sub>y</sub></span>.
+    This page is that discovery written in algebra, with sines and cosines doing the counting so the
+    vectors no longer have to land on grid lines.
+  </div>
+
+  <h2>Parallel, antiparallel, perpendicular</h2>
+  <p>Before the components, the three special cases. Only the first two let you work with magnitudes
+  alone:</p>
+  <table class="grid">
+    <tr><th>Relationship</th><th>Angle between them</th><th>What the magnitudes do</th></tr>
+    <tr><td><b>Parallel</b></td><td>0&deg; &mdash; same direction</td><td>Simply <b>add</b>: 3&nbsp;m + 2&nbsp;m = 5&nbsp;m</td></tr>
+    <tr><td><b>Antiparallel</b></td><td>180&deg; &mdash; opposite directions</td><td>Simply <b>subtract</b>: 3&nbsp;m &minus; 2&nbsp;m = 1&nbsp;m, pointing along the longer one</td></tr>
+    <tr><td><b>Perpendicular</b></td><td>90&deg;</td><td>Do <b>not</b> combine arithmetically. Use the Pythagorean theorem: <span class="rad">&radic;<span class="rad">(3&nbsp;m)&#178; + (2&nbsp;m)&#178;</span></span> &asymp; 3.6&nbsp;m</td></tr>
+  </table>
+  <p>Anything in between needs geometry &mdash; which is the whole reason for the component method.
+  Keep the first two rows in view, because the component method works by <em>manufacturing</em> the
+  parallel and antiparallel cases on purpose.</p>
+
+  <h2>Why components can simply be added</h2>
+  <p>Here is the one idea that makes the rest of the page mechanical. Pick an
+  <span class="m">x</span>&ndash;<span class="m">y</span> axis system and resolve every vector in the
+  problem. Now look at the <span class="m">x</span>-components you have collected:
+  <em>every one of them lies along the <span class="m">x</span>-axis.</em> Two arrows that lie along the
+  same line have no choice &mdash; they are parallel (both along +<span class="m">x</span>) or
+  antiparallel (one along +<span class="m">x</span>, one along &minus;<span class="m">x</span>). And you
+  just saw what happens in those two cases: the magnitudes add, or they subtract. Carry the direction in
+  the <em>sign</em> of the number and both cases become one rule: <b>add the signed numbers.</b></p>
+  <p>The <span class="m">y</span>-components are handled exactly the same way, on their own line, without
+  ever interacting with the <span class="m">x</span>-components. That independence is the real content of
+  this chapter, and it is what lets us split projectile motion into two separate problems later in
+  Module&nbsp;2.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="Left: a horizontal number line on which the x-component of A, 0.71 metres, and the x-component of B, 0.87 metres, are laid head to tail to give 1.57 metres. Right: a vertical number line on which the y-component of A, plus 0.71 metres, and the y-component of B, minus 0.50 metres, partly cancel to give 0.21 metres.">
+      <defs>
+        <marker id="f1-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f1-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="f1-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+      </defs>
+      <!-- ===== left: x components on the x axis ===== -->
+      <text x="20" y="30" font-weight="600">Along the x-axis</text>
+      <text class="sm" x="20" y="50">parallel &#183; both positive &#183; they add</text>
+      <line x1="40" y1="130" x2="400" y2="130" stroke="#5c6b62" stroke-width="1.5"/>
+      <g stroke="#5c6b62" stroke-width="1">
+        <line x1="60" y1="125" x2="60" y2="135"/><line x1="140" y1="125" x2="140" y2="135"/>
+        <line x1="220" y1="125" x2="220" y2="135"/><line x1="300" y1="125" x2="300" y2="135"/>
+        <line x1="380" y1="125" x2="380" y2="135"/>
+      </g>
+      <text class="sm" x="56" y="148">0</text><text class="sm" x="130" y="148">0.5</text>
+      <text class="sm" x="210" y="148">1.0</text><text class="sm" x="290" y="148">1.5</text>
+      <text class="sm" x="370" y="148">2.0 m</text>
+      <line x1="60" y1="102" x2="173" y2="102" stroke="#c0392b" stroke-width="3" marker-end="url(#f1-red)"/>
+      <line x1="173" y1="102" x2="312" y2="102" stroke="#2457b8" stroke-width="3" marker-end="url(#f1-blu)"/>
+      <text class="lbl" x="64" y="92" fill="#c0392b">A<tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> = +0.71 m</tspan></text>
+      <text class="lbl" x="186" y="92" fill="#2457b8">B<tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> = +0.87 m</tspan></text>
+      <line x1="60" y1="180" x2="312" y2="180" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f1-pur)"/>
+      <text class="lbl" x="96" y="202" fill="#7d3fa0">C<tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> = +0.71 m + 0.87 m = +1.57 m</tspan></text>
+      <text class="sm" x="40" y="240">Head to tail on a single line is</text>
+      <text class="sm" x="40" y="258">nothing but ordinary addition.</text>
+      <!-- ===== right: y components on the y axis ===== -->
+      <text x="450" y="30" font-weight="600">Along the y-axis</text>
+      <text class="sm" x="450" y="50">antiparallel &#183; opposite signs &#183;</text>
+      <text class="sm" x="450" y="66">they partly cancel</text>
+      <line x1="520" y1="268" x2="520" y2="90" stroke="#5c6b62" stroke-width="1.5"/>
+      <g stroke="#5c6b62" stroke-width="1">
+        <line x1="515" y1="250" x2="525" y2="250"/><line x1="515" y1="170" x2="525" y2="170"/>
+        <line x1="515" y1="122" x2="525" y2="122"/>
+      </g>
+      <text class="sm" x="496" y="254">0</text><text class="sm" x="482" y="174">0.5</text>
+      <text class="sm" x="478" y="126">0.8 m</text>
+      <line x1="556" y1="250" x2="556" y2="137" stroke="#c0392b" stroke-width="3" marker-end="url(#f1-red)"/>
+      <line x1="556" y1="137" x2="556" y2="217" stroke="#2457b8" stroke-width="3" marker-end="url(#f1-blu)"/>
+      <text class="lbl" x="572" y="152" fill="#c0392b">A<tspan font-size="11" dy="3">y</tspan><tspan dy="-3"> = +0.71</tspan></text>
+      <text class="lbl" x="572" y="196" fill="#2457b8">B<tspan font-size="11" dy="3">y</tspan><tspan dy="-3"> = &#8722;0.50</tspan></text>
+      <line x1="604" y1="250" x2="604" y2="217" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f1-pur)"/>
+      <text class="lbl" x="536" y="274" fill="#7d3fa0">C<tspan font-size="11" dy="3">y</tspan><tspan dy="-3"> = +0.21 m</tspan></text>
+    </svg>
+    <figcaption>The two vectors of the worked example below, taken apart. Each column of components is a
+      one-dimensional problem, and the sign is the only thing carrying the direction.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Subtraction is not a new operation</span>
+    <span class="m">A&#8407;</span> &minus; <span class="m">B&#8407;</span> means
+    <span class="m">A&#8407;</span> + (&minus;<span class="m">B&#8407;</span>). The vector
+    &minus;<span class="m">B&#8407;</span> has the <em>same magnitude</em> as
+    <span class="m">B&#8407;</span> with its direction <em>reversed</em> &mdash; so in components every sign
+    flips: (&minus;<span class="m">B&#8407;</span>)<sub><span class="m">x</span></sub> =
+    &minus;<span class="m">B<sub>x</sub></span> and
+    (&minus;<span class="m">B&#8407;</span>)<sub><span class="m">y</span></sub> =
+    &minus;<span class="m">B<sub>y</sub></span>. Reversing a vector does <b>not</b> make its magnitude
+    negative; magnitudes are never negative.
+  </div>
+
+  <h2>The recipe</h2>
+  <p>Two vectors <span class="m">A&#8407;</span> and <span class="m">B&#8407;</span> add to the resultant
+  <span class="m">C&#8407;</span>. Draw them head-to-tail and their components stack up the same way:</p>
+
+  <figure>
+    <svg viewBox="0 0 640 370" role="img" aria-label="Coordinate axes with vector A from the origin up and to the right, vector B continuing from A's head further right and up, and the purple resultant C from the origin to B's head. Each vector's x and y components are drawn, and the resultant's components run the full width and height of the figure.">
+      <defs>
+        <marker id="f2-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f2-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="f2-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="f2-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <!-- axes: origin (70,300) -->
+      <line x1="50" y1="300" x2="590" y2="300" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f2-ax)"/>
+      <line x1="70" y1="320" x2="70" y2="40" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f2-ax)"/>
+      <text class="lbl" x="596" y="296">x</text>
+      <text class="lbl" x="58" y="34">y</text>
+      <!-- A -->
+      <line x1="70" y1="300" x2="230" y2="160" stroke="#c0392b" stroke-width="3.5" marker-end="url(#f2-red)"/>
+      <line x1="70" y1="300" x2="230" y2="300" stroke="#c0392b" stroke-width="2" marker-end="url(#f2-red)"/>
+      <line x1="230" y1="300" x2="230" y2="160" stroke="#c0392b" stroke-width="2" marker-end="url(#f2-red)"/>
+      <text class="lbl" x="128" y="216" fill="#c0392b">A&#8407;</text>
+      <text class="lbl" x="172" y="292" fill="#c0392b">A<tspan font-size="11" dy="3">x</tspan></text>
+      <text class="lbl" x="238" y="246" fill="#c0392b">A<tspan font-size="11" dy="3">y</tspan></text>
+      <!-- B, head to tail from A's head -->
+      <line x1="230" y1="160" x2="500" y2="90" stroke="#2457b8" stroke-width="3.5" marker-end="url(#f2-blu)"/>
+      <line x1="230" y1="160" x2="500" y2="160" stroke="#2457b8" stroke-width="2" marker-end="url(#f2-blu)"/>
+      <line x1="500" y1="160" x2="500" y2="90" stroke="#2457b8" stroke-width="2" marker-end="url(#f2-blu)"/>
+      <text class="lbl" x="352" y="108" fill="#2457b8">B&#8407;</text>
+      <text class="lbl" x="350" y="152" fill="#2457b8">B<tspan font-size="11" dy="3">x</tspan></text>
+      <text class="lbl" x="508" y="130" fill="#2457b8">B<tspan font-size="11" dy="3">y</tspan></text>
+      <!-- C -->
+      <line x1="70" y1="300" x2="500" y2="90" stroke="#7d3fa0" stroke-width="3.5" marker-end="url(#f2-pur)"/>
+      <text class="lbl" x="320" y="210" fill="#7d3fa0">C&#8407; = A&#8407; + B&#8407;</text>
+      <line x1="70" y1="330" x2="500" y2="330" stroke="#7d3fa0" stroke-width="2.5" marker-end="url(#f2-pur)"/>
+      <text class="lbl" x="220" y="352" fill="#7d3fa0">C<tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> = A</tspan><tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> + B</tspan><tspan font-size="11" dy="3">x</tspan></text>
+      <line x1="548" y1="300" x2="548" y2="90" stroke="#7d3fa0" stroke-width="2.5" marker-end="url(#f2-pur)"/>
+      <text class="lbl" x="556" y="204" fill="#7d3fa0">C<tspan font-size="11" dy="3">y</tspan></text>
+      <!-- theta -->
+      <path d="M 130 300 A 60 60 0 0 0 124 274" fill="none" stroke="#7d3fa0" stroke-width="2"/>
+      <text class="lbl" x="136" y="290" fill="#7d3fa0">&#952;</text>
+    </svg>
+    <figcaption>Head-to-tail, with the bookkeeping shown. The purple arrow spans the sum of the two
+      <span class="m">x</span>-components across, and the sum of the two
+      <span class="m">y</span>-components up.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The component method, start to finish</div>
+    <div class="body">
+      <div class="mathline"><span class="m">C&#8407;</span> = <span class="m">A&#8407;</span> + <span class="m">B&#8407;</span></div>
+      <div class="mathline"><span class="m">C<sub>x</sub></span> = <span class="m">A<sub>x</sub></span> + <span class="m">B<sub>x</sub></span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="m">C<sub>y</sub></span> = <span class="m">A<sub>y</sub></span> + <span class="m">B<sub>y</sub></span></div>
+      <div class="mathline"><span class="m">C&#8407;</span> = <span class="m">C<sub>x</sub></span>&#8202;<span class="m">x&#770;</span>
+        + <span class="m">C<sub>y</sub></span>&#8202;<span class="m">y&#770;</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp; <span class="m">C&#8407;</span> = (<span class="m">C</span>, &#952;)</div>
+      <div class="mathline"><span class="m">C</span>&#178; = <span class="m">C<sub>x</sub></span>&#178; + <span class="m">C<sub>y</sub></span>&#178;
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp; <span class="m">C</span> =
+        <span class="rad">&radic;<span class="rad"><span class="m">C<sub>x</sub></span>&#178; + <span class="m">C<sub>y</sub></span>&#178;</span></span></div>
+      <div class="mathline">tan&nbsp;&#952; = <span class="frac"><span class="top"><span class="m">C<sub>y</sub></span></span><span class="bot"><span class="m">C<sub>x</sub></span></span></span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp; &#952; = tan<sup>&minus;1</sup><span class="frac"><span class="top"><span class="m">C<sub>y</sub></span></span><span class="bot"><span class="m">C<sub>x</sub></span></span></span></div>
+      <p class="why">Line&nbsp;2 is the whole method; everything else is trigonometry you already own.
+      Note what is <em>not</em> there: no line says
+      <span class="m">C</span> = <span class="m">A</span> + <span class="m">B</span>. Magnitudes do not add
+      &mdash; components do.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Order of operations</span>
+    Resolve <em>first</em>, add <em>second</em>, recombine <em>last</em>. Students who try to find the
+    magnitude of the resultant before adding the columns end up adding magnitudes, which is only legal for
+    parallel vectors. And do not stop at
+    <span class="m">C<sub>x</sub></span> and <span class="m">C<sub>y</sub></span>: a question that asks for
+    a vector wants both a magnitude and a direction.
+  </div>
+
+  <h2>Negative components: you insert the sign</h2>
+  <p>Resolving a vector is the step where students lose marks, and almost always for the same reason.
+  A component's sign comes from the <em>direction the component points</em>, and nothing else. Your
+  calculator will hand you a positive number for cos&nbsp;53&deg; whether or not the arrow points left.
+  Look at the picture, decide which way each component points, and write the sign yourself.</p>
+
+  <figure>
+    <svg viewBox="0 0 560 300" role="img" aria-label="A five metre vector A drawn in the second quadrant at 127 degrees from the positive x axis. Its x component points left along the negative x axis and its y component points up. The angle phi of 53 degrees is marked between the vector and the negative x axis.">
+      <defs>
+        <marker id="f3-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="f3-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <line x1="60" y1="210" x2="400" y2="210" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f3-ax)"/>
+      <line x1="230" y1="256" x2="230" y2="40" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f3-ax)"/>
+      <text class="lbl" x="406" y="206">x</text>
+      <text class="lbl" x="218" y="34">y</text>
+      <line x1="230" y1="210" x2="128" y2="74" stroke="#2457b8" stroke-width="3.5" marker-end="url(#f3-blu)"/>
+      <line x1="230" y1="210" x2="128" y2="210" stroke="#2457b8" stroke-width="2" marker-end="url(#f3-blu)"/>
+      <line x1="128" y1="210" x2="128" y2="74" stroke="#2457b8" stroke-width="2" marker-end="url(#f3-blu)"/>
+      <text class="lbl" x="188" y="120" fill="#2457b8">A&#8407;</text>
+      <text class="lbl" x="172" y="232" fill="#2457b8">A<tspan font-size="11" dy="3">x</tspan></text>
+      <text class="lbl" x="100" y="146" fill="#2457b8">A<tspan font-size="11" dy="3">y</tspan></text>
+      <path d="M 300 210 A 70 70 0 0 0 188 154" fill="none" stroke="#e0801a" stroke-width="2"/>
+      <text class="lbl" x="268" y="182" fill="#e0801a">&#952;</text>
+      <path d="M 185 210 A 45 45 0 0 1 203 174" fill="none" stroke="#7d3fa0" stroke-width="2"/>
+      <text class="lbl" x="192" y="200" fill="#7d3fa0">&#966;</text>
+      <text class="lbl" x="316" y="88">A&#8407; = 5.00 m at &#952; = 127&#176;</text>
+      <text class="lbl" x="316" y="116">A<tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> = &#8722;3.01 m</tspan></text>
+      <text class="lbl" x="316" y="140">A<tspan font-size="11" dy="3">y</tspan><tspan dy="-3"> = +3.99 m</tspan></text>
+      <text class="sm" x="316" y="168">&#966; = 180&#176; &#8722; 127&#176; = 53&#176;,</text>
+      <text class="sm" x="316" y="184">measured from the &#8722;x axis</text>
+      <text class="sm" x="60" y="278">The x-component points LEFT, so it is negative.</text>
+    </svg>
+    <figcaption>One arrow, two ways to name its direction &mdash; and only one of them lets the calculator
+      keep track of the sign for you.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The same components, two ways</div>
+    <div class="body">
+      <div class="mathline"><b>Using &#952; = 127&#176;, measured from the +<span class="m">x</span> axis</b></div>
+      <div class="mathline"><span class="m">A<sub>x</sub></span> = <span class="m">A</span>&#8202;cos&nbsp;&#952;
+        = (5.00 m) cos&nbsp;127&#176; = &minus;3.01 m</div>
+      <div class="mathline"><span class="m">A<sub>y</sub></span> = <span class="m">A</span>&#8202;sin&nbsp;&#952;
+        = (5.00 m) sin&nbsp;127&#176; = +3.99 m</div>
+      <p class="why">The calculator supplies the minus sign, because cosine is negative between 90&#176; and
+      270&#176;. This is the reason we measure directions counterclockwise from the +<span class="m">x</span>
+      axis whenever we can.</p>
+      <div class="mathline" style="margin-top:.8rem"><b>Using &#966; = 53&#176;, measured from the &minus;<span class="m">x</span> axis</b></div>
+      <div class="mathline"><span class="m">A<sub>x</sub></span> = &minus;<span class="m">A</span>&#8202;cos&nbsp;&#966;
+        = &minus;(5.00 m) cos&nbsp;53&#176; = &minus;3.01 m</div>
+      <div class="mathline"><span class="m">A<sub>y</sub></span> = +<span class="m">A</span>&#8202;sin&nbsp;&#966;
+        = +(5.00 m) sin&nbsp;53&#176; = +3.99 m</div>
+      <p class="why">Here cos&nbsp;53&#176; = +0.602 and the calculator has no idea the arrow points left.
+      <b>You</b> put the minus sign in, by reading the picture. Both routes give the same components, as
+      they must &mdash; it is the same arrow.</p>
+    </div>
+  </div>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Predict first</span>
+      A force vector has magnitude 8.0&nbsp;N and points 30&#176; above the &minus;<span class="m">x</span>
+      axis &mdash; up and to the <em>left</em>. Without touching a calculator, what is
+      <span class="m">F<sub>x</sub></span>?</p>
+    <div class="opts three">
+      <button class="opt" data-correct="false">+6.9 N</button>
+      <button class="opt" data-correct="true">&minus;6.9 N</button>
+      <button class="opt" data-correct="false">&minus;4.0 N</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Studying from the textbook</span>
+    Trevor spends a slide here on <em>how to read a worked example</em>, and it is worth the minute. Every
+    good solution has the same skeleton: state the axes you chose, resolve each vector into components,
+    add the <span class="m">x</span>-components, add the <span class="m">y</span>-components, recombine,
+    then check. Read the example with a pencil and reproduce each line before you look at it &mdash; a
+    solution you can follow is not the same thing as a solution you can produce. The OpenStax analytical
+    methods section listed in the references below is laid out exactly this way.
+  </div>
+
+  <h2>Example problem</h2>
+  <p>Trevor's problem, worked in full. <em>Two 1.0&nbsp;m displacement vectors point in different
+  directions, as shown. What is the final displacement of an object subject to both displacements?</em></p>
+
+  <figure>
+    <svg viewBox="0 0 560 300" role="img" aria-label="Coordinate axes with a red one metre vector A at 45 degrees above the positive x axis and a blue one metre vector B at 30 degrees below the positive x axis, both drawn from the origin.">
+      <defs>
+        <marker id="f4-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f4-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="f4-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <line x1="100" y1="150" x2="330" y2="150" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f4-ax)"/>
+      <line x1="170" y1="258" x2="170" y2="30" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f4-ax)"/>
+      <text class="lbl" x="336" y="146">x</text>
+      <text class="lbl" x="158" y="24">y</text>
+      <line x1="170" y1="150" x2="276" y2="44" stroke="#c0392b" stroke-width="3.5" marker-end="url(#f4-red)"/>
+      <line x1="170" y1="150" x2="300" y2="225" stroke="#2457b8" stroke-width="3.5" marker-end="url(#f4-blu)"/>
+      <path d="M 225 150 A 55 55 0 0 0 209 111" fill="none" stroke="#e0801a" stroke-width="2"/>
+      <text class="sm" x="228" y="132" fill="#e0801a">45&#176;</text>
+      <path d="M 245 150 A 75 75 0 0 1 235 188" fill="none" stroke="#e0801a" stroke-width="2"/>
+      <text class="sm" x="248" y="180" fill="#e0801a">30&#176;</text>
+      <text class="lbl" x="214" y="84" fill="#c0392b">A&#8407;</text>
+      <text class="lbl" x="250" y="216" fill="#2457b8">B&#8407;</text>
+      <text class="lbl" x="366" y="72" fill="#c0392b">A&#8407; = 1.0 m, 45&#176; above +x</text>
+      <text class="lbl" x="366" y="100" fill="#2457b8">B&#8407; = 1.0 m, 30&#176; below +x</text>
+      <text class="sm" x="366" y="132">The angle between them is 75&#176;.</text>
+      <text class="sm" x="366" y="150">Equal magnitudes, unequal</text>
+      <text class="sm" x="366" y="166">directions.</text>
+    </svg>
+    <figcaption>The setup. Note that <span class="m">B&#8407;</span> dips <em>below</em> the
+      <span class="m">x</span>-axis &mdash; that is where the only negative sign in this problem comes from.</figcaption>
+  </figure>
+
+  <div class="probe" id="probe2">
+    <p class="q"><span class="tag">Predict first</span>
+      Before you calculate anything: both displacements are 1.0&nbsp;m. What is the magnitude of the
+      resultant?</p>
+    <div class="opts three">
+      <button class="opt" data-correct="false">2.0 m &mdash; the magnitudes add</button>
+      <button class="opt" data-correct="true">About 1.6 m</button>
+      <button class="opt" data-correct="false">1.0 m &mdash; they are the same size</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h3>Step 1 &mdash; resolve each vector</h3>
+  <p>Work each vector on its own, and keep a guard digit or two; round only at the very end.</p>
+  <div class="mathblock">
+    <div class="head">Step 1 &#183; Resolve <span class="m">A&#8407;</span> and <span class="m">B&#8407;</span> into components</div>
+    <div class="body">
+      <div class="mathline"><span class="m">A<sub>x</sub></span> = (1.0 m) cos&nbsp;45&#176;
+        = (1.0 m)<span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">2</span></span></span><span class="bot">2</span></span>
+        = +0.7071 m</div>
+      <div class="mathline"><span class="m">A<sub>y</sub></span> = (1.0 m) sin&nbsp;45&#176;
+        = (1.0 m)<span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">2</span></span></span><span class="bot">2</span></span>
+        = +0.7071 m</div>
+      <div class="mathline" style="margin-top:.6rem"><span class="m">B<sub>x</sub></span> = (1.0 m) cos&nbsp;30&#176;
+        = (1.0 m)<span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">3</span></span></span><span class="bot">2</span></span>
+        = +0.8660 m</div>
+      <div class="mathline"><span class="m">B<sub>y</sub></span> = &minus;(1.0 m) sin&nbsp;30&#176;
+        = &minus;(1.0 m)<span class="frac"><span class="top">1</span><span class="bot">2</span></span>
+        = &minus;0.500 m</div>
+      <p class="why">That minus sign on <span class="m">B<sub>y</sub></span> is inserted by hand, because
+      <span class="m">B&#8407;</span> points below the axis. If instead you describe
+      <span class="m">B&#8407;</span> as being at &minus;30&#176; from the +<span class="m">x</span> axis
+      and let the calculator work, sin(&minus;30&#176;) = &minus;&#189; and the sign takes care of itself.
+      Both are correct; only one of them is correct <em>by accident</em> if you do not look at the picture.</p>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Two panels. Left: vector A resolved into a positive x component of 0.71 metres and a positive y component of 0.71 metres. Right: vector B resolved into a positive x component of 0.87 metres and a negative y component of 0.50 metres pointing downward.">
+      <defs>
+        <marker id="f5-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f5-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="f5-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <!-- panel 1: A, origin (90,190) -->
+      <text x="20" y="28" font-weight="600" fill="#c0392b">Resolve A&#8407;</text>
+      <line x1="50" y1="190" x2="290" y2="190" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f5-ax)"/>
+      <line x1="90" y1="240" x2="90" y2="60" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f5-ax)"/>
+      <line x1="90" y1="190" x2="175" y2="105" stroke="#c0392b" stroke-width="3.5" marker-end="url(#f5-red)"/>
+      <line x1="90" y1="190" x2="175" y2="190" stroke="#c0392b" stroke-width="2" marker-end="url(#f5-red)"/>
+      <line x1="175" y1="190" x2="175" y2="105" stroke="#c0392b" stroke-width="2" marker-end="url(#f5-red)"/>
+      <path d="M 128 190 A 38 38 0 0 0 117 163" fill="none" stroke="#e0801a" stroke-width="2"/>
+      <text class="sm" x="134" y="184" fill="#e0801a">45&#176;</text>
+      <text class="lbl" x="112" y="136" fill="#c0392b">A&#8407;</text>
+      <text class="lbl" x="98" y="212" fill="#c0392b">A<tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> = +0.71 m</tspan></text>
+      <text class="lbl" x="184" y="152" fill="#c0392b">A<tspan font-size="11" dy="3">y</tspan><tspan dy="-3"> = +0.71 m</tspan></text>
+      <!-- panel 2: B, origin (410,190) -->
+      <text x="340" y="28" font-weight="600" fill="#2457b8">Resolve B&#8407;</text>
+      <line x1="370" y1="190" x2="610" y2="190" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f5-ax)"/>
+      <line x1="410" y1="275" x2="410" y2="60" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f5-ax)"/>
+      <line x1="410" y1="190" x2="514" y2="250" stroke="#2457b8" stroke-width="3.5" marker-end="url(#f5-blu)"/>
+      <line x1="410" y1="190" x2="514" y2="190" stroke="#2457b8" stroke-width="2" marker-end="url(#f5-blu)"/>
+      <line x1="514" y1="190" x2="514" y2="250" stroke="#2457b8" stroke-width="2" marker-end="url(#f5-blu)"/>
+      <path d="M 455 190 A 45 45 0 0 1 449 212" fill="none" stroke="#e0801a" stroke-width="2"/>
+      <text class="sm" x="460" y="212" fill="#e0801a">30&#176;</text>
+      <text class="lbl" x="440" y="242" fill="#2457b8">B&#8407;</text>
+      <text class="lbl" x="418" y="178" fill="#2457b8">B<tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> = +0.87 m</tspan></text>
+      <text class="lbl" x="524" y="228" fill="#2457b8">B<tspan font-size="11" dy="3">y</tspan><tspan dy="-3"> = &#8722;0.50 m</tspan></text>
+      <text class="sm" x="524" y="248" fill="#2457b8">points down</text>
+    </svg>
+    <figcaption>Each vector taken apart on its own set of axes. The only negative number in the whole
+      problem is <span class="m">B<sub>y</sub></span>.</figcaption>
+  </figure>
+
+  <h3>Steps 2 and 3 &mdash; add the columns</h3>
+  <div class="mathblock">
+    <div class="head">Step 2 &#183; Add the <span class="m">x</span>-components &nbsp;&#183;&nbsp; Step 3 &#183; Add the <span class="m">y</span>-components</div>
+    <div class="body">
+      <div class="mathline"><span class="m">C<sub>x</sub></span> = <span class="m">A<sub>x</sub></span> + <span class="m">B<sub>x</sub></span>
+        = (+0.7071 m) + (+0.8660 m) = +1.5731 m</div>
+      <div class="mathline"><span class="m">C<sub>y</sub></span> = <span class="m">A<sub>y</sub></span> + <span class="m">B<sub>y</sub></span>
+        = (+0.7071 m) + (&minus;0.500 m) = +0.2071 m</div>
+      <p class="why">Both <span class="m">x</span>-components point along +<span class="m">x</span>, so they
+      are parallel and their magnitudes add. The two <span class="m">y</span>-components are antiparallel,
+      so they partly cancel &mdash; and because <span class="m">A<sub>y</sub></span> is the larger of the
+      two, the resultant ends up just barely above the axis. No protractor required.</p>
+    </div>
+  </div>
+
+  <h3>Step 4 &mdash; rebuild one arrow</h3>
+  <div class="mathblock">
+    <div class="head">Step 4 &#183; Recombine into magnitude and direction</div>
+    <div class="body">
+      <div class="mathline"><span class="m">C</span> =
+        <span class="rad">&radic;<span class="rad"><span class="m">C<sub>x</sub></span>&#178; + <span class="m">C<sub>y</sub></span>&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">(1.5731 m)&#178; + (0.2071 m)&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">2.5176 m&#178;</span></span> = 1.5867 m</div>
+      <div class="mathline">&#952; = tan<sup>&minus;1</sup><span class="frac"><span class="top"><span class="m">C<sub>y</sub></span></span><span class="bot"><span class="m">C<sub>x</sub></span></span></span>
+        = tan<sup>&minus;1</sup><span class="frac"><span class="top">0.2071 m</span><span class="bot">1.5731 m</span></span>
+        = tan<sup>&minus;1</sup>(0.13165) = 7.4997&#176;</div>
+      <div class="mathline" style="margin-top:.7rem"><b>Answer:</b>
+        <span class="m">C&#8407;</span> = <b>1.6 m at 7.5&#176; above the +<span class="m">x</span> axis</b></div>
+      <div class="mathline">equivalently &nbsp;
+        <span class="m">C&#8407;</span> = (1.6 <span class="m">x&#770;</span> + 0.21 <span class="m">y&#770;</span>) m</div>
+      <p class="why">Two significant figures, because the data were given as 1.0&nbsp;m. The guard digits
+      were carried through the middle of the calculation and dropped only here. Reporting
+      &ldquo;1.5867&nbsp;m&rdquo; would claim five-digit precision you were never given.</p>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 560 260" role="img" aria-label="The resultant C drawn to scale: a purple arrow 1.57 metres long in x and only 0.21 metres in y, lying only 7.5 degrees above the x axis.">
+      <defs>
+        <marker id="f6-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="f6-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <line x1="50" y1="190" x2="450" y2="190" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f6-ax)"/>
+      <line x1="90" y1="230" x2="90" y2="60" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#f6-ax)"/>
+      <text class="lbl" x="456" y="186">x</text>
+      <text class="lbl" x="78" y="54">y</text>
+      <line x1="90" y1="190" x2="326" y2="159" stroke="#7d3fa0" stroke-width="3.5" marker-end="url(#f6-pur)"/>
+      <line x1="90" y1="206" x2="326" y2="206" stroke="#7d3fa0" stroke-width="2" marker-end="url(#f6-pur)"/>
+      <line x1="336" y1="190" x2="336" y2="159" stroke="#7d3fa0" stroke-width="2" marker-end="url(#f6-pur)"/>
+      <line x1="326" y1="159" x2="336" y2="159" stroke="#7d3fa0" stroke-width="1" stroke-dasharray="4 3"/>
+      <path d="M 210 190 A 120 120 0 0 0 209 174" fill="none" stroke="#e0801a" stroke-width="2"/>
+      <text class="sm" x="232" y="186" fill="#e0801a">&#952; = 7.5&#176;</text>
+      <text class="lbl" x="170" y="160" fill="#7d3fa0">C&#8407;</text>
+      <text class="lbl" x="150" y="224" fill="#7d3fa0">C<tspan font-size="11" dy="3">x</tspan><tspan dy="-3"> = 1.57 m</tspan></text>
+      <text class="lbl" x="346" y="178" fill="#7d3fa0">C<tspan font-size="11" dy="3">y</tspan><tspan dy="-3"> = 0.21 m</tspan></text>
+      <text class="sm" x="352" y="66">Drawn to scale: two 1.0 m</text>
+      <text class="sm" x="352" y="84">displacements give 1.6 m,</text>
+      <text class="sm" x="352" y="102">not 2.0 m &#8212; and the result</text>
+      <text class="sm" x="352" y="120">lies almost along the x-axis,</text>
+      <text class="sm" x="352" y="138">because the y-components</text>
+      <text class="sm" x="352" y="156">nearly cancelled.</text>
+    </svg>
+    <figcaption>The resultant, to scale. Every one of those statements came out of the arithmetic, not
+      out of a drawing.</figcaption>
+  </figure>
+
+  <h3>Step 5 &mdash; check it</h3>
+  <p>Trevor closes the deck with a page of his own handwriting: the same problem done in exact form, and
+  then a short list of checks. Both are worth copying into your own habits.</p>
+
+  <div class="mathblock">
+    <div class="head">The same answer without a calculator until the last line</div>
+    <div class="body">
+      <div class="mathline"><span class="m">C<sub>x</sub></span> =
+        <span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">2</span></span> + <span class="rad">&radic;<span class="rad">3</span></span></span><span class="bot">2</span></span> m
+        &nbsp;&nbsp;&nbsp; <span class="m">C<sub>y</sub></span> =
+        <span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">2</span></span> &minus; 1</span><span class="bot">2</span></span> m</div>
+      <div class="mathline">tan&nbsp;&#952; =
+        <span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">2</span></span> &minus; 1</span><span class="bot"><span class="rad">&radic;<span class="rad">2</span></span> + <span class="rad">&radic;<span class="rad">3</span></span></span></span>
+        = 0.131652 &nbsp;&rarr;&nbsp; &#952; = 7.5000&#176;</div>
+      <p class="why">The metres cancel in the ratio, which is the check that you have a legitimate angle
+      and not a length. The exact value here is &#952; = 7.5000&#176;.
+      Rounding the components to four figures <em>before</em> taking the inverse tangent is what moves the
+      last digit around; it does not matter at two significant figures, but it is the reason to carry
+      guard digits.</p>
+    </div>
+  </div>
+
+  <div class="known">
+    <span class="label">Three checks worth doing every time</span>
+    <b>1. Work backwards.</b> <span class="m">C</span>&#8202;cos&nbsp;&#952; = (1.5867 m) cos&nbsp;7.5&#176;
+    = 1.573&nbsp;m, which is <span class="m">C<sub>x</sub></span> again.<br>
+    <b>2. Size.</b> The magnitude must be larger than either component:
+    1.59&nbsp;m &gt; 1.57&nbsp;m and 1.59&nbsp;m &gt; 0.21&nbsp;m. The hypotenuse is always the longest side.<br>
+    <b>3. Direction.</b> <span class="m">A&#8407;</span> reaches 45&deg; up and
+    <span class="m">B&#8407;</span> only 30&deg; down, so the resultant should end up <em>slightly</em>
+    above the axis. It does, at 7.5&deg;.
+  </div>
+
+  <div class="tip">
+    <span class="label">A physicist's shortcut &mdash; and why you still do it the long way</span>
+    When the two vectors have <em>equal</em> magnitudes, the parallelogram is a rhombus, so the resultant
+    bisects the angle between them. The angle between
+    <span class="m">A&#8407;</span> and <span class="m">B&#8407;</span> here is 45&#176; + 30&#176; =
+    75&#176;, so the resultant must sit at 45&#176; &minus; 75&#176;/2 = 7.5&#176; &mdash; exactly the
+    answer above &mdash; with magnitude
+    2(1.0 m) cos(75&#176;/2) = 1.5867&nbsp;m. Independently, the law of cosines gives
+    <span class="m">C</span>&#178; = (1.0 m)&#178; + (1.0 m)&#178; + 2(1.0 m)(1.0 m) cos&nbsp;75&#176;
+    = 2.5176 m&#178;. Three routes, one answer. The component method is the one that keeps working when
+    the magnitudes are unequal and there are five vectors instead of two.
+  </div>
+
+<p class="preview-note"><strong>Looking ahead:</strong> every vector on this page sat in the first
+  quadrant or dipped just below the axis, and the one second-quadrant example was handed to you with its
+  angle already measured from the +<span class="m">x</span> axis. Getting the signs right for vectors
+  pointing into <em>any</em> quadrant &mdash; and getting the right answer out of an inverse tangent that
+  only ever reports angles between &minus;90&#176; and +90&#176; &mdash; is the next page in this set, 03e.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>&#127903;&#65039; Exit ticket</strong>
+      <span class="sub">Four quick questions &mdash; check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> Why may the <span class="m">x</span>-components of
+          several vectors simply be added as ordinary signed numbers?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> Because components are scalars and scalars always add</label>
+          <label><input type="radio" name="q1" value="b"> <span>Because every <span class="m">x</span>-component lies along the <span class="m">x</span>-axis, so any two of them are parallel or antiparallel</span></label>
+          <label><input type="radio" name="q1" value="c"> <span>Because the <span class="m">x</span>-components are always perpendicular to each other</span></label>
+          <label><input type="radio" name="q1" value="d"> Because the angle between any two vectors is always 90&deg;</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> <span class="m">A&#8407;</span> has magnitude 5.00&nbsp;m
+          and points at 127&deg; from the +<span class="m">x</span> axis. Its <span class="m">x</span>-component is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> +3.01 m</label>
+          <label><input type="radio" name="q2" value="b"> &minus;3.01 m</label>
+          <label><input type="radio" name="q2" value="c"> +3.99 m</label>
+          <label><input type="radio" name="q2" value="d"> &minus;5.00 m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> <span class="m">B&#8407;</span> = (3.0&nbsp;m, &minus;2.0&nbsp;m).
+          What is &minus;<span class="m">B&#8407;</span>?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> (&minus;3.0 m, &minus;2.0 m)</label>
+          <label><input type="radio" name="q3" value="b"> (&minus;3.0 m, +2.0 m)</label>
+          <label><input type="radio" name="q3" value="c"> (3.0 m, 2.0 m) &mdash; a negative vector has a negative magnitude</label>
+          <label><input type="radio" name="q3" value="d"> (&minus;2.0 m, 3.0 m)</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Two 1.0&nbsp;m displacements, one at 45&deg; above the
+          +<span class="m">x</span> axis and one at 30&deg; below it, are applied one after the other. The
+          magnitude of the resultant is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> 2.0 m</label>
+          <label><input type="radio" name="q4" value="b"> 1.6 m</label>
+          <label><input type="radio" name="q4" value="c"> 1.4 m</label>
+          <label><input type="radio" name="q4" value="d"> 0.50 m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>Two vectors are <b>parallel</b> (0&deg;, magnitudes add), <b>antiparallel</b> (180&deg;, magnitudes
+        subtract), or neither. Perpendicular vectors (90&deg;) do not combine arithmetically at all.</li>
+    <li>Once you <b>resolve</b> every vector onto the same axes, all the
+        <span class="m">x</span>-components lie on one line, so they are parallel or antiparallel &mdash;
+        and therefore add as signed numbers. The <span class="m">y</span>-components do the same on their
+        own line, independently. <em>That</em> is why the component method works.</li>
+    <li>The method in one line:
+        <span class="m">C<sub>x</sub></span> = <span class="m">A<sub>x</sub></span> + <span class="m">B<sub>x</sub></span> and
+        <span class="m">C<sub>y</sub></span> = <span class="m">A<sub>y</sub></span> + <span class="m">B<sub>y</sub></span>.
+        Rebuild the <b>resultant</b> with
+        <span class="m">C</span> = <span class="rad">&radic;<span class="rad"><span class="m">C<sub>x</sub></span>&#178; + <span class="m">C<sub>y</sub></span>&#178;</span></span>
+        and &#952; = tan<sup>&minus;1</sup>(<span class="m">C<sub>y</sub></span>/<span class="m">C<sub>x</sub></span>).
+        Magnitudes never add; components do.</li>
+    <li>A component's sign comes from the <b>direction</b> it points. Measure the angle counterclockwise
+        from the +<span class="m">x</span> axis and the calculator handles the sign; measure it from any
+        other axis and <em>you</em> insert the sign, by looking at the picture.</li>
+    <li><span class="m">A&#8407;</span> &minus; <span class="m">B&#8407;</span> is
+        <span class="m">A&#8407;</span> + (&minus;<span class="m">B&#8407;</span>), where
+        &minus;<span class="m">B&#8407;</span> has the same <b>magnitude</b> as
+        <span class="m">B&#8407;</span> and the opposite <b>direction</b>. Magnitudes are never negative.</li>
+    <li>Two 1.0&nbsp;m displacements, at 45&deg; above and 30&deg; below the axis, give a resultant of
+        <b>1.6&nbsp;m at 7.5&deg; above the +<span class="m">x</span> axis</b> &mdash; not 2.0&nbsp;m.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/3-3-vector-addition-and-subtraction-analytical-methods" target="_blank" rel="noopener">3.3 Vector Addition and Subtraction: Analytical Methods</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-2-coordinate-systems-and-components-of-a-vector" target="_blank" rel="noopener">2.2 Coordinate Systems and Components of a Vector</a> &#183;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-3-algebra-of-vectors" target="_blank" rel="noopener">2.3 Algebra of Vectors</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Vector Addition Using Components</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &#183;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &#183; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- predict-first probes ---------- */
+(function(){
+  var data = {
+    probe1: {
+      right: 'Yes — negative. The arrow points up and to the LEFT, so its x-component points along −x. The size is (8.0 N) cos 30° = 6.9 N, and you supply the minus sign yourself.',
+      wrong: 'Look at the picture, not the calculator. The arrow points up and to the LEFT, so Fₓ must be negative: −(8.0 N) cos 30° = −6.9 N. (−4.0 N is (8.0 N) sin 30° — that is the y-component’s size, and it points up, so it is positive.)'
+    },
+    probe2: {
+      right: 'Right — about 1.6 m. The two y-components nearly cancel and the x-components add, giving 1.5867 m, which rounds to 1.6 m at two significant figures.',
+      wrong: 'No. Magnitudes only add when the vectors are parallel, and these are 75° apart. Resolve them: the x-components add to 1.57 m, the y-components almost cancel to 0.21 m, and the resultant is 1.6 m.'
+    }
+  };
+  Object.keys(data).forEach(function(id){
+    var probe = document.getElementById(id);
+    if(!probe) return;
+    var fb = probe.querySelector('.feedback');
+    probe.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var ok = btn.getAttribute('data-correct') === 'true';
+        probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+        if(ok){
+          btn.classList.add('correct');
+          fb.style.color = '';
+          fb.textContent = data[id].right;
+        } else {
+          btn.classList.add('wrong');
+          probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+          fb.style.color = '#c0392b';
+          fb.textContent = data[id].wrong;
+        }
+      });
+    });
+  });
+})();
+
+/* ---------- exit ticket ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var key = { q1:'b', q2:'b', q3:'b', q4:'b' };
+  var why = {
+    q1:'Every x-component lies on the x-axis, so any two of them are parallel or antiparallel — and in those two cases magnitudes add or subtract. Carry the direction in the sign and both cases become one rule.',
+    q2:'A<sub>x</sub> = A cos &#952; = (5.00 m) cos 127&#176; = &minus;3.01 m. The arrow points into the second quadrant, so its x-component points along &minus;x. (+3.99 m is A<sub>y</sub>.)',
+    q3:'&minus;B&#8407; has the same magnitude as B&#8407; with the direction reversed, so every component flips sign: (&minus;3.0 m, +2.0 m). A magnitude is never negative.',
+    q4:'Resolve: C<sub>x</sub> = 0.7071 + 0.8660 = 1.5731 m, C<sub>y</sub> = 0.7071 &minus; 0.500 = 0.2071 m, so C = &radic;(2.5176 m&#178;) = 1.59 m &rarr; 1.6 m at 7.5&#176; above the +x axis. 2.0 m would need the two to be parallel.'
+  };
+  function markCard(id, ok, msg){
+    var c = document.getElementById('card-' + id);
+    c.classList.remove('right','wrong');
+    c.classList.add(ok ? 'right' : 'wrong');
+    c.querySelector('.qfb').innerHTML = (ok ? '&#10003; ' : '&#10007; ') + msg;
+  }
+  function grade(){
+    var score = 0, answered = 0;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(!sel){ markCard(q, false, 'No answer chosen yet.'); return; }
+      answered++;
+      var ok = sel.value === key[q];
+      if(ok) score++;
+      markCard(q, ok, why[q]);
+    });
+    var box = document.getElementById('ticketScore');
+    box.classList.add('show');
+    box.innerHTML = score + ' / 4 correct' + (answered < 4 ? ' — some questions are still blank.' : '');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    var box = document.getElementById('ticketScore');
+    box.classList.remove('show'); box.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the note's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

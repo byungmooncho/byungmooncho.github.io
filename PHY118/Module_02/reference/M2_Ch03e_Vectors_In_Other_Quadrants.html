@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 Ch03e — Vectors in Other Quadrants</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 2 · Chapter 3 (College Physics) · Trevor slides 03e
+     "Vectors in Other Quadrants" — web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Merged from two source decks: "3e-Vectors in Other Quadrants.pptx"
+     (7 slides — the fuller Unit Circle slide and the Review slide) and
+     "03e-Vectors-Components-Quadrants-4x3.pptx" (7 slides — the "Four
+     Quadrants" build pair and the "Use a right triangle, and then add the
+     signs for direction" summary slide).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.9rem 0 .4rem; }
+  .chip{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; border:1px solid var(--green); color:var(--green-deep); background:var(--green-soft); border-radius:20px; padding:.25rem .75rem; }
+  .chip.scalar{ border-color:var(--rule); color:var(--muted); background:#f7f9f8; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .rad{ border-top:1.3px solid currentColor; padding:0 .15em; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opts.three{ grid-template-columns:1fr; }
+  @media (min-width:560px){ .probe .opts.three{ grid-template-columns:repeat(3,1fr); } }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt svg{ display:block; width:100%; height:auto; }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Motion In Two Dimensions</span>
+    <span>Chapter 3 · Slides 03e</span>
+  </div>
+
+  <h1>Vectors in Other Quadrants</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Every component you have computed so far pointed up and to the right. Real vectors point every which
+    way, and the moment a vector leaves the first quadrant one of its components goes <em>negative</em>.
+    The trigonometry does not change at all &mdash; it is still one right triangle &mdash; but you now owe
+    the answer two extra pieces of bookkeeping: the <b>sizes</b> come from sine and cosine, and the
+    <b>signs</b> come from looking at your own drawing. Do those in the wrong order and you will hand in a
+    vector pointing the opposite way from the one you meant.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Find</b> the components of a vector when given its
+        magnitude and direction &mdash; in <em>any</em> quadrant.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Attach</b> the correct sign to each component by
+        reading the quadrant off your own sketch, rather than off the calculator.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Convert</b> between a reference angle and a
+        standard-position angle, and say which of the two your calculator just handed you.</span></li>
+    </ul>
+    <div class="foot">Trevor's objective slide lists PE1. PE2 and PE3 are what the rest of the deck actually
+      drills &mdash; and they are where the marks are lost.</div>
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    You can <em>resolve</em> a vector into two perpendicular components with SOH-CAH-TOA, and you can go
+    back the other way with the Pythagorean theorem and an inverse tangent. That is all of page 03c, and it
+    is all the mathematics this page needs. Everything new here is about <em>direction</em>: which axis an
+    angle is measured from, and which way each component points.
+  </div>
+
+  <h2>Breaking a vector apart, once more</h2>
+  <p>On 03c you took a single vector and split it into two pieces, each one along or parallel to an axis.
+  Those pieces are its <b>components</b>, and adding them back head-to-tail returns the original vector.
+  Nothing about that construction cares where the vector points:</p>
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="A first-quadrant vector A drawn from the origin to the point three comma four, with its horizontal component along the x axis and its vertical component drawn as a dashed leg, forming a right triangle">
+      <defs>
+        <marker id="m0p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="m0b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="m0r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+      </defs>
+      <g stroke="#e4ece7" stroke-width="1">
+        <line x1="60" y1="60" x2="300" y2="60"/><line x1="60" y1="100" x2="300" y2="100"/>
+        <line x1="60" y1="140" x2="300" y2="140"/><line x1="60" y1="180" x2="300" y2="180"/>
+        <line x1="60" y1="220" x2="300" y2="220"/>
+        <line x1="100" y1="60" x2="100" y2="260"/><line x1="140" y1="60" x2="140" y2="260"/>
+        <line x1="180" y1="60" x2="180" y2="260"/><line x1="220" y1="60" x2="220" y2="260"/>
+        <line x1="260" y1="60" x2="260" y2="260"/><line x1="300" y1="60" x2="300" y2="260"/>
+      </g>
+      <line x1="60" y1="260" x2="320" y2="260" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="60" y1="260" x2="60" y2="50" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="56" y="276">0</text>
+      <text class="sm" x="176" y="276">3</text>
+      <text class="sm" x="44" y="104" text-anchor="end">4</text>
+      <!-- A = (3,4) with 40 px per unit, origin (60,260) -->
+      <line x1="60" y1="260" x2="180" y2="100" stroke="#7d3fa0" stroke-width="3" marker-end="url(#m0p)"/>
+      <line x1="60" y1="252" x2="180" y2="252" stroke="#c0392b" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#m0r)"/>
+      <line x1="180" y1="252" x2="180" y2="104" stroke="#2457b8" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#m0b)"/>
+      <text class="lbl" x="98" y="166" fill="#7d3fa0">A&#8407;</text>
+      <text class="lbl" x="120" y="242" text-anchor="middle" fill="#c0392b">A<tspan font-size="11" dy="4">x</tspan></text>
+      <text class="lbl" x="190" y="182" fill="#2457b8">A<tspan font-size="11" dy="4">y</tspan></text>
+      <text class="sm" x="360" y="96">The two components are <tspan font-style="italic">perpendicular</tspan>, so</text>
+      <text class="sm" x="360" y="118">they never interfere with each other.</text>
+      <text class="lbl" x="360" y="154">A&#8407; = A&#8407;<tspan font-size="11" dy="4">x</tspan><tspan dy="-4"> + A&#8407;</tspan><tspan font-size="11" dy="4">y</tspan></text>
+      <text class="sm" x="360" y="186">Their sizes come from the triangle.</text>
+      <text class="sm" x="360" y="208">Their signs come from the picture.</text>
+    </svg>
+    <figcaption>One vector, <em>resolved</em> into a horizontal and a vertical component &mdash; the whole
+      construction from 03c, and the starting point for this page.</figcaption>
+  </figure>
+
+  <h2>Where angles are measured from: the unit circle</h2>
+  <p>Before any of the signs make sense, the convention has to be nailed down. Trevor states it in one line:
+  <em>the unit circle measures angles from the</em> <span class="m">x</span><em>-axis</em>, and
+  <em>&lsquo;unit&rsquo; refers to the fact that the radius is 1 unit.</em> Two things are hidden in that
+  sentence, and both matter:</p>
+  <table class="defs">
+    <tr><td class="term">From the +<span class="m">x</span> axis</td><td class="eq">&equiv;</td>
+      <td>Zero degrees points along the positive <span class="m">x</span> axis, and the angle grows
+      <b>counterclockwise</b>. An angle written this way is in <b>standard position</b>. Unless a problem
+      says otherwise, this is the angle a physics answer means.</td></tr>
+    <tr><td class="term">Radius 1</td><td class="eq">&equiv;</td>
+      <td>On a circle of radius 1, the horizontal leg of the triangle <em>is</em>
+      cos&nbsp;<span class="m">&theta;</span> and the vertical leg <em>is</em>
+      sin&nbsp;<span class="m">&theta;</span> &mdash; no dividing needed. That is the whole reason the unit
+      circle is worth drawing: it is a picture of the sine and cosine of every angle at once.</td></tr>
+  </table>
+  <figure>
+    <svg class="sq" viewBox="0 0 340 340" role="img" aria-label="A circle of radius one centred on the origin, with a vector from the origin to a point on the rim, its cosine and sine drawn as dashed legs, and the angle theta marked counterclockwise from the positive x axis">
+      <defs>
+        <marker id="m3b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="m3s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <circle cx="170" cy="170" r="110" fill="none" stroke="#2457b8" stroke-width="1.6" opacity=".55"/>
+      <line x1="40" y1="170" x2="300" y2="170" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="170" y1="300" x2="170" y2="40" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="276" y="188">1</text>
+      <text class="sm" x="178" y="58">1</text>
+      <text class="sm" x="44" y="188">&minus;1</text>
+      <text class="sm" x="178" y="292">&minus;1</text>
+      <line x1="170" y1="170" x2="236" y2="82" stroke="#2457b8" stroke-width="3" marker-end="url(#m3b)"/>
+      <line x1="170" y1="176" x2="236" y2="176" stroke="#5c6b62" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m3s)"/>
+      <line x1="236" y1="176" x2="236" y2="88" stroke="#5c6b62" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m3s)"/>
+      <path d="M 210 170 A 40 40 0 0 0 194 138" fill="none" stroke="#2457b8" stroke-width="2"/>
+      <text class="lbl" x="200" y="160" fill="#2457b8">&theta;</text>
+      <text class="lbl" x="162" y="106" text-anchor="end" fill="#2457b8">r = 1</text>
+      <text class="sm" x="203" y="194" text-anchor="middle">cos &theta;</text>
+      <text class="sm" x="244" y="136">sin &theta;</text>
+    </svg>
+    <figcaption>Angles start on the +<span class="m">x</span> axis and grow counterclockwise. On the unit
+      circle the legs of the triangle are cos&nbsp;<span class="m">&theta;</span> and
+      sin&nbsp;<span class="m">&theta;</span> themselves.</figcaption>
+  </figure>
+  <div class="tip">
+    <span class="label">Two different angles</span>
+    A <b>standard-position angle</b> is measured counterclockwise from the +<span class="m">x</span> axis and
+    can be anything from 0&deg; to 360&deg;. A <b>reference angle</b> is the <em>acute</em> angle between the
+    vector and the <em>nearest</em> axis &mdash; always between 0&deg; and 90&deg;, and always positive. They
+    are equal only in the first quadrant. From here on, this page writes
+    <span class="m">&theta;</span> for the standard-position angle and
+    <span class="m">&phi;</span> for the reference angle, exactly as Trevor does on his slides.
+  </div>
+
+  <h2>The four quadrants</h2>
+  <p>The axes cut the plane into four <b>quadrants</b>, numbered counterclockwise starting from the
+  upper right. Which quadrant a vector points into fixes the sign of each of its components &mdash; and
+  that is a fact about the <em>picture</em>, not about any formula:</p>
+  <figure>
+    <svg viewBox="0 0 700 440" role="img" aria-label="A set of x and y axes with one vector drawn into each of the four quadrants, each with dashed component legs and a label giving the signs of its two components">
+      <defs>
+        <marker id="m1b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="m1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="m1p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="m1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+        <marker id="m1bs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="m1rs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="m1ps" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="m1gs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+      </defs>
+      <!-- grid, origin (250,215), 40 px per unit -->
+      <g stroke="#eef3f0" stroke-width="1">
+        <line x1="90" y1="55" x2="410" y2="55"/><line x1="90" y1="95" x2="410" y2="95"/>
+        <line x1="90" y1="135" x2="410" y2="135"/><line x1="90" y1="175" x2="410" y2="175"/>
+        <line x1="90" y1="255" x2="410" y2="255"/><line x1="90" y1="295" x2="410" y2="295"/>
+        <line x1="90" y1="335" x2="410" y2="335"/><line x1="90" y1="375" x2="410" y2="375"/>
+        <line x1="90" y1="55" x2="90" y2="375"/><line x1="130" y1="55" x2="130" y2="375"/>
+        <line x1="170" y1="55" x2="170" y2="375"/><line x1="210" y1="55" x2="210" y2="375"/>
+        <line x1="290" y1="55" x2="290" y2="375"/><line x1="330" y1="55" x2="330" y2="375"/>
+        <line x1="370" y1="55" x2="370" y2="375"/><line x1="410" y1="55" x2="410" y2="375"/>
+      </g>
+      <line x1="62" y1="215" x2="438" y2="215" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="250" y1="393" x2="250" y2="37" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="444" y="219">+x</text>
+      <text class="sm" x="250" y="30" text-anchor="middle">+y</text>
+      <!-- quadrant I: blue, tip (370,95) -->
+      <line x1="250" y1="215" x2="370" y2="95" stroke="#2457b8" stroke-width="3" marker-end="url(#m1b)"/>
+      <line x1="250" y1="209" x2="370" y2="209" stroke="#2457b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m1bs)"/>
+      <line x1="370" y1="209" x2="370" y2="101" stroke="#2457b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m1bs)"/>
+      <text class="lbl" x="288" y="140" fill="#2457b8">A&#8407;</text>
+      <text class="sm" x="330" y="74" fill="#2457b8">I &#183; ( +, + )</text>
+      <!-- quadrant II: red, tip (130,95) -->
+      <line x1="250" y1="215" x2="130" y2="95" stroke="#c0392b" stroke-width="3" marker-end="url(#m1r)"/>
+      <line x1="250" y1="209" x2="130" y2="209" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m1rs)"/>
+      <line x1="130" y1="209" x2="130" y2="101" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m1rs)"/>
+      <text class="lbl" x="196" y="140" fill="#c0392b">B&#8407;</text>
+      <text class="sm" x="94" y="74" fill="#c0392b">II &#183; ( &minus;, + )</text>
+      <!-- quadrant III: purple, tip (130,335) -->
+      <line x1="250" y1="215" x2="130" y2="335" stroke="#7d3fa0" stroke-width="3" marker-end="url(#m1p)"/>
+      <line x1="250" y1="221" x2="130" y2="221" stroke="#7d3fa0" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m1ps)"/>
+      <line x1="130" y1="221" x2="130" y2="329" stroke="#7d3fa0" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m1ps)"/>
+      <text class="lbl" x="192" y="302" fill="#7d3fa0">D&#8407;</text>
+      <text class="sm" x="94" y="366" fill="#7d3fa0">III &#183; ( &minus;, &minus; )</text>
+      <!-- quadrant IV: green, tip (370,335) -->
+      <line x1="250" y1="215" x2="370" y2="335" stroke="#134a29" stroke-width="3" marker-end="url(#m1g)"/>
+      <line x1="250" y1="221" x2="370" y2="221" stroke="#134a29" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m1gs)"/>
+      <line x1="370" y1="221" x2="370" y2="329" stroke="#134a29" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m1gs)"/>
+      <text class="lbl" x="290" y="302" fill="#134a29">C&#8407;</text>
+      <text class="sm" x="330" y="366" fill="#134a29">IV &#183; ( +, &minus; )</text>
+      <!-- right column -->
+      <text class="sm" x="470" y="92" font-weight="600" fill="#1d2b23">Standard position</text>
+      <text class="sm" x="470" y="112">measured counterclockwise from +x:</text>
+      <text class="sm" x="470" y="140">quadrant I &nbsp;&#8195;0&deg; to 90&deg;</text>
+      <text class="sm" x="470" y="160">quadrant II &nbsp;&#8195;90&deg; to 180&deg;</text>
+      <text class="sm" x="470" y="180">quadrant III &#8195;180&deg; to 270&deg;</text>
+      <text class="sm" x="470" y="200">quadrant IV &#8195;270&deg; to 360&deg;</text>
+      <text class="sm" x="470" y="236" font-weight="600" fill="#1d2b23">Read the dashed arrowheads.</text>
+      <text class="sm" x="470" y="256">A leg that points left is a negative</text>
+      <text class="sm" x="470" y="276">x component; a leg that points</text>
+      <text class="sm" x="470" y="296">down is a negative y component.</text>
+      <text class="sm" x="470" y="330">Nothing here depends on the length of</text>
+      <text class="sm" x="470" y="350">the vector &mdash; only on where it points.</text>
+    </svg>
+    <figcaption>One vector per quadrant. The signs of the components are read straight off the arrowheads of
+      the dashed legs.</figcaption>
+  </figure>
+
+  <table class="grid">
+    <tr><th>Quadrant</th><th><span class="m">A</span><sub>x</sub></th><th><span class="m">A</span><sub>y</sub></th><th>Standard-position <span class="m">&theta;</span></th><th>From the reference angle <span class="m">&phi;</span></th></tr>
+    <tr><td>I &mdash; upper right</td><td>+</td><td>+</td><td>0&deg; &ndash; 90&deg;</td><td><span class="m">&theta;</span> = <span class="m">&phi;</span></td></tr>
+    <tr><td>II &mdash; upper left</td><td>&minus;</td><td>+</td><td>90&deg; &ndash; 180&deg;</td><td><span class="m">&theta;</span> = 180&deg; &minus; <span class="m">&phi;</span></td></tr>
+    <tr><td>III &mdash; lower left</td><td>&minus;</td><td>&minus;</td><td>180&deg; &ndash; 270&deg;</td><td><span class="m">&theta;</span> = 180&deg; + <span class="m">&phi;</span></td></tr>
+    <tr><td>IV &mdash; lower right</td><td>+</td><td>&minus;</td><td>270&deg; &ndash; 360&deg;</td><td><span class="m">&theta;</span> = 360&deg; &minus; <span class="m">&phi;</span></td></tr>
+  </table>
+  <p class="why">In this table <span class="m">&phi;</span> is the reference angle measured to the nearest
+  <em>horizontal</em> axis &mdash; the +<span class="m">x</span> axis in quadrants I and IV, the
+  &minus;<span class="m">x</span> axis in quadrants II and III. Measure to the vertical axis instead and
+  every formula in the last column changes, which is the usual reason a student's answer is off by exactly
+  the complement of the angle.</p>
+
+  <h2>Use a right triangle, then add the signs for direction</h2>
+  <p>That sentence is the title of one of Trevor's slides, and it is also the procedure. In order:</p>
+  <ol>
+    <li><b>Draw</b> the vector from the origin, roughly to scale, on a real set of axes. This step is not
+      optional &mdash; it is the step that supplies the signs.</li>
+    <li><b>Build</b> a right triangle by dropping the two component legs. The hypotenuse is the vector; the
+      legs are parallel to the axes.</li>
+    <li><b>Find</b> the acute <b>reference angle</b> <span class="m">&phi;</span> between the vector and the
+      nearest horizontal axis.</li>
+    <li><b>Compute</b> the two <em>magnitudes</em> with sine and cosine, using
+      <span class="m">&phi;</span> and the magnitude <span class="m">A</span>. Both come out positive.</li>
+    <li><b>Attach</b> the signs by inspection, from the quadrant.</li>
+  </ol>
+  <div class="mathblock">
+    <div class="head">Step 4 &mdash; sizes only, from the reference angle</div>
+    <div class="body">
+      <div class="mathline">|<span class="m">A</span><sub>x</sub>| = <span class="m">A</span> cos <span class="m">&phi;</span>
+        &nbsp;&nbsp;&#183;&nbsp;&nbsp;
+        |<span class="m">A</span><sub>y</sub>| = <span class="m">A</span> sin <span class="m">&phi;</span></div>
+      <p class="why">Written with the <em>standard-position</em> angle instead, the signs come out on their
+      own &mdash; because the cosine and sine of an angle past 90&deg; are already negative where they need
+      to be:</p>
+      <div class="mathline"><span class="m">A</span><sub>x</sub> = <span class="m">A</span> cos <span class="m">&theta;</span>
+        &nbsp;&nbsp;&#183;&nbsp;&nbsp;
+        <span class="m">A</span><sub>y</sub> = <span class="m">A</span> sin <span class="m">&theta;</span></div>
+      <p class="why">Both routes give the same answer. Trevor teaches the first because a reference-angle
+      triangle is something you can <em>see</em>; the second is faster once you trust your angle. Pick one
+      and say which you used &mdash; mixing them is how a sign goes missing.</p>
+    </div>
+  </div>
+
+  <p>Here are Trevor's three worked vectors. All three have magnitude 5.0 and all three have a reference
+  angle of 53.1&deg; to the horizontal axis. <em>Same triangle, three times</em> &mdash; only the signs
+  change:</p>
+  <figure>
+    <svg viewBox="0 0 700 480" role="img" aria-label="Axes with three vectors of magnitude five: A into the first quadrant at plus three plus four, B into the second quadrant at minus three plus four, and C into the fourth quadrant at plus three minus four, each with dashed component legs and its reference angle marked at the origin">
+      <defs>
+        <marker id="m2b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="m2r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="m2g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+        <marker id="m2bs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="m2rs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="m2gs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+      </defs>
+      <!-- grid, origin (300,240), 42 px per unit -->
+      <g stroke="#eef3f0" stroke-width="1">
+        <line x1="132" y1="72" x2="468" y2="72"/><line x1="132" y1="114" x2="468" y2="114"/>
+        <line x1="132" y1="156" x2="468" y2="156"/><line x1="132" y1="198" x2="468" y2="198"/>
+        <line x1="132" y1="282" x2="468" y2="282"/><line x1="132" y1="324" x2="468" y2="324"/>
+        <line x1="132" y1="366" x2="468" y2="366"/><line x1="132" y1="408" x2="468" y2="408"/>
+        <line x1="132" y1="72" x2="132" y2="408"/><line x1="174" y1="72" x2="174" y2="408"/>
+        <line x1="216" y1="72" x2="216" y2="408"/><line x1="258" y1="72" x2="258" y2="408"/>
+        <line x1="342" y1="72" x2="342" y2="408"/><line x1="384" y1="72" x2="384" y2="408"/>
+        <line x1="426" y1="72" x2="426" y2="408"/><line x1="468" y1="72" x2="468" y2="408"/>
+      </g>
+      <line x1="110" y1="240" x2="490" y2="240" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="300" y1="430" x2="300" y2="50" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="126" y="252">&minus;4</text><text class="sm" x="168" y="252">&minus;3</text>
+      <text class="sm" x="210" y="252">&minus;2</text><text class="sm" x="252" y="252">&minus;1</text>
+      <text class="sm" x="339" y="252">1</text><text class="sm" x="381" y="252">2</text>
+      <text class="sm" x="423" y="252">3</text><text class="sm" x="465" y="252">4</text>
+      <text class="sm" x="292" y="76" text-anchor="end">4</text><text class="sm" x="292" y="118" text-anchor="end">3</text>
+      <text class="sm" x="292" y="160" text-anchor="end">2</text><text class="sm" x="292" y="202" text-anchor="end">1</text>
+      <text class="sm" x="292" y="290" text-anchor="end">&minus;1</text><text class="sm" x="292" y="332" text-anchor="end">&minus;2</text>
+      <text class="sm" x="292" y="374" text-anchor="end">&minus;3</text><text class="sm" x="292" y="416" text-anchor="end">&minus;4</text>
+      <!-- A = (3,4) -> (426,72), quadrant I, blue -->
+      <line x1="300" y1="240" x2="426" y2="72" stroke="#2457b8" stroke-width="3" marker-end="url(#m2b)"/>
+      <line x1="300" y1="234" x2="426" y2="234" stroke="#2457b8" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m2bs)"/>
+      <line x1="426" y1="234" x2="426" y2="78" stroke="#2457b8" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m2bs)"/>
+      <text class="lbl" x="344" y="146" fill="#2457b8">A&#8407;</text>
+      <text class="lbl" x="363" y="226" text-anchor="middle" fill="#2457b8">A<tspan font-size="11" dy="4">x</tspan></text>
+      <text class="lbl" x="434" y="152" fill="#2457b8">A<tspan font-size="11" dy="4">y</tspan></text>
+      <path d="M 340 240 A 40 40 0 0 0 324 208" fill="none" stroke="#2457b8" stroke-width="2"/>
+      <text class="lbl" x="328" y="228" fill="#2457b8">&phi;</text>
+      <!-- B = (-3,4) -> (174,72), quadrant II, red -->
+      <line x1="300" y1="240" x2="174" y2="72" stroke="#c0392b" stroke-width="3" marker-end="url(#m2r)"/>
+      <line x1="300" y1="234" x2="174" y2="234" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m2rs)"/>
+      <line x1="174" y1="234" x2="174" y2="78" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m2rs)"/>
+      <text class="lbl" x="240" y="152" fill="#c0392b">B&#8407;</text>
+      <text class="lbl" x="228" y="226" text-anchor="middle" fill="#c0392b">B<tspan font-size="11" dy="4">x</tspan></text>
+      <text class="lbl" x="166" y="152" text-anchor="end" fill="#c0392b">B<tspan font-size="11" dy="4">y</tspan></text>
+      <path d="M 260 240 A 40 40 0 0 1 276 208" fill="none" stroke="#c0392b" stroke-width="2"/>
+      <text class="lbl" x="266" y="228" text-anchor="end" fill="#c0392b">&phi;</text>
+      <!-- C = (3,-4) -> (426,408), quadrant IV, green -->
+      <line x1="300" y1="240" x2="426" y2="408" stroke="#134a29" stroke-width="3" marker-end="url(#m2g)"/>
+      <line x1="300" y1="274" x2="426" y2="274" stroke="#134a29" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m2gs)"/>
+      <line x1="426" y1="274" x2="426" y2="402" stroke="#134a29" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m2gs)"/>
+      <text class="lbl" x="336" y="342" fill="#134a29">C&#8407;</text>
+      <text class="lbl" x="378" y="292" text-anchor="middle" fill="#134a29">C<tspan font-size="11" dy="4">x</tspan></text>
+      <text class="lbl" x="434" y="336" fill="#134a29">C<tspan font-size="11" dy="4">y</tspan></text>
+      <path d="M 334 240 A 34 34 0 0 1 320.4 267.2" fill="none" stroke="#134a29" stroke-width="2"/>
+      <text class="lbl" x="338" y="266" fill="#134a29">&phi;</text>
+      <!-- right column -->
+      <text class="sm" x="506" y="120" font-weight="600" fill="#1d2b23">magnitude 5.0, &phi; = 53.1&deg;</text>
+      <text class="sm" x="506" y="150" fill="#2457b8">A&#8407; = ( +3.0, +4.0 )</text>
+      <text class="sm" x="506" y="168" fill="#2457b8">quadrant I, &theta; = 53.1&deg;</text>
+      <text class="sm" x="506" y="200" fill="#c0392b">B&#8407; = ( &minus;3.0, +4.0 )</text>
+      <text class="sm" x="506" y="218" fill="#c0392b">quadrant II, &theta; = 126.9&deg;</text>
+      <text class="sm" x="506" y="250" fill="#134a29">C&#8407; = ( +3.0, &minus;4.0 )</text>
+      <text class="sm" x="506" y="268" fill="#134a29">quadrant IV, &theta; = 306.9&deg;</text>
+      <text class="sm" x="506" y="304">5.0 cos 53.1&deg; = 3.0</text>
+      <text class="sm" x="506" y="324">5.0 sin 53.1&deg; = 4.0</text>
+      <text class="sm" x="506" y="356">Three vectors, one triangle.</text>
+      <text class="sm" x="506" y="376">Only the signs and the</text>
+      <text class="sm" x="506" y="396">standard-position angle differ.</text>
+    </svg>
+    <figcaption>Trevor's <span class="m">A&#8407;</span>, <span class="m">B&#8407;</span> and
+      <span class="m">C&#8407;</span>: magnitude 5.0 each, reference angle
+      <span class="m">&phi;</span>&nbsp;=&nbsp;53.1&deg; each. The green horizontal leg is drawn just below
+      the axis so it does not hide the blue one.</figcaption>
+  </figure>
+
+  <div class="probe" id="probe1"
+       data-ok="Exactly. Both ratios are the same number, &minus;4/3, so the calculator receives the same input twice and returns the same output twice. It never saw your two minus signs separately — it only ever saw their quotient."
+       data-no="Not quite. Work out the two ratios: 4.0 / (&minus;3.0) = &minus;1.33 and (&minus;4.0) / 3.0 = &minus;1.33. They are the same number, so tan&#8315;&#185; hands back the same angle for both vectors — even though the vectors point almost opposite ways.">
+    <p class="q"><span class="tag">Predict first</span>
+      <span class="m">P&#8407;</span> = (&minus;3.0&nbsp;m, 4.0&nbsp;m) points up and to the left.
+      <span class="m">Q&#8407;</span> = (3.0&nbsp;m, &minus;4.0&nbsp;m) points down and to the right.
+      For each one you type the inverse tangent of <span class="m">A</span><sub>y</sub>&thinsp;/&thinsp;<span class="m">A</span><sub>x</sub>
+      into your calculator. What comes back?</p>
+    <div class="opts three">
+      <button class="opt" data-correct="false">Two different angles: 126.9&deg; for <span class="m">P&#8407;</span> and &minus;53.1&deg; for <span class="m">Q&#8407;</span></button>
+      <button class="opt" data-correct="true">The same angle, &minus;53.1&deg;, for both</button>
+      <button class="opt" data-correct="false">An error for <span class="m">P&#8407;</span>, because its <span class="m">x</span> component is negative</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>Reference angle, or standard-position angle?</h2>
+  <p>Once the sizes are in hand, the only remaining job is to report the <b>direction</b>. Four pictures,
+  four conversions &mdash; and in every one of them <span class="m">&phi;</span> is the same small acute
+  angle:</p>
+  <div class="fig-grid">
+    <figure>
+      <svg class="sq" viewBox="0 0 300 280" role="img" aria-label="Quadrant one: a vector up and to the right, with the reference angle equal to the standard position angle">
+        <defs><marker id="m4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker></defs>
+        <line x1="25" y1="140" x2="275" y2="140" stroke="#5c6b62" stroke-width="1.4"/>
+        <line x1="150" y1="232" x2="150" y2="40" stroke="#5c6b62" stroke-width="1.4"/>
+        <line x1="150" y1="140" x2="210" y2="60" stroke="#2457b8" stroke-width="3" marker-end="url(#m4a)"/>
+        <path d="M 184 140 A 34 34 0 0 0 170.4 112.8" fill="none" stroke="#2457b8" stroke-width="2"/>
+        <text class="lbl" x="190" y="128" fill="#2457b8">&phi;</text>
+        <text class="sm" x="248" y="58" text-anchor="end" fill="#5c6b62">I</text>
+        <text class="sm" x="150" y="252" text-anchor="middle">the reference angle already</text>
+        <text class="sm" x="150" y="268" text-anchor="middle">is the standard-position angle</text>
+      </svg>
+      <figcaption>Quadrant I &mdash; <span class="m">&theta;</span> = <span class="m">&phi;</span></figcaption>
+    </figure>
+    <figure>
+      <svg class="sq" viewBox="0 0 300 280" role="img" aria-label="Quadrant two: a vector up and to the left, with a small reference angle measured from the negative x axis and a larger standard position angle measured counterclockwise from the positive x axis">
+        <defs><marker id="m4b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker></defs>
+        <line x1="25" y1="140" x2="275" y2="140" stroke="#5c6b62" stroke-width="1.4"/>
+        <line x1="150" y1="232" x2="150" y2="40" stroke="#5c6b62" stroke-width="1.4"/>
+        <line x1="150" y1="140" x2="90" y2="60" stroke="#c0392b" stroke-width="3" marker-end="url(#m4b)"/>
+        <path d="M 116 140 A 34 34 0 0 1 129.6 112.8" fill="none" stroke="#c0392b" stroke-width="2"/>
+        <text class="lbl" x="110" y="128" text-anchor="end" fill="#c0392b">&phi;</text>
+        <path d="M 204 140 A 54 54 0 0 0 117.6 96.8" fill="none" stroke="#7d3fa0" stroke-width="1.8" stroke-dasharray="5 4"/>
+        <text class="lbl" x="170" y="106" fill="#7d3fa0">&theta;</text>
+        <text class="sm" x="52" y="58" fill="#5c6b62">II</text>
+        <text class="sm" x="150" y="252" text-anchor="middle">&phi; is measured from the</text>
+        <text class="sm" x="150" y="268" text-anchor="middle">&minus;x axis, &theta; from the +x axis</text>
+      </svg>
+      <figcaption>Quadrant II &mdash; <span class="m">&theta;</span> = 180&deg; &minus; <span class="m">&phi;</span></figcaption>
+    </figure>
+    <figure>
+      <svg class="sq" viewBox="0 0 300 280" role="img" aria-label="Quadrant three: a vector down and to the left, with a small reference angle below the negative x axis and a standard position angle of more than 180 degrees">
+        <defs><marker id="m4c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker></defs>
+        <line x1="25" y1="140" x2="275" y2="140" stroke="#5c6b62" stroke-width="1.4"/>
+        <line x1="150" y1="232" x2="150" y2="40" stroke="#5c6b62" stroke-width="1.4"/>
+        <line x1="150" y1="140" x2="90" y2="220" stroke="#7d3fa0" stroke-width="3" marker-end="url(#m4c)"/>
+        <path d="M 116 140 A 34 34 0 0 0 129.6 167.2" fill="none" stroke="#7d3fa0" stroke-width="2"/>
+        <text class="lbl" x="110" y="168" text-anchor="end" fill="#7d3fa0">&phi;</text>
+        <path d="M 204 140 A 54 54 0 1 0 117.6 183.2" fill="none" stroke="#2457b8" stroke-width="1.8" stroke-dasharray="5 4"/>
+        <text class="lbl" x="172" y="196" fill="#2457b8">&theta;</text>
+        <text class="sm" x="52" y="234" fill="#5c6b62">III</text>
+        <text class="sm" x="150" y="252" text-anchor="middle">the long way round:</text>
+        <text class="sm" x="150" y="268" text-anchor="middle">&theta; is past a half turn</text>
+      </svg>
+      <figcaption>Quadrant III &mdash; <span class="m">&theta;</span> = 180&deg; + <span class="m">&phi;</span></figcaption>
+    </figure>
+    <figure>
+      <svg class="sq" viewBox="0 0 300 280" role="img" aria-label="Quadrant four: a vector down and to the right, with a small reference angle below the positive x axis and a standard position angle close to a full turn">
+        <defs><marker id="m4d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker></defs>
+        <line x1="25" y1="140" x2="275" y2="140" stroke="#5c6b62" stroke-width="1.4"/>
+        <line x1="150" y1="232" x2="150" y2="40" stroke="#5c6b62" stroke-width="1.4"/>
+        <line x1="150" y1="140" x2="210" y2="220" stroke="#134a29" stroke-width="3" marker-end="url(#m4d)"/>
+        <path d="M 184 140 A 34 34 0 0 1 170.4 167.2" fill="none" stroke="#134a29" stroke-width="2"/>
+        <text class="lbl" x="190" y="168" fill="#134a29">&phi;</text>
+        <path d="M 204 140 A 54 54 0 1 0 182.4 183.2" fill="none" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="5 4"/>
+        <text class="lbl" x="108" y="198" text-anchor="end" fill="#c0392b">&theta;</text>
+        <text class="sm" x="248" y="234" text-anchor="end" fill="#5c6b62">IV</text>
+        <text class="sm" x="150" y="252" text-anchor="middle">&minus;53.1&deg; and 306.9&deg; name the</text>
+        <text class="sm" x="150" y="268" text-anchor="middle">same direction &mdash; say which you used</text>
+      </svg>
+      <figcaption>Quadrant IV &mdash; <span class="m">&theta;</span> = 360&deg; &minus; <span class="m">&phi;</span>, or report &minus;<span class="m">&phi;</span></figcaption>
+    </figure>
+  </div>
+  <p>Trevor writes the last two as equations on his slides, and they are worth reading as bookkeeping rather
+  than as formulas to memorize: for <span class="m">B&#8407;</span> in quadrant&nbsp;II,
+  <span class="m">&phi;</span><sub>B</sub> + <span class="m">&theta;</span><sub>B</sub> = 53.1&deg; +
+  126.9&deg; = 180&deg;; for <span class="m">C&#8407;</span> in quadrant&nbsp;IV,
+  <span class="m">&theta;</span><sub>C</sub> + <span class="m">&phi;</span><sub>C</sub> = 306.9&deg; +
+  53.1&deg; = 360&deg;.</p>
+
+  <h2>What your calculator actually answered</h2>
+  <p>This is the one place on this page where students reliably lose marks, so it is worth being precise
+  about whose fault it is. Trevor's line is the right one: <b>your calculator does not know where your
+  vector is.</b> It is not wrong &mdash; it answered the question you asked, which was narrower than the
+  question you meant.</p>
+  <div class="mathblock">
+    <div class="head">What tan<sup>&minus;1</sup> can and cannot return</div>
+    <div class="body">
+      <div class="mathline">tan <span class="m">&theta;</span> =
+        <span class="frac"><span class="top"><span class="m">A</span><sub>y</sub></span><span class="bot"><span class="m">A</span><sub>x</sub></span></span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="m">&theta;</span> = tan<sup>&minus;1</sup>
+        <span class="frac"><span class="top"><span class="m">A</span><sub>y</sub></span><span class="bot"><span class="m">A</span><sub>x</sub></span></span></div>
+      <p class="why">The function tan<sup>&minus;1</sup> has to return exactly one angle for each input, so
+      it is defined to return one from the interval (&minus;90&deg;, 90&deg;) &mdash; quadrant I for a
+      positive input, quadrant IV for a negative one. It <em>cannot</em> return a quadrant II or quadrant III
+      angle, ever. And the ratio you fed it has already thrown your signs away: 4/(&minus;3) and
+      (&minus;4)/3 are the same number.</p>
+    </div>
+  </div>
+  <table class="grid">
+    <tr><th>Vector is in&hellip;</th><th>tan<sup>&minus;1</sup> returns</th><th>What to do</th></tr>
+    <tr><td>Quadrant I &nbsp;(+,&nbsp;+)</td><td>a positive angle, 0&deg; to 90&deg;</td><td>Nothing. It is already the standard-position angle.</td></tr>
+    <tr><td>Quadrant II (&minus;,&nbsp;+)</td><td>a <em>negative</em> angle</td><td><b>Add 180&deg;.</b></td></tr>
+    <tr><td>Quadrant III (&minus;,&nbsp;&minus;)</td><td>a <em>positive</em> angle &mdash; it looks like quadrant I</td><td><b>Add 180&deg;.</b></td></tr>
+    <tr><td>Quadrant IV (+,&nbsp;&minus;)</td><td>a negative angle</td><td>Report it as is (a negative angle), or add 360&deg;.</td></tr>
+  </table>
+  <div class="tip">
+    <span class="label">The trap</span>
+    Quadrant III is the nastiest of the four, because the two minus signs cancel in the ratio and the
+    calculator hands back a cheerful <em>positive</em> angle that looks like a perfectly good quadrant I
+    answer. Nothing in the number warns you. Only your sketch does.
+  </div>
+  <p class="why">Trevor gets around this on his second-quadrant slide by using cos<sup>&minus;1</sup>
+  instead: cos<sup>&minus;1</sup>(&minus;3.0&thinsp;/&thinsp;5.0) = 126.9&deg; straight away, because the
+  inverse cosine returns angles from 0&deg; to 180&deg; and therefore <em>can</em> reach quadrant II. That
+  works, and it is a good trick &mdash; but notice it only moves the problem: the inverse cosine cannot tell
+  quadrant I from quadrant IV, or II from III, because cos(&minus;<span class="m">&theta;</span>) =
+  cos&nbsp;<span class="m">&theta;</span>. No single inverse trig function can do the job alone. Two
+  components and a drawing can.</p>
+
+  <div class="probe" id="probe2"
+       data-ok="Right. Both components are negative, so the vector is in quadrant III, between 180&deg; and 270&deg;. The calculator returned the reference angle 25.0&deg;; add 180&deg; to get 205.0&deg;."
+       data-no="No — check the signs of the components first. Both <i>v</i><sub>x</sub> and <i>v</i><sub>y</sub> are negative, which puts the velocity in quadrant III, so the answer must lie between 180&deg; and 270&deg;. The calculator gave you the reference angle; add 180&deg;.">
+    <p class="q"><span class="tag">Predict first</span>
+      A velocity has <span class="m">v</span><sub>x</sub> = &minus;10.9&nbsp;m/s and
+      <span class="m">v</span><sub>y</sub> = &minus;5.07&nbsp;m/s. Your calculator reports
+      tan<sup>&minus;1</sup>(&minus;5.07&thinsp;/&thinsp;&minus;10.9) = 25.0&deg;. Measured counterclockwise
+      from the +<span class="m">x</span> axis, which way is the object moving?</p>
+    <div class="opts three">
+      <button class="opt" data-correct="false">25.0&deg;</button>
+      <button class="opt" data-correct="false">155.0&deg;</button>
+      <button class="opt" data-correct="true">205.0&deg;</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>Worked example: a velocity in the third quadrant</h2>
+  <p>A puck slides across a table with a velocity whose components are
+  <span class="m">v</span><sub>x</sub> = &minus;10.9&nbsp;m/s and
+  <span class="m">v</span><sub>y</sub> = &minus;5.07&nbsp;m/s. Find its magnitude and its direction, and then
+  turn the answer back into components as a check.</p>
+  <figure>
+    <svg viewBox="0 0 620 380" role="img" aria-label="Axes with a velocity vector pointing down and to the left into the third quadrant, its negative x component drawn leftward along the axis and its negative y component drawn downward, with the reference angle of 25 degrees below the negative x axis and the standard position angle of 205 degrees swept counterclockwise from the positive x axis">
+      <defs>
+        <marker id="m5p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="m5ps" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+      </defs>
+      <!-- origin (330,130), 18 px per m/s -->
+      <line x1="90" y1="130" x2="540" y2="130" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="330" y1="330" x2="330" y2="40" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="546" y="134">+x</text>
+      <text class="sm" x="330" y="34" text-anchor="middle">+y</text>
+      <line x1="150" y1="126" x2="150" y2="134" stroke="#5c6b62" stroke-width="1.2"/>
+      <text class="sm" x="150" y="156" text-anchor="middle">&minus;10</text>
+      <line x1="510" y1="126" x2="510" y2="134" stroke="#5c6b62" stroke-width="1.2"/>
+      <text class="sm" x="510" y="148" text-anchor="middle">10</text>
+      <line x1="326" y1="220" x2="334" y2="220" stroke="#5c6b62" stroke-width="1.2"/>
+      <text class="sm" x="340" y="224">&minus;5 (m/s)</text>
+      <!-- v = (-10.876, -5.071) -> tip (134, 221) -->
+      <line x1="330" y1="130" x2="134" y2="221" stroke="#7d3fa0" stroke-width="3.2" marker-end="url(#m5p)"/>
+      <line x1="330" y1="138" x2="134" y2="138" stroke="#7d3fa0" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m5ps)"/>
+      <line x1="134" y1="138" x2="134" y2="215" stroke="#7d3fa0" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#m5ps)"/>
+      <text class="lbl" x="232" y="124" text-anchor="middle" fill="#7d3fa0">v<tspan font-size="11" dy="4">x</tspan></text>
+      <text class="lbl" x="126" y="178" text-anchor="end" fill="#7d3fa0">v<tspan font-size="11" dy="4">y</tspan></text>
+      <text class="lbl" x="226" y="196" fill="#7d3fa0">v&#8407;</text>
+      <path d="M 290 130 A 40 40 0 0 0 293.7 146.9" fill="none" stroke="#c0392b" stroke-width="2"/>
+      <text class="sm" x="262" y="150" text-anchor="end" fill="#c0392b">&phi; = 25.0&deg;</text>
+      <path d="M 390 130 A 60 60 0 1 0 275.6 155.4" fill="none" stroke="#134a29" stroke-width="1.8" stroke-dasharray="5 4"/>
+      <text class="sm" x="392" y="98" fill="#134a29">&theta; = 205.0&deg;</text>
+      <text class="sm" x="380" y="238">|v&#8407;| = 12.0 m/s</text>
+      <text class="sm" x="380" y="262">&phi; = tan&#8315;&#185;( 5.07 / 10.9 ) = 25.0&deg;</text>
+      <text class="sm" x="380" y="282">measured from the &minus;x axis</text>
+      <text class="sm" x="380" y="308">&theta; = 180&deg; + 25.0&deg; = 205.0&deg;</text>
+      <text class="sm" x="380" y="328">measured from the +x axis</text>
+    </svg>
+    <figcaption>Both components negative &rarr; quadrant III. The reference angle is 25.0&deg; below the
+      &minus;<span class="m">x</span> axis; the standard-position angle is 205.0&deg;.</figcaption>
+  </figure>
+  <div class="mathblock">
+    <div class="head">Components &rarr; magnitude and direction</div>
+    <div class="body">
+      <div class="mathline">|<span class="m">v&#8407;</span>| =
+        <span class="rad">&radic;<span class="rad"><span class="m">v</span><sub>x</sub>&#178; + <span class="m">v</span><sub>y</sub>&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">(&minus;10.9)&#178; + (&minus;5.07)&#178;</span></span> m/s
+        = <span class="rad">&radic;<span class="rad">144</span></span> m/s = 12.0 m/s</div>
+      <p class="why">The squares kill the signs, so the magnitude never comes out negative. That is a feature,
+      not a loophole: a magnitude is a size.</p>
+      <div class="mathline"><span class="m">&phi;</span> = tan<sup>&minus;1</sup>
+        <span class="frac"><span class="top">|<span class="m">v</span><sub>y</sub>|</span><span class="bot">|<span class="m">v</span><sub>x</sub>|</span></span>
+        = tan<sup>&minus;1</sup>
+        <span class="frac"><span class="top">5.07</span><span class="bot">10.9</span></span>
+        = 25.0&deg; &nbsp;&nbsp;<span class="up">(from the &minus;<span class="m">x</span> axis)</span></div>
+      <div class="mathline"><span class="m">&theta;</span> = 180&deg; + <span class="m">&phi;</span> =
+        180&deg; + 25.0&deg; = 205.0&deg; &nbsp;&nbsp;<span class="up">(from the +<span class="m">x</span> axis, counterclockwise)</span></div>
+      <p class="why">Feed the calculator the signed ratio instead and it returns
+      tan<sup>&minus;1</sup>(&minus;5.07&thinsp;/&thinsp;&minus;10.9) = tan<sup>&minus;1</sup>(0.465) =
+      25.0&deg; &mdash; numerically the same, and still not the answer. It is the reference angle, and it
+      needs 180&deg; added because the sketch puts the vector in quadrant III.</p>
+    </div>
+  </div>
+  <div class="mathblock">
+    <div class="head">Magnitude and direction &rarr; components (the check, and PE1)</div>
+    <div class="body">
+      <div class="mathline"><span class="m">v</span><sub>x</sub> = <span class="m">v</span> cos <span class="m">&theta;</span>
+        = (12.0 m/s) cos 205.0&deg; = (12.0 m/s)(&minus;0.906) = &minus;10.9 m/s</div>
+      <div class="mathline"><span class="m">v</span><sub>y</sub> = <span class="m">v</span> sin <span class="m">&theta;</span>
+        = (12.0 m/s) sin 205.0&deg; = (12.0 m/s)(&minus;0.423) = &minus;5.07 m/s</div>
+      <p class="why">Used with the <em>standard-position</em> angle, cosine and sine deliver both signs for
+      free &mdash; cos&nbsp;205&deg; and sin&nbsp;205&deg; are both negative, which is precisely what
+      quadrant III requires. Run it with the reference angle instead and you get
+      12.0&nbsp;cos&nbsp;25.0&deg; = +10.9&nbsp;m/s and 12.0&nbsp;sin&nbsp;25.0&deg; = +5.07&nbsp;m/s, both
+      sizes right and both signs wrong. Then you attach the minus signs yourself, from the drawing.</p>
+    </div>
+  </div>
+
+  <h3>Where this pays off</h3>
+  <p>Page 03d added vectors by adding their components. Everything on this page is what makes 03d safe:
+  a <b>resultant</b> built from signed components lands in whatever quadrant the signed sums put it in, and
+  the direction you report for that resultant has to come out of a sketch, not out of an inverse tangent.
+  If <span class="m">R</span><sub>x</sub> = &minus;10.9 and <span class="m">R</span><sub>y</sub> =
+  &minus;5.07, the resultant is the quadrant III vector you just worked &mdash; and any answer of 25&deg;
+  points the arrow the wrong way down the table.</p>
+
+<p class="preview-note"><strong>Looking back across the set:</strong> 03a introduced magnitude and
+  direction, 03c the components of a single vector, and 03d the addition of vectors by
+  components. This page &mdash; 03e &mdash; closes the set by removing the last restriction: the vector no
+  longer has to point up and to the right. Nothing was added to the mathematics; a piece of bookkeeping was
+  added to the answer.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>&#127903;&#65039; Exit ticket</strong>
+      <span class="sub">Four quick questions &mdash; check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> A vector points into the <em>third</em> quadrant. Its components are&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> <span><span class="m">A</span><sub>x</sub> positive, <span class="m">A</span><sub>y</sub> negative</span></label>
+          <label><input type="radio" name="q1" value="b"> <span>both negative</span></label>
+          <label><input type="radio" name="q1" value="c"> <span><span class="m">A</span><sub>x</sub> negative, <span class="m">A</span><sub>y</sub> positive</span></label>
+          <label><input type="radio" name="q1" value="d"> <span>both positive</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> <span class="m">B&#8407;</span> has magnitude 5.0&nbsp;m and lies in the second quadrant, with a reference angle of 53.1&deg; measured from the &minus;<span class="m">x</span> axis. Its components are&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> <span>(3.0 m, 4.0 m)</span></label>
+          <label><input type="radio" name="q2" value="b"> <span>(&minus;3.0 m, 4.0 m)</span></label>
+          <label><input type="radio" name="q2" value="c"> <span>(&minus;4.0 m, 3.0 m)</span></label>
+          <label><input type="radio" name="q2" value="d"> <span>(&minus;3.0 m, &minus;4.0 m)</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> <span class="m">A&#8407;</span> = (&minus;6.0&nbsp;m, 8.0&nbsp;m). Your calculator reports tan<sup>&minus;1</sup>(8.0&thinsp;/&thinsp;&minus;6.0) = &minus;53.1&deg;. The direction of <span class="m">A&#8407;</span>, measured counterclockwise from the +<span class="m">x</span> axis, is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> <span>&minus;53.1&deg;</span></label>
+          <label><input type="radio" name="q3" value="b"> <span>53.1&deg;</span></label>
+          <label><input type="radio" name="q3" value="c"> <span>126.9&deg;</span></label>
+          <label><input type="radio" name="q3" value="d"> <span>306.9&deg;</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> On the unit circle&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> <span>angles are measured clockwise from the +<span class="m">y</span> axis, and &ldquo;unit&rdquo; means the diameter is 1</span></label>
+          <label><input type="radio" name="q4" value="b"> <span>angles are measured counterclockwise from the +<span class="m">x</span> axis, and &ldquo;unit&rdquo; means the radius is 1</span></label>
+          <label><input type="radio" name="q4" value="c"> <span>angles are measured counterclockwise from the +<span class="m">y</span> axis, and &ldquo;unit&rdquo; means the circumference is 1</span></label>
+          <label><input type="radio" name="q4" value="d"> <span>the radius is 1, but the angle may be measured from whichever axis is closer</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>The four <b>quadrants</b> fix the signs of a vector's <b>components</b>: (+,&nbsp;+) in I,
+        (&minus;,&nbsp;+) in II, (&minus;,&nbsp;&minus;) in III, (+,&nbsp;&minus;) in IV. That is read off a
+        drawing, not off a formula.</li>
+    <li>The procedure never changes: draw the vector, build the right triangle, get the two
+        <em>sizes</em> from <span class="m">A</span>&nbsp;cos&nbsp;<span class="m">&phi;</span> and
+        <span class="m">A</span>&nbsp;sin&nbsp;<span class="m">&phi;</span> with the acute
+        <b>reference angle</b>, then attach the signs by inspection.</li>
+    <li>A <b>reference angle</b> is the acute angle to the nearest axis; a <b>standard-position angle</b> is
+        measured counterclockwise from the +<span class="m">x</span> axis. They agree only in quadrant I.
+        Convert with <span class="m">&theta;</span> = <span class="m">&phi;</span>,
+        180&deg;&nbsp;&minus;&nbsp;<span class="m">&phi;</span>,
+        180&deg;&nbsp;+&nbsp;<span class="m">&phi;</span>, or
+        360&deg;&nbsp;&minus;&nbsp;<span class="m">&phi;</span> in quadrants I to IV.</li>
+    <li>Used with the standard-position angle, <span class="m">A</span><sub>x</sub> =
+        <span class="m">A</span>&nbsp;cos&nbsp;<span class="m">&theta;</span> and
+        <span class="m">A</span><sub>y</sub> = <span class="m">A</span>&nbsp;sin&nbsp;<span class="m">&theta;</span>
+        produce the signs automatically.</li>
+    <li>The <b>unit circle</b> is the convention behind all of it: angles counterclockwise from the
+        +<span class="m">x</span> axis, and &ldquo;unit&rdquo; means the radius is 1, so the two legs of the
+        triangle are cos&nbsp;<span class="m">&theta;</span> and sin&nbsp;<span class="m">&theta;</span>
+        themselves.</li>
+    <li>tan<sup>&minus;1</sup> can only return an angle in (&minus;90&deg;,&nbsp;90&deg;), and the ratio
+        <span class="m">A</span><sub>y</sub>&thinsp;/&thinsp;<span class="m">A</span><sub>x</sub> has
+        already discarded your signs. Quadrants II and III need 180&deg; added; quadrant IV can be reported
+        as a negative angle or as 360&deg; minus the reference angle. The calculator is not wrong &mdash;
+        <em>it does not know where your vector is.</em></li>
+    <li>This is what keeps 03d honest: the <b>resultant</b> of a head-to-tail addition has whatever
+        <b>direction</b> its signed components say it has, and its <b>magnitude</b> is always positive.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/3-3-vector-addition-and-subtraction-analytical-methods" target="_blank" rel="noopener">3.3 Vector Addition and Subtraction: Analytical Methods</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-2-coordinate-systems-and-components-of-a-vector" target="_blank" rel="noopener">2.2 Coordinate Systems and Components of a Vector</a> &#183;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-3-algebra-of-vectors" target="_blank" rel="noopener">2.3 Algebra of Vectors</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Vectors in Other Quadrants</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &#183;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &#183; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- predict-first probes ---------- */
+(function(){
+  document.querySelectorAll('.probe').forEach(function(probe){
+    var fb = probe.querySelector('.feedback');
+    if(!fb) return;
+    var okMsg = probe.getAttribute('data-ok') || '';
+    var noMsg = probe.getAttribute('data-no') || '';
+    probe.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var ok = btn.getAttribute('data-correct') === 'true';
+        probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+        if(ok){
+          btn.classList.add('correct');
+          fb.style.color = '';
+          fb.innerHTML = okMsg;
+        } else {
+          btn.classList.add('wrong');
+          probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+          fb.style.color = '#c0392b';
+          fb.innerHTML = noMsg;
+        }
+      });
+    });
+  });
+})();
+
+/* ---------- exit ticket ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var key = { q1:'b', q2:'b', q3:'c', q4:'b' };
+  var why = {
+    q1:'Third quadrant is down and to the left, so both components point the negative way: <i>A</i><sub>x</sub> &lt; 0 and <i>A</i><sub>y</sub> &lt; 0.',
+    q2:'Sizes first: 5.0 cos 53.1&#176; = 3.0 m along x and 5.0 sin 53.1&#176; = 4.0 m along y. Then the signs, from the quadrant: up and to the left means (&minus;3.0 m, +4.0 m).',
+    q3:'Both the calculator&rsquo;s &minus;53.1&#176; and the vector&rsquo;s own components have the same ratio, so add 180&#176;: &minus;53.1&#176; + 180&#176; = 126.9&#176;, which is in quadrant II &mdash; where (&minus;6.0, +8.0) actually points.',
+    q4:'Angles are measured counterclockwise from the +x axis &mdash; standard position &mdash; and &ldquo;unit&rdquo; refers to the radius being 1, which is why the legs of the triangle are cos &#952; and sin &#952; themselves.'
+  };
+  function markCard(id, ok, msg){
+    var c = document.getElementById('card-' + id);
+    c.classList.remove('right','wrong');
+    c.classList.add(ok ? 'right' : 'wrong');
+    c.querySelector('.qfb').innerHTML = (ok ? '&#10003; ' : '&#10007; ') + msg;
+  }
+  function grade(){
+    var score = 0, answered = 0;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(!sel){ markCard(q, false, 'No answer chosen yet.'); return; }
+      answered++;
+      var ok = sel.value === key[q];
+      if(ok) score++;
+      markCard(q, ok, why[q]);
+    });
+    var box = document.getElementById('ticketScore');
+    box.classList.add('show');
+    box.innerHTML = score + ' / 4 correct' + (answered < 4 ? ' — some questions are still blank.' : '');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    var box = document.getElementById('ticketScore');
+    box.classList.remove('show'); box.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the note's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 Ch04a — Horizontally Fired Projectiles</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 2 · Chapter 3 (College Physics) · Trevor slides 04a
+     "Horizontally Fired Projectiles" — web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Merged from two source decks: "a-Horizontal Projectiles.pptx" (10 slides, the
+     spine) and "b-Horizontal Projectile Example.pptx" (6 slides — the same baseball
+     example extracted as its own mini-deck, carrying live ink annotations that strike
+     out every term which collapses to zero).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.9rem 0 .4rem; }
+  .chip{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; border:1px solid var(--green); color:var(--green-deep); background:var(--green-soft); border-radius:20px; padding:.25rem .75rem; }
+  .chip.scalar{ border-color:var(--rule); color:var(--muted); background:#f7f9f8; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .rad{ border-top:1.3px solid currentColor; padding:0 .15em; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opts.three{ grid-template-columns:1fr; }
+  @media (min-width:560px){ .probe .opts.three{ grid-template-columns:repeat(3,1fr); } }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt svg{ display:block; width:100%; height:auto; }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Motion In Two Dimensions</span>
+    <span>Chapter 3 · Slides 04a</span>
+  </div>
+
+  <h1>Horizontally Fired Projectiles</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Throw a baseball straight out from a rooftop. It travels forward and it falls, and the two things happen
+    at the same time without interfering with each other &mdash; the <b>independence of horizontal and
+    vertical motion</b>. So you do not solve one curved problem; you solve two straight-line problems from
+    Module&nbsp;1 and staple them together with the <em>one shared clock</em>. Firing
+    <em>horizontally</em> buys you one extra gift: the initial vertical velocity is zero, which
+    collapses the vertical equation from a quadratic into a single square root.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Solve</b> projectile problems in which the projectile is shot horizontally.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Determine</b> the time of flight, distance travelled, launch speed, and/or impact velocity for
+        projectiles shot horizontally, when given sufficient information.</span></li>
+    </ul>
+    <div class="foot">Dropping the &ldquo;horizontally&rdquo; restriction &mdash; any launch angle you like &mdash; is
+      the sibling page 04b. Maximum height and range get their own special equations in 04c.</div>
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Every equation on this page is a Module&nbsp;1 equation. You already solve constant-velocity problems
+    (<span class="m">x</span> = <span class="m">v</span>&#8201;&#916;<span class="m">t</span>) and free-fall
+    problems (<span class="m">a</span> = &minus;9.80&nbsp;m/s&#178;, dropped from rest). You also already know
+    how to <b>resolve</b> a velocity into <b>components</b> from N2. Nothing new is being asked of your
+    algebra &mdash; only that you run two familiar problems side by side on one clock.
+  </div>
+
+  <h2>The treatment for <em>any</em> projectile</h2>
+  <p>Trevor's recipe is three steps, and it is the same three steps whether the launch is horizontal, angled
+  up, or angled down:</p>
+  <ol>
+    <li><b>Find the components of the initial velocity</b>, making sure the angles are correct.</li>
+    <li><b>Apply the equations of motion to each component separately.</b> The <span class="m">x</span>
+        equations see only <span class="m">x</span> information; the <span class="m">y</span> equations see only
+        <span class="m">y</span> information. The <em>only</em> thing they share is
+        &#916;<span class="m">t</span>.</li>
+    <li><b>Recombine</b> to answer the question that was actually asked &mdash; a final position, a final
+        velocity, a <b>magnitude</b> and a <b>direction</b>.</li>
+  </ol>
+
+  <h3>Step 1 for a horizontal launch: the launch speed is all of <span class="m">v</span><sub>0<span class="up">x</span></sub></h3>
+  <div class="mathblock">
+    <div class="head">Resolving a launch at &#952; = 0&deg;</div>
+    <div class="body">
+      <div class="mathline"><span class="m">v</span><sub>0<span class="up">x</span></sub>
+        = <span class="m">v</span><sub>0</sub> cos&#8201;&#952;
+        = <span class="m">v</span><sub>0</sub> cos&#8201;0&deg;
+        = <span class="m">v</span><sub>0</sub>&#8201;(1) = <span class="m">v</span><sub>0</sub></div>
+      <div class="mathline"><span class="m">v</span><sub>0<span class="up">y</span></sub>
+        = <span class="m">v</span><sub>0</sub> sin&#8201;&#952;
+        = <span class="m">v</span><sub>0</sub> sin&#8201;0&deg;
+        = <span class="m">v</span><sub>0</sub>&#8201;(0) = 0</div>
+      <p class="why">Cos&#8201;0&deg; = 1 and sin&#8201;0&deg; = 0, so the whole launch speed lands in the
+      horizontal column and the vertical column starts empty. Keep the step visible anyway: on 04b the angle
+      will not be zero, and the habit of writing both lines is what keeps you out of trouble there.</p>
+    </div>
+  </div>
+
+  <h2>Why the two directions separate</h2>
+  <p>The claim is Cho's N3 claim: <b>the horizontal and vertical motions are independent</b>. Here is the
+  reasoning, and it is entirely about the <em>vector</em> nature of the force.</p>
+  <p>Gravity pulls <em>straight down</em>. A straight-down vector has <b>no horizontal component</b>. So
+  in the horizontal column the acceleration is <span class="m">a</span><sub>x</sub> = 0 and the horizontal
+  velocity never changes &mdash; not because gravity switches off, but because gravity has nothing to
+  contribute in that direction. In the vertical column the acceleration is the full
+  <span class="m">a</span><sub>y</sub> = &minus;9.80&nbsp;m/s&#178;, and the ball is in free fall from the
+  instant it leaves your hand.</p>
+
+  <div class="tip">
+    <span class="label">Say it carefully</span>
+    Not &ldquo;the horizontal motion is unaffected by gravity&rdquo; in the sense of <em>no force acting</em>
+    &mdash; the ball has weight the whole way down. Say instead: <b>gravity has no horizontal component, so
+    <span class="m">a</span><sub>x</sub> = 0 and <span class="m">v</span><sub>x</sub> is constant.</b>
+    That sentence is the claim, the evidence and the reasoning in one line.
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 400" role="img" aria-label="Parabolic trajectory of a ball thrown horizontally from the top of a fifty metre building, with the velocity resolved into a constant horizontal component and a growing downward vertical component at four equally spaced instants">
+      <defs>
+        <marker id="hf-bl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="hf-rd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="hf-pu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="hf-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <!-- building and ground -->
+      <rect x="56" y="50" width="20" height="280" fill="#eef3f0" stroke="#9aa8a0" stroke-width="1.5"/>
+      <line x1="40" y1="330" x2="610" y2="330" stroke="#5c6b62" stroke-width="1.5"/>
+      <!-- height dimension -->
+      <line x1="46" y1="50" x2="46" y2="330" stroke="#5c6b62" stroke-width="1" marker-start="url(#hf-dim)" marker-end="url(#hf-dim)"/>
+      <text class="sm" x="4" y="194">50.0 m</text>
+      <!-- equal-spacing droplines -->
+      <g stroke="#dce6e0" stroke-width="1" stroke-dasharray="4 4">
+        <line x1="211.2" y1="72.2" x2="211.2" y2="330"/>
+        <line x1="346.4" y1="138.9" x2="346.4" y2="330"/>
+        <line x1="481.6" y1="250" x2="481.6" y2="330"/>
+      </g>
+      <!-- trajectory -->
+      <path d="M 76 50 Q 316 50 556 330" fill="none" stroke="#134a29" stroke-width="2.5"/>
+      <!-- instants -->
+      <g fill="#1d2b23">
+        <circle cx="76" cy="50" r="4"/><circle cx="211.2" cy="72.2" r="4"/>
+        <circle cx="346.4" cy="138.9" r="4"/><circle cx="481.6" cy="250" r="4"/>
+      </g>
+      <!-- resultants (dashed, drawn first so the components sit on top) -->
+      <g stroke="#7d3fa0" stroke-width="1.6" stroke-dasharray="5 4">
+        <line x1="211.2" y1="72.2" x2="303.2" y2="92.5" marker-end="url(#hf-pu)"/>
+        <line x1="346.4" y1="138.9" x2="438.4" y2="179.5" marker-end="url(#hf-pu)"/>
+        <line x1="481.6" y1="250" x2="573.6" y2="310.9" marker-end="url(#hf-pu)"/>
+      </g>
+      <!-- horizontal components: identical every time -->
+      <g stroke="#2457b8" stroke-width="3">
+        <line x1="76" y1="50" x2="168" y2="50" marker-end="url(#hf-bl)"/>
+        <line x1="211.2" y1="72.2" x2="303.2" y2="72.2" marker-end="url(#hf-bl)"/>
+        <line x1="346.4" y1="138.9" x2="438.4" y2="138.9" marker-end="url(#hf-bl)"/>
+        <line x1="481.6" y1="250" x2="573.6" y2="250" marker-end="url(#hf-bl)"/>
+      </g>
+      <!-- vertical components: longer each time -->
+      <g stroke="#c0392b" stroke-width="3">
+        <line x1="211.2" y1="72.2" x2="211.2" y2="92.5" marker-end="url(#hf-rd)"/>
+        <line x1="346.4" y1="138.9" x2="346.4" y2="179.5" marker-end="url(#hf-rd)"/>
+        <line x1="481.6" y1="250" x2="481.6" y2="310.9" marker-end="url(#hf-rd)"/>
+      </g>
+      <text class="lbl" x="96" y="42" fill="#2457b8">v&#8407;<tspan class="sm" dy="3">0x</tspan></text>
+      <text class="lbl" x="178" y="112" fill="#c0392b">v&#8407;<tspan class="sm" dy="3">y</tspan></text>
+      <text class="lbl" x="440" y="300" fill="#c0392b">v&#8407;<tspan class="sm" dy="3">y</tspan></text>
+      <!-- legend -->
+      <text class="sm" x="316" y="40" fill="#2457b8">blue: v&#8407;x &#183; constant</text>
+      <text class="sm" x="316" y="58" fill="#c0392b">red: v&#8407;y &#183; grows downward</text>
+      <text class="sm" x="316" y="76" fill="#7d3fa0">purple: their sum</text>
+      <!-- range dimension -->
+      <line x1="76" y1="362" x2="556" y2="362" stroke="#5c6b62" stroke-width="1" marker-start="url(#hf-dim)" marker-end="url(#hf-dim)"/>
+      <text class="sm" x="262" y="382">x = v0x &#916;t = 128 m</text>
+      <text class="sm" x="44" y="348">ground</text>
+    </svg>
+    <figcaption>The velocity resolved at four instants 0.90&nbsp;s apart. The blue arrows are identical
+      because <span class="m">a</span><sub>x</sub> = 0; the red ones grow by 9.80&nbsp;m/s each second.
+      Equal sideways steps, ever-larger downward steps &mdash; one constant-velocity problem and one
+      free-fall problem, sharing a clock.</figcaption>
+  </figure>
+
+  <figure>
+    <svg viewBox="0 0 640 350" role="img" aria-label="Ball A dropped straight down beside ball B fired horizontally from the same height, with level dashed lines showing that at every instant the two balls are at the same height">
+      <defs>
+        <marker id="dl-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+        <marker id="dl-grn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+      </defs>
+      <!-- level lines -->
+      <g stroke="#c9d4cd" stroke-width="1" stroke-dasharray="6 5">
+        <line x1="52" y1="50" x2="560" y2="50"/>
+        <line x1="52" y1="65.6" x2="560" y2="65.6"/>
+        <line x1="52" y1="112.5" x2="560" y2="112.5"/>
+        <line x1="52" y1="190.6" x2="560" y2="190.6"/>
+      </g>
+      <line x1="40" y1="300" x2="610" y2="300" stroke="#5c6b62" stroke-width="1.5"/>
+      <!-- drop path -->
+      <line x1="70" y1="50" x2="70" y2="300" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="4 4"/>
+      <!-- launch path -->
+      <path d="M 100 50 Q 320 50 540 300" fill="none" stroke="#2457b8" stroke-width="2"/>
+      <!-- launch arrow -->
+      <line x1="100" y1="50" x2="172" y2="50" stroke="#134a29" stroke-width="3" marker-end="url(#dl-grn)"/>
+      <text class="lbl" x="122" y="42" fill="#134a29">v&#8407;<tspan class="sm" dy="3">0</tspan></text>
+      <!-- balls -->
+      <g fill="#c0392b">
+        <circle cx="70" cy="50" r="7"/><circle cx="70" cy="65.6" r="7"/>
+        <circle cx="70" cy="112.5" r="7"/><circle cx="70" cy="190.6" r="7"/><circle cx="70" cy="293" r="7"/>
+      </g>
+      <g fill="#2457b8">
+        <circle cx="100" cy="50" r="7"/><circle cx="210" cy="65.6" r="7"/>
+        <circle cx="320" cy="112.5" r="7"/><circle cx="430" cy="190.6" r="7"/><circle cx="540" cy="293" r="7"/>
+      </g>
+      <text class="sm" x="16" y="34" fill="#c0392b">A &#183; dropped</text>
+      <text class="sm" x="196" y="34" fill="#2457b8">B &#183; fired horizontally</text>
+      <!-- time stamps -->
+      <text class="sm" x="566" y="54">t = 0</text>
+      <text class="sm" x="566" y="70">T/4</text>
+      <text class="sm" x="566" y="116">T/2</text>
+      <text class="sm" x="566" y="194">3T/4</text>
+      <text class="sm" x="566" y="290">T</text>
+      <!-- equal spacing bracket -->
+      <line x1="100" y1="318" x2="540" y2="318" stroke="#5c6b62" stroke-width="1" marker-start="url(#dl-dim)" marker-end="url(#dl-dim)"/>
+      <g stroke="#5c6b62" stroke-width="1">
+        <line x1="210" y1="313" x2="210" y2="323"/><line x1="320" y1="313" x2="320" y2="323"/>
+        <line x1="430" y1="313" x2="430" y2="323"/>
+      </g>
+      <text class="sm" x="212" y="338">equal &#916;x in equal &#916;t</text>
+      <text class="sm" x="44" y="292">ground</text>
+    </svg>
+    <figcaption>Released together, they land together. The dashed lines are level: at every instant the two
+      balls are at the same height, because both start with
+      <span class="m">v</span><sub>0<span class="up">y</span></sub> = 0 and both fall with the same
+      <span class="m">g</span>.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">One standing assumption</span>
+    Air resistance is neglected everywhere on this page. A real baseball loses a noticeable bite of its
+    horizontal speed to drag, so the real landing point is short of the one we compute.
+  </div>
+
+  <div class="probe" id="probe1"
+    data-right-msg="Correct — the same. Gravity has no horizontal component, so ax = 0 and vx is frozen at v0x for the whole flight. The ball is falling faster and faster, but it is not travelling forward any slower."
+    data-wrong-msg="Not quite. Look at the blue arrows in the figure above: identical length at every instant. Gravity points straight down, so it has no horizontal component, ax = 0, and vx stays equal to v0x the entire flight.">
+    <p class="q"><span class="tag">Predict first</span>
+      A ball is thrown horizontally at 40.0&nbsp;m/s. Halfway down, its <em>horizontal</em> velocity
+      component is&hellip;</p>
+    <div class="opts three">
+      <button class="opt" data-correct="false"><span>smaller than 40.0 m/s &mdash; gravity is dragging it down</span></button>
+      <button class="opt" data-correct="true"><span>still exactly 40.0 m/s</span></button>
+      <button class="opt" data-correct="false"><span>larger than 40.0 m/s &mdash; it is speeding up</span></button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>Pick a sign convention and never drift</h2>
+  <p>Two directions means two chances to lose a minus sign. Fix the convention once, in writing, before you
+  touch a number. On this page: <b>up is positive</b>, the origin sits on the ground directly below the
+  launch point, and therefore <span class="m">a</span><sub>y</sub> = &minus;9.80&nbsp;m/s&#178; every single
+  time. The launch is in the +<span class="m">x</span> direction.</p>
+
+  <div class="fig-grid">
+    <figure>
+      <svg class="sq" viewBox="0 0 340 290" role="img" aria-label="Axes with the origin on the ground below the launch point, up positive, showing the launch height, the horizontal launch velocity and the downward acceleration">
+        <defs>
+          <marker id="sc-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+          <marker id="sc-gr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+          <marker id="sc-rd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        </defs>
+        <rect x="40" y="40" width="35" height="200" fill="#eef3f0" stroke="#9aa8a0" stroke-width="1.5"/>
+        <path d="M 75 40 Q 170 40 265 240" fill="none" stroke="#134a29" stroke-width="1.6" stroke-dasharray="5 4"/>
+        <line x1="40" y1="240" x2="318" y2="240" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#sc-ax)"/>
+        <line x1="40" y1="240" x2="40" y2="26" stroke="#5c6b62" stroke-width="1.5" marker-end="url(#sc-ax)"/>
+        <text class="lbl" x="298" y="260">+x</text>
+        <text class="lbl" x="22" y="20">+y</text>
+        <circle cx="75" cy="40" r="4" fill="#1d2b23"/>
+        <line x1="75" y1="40" x2="145" y2="40" stroke="#134a29" stroke-width="3" marker-end="url(#sc-gr)"/>
+        <text class="sm" x="84" y="32" fill="#134a29">v&#8407;0, horizontal</text>
+        <line x1="300" y1="50" x2="300" y2="112" stroke="#c0392b" stroke-width="3" marker-end="url(#sc-rd)"/>
+        <text class="sm" x="196" y="76" fill="#c0392b">a&#8407;y = &#8722;g</text>
+        <text class="sm" x="196" y="92" fill="#c0392b">= &#8722;9.80 m/s&#178;</text>
+        <text class="sm" x="84" y="150">y0 = 50.0 m</text>
+        <text class="sm" x="84" y="166">x0 = 0</text>
+        <text class="sm" x="150" y="232">y = 0 at impact</text>
+        <circle cx="40" cy="240" r="3.5" fill="#5c6b62"/>
+        <text class="sm" x="12" y="258">origin</text>
+      </svg>
+      <figcaption>Up positive, origin on the ground.</figcaption>
+    </figure>
+    <figure>
+      <svg class="sq" viewBox="0 0 340 250" role="img" aria-label="Right triangle of the impact velocity: horizontal component forty metres per second, vertical component thirty one point three metres per second downward, resultant fifty point eight metres per second at thirty eight degrees below the horizontal">
+        <defs>
+          <marker id="iv-bl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+          <marker id="iv-rd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+          <marker id="iv-pu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        </defs>
+        <line x1="60" y1="60" x2="260" y2="60" stroke="#2457b8" stroke-width="3" marker-end="url(#iv-bl)"/>
+        <line x1="260" y1="60" x2="260" y2="216.5" stroke="#c0392b" stroke-width="3" marker-end="url(#iv-rd)"/>
+        <line x1="60" y1="60" x2="260" y2="216.5" stroke="#7d3fa0" stroke-width="3" marker-end="url(#iv-pu)"/>
+        <path d="M 115 60 A 55 55 0 0 1 103.3 93.9" fill="none" stroke="#7d3fa0" stroke-width="1.6"/>
+        <text class="sm" x="120" y="92" fill="#7d3fa0">38.0&deg;</text>
+        <text class="sm" x="104" y="50" fill="#2457b8">vx = 40.0 m/s</text>
+        <text class="sm" x="268" y="140" fill="#c0392b">vy =</text>
+        <text class="sm" x="268" y="156" fill="#c0392b">&#8722;31.3 m/s</text>
+        <text class="sm" x="78" y="164" fill="#7d3fa0">|v&#8407;| = 50.8 m/s</text>
+        <circle cx="60" cy="60" r="3.5" fill="#1d2b23"/>
+      </svg>
+      <figcaption>Step 3: recombine into a magnitude and a direction.</figcaption>
+    </figure>
+  </div>
+
+  <h2>The horizontal-projectile equations</h2>
+  <p>Take the six equations of motion &mdash; three for <span class="m">x</span>, three for
+  <span class="m">y</span> &mdash; and feed them the two facts a horizontal launch gives you:
+  <span class="m">a</span><sub>x</sub> = 0 and
+  <span class="m">v</span><sub>0<span class="up">y</span></sub> = 0. Most of the terms die.</p>
+
+  <table class="grid">
+    <tr><th>General equation of motion</th><th>Horizontal launch</th><th>What collapsed, and why</th></tr>
+    <tr>
+      <td><span class="m">x</span> = <span class="m">x</span><sub>0</sub> + <span class="m">v</span><sub>0<span class="up">x</span></sub>&#916;<span class="m">t</span> + &frac12;<span class="m">a</span><sub>x</sub>&#916;<span class="m">t</span>&#178;</td>
+      <td><span class="m">x</span> = <span class="m">v</span><sub>0</sub>&#916;<span class="m">t</span></td>
+      <td><span class="m">a</span><sub>x</sub> = 0 (gravity has no horizontal component);
+          <span class="m">x</span><sub>0</sub> = 0 by our choice of origin</td>
+    </tr>
+    <tr>
+      <td><span class="m">v</span><sub>x</sub> = <span class="m">v</span><sub>0<span class="up">x</span></sub> + <span class="m">a</span><sub>x</sub>&#916;<span class="m">t</span></td>
+      <td><span class="m">v</span><sub>x</sub> = <span class="m">v</span><sub>0</sub></td>
+      <td>constant horizontal velocity for the whole flight</td>
+    </tr>
+    <tr>
+      <td><span class="m">v</span><sub>x</sub>&#178; = <span class="m">v</span><sub>0<span class="up">x</span></sub>&#178; + 2<span class="m">a</span><sub>x</sub>&#916;<span class="m">x</span></td>
+      <td><span class="m">v</span><sub>x</sub>&#178; = <span class="m">v</span><sub>0</sub>&#178;</td>
+      <td>an identity once <span class="m">a</span><sub>x</sub> = 0 &mdash; it tells you nothing new</td>
+    </tr>
+    <tr>
+      <td><span class="m">y</span> = <span class="m">y</span><sub>0</sub> + <span class="m">v</span><sub>0<span class="up">y</span></sub>&#916;<span class="m">t</span> + &frac12;<span class="m">a</span><sub>y</sub>&#916;<span class="m">t</span>&#178;</td>
+      <td>&#916;<span class="m">y</span> = &minus;&frac12;<span class="m">g</span>&#916;<span class="m">t</span>&#178;</td>
+      <td><b>the important one:</b> <span class="m">v</span><sub>0<span class="up">y</span></sub> = 0 kills the
+          term linear in &#916;<span class="m">t</span>, so no quadratic formula</td>
+    </tr>
+    <tr>
+      <td><span class="m">v</span><sub>y</sub> = <span class="m">v</span><sub>0<span class="up">y</span></sub> + <span class="m">a</span><sub>y</sub>&#916;<span class="m">t</span></td>
+      <td><span class="m">v</span><sub>y</sub> = &minus;<span class="m">g</span>&#916;<span class="m">t</span></td>
+      <td>free fall from rest, vertically</td>
+    </tr>
+    <tr>
+      <td><span class="m">v</span><sub>y</sub>&#178; = <span class="m">v</span><sub>0<span class="up">y</span></sub>&#178; + 2<span class="m">a</span><sub>y</sub>&#916;<span class="m">y</span></td>
+      <td><span class="m">v</span><sub>y</sub>&#178; = &minus;2<span class="m">g</span>&#916;<span class="m">y</span></td>
+      <td>the time-free route to the impact speed (&#916;<span class="m">y</span> is negative, so the right
+          side is positive)</td>
+    </tr>
+  </table>
+
+  <div class="mathblock">
+    <div class="head">Six relations for a horizontal launch &mdash; up positive, <span class="m">a</span><sub>y</sub> = &minus;<span class="m">g</span></div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">v</span><sub>0<span class="up">x</span></sub> = <span class="m">v</span><sub>0</sub>
+        &nbsp;&nbsp;&#183;&nbsp;&nbsp;
+        <span class="m">v</span><sub>0<span class="up">y</span></sub> = 0
+      </div>
+      <div class="mathline">
+        <span class="m">x</span> = <span class="m">v</span><sub>0<span class="up">x</span></sub>&#8201;&#916;<span class="m">t</span>
+        &nbsp;&nbsp;&#183;&nbsp;&nbsp;
+        &#916;<span class="m">y</span> = &minus;<span class="frac"><span class="top">1</span><span class="bot">2</span></span><span class="m">g</span>&#8201;&#916;<span class="m">t</span>&#178;
+      </div>
+      <div class="mathline">
+        <span class="m">v</span><sub>y</sub> = &minus;<span class="m">g</span>&#8201;&#916;<span class="m">t</span>
+        &nbsp;&nbsp;&#183;&nbsp;&nbsp;
+        <span class="m">v</span><sub>y</sub>&#178; = &minus;2<span class="m">g</span>&#8201;&#916;<span class="m">y</span>
+      </div>
+      <p class="why">Six relations, and six quantities that could in principle be unknown:
+      <span class="m">v</span><sub>0</sub>, <span class="m">v</span><sub>0<span class="up">x</span></sub>,
+      <span class="m">v</span><sub>y</sub>, &#916;<span class="m">y</span>,
+      &#916;<span class="m">t</span> and <span class="m">x</span>. In practice a problem hands you nearly all
+      of them and asks for one or two. And they are valid <em>only</em> for a horizontal launch &mdash; the
+      moment the launch angle is not zero,
+      <span class="m">v</span><sub>0<span class="up">y</span></sub> &ne; 0 and the vertical equation goes back
+      to being a quadratic. That is page 04b.</p>
+      <p class="why">If you would rather work with the drop <em>height</em>
+      <span class="m">h</span> = |&#916;<span class="m">y</span>| as a positive number measured downward,
+      the second and fourth read <span class="m">h</span> =
+      &frac12;<span class="m">g</span>&#916;<span class="m">t</span>&#178; and
+      <span class="m">v</span><sub>y</sub>&#178; = 2<span class="m">gh</span>. Same physics; just be sure you
+      have committed to one convention and stay there.</p>
+    </div>
+  </div>
+
+  <h2>Worked example: the baseball off the roof</h2>
+  <p><em>A baseball is thrown horizontally from the top of a 50.0&nbsp;m tall building. Its initial velocity
+  is 40.0&nbsp;m/s. Where does the baseball land?</em></p>
+
+  <h3>Set-up &mdash; write down everything before you compute anything</h3>
+  <table class="defs">
+    <tr><td class="term">Horizontal</td><td class="eq">&rarr;</td><td><span class="m">x</span><sub>0</sub> = 0,
+      &nbsp;<span class="m">v</span><sub>0<span class="up">x</span></sub> = 40.0&nbsp;m/s,
+      &nbsp;<span class="m">a</span><sub>x</sub> = 0, &nbsp;<span class="m">x</span> = ?</td></tr>
+    <tr><td class="term">Vertical</td><td class="eq">&rarr;</td><td><span class="m">y</span><sub>0</sub> = 50.0&nbsp;m,
+      &nbsp;<span class="m">y</span> = 0, &nbsp;<span class="m">v</span><sub>0<span class="up">y</span></sub> = 0,
+      &nbsp;<span class="m">a</span><sub>y</sub> = &minus;9.80&nbsp;m/s&#178;</td></tr>
+    <tr><td class="term">Shared</td><td class="eq">&equiv;</td><td>&#916;<span class="m">t</span> &mdash; the one
+      quantity both columns agree on, and therefore the bridge between them</td></tr>
+  </table>
+  <p>&ldquo;Where does it land&rdquo; is a question about <span class="m">x</span>, and the horizontal column
+  cannot answer it: <span class="m">x</span> = <span class="m">v</span><sub>0<span class="up">x</span></sub>&#916;<span class="m">t</span>
+  has two unknowns. So go get &#916;<span class="m">t</span> from the vertical column, which knows the whole
+  story of the fall.</p>
+
+  <h3>Step 2a &mdash; the time, from the vertical column</h3>
+  <div class="mathblock">
+    <div class="head">Vertical: free fall from rest through 50.0 m</div>
+    <div class="body">
+      <div class="mathline"><span class="m">y</span> = <span class="m">y</span><sub>0</sub>
+        + <span class="m">v</span><sub>0<span class="up">y</span></sub>&#8201;&#916;<span class="m">t</span>
+        + &frac12;<span class="m">a</span><sub>y</sub>&#8201;&#916;<span class="m">t</span>&#178;</div>
+      <div class="mathline">0 = <span class="m">y</span><sub>0</sub> + 0
+        + &frac12;(&minus;<span class="m">g</span>)&#8201;&#916;<span class="m">t</span>&#178;
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        &frac12;<span class="m">g</span>&#8201;&#916;<span class="m">t</span>&#178; = <span class="m">y</span><sub>0</sub></div>
+      <div class="mathline">&#916;<span class="m">t</span> =
+        <span class="rad">&radic;<span class="rad">
+          <span class="frac"><span class="top">2<span class="m">y</span><sub>0</sub></span><span class="bot"><span class="m">g</span></span></span>
+        </span></span>
+        = <span class="rad">&radic;<span class="rad">
+          <span class="frac"><span class="top">2 (50.0 m)</span><span class="bot">9.80 m/s&#178;</span></span>
+        </span></span>
+        = <span class="rad">&radic;<span class="rad">10.204 s&#178;</span></span> = 3.1944 s</div>
+      <p class="why">The units work out: m &divide; (m/s&#178;) = s&#178;, and the square root of s&#178; is s.
+      The algebra also offers &#916;<span class="m">t</span> = &minus;3.1944&nbsp;s; we throw it out because
+      the ball was thrown at <span class="m">t</span> = 0 and we want the future, not the past.</p>
+      <p class="why"><b>No quadratic formula.</b> That is the whole payoff of
+      <span class="m">v</span><sub>0<span class="up">y</span></sub> = 0 &mdash; the &#916;<span class="m">t</span>
+      term vanished and what was left was a bare square.</p>
+    </div>
+  </div>
+
+  <h3>Step 2b &mdash; the distance, from the horizontal column</h3>
+  <div class="mathblock">
+    <div class="head">Horizontal: constant velocity for 3.1944 s</div>
+    <div class="body">
+      <div class="mathline"><span class="m">x</span> = <span class="m">x</span><sub>0</sub>
+        + <span class="m">v</span><sub>0<span class="up">x</span></sub>&#8201;&#916;<span class="m">t</span>
+        + &frac12;<span class="m">a</span><sub>x</sub>&#8201;&#916;<span class="m">t</span>&#178;
+        = <span class="m">v</span><sub>0<span class="up">x</span></sub>&#8201;&#916;<span class="m">t</span></div>
+      <div class="mathline"><span class="m">x</span> = (40.0 m/s)(3.1944 s) = 127.78 m
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp; <b><span class="m">x</span> = 128 m</b></div>
+      <p class="why">Both given values carry three significant figures, so the answer gets three: the ball
+      lands <b>128&nbsp;m</b> from the base of the building, measured horizontally. Carry the guard digits
+      (3.1944&nbsp;s, not 3.19&nbsp;s) through the middle of the calculation and round only here &mdash;
+      rounding the time first would cost you a metre.</p>
+    </div>
+  </div>
+
+  <h3>Step 3 &mdash; recombine, if the question asks for the impact velocity</h3>
+  <div class="mathblock">
+    <div class="head">Magnitude and direction at impact</div>
+    <div class="body">
+      <div class="mathline"><span class="m">v</span><sub>x</sub> = <span class="m">v</span><sub>0<span class="up">x</span></sub> = 40.0 m/s
+        &nbsp;&nbsp;&#183;&nbsp;&nbsp;
+        <span class="m">v</span><sub>y</sub> = &minus;<span class="m">g</span>&#8201;&#916;<span class="m">t</span>
+        = &minus;(9.80 m/s&#178;)(3.1944 s) = &minus;31.3 m/s</div>
+      <div class="mathline">|<span class="m">v&#8407;</span>| =
+        <span class="rad">&radic;<span class="rad"><span class="m">v</span><sub>x</sub>&#178; + <span class="m">v</span><sub>y</sub>&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">(40.0)&#178; + (31.30)&#178;</span></span> m/s = 50.8 m/s</div>
+      <div class="mathline">&#952; = tan<sup>&minus;1</sup>
+        <span class="frac"><span class="top">31.30</span><span class="bot">40.0</span></span>
+        = 38.0&deg; <em>below</em> the horizontal</div>
+      <p class="why">The minus sign on <span class="m">v</span><sub>y</sub> is the convention doing its job:
+      up is positive, so a downward velocity reports negative. For the magnitude you square it anyway; for the
+      direction, state the sign in words &mdash; &ldquo;below the horizontal&rdquo; &mdash; rather than leaving
+      a bare negative angle for a grader to interpret.</p>
+      <p class="why">Cross-check with the time-free equation:
+      <span class="m">v</span><sub>y</sub>&#178; = &minus;2<span class="m">g</span>&#916;<span class="m">y</span>
+      = &minus;2(9.80 m/s&#178;)(&minus;50.0 m) = 980 m&#178;/s&#178;, so
+      <span class="m">v</span><sub>y</sub> = &minus;31.3 m/s. Same answer by a different road &mdash; always
+      worth 20 seconds on an exam.</p>
+    </div>
+  </div>
+
+  <div class="probe" id="probe2"
+    data-right-msg="Correct — unchanged at 3.19 s. The launch speed lives entirely in the horizontal column; the vertical column only ever knew y0 = 50.0 m, v0y = 0 and g. Throwing harder doubles the distance to 256 m, not the time."
+    data-wrong-msg="Not this one. Look at which column the launch speed appears in. The fall time comes from y0 = 50.0 m, v0y = 0 and g alone — v0x is nowhere in that equation. So the time stays 3.19 s and the ball simply gets twice as far: 256 m.">
+    <p class="q"><span class="tag">Predict first</span>
+      Same roof, same 50.0&nbsp;m, but you throw the ball at 80.0&nbsp;m/s instead of 40.0&nbsp;m/s. The
+      time it spends in the air&hellip;</p>
+    <div class="opts three">
+      <button class="opt" data-correct="false"><span>doubles, to about 6.39 s</span></button>
+      <button class="opt" data-correct="false"><span>halves, to about 1.60 s</span></button>
+      <button class="opt" data-correct="true"><span>does not change &mdash; still 3.19 s</span></button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+<!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>&#127903;&#65039; Exit ticket</strong>
+      <span class="sub">Four quick questions &mdash; check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> Which single fact is what makes a <em>horizontal</em>
+          launch simpler than a general projectile launch?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"><span><span class="m">a</span><sub>y</sub> = 0, so there is no vertical acceleration</span></label>
+          <label><input type="radio" name="q1" value="b"><span><span class="m">v</span><sub>0<span class="up">y</span></sub> = 0, so the vertical equation has no term linear in &#916;<span class="m">t</span></span></label>
+          <label><input type="radio" name="q1" value="c"><span>Gravity does not act on the ball while it is moving forward</span></label>
+          <label><input type="radio" name="q1" value="d"><span><span class="m">v</span><sub>0<span class="up">x</span></sub> = 0, so the horizontal equation disappears</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> A stone is thrown horizontally at 25.0&nbsp;m/s from a
+          ledge 20.0&nbsp;m above flat ground. How long is it in the air?
+          (<span class="m">g</span> = 9.80&nbsp;m/s&#178;, no air resistance)</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"><span>0.800 s</span></label>
+          <label><input type="radio" name="q2" value="b"><span>1.43 s</span></label>
+          <label><input type="radio" name="q2" value="c"><span>2.02 s</span></label>
+          <label><input type="radio" name="q2" value="d"><span>4.08 s</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> The baseball thrown at 40.0&nbsp;m/s off the 50.0&nbsp;m
+          building landed 128&nbsp;m out. Thrown at 80.0&nbsp;m/s from the same roof, it would land&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"><span>64.0 m out</span></label>
+          <label><input type="radio" name="q3" value="b"><span>still 128 m out</span></label>
+          <label><input type="radio" name="q3" value="c"><span>181 m out</span></label>
+          <label><input type="radio" name="q3" value="d"><span>256 m out</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Which statement about the <em>horizontal</em> motion of a
+          projectile (no air resistance) is stated correctly?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"><span>No force acts on the ball horizontally or vertically once it leaves the hand</span></label>
+          <label><input type="radio" name="q4" value="b"><span>Gravity gradually slows the horizontal motion, so <span class="m">v</span><sub>x</sub> decreases</span></label>
+          <label><input type="radio" name="q4" value="c"><span>Gravity has no horizontal component, so <span class="m">a</span><sub>x</sub> = 0 and <span class="m">v</span><sub>x</sub> stays constant</span></label>
+          <label><input type="radio" name="q4" value="d"><span><span class="m">v</span><sub>x</sub> grows, because the total speed is growing as the ball falls</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>A horizontally fired projectile follows a <b>parabolic</b> path from its launch height down to some
+        lower height. Horizontal projectile problems <b>simplify the initial conditions</b> compared with
+        general projectile problems, and they generally <b>avoid the quadratic formula</b>.</li>
+    <li>The horizontal and vertical motions are <b>independent</b>: gravity has no horizontal component, so
+        <span class="m">a</span><sub>x</sub> = 0 and <span class="m">v</span><sub>x</sub> is constant, while
+        vertically the projectile is in free fall at <span class="m">a</span><sub>y</sub> =
+        &minus;9.80&nbsp;m/s&#178;. The two columns share exactly one quantity:
+        <b>&#916;<span class="m">t</span></b>.</li>
+    <li>&ldquo;Horizontally&rdquo; means &#952; = 0&deg;, so
+        <span class="m">v</span><sub>0<span class="up">x</span></sub> = <span class="m">v</span><sub>0</sub>
+        and <span class="m">v</span><sub>0<span class="up">y</span></sub> = 0. That second fact is the one that
+        collapses the vertical position equation to
+        &#916;<span class="m">y</span> = &minus;&frac12;<span class="m">g</span>&#916;<span class="m">t</span>&#178;
+        &mdash; a single square root instead of a quadratic.</li>
+    <li>The standard route is: get &#916;<span class="m">t</span> from the vertical column, then feed it to the
+        horizontal column. For the 50.0&nbsp;m building at 40.0&nbsp;m/s:
+        &#916;<span class="m">t</span> = 3.19&nbsp;s and <span class="m">x</span> = 128&nbsp;m, landing at
+        50.8&nbsp;m/s, 38.0&deg; below the horizontal.</li>
+    <li><b>Resolve, compute, recombine.</b> Step 3 is not optional bookkeeping &mdash; a velocity answer is
+        not finished until it has both a <b>magnitude</b> and a <b>direction</b>.</li>
+    <li>Everything here assumes <b>no air resistance</b>, and everything here assumes the launch is
+        <b>exactly horizontal</b>. Release the second assumption and you are on page 04b.</li>
+  </ul>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> tilt the launcher and
+  <span class="m">v</span><sub>0<span class="up">y</span></sub> is no longer zero. The three-step treatment
+  does not change at all &mdash; but the vertical position equation keeps its linear term, so solving for
+  &#916;<span class="m">t</span> means a genuine quadratic. That is <b>04b, General Projectile
+  Problems</b>; the shortcut formulas for maximum height and range are <b>04c</b>.</p>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/3-4-projectile-motion" target="_blank" rel="noopener">3.4 Projectile Motion</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion" target="_blank" rel="noopener">4.3 Projectile Motion</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Horizontally Fired Projectiles</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 ·
+    Adapted for PHY 118 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- predict-first probes ---------- */
+(function(){
+  document.querySelectorAll('.probe').forEach(function(probe){
+    var fb = probe.querySelector('.feedback');
+    var right = probe.getAttribute('data-right-msg') || 'Correct.';
+    var wrong = probe.getAttribute('data-wrong-msg') || 'Not quite — try again.';
+    probe.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var ok = btn.getAttribute('data-correct') === 'true';
+        probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+        if(ok){
+          btn.classList.add('correct');
+          fb.style.color = '';
+          fb.textContent = right;
+        } else {
+          btn.classList.add('wrong');
+          probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+          fb.style.color = '#c0392b';
+          fb.textContent = wrong;
+        }
+      });
+    });
+  });
+})();
+
+/* ---------- exit ticket ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var key = { q1:'b', q2:'c', q3:'d', q4:'c' };
+  var why = {
+    q1:'v<sub>0y</sub> = 0 is the gift. It removes the term linear in &#916;t from y = y<sub>0</sub> + v<sub>0y</sub>&#916;t + &frac12;a<sub>y</sub>&#916;t&#178;, leaving a bare square you can root. a<sub>y</sub> is still &minus;9.80 m/s&#178;, and gravity never stops acting.',
+    q2:'&#916;t = &radic;(2y<sub>0</sub>/g) = &radic;(2 &#215; 20.0 / 9.80) = &radic;4.082 s&#178; = 2.02 s. The 25.0 m/s never enters &mdash; it lives in the horizontal column. (1.43 s forgets the factor of 2; 4.08 s forgets the square root; 0.800 s divides the height by the speed.)',
+    q3:'The fall time is set by the height alone, so it is still 3.19 s. Double v<sub>0x</sub> and x = v<sub>0x</sub>&#916;t doubles too: 256 m. It is not 181 m &mdash; nothing here involves &radic;2.',
+    q4:'Gravity is a vertical vector, so it has no horizontal component: a<sub>x</sub> = 0 and v<sub>x</sub> is frozen at v<sub>0x</sub>. The ball still has weight the whole flight &mdash; &ldquo;no horizontal component&rdquo; is not the same as &ldquo;no force.&rdquo;'
+  };
+  function markCard(id, ok, msg){
+    var c = document.getElementById('card-' + id);
+    c.classList.remove('right','wrong');
+    c.classList.add(ok ? 'right' : 'wrong');
+    c.querySelector('.qfb').innerHTML = (ok ? '&#10003; ' : '&#10007; ') + msg;
+  }
+  function grade(){
+    var score = 0, answered = 0;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(!sel){ markCard(q, false, 'No answer chosen yet.'); return; }
+      answered++;
+      var ok = sel.value === key[q];
+      if(ok) score++;
+      markCard(q, ok, why[q]);
+    });
+    var box = document.getElementById('ticketScore');
+    box.classList.add('show');
+    box.innerHTML = score + ' / 4 correct' + (answered < 4 ? ' — some questions are still blank.' : '');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    var box = document.getElementById('ticketScore');
+    box.classList.remove('show'); box.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the note's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 Ch03c — Vector Components</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 2 · Chapter 3 (College Physics) · Trevor slides 03c
+     "Vector Components" — web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "03c-Vectors-Components.pptx" (12 slides). No duplicate twin.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.9rem 0 .4rem; }
+  .chip{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; border:1px solid var(--green); color:var(--green-deep); background:var(--green-soft); border-radius:20px; padding:.25rem .75rem; }
+  .chip.scalar{ border-color:var(--rule); color:var(--muted); background:#f7f9f8; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .rad{ border-top:1.3px solid currentColor; padding:0 .15em; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opts.three{ grid-template-columns:1fr; }
+  @media (min-width:560px){ .probe .opts.three{ grid-template-columns:repeat(3,1fr); } }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt svg{ display:block; width:100%; height:auto; }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Motion In Two Dimensions</span>
+    <span>Chapter 3 · Slides 03c</span>
+  </div>
+
+  <h1>Vector Components</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    On page 03a you added arrows by drawing them <b>head-to-tail</b>. That works, but a ruler and a
+    protractor are not a calculation. The fix is to run the construction <em>backwards</em>: take one
+    slanted arrow and <b>resolve</b> it into two perpendicular pieces &mdash; a piece along
+    <span class="m">x</span> and a piece along <span class="m">y</span>. Those pieces are the vector's
+    <b>components</b>, and once you have them, two-dimensional motion becomes two one-dimensional problems
+    you already know how to solve. The one thing that goes wrong is deciding which trig function to use,
+    and that is what most of this page is about.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Define</b> the components of a vector.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Determine</b> the components of a vector &mdash; whichever axis the angle happens to be measured from.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine</b> the magnitude and direction of a vector given its components.</span></li>
+    </ul>
+    <div class="foot">Adding vectors <em>by</em> components is page 03d; sign traps outside the first
+      quadrant are page 03e.</div>
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    On grid paper in 03a you found the resultant by counting squares: &ldquo;2 right and 4 up, plus 4 right
+    and 0 up, makes 6 right and 4 up.&rdquo; You were already using components &mdash; you just did not have
+    the word. You also already have the trigonometry: sin, cos, tan of a right triangle, and the
+    Pythagorean theorem. Nothing new is being asked of your math.
+  </div>
+
+  <h2>Breaking a vector apart</h2>
+  <p>Head-to-tail addition has an inverse. Given the <b>resultant</b>, ask: <em>which two perpendicular
+  arrows, added head-to-tail, would produce it?</em> There is exactly one answer, and the two arrows are
+  the vector's components.</p>
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Grid paper with a purple vector running three squares right and four squares up, its navy horizontal component along the bottom and its red vertical component up the left side">
+      <defs>
+        <marker id="c1-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="c1-nav" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+        <marker id="c1-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+      </defs>
+      <g stroke="#dce6e0" stroke-width="1">
+        <line x1="60" y1="20" x2="60" y2="260"/><line x1="100" y1="20" x2="100" y2="260"/>
+        <line x1="140" y1="20" x2="140" y2="260"/><line x1="180" y1="20" x2="180" y2="260"/>
+        <line x1="220" y1="20" x2="220" y2="260"/><line x1="260" y1="20" x2="260" y2="260"/>
+        <line x1="300" y1="20" x2="300" y2="260"/><line x1="340" y1="20" x2="340" y2="260"/>
+        <line x1="60" y1="20" x2="340" y2="20"/><line x1="60" y1="60" x2="340" y2="60"/>
+        <line x1="60" y1="100" x2="340" y2="100"/><line x1="60" y1="140" x2="340" y2="140"/>
+        <line x1="60" y1="180" x2="340" y2="180"/><line x1="60" y1="220" x2="340" y2="220"/>
+        <line x1="60" y1="260" x2="340" y2="260"/>
+      </g>
+      <line x1="180" y1="260" x2="180" y2="100" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <line x1="60" y1="100" x2="180" y2="100" stroke="#134a29" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <line x1="60" y1="260" x2="180" y2="260" stroke="#134a29" stroke-width="3.5" marker-end="url(#c1-nav)"/>
+      <line x1="60" y1="260" x2="60" y2="100" stroke="#c0392b" stroke-width="3.5" marker-end="url(#c1-red)"/>
+      <line x1="60" y1="260" x2="180" y2="100" stroke="#7d3fa0" stroke-width="3.5" marker-end="url(#c1-pur)"/>
+      <text class="lbl" x="112" y="168" fill="#7d3fa0">A&#8407;</text>
+      <text class="lbl" x="110" y="280" fill="#134a29">A<tspan font-size="11" dy="3">x</tspan></text>
+      <text class="lbl" x="30" y="176" fill="#c0392b">A<tspan font-size="11" dy="3">y</tspan></text>
+      <text class="sm" x="380" y="80">3 squares right,</text>
+      <text class="sm" x="380" y="100">4 squares up.</text>
+      <text class="sm" x="380" y="132">Those two numbers are the</text>
+      <text class="sm" x="380" y="152">components of the purple</text>
+      <text class="sm" x="380" y="172">arrow. Added head-to-tail</text>
+      <text class="sm" x="380" y="192">they rebuild it exactly.</text>
+      <text class="sm" x="380" y="224">Note the components are</text>
+      <text class="sm" x="380" y="244">3 and 4 &mdash; the vector itself</text>
+      <text class="sm" x="380" y="264">is 5 squares long.</text>
+    </svg>
+    <figcaption>To <em>resolve</em> a vector is to replace it with its two perpendicular components.</figcaption>
+  </figure>
+
+  <h3>The definition</h3>
+  <table class="defs">
+    <tr><td class="term">Component</td><td class="eq">&equiv;</td><td>The <em>signed</em> length of the perpendicular projection of the vector onto a coordinate
+      axis. Write the <span class="m">x</span>-component of <span class="m">A&#8407;</span> as
+      <span class="m">A<sub>x</sub></span> and the <span class="m">y</span>-component as
+      <span class="m">A<sub>y</sub></span> &mdash; plain letters, no arrows, because each is just a number.</td></tr>
+    <tr><td class="term">Resolve</td><td class="eq">&equiv;</td><td>To find those two numbers. &ldquo;Resolve <span class="m">A&#8407;</span> into components&rdquo; and
+      &ldquo;find <span class="m">A<sub>x</sub></span> and <span class="m">A<sub>y</sub></span>&rdquo; mean the same thing.</td></tr>
+  </table>
+  <p>&ldquo;Signed&rdquo; matters: a component can be negative. In the first quadrant both are positive, which
+  is where this page stays &mdash; page 03e handles the other three.</p>
+
+  <h2>A component is the shadow the vector casts</h2>
+  <p>Shine a light straight down on a slanted arrow and it throws a shadow on the
+  <span class="m">x</span>-axis; that shadow is <span class="m">A<sub>x</sub></span>. Shine the light in
+  from the side and the shadow on the <span class="m">y</span>-axis is
+  <span class="m">A<sub>y</sub></span>. The picture is worth keeping, as long as you remember what it is a
+  picture <em>of</em>: the perpendicular projection onto each axis.</p>
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Left: a lamp above a slanted vector casts a shadow onto the x-axis equal to r cosine theta. Right: a lamp to the right casts a shadow onto the y-axis equal to r sine theta">
+      <defs>
+        <marker id="c2-mag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="c2-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="c2-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+        <linearGradient id="c2-beamA" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fdf3bd"/><stop offset="100%" stop-color="#fffdf0"/>
+        </linearGradient>
+        <linearGradient id="c2-beamB" x1="1" y1="0" x2="0" y2="0">
+          <stop offset="0%" stop-color="#fdf3bd"/><stop offset="100%" stop-color="#fffdf0"/>
+        </linearGradient>
+      </defs>
+
+      <!-- LEFT: light from above -->
+      <rect x="70" y="72" width="124" height="128" fill="url(#c2-beamA)"/>
+      <path d="M 70 72 Q 132 42 194 72 Z" fill="#2457b8"/>
+      <text class="sm" x="80" y="36">light from above</text>
+      <line x1="60" y1="200" x2="250" y2="200" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c2-ax)"/>
+      <line x1="70" y1="212" x2="70" y2="78" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c2-ax)"/>
+      <text class="lbl" x="256" y="205">x</text>
+      <text class="lbl" x="58" y="72">y</text>
+      <line x1="194" y1="114" x2="194" y2="200" stroke="#9aa8a0" stroke-width="1.4" stroke-dasharray="4 4"/>
+      <line x1="70" y1="200" x2="194" y2="114" stroke="#c0392b" stroke-width="3" marker-end="url(#c2-red)"/>
+      <path d="M 110 200 A 40 40 0 0 0 103 186" fill="none" stroke="#2457b8" stroke-width="1.8"/>
+      <text class="lbl" x="113" y="193" fill="#2457b8">&#952;</text>
+      <text class="lbl" x="126" y="145" fill="#c0392b">r&#8407;</text>
+      <line x1="70" y1="200" x2="194" y2="200" stroke="#7d3fa0" stroke-width="4" marker-end="url(#c2-mag)"/>
+      <text class="lbl" x="120" y="222" fill="#7d3fa0">r<tspan font-size="11" dy="3">x</tspan></text>
+      <text class="lbl" x="70" y="262">r<tspan font-size="11" dy="3">x</tspan><tspan font-size="15" dy="-3"> = r cos &#952;</tspan></text>
+      <text class="sm" x="70" y="284">the shadow on the x-axis</text>
+
+      <!-- RIGHT: light from the side -->
+      <rect x="400" y="114" width="150" height="86" fill="url(#c2-beamB)"/>
+      <path d="M 550 114 Q 580 157 550 200 Z" fill="#2457b8"/>
+      <text class="sm" x="466" y="36">light from the side</text>
+      <line x1="390" y1="200" x2="580" y2="200" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c2-ax)"/>
+      <line x1="400" y1="212" x2="400" y2="78" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c2-ax)"/>
+      <text class="lbl" x="586" y="205">x</text>
+      <text class="lbl" x="388" y="72">y</text>
+      <line x1="400" y1="114" x2="524" y2="114" stroke="#9aa8a0" stroke-width="1.4" stroke-dasharray="4 4"/>
+      <line x1="400" y1="200" x2="524" y2="114" stroke="#c0392b" stroke-width="3" marker-end="url(#c2-red)"/>
+      <path d="M 440 200 A 40 40 0 0 0 433 186" fill="none" stroke="#2457b8" stroke-width="1.8"/>
+      <text class="lbl" x="443" y="193" fill="#2457b8">&#952;</text>
+      <text class="lbl" x="466" y="144" fill="#c0392b">r&#8407;</text>
+      <line x1="400" y1="200" x2="400" y2="114" stroke="#7d3fa0" stroke-width="4" marker-end="url(#c2-mag)"/>
+      <text class="lbl" x="370" y="160" fill="#7d3fa0">r<tspan font-size="11" dy="3">y</tspan></text>
+      <text class="lbl" x="400" y="262">r<tspan font-size="11" dy="3">y</tspan><tspan font-size="15" dy="-3"> = r sin &#952;</tspan></text>
+      <text class="sm" x="400" y="284">the shadow on the y-axis</text>
+    </svg>
+    <figcaption>Components as shadows &mdash; with &#952; measured from the <span class="m">x</span>-axis, as it is here.</figcaption>
+  </figure>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Predict first</span>
+      Each individual component of a vector will always be&hellip;</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">shorter than the magnitude of the original vector</button>
+      <button class="opt" data-correct="false">longer than the magnitude of the original vector</button>
+      <button class="opt" data-correct="true">shorter than <em>or equal to</em> the magnitude of the original vector</button>
+      <button class="opt" data-correct="false">longer than <em>or equal to</em> the magnitude of the original vector</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <p>Why &ldquo;or equal to&rdquo;? Because <span class="m">A<sub>x</sub></span> =
+  <span class="m">A</span>&nbsp;cos&nbsp;&#952; and cosine never exceeds 1 &mdash; but it <em>reaches</em> 1
+  when &#952;&nbsp;=&nbsp;0, which is the vector lying flat along the <span class="m">x</span>-axis. A
+  vector that points straight along an axis <em>is</em> its own component in that direction, and has zero
+  component in the other. Equality is the special case, not an impossibility.</p>
+
+  <h2>Which function goes with which axis?</h2>
+  <p>Here is the heart of the lesson. <b>Cosine does not &ldquo;go with&nbsp;<span class="m">x</span>.&rdquo;</b>
+  Cosine goes with the side <em>adjacent</em> to the angle you were handed, and sine with the side
+  <em>opposite</em>. Which of those is the <span class="m">x</span>-side depends entirely on where the
+  angle was measured from.</p>
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Left: the same vector with the angle theta measured up from the x-axis. Right: the same vector with the angle phi measured over from the y-axis. The two angles sum to ninety degrees">
+      <defs>
+        <marker id="c3-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="c3-mag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="c3-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <!-- LEFT -->
+      <text x="60" y="26" font-weight="600">Angle from the x-axis</text>
+      <line x1="50" y1="190" x2="250" y2="190" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c3-ax)"/>
+      <line x1="60" y1="204" x2="60" y2="58" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c3-ax)"/>
+      <text class="lbl" x="256" y="195">x</text><text class="lbl" x="48" y="52">y</text>
+      <line x1="60" y1="190" x2="191" y2="98" stroke="#c0392b" stroke-width="3" marker-end="url(#c3-red)"/>
+      <line x1="60" y1="190" x2="191" y2="190" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c3-mag)"/>
+      <line x1="191" y1="190" x2="191" y2="98" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c3-mag)"/>
+      <path d="M 102 190 A 42 42 0 0 0 95 175" fill="none" stroke="#2457b8" stroke-width="1.8"/>
+      <text class="lbl" x="106" y="182" fill="#2457b8">&#952;</text>
+      <text class="lbl" x="116" y="132" fill="#c0392b">r&#8407;</text>
+      <text class="lbl" x="118" y="212" fill="#7d3fa0">r<tspan font-size="11" dy="3">x</tspan></text>
+      <text class="lbl" x="200" y="148" fill="#7d3fa0">r<tspan font-size="11" dy="3">y</tspan></text>
+      <text class="sm" x="50" y="234">&#952; is ADJACENT to r<tspan font-size="9" dy="2.5">x</tspan></text>
+      <text class="sm" x="50" y="250">&#8658; r<tspan font-size="9" dy="2.5">x</tspan><tspan font-size="11" dy="-2.5"> = r cos &#952; &#183; r</tspan><tspan font-size="9" dy="2.5">y</tspan><tspan font-size="11" dy="-2.5"> = r sin &#952;</tspan></text>
+      <!-- RIGHT -->
+      <text x="400" y="26" font-weight="600">Angle from the y-axis</text>
+      <line x1="390" y1="190" x2="590" y2="190" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c3-ax)"/>
+      <line x1="400" y1="204" x2="400" y2="58" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c3-ax)"/>
+      <text class="lbl" x="596" y="195">x</text><text class="lbl" x="388" y="52">y</text>
+      <line x1="400" y1="190" x2="531" y2="98" stroke="#c0392b" stroke-width="3" marker-end="url(#c3-red)"/>
+      <line x1="400" y1="190" x2="400" y2="98" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c3-mag)"/>
+      <line x1="400" y1="98" x2="531" y2="98" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c3-mag)"/>
+      <path d="M 400 152 A 38 38 0 0 0 424 138" fill="none" stroke="#e0801a" stroke-width="1.8"/>
+      <text class="lbl" x="414" y="130" fill="#e0801a">&#966;</text>
+      <text class="lbl" x="470" y="158" fill="#c0392b">r&#8407;</text>
+      <text class="lbl" x="458" y="90" fill="#7d3fa0">r<tspan font-size="11" dy="3">x</tspan></text>
+      <text class="lbl" x="370" y="148" fill="#7d3fa0">r<tspan font-size="11" dy="3">y</tspan></text>
+      <text class="sm" x="390" y="234">&#966; is ADJACENT to r<tspan font-size="9" dy="2.5">y</tspan></text>
+      <text class="sm" x="390" y="250">&#8658; r<tspan font-size="9" dy="2.5">x</tspan><tspan font-size="11" dy="-2.5"> = r sin &#966; &#183; r</tspan><tspan font-size="9" dy="2.5">y</tspan><tspan font-size="11" dy="-2.5"> = r cos &#966;</tspan></text>
+    </svg>
+    <figcaption>Same vector, same components &mdash; two different angles, and therefore two different
+      formulas. Note &#952;&nbsp;+&nbsp;&#966;&nbsp;=&nbsp;90&deg;.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The same two numbers, written four ways</div>
+    <div class="body">
+      <div class="mathline">sin&nbsp;&#952; = <span class="frac"><span class="top">r<sub>y</sub></span><span class="bot">r</span></span>
+        &nbsp;&#8658;&nbsp; <span class="m">r<sub>y</sub></span> = <span class="m">r</span>&nbsp;sin&nbsp;&#952;
+        &nbsp;&nbsp;&nbsp;&nbsp; cos&nbsp;&#952; = <span class="frac"><span class="top">r<sub>x</sub></span><span class="bot">r</span></span>
+        &nbsp;&#8658;&nbsp; <span class="m">r<sub>x</sub></span> = <span class="m">r</span>&nbsp;cos&nbsp;&#952;</div>
+      <div class="mathline">sin&nbsp;&#966; = <span class="frac"><span class="top">r<sub>x</sub></span><span class="bot">r</span></span>
+        &nbsp;&#8658;&nbsp; <span class="m">r<sub>x</sub></span> = <span class="m">r</span>&nbsp;sin&nbsp;&#966;
+        &nbsp;&nbsp;&nbsp;&nbsp; cos&nbsp;&#966; = <span class="frac"><span class="top">r<sub>y</sub></span><span class="bot">r</span></span>
+        &nbsp;&#8658;&nbsp; <span class="m">r<sub>y</sub></span> = <span class="m">r</span>&nbsp;cos&nbsp;&#966;</div>
+      <p class="why">All four lines describe the identical arrow. The top pair uses the angle from the
+      <span class="m">x</span>-axis; the bottom pair uses the angle from the <span class="m">y</span>-axis.
+      They agree because &#966;&nbsp;=&nbsp;90&deg;&nbsp;&minus;&nbsp;&#952;, and
+      sin(90&deg;&nbsp;&minus;&nbsp;&#952;)&nbsp;=&nbsp;cos&nbsp;&#952;.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Trevor's warning &mdash; the one to remember</span>
+    <b>Don't blindly learn that cos goes with <span class="m">x</span> and sin goes with
+    <span class="m">y</span>.</b> Draw the triangle, label the angle you were actually given, and ask which
+    side is adjacent to it. SOH-CAH-TOA is about <em>opposite</em> and <em>adjacent</em> &mdash; never about
+    <span class="m">x</span> and <span class="m">y</span>.
+  </div>
+
+  <h3>The sneaky dirty trick</h3>
+  <p>Trevor's name for it, and he is not joking: the homework problem and the quiz problem can look
+  identical and need opposite functions. Only the position of the little angle mark has changed.</p>
+  <figure>
+    <svg viewBox="0 0 640 250" role="img" aria-label="Two identical vector diagrams. In the homework problem the angle theta is marked at the origin between the x-axis and the vector. In the quiz problem the angle phi is marked between the y-axis and the vector">
+      <defs>
+        <marker id="c4-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="c4-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <text x="60" y="26" font-weight="600">Homework problem</text>
+      <line x1="50" y1="160" x2="250" y2="160" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c4-ax)"/>
+      <line x1="60" y1="174" x2="60" y2="42" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c4-ax)"/>
+      <text class="lbl" x="256" y="165">x</text><text class="lbl" x="48" y="38">y</text>
+      <line x1="60" y1="160" x2="191" y2="68" stroke="#c0392b" stroke-width="3" marker-end="url(#c4-red)"/>
+      <path d="M 102 160 A 42 42 0 0 0 95 145" fill="none" stroke="#2457b8" stroke-width="1.8"/>
+      <text class="lbl" x="106" y="152" fill="#2457b8">&#952;</text>
+      <text class="lbl" x="118" y="104" fill="#c0392b">r&#8407;</text>
+      <text class="sm" x="50" y="200">r<tspan font-size="9" dy="2.5">x</tspan><tspan font-size="11" dy="-2.5"> = r cos &#952; &#183; r</tspan><tspan font-size="9" dy="2.5">y</tspan><tspan font-size="11" dy="-2.5"> = r sin &#952;</tspan></text>
+      <text class="sm" x="50" y="222">the angle is adjacent to the x-side</text>
+
+      <text x="400" y="26" font-weight="600">Quiz problem</text>
+      <line x1="390" y1="160" x2="590" y2="160" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c4-ax)"/>
+      <line x1="400" y1="174" x2="400" y2="42" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c4-ax)"/>
+      <text class="lbl" x="596" y="165">x</text><text class="lbl" x="388" y="38">y</text>
+      <line x1="400" y1="160" x2="531" y2="68" stroke="#c0392b" stroke-width="3" marker-end="url(#c4-red)"/>
+      <path d="M 400 122 A 38 38 0 0 0 424 108" fill="none" stroke="#e0801a" stroke-width="1.8"/>
+      <text class="lbl" x="414" y="100" fill="#e0801a">&#966;</text>
+      <text class="lbl" x="470" y="128" fill="#c0392b">r&#8407;</text>
+      <text class="sm" x="390" y="200">r<tspan font-size="9" dy="2.5">x</tspan><tspan font-size="11" dy="-2.5"> = r sin &#966; &#183; r</tspan><tspan font-size="9" dy="2.5">y</tspan><tspan font-size="11" dy="-2.5"> = r cos &#966;</tspan></text>
+      <text class="sm" x="390" y="222">the angle is adjacent to the y-side</text>
+    </svg>
+    <figcaption>The arrows are identical. The formulas are not. Read the angle mark before you touch
+      your calculator.</figcaption>
+  </figure>
+
+  <h2>Two worked examples &mdash; deliberately not the same</h2>
+  <div class="fig-grid">
+    <figure>
+      <svg class="sq" viewBox="0 0 320 240" role="img" aria-label="Vector A of magnitude ten metres at thirty degrees above the x-axis, with its x and y components marked">
+        <defs>
+          <marker id="c5-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+          <marker id="c5-mag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+          <marker id="c5-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+        </defs>
+        <line x1="30" y1="180" x2="290" y2="180" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c5-ax)"/>
+        <line x1="40" y1="200" x2="40" y2="40" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c5-ax)"/>
+        <text class="lbl" x="296" y="185">x</text><text class="lbl" x="28" y="34">y</text>
+        <line x1="40" y1="180" x2="252" y2="58" stroke="#c0392b" stroke-width="3" marker-end="url(#c5-red)"/>
+        <line x1="40" y1="180" x2="252" y2="180" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c5-mag)"/>
+        <line x1="252" y1="180" x2="252" y2="58" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c5-mag)"/>
+        <path d="M 96 180 A 56 56 0 0 0 89 166" fill="none" stroke="#2457b8" stroke-width="1.8"/>
+        <text class="lbl" x="100" y="172" fill="#2457b8">&#952; = 30.0&deg;</text>
+        <text class="lbl" x="86" y="92" fill="#c0392b">A&#8407;<tspan font-size="13" font-style="normal"> = 10.0 m</tspan></text>
+        <text class="lbl" x="140" y="202" fill="#7d3fa0">A<tspan font-size="11" dy="3">x</tspan></text>
+        <text class="lbl" x="258" y="124" fill="#7d3fa0">A<tspan font-size="11" dy="3">y</tspan></text>
+        <text class="sm" x="30" y="228">angle measured from the x-axis</text>
+      </svg>
+      <figcaption>Example 1</figcaption>
+    </figure>
+    <figure>
+      <svg class="sq" viewBox="0 0 320 240" role="img" aria-label="Vector B of magnitude five metres at forty five degrees from the y-axis, with its x and y components marked">
+        <defs>
+          <marker id="c6-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+          <marker id="c6-mag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+          <marker id="c6-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+        </defs>
+        <line x1="30" y1="180" x2="290" y2="180" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c6-ax)"/>
+        <line x1="40" y1="200" x2="40" y2="40" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c6-ax)"/>
+        <text class="lbl" x="296" y="185">x</text><text class="lbl" x="28" y="34">y</text>
+        <line x1="40" y1="180" x2="190" y2="70" stroke="#c0392b" stroke-width="3" marker-end="url(#c6-red)"/>
+        <line x1="40" y1="180" x2="40" y2="70" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c6-mag)"/>
+        <line x1="40" y1="70" x2="190" y2="70" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c6-mag)"/>
+        <path d="M 40 136 A 44 44 0 0 0 68 120" fill="none" stroke="#e0801a" stroke-width="1.8"/>
+        <text class="lbl" x="48" y="104" fill="#e0801a">&#952; = 45.0&deg;</text>
+        <text class="lbl" x="126" y="150" fill="#c0392b">B&#8407;<tspan font-size="13" font-style="normal"> = 5.00 m</tspan></text>
+        <text class="lbl" x="100" y="60" fill="#7d3fa0">B<tspan font-size="11" dy="3">x</tspan></text>
+        <text class="lbl" x="12" y="152" fill="#7d3fa0">B<tspan font-size="11" dy="3">y</tspan></text>
+        <text class="sm" x="30" y="228">angle measured from the y-axis</text>
+      </svg>
+      <figcaption>Example 2 &mdash; the same letter &#952;, a different axis</figcaption>
+    </figure>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Example 1 &mdash; <span class="m">A</span> = 10.0 m, &#952; = 30.0&deg; from the <span class="m">x</span>-axis</div>
+    <div class="body">
+      <div class="mathline">cos&nbsp;&#952; = <span class="frac"><span class="top">A<sub>x</sub></span><span class="bot">A</span></span>
+        &nbsp;&#8658;&nbsp; <span class="m">A<sub>x</sub></span> = <span class="m">A</span>&nbsp;cos&nbsp;&#952;
+        = (10.0 m)(cos&nbsp;30.0&deg;) = (10.0 m)<span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">3</span></span></span><span class="bot">2</span></span>
+        = 8.66 m</div>
+      <div class="mathline">sin&nbsp;&#952; = <span class="frac"><span class="top">A<sub>y</sub></span><span class="bot">A</span></span>
+        &nbsp;&#8658;&nbsp; <span class="m">A<sub>y</sub></span> = <span class="m">A</span>&nbsp;sin&nbsp;&#952;
+        = (10.0 m)(sin&nbsp;30.0&deg;) = (10.0 m)<span class="frac"><span class="top">1</span><span class="bot">2</span></span>
+        = 5.00 m</div>
+      <p class="why">Sanity check: 8.66&nbsp;m and 5.00&nbsp;m are both smaller than 10.0&nbsp;m, and
+      8.66&#178;&nbsp;+&nbsp;5.00&#178;&nbsp;=&nbsp;75.0&nbsp;+&nbsp;25.0&nbsp;=&nbsp;100&nbsp;=&nbsp;10.0&#178;.
+      A 30&deg; vector leans mostly along <span class="m">x</span>, so the bigger number belongs to
+      <span class="m">A<sub>x</sub></span> &mdash; which is what the picture says too.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Example 2 &mdash; <span class="m">B</span> = 5.00 m, &#952; = 45.0&deg; from the <span class="m">y</span>-axis</div>
+    <div class="body">
+      <div class="mathline"><span class="m">B<sub>x</sub></span> = <span class="m">B</span>&nbsp;sin&nbsp;&#952;
+        = (5.00 m)(sin&nbsp;45.0&deg;) = (5.00 m)<span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">2</span></span></span><span class="bot">2</span></span>
+        = 3.54 m</div>
+      <div class="mathline"><span class="m">B<sub>y</sub></span> = <span class="m">B</span>&nbsp;cos&nbsp;&#952;
+        = (5.00 m)(cos&nbsp;45.0&deg;) = (5.00 m)<span class="frac"><span class="top"><span class="rad">&radic;<span class="rad">2</span></span></span><span class="bot">2</span></span>
+        = 3.54 m</div>
+      <p class="why">The sine now belongs to <span class="m">x</span>, because &#952; is measured from the
+      <span class="m">y</span>-axis. At 45&deg; the two answers happen to be equal, so a student who used the
+      wrong function still gets 3.54&nbsp;m and never finds out. That is exactly why the trick is
+      &ldquo;sneaky.&rdquo;</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Do this one yourself</span>
+    Repeat Example 2 with &#952;&nbsp;=&nbsp;30.0&deg; from the <span class="m">y</span>-axis. The right
+    answers are <span class="m">B<sub>x</sub></span>&nbsp;=&nbsp;(5.00&nbsp;m)(sin&nbsp;30.0&deg;)&nbsp;=&nbsp;2.50&nbsp;m
+    and <span class="m">B<sub>y</sub></span>&nbsp;=&nbsp;(5.00&nbsp;m)(cos&nbsp;30.0&deg;)&nbsp;=&nbsp;4.33&nbsp;m.
+    Blindly pairing cosine with <span class="m">x</span> gives 4.33&nbsp;m and 2.50&nbsp;m &mdash; the two
+    numbers swapped, and a vector pointing the wrong way. The 45&deg; case hides the error; this one does not.
+  </div>
+
+  <div class="probe" id="probe2">
+    <p class="q"><span class="tag">Predict first</span>
+      A vector has a fixed magnitude. You rotate it in the plane from &#952;&nbsp;=&nbsp;30&deg; to
+      &#952;&nbsp;=&nbsp;60&deg;, measured from the <span class="m">x</span>-axis. What happens to the
+      magnitude of its <span class="m">x</span>-component?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">It gets bigger.</button>
+      <button class="opt" data-correct="true">It gets smaller.</button>
+      <button class="opt" data-correct="false">It stays the same.</button>
+      <button class="opt" data-correct="false">It gets bigger, then smaller.</button>
+      <button class="opt" data-correct="false">It gets smaller, then bigger.</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <p>Trevor pairs that question with a second one: <em>what happens to the magnitude of the vector
+  itself?</em> Nothing. Rotating an arrow does not stretch it. For a 10.0&nbsp;m vector,
+  <span class="m">A<sub>x</sub></span> falls from 8.66&nbsp;m to 5.00&nbsp;m and
+  <span class="m">A<sub>y</sub></span> rises from 5.00&nbsp;m to 8.66&nbsp;m &mdash; and
+  <span class="rad">&radic;<span class="rad">A<sub>x</sub>&#178; + A<sub>y</sub>&#178;</span></span> is
+  10.0&nbsp;m both times. Components trade off; the magnitude is untouched.</p>
+
+  <h2>Why anyone bothers: the dimensions come apart</h2>
+  <p>This is the payoff, and it is worth more than the arithmetic. A projectile's path,
+  <span class="m">y</span> as a function of <span class="m">x</span>, is an ugly thing to write down. But
+  <span class="m">x</span> as a function of <span class="m">t</span> and <span class="m">y</span> as a
+  function of <span class="m">t</span> are both equations you already solved in Module&nbsp;1 &mdash; one of
+  them has no acceleration at all.</p>
+  <div class="mathblock">
+    <div class="head">One messy equation, or two easy ones</div>
+    <div class="body">
+      <div class="mathline"><span class="m">y</span>(<span class="m">x</span>) =
+        [ <span class="m">y</span><sub>0</sub> &minus;
+        <span class="frac"><span class="top">v<sub>0y</sub></span><span class="bot">v<sub>0x</sub></span></span><span class="m">x</span><sub>0</sub>
+        + <span class="frac"><span class="top">a<sub>y</sub>x<sub>0</sub>&#178;</span><span class="bot">2v<sub>0x</sub>&#178;</span></span> ]
+        + [ <span class="frac"><span class="top">v<sub>0y</sub></span><span class="bot">v<sub>0x</sub></span></span>
+        &minus; <span class="frac"><span class="top">a<sub>y</sub>x<sub>0</sub></span><span class="bot">v<sub>0x</sub>&#178;</span></span> ]<span class="m">x</span>
+        + [ <span class="frac"><span class="top">a<sub>y</sub></span><span class="bot">2v<sub>0x</sub>&#178;</span></span> ]<span class="m">x</span>&#178;</div>
+      <p class="why">That is the &ldquo;messy&rdquo; equation. Nobody memorizes it. (It comes from
+      eliminating <span class="m">t</span> between the two lines below, which is where it belongs &mdash;
+      derive it when you need it rather than carrying it around.)</p>
+      <div class="mathline"><span class="m">x</span>(<span class="m">t</span>) =
+        <span class="m">x</span><sub>0</sub> + <span class="m">v</span><sub>0x</sub><span class="m">t</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="m">a<sub>x</sub></span> = 0</div>
+      <div class="mathline"><span class="m">y</span>(<span class="m">t</span>) =
+        <span class="m">y</span><sub>0</sub> + <span class="m">v</span><sub>0y</sub><span class="m">t</span>
+        + <span class="frac"><span class="top">1</span><span class="bot">2</span></span><span class="m">a<sub>y</sub>t</span>&#178;
+        &nbsp;&nbsp;&nbsp; <span class="m">a<sub>y</sub></span> = &minus;<span class="m">g</span></div>
+      <p class="why">The recipe: <b>figure out <span class="m">x</span>, figure out <span class="m">y</span>,
+      then plot <span class="m">y</span> against <span class="m">x</span>.</b> Time is the thread that ties
+      the two one-dimensional problems together &mdash; the same <span class="m">t</span> appears in both.</p>
+    </div>
+  </div>
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Left: a parabolic plot of y-position against x-position. Right: the same motion plotted against time, where x rises along a straight line and y traces a parabola">
+      <!-- LEFT PANEL: y vs x -->
+      <text x="45" y="28" font-weight="600">Path: y vs. x</text>
+      <g stroke="#e4ece7" stroke-width="1">
+        <line x1="45" y1="212" x2="285" y2="212"/><line x1="45" y1="174" x2="285" y2="174"/>
+        <line x1="45" y1="136" x2="285" y2="136"/><line x1="45" y1="98" x2="285" y2="98"/>
+        <line x1="45" y1="60" x2="285" y2="60"/>
+        <line x1="88" y1="60" x2="88" y2="250"/><line x1="132" y1="60" x2="132" y2="250"/>
+        <line x1="176" y1="60" x2="176" y2="250"/><line x1="219" y1="60" x2="219" y2="250"/>
+        <line x1="263" y1="60" x2="263" y2="250"/>
+      </g>
+      <line x1="45" y1="250" x2="290" y2="250" stroke="#5c6b62" stroke-width="1.4"/>
+      <line x1="45" y1="250" x2="45" y2="52" stroke="#5c6b62" stroke-width="1.4"/>
+      <text class="sm" x="41" y="266">0</text><text class="sm" x="128" y="266">2</text><text class="sm" x="215" y="266">4</text>
+      <text class="sm" x="30" y="216">1</text><text class="sm" x="30" y="140">3</text><text class="sm" x="30" y="64">5</text>
+      <text class="sm" x="128" y="284">x-position (m)</text>
+      <text class="sm" x="22" y="150" transform="rotate(-90 22 150)">y-position (m)</text>
+      <g fill="#1d2b23">
+        <circle cx="45" cy="250" r="3.2"/><circle cx="56" cy="216" r="3.2"/><circle cx="67" cy="186" r="3.2"/>
+        <circle cx="78" cy="159" r="3.2"/><circle cx="89" cy="136" r="3.2"/><circle cx="101" cy="116" r="3.2"/>
+        <circle cx="112" cy="100" r="3.2"/><circle cx="123" cy="87" r="3.2"/><circle cx="134" cy="78" r="3.2"/>
+        <circle cx="145" cy="73" r="3.2"/><circle cx="156" cy="71" r="3.2"/><circle cx="167" cy="73" r="3.2"/>
+        <circle cx="178" cy="78" r="3.2"/><circle cx="189" cy="87" r="3.2"/><circle cx="201" cy="100" r="3.2"/>
+        <circle cx="212" cy="116" r="3.2"/><circle cx="223" cy="136" r="3.2"/><circle cx="234" cy="159" r="3.2"/>
+        <circle cx="245" cy="186" r="3.2"/><circle cx="256" cy="216" r="3.2"/><circle cx="267" cy="250" r="3.2"/>
+      </g>
+      <text class="sm" x="150" y="46">one messy curve</text>
+
+      <!-- RIGHT PANEL: x and y vs t -->
+      <text x="365" y="28" font-weight="600">Components: x and y vs. t</text>
+      <g stroke="#e4ece7" stroke-width="1">
+        <line x1="365" y1="212" x2="600" y2="212"/><line x1="365" y1="174" x2="600" y2="174"/>
+        <line x1="365" y1="136" x2="600" y2="136"/><line x1="365" y1="98" x2="600" y2="98"/>
+        <line x1="365" y1="60" x2="600" y2="60"/>
+        <line x1="424" y1="60" x2="424" y2="250"/><line x1="483" y1="60" x2="483" y2="250"/>
+        <line x1="541" y1="60" x2="541" y2="250"/><line x1="600" y1="60" x2="600" y2="250"/>
+      </g>
+      <line x1="365" y1="250" x2="608" y2="250" stroke="#5c6b62" stroke-width="1.4"/>
+      <line x1="365" y1="250" x2="365" y2="52" stroke="#5c6b62" stroke-width="1.4"/>
+      <text class="sm" x="361" y="266">0</text><text class="sm" x="414" y="266">0.5</text>
+      <text class="sm" x="473" y="266">1.0</text><text class="sm" x="531" y="266">1.5</text>
+      <text class="sm" x="590" y="266">2.0</text>
+      <text class="sm" x="350" y="216">1</text><text class="sm" x="350" y="140">3</text><text class="sm" x="350" y="64">5</text>
+      <text class="sm" x="460" y="284">time (s)</text>
+      <text class="sm" x="342" y="152" transform="rotate(-90 342 152)">position (m)</text>
+      <g fill="#e0801a">
+        <circle cx="365" cy="250" r="3.2"/><circle cx="377" cy="240" r="3.2"/><circle cx="388" cy="231" r="3.2"/>
+        <circle cx="400" cy="221" r="3.2"/><circle cx="411" cy="211" r="3.2"/><circle cx="423" cy="202" r="3.2"/>
+        <circle cx="434" cy="192" r="3.2"/><circle cx="446" cy="182" r="3.2"/><circle cx="457" cy="173" r="3.2"/>
+        <circle cx="469" cy="163" r="3.2"/><circle cx="480" cy="153" r="3.2"/><circle cx="492" cy="144" r="3.2"/>
+        <circle cx="503" cy="134" r="3.2"/><circle cx="515" cy="124" r="3.2"/><circle cx="526" cy="115" r="3.2"/>
+        <circle cx="538" cy="105" r="3.2"/><circle cx="549" cy="95" r="3.2"/><circle cx="561" cy="85" r="3.2"/>
+        <circle cx="572" cy="76" r="3.2"/><circle cx="584" cy="66" r="3.2"/><circle cx="595" cy="56" r="3.2"/>
+      </g>
+      <g fill="#2457b8">
+        <circle cx="365" cy="250" r="3.2"/><circle cx="377" cy="216" r="3.2"/><circle cx="388" cy="186" r="3.2"/>
+        <circle cx="400" cy="159" r="3.2"/><circle cx="411" cy="136" r="3.2"/><circle cx="423" cy="116" r="3.2"/>
+        <circle cx="434" cy="100" r="3.2"/><circle cx="446" cy="87" r="3.2"/><circle cx="457" cy="78" r="3.2"/>
+        <circle cx="469" cy="73" r="3.2"/><circle cx="480" cy="71" r="3.2"/><circle cx="492" cy="73" r="3.2"/>
+        <circle cx="503" cy="78" r="3.2"/><circle cx="515" cy="87" r="3.2"/><circle cx="526" cy="100" r="3.2"/>
+        <circle cx="538" cy="116" r="3.2"/><circle cx="549" cy="136" r="3.2"/><circle cx="561" cy="159" r="3.2"/>
+        <circle cx="572" cy="186" r="3.2"/><circle cx="584" cy="216" r="3.2"/><circle cx="595" cy="250" r="3.2"/>
+      </g>
+      <circle cx="404" cy="44" r="3.6" fill="#e0801a"/><text class="sm" x="414" y="48">x: a straight line</text>
+      <circle cx="510" cy="44" r="3.6" fill="#2457b8"/><text class="sm" x="520" y="48">y: free fall</text>
+    </svg>
+    <figcaption>Same motion, plotted two ways. On the right, each component is a Module&nbsp;1 problem:
+      constant velocity in <span class="m">x</span>, constant acceleration in <span class="m">y</span>.</figcaption>
+  </figure>
+  <p class="why">Plotted here: <span class="m">v</span><sub>0x</sub>&nbsp;=&nbsp;2.60&nbsp;m/s,
+  <span class="m">v</span><sub>0y</sub>&nbsp;=&nbsp;9.60&nbsp;m/s,
+  <span class="m">a<sub>y</sub></span>&nbsp;=&nbsp;&minus;9.80&nbsp;m/s&#178;, giving a 1.96&nbsp;s flight,
+  a 5.09&nbsp;m range and a 4.70&nbsp;m peak. You will do this problem properly in 03d and beyond.</p>
+
+  <div class="probe" id="probe3">
+    <p class="q"><span class="tag">Predict first</span>
+      If <em>each</em> component of a vector is doubled, what happens to the direction angle of that vector?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">It doubles.</button>
+      <button class="opt" data-correct="false">It increases, but by less than double.</button>
+      <button class="opt" data-correct="true">It does not change.</button>
+      <button class="opt" data-correct="false">It is reduced by half.</button>
+      <button class="opt" data-correct="false">It decreases, but not as much as half.</button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>Going the other way: vector from components</h2>
+  <p>PE3. You have <span class="m">r<sub>x</sub></span> and <span class="m">r<sub>y</sub></span> and you want
+  the <b>magnitude</b> and <b>direction</b>. Same triangle, read in the other order: Pythagoras for the
+  magnitude, an inverse tangent for the angle.</p>
+  <figure>
+    <svg viewBox="0 0 640 230" role="img" aria-label="A right triangle whose horizontal leg is r sub x, vertical leg r sub y, and hypotenuse r, with the angle theta at the origin, beside the Pythagorean and inverse tangent formulas">
+      <defs>
+        <marker id="c7-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="c7-mag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="c7-ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <line x1="40" y1="170" x2="270" y2="170" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c7-ax)"/>
+      <line x1="50" y1="188" x2="50" y2="40" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#c7-ax)"/>
+      <text class="lbl" x="276" y="175">x</text><text class="lbl" x="38" y="34">y</text>
+      <line x1="50" y1="170" x2="212" y2="76" stroke="#c0392b" stroke-width="3" marker-end="url(#c7-red)"/>
+      <line x1="50" y1="170" x2="212" y2="170" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c7-mag)"/>
+      <line x1="212" y1="170" x2="212" y2="76" stroke="#7d3fa0" stroke-width="3" marker-end="url(#c7-mag)"/>
+      <polyline points="194,170 194,154 212,154" fill="none" stroke="#5c6b62" stroke-width="1.3"/>
+      <path d="M 102 170 A 52 52 0 0 0 96 156" fill="none" stroke="#2457b8" stroke-width="1.8"/>
+      <text class="lbl" x="106" y="162" fill="#2457b8">&#952;</text>
+      <text class="lbl" x="112" y="112" fill="#c0392b">r&#8407;</text>
+      <text class="lbl" x="118" y="192" fill="#7d3fa0">r<tspan font-size="11" dy="3">x</tspan></text>
+      <text class="lbl" x="222" y="128" fill="#7d3fa0">r<tspan font-size="11" dy="3">y</tspan></text>
+      <text x="320" y="70" font-weight="600">Reading the triangle backwards</text>
+      <text class="sm" x="320" y="100">You are handed the two legs.</text>
+      <text class="sm" x="320" y="124">The hypotenuse &mdash; the magnitude &mdash;</text>
+      <text class="sm" x="320" y="142">comes from the Pythagorean theorem.</text>
+      <text class="sm" x="320" y="172">The direction comes from the ratio</text>
+      <text class="sm" x="320" y="190">of the legs: an inverse tangent.</text>
+    </svg>
+    <figcaption>Magnitude and direction from the components &mdash; the reverse of resolving.</figcaption>
+  </figure>
+  <div class="mathblock">
+    <div class="head">From components back to magnitude and direction</div>
+    <div class="body">
+      <div class="mathline"><span class="m">r<sub>x</sub></span>&#178; + <span class="m">r<sub>y</sub></span>&#178; = <span class="m">r</span>&#178;
+        &nbsp;&nbsp;&#8658;&nbsp;&nbsp; <span class="m">r</span> = <span class="rad">&radic;<span class="rad">r<sub>x</sub>&#178; + r<sub>y</sub>&#178;</span></span></div>
+      <div class="mathline">tan&nbsp;&#952; = <span class="frac"><span class="top">r<sub>y</sub></span><span class="bot">r<sub>x</sub></span></span>
+        &nbsp;&nbsp;&#8658;&nbsp;&nbsp; &#952; = tan<sup>&minus;1</sup>&#8202;(<span class="frac"><span class="top">r<sub>y</sub></span><span class="bot">r<sub>x</sub></span></span>)</div>
+      <p class="why">Put Example&nbsp;1's numbers back in and the original vector reappears:</p>
+      <div class="mathline"><span class="m">r</span> = <span class="rad">&radic;<span class="rad">r<sub>x</sub>&#178; + r<sub>y</sub>&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">(8.66 m)&#178; + (5.00 m)&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">100 m&#178;</span></span> = 10.0 m</div>
+      <div class="mathline">&#952; = tan<sup>&minus;1</sup>&#8202;(<span class="frac"><span class="top">5.00 m</span><span class="bot">8.66 m</span></span>)
+        = tan<sup>&minus;1</sup>&#8202;(0.577) = 30.0&deg;</div>
+      <p class="why">Units cancel inside the inverse tangent &mdash; an angle is a pure number. And notice why
+      probe&nbsp;3 came out the way it did: double both components and the <em>ratio</em>
+      5.00/8.66 is unchanged, so &#952; is unchanged; but the magnitude becomes
+      <span class="rad">&radic;<span class="rad">(17.32)&#178; + (10.00)&#178;</span></span> = 20.0&nbsp;m.
+      Doubling the components scales the vector without turning it.</p>
+    </div>
+  </div>
+  <div class="tip">
+    <span class="label">One caution before 03e</span>
+    Your calculator's tan<sup>&minus;1</sup> always returns an angle between &minus;90&deg; and +90&deg;, so it
+    cannot tell (3,&nbsp;4) from (&minus;3,&nbsp;&minus;4) &mdash; both give 53.1&deg;. In the first quadrant,
+    where this page lives, that is harmless. Outside it you must look at the <em>signs</em> of the components
+    and fix the quadrant by hand. That is page 03e.
+  </div>
+
+<!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>&#127903;&#65039; Exit ticket</strong>
+      <span class="sub">Four quick questions &mdash; check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> A vector has magnitude <span class="m">A</span> = 12.0 m
+          and points 25.0&deg; above the <span class="m">+x</span>-axis. Its <span class="m">x</span>-component is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> 5.07 m</label>
+          <label><input type="radio" name="q1" value="b"> 10.9 m</label>
+          <label><input type="radio" name="q1" value="c"> 12.0 m</label>
+          <label><input type="radio" name="q1" value="d"> 26.4 m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> A vector of magnitude 8.00 m makes an angle of 30.0&deg;
+          with the <span class="m">+y</span>-axis. Its <span class="m">x</span>-component is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> 6.93 m</label>
+          <label><input type="radio" name="q2" value="b"> 4.00 m</label>
+          <label><input type="radio" name="q2" value="c"> 8.00 m</label>
+          <label><input type="radio" name="q2" value="d"> 0 m</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> A velocity has components
+          <span class="m">v<sub>x</sub></span> = 6.00 m/s and <span class="m">v<sub>y</sub></span> = 8.00 m/s.
+          Its magnitude and direction are&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"><span>14.0 m/s at 36.9&deg; above the <span class="m">+x</span>-axis</span></label>
+          <label><input type="radio" name="q3" value="b"><span>10.0 m/s at 53.1&deg; above the <span class="m">+x</span>-axis</span></label>
+          <label><input type="radio" name="q3" value="c"><span>10.0 m/s at 36.9&deg; above the <span class="m">+x</span>-axis</span></label>
+          <label><input type="radio" name="q3" value="d"><span>100 m/s at 1.33&deg; above the <span class="m">+x</span>-axis</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Both components of a vector are doubled. The new vector&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> has twice the magnitude and twice the angle</label>
+          <label><input type="radio" name="q4" value="b"> has the same magnitude and twice the angle</label>
+          <label><input type="radio" name="q4" value="c"> has twice the magnitude and the same direction</label>
+          <label><input type="radio" name="q4" value="d"> has four times the magnitude and the same direction</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>To <b>resolve</b> a vector is to replace it with two perpendicular <b>components</b> that, added
+        <b>head-to-tail</b>, rebuild it. A component is the signed length of the vector's perpendicular
+        projection onto an axis &mdash; its shadow on that axis.</li>
+    <li>A component's magnitude is <b>never larger</b> than the vector's <b>magnitude</b>, and equals it only
+        when the vector lies along that axis (the other component is then zero).</li>
+    <li><b>Cosine does not belong to <span class="m">x</span>.</b> Cosine goes with the side adjacent to the
+        given angle, sine with the side opposite. With &#952; from the <span class="m">x</span>-axis,
+        <span class="m">r<sub>x</sub></span> = <span class="m">r</span>&nbsp;cos&nbsp;&#952; and
+        <span class="m">r<sub>y</sub></span> = <span class="m">r</span>&nbsp;sin&nbsp;&#952;; with &#966; from
+        the <span class="m">y</span>-axis those swap. Draw the triangle first, every time.</li>
+    <li>Rotating a vector trades one component for the other and leaves the magnitude alone; scaling both
+        components equally changes the magnitude and leaves the <b>direction</b> alone.</li>
+    <li>Going back: <span class="m">r</span> =
+        <span class="rad">&radic;<span class="rad">r<sub>x</sub>&#178; + r<sub>y</sub>&#178;</span></span>
+        and &#952; = tan<sup>&minus;1</sup>(<span class="m">r<sub>y</sub></span>&#8202;/&#8202;<span class="m">r<sub>x</sub></span>),
+        with the inverse tangent's quadrant checked by hand.</li>
+    <li>Why it matters: components let you treat two-dimensional motion as two independent
+        one-dimensional problems tied together by the clock. That is the whole of Module&nbsp;2.</li>
+  </ul>
+
+  <p class="preview-note"><strong>Next:</strong> page 03d adds several vectors by adding their components
+  &mdash; the analytical method that replaces the ruler for good. Page 03e handles vectors that leave the
+  first quadrant, where the signs and the inverse tangent need watching.</p>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/3-3-vector-addition-and-subtraction-analytical-methods" target="_blank" rel="noopener">3.3 Vector Addition and Subtraction: Analytical Methods</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-1-scalars-and-vectors" target="_blank" rel="noopener">2.1 Scalars and Vectors</a> ·
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-2-coordinate-systems-and-components-of-a-vector" target="_blank" rel="noopener">2.2 Coordinate Systems and Components of a Vector</a> (the key section for this page)</li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Vector Components</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 ·
+    Adapted for PHY 118 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- predict-first probes ---------- */
+(function(){
+  var specs = [
+    { id:'probe1',
+      ok:'Right — shorter than OR EQUAL TO. A component is r cosθ or r sinθ, and those functions cap at 1, so a component can never be longer. But a vector lying flat along an axis has a component exactly equal to its own magnitude, so “strictly shorter” is too strong.',
+      no:'Not quite. “Longer” is impossible — the hypotenuse of a right triangle is always the longest side. And “strictly shorter” misses the special case: a vector pointing straight along an axis has a component equal to its full magnitude (and zero in the other direction).' },
+    { id:'probe2',
+      ok:'Yes — it gets smaller. The x-component is A cosθ, and cosine falls steadily as θ grows from 0° to 90°. For a 10.0 m vector it drops from 8.66 m to 5.00 m, while the y-component climbs from 5.00 m to 8.66 m. The magnitude itself never changes — rotating an arrow does not stretch it.',
+      no:'Not this one. Steepening the vector moves “how much of it” lies along x over into the y direction: the x-component is A cosθ, falling from A cos 30° = 8.66 m to A cos 60° = 5.00 m for a 10.0 m vector. Cosine decreases steadily from 0° to 90°, so there is no turning point — it just gets smaller.' },
+    { id:'probe3',
+      ok:'Correct — it does not change. The direction angle depends only on the RATIO of the y-component to the x-component, and doubling both leaves that ratio untouched. The magnitude, on the other hand, doubles. You have scaled the vector, not turned it.',
+      no:'Not this one. The direction angle is the inverse tangent of the y-component divided by the x-component, and doubling both cancels in that ratio — so the direction is unchanged. What DOES double is the magnitude: scaling both legs of the triangle by 2 scales the hypotenuse by 2.' }
+  ];
+  specs.forEach(function(spec){
+    var probe = document.getElementById(spec.id);
+    if(!probe) return;
+    var fb = probe.querySelector('.feedback');
+    probe.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var ok = btn.getAttribute('data-correct') === 'true';
+        probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+        if(ok){
+          btn.classList.add('correct');
+          fb.style.color = '';
+          fb.textContent = spec.ok;
+        } else {
+          btn.classList.add('wrong');
+          probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+          fb.style.color = '#c0392b';
+          fb.textContent = spec.no;
+        }
+      });
+    });
+  });
+})();
+
+/* ---------- exit ticket ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var key = { q1:'b', q2:'b', q3:'b', q4:'c' };
+  var why = {
+    q1:'The angle is measured from the x-axis, so the x-side is adjacent: A<sub>x</sub> = A cos 25.0&#176; = (12.0 m)(0.906) = 10.9 m. The 5.07 m is A sin 25.0&#176; &mdash; that is A<sub>y</sub>.',
+    q2:'This angle is measured from the <em>y</em>-axis, so the x-side is now OPPOSITE the angle: A<sub>x</sub> = (8.00 m)(sin 30.0&#176;) = 4.00 m. Pairing cosine with x gives 6.93 m, which is actually A<sub>y</sub>.',
+    q3:'|v| = &radic;(6.00&#178; + 8.00&#178;) = &radic;100 = 10.0 m/s, and &#952; = tan&#8315;&#185;(8.00/6.00) = 53.1&#176;. Getting 36.9&#176; means you divided the wrong way &mdash; that is the angle from the <em>y</em>-axis.',
+    q4:'Doubling both components doubles the magnitude (&radic;((2r<sub>x</sub>)&#178;+(2r<sub>y</sub>)&#178;) = 2r) but leaves the ratio r<sub>y</sub>/r<sub>x</sub>, and therefore the direction, unchanged.'
+  };
+  function markCard(id, ok, msg){
+    var c = document.getElementById('card-' + id);
+    c.classList.remove('right','wrong');
+    c.classList.add(ok ? 'right' : 'wrong');
+    c.querySelector('.qfb').innerHTML = (ok ? '&#10003; ' : '&#10007; ') + msg;
+  }
+  function grade(){
+    var score = 0, answered = 0;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(!sel){ markCard(q, false, 'No answer chosen yet.'); return; }
+      answered++;
+      var ok = sel.value === key[q];
+      if(ok) score++;
+      markCard(q, ok, why[q]);
+    });
+    var box = document.getElementById('ticketScore');
+    box.classList.add('show');
+    box.innerHTML = score + ' / 4 correct' + (answered < 4 ? ' — some questions are still blank.' : '');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    var box = document.getElementById('ticketScore');
+    box.classList.remove('show'); box.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the note's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
