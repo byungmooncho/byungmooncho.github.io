@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHY 151 Lab 02 — Free Fall</title>
+<style>
+  /* ==================================================================
+     FLCC Physics lab page — PHY 151 Module 2
+     Built 2026-09-21 from the PHY 151 Lab 02 page; same design tokens
+     as the M2 note pages.
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:2rem 0 .8rem; font-weight:700; }
+  h3{ font-size:1.02rem; margin:1.4rem 0 .4rem; font-weight:700; color:var(--green-deep);
+      font-family:"Segoe UI", system-ui, sans-serif; }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .logistics{
+    display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin:1.1rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+  }
+  .logistics .chip{
+    background:#fff; border:1px solid var(--rule); border-radius:20px; padding:.3rem .85rem;
+  }
+  .logistics .chip b{ color:var(--green-deep); }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior p:last-child{ margin-bottom:0; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  ol.steps{ padding-left:1.3rem; }
+  ol.steps > li{ margin:.65rem 0; }
+  ul.kit{ padding-left:1.3rem; }
+  ul.kit li{ margin:.3rem 0; }
+
+  .eqn{
+    font-family:"Cambria Math","Segoe UI",Georgia,serif; font-size:1.15rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:600; letter-spacing:.02em;
+  }
+  .eqn small{ display:block; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+    font-weight:400; color:var(--muted); margin-top:.4rem; letter-spacing:0; }
+
+  table.spec{ width:100%; border-collapse:collapse; margin:.9rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  table.spec th, table.spec td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec caption{ caption-side:top; text-align:left; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.8rem; color:var(--muted); padding-bottom:.35rem; }
+
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .watch{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.3rem 0; background:#fffdf8;
+  }
+  .watch b{ color:#9a5c10; }
+
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .sim canvas{ display:block; width:100%; height:auto; background:#fff; }
+  .grid2{ display:grid; gap:.7rem 1.2rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .ctrl input[type=number], .ctrl input[type=text], .ctrl select, .ctrl textarea{
+    font:inherit; font-size:.92rem; width:100%; box-sizing:border-box;
+    padding:.4rem .55rem; border:1px solid var(--rule); border-radius:6px; background:#fff;
+  }
+  .ctrl textarea{ min-height:7rem; font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; font-size:.85rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .verdict{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; margin-top:.9rem;
+    padding:.65rem .9rem; border-radius:8px; background:#fff; border:1px solid var(--rule);
+    min-height:1.2em;
+  }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .check-group{ margin:0 0 1.1rem; }
+  .check-group > .gh{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--green); font-weight:700; display:block; margin-bottom:.4rem;
+  }
+  .check-group label{ display:flex; gap:.6rem; align-items:flex-start;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; margin-bottom:.4rem; cursor:pointer; background:#fff; }
+  .check-group label:hover{ border-color:var(--green); }
+  .check-group input{ margin-top:.2rem; accent-color:var(--green); flex:none; }
+  .check-group input:checked + span{ color:var(--muted); text-decoration:line-through; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:.6rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule);
+  }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  .refs{ font-size:.95rem; }
+  .refs li{ margin:.4rem 0; }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+  footer .attrib{ display:block; margin-top:.3rem; }
+
+
+  /* optional / bonus section marker */
+  .optional{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .optional .head{
+    background:#f4f1e8; border-bottom:1px solid var(--rule); color:#7a5a14;
+    padding:.6rem 1.1rem; display:flex; align-items:center; gap:.6rem; flex-wrap:wrap;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  .optional .head strong{ font-size:.95rem; }
+  .optional .head .badge{
+    background:var(--amber); color:#fff; border-radius:20px; padding:.12rem .7rem;
+    font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700;
+  }
+  .optional .body{ padding:1rem 1.1rem 1.15rem; }
+  .optional .body > :first-child{ margin-top:0; }
+  .optional h3{ margin-top:1.1rem; }
+  @media print{ .optional{ break-inside:avoid-page; } }
+
+  @media print{
+    body{ font-size:10.5pt; }
+    .note-wrap{ max-width:none; padding:0; }
+    .btn, .sim .buttons{ display:none !important; }
+    .sim, .ticket, .pe, .prior{ break-inside:avoid; }
+    h2{ break-after:avoid; }
+    .verdict, .readout, .sim .panel .ctrl textarea{ display:none; }
+    a{ color:inherit; text-decoration:none; }
+    .probe .opts{ counter-reset:opt; }
+    .probe .opt{ cursor:default; border:none; padding:.12rem 0 .12rem 1.6rem; position:relative; background:none; }
+    .probe .opt::before{
+      counter-increment:opt; content:"(" counter(opt, upper-alpha) ")";
+      position:absolute; left:0; font-weight:600; color:#5c6b62;
+    }
+    .probe .feedback{ display:none; }
+    .pe li .tick{ width:1.7rem; height:1.7rem; font-size:.66rem; }
+    .check-group label{ break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>PHY 151 &middot; Module 2</span>
+    <span>Lab 02</span>
+  </div>
+
+  <h1>Free Fall: Measuring <i>g</i> from a Ticker Tape</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Every problem you solved in Module 1 used a number you were simply handed: 9.81&nbsp;m/s&sup2;. In
+    this lab you measure it yourself. A <b>ticker-tape timer</b> drags a paper tape through a vibrating
+    stylus and stamps a dot on it forty times a second while a mass pulls the tape toward the floor.
+    Those dots are a position-versus-time graph that the falling mass drew for you &mdash; you just have
+    to measure it with a ruler. You will fit a curve to that data, read <em>g</em> straight out of the fit,
+    and then argue about how close your answer really is.
+    <div class="logistics">
+      <span class="chip"><b>Due</b> See the Module&nbsp;2 Lab folder on Brightspace</span>
+      <span class="chip"><b>Pairs with</b> M2 N3</span>
+      <span class="chip"><b>Report</b> Full lab report &mdash; use the Lab Template</span>
+      <span class="chip"><b>Data</b> Your own &mdash; three tapes per group</span>
+      <span class="chip"><b>Print</b> <a href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB02_Free_Fall.pdf" style="color:#1e6b3c;">PDF version of this page</a></span>
+    </div>
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lab, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Read a ticker tape as position-versus-time data</b>
+        &mdash; measure cumulative distance from a chosen origin dot, and convert dot number to time using
+        the timer frequency, <i>t</i>&nbsp;=&nbsp;<i>n</i>/<i>f</i>.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Map a kinematic model onto a fit equation</b> &mdash;
+        recognize that <i>x</i> = <i>x</i><sub>0</sub> + <i>v</i><sub>0</sub>&Delta;<i>t</i> +
+        &frac12;<i>a</i>(&Delta;<i>t</i>)&sup2; and <i>y</i> = <i>Ax</i>&sup2; + <i>Bx</i> + <i>C</i> are the
+        same equation, and read the acceleration out of the fit as <i>a</i>&nbsp;=&nbsp;2<i>A</i>.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Interpret every fit parameter physically</b> &mdash;
+        say what <i>A</i>, <i>B</i> and <i>C</i> each mean on your tape, and use <i>B</i> to work out where
+        on the fall your dot&nbsp;0 actually sits.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Build a graph that can be read without you
+        standing next to it</b> &mdash; correct variable on each axis, units in both axis titles,
+        markers rather than joined dots, the fitted curve drawn over the data, and the fit equation
+        and R&sup2; displayed on the chart.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Report a measured value with an uncertainty</b> &mdash;
+        mean and standard deviation across your three tapes, carried to the correct number of significant
+        digits.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Compute percent error and apply the 10% rule</b> &mdash;
+        and, if your error is large, identify a specific physical mechanism and estimate its size rather than
+        waving at it.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ PRIOR KNOWLEDGE / FRAMING ============ -->
+  <div class="prior">
+    <div class="head"><span class="spark">&#128270;</span><strong>Why a tape and not a stopwatch?</strong></div>
+    <div class="body">
+      <p>Drop something from a metre up and it lands in about 0.45&nbsp;s. Your reaction time is roughly
+      0.2&nbsp;s. A stopwatch measurement of that fall is not slightly imprecise &mdash; it is dominated by
+      you. Timing is almost always the weakest measurement in a mechanics experiment, and the standard fix
+      is to <em>stop timing by hand</em>.</p>
+      <p>The ticker-tape timer does exactly that. It ticks at a fixed rate set by the AC line frequency, so
+      the time axis of your data is essentially perfect and free: dot number <i>n</i> happened at
+      <i>t</i>&nbsp;=&nbsp;<i>n</i>/<i>f</i>, no human involved. That moves the entire measurement onto the
+      one axis you <em>can</em> measure well &mdash; distance, with a ruler, on a tape lying flat on a
+      table. It also hands you twenty-odd data points instead of one, which is what makes fitting possible
+      at all.</p>
+      <div class="cases">
+        <div class="case"><span class="emoji">&#128337;</span><b>Time</b>
+          <small>Set by the timer, not by you. <i>t</i> = <i>n</i>/<i>f</i>, exact to better than 1%.</small></div>
+        <div class="case"><span class="emoji">&#128207;</span><b>Distance</b>
+          <small>The measurement you actually make. A millimetre ruler, read carefully, is good to &plusmn;0.5&nbsp;mm.</small></div>
+        <div class="case"><span class="emoji">&#128202;</span><b>Acceleration</b>
+          <small>Never measured directly. It comes out of a fit to the other two &mdash; which is why the fit has to be the right one.</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PREDICT FIRST ============ -->
+  <div class="probe" id="probe1">
+    <p class="q">Predict first &mdash; before you run a single tape. The falling mass does not
+      just fall: it also has to <em>drag a paper tape through the timer</em>, past a stylus that is
+      striking it forty times a second. If that contact resists the motion at all, what will the
+      acceleration you measure from the tape do?</p>
+    <div class="opts">
+      <button class="opt" data-ok="0">Come out higher than 9.81&nbsp;m/s&sup2;.</button>
+      <button class="opt" data-ok="1">Come out lower than 9.81&nbsp;m/s&sup2;.</button>
+      <button class="opt" data-ok="0">Stay at 9.81 &mdash; friction changes the speed, not the acceleration.</button>
+      <button class="opt" data-ok="0">Scatter randomly above and below 9.81.</button>
+    </div>
+    <p class="feedback" id="fb1"></p>
+  </div>
+
+  <h2>What you need</h2>
+  <ul class="kit">
+    <li>Ticker-tape timer. Most of our units tick at <b>40&nbsp;Hz</b> &mdash; <b>check the label on the one
+      you are using</b>, because some run at 60&nbsp;Hz and every number you compute depends on it.</li>
+    <li>Paper tape, a hanging mass (200&ndash;500&nbsp;g works well), masking tape, and a clear drop of at
+      least 1.5&nbsp;m &mdash; a table edge or the stairwell rail.</li>
+    <li>A metre stick or a two-metre stick with millimetre divisions.</li>
+    <li>A spreadsheet program &mdash; Excel, Google Sheets, or LibreOffice Calc.</li>
+    <li>The <b>Lab Template</b> and the <b>Lab Information</b> module on Brightspace. Read both before
+      you start writing.</li>
+  </ul>
+
+  <h2>Part I &mdash; Running the tape</h2>
+  <p>A ticker-tape timer marks a paper tape at a fixed frequency while the tape is pulled through it. Because
+  the marks are made at equal time intervals, the <em>spacing</em> between marks is a direct picture of the
+  speed: evenly spaced dots mean constant speed, and dots that spread out mean the object is speeding up.
+  A usable tape runs about 1.0&ndash;1.5&nbsp;m.</p>
+
+  <ol class="steps">
+    <li>Thread the tape through the timer and attach the hanging mass to one end. Check that the tape runs
+      freely and is not twisted. <b>A twisted tape binds, and binding is the single largest source of error
+      in this method.</b></li>
+    <li>Hold the mass so the tape is slack-free but not under tension, with the timer clamped at the table
+      edge and the mass free to fall clear of everything below it.</li>
+    <li>Start the timer <em>first</em>, then release the mass. Catch the tape &mdash; or let the mass land
+      on something soft.</li>
+    <li>Lay the tape out flat on the bench and tape it down so it cannot shift while you measure.</li>
+    <li>Repeat until you have <b>three good tapes</b>. A tape is good if the dots are distinct and separating
+      smoothly; discard and re-run any tape with a visible skip, a smear, or a section where the spacing
+      jumps around.</li>
+  </ol>
+
+  <h2>Part II &mdash; Measuring the dots</h2>
+  <p>This is the whole experiment. Everything after it is arithmetic.</p>
+
+  <ol class="steps">
+    <li><b>Find your origin dot.</b> Near the start of the tape you will find a dark blot or a cluster of
+      dots almost on top of each other &mdash; that is the timer striking the same spot while the mass was
+      still held, plus the first few ticks of the fall, which are only a few millimetres apart. Skip past it.
+      The first dot you can clearly separate from its neighbours is your <b>dot&nbsp;0</b>. Circle it and
+      label it 0.</li>
+    <li><b>Number the rest.</b> Circle and number every subsequent dot: 1, 2, 3, &hellip; Keep going as far
+      as the dots stay clean, ideally 20 or more.</li>
+    <li><b>Measure from dot&nbsp;0 to each dot.</b> Not dot-to-dot. Measuring each gap separately and adding
+      them up compounds every small error you make; measuring from a single origin does not. Record to the
+      nearest millimetre, in centimetres, in your lab notebook.</li>
+    <li>Measure to the <em>dot</em>, not to the circle you drew around it.</li>
+    <li>Do all three tapes. Keep each one's data in its own column.</li>
+  </ol>
+
+  <div class="watch">
+    <b>Your dot&nbsp;0 is not the release point, and that is fine.</b> By the time the dots are far enough
+    apart to measure, the mass has already been falling for a tick or two and is moving at a few tenths of a
+    metre per second. This is unavoidable &mdash; the timer is running before you let go, the first gaps are
+    smaller than the dots themselves, and you do not release in sync with the ticks. The analysis below is
+    built so that this costs you nothing. In fact, the fit will tell you <em>how fast</em> the mass was
+    already moving at dot&nbsp;0, and you will use that number in your discussion.
+  </div>
+
+  <h3>Building your data table</h3>
+  <p>In your spreadsheet, for each tape, build these columns:</p>
+
+  <table class="spec">
+    <caption>Table 1 &mdash; required columns, one block per tape</caption>
+    <tr><th>Column</th><th>What goes in it</th></tr>
+    <tr><td>Dot number <i>n</i></td><td>0, 1, 2, 3, &hellip;</td></tr>
+    <tr><td>Time <i>t</i> (s)</td><td><i>t</i> = <i>n</i>/<i>f</i>. At 40&nbsp;Hz, dot 7 is at 7/40 = 0.175&nbsp;s.</td></tr>
+    <tr><td>Distance (cm)</td><td>What you measured from dot&nbsp;0, straight from your notebook. Do not "clean up" a value that looks out of line.</td></tr>
+    <tr><td>Position <i>x</i> (m)</td><td>The distance column divided by 100. <b>Every fit below is done in metres and seconds.</b></td></tr>
+  </table>
+
+  <div class="watch">
+    <b>Units are not a formality here.</b> If you fit centimetres against seconds you will get an
+    acceleration of about 980, and it will look like a plausible number in a cell. Convert to metres
+    <em>before</em> you fit, and show the conversion as one of your sample calculations.
+  </div>
+
+  <h2>Part III &mdash; Making the graph and reading the fit</h2>
+  <p>This part is the analysis, and it is where most of the marks are. You will plot position
+  against time, fit a second-order polynomial to it, and read the acceleration out of the fit. Read
+  this section before you open the chart tool, not after.</p>
+
+  <h3>Why a quadratic, and not something else</h3>
+  <p>You already know the equation that describes this motion. It is the one from Module&nbsp;1:</p>
+
+  <div class="eqn">
+    <i>x</i> = <i>x</i><sub>0</sub> + <i>v</i><sub>0</sub>&thinsp;&Delta;<i>t</i> + &frac12;&thinsp;<i>a</i>&thinsp;(&Delta;<i>t</i>)&sup2;
+    <small>position under constant acceleration</small>
+  </div>
+
+  <p>And a spreadsheet's order-2 polynomial trendline fits this:</p>
+
+  <div class="eqn">
+    <i>y</i> = <i>A</i>&thinsp;<i>x</i>&sup2; + <i>B</i>&thinsp;<i>x</i> + <i>C</i>
+    <small>generic parabola &mdash; what the trendline reports</small>
+  </div>
+
+  <p>These are the same equation written with different letters. That is the whole trick of this lab.
+  Line them up term by term, with your <b>time</b> column playing the role of <i>x</i> and your
+  <b>position</b> column the role of <i>y</i>. You are not fitting a parabola because the data happens
+  to look curved; you are fitting one because constant acceleration <em>is</em> a quadratic in time,
+  and the coefficients of that quadratic are the physical quantities you came to measure.</p>
+
+  <h3>What each fit parameter means</h3>
+  <table class="spec">
+    <caption>Table 2 &mdash; reading the three coefficients, with <i>y</i> in metres and <i>x</i> in seconds</caption>
+    <tr><th>Fit reports</th><th>Physics calls it</th><th>Units</th><th>What you do with it</th></tr>
+    <tr><td><i>A</i></td><td>&frac12;<i>a</i></td><td>m/s&sup2;</td>
+        <td><b><i>a</i> = 2<i>A</i></b> &mdash; this is your measured acceleration. <b>Double it. Every
+        time.</b> On a good tape <i>A</i> itself lands near 4.9, not near 9.8.</td></tr>
+    <tr><td><i>B</i></td><td><i>v</i><sub>0</sub></td><td>m/s</td>
+        <td>The speed the mass already had at dot&nbsp;0 &mdash; a few tenths of a m/s, and positive.
+        <b>Interpret it in your discussion; do not just report it.</b></td></tr>
+    <tr><td><i>C</i></td><td><i>x</i><sub>0</sub></td><td>m</td>
+        <td>The position of dot&nbsp;0 in your own coordinate system. It should come out near zero,
+        because you measured everything from dot&nbsp;0.</td></tr>
+  </table>
+
+  <p>Notice that you get all three for free. You are not assuming the mass started from rest, and you
+  are not assuming dot&nbsp;0 is anywhere in particular &mdash; the fit works those out and hands them
+  to you. That is precisely why this method survives a dot&nbsp;0 that is already moving.</p>
+
+  <h3>Making the plot, step by step</h3>
+  <ol class="steps">
+    <li>Select your <b>time</b> column and your <b>position-in-metres</b> column, and insert a
+      <b>Scatter (XY)</b> chart. Not a line chart, not a bar chart. Time goes on the horizontal axis
+      &mdash; the independent variable always does.</li>
+    <li>Choose the <b>markers-only</b> scatter subtype. Do not let the spreadsheet join your points
+      with a line: a line claims you measured the motion in between the dots, and you did not. The
+      only curve on the chart should be the fit.</li>
+    <li>Right-click any data point and choose <b>Add Trendline</b>.</li>
+    <li>In the trendline options, select <b>Polynomial</b> and set the <b>Order to 2</b>. Leave
+      <b>Set Intercept</b> unchecked &mdash; forcing the curve through zero throws away the <i>C</i>
+      you want to read.</li>
+    <li>Check both <b>Display Equation on chart</b> and <b>Display R-squared value on chart</b>. You
+      may need to scroll down in the options panel to find them.</li>
+    <li>Give the chart <b>axis titles with units</b> &mdash; "Time (s)" and "Position (m)" &mdash; and
+      delete the default chart title and the legend, which say nothing on a single-series plot. The
+      caption below the figure does that job in a report.</li>
+    <li>Read <i>A</i>, <i>B</i>, <i>C</i> and R&sup2; off the chart. <b>Double <i>A</i>.</b> That is
+      your measured acceleration for that tape.</li>
+    <li>Repeat for all three tapes. Each tape gets its own graph in your report, with the equation and
+      R&sup2; visible.</li>
+  </ol>
+
+  <div class="watch">
+    <b>Widen the equation label before you trust it.</b> Excel displays trendline coefficients with very
+    few significant digits by default, and for <i>A</i> that can round your answer by a percent or more.
+    Click the equation label, open <b>Format Trendline Label</b>, and set the number format to
+    <b>Scientific</b> with 4 decimal places &mdash; or at minimum confirm you are reading four
+    significant digits out of <i>A</i>. Rounding <i>A</i> to 4.9 and doubling it is not a measurement;
+    it is the number you were handed in Module&nbsp;1 given back to you.
+  </div>
+
+  <h3>What every graph in this report must show</h3>
+  <table class="spec">
+    <caption>Table 3 &mdash; the checklist your figures are graded against</caption>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Horizontal axis</td><td>Time, in seconds. Titled <b>Time (s)</b>. The independent variable.</td></tr>
+    <tr><td>Vertical axis</td><td>Position, in metres. Titled <b>Position (m)</b>. Never centimetres.</td></tr>
+    <tr><td>Data</td><td>Plotted as <b>individual markers</b>, unconnected. One tape per chart.</td></tr>
+    <tr><td>Fit</td><td>The order-2 curve drawn <em>over</em> the data, so a reader can see where it fits well and where it does not.</td></tr>
+    <tr><td>Fit equation</td><td>Displayed on the chart, with enough significant digits in <i>A</i> to be read (four).</td></tr>
+    <tr><td>Goodness of fit</td><td>R&sup2; displayed on the chart.</td></tr>
+    <tr><td>Scale</td><td>Axes covering your data and little else &mdash; a plot where the parabola occupies a fifth of the frame hides exactly the curvature you are measuring.</td></tr>
+    <tr><td>Figure number</td><td>Numbered in order of first mention: Figure&nbsp;1, Figure&nbsp;2, &hellip;</td></tr>
+    <tr><td>Caption</td><td><em>Below</em> the figure, one sentence saying what is plotted and what the curve is.</td></tr>
+    <tr><td>Mention in text</td><td>Introduced by a sentence before it appears &mdash; "Figure&nbsp;2 shows&hellip;". A figure nobody refers to earns nothing.</td></tr>
+    <tr><td>No chart junk</td><td>No default "Chart Title", no legend on a one-series plot, no gridline clutter, no 3-D anything.</td></tr>
+  </table>
+
+  <div class="watch">
+    <b>Sanity-check the three numbers before you write them down.</b> On a good tape,
+    <i>A</i>&nbsp;&asymp;&nbsp;4.9&nbsp;m/s&sup2;, <i>B</i> is a few tenths of a m/s and positive, and
+    <i>C</i> is within a centimetre or so of zero. If <i>A</i> comes back near 490 you are still in
+    centimetres. If <i>A</i> is near 9.8 you have fitted something other than position against time
+    &mdash; or you are about to double a number that was already the acceleration. If <i>B</i> is
+    large and negative, your distances are running the wrong way down the tape.
+  </div>
+
+  <div class="prior">
+    <div class="head"><span class="spark">&#9888;</span><strong>Why we are not plotting <i>x</i> against <i>t</i>&sup2;</strong></div>
+    <div class="body">
+      <p>You may have seen free fall handled by plotting position against <em>time squared</em>, so that
+      <i>x</i> = &frac12;<i>gt</i>&sup2; becomes a straight line whose slope is <i>g</i>/2. That is a
+      legitimate trick, and it works &mdash; <b>as long as the object starts from rest at the point you call
+      zero.</b></p>
+      <p>On a ticker tape, it does not. Your dot&nbsp;0 is a tick or two into the fall, so
+      <i>v</i><sub>0</sub> is not zero, and the real relationship is
+      <i>x</i> = <i>v</i><sub>0</sub><i>t</i> + &frac12;<i>gt</i>&sup2;. Plotted against <i>t</i>&sup2;,
+      that is <em>not</em> a straight line &mdash; the <i>v</i><sub>0</sub><i>t</i> term becomes
+      <i>v</i><sub>0</sub>&radic;(<i>t</i>&sup2;), which curves. Fitting a line to it anyway does not simply
+      shift the intercept; it quietly folds part of the velocity term into the slope and pushes your
+      <i>g</i> <b>upward</b>, typically by 10&ndash;15% on a real tape.</p>
+      <p>What makes this worth a paragraph is that the wrong answer looks <em>better</em>. Because the tape
+      also drags, which pushes <i>g</i> down, the two errors partly cancel and the linearized fit lands
+      suspiciously close to 9.8 &mdash; for the wrong reason, with an R&sup2; of 0.999 reassuring you the
+      whole time. The order-2 fit avoids the trade entirely: it models <i>v</i><sub>0</sub> instead of
+      wishing it away.</p>
+    </div>
+  </div>
+
+  <h2>Analysis</h2>
+  <p>Your report needs a results table that gathers every fit. Build it in the spreadsheet, and number,
+  caption and introduce it in the text ("Table&nbsp;2 shows&hellip;").</p>
+
+  <table class="spec">
+    <caption>Required columns for your fit-results table</caption>
+    <tr><th>Column</th><th>What goes in it</th></tr>
+    <tr><td>Tape</td><td>1, 2, 3</td></tr>
+    <tr><td>Dots used</td><td>How many, and which range &mdash; part of your data, not a detail</td></tr>
+    <tr><td><i>A</i>, <i>B</i>, <i>C</i></td><td>Trendline coefficients, with units</td></tr>
+    <tr><td>R&sup2;</td><td>From the trendline display</td></tr>
+    <tr><td><i>g</i> = 2<i>A</i></td><td>Measured acceleration, m/s&sup2;</td></tr>
+    <tr><td>% error</td><td>Against 9.81&nbsp;m/s&sup2;</td></tr>
+  </table>
+
+  <h3>The statistics you need</h3>
+  <p>You have three tapes, so you can report a mean and a spread.</p>
+
+  <div class="eqn">
+    <i>g&#772;</i> = (1/<i>N</i>) &Sigma; <i>g<sub>i</sub></i> &nbsp;&nbsp;&nbsp;
+    <i>s</i> = &radic;[ &Sigma;(<i>g<sub>i</sub></i> &minus; <i>g&#772;</i>)&sup2; / (<i>N</i> &minus; 1) ]
+    <small>In Excel: <code>=AVERAGE(range)</code> and <code>=STDEV.S(range)</code></small>
+  </div>
+
+  <p>Quote your result as <b><i>g&#772;</i> &plusmn; <i>s</i></b>, rounded so the uncertainty carries one
+  significant digit and the value is rounded to the same decimal place. A mean of 8.6127 with a standard
+  deviation of 0.3142 is reported as <b>8.6 &plusmn; 0.3&nbsp;m/s&sup2;</b> &mdash; never as
+  8.6127&nbsp;&plusmn;&nbsp;0.3142.</p>
+
+  <div class="watch">
+    <b>Three tapes is a small sample, and you should say so.</b> A standard deviation from <i>N</i> = 3 is
+    itself very uncertain. It tells you roughly how much one tape differs from another; it does not license
+    a precise claim about how well you know the average. Use it, quote it, and note the limitation in your
+    discussion rather than pretending it is more than it is.
+  </div>
+
+  <h3>Percent error</h3>
+  <div class="eqn">
+    % error = | measured &minus; accepted | / accepted &times; 100%
+    <small>accepted value: <i>g</i> = 9.81&nbsp;m/s&sup2;</small>
+  </div>
+
+  <p>Then apply the rule from the lab-writing guidelines. <b>Under 10%</b>, you may attribute the difference
+  to ordinary experimental uncertainty and say so. <b>Over 10%</b>, that is no longer an acceptable
+  explanation: you must name a specific physical mechanism and <em>put a number on it</em>. Expect to be in
+  the second case. The tape method has a real, identifiable systematic error in it, and finding it is the
+  point of the lab.</p>
+
+  <!-- ============ OPTIONAL EXTENSION ============ -->
+  <div class="optional">
+    <div class="head"><span class="badge">Optional</span><strong>A second route to the same number &mdash; up to 3 bonus points</strong></div>
+    <div class="body">
+      <p><b>You do not need this section to finish the lab or to earn full marks.</b> Everything above is the
+      complete assignment. What follows is a second, independent way to get <i>g</i> out of the same tape,
+      for anyone who wants to try it &mdash; it is worth up to three bonus points if you do it correctly and
+      write it up properly.</p>
+
+      <p>The fit in Part III found the acceleration from the <em>curvature</em> of a parabola. You can also
+      get it from the <em>slope of a straight line</em>, by turning your positions into velocities first.</p>
+
+      <p>The dot spacing is already velocity information: over one tick the mass moves some distance, so
+      dividing that distance by the tick time gives a velocity. The cleanest version uses the dots on
+      <em>either side</em> of the one you are interested in:</p>
+
+      <div class="eqn">
+        <i>v<sub>n</sub></i> = ( <i>x</i><sub><i>n</i>+1</sub> &minus; <i>x</i><sub><i>n</i>&minus;1</sub> ) / (2&Delta;<i>t</i>)
+        <small>central-difference velocity at dot <i>n</i>, where &Delta;<i>t</i> = 1/<i>f</i></small>
+      </div>
+
+      <p>This is the average velocity across the two ticks straddling dot&nbsp;<i>n</i>, and because the
+      motion has constant acceleration, that average is exactly the instantaneous velocity <em>at</em>
+      dot&nbsp;<i>n</i> &mdash; not an approximation. You can compute it for every dot except the first and
+      the last. Then, from Module&nbsp;1, <i>v</i> = <i>v</i><sub>0</sub> + <i>a</i>&Delta;<i>t</i>, which is
+      a straight line.</p>
+
+      <h3>If you want to try it</h3>
+      <ol class="steps">
+        <li>Add a velocity column next to one tape's data:
+          <code>=(x_next &minus; x_prev)/(2*&Delta;t)</code>, in m/s. Leave the first and last rows blank
+          &mdash; those dots have no neighbour on one side.</li>
+        <li>Plot velocity against time as a Scatter (XY) chart.</li>
+        <li>Add a trendline &mdash; this time <b>Linear</b> &mdash; with the equation and R&sup2; displayed.</li>
+        <li>The <b>slope is your acceleration directly</b>, in m/s&sup2;. No doubling. The intercept is
+          <i>v</i><sub>0</sub>, and it should come out close to the <i>B</i> from your order-2 fit.</li>
+      </ol>
+
+      <p><b>To earn the bonus,</b> include the velocity-versus-time graph as a numbered figure with its fit
+      equation and R&sup2;, show one sample calculation of a central-difference velocity with units, and add
+      two or three sentences to your discussion comparing the two accelerations &mdash; how close are they,
+      and what does it mean that two different reductions of the same measurements agree or disagree?</p>
+
+      <p>One tape is enough for the bonus. You do not have to do all three.</p>
+    </div>
+  </div>
+
+  <h2>Check your fit</h2>
+  <p>Paste one tape's distances below &mdash; one per line, starting with dot&nbsp;0 &mdash; and this tool
+  will fit them and report the numbers you should be seeing in your spreadsheet. Use it to catch arithmetic
+  and units mistakes. <b>It is a check on your own work, not a substitute for it:</b> your report must show
+  the spreadsheet chart, the trendline equation, and a sample calculation you did by hand.</p>
+
+  <div class="sim">
+    <div class="sim-head"><span>&Sigma;</span><span>Tool &middot; Order-2 fit to one tape</span></div>
+    <div class="panel">
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="freq">Timer frequency (Hz)</label>
+          <input type="number" id="freq" value="40" min="1" step="1">
+        </div>
+        <div class="ctrl">
+          <label for="units">Units of the values you paste</label>
+          <select id="units">
+            <option value="100" selected>centimetres (cm)</option>
+            <option value="1">metres (m)</option>
+            <option value="1000">millimetres (mm)</option>
+          </select>
+        </div>
+      </div>
+      <div class="ctrl" style="margin-top:.7rem;">
+        <label for="data">Distance from dot 0 &mdash; one value per line, dot 0 first</label>
+        <textarea id="data" placeholder="0&#10;2.1&#10;3.9&#10;6.1&#10;8.9&#10;12.2&#10;..."></textarea>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="go">Fit it</button>
+        <button class="btn" id="clr">Clear</button>
+      </div>
+      <div class="readout" id="out">
+        <span class="chip"><b>N</b> &mdash;</span>
+        <span class="chip"><b>g = 2A</b> &mdash;</span>
+        <span class="chip"><b>B = v<sub>0</sub></b> &mdash;</span>
+        <span class="chip"><b>C = x<sub>0</sub></b> &mdash;</span>
+        <span class="chip"><b>R&sup2;</b> &mdash;</span>
+        <span class="chip"><b>% error</b> &mdash;</span>
+        <span class="chip"><b>Optional route: g</b> &mdash;</span>
+        <span class="chip"><b>Optional: % error</b> &mdash;</span>
+      </div>
+      <div class="verdict" id="verdict">Paste at least five values.</div>
+      <p class="hint-row">Percent error is computed against <i>g</i> = 9.81&nbsp;m/s&sup2;. The last two
+      chips show the optional velocity route, for anyone attempting the bonus &mdash; ignore them otherwise.</p>
+    </div>
+  </div>
+
+  <h2>Questions for your discussion</h2>
+  <p>Work these into your <b>Discussion</b> and <b>Additional Questions</b> sections, in sentences and
+  paragraphs &mdash; never as a numbered list, and never by restating the question before answering it.
+  Do not limit yourself to these; add any other insight you have.</p>
+
+  <ol class="questions">
+    <li>Your fit reported a value for <i>B</i>. Convert it into a time: if the mass had been falling freely
+      from rest, how long had it been falling when it reached dot&nbsp;0? Compare that to one tick of the
+      timer. Does the number you get match the size of the blot you skipped past at the start of the tape?</li>
+    <li>State which direction your measured <i>g</i> missed 9.81, and propose a physical mechanism that is
+      <em>consistent with that direction</em>. A mechanism that would push the answer the wrong way is
+      evidence against itself.</li>
+    <li>Treat the tape's drag as a constant retarding force and estimate its size per unit mass from your own
+      deficit: if you measured <i>g</i><sub>meas</sub>, then the drag contributes
+      (9.81 &minus; <i>g</i><sub>meas</sub>) in m/s&sup2;. Multiply by your hanging mass to get a force in
+      newtons. Is that a plausible amount of friction for paper sliding past a vibrating stylus? Say why or
+      why not.</li>
+    <li>Your R&sup2; values will be very close to 1. Say precisely what that does and does not tell you. Can
+      a data set be shifted by a systematic error and still produce R&sup2; = 0.9999?</li>
+    <li>The time axis of this experiment carries almost no uncertainty, while the distance axis carries all
+      of it. Explain why, and say which of the two is limiting how well you know your answer.</li>
+    <li>Suppose your three tapes agree with each other to within 0.1&nbsp;m/s&sup2; while sitting a full
+      1&nbsp;m/s&sup2; away from 9.81. Explain in your own words why that combination is <em>more</em>
+      troubling than a large scatter would be, not less.</li>
+    <li>Name one change to the apparatus or the procedure that would reduce the dominant error here, and say
+      roughly how much of the deficit you would expect it to remove.</li>
+  </ol>
+
+  <div class="watch">
+    <b>One thing the rubric will not accept:</b> "human error." It explains nothing, and it is not a category
+    of error in experimental physics. If your percent error is under 10%, attribute it to ordinary
+    experimental uncertainty and say so. If it is over 10%, you must identify specific error sources and
+    <em>quantify</em> them &mdash; a named mechanism with a number attached.
+  </div>
+
+  <!-- ============ SUBMISSION CHECKLIST ============ -->
+  <div class="ticket">
+    <div class="t-head">
+      <strong><span>&#10003;</span> Before you submit</strong>
+      <span class="sub">Every line here maps to a row on the Lab&nbsp;02 grading rubric.</span>
+    </div>
+    <div class="t-body">
+      <div class="check-group">
+        <span class="gh">Format &amp; front matter</span>
+        <label><input type="checkbox"><span>Lab Template used, with names, course, lab number, and both dates in the heading</span></label>
+        <label><input type="checkbox"><span>Abstract: four sentences or fewer &mdash; theme, numerical results for <i>g</i>, percent error. Nothing else.</span></label>
+        <label><input type="checkbox"><span>Introduction states the kinematic equation and the parabola it maps onto, defines every variable with units, and ends with the question the lab answers</span></label>
+      </div>
+      <div class="check-group">
+        <span class="gh">Experimental</span>
+        <label><input type="checkbox"><span>Timer frequency stated explicitly, read off the unit you used</span></label>
+        <label><input type="checkbox"><span>Equipment described within the procedure, in paragraphs &mdash; not as a bare list</span></label>
+        <label><input type="checkbox"><span>Procedure in your own words, detailed enough to follow blindly &mdash; not copied from this handout</span></label>
+        <label><input type="checkbox"><span>A photo of the setup plus a labelled sketch showing where dot&nbsp;0 is and which direction was measured as positive</span></label>
+        <label><input type="checkbox"><span>How you chose dot&nbsp;0, and how many dots you measured on each tape</span></label>
+      </div>
+      <div class="check-group">
+        <span class="gh">Results</span>
+        <label><input type="checkbox"><span>Raw dot data table for all three tapes &mdash; numbered, captioned, units on every column, referenced in the text</span></label>
+        <label><input type="checkbox"><span>Fit-results table with <i>A</i>, <i>B</i>, <i>C</i>, R&sup2;, <i>g</i> = 2<i>A</i> and percent error</span></label>
+        <label><input type="checkbox"><span>Position-vs-time graph for each tape, with the order-2 trendline, its equation and R&sup2; displayed</span></label>
+        <label><input type="checkbox"><span>Every graph numbered as a Figure, captioned, and described in the text ("Figure 2 shows&hellip;")</span></label>
+        <label><input type="checkbox"><span>A sample calculation, worked step by step with units, for <i>each</i> type: cm&rarr;m conversion, dot number to time, <i>a</i> = 2<i>A</i>, mean, standard deviation, percent error</span></label>
+        <label><input type="checkbox"><span>Significant digits handled correctly throughout, including in the tables</span></label>
+      </div>
+      <div class="check-group">
+        <span class="gh">Discussion &amp; conclusion</span>
+        <label><input type="checkbox"><span>Opens with "we experimentally determined that&hellip; &plusmn; error"</span></label>
+        <label><input type="checkbox"><span>Result compared to 9.81&nbsp;m/s&sup2; by percent error</span></label>
+        <label><input type="checkbox"><span>The 10% rule applied &mdash; and if over 10%, a named mechanism with a number attached</span></label>
+        <label><input type="checkbox"><span><i>B</i> interpreted physically, not just reported</span></label>
+        <label><input type="checkbox"><span>The <i>N</i> = 3 limitation acknowledged</span></label>
+        <label><input type="checkbox"><span>Additional questions answered in a dedicated section, in paragraphs</span></label>
+        <label><input type="checkbox"><span>The phrase "human error" appears nowhere in the report</span></label>
+        <label><input type="checkbox"><span>Conclusion: 3&ndash;4 sentences &mdash; numerical result with percent error, a definitive statement, and one concrete improvement</span></label>
+      </div>
+      <div class="check-group">
+        <span class="gh">References</span>
+        <label><input type="checkbox"><span>At least one source beyond the textbook and this handout &mdash; on <i>g</i> and how it varies with latitude and altitude</span></label>
+        <label><input type="checkbox"><span>Author, title and date given for each &mdash; a bare URL is not a citation</span></label>
+      </div>
+      <div class="check-group">
+        <span class="gh">Optional &mdash; bonus only</span>
+        <label><input type="checkbox"><span>Velocity-vs-time graph for at least one tape, numbered and captioned, with its linear fit equation and R&sup2;</span></label>
+        <label><input type="checkbox"><span>Sample calculation of one central-difference velocity, with units</span></label>
+        <label><input type="checkbox"><span>Two or three sentences comparing the two accelerations and saying what the agreement or disagreement means</span></label>
+      </div>
+      <div class="score" id="score">0 of 0 checked.</div>
+    </div>
+  </div>
+
+  <h2>Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB02_Free_Fall.pdf">
+      <span class="kind">Handout &middot; PDF</span>
+      <span class="name">This lab, printable</span>
+      <span class="hint">The whole page as a PDF. Print it and bring it to lab &mdash; the interactive
+      checker only works on this page, but everything else is there.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB02_Free_Fall_Raw_Data.xlsx">
+      <span class="kind">Data sheet &middot; XLSX</span>
+      <span class="name">Raw data sheet</span>
+      <span class="hint">Type your dot distances into the shaded cells; time, position and the
+      summary calculate themselves. Set the timer frequency at the top first.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB02_Rubric.docx">
+      <span class="kind">Grading &middot; DOCX</span>
+      <span class="name">Lab 02 rubric</span>
+      <span class="hint">Exactly what your report is marked on, criterion by criterion, with the
+      full-credit description for each. Read it before you write, not after &mdash; it doubles as an
+      outline.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB02_Free_Fall_Example_Starter.docx">
+      <span class="kind">Writing aid &middot; DOCX</span>
+      <span class="name">Example starter sentences</span>
+      <span class="hint">A model report with XX placeholders where your numbers go, and a prompt for
+      every table and figure the rubric asks for. Not a report to hand in &mdash; a way to start one.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">Required &middot; on Brightspace</span>
+      <span class="name">Lab Template and Lab Information module</span>
+      <span class="hint">Not linked here &mdash; find them in the <b>Lab Information</b> module on
+      Brightspace. Read both before you write: formatting, the abstract rules, significant digits, and
+      what belongs in each section.</span>
+    </div>
+  </div>
+
+  <h2>References to get you started</h2>
+  <p class="refs">Your references should include material on <i>g</i> and on free fall. Your textbook, this
+  handout, and the Module&nbsp;1 note pages all count, and you need at least one source beyond the textbook.
+  Use this format:</p>
+  <p class="refs">[1] [Authors' names], <i>Journal or Book title</i>, edition, Volume number, page number,
+  (year).</p>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 151
+    <span class="attrib">Revised from the PHY 151 Free Fall lab by H. Trevor Johnson-Steigelman. Ticker-tape
+    portion retained; the remote-scan and sonic-ranger sections have been retired in favour of data the class
+    collects itself. Revised 2026-09-21.</span>
+  </footer>
+
+</div>
+<script>
+(function(){
+  "use strict";
+  var G = 9.81;
+
+  /* ---------- linear algebra: solve 3x3 by Gaussian elimination ---------- */
+  function solve3(M, v){
+    var a = [[M[0][0],M[0][1],M[0][2],v[0]],
+             [M[1][0],M[1][1],M[1][2],v[1]],
+             [M[2][0],M[2][1],M[2][2],v[2]]];
+    for(var i=0;i<3;i++){
+      var p=i;
+      for(var r=i+1;r<3;r++){ if(Math.abs(a[r][i])>Math.abs(a[p][i])) p=r; }
+      if(Math.abs(a[p][i])<1e-18) return null;
+      var t=a[i]; a[i]=a[p]; a[p]=t;
+      for(var r2=0;r2<3;r2++){
+        if(r2===i) continue;
+        var f=a[r2][i]/a[i][i];
+        for(var c=i;c<4;c++) a[r2][c]-=f*a[i][c];
+      }
+    }
+    return [a[0][3]/a[0][0], a[1][3]/a[1][1], a[2][3]/a[2][2]];
+  }
+
+  function rsq(y, yhat){
+    var n=y.length, mean=0, i;
+    for(i=0;i<n;i++) mean+=y[i];
+    mean/=n;
+    var ssTot=0, ssRes=0;
+    for(i=0;i<n;i++){ ssTot+=(y[i]-mean)*(y[i]-mean); ssRes+=(y[i]-yhat[i])*(y[i]-yhat[i]); }
+    if(ssTot===0) return NaN;
+    return 1-ssRes/ssTot;
+  }
+
+  /* least-squares parabola y = A t^2 + B t + C */
+  function quadFit(t, y){
+    var n=t.length, S=[0,0,0,0,0], T=[0,0,0], i, ti;
+    for(i=0;i<n;i++){
+      ti=t[i];
+      S[0]+=1; S[1]+=ti; S[2]+=ti*ti; S[3]+=ti*ti*ti; S[4]+=ti*ti*ti*ti;
+      T[0]+=ti*ti*y[i]; T[1]+=ti*y[i]; T[2]+=y[i];
+    }
+    var sol = solve3([[S[4],S[3],S[2]],[S[3],S[2],S[1]],[S[2],S[1],S[0]]], T);
+    if(!sol) return null;
+    var A=sol[0], B=sol[1], C=sol[2], yh=[];
+    for(i=0;i<n;i++) yh.push(A*t[i]*t[i]+B*t[i]+C);
+    return {A:A, B:B, C:C, r2:rsq(y,yh)};
+  }
+
+  /* least-squares line y = m t + b */
+  function linFit(t, y){
+    var n=t.length, st=0, sy=0, stt=0, sty=0, i;
+    for(i=0;i<n;i++){ st+=t[i]; sy+=y[i]; stt+=t[i]*t[i]; sty+=t[i]*y[i]; }
+    var d = n*stt - st*st;
+    if(Math.abs(d)<1e-18) return null;
+    var m=(n*sty-st*sy)/d, b=(sy-m*st)/n, yh=[];
+    for(i=0;i<n;i++) yh.push(m*t[i]+b);
+    return {m:m, b:b, r2:rsq(y,yh)};
+  }
+
+  function fmt(x, d){
+    if(x===null || x===undefined || !isFinite(x)) return "—";
+    return x.toFixed(d===undefined?3:d);
+  }
+
+  /* ---------- the tool ---------- */
+  var out = document.getElementById("out");
+  var verdict = document.getElementById("verdict");
+
+  function setOut(vals){
+    var chips = out.getElementsByClassName("chip");
+    for(var i=0;i<chips.length && i<vals.length;i++){
+      var b = chips[i].getElementsByTagName("b")[0].outerHTML;
+      chips[i].innerHTML = b + " " + vals[i];
+    }
+  }
+
+  function run(){
+    var raw = document.getElementById("data").value;
+    var f = parseFloat(document.getElementById("freq").value);
+    var div = parseFloat(document.getElementById("units").value);
+    if(!(f>0)){ verdict.textContent = "Enter a timer frequency greater than zero."; return; }
+
+    var parts = raw.split(/[\s,;]+/), vals = [], i;
+    for(i=0;i<parts.length;i++){
+      if(parts[i]==="") continue;
+      var v = parseFloat(parts[i]);
+      if(isFinite(v)) vals.push(v/div);
+    }
+    if(vals.length < 5){
+      setOut(["—","—","—","—","—","—","—","—"]);
+      verdict.textContent = "Paste at least five values.";
+      return;
+    }
+
+    var dt = 1/f, t = [];
+    for(i=0;i<vals.length;i++) t.push(i*dt);
+
+    var qa = quadFit(t, vals);
+    if(!qa){ verdict.textContent = "Could not fit these values — check for duplicated or non-numeric entries."; return; }
+    var gA = 2*qa.A;
+
+    /* central-difference velocities */
+    var tv=[], vv=[];
+    for(i=1;i<vals.length-1;i++){ tv.push(t[i]); vv.push((vals[i+1]-vals[i-1])/(2*dt)); }
+    var lb = (tv.length>=3) ? linFit(tv, vv) : null;
+    var gB = lb ? lb.m : null;
+
+    var eA = Math.abs(gA-G)/G*100;
+    var eB = (gB!==null) ? Math.abs(gB-G)/G*100 : null;
+
+    setOut([
+      String(vals.length),
+      fmt(gA,3) + " m/s²",
+      fmt(qa.B,3) + " m/s",
+      fmt(qa.C*100,2) + " cm",
+      qa.r2.toFixed(5),
+      fmt(eA,1) + "%",
+      (gB!==null ? fmt(gB,3)+" m/s²" : "—"),
+      (eB!==null ? fmt(eB,1)+"%" : "—")
+    ]);
+
+    var msg = [];
+    if(gB!==null && Math.abs(gA-gB)/Math.abs(gA) > 0.03){
+      msg.push("The optional velocity route differs from the order-2 fit by " + (Math.abs(gA-gB)/Math.abs(gA)*100).toFixed(1) +
+               "% on this tape. If you are attempting the bonus, that gap is too large — look for a units slip or a misaligned row in the velocity column.");
+    }
+    if(qa.B > 0.15){
+      msg.push("B = " + qa.B.toFixed(2) + " m/s means dot 0 was already " + (qa.B/G).toFixed(3) +
+               " s into the fall — about " + (qa.B/G*f).toFixed(1) + " ticks. Use this in your discussion.");
+    } else if(qa.B < -0.15){
+      msg.push("B came out negative, which would mean the mass was moving upward at dot 0. Check that your distances increase down the tape and that dot 0 is the first value.");
+    }
+    if(eA > 10){
+      msg.push("Percent error is above 10%, so ordinary experimental uncertainty is not an acceptable explanation — the rubric requires a named mechanism with a number attached.");
+    } else {
+      msg.push("Percent error is under 10%; you may attribute it to ordinary experimental uncertainty, and you should say so explicitly.");
+    }
+    if(Math.abs(qa.C) > 0.02){
+      msg.push("C = " + (qa.C*100).toFixed(1) + " cm is a long way from zero. Your first pasted value should be the distance at dot 0, which is 0.");
+    }
+    verdict.innerHTML = msg.join(" ");
+  }
+
+  document.getElementById("go").addEventListener("click", run);
+  document.getElementById("clr").addEventListener("click", function(){
+    document.getElementById("data").value = "";
+    setOut(["—","—","—","—","—","—","—","—"]);
+    verdict.textContent = "Paste at least five values.";
+  });
+
+  /* ---------- predict-first probe ---------- */
+  var probe = document.getElementById("probe1");
+  var fb = document.getElementById("fb1");
+  var opts = probe.getElementsByClassName("opt");
+  for(var k=0;k<opts.length;k++){
+    (function(btn){
+      btn.addEventListener("click", function(){
+        var ok = btn.getAttribute("data-ok") === "1";
+        btn.classList.add(ok ? "correct" : "wrong");
+        if(ok){
+          fb.innerHTML = "Right. Friction between the tape and the timer acts upward on the falling system the whole way down, so the net downward force is less than the weight and the measured acceleration comes out <b>below</b> 9.81. Because the drag is always in the same direction, this is a <b>systematic</b> error — running more tapes will not average it away.";
+        } else {
+          fb.innerHTML = "Not quite. The tape is in contact with the timer for the entire fall, and the friction acts upward the whole time. That reduces the net downward force, so the measured acceleration comes out <b>below</b> 9.81 — and it does so on every tape, which makes it systematic rather than random.";
+        }
+      });
+    })(opts[k]);
+  }
+
+  /* ---------- checklist counter ---------- */
+  var boxes = document.querySelectorAll(".check-group input[type=checkbox]");
+  var score = document.getElementById("score");
+  function tally(){
+    var n=0;
+    for(var i=0;i<boxes.length;i++){ if(boxes[i].checked) n++; }
+    score.textContent = n + " of " + boxes.length + " checked.";
+  }
+  for(var j=0;j<boxes.length;j++) boxes[j].addEventListener("change", tally);
+  tally();
+})();
+</script>
+
+<!-- FLCC autosize reporter V4 — measures the content element, not the document.
+     See Cross_Course_Notes/Autosize_V4_Single_Source_Workflow.md -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
