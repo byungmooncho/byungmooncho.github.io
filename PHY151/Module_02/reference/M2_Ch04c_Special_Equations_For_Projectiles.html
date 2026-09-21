@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 Ch04c — Special Equations for Projectiles</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 151 · Module 2 · Chapter 4 (University Physics) · Trevor slides 04c
+     "Special Equations for Projectiles" — web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "c-Special Equations for Projectiles.pptx" (6 slides). Trevor's
+     filenames carry no chapter number; Cho has filed the "c-" projectile decks as
+     the Chapter 4 set (04a horizontal, 04b general, 04c this one).
+     Style block copied verbatim from M2_Ch03a_Vector_Basics.html.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.9rem 0 .4rem; }
+  .chip{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; border:1px solid var(--green); color:var(--green-deep); background:var(--green-soft); border-radius:20px; padding:.25rem .75rem; }
+  .chip.scalar{ border-color:var(--rule); color:var(--muted); background:#f7f9f8; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .rad{ border-top:1.3px solid currentColor; padding:0 .15em; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opts.three{ grid-template-columns:1fr; }
+  @media (min-width:560px){ .probe .opts.three{ grid-template-columns:repeat(3,1fr); } }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt svg{ display:block; width:100%; height:auto; }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Motion In Two Dimensions</span>
+    <span>Chapter 4 · Slides 04c</span>
+  </div>
+
+  <h1>Special Equations for Projectiles</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Every projectile problem can be solved from the component equations alone &mdash; resolve the launch
+    velocity, run <span class="m">x</span> and <span class="m">y</span> separately, let the flight time link
+    them. Do that once for the <em>general</em> level-ground launch and the algebra collapses into two tidy
+    formulas: an <b>apex height</b> and a <b>range</b>. They are worth deriving because the derivation is the
+    whole course in miniature &mdash; and worth deriving <em>carefully</em>, because each one is only true
+    under conditions that the formula itself no longer shows you.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Determine</b> the maximum height above the launch
+        point a projectile travels when given the launch angle and speed.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Derive</b> and <b>use</b> the range equation to
+        find the horizontal distance traveled by a projectile when given the launch angle and speed.</span></li>
+    </ul>
+    <div class="foot">The rest of the Chapter&nbsp;4 projectile objectives are carried by the sibling pages:
+      04a for a horizontal launch, 04b for the general problem.</div>
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Three things, all from earlier pages. <b>Resolve</b> a launch velocity into components:
+    <span class="m">v</span><sub>0<span class="m">x</span></sub> = <span class="m">v</span><sub>0</sub>&thinsp;cos&thinsp;&#952;
+    and <span class="m">v</span><sub>0<span class="m">y</span></sub> = <span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;.
+    <b>Independence of motion</b>: horizontally <span class="m">a</span><sub><span class="m">x</span></sub> = 0,
+    vertically <span class="m">a</span><sub><span class="m">y</span></sub> = &minus;<span class="m">g</span>,
+    and the two never talk to each other except through the shared clock. And the three kinematic equations,
+    including the one with no time in it,
+    <span class="m">v</span><sub><span class="m">y</span></sub>&#178; = <span class="m">v</span><sub>0<span class="m">y</span></sub>&#178; + 2<span class="m">a</span><sub><span class="m">y</span></sub>&#8201;&#916;<span class="m">y</span>.
+    Nothing new enters this page. Everything on it is those three facts pushed through to the end.
+  </div>
+
+  <h2>One restriction, stated up front: a level plane</h2>
+  <p>Trevor's second slide sets the ground rules, and they matter more than anything else on this page:
+  <em>in this lesson we are looking at projectiles fired on a level plane.</em> The projectile lands at the
+  same height it left. Nothing on this page is true for a ball thrown off a cliff, a golf ball landing on a
+  green above the tee, or an arrow shot from a tower.</p>
+  <p>Two more assumptions ride along quietly, as they have all module: <b>no air resistance</b>, and
+  <span class="m">g</span> <b>constant</b> over the whole flight. So the full contract is:</p>
+  <table class="defs">
+    <tr><td class="term">Level ground</td><td class="eq">&equiv;</td><td>landing height = launch height. This is the one that breaks most often in real problems.</td></tr>
+    <tr><td class="term">No air drag</td><td class="eq">&equiv;</td><td>the only force in flight is gravity, so the horizontal velocity never changes.</td></tr>
+    <tr><td class="term">Constant <span class="m">g</span></td><td class="eq">&equiv;</td><td><span class="m">g</span> = 9.80&nbsp;m/s&#178; throughout &mdash; fine for anything that stays near the ground.</td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Sign convention &mdash; read this once, carefully</span>
+    On the component pages you wrote <span class="m">a</span><sub><span class="m">y</span></sub> =
+    &minus;<span class="m">g</span> = &minus;9.80&nbsp;m/s&#178;, with the minus sign doing real work.
+    The two formulas on this page are <em>derived</em> from that, and the minus signs cancel on the way.
+    In the finished formulas <span class="m">g</span> is a positive <b>magnitude</b>: substitute
+    <span class="m">g</span> = +9.80&nbsp;m/s&#178;. Put &minus;9.80 into the range equation and you will get a
+    negative range. The derivation below shows exactly where the sign goes.
+  </div>
+
+  <h2>At the top of the path, <span class="m">v</span><sub><span class="m">y</span></sub> = 0</h2>
+  <p>This single sentence is the hinge of the whole lesson. On the way up the projectile is still rising; on
+  the way down it is falling; at the <b>apex</b> it is doing neither. The vertical component of velocity
+  passes through zero &mdash; the object stops moving up. It does <em>not</em> stop: the horizontal component
+  is untouched by gravity and carries straight on.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A symmetric projectile trajectory over level ground. At launch the velocity is resolved into a horizontal and a vertical component with the launch angle theta marked. At the apex only the horizontal component remains and the vertical component is zero. At landing the velocity has the same magnitude as at launch, directed below the horizontal. The apex height h and the range R are marked.">
+      <defs>
+        <marker id="pj-grn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+        <marker id="pj-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="pj-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <!-- ground -->
+      <line x1="40" y1="270" x2="600" y2="270" stroke="#9aa8a0" stroke-width="2"/>
+      <text class="sm" x="44" y="286">level ground</text>
+      <!-- trajectory -->
+      <polyline points="70,270.0 93,237.7 116,208.8 139,183.3 162,161.2 185,142.5 208,127.2 231,115.3 254,106.8 277,101.7 300,100.0 323,101.7 346,106.8 369,115.3 392,127.2 415,142.5 438,161.2 461,183.3 484,208.8 507,237.7 530,270.0"
+                fill="none" stroke="#2457b8" stroke-width="2.5" stroke-dasharray="7 5"/>
+      <!-- apex height -->
+      <line x1="300" y1="266" x2="300" y2="106" stroke="#5c6b62" stroke-width="1.4" stroke-dasharray="5 4" marker-start="url(#pj-dim)" marker-end="url(#pj-dim)"/>
+      <text class="lbl" x="308" y="196">h</text>
+      <!-- range -->
+      <line x1="70" y1="304" x2="530" y2="304" stroke="#5c6b62" stroke-width="1.4" marker-start="url(#pj-dim)" marker-end="url(#pj-dim)"/>
+      <line x1="70" y1="274" x2="70" y2="308" stroke="#5c6b62" stroke-width="1" stroke-dasharray="4 3"/>
+      <line x1="530" y1="274" x2="530" y2="308" stroke="#5c6b62" stroke-width="1" stroke-dasharray="4 3"/>
+      <text class="lbl" x="294" y="324">R</text>
+      <!-- launch -->
+      <circle cx="70" cy="270" r="4" fill="#1d2b23"/>
+      <line x1="70" y1="270" x2="115" y2="199" stroke="#7d3fa0" stroke-width="3" marker-end="url(#pj-pur)"/>
+      <line x1="70" y1="270" x2="118" y2="270" stroke="#134a29" stroke-width="2.5" marker-end="url(#pj-grn)"/>
+      <line x1="70" y1="270" x2="70" y2="196" stroke="#134a29" stroke-width="2.5" marker-end="url(#pj-grn)"/>
+      <path d="M 96 270 A 26 26 0 0 0 84.6 248.5" fill="none" stroke="#2457b8" stroke-width="2"/>
+      <text class="lbl" x="99" y="264" fill="#2457b8">&#952;</text>
+      <text class="lbl" x="120" y="192" fill="#7d3fa0">v<tspan font-size="10" dy="3">0</tspan></text>
+      <text class="lbl" x="86" y="290" fill="#134a29">v<tspan font-size="10" dy="3">0x</tspan></text>
+      <text class="lbl" x="30" y="228" fill="#134a29">v<tspan font-size="10" dy="3">0y</tspan></text>
+      <!-- apex -->
+      <circle cx="300" cy="100" r="4" fill="#1d2b23"/>
+      <line x1="300" y1="100" x2="366" y2="100" stroke="#134a29" stroke-width="2.5" marker-end="url(#pj-grn)"/>
+      <text class="lbl" x="370" y="105" fill="#134a29">v<tspan font-size="10" dy="3">0x</tspan></text>
+      <text class="sm" x="196" y="86">apex &#183; v<tspan font-size="9" dy="2">y</tspan><tspan dy="-2"> = 0</tspan></text>
+      <!-- landing -->
+      <circle cx="530" cy="270" r="4" fill="#1d2b23"/>
+      <line x1="485" y1="199" x2="530" y2="270" stroke="#7d3fa0" stroke-width="3" marker-end="url(#pj-pur)"/>
+      <line x1="485" y1="199" x2="527" y2="199" stroke="#134a29" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#pj-grn)"/>
+      <line x1="530" y1="203" x2="530" y2="262" stroke="#134a29" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#pj-grn)"/>
+      <text class="lbl" x="436" y="232" fill="#7d3fa0">v<tspan font-size="10" dy="3">0</tspan></text>
+      <text class="lbl" x="487" y="192" fill="#134a29">v<tspan font-size="10" dy="3">0x</tspan></text>
+      <text class="lbl" x="538" y="238" fill="#134a29">v<tspan font-size="10" dy="3">0y</tspan></text>
+      <text class="sm" x="540" y="196">lands at the</text>
+      <text class="sm" x="540" y="212">same speed</text>
+    </svg>
+    <figcaption>Level ground makes the picture symmetric: the two halves of the flight are mirror images,
+      so the landing speed equals the launch speed and the landing angle equals &#952; below the horizontal.</figcaption>
+  </figure>
+
+  <h3>Things to know about projectiles</h3>
+  <ul>
+    <li>The <b>flight time</b> up equals the flight time down &mdash; on level ground. Half the total flight
+      time is spent reaching the apex.</li>
+    <li>At <b>equal heights the speed is the same</b>, once going up and once coming down. Only the
+      <em>direction</em> differs, and only in its vertical part.</li>
+    <li>The speed at the apex is <em>not</em> zero. It is
+      <span class="m">v</span><sub>0<span class="m">x</span></sub> = <span class="m">v</span><sub>0</sub>&thinsp;cos&thinsp;&#952;
+      &mdash; the whole horizontal component, unchanged since launch.</li>
+    <li>The speed at landing is not zero either. Its <b>magnitude</b> is
+      <span class="m">v</span><sub>0</sub> again, with its <b>direction</b> now &#952; <em>below</em> the
+      horizontal.</li>
+  </ul>
+  <div class="tip">
+    <span class="label">The trap</span>
+    &ldquo;At the top the velocity is zero&rdquo; is the single most common error in this chapter.
+    <span class="m">v</span><sub><span class="m">y</span></sub> = 0 at the apex;
+    <span class="m">v</span><sub><span class="m">x</span></sub> never was and never will be. Write the
+    subscript. It is the difference between a right answer and a projectile that falls straight out of the sky.
+  </div>
+
+  <h2>Maximum height above the launch point</h2>
+  <p>A projectile is launched with velocity (<span class="m">v</span><sub>0</sub>, &#952;). What equation
+  describes the maximum height? There are two routes, and Trevor shows both, because they need different
+  information.</p>
+
+  <h3>Form 1 &mdash; from the launch velocity alone</h3>
+  <p>Use the kinematic equation that has no time in it, applied to the <span class="m">y</span> motion only,
+  and impose the apex condition.</p>
+  <div class="mathblock">
+    <div class="head">Maximum height, no clock required</div>
+    <div class="body">
+      <div class="mathline"><span class="m">v</span><sub><span class="m">y</span></sub>&#178;
+        = <span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;
+        + 2<span class="m">a</span><sub><span class="m">y</span></sub>&#8201;(<span class="m">y</span> &minus; <span class="m">y</span><sub>0</sub>)</div>
+      <div class="mathline">0 = <span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;
+        + 2(&minus;<span class="m">g</span>)(<span class="m">h</span> &minus; 0)</div>
+      <p class="why">Substituted three things at once:
+        <span class="m">v</span><sub><span class="m">y</span></sub> = 0 at the apex;
+        <span class="m">a</span><sub><span class="m">y</span></sub> = &minus;<span class="m">g</span> with the
+        <span class="m">y</span>-axis pointing up; and the launch point as the origin,
+        <span class="m">y</span><sub>0</sub> = 0, so <span class="m">y</span> at the apex is the height
+        <span class="m">h</span> we want.</p>
+      <div class="mathline">2<span class="m">gh</span> = <span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;</div>
+      <p class="why">Moved the negative term across. Both minus signs are now gone &mdash; this is where
+        <span class="m">g</span> becomes a positive magnitude.</p>
+      <div class="mathline"><span class="m">h</span> =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;</span><span class="bot">2<span class="m">g</span></span></span>
+        =
+        <span class="frac"><span class="top">(<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;)&#178;</span><span class="bot">2<span class="m">g</span></span></span></div>
+      <p class="why">Substituted <span class="m">v</span><sub>0<span class="m">y</span></sub> =
+        <span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;. Note the square covers the whole
+        product: (<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;)&#178;, not
+        <span class="m">v</span><sub>0</sub>&thinsp;sin(&#952;&#178;).</p>
+    </div>
+  </div>
+
+  <h3>Form 2 &mdash; the version that requires the time</h3>
+  <p>If you already know when the projectile reaches the apex, use the position equation instead. First find
+  that time, from the velocity equation:</p>
+  <div class="mathblock">
+    <div class="head">Time to the apex, then the height</div>
+    <div class="body">
+      <div class="mathline"><span class="m">v</span><sub><span class="m">y</span></sub> =
+        <span class="m">v</span><sub>0<span class="m">y</span></sub> &minus; <span class="m">g</span>&#8201;&#916;<span class="m">t</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        0 = <span class="m">v</span><sub>0<span class="m">y</span></sub> &minus; <span class="m">g</span>&#8201;<span class="m">t</span><sub>apex</sub></div>
+      <div class="mathline"><span class="m">t</span><sub>apex</sub> =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0<span class="m">y</span></sub></span><span class="bot"><span class="m">g</span></span></span>
+        =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;</span><span class="bot"><span class="m">g</span></span></span></div>
+      <p class="why">Again the apex condition <span class="m">v</span><sub><span class="m">y</span></sub> = 0,
+        this time in the velocity equation.</p>
+      <div class="mathline"><span class="m">h</span> =
+        <span class="m">v</span><sub>0<span class="m">y</span></sub>&#8201;<span class="m">t</span><sub>apex</sub>
+        &minus; <span class="frac"><span class="top">1</span><span class="bot">2</span></span>
+        <span class="m">g</span>&#8201;<span class="m">t</span><sub>apex</sub>&#178;</div>
+      <div class="mathline"><span class="m">h</span> =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;</span><span class="bot"><span class="m">g</span></span></span>
+        &minus;
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;</span><span class="bot">2<span class="m">g</span></span></span>
+        =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;</span><span class="bot">2<span class="m">g</span></span></span></div>
+      <p class="why">Substituted <span class="m">t</span><sub>apex</sub> =
+        <span class="m">v</span><sub>0<span class="m">y</span></sub>/<span class="m">g</span> into both terms.
+        The two routes agree, as they must &mdash; they are the same physics with the clock eliminated in a
+        different order.</p>
+    </div>
+  </div>
+  <div class="tip">
+    <span class="label">Which form to reach for</span>
+    Form&nbsp;1 needs only the launch velocity, so it is the one to use when the question hands you
+    <span class="m">v</span><sub>0</sub> and &#952; and nothing else. Form&nbsp;2 earns its keep when the time
+    is already on the page &mdash; and it is the form that survives when the ground is not level, because it
+    never assumed anything about where the projectile lands.
+  </div>
+
+  <h2>Deriving the range equation</h2>
+  <p>The <b>range</b> <span class="m">R</span> is the horizontal distance from launch to landing. Horizontally
+  there is no acceleration, so the horizontal problem is trivial &mdash; the work is all in finding the
+  <b>flight time</b>, and that is where <em>level ground</em> gets used.</p>
+
+  <div class="mathblock">
+    <div class="head">Step 1 &mdash; the horizontal motion</div>
+    <div class="body">
+      <div class="mathline"><span class="m">x</span> = <span class="m">x</span><sub>0</sub>
+        + <span class="m">v</span><sub>0<span class="m">x</span></sub>&#8201;&#916;<span class="m">t</span>
+        + <span class="frac"><span class="top">1</span><span class="bot">2</span></span>
+        <span class="m">a</span><sub><span class="m">x</span></sub>&#8201;(&#916;<span class="m">t</span>)&#178;</div>
+      <div class="mathline"><span class="m">R</span> = <span class="m">v</span><sub>0<span class="m">x</span></sub>&#8201;<span class="m">T</span></div>
+      <p class="why">Substituted <span class="m">x</span><sub>0</sub> = 0 (launch at the origin) and
+        <span class="m">a</span><sub><span class="m">x</span></sub> = 0 (no air resistance, so nothing pushes
+        horizontally). <span class="m">T</span> is the total flight time. Distance = speed &times; time, no more
+        than that &mdash; but we do not know <span class="m">T</span> yet.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Step 2 &mdash; the flight time, from the vertical motion</div>
+    <div class="body">
+      <div class="mathline"><span class="m">y</span> = <span class="m">y</span><sub>0</sub>
+        + <span class="m">v</span><sub>0<span class="m">y</span></sub>&#8201;&#916;<span class="m">t</span>
+        + <span class="frac"><span class="top">1</span><span class="bot">2</span></span>
+        <span class="m">a</span><sub><span class="m">y</span></sub>&#8201;(&#916;<span class="m">t</span>)&#178;</div>
+      <div class="mathline">0 = <span class="m">v</span><sub>0<span class="m">y</span></sub>&#8201;<span class="m">T</span>
+        + <span class="frac"><span class="top">1</span><span class="bot">2</span></span>(&minus;<span class="m">g</span>)<span class="m">T</span>&#178;</div>
+      <p class="why"><b>This is the level-ground step.</b> Setting the left side to zero says the projectile
+        finishes at the same height it started: <span class="m">y</span> = <span class="m">y</span><sub>0</sub> = 0.
+        Everything downstream of this line inherits that assumption.</p>
+      <div class="mathline"><span class="frac"><span class="top">1</span><span class="bot">2</span></span>
+        <span class="m">g</span>&#8201;<span class="m">T</span>&#178; =
+        <span class="m">v</span><sub>0<span class="m">y</span></sub>&#8201;<span class="m">T</span></div>
+      <div class="mathline"><span class="m">T</span> =
+        <span class="frac"><span class="top">2<span class="m">v</span><sub>0<span class="m">y</span></sub></span><span class="bot"><span class="m">g</span></span></span>
+        =
+        <span class="frac"><span class="top">2<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;</span><span class="bot"><span class="m">g</span></span></span></div>
+      <p class="why">Divided both sides by <span class="m">T</span>. That throws away the root
+        <span class="m">T</span> = 0, which is a genuine solution &mdash; the projectile is also at
+        <span class="m">y</span> = 0 at the instant of launch &mdash; but not the one we want. Notice
+        <span class="m">T</span> = 2<span class="m">t</span><sub>apex</sub>: up and down take equal times,
+        exactly as the picture promised.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Step 3 &mdash; put them together</div>
+    <div class="body">
+      <div class="mathline"><span class="m">R</span> = <span class="m">v</span><sub>0<span class="m">x</span></sub>&#8201;<span class="m">T</span>
+        = <span class="m">v</span><sub>0<span class="m">x</span></sub>
+        <span class="frac"><span class="top">2<span class="m">v</span><sub>0<span class="m">y</span></sub></span><span class="bot"><span class="m">g</span></span></span>
+        =
+        <span class="frac"><span class="top">2<span class="m">v</span><sub>0<span class="m">x</span></sub><span class="m">v</span><sub>0<span class="m">y</span></sub></span><span class="bot"><span class="m">g</span></span></span></div>
+      <div class="mathline"><span class="m">R</span> =
+        <span class="frac"><span class="top">2(<span class="m">v</span><sub>0</sub>&thinsp;cos&thinsp;&#952;)(<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;)</span><span class="bot"><span class="m">g</span></span></span>
+        =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0</sub>&#178;&#8201;(2&#8201;sin&thinsp;&#952;&#8201;cos&thinsp;&#952;)</span><span class="bot"><span class="m">g</span></span></span></div>
+      <p class="why">Substituted both components and pulled the two factors of
+        <span class="m">v</span><sub>0</sub> out front. Nothing clever has happened yet &mdash; it is still
+        just <span class="m">v</span><sub>0<span class="m">x</span></sub><span class="m">T</span>.</p>
+      <div class="mathline">2&#8201;sin&thinsp;&#952;&#8201;cos&thinsp;&#952; = sin(2&#952;)</div>
+      <p class="why"><b>The step students cannot reproduce.</b> This is the double-angle identity from
+        trigonometry &mdash; read the right-hand side as &ldquo;the sine of the quantity two theta,&rdquo; not
+        as two times sin&thinsp;&#952;. It is a rewriting, not a physics assumption: the line above and the
+        line below say exactly the same thing.</p>
+      <div class="mathline"><span class="m">R</span> =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0</sub>&#178;&#8201;sin(2&#952;)</span><span class="bot"><span class="m">g</span></span></span>
+        &nbsp;&nbsp;&#183;&nbsp;&nbsp;the range equation</div>
+      <p class="why">With <span class="m">g</span> = +9.80&nbsp;m/s&#178;. Set it beside the height:
+        <span class="m">h</span> = (<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;)&#178;/(2<span class="m">g</span>).
+        Same <span class="m">v</span><sub>0</sub>&#178;, same <span class="m">g</span> downstairs &mdash; the two
+        equations differ only in the trig factor and the 2. That similarity is a memory aid, and it is also a
+        trap: it makes them easy to swap by accident.</p>
+    </div>
+  </div>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Predict first</span>
+      Two identical balls leave the same spot on a flat field at the same speed,
+      <span class="m">v</span><sub>0</sub> = 20.0&nbsp;m/s. One is fired at 30&#176;, the other at 60&#176;.
+      Which one lands farther away?</p>
+    <div class="opts three">
+      <button class="opt" data-correct="false"><span>The 30&#176; ball &mdash; it is aimed more along the ground.</span></button>
+      <button class="opt" data-correct="false"><span>The 60&#176; ball &mdash; it stays in the air much longer.</span></button>
+      <button class="opt" data-correct="true"><span>Neither &mdash; they land the same distance away.</span></button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>What sin(2&#952;) tells you at a glance</h2>
+  <p>Once the range is written as <span class="m">R</span> = (<span class="m">v</span><sub>0</sub>&#178;/<span class="m">g</span>)&#8201;sin(2&#952;),
+  three results fall out of the shape of the sine function alone. No further physics is needed &mdash; only
+  the fact that sin(2&#952;) runs from 0 up to 1 and back to 0 as &#952; goes from 0&#176; to 90&#176;.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="Graph of range versus launch angle for a fixed launch speed. The curve starts at zero at zero degrees, rises to a single maximum of 40.8 metres at 45 degrees, and falls back to zero at 90 degrees. Points at 30 degrees and 60 degrees are marked at the same range of 35.3 metres.">
+      <defs>
+        <marker id="rg-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker>
+      </defs>
+      <!-- gridlines -->
+      <g stroke="#e4ece7" stroke-width="1">
+        <line x1="70" y1="213.3" x2="580" y2="213.3"/><line x1="70" y1="166.7" x2="580" y2="166.7"/>
+        <line x1="70" y1="120" x2="580" y2="120"/><line x1="70" y1="73.3" x2="580" y2="73.3"/>
+        <line x1="151.7" y1="260" x2="151.7" y2="45"/><line x1="233.3" y1="260" x2="233.3" y2="45"/>
+        <line x1="315" y1="260" x2="315" y2="45"/><line x1="396.7" y1="260" x2="396.7" y2="45"/>
+        <line x1="478.3" y1="260" x2="478.3" y2="45"/><line x1="560" y1="260" x2="560" y2="45"/>
+      </g>
+      <!-- axes -->
+      <line x1="70" y1="260" x2="590" y2="260" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="70" y1="260" x2="70" y2="45" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="62" y="278">0</text><text class="sm" x="140" y="278">15&#176;</text>
+      <text class="sm" x="222" y="278">30&#176;</text><text class="sm" x="304" y="278">45&#176;</text>
+      <text class="sm" x="386" y="278">60&#176;</text><text class="sm" x="468" y="278">75&#176;</text>
+      <text class="sm" x="550" y="278">90&#176;</text>
+      <text class="sm" x="40" y="217">10</text><text class="sm" x="40" y="170">20</text>
+      <text class="sm" x="40" y="124">30</text><text class="sm" x="40" y="77">40</text>
+      <text class="sm" x="250" y="300">launch angle &#952;</text>
+      <text class="sm" x="16" y="38">R (m)</text>
+      <!-- curve -->
+      <polyline points="70.0,260.0 97.2,226.9 124.4,194.9 151.7,164.8 178.9,137.6 206.1,114.1 233.3,95.0 260.6,81.0 287.8,72.4 315.0,69.5 342.2,72.4 369.4,81.0 396.7,95.0 423.9,114.1 451.1,137.6 478.3,164.8 505.6,194.9 532.8,226.9 560.0,260.0"
+                fill="none" stroke="#2457b8" stroke-width="3"/>
+      <!-- complementary pair -->
+      <line x1="233.3" y1="95" x2="396.7" y2="95" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="6 4" marker-start="url(#rg-dim)" marker-end="url(#rg-dim)"/>
+      <line x1="233.3" y1="95" x2="233.3" y2="260" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <line x1="396.7" y1="95" x2="396.7" y2="260" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <circle cx="233.3" cy="95" r="5" fill="#c0392b"/><circle cx="396.7" cy="95" r="5" fill="#c0392b"/>
+      <text class="sm" x="246" y="88" fill="#c0392b">30&#176; and 60&#176; &#183; same range, 35.3 m</text>
+      <!-- peak -->
+      <line x1="315" y1="69.5" x2="315" y2="260" stroke="#7d3fa0" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <circle cx="315" cy="69.5" r="5" fill="#7d3fa0"/>
+      <text class="sm" x="330" y="56" fill="#7d3fa0">45&#176; &#183; farthest, 40.8 m</text>
+      <!-- caption inside -->
+      <text class="sm" x="86" y="62">v<tspan font-size="9" dy="2">0</tspan><tspan dy="-2"> = 20.0 m/s, g = 9.80 m/s&#178;</tspan></text>
+    </svg>
+    <figcaption>One launch speed, every launch angle. The curve is symmetric about 45&#176;, which is why
+      complementary angles pair up.</figcaption>
+  </figure>
+
+  <table class="grid">
+    <tr><th>What the formula says</th><th>Why it is immediate</th></tr>
+    <tr><td><span class="m">R</span> = 0 at &#952; = 0&#176;</td>
+        <td>sin(0&#176;) = 0. Fired horizontally from ground level, the projectile is already on the ground: the flight time is zero.</td></tr>
+    <tr><td><span class="m">R</span> = 0 at &#952; = 90&#176;</td>
+        <td>sin(180&#176;) = 0. Straight up has the longest flight time of all, but <span class="m">v</span><sub>0<span class="m">x</span></sub> = 0, so it comes back down on your head.</td></tr>
+    <tr><td><span class="m">R</span> is largest at &#952; = 45&#176;</td>
+        <td>sin(2&#952;) peaks at 1 when 2&#952; = 90&#176;. So <span class="m">R</span><sub>max</sub> = <span class="m">v</span><sub>0</sub>&#178;/<span class="m">g</span>.</td></tr>
+    <tr><td>&#952; and (90&#176; &minus; &#952;) give the same <span class="m">R</span></td>
+        <td>sin(2(90&#176; &minus; &#952;)) = sin(180&#176; &minus; 2&#952;) = sin(2&#952;). The two angles feed the same number into the same formula.</td></tr>
+  </table>
+  <p>The last row is worth a sentence of physics, not just trigonometry. The low angle wins on horizontal
+  speed and loses on flight time; the high angle does the reverse. Because
+  <span class="m">R</span> = <span class="m">v</span><sub>0<span class="m">x</span></sub><span class="m">T</span>
+  is a <em>product</em>, and cos&thinsp;&#952; and sin&thinsp;&#952; simply trade places when you swap &#952;
+  for 90&#176; &minus; &#952;, the two effects cancel exactly. The trajectories look nothing alike &mdash; the
+  60&#176; shot climbs three times as high &mdash; but they come down in the same place.</p>
+
+  <h2>Worked example 1 &mdash; <span class="m">v</span><sub>0</sub> = 20.0 m/s at &#952; = 30.0&#176;</h2>
+  <p>A ball leaves the ground at 20.0&nbsp;m/s, 30.0&#176; above the horizontal, on a level field. Take
+  <span class="m">g</span> = 9.80&nbsp;m/s&#178;. Find the maximum height, the flight time, and the range.</p>
+  <div class="mathblock">
+    <div class="head">Resolve first, then substitute</div>
+    <div class="body">
+      <div class="mathline"><span class="m">v</span><sub>0<span class="m">x</span></sub> =
+        (20.0&#8201;m/s)&#8201;cos&thinsp;30.0&#176; = 17.3205&#8201;m/s</div>
+      <div class="mathline"><span class="m">v</span><sub>0<span class="m">y</span></sub> =
+        (20.0&#8201;m/s)&#8201;sin&thinsp;30.0&#176; = 10.0000&#8201;m/s</div>
+      <p class="why">Guard digits kept; everything is rounded once, at the end.</p>
+      <div class="mathline"><span class="m">h</span> =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;</span><span class="bot">2<span class="m">g</span></span></span>
+        =
+        <span class="frac"><span class="top">(10.0000&#8201;m/s)&#178;</span><span class="bot">2(9.80&#8201;m/s&#178;)</span></span>
+        = 5.1020&#8201;m &nbsp;&rarr;&nbsp; <b>5.10 m</b></div>
+      <div class="mathline"><span class="m">T</span> =
+        <span class="frac"><span class="top">2<span class="m">v</span><sub>0<span class="m">y</span></sub></span><span class="bot"><span class="m">g</span></span></span>
+        =
+        <span class="frac"><span class="top">2(10.0000&#8201;m/s)</span><span class="bot">9.80&#8201;m/s&#178;</span></span>
+        = 2.0408&#8201;s &nbsp;&rarr;&nbsp; <b>2.04 s</b></div>
+      <div class="mathline"><span class="m">R</span> =
+        <span class="m">v</span><sub>0<span class="m">x</span></sub><span class="m">T</span>
+        = (17.3205&#8201;m/s)(2.0408&#8201;s) = 35.3480&#8201;m &nbsp;&rarr;&nbsp; <b>35.3 m</b></div>
+      <p class="why">Check it against the range equation directly:
+        <span class="m">R</span> = (20.0&#8201;m/s)&#178;&#8201;sin(60.0&#176;)/(9.80&#8201;m/s&#178;)
+        = (400&#8201;m&#178;/s&#178;)(0.86603)/(9.80&#8201;m/s&#178;) = 35.3480&#8201;m. Same number, as it must be &mdash;
+        the range equation <em>is</em> <span class="m">v</span><sub>0<span class="m">x</span></sub><span class="m">T</span>
+        with the substitutions already made. The time to the apex is
+        <span class="m">T</span>/2 = 1.02&nbsp;s.</p>
+    </div>
+  </div>
+
+  <h2>Worked example 2 &mdash; the same speed at &#952; = 60.0&#176;</h2>
+  <p>Now fire the identical ball at 60.0&#176;, the complement of 30.0&#176;. Everything about the flight
+  changes except one number.</p>
+  <div class="mathblock">
+    <div class="head">The complementary launch</div>
+    <div class="body">
+      <div class="mathline"><span class="m">v</span><sub>0<span class="m">x</span></sub> =
+        (20.0&#8201;m/s)&#8201;cos&thinsp;60.0&#176; = 10.0000&#8201;m/s &nbsp;&#183;&nbsp;
+        <span class="m">v</span><sub>0<span class="m">y</span></sub> =
+        (20.0&#8201;m/s)&#8201;sin&thinsp;60.0&#176; = 17.3205&#8201;m/s</div>
+      <p class="why">The two components have simply swapped values with Example&nbsp;1. That is the whole
+        content of &ldquo;complementary angle.&rdquo;</p>
+      <div class="mathline"><span class="m">h</span> =
+        <span class="frac"><span class="top">(17.3205&#8201;m/s)&#178;</span><span class="bot">2(9.80&#8201;m/s&#178;)</span></span>
+        = 15.3061&#8201;m &nbsp;&rarr;&nbsp; <b>15.3 m</b></div>
+      <div class="mathline"><span class="m">T</span> =
+        <span class="frac"><span class="top">2(17.3205&#8201;m/s)</span><span class="bot">9.80&#8201;m/s&#178;</span></span>
+        = 3.5348&#8201;s &nbsp;&rarr;&nbsp; <b>3.53 s</b></div>
+      <div class="mathline"><span class="m">R</span> = (10.0000&#8201;m/s)(3.5348&#8201;s)
+        = 35.3480&#8201;m &nbsp;&rarr;&nbsp; <b>35.3 m</b></div>
+      <p class="why">Three times the height, 1.73 times the flight time, and the <em>identical</em> range.
+        Horizontal speed fell by the same factor 1.73 that the flight time rose by, and the product is
+        untouched. In the range equation this is one line: sin(2&#8201;&#215;&#8201;60.0&#176;) = sin(120.0&#176;)
+        = sin(60.0&#176;) = 0.86603.</p>
+    </div>
+  </div>
+  <p class="why">For reference, the best either ball can do is 45.0&#176;:
+  <span class="m">R</span><sub>max</sub> = <span class="m">v</span><sub>0</sub>&#178;/<span class="m">g</span>
+  = (400&nbsp;m&#178;/s&#178;)/(9.80&nbsp;m/s&#178;) = 40.8&nbsp;m, with <span class="m">h</span> = 10.2&nbsp;m
+  and <span class="m">T</span> = 2.89&nbsp;s.</p>
+
+  <h2>Limitations &mdash; where these equations stop working</h2>
+  <p>Trevor closes the deck on this point, and it is the right place to close. The two formulas are compact
+  because the assumptions have been absorbed into them. Once absorbed, they are invisible: nothing in
+  <span class="m">R</span> = <span class="m">v</span><sub>0</sub>&#178;&#8201;sin(2&#952;)/<span class="m">g</span>
+  reminds you that the ground was flat. You have to remember.</p>
+
+  <h3>Launching from a cliff</h3>
+  <p>Take the same launch &mdash; same <span class="m">v</span><sub>0</sub>, same &#952; &mdash; but fire it
+  from the top of a cliff of height <span class="m">H</span> above the plain below. Go back through the
+  derivation and check each line:</p>
+  <table class="grid">
+    <tr><th>Result</th><th>Still true from a cliff?</th><th>Why</th></tr>
+    <tr><td><span class="m">v</span><sub><span class="m">y</span></sub> = 0 at the apex</td>
+        <td><b>Yes</b></td>
+        <td>It is a statement about the vertical motion only, and says nothing about where the projectile eventually lands.</td></tr>
+    <tr><td><span class="m">h</span> = (<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;)&#178;/(2<span class="m">g</span>)</td>
+        <td><b>Yes</b></td>
+        <td>Derived from <span class="m">v</span><sub><span class="m">y</span></sub>&#178; = <span class="m">v</span><sub>0<span class="m">y</span></sub>&#178; &minus; 2<span class="m">gh</span> with the launch point as the origin. It is the rise <em>above the launch point</em>. The height above the <em>ground</em> is <span class="m">h</span> + <span class="m">H</span>.</td></tr>
+    <tr><td><span class="m">T</span> = 2<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;/<span class="m">g</span></td>
+        <td><b>No</b></td>
+        <td>This came from setting <span class="m">y</span> = 0 at landing. From a cliff the landing point is at <span class="m">y</span> = &minus;<span class="m">H</span>, and the equation 0 = <span class="m">H</span> + <span class="m">v</span><sub>0<span class="m">y</span></sub><span class="m">T</span> &minus; &#189;<span class="m">gT</span>&#178; is a genuine quadratic that no longer factors so kindly.</td></tr>
+    <tr><td><span class="m">R</span> = <span class="m">v</span><sub>0</sub>&#178;&#8201;sin(2&#952;)/<span class="m">g</span></td>
+        <td><b>No</b></td>
+        <td>It is <span class="m">v</span><sub>0<span class="m">x</span></sub><span class="m">T</span>, so it inherits the wrong <span class="m">T</span>. It will <em>under</em>-predict: the extra fall buys extra time, and the real range is longer.</td></tr>
+  </table>
+  <p>So one of the four survives. That is the honest answer to &ldquo;can I use the special equations here?&rdquo;
+  &mdash; the apex height yes, the flight time and the range no.</p>
+  <div class="tip">
+    <span class="label">One more casualty</span>
+    The 45&#176; result goes too. Because the extra drop rewards a flatter, faster shot, the angle that
+    maximises range from a cliff is always <em>less</em> than 45&#176;, and it gets smaller the taller the
+    cliff. &ldquo;Aim at 45&#176; for maximum distance&rdquo; is a level-ground statement, not a law of nature.
+  </div>
+  <p class="preview-note"><strong>Looking ahead:</strong> page <b>04b &mdash; General Projectile Problems</b> is
+  where the level-plane restriction is dropped for good. Without it there is no closed-form flight time to
+  substitute, so you solve the quadratic instead &mdash; and if the unknown is the launch <em>angle</em>
+  rather than the time, the algebra reorganises into a quadratic in tan&thinsp;&#952;, which is why such
+  problems usually have two answers. Page <b>04a &mdash; Horizontally Fired Projectiles</b> is the opposite
+  simplification: &#952; = 0, so <span class="m">v</span><sub>0<span class="m">y</span></sub> = 0 and there is
+  no apex at all.</p>
+
+  <div class="probe" id="probe2">
+    <p class="q"><span class="tag">Predict first</span>
+      You fire the same projectile &mdash; same <span class="m">v</span><sub>0</sub>, same &#952; &mdash; from
+      the roof of a building instead of from the field. Which of these three results is <em>still</em> correct
+      without any modification?</p>
+    <div class="opts three">
+      <button class="opt" data-correct="true"><span>The maximum height above the launch point, <span class="m">h</span> = (<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;)&#178;/(2<span class="m">g</span>)</span></button>
+      <button class="opt" data-correct="false"><span>The flight time, <span class="m">T</span> = 2<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;/<span class="m">g</span></span></button>
+      <button class="opt" data-correct="false"><span>The range, <span class="m">R</span> = <span class="m">v</span><sub>0</sub>&#178;&#8201;sin(2&#952;)/<span class="m">g</span></span></button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <div class="known">
+    <span class="label">In your own notes</span>
+    You have already derived both of these by hand, the long way, in
+    <a href="../M2_N4_2D_Projectile_Arbitrary_Angles.html">N4 &mdash; 2D Projectile, Arbitrary Angles</a>:
+    the flight time and the apex height come out of the component equations there, and the last section of
+    that page works the general <em>cliff</em> launch that Trevor warns about &mdash; the one that resolves
+    into a quadratic in tan&thinsp;&#952;. Running the range equation <em>backwards</em> &mdash; you are given
+    the distance and asked for the angle &mdash; is
+    <a href="../M2_N5_Launch_Parameters_To_Hit_Targets.html">N5 &mdash; Launch Parameters To Hit Targets</a>.
+    Solving sin(2&#952;) = <span class="m">Rg</span>/<span class="m">v</span><sub>0</sub>&#178; gives two
+    angles, not one: a low arc and a high arc, and they are the complementary pair you met above.
+  </div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>&#127903;&#65039; Exit ticket</strong>
+      <span class="sub">Four quick questions &mdash; check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> A ball is launched from level ground at 20.0&nbsp;m/s,
+          30.0&#176; above the horizontal, with <span class="m">g</span> = 9.80&nbsp;m/s&#178;. How high above
+          the launch point does it rise?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> <span>5.10 m</span></label>
+          <label><input type="radio" name="q1" value="b"> <span>10.2 m</span></label>
+          <label><input type="radio" name="q1" value="c"> <span>15.3 m</span></label>
+          <label><input type="radio" name="q1" value="d"> <span>20.4 m</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> Same launch. How far away does it land?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> <span>20.4 m</span></label>
+          <label><input type="radio" name="q2" value="b"> <span>35.3 m</span></label>
+          <label><input type="radio" name="q2" value="c"> <span>40.8 m</span></label>
+          <label><input type="radio" name="q2" value="d"> <span>70.7 m</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> On level ground, which other launch angle gives exactly
+          the same range as 25&#176; at the same launch speed?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> <span>50&#176;</span></label>
+          <label><input type="radio" name="q3" value="b"> <span>65&#176;</span></label>
+          <label><input type="radio" name="q3" value="c"> <span>75&#176;</span></label>
+          <label><input type="radio" name="q3" value="d"> <span>No other angle can &mdash; each angle gives its own range.</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> At the apex of a level-ground trajectory launched at
+          (<span class="m">v</span><sub>0</sub>, &#952;), the projectile's <em>speed</em> is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> <span>zero &mdash; it has stopped</span></label>
+          <label><input type="radio" name="q4" value="b"> <span><span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;</span></label>
+          <label><input type="radio" name="q4" value="c"> <span><span class="m">v</span><sub>0</sub>&thinsp;cos&thinsp;&#952;</span></label>
+          <label><input type="radio" name="q4" value="d"> <span><span class="m">v</span><sub>0</sub> &mdash; unchanged from launch</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>Everything on this page assumes a <b>level plane</b> &mdash; landing height equal to launch height
+      &mdash; plus no air resistance and constant <span class="m">g</span>. Those assumptions are baked into
+      the formulas and are no longer visible in them.</li>
+    <li>At the <b>apex</b>, <span class="m">v</span><sub><span class="m">y</span></sub> = 0. The speed there is
+      <span class="m">v</span><sub>0</sub>&thinsp;cos&thinsp;&#952;, not zero.</li>
+    <li><b>Maximum height above the launch point:</b>
+      <span class="m">h</span> = <span class="m">v</span><sub>0<span class="m">y</span></sub>&#178;/(2<span class="m">g</span>)
+      = (<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;)&#178;/(2<span class="m">g</span>),
+      from <span class="m">v</span><sub><span class="m">y</span></sub>&#178; = <span class="m">v</span><sub>0<span class="m">y</span></sub>&#178; &minus; 2<span class="m">gh</span>
+      with <span class="m">v</span><sub><span class="m">y</span></sub> = 0.</li>
+    <li><b>Time to the apex</b> <span class="m">t</span> = <span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;/<span class="m">g</span>,
+      and on level ground the <b>flight time</b> is exactly twice that,
+      <span class="m">T</span> = 2<span class="m">v</span><sub>0</sub>&thinsp;sin&thinsp;&#952;/<span class="m">g</span>.</li>
+    <li><b>Range:</b> <span class="m">R</span> = <span class="m">v</span><sub>0<span class="m">x</span></sub><span class="m">T</span>
+      = <span class="m">v</span><sub>0</sub>&#178;&#8201;sin(2&#952;)/<span class="m">g</span>, using
+      2&#8201;sin&thinsp;&#952;&#8201;cos&thinsp;&#952; = sin(2&#952;).</li>
+    <li>The two boxed results are <b>very similar</b> in form &mdash; same
+      <span class="m">v</span><sub>0</sub>&#178;, same <span class="m">g</span> beneath &mdash; which makes
+      them easy to remember and easy to confuse. In both, <span class="m">g</span> is a positive
+      <b>magnitude</b>: substitute +9.80&nbsp;m/s&#178;.</li>
+    <li>From sin(2&#952;) alone: <span class="m">R</span> = 0 at 0&#176; and 90&#176;,
+      <span class="m">R</span> is largest at 45&#176; (<span class="m">R</span><sub>max</sub> =
+      <span class="m">v</span><sub>0</sub>&#178;/<span class="m">g</span>), and complementary angles &#952;
+      and 90&#176; &minus; &#952; give equal ranges.</li>
+    <li><b>Be careful of the limitations.</b> Launch from a cliff and the apex height still holds, but the
+      flight time and the range both need modification &mdash; see 04b.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/3-4-projectile-motion" target="_blank" rel="noopener">3.4 Projectile Motion</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion" target="_blank" rel="noopener">4.3 Projectile Motion</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Special Equations for Projectiles</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 ·
+    Adapted for PHY 151 by Dr. Byungmoon Cho · FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- predict-first probes ---------- */
+(function(){
+  var data = {
+    probe1: {
+      right: 'Correct — they land in the same place. 30° and 60° are complementary, and sin(2 &#183; 30&#176;) = sin(2 &#183; 60&#176;) = sin 60&#176;, so the range equation returns the same 35.3 m for both. The 60° ball climbs three times as high and stays up 1.73 times as long, but it is moving horizontally 1.73 times slower.',
+      wrong: 'No — this is the classic trap. Each angle wins on one factor and loses on the other, and R = v<sub>0x</sub>T is their product. sin(2 &#183; 30&#176;) = sin(2 &#183; 60&#176;) = 0.866, so both ranges are 35.3 m.'
+    },
+    probe2: {
+      right: 'Yes — the apex height survives. It was derived from v<sub>y</sub>&#178; = v<sub>0y</sub>&#178; &minus; 2gh with the launch point as the origin, so it never used the landing height at all. The flight time and the range both did.',
+      wrong: 'Not this one. That result came from setting y = 0 at landing, which says the projectile finishes at launch height — false from a roof. Only the maximum height above the launch point is untouched.'
+    }
+  };
+  Object.keys(data).forEach(function(id){
+    var probe = document.getElementById(id);
+    if(!probe) return;
+    var fb = probe.querySelector('.feedback');
+    probe.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var ok = btn.getAttribute('data-correct') === 'true';
+        probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+        if(ok){
+          btn.classList.add('correct');
+          fb.style.color = '';
+          fb.innerHTML = data[id].right;
+        } else {
+          btn.classList.add('wrong');
+          probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+          fb.style.color = '#c0392b';
+          fb.innerHTML = data[id].wrong;
+        }
+      });
+    });
+  });
+})();
+
+/* ---------- exit ticket ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var key = { q1:'a', q2:'b', q3:'b', q4:'c' };
+  var why = {
+    q1:'h = (v<sub>0</sub> sin &#952;)&#178;/(2g) = (10.0 m/s)&#178;/(2 &#183; 9.80 m/s&#178;) = 5.10 m. 10.2 m is the apex height for a 45&#176; launch, and 15.3 m is the one for 60&#176;.',
+    q2:'R = v<sub>0</sub>&#178; sin(2&#952;)/g = (400 m&#178;/s&#178;)(sin 60&#176;)/(9.80 m/s&#178;) = 35.3 m. 40.8 m would be the range at 45&#176; &mdash; the best this launch speed can do.',
+    q3:'65&#176;, because 25&#176; + 65&#176; = 90&#176;. Complementary angles give equal ranges: sin(2 &#183; 65&#176;) = sin 130&#176; = sin 50&#176; = sin(2 &#183; 25&#176;). Both give 31.3 m at 20.0 m/s.',
+    q4:'v<sub>0</sub> cos &#952;. Only the vertical component vanishes at the apex; the horizontal component has not changed since launch, because there is no horizontal acceleration.'
+  };
+  function markCard(id, ok, msg){
+    var c = document.getElementById('card-' + id);
+    c.classList.remove('right','wrong');
+    c.classList.add(ok ? 'right' : 'wrong');
+    c.querySelector('.qfb').innerHTML = (ok ? '&#10003; ' : '&#10007; ') + msg;
+  }
+  function grade(){
+    var score = 0, answered = 0;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(!sel){ markCard(q, false, 'No answer chosen yet.'); return; }
+      answered++;
+      var ok = sel.value === key[q];
+      if(ok) score++;
+      markCard(q, ok, why[q]);
+    });
+    var box = document.getElementById('ticketScore');
+    box.classList.add('show');
+    box.innerHTML = score + ' / 4 correct' + (answered < 4 ? ' — some questions are still blank.' : '');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    var box = document.getElementById('ticketScore');
+    box.classList.remove('show'); box.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the note's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
