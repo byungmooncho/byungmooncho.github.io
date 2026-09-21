@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 Ch03b — Unit Vectors</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 151 · Module 2 · Chapter 2 (University Physics) · Trevor slides 03b
+     "Unit Vectors" — web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Merged from two source decks: "Unit Vectors.pptx" (7 slides, the
+     fuller lineage) and "03b-Unit Vectors.pptx" (7 slides — adds the
+     5-12-13 Cartesian-form example, the "Check Yourself" clicker question,
+     and the slide insisting that components need not be horizontal and vertical).
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --purple:#7d3fa0; --orange:#e0801a; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* definitions */
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.9rem 0 .4rem; }
+  .chip{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; border:1px solid var(--green); color:var(--green-deep); background:var(--green-soft); border-radius:20px; padding:.25rem .75rem; }
+  .chip.scalar{ border-color:var(--rule); color:var(--muted); background:#f7f9f8; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .rad{ border-top:1.3px solid currentColor; padding:0 .15em; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  .fig-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:600px){ .fig-grid{ grid-template-columns:1fr 1fr; } }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  /* clicker-style questions */
+  .probe{ border:1px solid var(--rule); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8; }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .q .tag{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); display:block; font-weight:700; margin-bottom:.15rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opts.three{ grid-template-columns:1fr; }
+  @media (min-width:560px){ .probe .opts.three{ grid-template-columns:repeat(3,1fr); } }
+  .probe .opt{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left; border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer; color:var(--ink); }
+  .probe .opt svg{ display:block; width:100%; height:auto; }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:var(--red); background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; border:1px solid var(--green); background:#fff; color:var(--green); padding:.45rem .95rem; border-radius:6px; cursor:pointer; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:var(--red); }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:var(--red); }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{ font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem; margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft); border:1px solid var(--rule); display:none; }
+  .ticket .score.show{ display:block; }
+
+  .preview-note{ background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:.7rem 1rem; margin:1.4rem 0 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .preview-note strong{ color:var(--amber); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 · Motion In Two Dimensions</span>
+    <span>Chapter 2 · Slides 03b</span>
+  </div>
+
+  <h1>Unit Vectors</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A vector is an arrow, and drawing arrows is slow. So we build every vector out of one stock part:
+    a <b>unit vector</b> &mdash; an arrow of magnitude exactly 1 that points along a coordinate direction
+    and wears a hat, <span class="m">x&#770;</span>. Once you have
+    <span class="m">x&#770;</span> and <span class="m">y&#770;</span>, any vector in the plane is just two
+    numbers times those two arrows: <span class="m">V&#8407;</span> = 4&nbsp;m&nbsp;<span class="m">x&#770;</span>
+    + 3&nbsp;m&nbsp;<span class="m">y&#770;</span>. That is the notation the whole rest of this course
+    is written in.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Define</b> the term &ldquo;unit vector.&rdquo;</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Draw or identify</b> a vector when given it in unit-vector form.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Describe and carry out</b> mathematical operations on unit vectors &mdash; multiplying one by a scalar, and adding two of them to build a vector.</span></li>
+    </ul>
+    <div class="foot">Turning a magnitude and an angle into the two numbers out front is the job of
+      <em>components</em>, the next page in this set (03c). Here we only set up the notation and the
+      arithmetic that goes with it.</div>
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    On page 03a you moved a rook one square right and two squares up and wrote the move as
+    <span class="m">x&#770;</span> + 2<span class="m">y&#770;</span>. Those hatted symbols were unit
+    vectors, and you already read them correctly: &ldquo;one step in the <span class="m">x</span>
+    direction, two steps in the <span class="m">y</span> direction.&rdquo; This page just makes that
+    reading official.
+  </div>
+
+  <h2>A &ldquo;regular&rdquo; vector and a unit vector</h2>
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Left: a grid with a long purple vector from the origin and, drawn elsewhere on the grid, a red unit vector one square long along x and a blue unit vector one square long along y. Right: a list contrasting a regular vector with a unit vector.">
+      <defs>
+        <marker id="f1-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="f1-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f1-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+      </defs>
+      <!-- grid: origin (50,260), 34 px per unit, 6 units -->
+      <g stroke="#e4ece7" stroke-width="1">
+        <line x1="50" y1="226" x2="254" y2="226"/><line x1="50" y1="192" x2="254" y2="192"/>
+        <line x1="50" y1="158" x2="254" y2="158"/><line x1="50" y1="124" x2="254" y2="124"/>
+        <line x1="50" y1="90"  x2="254" y2="90"/> <line x1="50" y1="56"  x2="254" y2="56"/>
+        <line x1="84"  y1="56" x2="84"  y2="260"/><line x1="118" y1="56" x2="118" y2="260"/>
+        <line x1="152" y1="56" x2="152" y2="260"/><line x1="186" y1="56" x2="186" y2="260"/>
+        <line x1="220" y1="56" x2="220" y2="260"/><line x1="254" y1="56" x2="254" y2="260"/>
+      </g>
+      <line x1="50" y1="260" x2="262" y2="260" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="50" y1="260" x2="50" y2="48" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="266" y="264">x</text>
+      <text class="sm" x="42" y="44">y</text>
+      <text class="sm" x="40" y="274">0</text>
+      <!-- regular vector to (4,3) -->
+      <line x1="50" y1="260" x2="186" y2="158" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f1-pur)"/>
+      <text class="lbl" x="104" y="192" fill="#7d3fa0">V&#8407;</text>
+      <!-- unit vectors, drawn away from the origin -->
+      <line x1="186" y1="226" x2="220" y2="226" stroke="#c0392b" stroke-width="3" marker-end="url(#f1-red)"/>
+      <line x1="186" y1="226" x2="186" y2="192" stroke="#2457b8" stroke-width="3" marker-end="url(#f1-blu)"/>
+      <text class="lbl" x="204" y="248" fill="#c0392b">x&#770;</text>
+      <text class="lbl" x="162" y="208" fill="#2457b8">y&#770;</text>
+      <text class="sm" x="50" y="288">one grid square = one unit</text>
+      <!-- right column -->
+      <text x="300" y="46" font-weight="600">A &ldquo;regular&rdquo; vector</text>
+      <text class="sm" x="308" y="68">&#183; can have any magnitude, and</text>
+      <text class="sm" x="308" y="88">&#183; can point in any direction.</text>
+      <text x="300" y="126" font-weight="600">A unit vector</text>
+      <text class="sm" x="308" y="148">&#183; has a magnitude of exactly 1,</text>
+      <text class="sm" x="308" y="168">&#183; points along one coordinate direction,</text>
+      <text class="sm" x="308" y="188">&#183; and wears a hat: x&#770; is read &ldquo;x hat.&rdquo;</text>
+      <text x="300" y="226" font-weight="600">A set of unit vectors</text>
+      <text class="sm" x="308" y="248">&#183; can and must map out every point</text>
+      <text class="sm" x="308" y="268">&nbsp; in the region.</text>
+    </svg>
+    <figcaption>The purple arrow is free to be any length and point anywhere. The red and blue arrows
+      are not: each is one unit long and locked to a coordinate direction.</figcaption>
+  </figure>
+
+  <p>Notice where the red and blue arrows are drawn &mdash; out in the middle of the grid, not at the
+  origin. A unit vector is still a vector, so it does not care where you draw it. What makes it a
+  <em>unit</em> vector is only its magnitude and its <b>direction</b>.</p>
+
+  <div class="tip">
+    <span class="label">Be precise</span>
+    A unit vector is <em>dimensionless</em>. Its magnitude is the bare number 1 &mdash; not 1&nbsp;m, not
+    1&nbsp;m/s. All of the physics, and all of the units, live in the number you put in front of it.
+    Trevor's slide writes <span class="m">x&#770;</span> = (1&nbsp;m, 0&deg;) to show you where the arrow
+    points on a diagram whose squares are metres; read that &ldquo;m&rdquo; as belonging to the grid, not
+    to the hat.
+  </div>
+
+  <h2>What the hat buys you</h2>
+  <figure>
+    <svg viewBox="0 0 640 290" role="img" aria-label="Three rows. Top: a short red arrow labelled x hat, one unit long. Middle: a red arrow three times as long labelled 3 metres x hat. Bottom: a blue vertical arrow labelled 3 metres per second y hat.">
+      <defs>
+        <marker id="f2-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f2-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+      </defs>
+      <line x1="40" y1="45" x2="80" y2="45" stroke="#c0392b" stroke-width="3" marker-end="url(#f2-red)"/>
+      <text class="lbl" x="92" y="50" fill="#c0392b">x&#770;</text>
+      <text class="sm" x="128" y="50">one unit long, pointing along +x &#183; magnitude 1, no units</text>
+      <line x1="30" y1="80" x2="610" y2="80" stroke="#d7e2da" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="40" y1="115" x2="160" y2="115" stroke="#c0392b" stroke-width="3" marker-end="url(#f2-red)"/>
+      <text class="lbl" x="172" y="120" fill="#c0392b">3 m x&#770;</text>
+      <text class="sm" x="248" y="120">a displacement of magnitude 3 m, pointing along +x</text>
+      <line x1="30" y1="145" x2="610" y2="145" stroke="#d7e2da" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="60" y1="275" x2="60" y2="175" stroke="#2457b8" stroke-width="3" marker-end="url(#f2-blu)"/>
+      <text class="lbl" x="76" y="215" fill="#2457b8">3 m/s y&#770;</text>
+      <text class="sm" x="160" y="215">a velocity of magnitude 3 m/s, pointing along +y</text>
+      <text class="sm" x="160" y="238">the two arrows are not to a common scale &mdash; one is</text>
+      <text class="sm" x="160" y="256">metres, the other metres per second</text>
+    </svg>
+    <figcaption>The hat carries the direction. The number and unit in front carry the size.</figcaption>
+  </figure>
+
+  <table class="defs">
+    <tr><td class="term"><span class="m">x&#770;</span>, <span class="m">y&#770;</span>, <span class="m">z&#770;</span></td><td class="eq">&equiv;</td><td>The three unit vectors along the coordinate axes. This is the notation used in PHY&nbsp;151, because the hat tells you <em>which axis</em> at a glance.</td></tr>
+    <tr><td class="term"><span class="m">i&#770;</span>, <span class="m">j&#770;</span>, <span class="m">k&#770;</span></td><td class="eq">=</td><td>The same three vectors, in the notation most textbooks use &mdash; read &ldquo;i hat, j hat, k hat.&rdquo; <span class="m">i&#770;</span> = <span class="m">x&#770;</span>, <span class="m">j&#770;</span> = <span class="m">y&#770;</span>, <span class="m">k&#770;</span> = <span class="m">z&#770;</span>. OpenStax uses this set; expect both.</td></tr>
+    <tr><td class="term">|<span class="m">x&#770;</span>|</td><td class="eq">=</td><td>1. Always, for every unit vector, in every unit system. <em>That is the definition.</em></td></tr>
+  </table>
+
+  <h2>A scalar times a vector</h2>
+  <p>The only two things a scalar can do to a vector are change its <b>magnitude</b> and flip it
+  end-for-end.</p>
+  <figure>
+    <svg viewBox="0 0 640 280" role="img" aria-label="A one unit red arrow labelled x hat, a five unit arrow labelled 5 x hat built from five copies head to tail, a four unit arrow pointing the other way labelled minus 4 x hat, and a two and a half unit arrow. At the right, dashed arrows at other angles crossed out.">
+      <defs>
+        <marker id="f3-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f3-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="f3-gry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9aa8a0"/></marker>
+      </defs>
+      <text class="lbl" x="40" y="34" fill="#c0392b">x&#770;</text>
+      <line x1="40" y1="52" x2="80" y2="52" stroke="#c0392b" stroke-width="3" marker-end="url(#f3-red)"/>
+      <text class="lbl" x="40" y="94" fill="#7d3fa0">5 x&#770;</text>
+      <line x1="40" y1="112" x2="240" y2="112" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f3-pur)"/>
+      <g stroke="#c0392b" stroke-width="2" marker-end="url(#f3-red)">
+        <line x1="40" y1="132" x2="78" y2="132"/><line x1="80" y1="132" x2="118" y2="132"/>
+        <line x1="120" y1="132" x2="158" y2="132"/><line x1="160" y1="132" x2="198" y2="132"/>
+        <line x1="200" y1="132" x2="238" y2="132"/>
+      </g>
+      <text class="sm" x="252" y="137">five copies, head-to-tail</text>
+      <text class="lbl" x="40" y="176" fill="#7d3fa0">&#8722;4 x&#770;</text>
+      <line x1="200" y1="194" x2="40" y2="194" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f3-pur)"/>
+      <text class="sm" x="212" y="199">four units long, pointing the other way</text>
+      <text class="lbl" x="40" y="238" fill="#7d3fa0">2.5 x&#770;</text>
+      <line x1="40" y1="256" x2="140" y2="256" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f3-pur)"/>
+      <text class="sm" x="152" y="261">the multiplier need not be a whole number</text>
+      <!-- forbidden rotations -->
+      <line x1="500" y1="40" x2="540" y2="40" stroke="#c0392b" stroke-width="3" marker-end="url(#f3-red)"/>
+      <text class="lbl" x="548" y="45" fill="#c0392b">x&#770;</text>
+      <line x1="500" y1="96" x2="534" y2="62" stroke="#9aa8a0" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#f3-gry)"/>
+      <line x1="503" y1="63" x2="531" y2="95" stroke="#c0392b" stroke-width="3"/>
+      <line x1="503" y1="95" x2="531" y2="63" stroke="#c0392b" stroke-width="3"/>
+      <text class="sm" x="452" y="122" fill="#c0392b">no scalar can rotate a vector</text>
+    </svg>
+    <figcaption>Scalar multiplication stretches, shrinks, or reverses &mdash; it never swings the arrow to a
+      new angle.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Sign, not magnitude</span>
+    A <b>magnitude</b> is never negative. When you write &minus;4<span class="m">x&#770;</span>, the minus
+    sign is a statement about <b>direction</b>: the vector has magnitude 4 and points along
+    &minus;<span class="m">x</span>. Writing &ldquo;the magnitude is &minus;4&rdquo; is always wrong.
+  </div>
+
+  <div class="probe" id="probe1">
+    <p class="q"><span class="tag">Predict first</span>
+      Multiply the unit vector <span class="m">x&#770;</span> by the scalar &minus;4. The result&hellip;</p>
+    <div class="opts three">
+      <button class="opt" data-correct="false">has magnitude 4 and points along +<span class="m">x</span></button>
+      <button class="opt" data-correct="true">has magnitude 4 and points along &minus;<span class="m">x</span></button>
+      <button class="opt" data-correct="false">has magnitude &minus;4 and points along +<span class="m">x</span></button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>Building any vector out of unit vectors</h2>
+  <p>Take 4&nbsp;m of <span class="m">x&#770;</span>, then 3&nbsp;m of <span class="m">y&#770;</span>, and
+  lay them <b>head-to-tail</b>. The single arrow that closes the path is the <b>resultant</b> &mdash; and
+  because the two pieces are perpendicular, the Pythagorean theorem hands you its magnitude.</p>
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="A grid with a red arrow four units along x, a blue arrow three units up from its head, and the purple resultant from the origin to the same point, with the numerical results listed at the right.">
+      <defs>
+        <marker id="f4-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f4-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="f4-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+      </defs>
+      <!-- grid: origin (60,260), 40 px per unit -->
+      <g stroke="#e4ece7" stroke-width="1">
+        <line x1="60" y1="220" x2="300" y2="220"/><line x1="60" y1="180" x2="300" y2="180"/>
+        <line x1="60" y1="140" x2="300" y2="140"/><line x1="60" y1="100" x2="300" y2="100"/>
+        <line x1="60" y1="60"  x2="300" y2="60"/>
+        <line x1="100" y1="60" x2="100" y2="260"/><line x1="140" y1="60" x2="140" y2="260"/>
+        <line x1="180" y1="60" x2="180" y2="260"/><line x1="220" y1="60" x2="220" y2="260"/>
+        <line x1="260" y1="60" x2="260" y2="260"/><line x1="300" y1="60" x2="300" y2="260"/>
+      </g>
+      <line x1="60" y1="260" x2="308" y2="260" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="60" y1="260" x2="60" y2="52" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="50" y="276">0</text>
+      <text class="sm" x="216" y="276">4</text>
+      <text class="sm" x="44" y="185">2</text>
+      <text class="sm" x="312" y="264">x</text>
+      <text class="sm" x="52" y="46">y</text>
+      <line x1="60" y1="260" x2="220" y2="260" stroke="#c0392b" stroke-width="3" marker-end="url(#f4-red)"/>
+      <line x1="220" y1="260" x2="220" y2="144" stroke="#2457b8" stroke-width="3" marker-end="url(#f4-blu)"/>
+      <line x1="60" y1="260" x2="220" y2="140" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f4-pur)"/>
+      <path d="M 120 260 A 60 60 0 0 0 108 224" fill="none" stroke="#e0801a" stroke-width="2"/>
+      <text class="lbl" x="124" y="244" fill="#e0801a">&#952;</text>
+      <text class="lbl" x="140" y="292" fill="#c0392b">4 m x&#770;</text>
+      <text class="lbl" x="230" y="205" fill="#2457b8">3 m y&#770;</text>
+      <text class="lbl" x="96" y="196" fill="#7d3fa0">V&#8407;</text>
+      <text class="lbl" x="350" y="90">V&#8407; = 4 m x&#770; + 3 m y&#770;</text>
+      <text class="sm"  x="350" y="116">4 m along x, then 3 m along y</text>
+      <text class="lbl" x="350" y="160">|V&#8407;| = 5.0 m</text>
+      <text class="lbl" x="350" y="192">&#952; = 36.9&#176;</text>
+      <text class="sm"  x="350" y="216">measured from the +x axis</text>
+      <text class="sm"  x="350" y="248">The order does not matter:</text>
+      <text class="sm"  x="350" y="266">3 m y&#770; then 4 m x&#770; lands</text>
+      <text class="sm"  x="350" y="284">on the same point.</text>
+    </svg>
+    <figcaption>Two perpendicular pieces, one resultant. This is the 3-4-5 triangle you already know.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Magnitude and direction from the unit-vector form</div>
+    <div class="body">
+      <div class="mathline">|<span class="m">V&#8407;</span>| =
+        <span class="rad">&radic;<span class="rad">(4 m)&#178; + (3 m)&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">25 m&#178;</span></span> = 5.0 m</div>
+      <div class="mathline">&#952; = tan<sup>&minus;1</sup>
+        <span class="frac"><span class="top">3 m</span><span class="bot">4 m</span></span>
+        = 36.9&#176;</div>
+      <p class="why">The units cancel inside the inverse tangent &mdash; an angle is a pure number, so
+      they had better. If your calculator gives 0.6435, it is in radians; switch it to degrees.</p>
+    </div>
+  </div>
+
+  <h3>A worked example: 5.0&nbsp;m and 12.0&nbsp;m</h3>
+  <p>A vector has a 5.0&nbsp;m <b>component</b> along <span class="m">x</span> and a 12.0&nbsp;m component
+  along <span class="m">y</span>. Write it, then find its magnitude and direction.</p>
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A tall rectangle whose base is five metres and whose height is twelve metres, with the purple diagonal as the vector, and the results listed at the right.">
+      <defs>
+        <marker id="f5-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f5-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="f5-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+      </defs>
+      <!-- 20 px per metre, tail at (140,300) -->
+      <line x1="140" y1="300" x2="140" y2="60" stroke="#2457b8" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <line x1="140" y1="60" x2="240" y2="60" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <line x1="140" y1="300" x2="240" y2="300" stroke="#c0392b" stroke-width="3" marker-end="url(#f5-red)"/>
+      <line x1="240" y1="300" x2="240" y2="64" stroke="#2457b8" stroke-width="3" marker-end="url(#f5-blu)"/>
+      <line x1="140" y1="300" x2="240" y2="60" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f5-pur)"/>
+      <path d="M 190 300 A 50 50 0 0 0 158 254" fill="none" stroke="#e0801a" stroke-width="2"/>
+      <text class="lbl" x="176" y="282" fill="#e0801a">&#952;</text>
+      <text class="lbl" x="146" y="322" fill="#c0392b">5.0 m x&#770;</text>
+      <text class="lbl" x="252" y="186" fill="#2457b8">12.0 m y&#770;</text>
+      <text class="lbl" x="164" y="150" fill="#7d3fa0">V&#8407;</text>
+      <text class="lbl" x="360" y="110">V&#8407; = 5.0 m x&#770; + 12.0 m y&#770;</text>
+      <text class="lbl" x="360" y="146">V&#8407; = (5.0 m, 12.0 m)</text>
+      <text class="sm"  x="360" y="170">Cartesian component form</text>
+      <text class="lbl" x="360" y="214">|V&#8407;| = 13.0 m</text>
+      <text class="lbl" x="360" y="246">&#952; = 67.4&#176;</text>
+      <text class="sm"  x="360" y="270">from the +x axis &#183; a 5-12-13</text>
+      <text class="sm"  x="360" y="288">right triangle</text>
+    </svg>
+    <figcaption>The two component arrows and the resultant close a right triangle every single time.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Checking the numbers</div>
+    <div class="body">
+      <div class="mathline"><span class="m">V&#8407;</span> = 5.0 m <span class="m">x&#770;</span> + 12.0 m <span class="m">y&#770;</span>
+        &nbsp;&nbsp;&equiv;&nbsp;&nbsp; (5.0 m, 12.0 m)</div>
+      <div class="mathline">|<span class="m">V&#8407;</span>| =
+        <span class="rad">&radic;<span class="rad">(5.0 m)&#178; + (12.0 m)&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">25 m&#178; + 144 m&#178;</span></span>
+        = <span class="rad">&radic;<span class="rad">169 m&#178;</span></span> = 13.0 m</div>
+      <div class="mathline">&#952; = tan<sup>&minus;1</sup>
+        <span class="frac"><span class="top">12.0 m</span><span class="bot">5.0 m</span></span>
+        = 67.4&#176;</div>
+      <p class="why">13.0&nbsp;m is bigger than either piece and smaller than 5.0 + 12.0 = 17.0&nbsp;m.
+      Components never simply add to the magnitude &mdash; that only happens for parallel vectors, which
+      these two are not.</p>
+    </div>
+  </div>
+
+  <div class="probe" id="probe2">
+    <p class="q"><span class="tag">Predict first</span>
+      Which arrow is <span class="m">V&#8407;</span> = 1&nbsp;m&nbsp;<span class="m">x&#770;</span>
+      + 3&nbsp;m&nbsp;<span class="m">y&#770;</span>?</p>
+    <div class="opts three">
+      <button class="opt" data-correct="true">
+        <svg viewBox="0 0 160 110" role="img" aria-label="Option 1: a steep arrow going up and slightly to the right">
+          <defs><marker id="cy1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker></defs>
+          <line x1="16" y1="55" x2="142" y2="55" stroke="#9aa8a0" stroke-width="1.2"/>
+          <line x1="78" y1="100" x2="78" y2="12" stroke="#9aa8a0" stroke-width="1.2"/>
+          <text class="sm" x="146" y="60">x</text><text class="sm" x="66" y="18">y</text>
+          <line x1="78" y1="55" x2="91" y2="16" stroke="#c0392b" stroke-width="3" marker-end="url(#cy1)"/>
+        </svg>
+        <span>1</span>
+      </button>
+      <button class="opt" data-correct="false">
+        <svg viewBox="0 0 160 110" role="img" aria-label="Option 2: a shallow arrow going right and slightly up">
+          <defs><marker id="cy2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker></defs>
+          <line x1="16" y1="55" x2="142" y2="55" stroke="#9aa8a0" stroke-width="1.2"/>
+          <line x1="78" y1="100" x2="78" y2="12" stroke="#9aa8a0" stroke-width="1.2"/>
+          <text class="sm" x="146" y="60">x</text><text class="sm" x="66" y="18">y</text>
+          <line x1="78" y1="55" x2="117" y2="42" stroke="#c0392b" stroke-width="3" marker-end="url(#cy2)"/>
+        </svg>
+        <span>2</span>
+      </button>
+      <button class="opt" data-correct="false">
+        <svg viewBox="0 0 160 110" role="img" aria-label="Option 3: a shallow arrow going right and slightly down">
+          <defs><marker id="cy3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker></defs>
+          <line x1="16" y1="55" x2="142" y2="55" stroke="#9aa8a0" stroke-width="1.2"/>
+          <line x1="78" y1="100" x2="78" y2="12" stroke="#9aa8a0" stroke-width="1.2"/>
+          <text class="sm" x="146" y="60">x</text><text class="sm" x="66" y="18">y</text>
+          <line x1="78" y1="55" x2="117" y2="68" stroke="#c0392b" stroke-width="3" marker-end="url(#cy3)"/>
+        </svg>
+        <span>3</span>
+      </button>
+    </div>
+    <div class="feedback" role="status"></div>
+  </div>
+
+  <h2>Reporting the value of a vector</h2>
+  <p>Every vector in this course can be written two ways, and you will be asked for both. Going from the
+  polar form to the Cartesian form is called <b>resolving</b> the vector: you replace one arrow with two
+  perpendicular components that add back up to it.</p>
+  <figure>
+    <svg viewBox="0 0 640 290" role="img" aria-label="A purple vector A at thirty degrees above the x axis, its red horizontal component and blue vertical component forming a right triangle, with the component formulas at the right.">
+      <defs>
+        <marker id="f6-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/></marker>
+        <marker id="f6-blu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2457b8"/></marker>
+        <marker id="f6-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+      </defs>
+      <line x1="50" y1="250" x2="352" y2="250" stroke="#5c6b62" stroke-width="1.5"/>
+      <line x1="60" y1="262" x2="60" y2="58" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="sm" x="358" y="255">x</text>
+      <text class="sm" x="50" y="50">y</text>
+      <line x1="60" y1="250" x2="285" y2="250" stroke="#c0392b" stroke-width="3" marker-end="url(#f6-red)"/>
+      <line x1="285" y1="250" x2="285" y2="120" stroke="#2457b8" stroke-width="3" marker-end="url(#f6-blu)"/>
+      <line x1="60" y1="250" x2="285" y2="120" stroke="#7d3fa0" stroke-width="3" marker-end="url(#f6-pur)"/>
+      <polyline points="268,250 268,233 285,233" fill="none" stroke="#1d2b23" stroke-width="1.5"/>
+      <path d="M 115 250 A 55 55 0 0 0 108 222" fill="none" stroke="#1d2b23" stroke-width="2"/>
+      <text class="lbl" x="122" y="234">&#952;</text>
+      <text class="lbl" x="150" y="170" fill="#7d3fa0">A&#8407;</text>
+      <text class="lbl" x="158" y="272" fill="#c0392b">A&#8407;<tspan font-size="11" dy="4">x</tspan></text>
+      <text class="lbl" x="296" y="190" fill="#2457b8">A&#8407;<tspan font-size="11" dy="4">y</tspan></text>
+      <text class="lbl" x="400" y="100">A<tspan font-size="11" dy="4">x</tspan><tspan dy="-4"> = A cos &#952;</tspan></text>
+      <text class="lbl" x="400" y="140">A<tspan font-size="11" dy="4">y</tspan><tspan dy="-4"> = A sin &#952;</tspan></text>
+      <text class="sm"  x="400" y="180">with A = 10.0 m and &#952; = 30.0&#176;</text>
+      <text class="lbl" x="400" y="212">A<tspan font-size="11" dy="4">x</tspan><tspan dy="-4"> = 8.66 m</tspan></text>
+      <text class="lbl" x="400" y="244">A<tspan font-size="11" dy="4">y</tspan><tspan dy="-4"> = 5.00 m</tspan></text>
+    </svg>
+    <figcaption>One arrow, two perpendicular components. The right angle is what lets you use cosine and
+      sine at all.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The same vector, written both ways</div>
+    <div class="body">
+      <div class="mathline"><b>Polar form</b> &nbsp;&nbsp;
+        <span class="m">A&#8407;</span> = (10.0 m, 30.0&#176;) &nbsp;&nbsp;&equiv;&nbsp;&nbsp;
+        <span class="m">A&#8407;</span> = 10.0 m @ 30.0&#176;</div>
+      <div class="mathline"><span class="m">A<sub>x</sub></span> = <span class="m">A</span> cos&nbsp;&#952;
+        = (10.0 m)(cos 30.0&#176;) = 8.66 m</div>
+      <div class="mathline"><span class="m">A<sub>y</sub></span> = <span class="m">A</span> sin&nbsp;&#952;
+        = (10.0 m)(sin 30.0&#176;) = 5.00 m</div>
+      <div class="mathline"><b>Cartesian form</b> &nbsp;&nbsp;
+        <span class="m">A&#8407;</span> = 8.66 m <span class="m">x&#770;</span> + 5.00 m <span class="m">y&#770;</span>
+        &nbsp;&nbsp;&equiv;&nbsp;&nbsp; <span class="m">A&#8407;</span> = (8.66 m, 5.00 m)</div>
+      <p class="why">Check it backwards:
+        <span class="rad">&radic;<span class="rad">(8.66 m)&#178; + (5.00 m)&#178;</span></span>
+        = 10.0 m, and tan<sup>&minus;1</sup>(5.00 / 8.66) = 30.0&#176;. Same arrow, different bookkeeping.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Watch the angle</span>
+    <span class="m">A<sub>x</sub></span> = <span class="m">A</span> cos&nbsp;&#952; only because &#952; is
+    measured from the <span class="m">x</span>-axis, which makes the horizontal side <em>adjacent</em> to
+    &#952;. Measure the angle from the <span class="m">y</span>-axis instead and cosine and sine trade
+    places. Draw the triangle, then decide &mdash; never the other way round.
+  </div>
+
+  <h2>Components do not have to be horizontal and vertical</h2>
+  <p>A coordinate system is a <em>choice</em>. You pick it; nature does not. Put a ball on a ramp and the
+  useful axes are not horizontal and vertical at all &mdash; they are along the surface and perpendicular
+  to it, because that is how the ball is allowed to move.</p>
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="A ball resting on a ramp inclined at twenty degrees. The purple weight vector points straight down and is resolved into two green components, one along the surface and one perpendicular to it, with the tilted axes drawn in orange.">
+      <defs>
+        <marker id="f7-pur" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d3fa0"/></marker>
+        <marker id="f7-grn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#134a29"/></marker>
+        <marker id="f7-org" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e0801a"/></marker>
+      </defs>
+      <!-- the ramp -->
+      <polygon points="60,55 60,251 600,251" fill="#f4f8f5" stroke="#2457b8" stroke-width="2"/>
+      <path d="M 545 251 A 55 55 0 0 0 548 232" fill="none" stroke="#1d2b23" stroke-width="1.5"/>
+      <text class="sm" x="506" y="245">20&#176;</text>
+      <!-- tilted axes through the ball -->
+      <g stroke="#e0801a" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#f7-org)" marker-start="url(#f7-org)">
+        <line x1="142" y1="70" x2="368" y2="152"/>
+        <line x1="251" y1="35" x2="183" y2="223"/>
+      </g>
+      <text class="lbl" x="374" y="160" fill="#e0801a">x&#770;&#8242;</text>
+      <text class="lbl" x="256" y="30" fill="#e0801a">y&#770;&#8242;</text>
+      <!-- head-to-tail completion -->
+      <g stroke="#134a29" stroke-width="1.4" stroke-dasharray="6 4">
+        <line x1="262" y1="114" x2="227" y2="211"/>
+        <line x1="192" y1="198" x2="227" y2="211"/>
+      </g>
+      <!-- the weight and its components -->
+      <line x1="227" y1="101" x2="227" y2="211" stroke="#7d3fa0" stroke-width="3.5" marker-end="url(#f7-pur)"/>
+      <line x1="227" y1="101" x2="262" y2="114" stroke="#134a29" stroke-width="3.5" marker-end="url(#f7-grn)"/>
+      <line x1="227" y1="101" x2="192" y2="198" stroke="#134a29" stroke-width="3.5" marker-end="url(#f7-grn)"/>
+      <circle cx="227" cy="101" r="14" fill="#eef2f6" stroke="#5c6b62" stroke-width="1.5"/>
+      <text class="lbl" x="233" y="232" fill="#7d3fa0">W&#8407;</text>
+      <text class="lbl" x="272" y="100" fill="#134a29">W&#8407;&#8741;</text>
+      <text class="lbl" x="146" y="210" fill="#134a29">W&#8407;&#8869;</text>
+      <!-- legend -->
+      <line x1="408" y1="56" x2="434" y2="56" stroke="#7d3fa0" stroke-width="3.5"/>
+      <text class="sm" x="442" y="60">W&#8407; &mdash; the weight, straight down</text>
+      <line x1="408" y1="82" x2="434" y2="82" stroke="#134a29" stroke-width="3.5"/>
+      <text class="sm" x="442" y="86">W&#8407;&#8741; &mdash; along the surface</text>
+      <line x1="408" y1="108" x2="434" y2="108" stroke="#134a29" stroke-width="3.5"/>
+      <text class="sm" x="442" y="112">W&#8407;&#8869; &mdash; into the surface</text>
+      <line x1="408" y1="134" x2="434" y2="134" stroke="#e0801a" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <text class="sm" x="442" y="138">x&#770;&#8242;, y&#770;&#8242; &mdash; the axes you chose</text>
+      <text class="sm" x="60" y="282">Neither green arrow is horizontal or vertical &mdash; and the two of them still add head-to-tail to the weight.</text>
+    </svg>
+    <figcaption>The weight is <em>resolved</em> along the ramp instead of along the room. Same vector, a
+      smarter pair of components.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">What does and does not change</span>
+    Tilting the axes does <em>not</em> change the weight. <span class="m">W&#8407;</span> still points
+    straight down with the same magnitude; only the two numbers you report for it change. The vector is
+    physical, the components are bookkeeping &mdash; and good bookkeeping is chosen to make the algebra
+    easy.
+  </div>
+
+  <div class="known">
+    <span class="label">In your own notes</span>
+    The construction in this lesson is the one you did by hand in
+    <a href="../M2_N2_Resolving_A_Vector.html">N2 &mdash; Resolving A Vector</a>: there you split one
+    arrow into two perpendicular components, and here you write those components as numbers times
+    <span class="m">x&#770;</span> and <span class="m">y&#770;</span>. The cosine and sine you need for
+    <span class="m">A<sub>x</sub></span> and <span class="m">A<sub>y</sub></span> are set out in
+    <a href="../M2_N2a_Trig_Definitions.html">N2a &mdash; Trig Definitions</a>. And going the other
+    direction &mdash; laying 4&nbsp;m&nbsp;<span class="m">x&#770;</span> and
+    3&nbsp;m&nbsp;<span class="m">y&#770;</span> head-to-tail to get the <b>resultant</b> &mdash; is the
+    grid-paper addition from <a href="../M2_N1_How_Do_Vectors_Add.html">N1 &mdash; How Do Vectors
+    Add?</a>, now done with two perpendicular arrows instead of two slanted ones.
+  </div>
+
+  <p class="preview-note"><strong>Looking ahead:</strong> this page gave you the notation and took the
+  numbers out front for granted. Where those numbers come from &mdash; and how to get them for a vector
+  at any angle &mdash; is <em>components</em>, page 03c. Adding several vectors by adding their
+  components is 03d, and handling angles outside the first quadrant is 03e.</p>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>&#127903;&#65039; Exit ticket</strong>
+      <span class="sub">Four quick questions &mdash; check yourself before you close this page.</span>
+    </div>
+    <div class="t-body">
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> A unit vector such as <span class="m">x&#770;</span> has&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> a magnitude of 1 m</label>
+          <label><input type="radio" name="q1" value="b"> whatever magnitude the vector it describes has</label>
+          <label><input type="radio" name="q1" value="c"> a magnitude of exactly 1, with no units</label>
+          <label><input type="radio" name="q1" value="d"> a magnitude of zero, since it only gives a direction</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> <span class="m">A&#8407;</span> = 10.0 m @ 30.0&#176; above the +<span class="m">x</span> axis. In Cartesian component form, <span class="m">A&#8407;</span> =&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> 5.00 m <span class="m">x&#770;</span> + 8.66 m <span class="m">y&#770;</span></label>
+          <label><input type="radio" name="q2" value="b"> 8.66 m <span class="m">x&#770;</span> + 5.00 m <span class="m">y&#770;</span></label>
+          <label><input type="radio" name="q2" value="c"> 10.0 m <span class="m">x&#770;</span> + 30.0 m <span class="m">y&#770;</span></label>
+          <label><input type="radio" name="q2" value="d"> 8.66 m <span class="m">x&#770;</span> + 8.66 m <span class="m">y&#770;</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> Compared with <span class="m">x&#770;</span>, the vector &minus;3<span class="m">x&#770;</span> is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q3" value="a"> one third as long, pointing the same way</label>
+          <label><input type="radio" name="q3" value="b"> three times as long, rotated 90&#176; from <span class="m">x&#770;</span></label>
+          <label><input type="radio" name="q3" value="c"> three times as long, pointing the same way as <span class="m">x&#770;</span></label>
+          <label><input type="radio" name="q3" value="d"> three times as long, pointing opposite to <span class="m">x&#770;</span></label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> A ball sits on a 20&#176; ramp. You resolve its weight into one component along the surface and one perpendicular to it. This is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> fine &mdash; the axes are yours to choose, and tilted ones make this problem easier</label>
+          <label><input type="radio" name="q4" value="b"> not allowed; components must be horizontal and vertical</label>
+          <label><input type="radio" name="q4" value="c"> allowed only after you convert to horizontal and vertical components</label>
+          <label><input type="radio" name="q4" value="d"> allowed, but it changes the weight vector itself</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Review</h2>
+  <ul>
+    <li>A <b>unit vector</b> has a <b>magnitude</b> of exactly 1, is dimensionless, points along one
+        coordinate <b>direction</b>, and is written with a hat: <span class="m">x&#770;</span>,
+        <span class="m">y&#770;</span>, <span class="m">z&#770;</span> &mdash; or
+        <span class="m">i&#770;</span>, <span class="m">j&#770;</span>, <span class="m">k&#770;</span> in
+        most textbooks.</li>
+    <li>A scalar times a vector changes the magnitude and nothing else, except that a <em>negative</em>
+        scalar reverses the direction. No scalar can rotate a vector to a new angle, and the multiplier
+        need not be a whole number.</li>
+    <li>Any vector in the plane is the head-to-tail sum of two perpendicular pieces:
+        <span class="m">V&#8407;</span> = <span class="m">V<sub>x</sub></span> <span class="m">x&#770;</span>
+        + <span class="m">V<sub>y</sub></span> <span class="m">y&#770;</span>. The numbers out front are
+        its <b>components</b>; the arrow they build is the <b>resultant</b>.</li>
+    <li>Polar and Cartesian are two reports on one arrow. To <b>resolve</b> a vector,
+        <span class="m">A<sub>x</sub></span> = <span class="m">A</span> cos&nbsp;&#952; and
+        <span class="m">A<sub>y</sub></span> = <span class="m">A</span> sin&nbsp;&#952; when &#952; is
+        measured from the <span class="m">x</span>-axis; to go back,
+        |<span class="m">A&#8407;</span>| = <span class="rad">&radic;<span class="rad"><span class="m">A<sub>x</sub></span>&#178; + <span class="m">A<sub>y</sub></span>&#178;</span></span>.</li>
+    <li>The coordinate system is a choice. Components do not have to be horizontal and vertical &mdash;
+        on a ramp they should not be &mdash; and tilting the axes changes only the numbers, never the
+        vector.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/3-2-vector-addition-and-subtraction-graphical-methods" target="_blank" rel="noopener">3.2 Vector Addition and Subtraction: Graphical Methods</a> &#183;
+      <a href="https://openstax.org/books/college-physics/pages/3-3-vector-addition-and-subtraction-analytical-methods" target="_blank" rel="noopener">3.3 Vector Addition and Subtraction: Analytical Methods</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-1-scalars-and-vectors" target="_blank" rel="noopener">2.1 Scalars and Vectors</a> &#183;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-2-coordinate-systems-and-components-of-a-vector" target="_blank" rel="noopener">2.2 Coordinate Systems and Components of a Vector</a> &#183;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/2-3-algebra-of-vectors" target="_blank" rel="noopener">2.3 Algebra of Vectors</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Unit Vectors</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &#183;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &#183; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* ---------- predict-first probe: scalar times a unit vector ---------- */
+(function(){
+  var probe = document.getElementById('probe1');
+  if(!probe) return;
+  var fb = probe.querySelector('.feedback');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var ok = btn.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(ok){
+        btn.classList.add('correct');
+        fb.style.color = '';
+        fb.textContent = 'Yes — magnitude 4, pointing the other way. The minus sign reverses the direction; it does not make the magnitude negative, and it cannot rotate the arrow to any other angle.';
+      } else {
+        btn.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = 'Not this one. A magnitude is never negative, and a negative scalar does exactly one thing to the direction: it reverses it. So −4x̂ has magnitude 4 and points along −x.';
+      }
+    });
+  });
+})();
+
+/* ---------- predict-first probe: read the unit-vector form ---------- */
+(function(){
+  var probe = document.getElementById('probe2');
+  if(!probe) return;
+  var fb = probe.querySelector('.feedback');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var ok = btn.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(ok){
+        btn.classList.add('correct');
+        fb.style.color = '';
+        fb.textContent = 'Yes — 1 m across and 3 m up, so the arrow is steep. The number in front of x̂ is the run; the number in front of ŷ is the rise.';
+      } else {
+        btn.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = 'Not this one. Read the coefficients in order: 1 m along x̂, then 3 m along ŷ. Option 2 is 3 m x̂ + 1 m ŷ — the same two numbers, swapped, and a different vector.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var key = { q1:'c', q2:'b', q3:'d', q4:'a' };
+  var why = {
+    q1:'A unit vector is dimensionless and its magnitude is the bare number 1. The units belong to the coefficient in front of it — 3 m x&#770; has magnitude 3 m, but x&#770; itself has magnitude 1.',
+    q2:'A<sub>x</sub> = A cos &#952; = (10.0 m)(cos 30.0&#176;) = 8.66 m and A<sub>y</sub> = A sin &#952; = (10.0 m)(sin 30.0&#176;) = 5.00 m. The larger component goes with the axis the vector leans toward, and here &#952; is only 30&#176;, so it leans toward x.',
+    q3:'The 3 stretches it to three times the length; the minus sign reverses it. A scalar can do nothing else — in particular it cannot rotate the vector by 90&#176;.',
+    q4:'The coordinate system is yours to choose. On a ramp, axes along and perpendicular to the surface are the smart choice, because that is how the ball is free to move. Tilting the axes changes the two reported numbers, never the weight vector itself.'
+  };
+  function markCard(id, ok, msg){
+    var c = document.getElementById('card-' + id);
+    c.classList.remove('right','wrong');
+    c.classList.add(ok ? 'right' : 'wrong');
+    c.querySelector('.qfb').innerHTML = (ok ? '&#10003; ' : '&#10007; ') + msg;
+  }
+  function grade(){
+    var score = 0, answered = 0;
+    ['q1','q2','q3','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="' + q + '"]:checked');
+      if(!sel){ markCard(q, false, 'No answer chosen yet.'); return; }
+      answered++;
+      var ok = sel.value === key[q];
+      if(ok) score++;
+      markCard(q, ok, why[q]);
+    });
+    var box = document.getElementById('ticketScore');
+    box.classList.add('show');
+    box.innerHTML = score + ' / 4 correct' + (answered < 4 ? ' — some questions are still blank.' : '');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    var box = document.getElementById('ticketScore');
+    box.classList.remove('show'); box.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the note's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
