@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHY 151 Lab 03 — Projectile Motion</title>
+<style>
+  /* ==================================================================
+     FLCC Physics lab page — PHY 151 Module 2
+     Matches the M2 N1–N5 note-page template (same tokens, same blocks).
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:2rem 0 .8rem; font-weight:700; }
+  h3{ font-size:1.02rem; margin:1.4rem 0 .4rem; font-weight:700; color:var(--green-deep);
+      font-family:"Segoe UI", system-ui, sans-serif; }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* due-date / logistics strip */
+  .logistics{
+    display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin:1.1rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+  }
+  .logistics .chip{
+    background:#fff; border:1px solid var(--rule); border-radius:20px; padding:.3rem .85rem;
+  }
+  .logistics .chip b{ color:var(--green-deep); }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* boxed callout, gradient head (prior-knowledge / explain / safety) */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior p:last-child{ margin-bottom:0; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* procedure steps */
+  ol.steps{ padding-left:1.3rem; }
+  ol.steps > li{ margin:.65rem 0; }
+  ul.kit{ padding-left:1.3rem; }
+  ul.kit li{ margin:.3rem 0; }
+
+  /* equation block */
+  .eqn{
+    font-family:"Cambria Math","Segoe UI",Georgia,serif; font-size:1.15rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:600; letter-spacing:.02em;
+  }
+  .eqn small{ display:block; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+    font-weight:400; color:var(--muted); margin-top:.4rem; letter-spacing:0; }
+
+  /* data tables the student must produce */
+  table.spec{ width:100%; border-collapse:collapse; margin:.9rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  table.spec th, table.spec td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec caption{ caption-side:top; text-align:left; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.8rem; color:var(--muted); padding-bottom:.35rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* warning / watch-out */
+  .watch{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.3rem 0; background:#fffdf8;
+  }
+  .watch b{ color:#9a5c10; }
+
+  /* interactive tool panel */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .sim canvas{ display:block; width:100%; height:auto; background:#fff; }
+  .grid2{ display:grid; gap:.7rem 1.2rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .ctrl input[type=number], .ctrl input[type=text], .ctrl textarea{
+    font:inherit; font-size:.92rem; width:100%; box-sizing:border-box;
+    padding:.4rem .55rem; border:1px solid var(--rule); border-radius:6px; background:#fff;
+  }
+  .ctrl textarea{ min-height:5.5rem; font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; font-size:.85rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .verdict{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; margin-top:.9rem;
+    padding:.65rem .9rem; border-radius:8px; background:#fff; border:1px solid var(--rule);
+    min-height:1.2em;
+  }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* submission checklist */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .check-group{ margin:0 0 1.1rem; }
+  .check-group > .gh{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--green); font-weight:700; display:block; margin-bottom:.4rem;
+  }
+  .check-group label{ display:flex; gap:.6rem; align-items:flex-start;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; margin-bottom:.4rem; cursor:pointer; background:#fff; }
+  .check-group label:hover{ border-color:var(--green); }
+  .check-group input{ margin-top:.2rem; accent-color:var(--green); flex:none; }
+  .check-group input:checked + span{ color:var(--muted); text-decoration:line-through; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:.6rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule);
+  }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  .refs{ font-size:.95rem; }
+  .refs li{ margin:.4rem 0; }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+  footer .attrib{ display:block; margin-top:.3rem; }
+
+  .eqn .domain{
+    display:block; margin-top:.6rem; padding-top:.55rem; border-top:1px dashed var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:400;
+    line-height:1.55; color:var(--muted); letter-spacing:0; text-align:left;
+  }
+  .eqn .domain b{ color:var(--green-deep); }
+  .filenote{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted);
+    margin:.7rem 0 0; line-height:1.55;
+  }
+
+  /* ---- apparatus diagram (added 2026-09-24) ---- */
+  .apparatus{ margin:1.4rem 0; padding:0; }
+  .apparatus svg{ display:block; width:100%; height:auto; }
+  .apparatus .cap{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted);
+    text-align:center; margin-top:.5rem; line-height:1.5;
+  }
+  .apparatus .frame{ border:1px solid var(--rule); border-radius:8px; background:#fff; padding:.6rem; }
+  .ap-solid{ fill:none; stroke:var(--ink); stroke-width:2; }
+  .ap-thin{ fill:none; stroke:var(--ink); stroke-width:1.2; }
+  .ap-dash{ fill:none; stroke:var(--muted); stroke-width:1.4; stroke-dasharray:5 4; }
+  .ap-traj{ fill:none; stroke:var(--green); stroke-width:2.2; stroke-dasharray:7 5; }
+  .ap-dim{ fill:none; stroke:var(--green-deep); stroke-width:1.6; }
+  .ap-warn{ fill:none; stroke:#c0392b; stroke-width:1.6; }
+  .ap-shelf{ fill:#e8e4f0; stroke:var(--ink); stroke-width:1.5; }
+  .ap-tube{ fill:#cfd8d3; stroke:var(--ink); stroke-width:1.5; }
+  .ap-ball{ fill:var(--ink); }
+  .ap-paper{ fill:#fff; stroke:var(--ink); stroke-width:1; }
+  .ap-carbon{ fill:#4a4a52; stroke:var(--ink); stroke-width:1; }
+  .ap-t{ font-family:"Segoe UI", system-ui, sans-serif; font-size:14px; fill:var(--ink); }
+  .ap-t.lbl{ font-weight:700; fill:var(--green-deep); font-size:16px; }
+  .ap-t.sm{ font-size:12.5px; fill:var(--muted); }
+  .ap-t.bad{ font-size:12.5px; fill:#c0392b; font-weight:600; }
+  @media print{ .apparatus{ page-break-inside:avoid; } }
+
+  @media print{
+    body{ font-size:10.5pt; }
+    .note-wrap{ max-width:none; padding:0; }
+    .btn, .sim .buttons{ display:none !important; }
+    .sim, .ticket, .pe, .prior{ break-inside:avoid; }
+    h2{ break-after:avoid; }
+    .verdict, .readout, .sim .panel .ctrl textarea{ display:none; }
+    a{ color:inherit; text-decoration:none; }
+    /* probe options stay visible on paper, as a plain lettered list */
+    .probe .opts{ counter-reset:opt; }
+    .probe .opt{ cursor:default; border:none; padding:.12rem 0 .12rem 1.6rem; position:relative; background:none; }
+    .probe .opt::before{
+      counter-increment:opt; content:"(" counter(opt, upper-alpha) ")";
+      position:absolute; left:0; font-weight:600; color:#5c6b62;
+    }
+    .probe .feedback{ display:none; }
+    /* the tick badges need a hair more room at print metrics */
+    .pe li .tick{ width:1.7rem; height:1.7rem; font-size:.66rem; }
+    .check-group label{ break-inside:avoid; }
+  }
+
+.sign-note{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; line-height:1.55; color:var(--ink,#1d2b23); background:#fdf6ea; border-left:3px solid var(--amber,#c77b1f); border-radius:0 6px 6px 0; padding:.6rem .85rem; margin:.9rem 0; }
+  .note-link{
+    background:#fff; border:1px solid var(--rule); border-left:4px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.85rem 1.05rem; margin:1rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .note-link b{ color:var(--green-deep); }
+.sign-note b{ color:#8a5512; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 &middot; Vectors and Projectile Motion</span>
+    <span>Lab 03</span>
+  </div>
+
+  <h1>Projectile Motion: Predicting Where the Ball Lands</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In M2 N3 you argued that a horizontally launched ball and a dropped ball hit the ground at the same
+    instant, because the horizontal and vertical motions are independent. This lab puts money on that
+    claim. You will launch a ball horizontally from one height and measure where it lands &mdash; and
+    that single measurement, combined with the independence claim, is enough to tell you the launch
+    speed. Then you move the launcher to a height you have never used, calculate where the ball will
+    land, <b>put a cup there</b>, and fire. Either physics predicts the future or it does not, and you
+    are about to find out in front of witnesses.
+    <div class="logistics">
+      <span class="chip"><b>Due</b> Sunday, October 11, 11:59 PM</span>
+      <span class="chip"><b>Report</b> Full lab report &mdash; use the Lab Template</span>
+      <span class="chip"><b>Pairs with</b> M2 N3, M2 N4</span>
+    </div>
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lab, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Treat a two-dimensional motion as two one-dimensional motions</b>
+        sharing a single clock &mdash; constant velocity horizontally, constant acceleration vertically.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Solve a system of two kinematic equations</b> by eliminating the
+        shared time variable, and derive d = v<sub>0</sub>&radic;(2h/g) yourself rather than quoting it.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine an unmeasured quantity indirectly</b> &mdash; obtain the
+        launch speed from a height and a horizontal distance, neither of which is a speed.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Propagate uncertainty through a calculation</b>, so that your
+        launch speed carries an uncertainty derived from the uncertainties in h and d.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Make a quantitative prediction before taking the data</b>, then
+        test it &mdash; and report the result whether or not it worked.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Plot theory as a curve and experiment as points on one graph</b>,
+        and read the pattern in the residuals rather than only the average agreement.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ THE PHYSICS ============ -->
+  <h2>The physics you are using</h2>
+<div class="sign-note"><b>Sign convention here.</b> The physics is <b>a = &minus;g</b>: upward is positive, and
+    <i>g</i> is a magnitude that never carries a sign. This lab uses <b>g = 9.81&nbsp;m/s&sup2;</b> throughout
+    &mdash; the accepted value at our latitude, the same one Lab&nbsp;02 compares against. The equations below
+    write <i>g</i> without a minus sign because they compute the <em>magnitude</em> of the drop below the launch
+    point as time grows; the ball is still accelerating downward at a&nbsp;=&nbsp;&minus;g. Quote 9.81 in your
+    report and keep it consistent everywhere, including in your spreadsheet.</div>
+
+
+  <div class="note-link"><b>You built this in Note&nbsp;3.</b> <i>Freefall vs. Horizontal Launch</i>
+  is where the claim was settled: a ball launched horizontally falls in exactly the same time as a ball
+  simply dropped from the same height, because the two motions are independent and the launched ball
+  starts with no vertical velocity at all. That note derives t&nbsp;=&nbsp;&radic;(2h&frasl;g) and leaves
+  one question deliberately open &mdash; <i>keep the launch speed and double the height; does the ball
+  land twice as far out?</i> <b>This lab is where you answer it, with a steel ball and a ruler.</b>
+  Bring the prediction you wrote down.</div>
+
+  <p>When an object moves near the surface of the Earth in both directions at once, gravity pulls
+  vertically and does nothing at all horizontally. So the horizontal velocity of a projectile never
+  changes, while its vertical velocity changes steadily. That gives you two kinematic equations for the
+  same flight, one per axis, with <b>t</b> shared between them:</p>
+
+  <div class="eqn">
+    horizontal: &nbsp; d = v<sub>0</sub>&thinsp;t &nbsp;&nbsp; (a<sub>x</sub> = 0)<br>
+    vertical: &nbsp; h = &frac12;&thinsp;g&thinsp;t&sup2; &nbsp;&nbsp; (v<sub>0y</sub> = 0)
+    <small>the ball leaves the launcher horizontally, so its initial vertical speed is zero</small>
+  </div>
+
+  <p>Two equations, three unknowns &mdash; but <b>t</b> is shared, and that is the whole trick. Solve the
+  vertical equation for the fall time, substitute it into the horizontal one, and the time drops out:</p>
+
+  <div class="eqn">
+    t = &radic;(2h / g) &nbsp;&nbsp;&rarr;&nbsp;&nbsp; d = v<sub>0</sub>&thinsp;&radic;(2h / g)
+    <small>Do this derivation yourself in your Introduction, line by line. Do not simply quote the result.</small>
+  </div>
+
+  <p>Read that equation two ways. If you know <b>h</b> and measure <b>d</b>, you get <b>v<sub>0</sub></b>
+  &mdash; a speed you never measured directly and have no stopwatch fast enough to catch. And once you
+  know <b>v<sub>0</sub></b>, the same equation runs forward and predicts <b>d</b> for any height you
+  like. That round trip, measurement to prediction, is this lab.</p>
+
+  <div class="watch"><b>What this lab does <em>not</em> measure.</b> Put
+  v<sub>0</sub> = d&#772;<sub>0</sub>&radic;(g&frasl;2h<sub>0</sub>) from your calibration run back into
+  d = v<sub>0</sub>&radic;(2h&frasl;g), and watch <i>g</i> cancel:
+
+  <div class="eqn">d &nbsp;=&nbsp; d&#772;<sub>0</sub> &radic;(h &frasl; h<sub>0</sub>)
+    <span class="domain"><b>Where this holds:</b> the same launcher at the same launch speed for every
+    height, released horizontally, air resistance ignored. It is the two boxed equations above with
+    v<sub>0</sub> eliminated &mdash; nothing new, just the same physics with the calibration folded in.</span>
+  </div>
+
+  <p>Your prediction depends on the calibration pair (h<sub>0</sub>, d&#772;<sub>0</sub>) and the new height,
+  and on nothing else. <b>So this is not a measurement of <i>g</i></b>, and a disagreement between your
+  prediction and your data cannot be blamed on the value of <i>g</i> you used &mdash; it would survive any
+  value at all. What you are testing is the <b>scaling law</b>: that <i>d</i> grows as &radic;<i>h</i>. Say so
+  in your Introduction. It is also the whole content of the prediction below, and it is what makes discussion
+  question&nbsp;7 worth answering.</p>
+
+  <!-- ============ PREDICT FIRST ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first. You double the launch height. Ignoring air resistance, the horizontal
+    distance the ball travels will&hellip;</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Double as well.</button>
+      <button class="opt" data-correct="true">Increase by a factor of &radic;2, about 1.41.</button>
+      <button class="opt" data-correct="false">Quadruple.</button>
+      <button class="opt" data-correct="false">Stay the same &mdash; the launch speed has not changed.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <h2>What you need</h2>
+  <ul class="kit">
+    <li>Horizontal ball launcher and a small steel ball or marble</li>
+    <li>A shelf unit, a set of tables, or anything that gives you launch heights from about 0.20&nbsp;m to
+      over 1.00&nbsp;m &mdash; the wider the range of heights, the more clearly the relationship shows</li>
+    <li>Two-meter stick or tape measure; a level</li>
+    <li>Carbon paper and plain paper; tape</li>
+    <li>A plastic cup (not glass or ceramic &mdash; you will be aiming a steel ball at it)</li>
+    <li>Camera for setup photos and for the Extras</li>
+    <li>The <b>Lab Template</b> and the <b>Lab Information</b> module</li>
+  </ul>
+
+  <div class="watch">
+    <b>Two requirements before you take a single measurement.</b> First, you must be able to measure the
+    height of the <em>end of the launcher</em> &mdash; that is where the ball's flight begins, and it is
+    not the same as the height of the shelf. Second, the launcher must be genuinely horizontal; check it
+    with a level rather than by eye. Make sure the ball has a clear path all the way to the floor. And
+    always start the ball at the top of the launcher, every single time &mdash; the launcher is designed
+    to give a consistent launch speed, but only if it is loaded consistently.
+  </div>
+
+
+  <!-- ============ APPARATUS DIAGRAM ============ -->
+  <figure class="apparatus">
+    <div class="frame">
+    <svg viewBox="0 0 740 430" role="img"
+         aria-label="Side view of the setup. A launcher sits on a shelf with its end overhanging. A dashed plumb line drops from the end of the launcher to the floor. The height h is measured from the end of the launcher down to the floor, not from the shelf surface. The ball follows a dashed curved path to a landing mark on carbon paper, and the distance d is measured along the floor from the plumb point to that mark.">
+      <defs>
+        <marker id="apArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1f6b4a"></path>
+        </marker>
+      </defs>
+
+      <!-- floor -->
+      <line class="ap-solid" x1="40" y1="360" x2="700" y2="360"></line>
+      <text class="ap-t sm" x="46" y="378">floor</text>
+
+      <!-- shelf / stand -->
+      <rect class="ap-shelf" x="70" y="140" width="165" height="11"></rect>
+      <rect class="ap-shelf" x="95" y="151" width="34" height="209"></rect>
+
+      <!-- launcher tube, end overhanging the shelf -->
+      <rect class="ap-tube" x="108" y="116" width="145" height="17" rx="5"></rect>
+      <circle class="ap-ball" cx="124" cy="124" r="6"></circle>
+      <text class="ap-t sm" x="66" y="102">load the ball at the top, every time</text>
+
+      <!-- the launch point -->
+      <circle cx="253" cy="133" r="4" fill="#1f6b4a"></circle>
+      <line class="ap-thin" x1="257" y1="130" x2="300" y2="82" stroke-dasharray="3 3"></line>
+      <text class="ap-t sm" x="304" y="78">end of the launcher &mdash; the flight starts here</text>
+
+      <!-- plumb line -->
+      <line class="ap-dash" x1="253" y1="137" x2="253" y2="356"></line>
+      <path class="ap-thin" d="M247,344 L259,344 L253,358 z" fill="#8a8f98"></path>
+      <text class="ap-t sm" x="150" y="262">plumb line</text>
+      <line class="ap-dash" x1="200" y1="258" x2="248" y2="258"></line>
+
+      <!-- h dimension -->
+      <line class="ap-dim" x1="330" y1="133" x2="330" y2="360" marker-start="url(#apArrow)" marker-end="url(#apArrow)"></line>
+      <line class="ap-thin" x1="257" y1="133" x2="336" y2="133" stroke-dasharray="4 3"></line>
+      <text class="ap-t lbl" x="340" y="240">h</text>
+      <text class="ap-t sm" x="340" y="258">measured from the</text>
+      <text class="ap-t sm" x="340" y="274">END of the launcher</text>
+
+      <!-- the wrong height -->
+      <line class="ap-warn" x1="196" y1="152" x2="196" y2="182" stroke-dasharray="4 3"></line>
+      <path class="ap-warn" d="M189,176 L203,190 M203,176 L189,190"></path>
+      <text class="ap-t bad" x="140" y="210">not the shelf surface</text>
+
+      <!-- trajectory -->
+      <path class="ap-traj" d="M250.0,130.0 L257.8,130.1 L265.5,130.6 L273.2,131.3 L281.0,132.3 L288.8,133.6 L296.5,135.2 L304.2,137.0 L312.0,139.2 L319.8,141.6 L327.5,144.4 L335.2,147.4 L343.0,150.7 L350.8,154.3 L358.5,158.2 L366.2,162.3 L374.0,166.8 L381.8,171.5 L389.5,176.6 L397.2,181.9 L405.0,187.5 L412.8,193.4 L420.5,199.6 L428.2,206.0 L436.0,212.8 L443.8,219.8 L451.5,227.2 L459.2,234.8 L467.0,242.7 L474.8,250.9 L482.5,259.4 L490.2,268.1 L498.0,277.2 L505.8,286.5 L513.5,296.2 L521.2,306.1 L529.0,316.3 L536.8,326.8 L544.5,337.6 L552.2,348.6 L560.0,360.0"></path>
+
+      <!-- paper and carbon paper -->
+      <rect class="ap-paper" x="470" y="352" width="180" height="8"></rect>
+      <rect class="ap-carbon" x="470" y="346" width="180" height="6"></rect>
+      <text class="ap-t sm" x="700" y="332" text-anchor="end">carbon paper over plain paper</text>
+      <circle cx="560" cy="352" r="4.5" fill="#c0392b"></circle>
+
+      <!-- d dimension -->
+      <line class="ap-dim" x1="253" y1="398" x2="560" y2="398" marker-start="url(#apArrow)" marker-end="url(#apArrow)"></line>
+      <line class="ap-thin" x1="253" y1="362" x2="253" y2="404" stroke-dasharray="4 3"></line>
+      <line class="ap-thin" x1="560" y1="356" x2="560" y2="404" stroke-dasharray="4 3"></line>
+      <text class="ap-t lbl" x="406" y="392" text-anchor="middle">d</text>
+      <text class="ap-t sm" x="406" y="418" text-anchor="middle">from the plumb point to the landing mark</text>
+    </svg>
+    </div>
+    <figcaption class="cap"><b>Figure A.</b> Where the two measurements are taken. <b>h</b> runs from the
+    <i>end of the launcher</i> to the floor &mdash; not from the shelf surface, which sits lower and will
+    bias every prediction you make. <b>d</b> runs from the point directly below the launcher end, found
+    with a plumb line, to the landing mark. Your own report needs a photo of your apparatus <i>and</i> a
+    labelled sketch of your own; this one is not a substitute for either.</figcaption>
+  </figure>
+
+  <!-- ============ PART I ============ -->
+  <h2>Part I &mdash; Determining the launch speed</h2>
+
+  <ol class="steps">
+    <li>Mount the launcher at your first height. Measure <b>h</b>, the vertical drop from the end of the
+      launcher to the floor. Record your measurement uncertainty along with the value &mdash; half the
+      smallest division on your measuring device is a reasonable starting point.</li>
+    <li>Tape a sheet of plain paper down in the landing area, and lay carbon paper over it, carbon side
+      down. Each landing leaves a small mark on the plain sheet, which you can measure afterward at your
+      leisure. This is much more accurate than trying to watch where the ball hits.</li>
+    <li>Place the ball at the top of the launcher and release it. Repeat for <b>at least five trials</b>
+      &mdash; five is the number the rubric expects.</li>
+    <li>Measure <b>d</b> for each mark: the horizontal distance from the point <em>directly below the end
+      of the launcher</em> to the landing mark. Drop a plumb line if you need to find that point
+      honestly.</li>
+    <li>Compute the mean horizontal distance and its standard error of the mean.</li>
+  </ol>
+
+  <h3>Getting v<sub>0</sub> and its uncertainty</h3>
+  <p>Use your average distance and your measured height in the equation you derived:</p>
+
+  <div class="eqn">
+    v<sub>0</sub> = d&#772; / &radic;(2h / g) = d&#772; &radic;(g / 2h)
+  </div>
+
+  <p>Because v<sub>0</sub> depends on d to the first power and on h to the power &minus;&frac12;, the
+  relative uncertainties combine like this:</p>
+
+  <div class="eqn">
+    &delta;v<sub>0</sub> / v<sub>0</sub> = &radic;[ (&delta;d / d&#772;)&sup2; + (&frac12; &middot; &delta;h / h)&sup2; ]
+    <small>use the standard error of the mean for &delta;d, and your measurement uncertainty for &delta;h</small>
+  </div>
+
+  <p>Notice what that factor of &frac12; is telling you: an error in the height hurts you only half as
+  much as the same relative error in the distance. That is worth a sentence in your discussion, and it
+  tells you which measurement deserves more of your care.</p>
+
+  <p>Show this as a worked sample calculation, with units at every step.</p>
+
+  <!-- ============ PART II ============ -->
+  <h2>Part II &mdash; Predicting the landing position</h2>
+
+  <p>Now run the equation forward. You know v<sub>0</sub>; pick a new height and calculate where the ball
+  will land before you fire it.</p>
+
+  <ol class="steps">
+    <li>Move the launcher to a height you have <b>not</b> used yet. Measure the new h.</li>
+    <li><b>Calculate the predicted landing distance</b> and write it in your lab notebook <em>before you
+      launch</em>. This is the point of the lab &mdash; a prediction recorded after the fact is not a
+      prediction.</li>
+    <li>Place the cup so its centre is at your predicted distance. Take one shot and record whether it
+      went in. Report that result honestly whichever way it goes.</li>
+    <li>Whether or not you hit the cup, move the cup aside and use carbon paper to record <b>at least
+      five landing marks</b> at this height. Measure them and compute the mean and SEM.</li>
+    <li>Repeat all of the above for <b>at least five different heights</b>, including the one you used in
+      Part I. Spread them out across the full range you can reach.</li>
+  </ol>
+
+  <!-- ============ PART III ============ -->
+  <h2>Part III &mdash; Theory against data on one graph</h2>
+
+  <p>Make a single graph with launch height <b>h</b> on the horizontal axis and horizontal distance
+  <b>d</b> on the vertical axis. It carries two things:</p>
+
+  <ul class="kit">
+    <li>The <b>theory</b>, plotted as a smooth dashed curve: compute d = v<sub>0</sub>&radic;(2h/g) at
+      closely spaced heights across your whole range &mdash; every 0.05&nbsp;m works well &mdash; using
+      the v<sub>0</sub> you determined in Part I.</li>
+    <li>The <b>experiment</b>, plotted as discrete markers with vertical error bars: your measured mean
+      distance at each height you actually tested.</li>
+  </ul>
+
+  <div class="watch">
+    <b>Do not fit a trendline to the experimental points here.</b> The curve on this graph is not fitted
+    to your data &mdash; it is calculated from a v<sub>0</sub> you measured separately, which is precisely
+    what makes the comparison meaningful. Do not connect your data points dot-to-dot either.
+  </div>
+
+  <h3>The comparison</h3>
+  <p>For each height, compute the percent difference between your measured and predicted distances:</p>
+
+  <div class="eqn">
+    % difference = |d<sub>measured</sub> &minus; d<sub>predicted</sub>| / d<sub>predicted</sub> &times; 100%
+  </div>
+
+  <p>Then look at the <em>pattern</em> in those percent differences, not just their average. Are they
+  scattered randomly around zero, or do they trend one way as the height increases? Are they larger at
+  small heights or at large heights? A trend in the residuals means something systematic is going on, and
+  finding it is worth more than a small average error.</p>
+
+  <!-- ============ CALCULATOR ============ -->
+  <h2>Check your predictions</h2>
+  <p>Use this to check the arithmetic in your spreadsheet. Your report still has to show the calculation
+  worked by hand, with units.</p>
+
+  <div class="sim">
+    <div class="sim-head"><span>&#9679;</span> Tool &middot; Launch speed and predicted landing distance</div>
+    <div class="panel">
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="calH">Calibration height h<sub>0</sub> (m)</label>
+          <input type="number" id="calH" step="any" inputmode="decimal" placeholder="0.927">
+        </div>
+        <div class="ctrl">
+          <label for="calD">Mean measured distance d&#772;<sub>0</sub> (m)</label>
+          <input type="number" id="calD" step="any" inputmode="decimal" placeholder="0.475">
+        </div>
+        <div class="ctrl">
+          <label for="newH">New launch height h (m)</label>
+          <input type="number" id="newH" step="any" inputmode="decimal" placeholder="1.217">
+        </div>
+        <div class="ctrl">
+          <label for="measD">Measured distance at that height (m) &mdash; optional</label>
+          <input type="number" id="measD" step="any" inputmode="decimal" placeholder="leave blank to predict only">
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="calcBtn">Compute</button>
+        <button class="btn" id="calcClear">Clear</button>
+      </div>
+      <div class="readout">
+        <span class="chip">v<sub>0</sub> = <b id="oV0">&mdash;</b></span>
+        <span class="chip">fall time t = <b id="oT">&mdash;</b></span>
+        <span class="chip">predicted d = <b id="oD">&mdash;</b></span>
+        <span class="chip">% difference = <b id="oPct">&mdash;</b></span>
+      </div>
+      <div class="verdict" id="oVerdict">Enter a calibration height and distance to begin.</div>
+      <div class="hint-row">Uses g = 9.81 m/s&sup2; and assumes the ball leaves the launcher horizontally from rest in the vertical direction.</div>
+    </div>
+  </div>
+
+  <!-- ============ DISCUSSION ============ -->
+  <h2>Questions for your discussion</h2>
+  <p>Work these into your Discussion and Additional Questions sections, in <b>sentences and paragraphs</b>
+  &mdash; never as a numbered list, and never by restating the question before answering it. Do not limit
+  yourself to these; add any other insight you have.</p>
+
+  <ol class="questions">
+    <li>Why did we not simply use a stopwatch to measure the time of fall? Estimate the actual fall time
+      for one of your heights and compare it to a realistic human reaction time to make the argument
+      quantitative rather than hand-waved.</li>
+    <li>Was air resistance a factor in this experiment? Do not just assert an answer &mdash; argue from
+      what your data would look like if it were. If drag mattered, would your measured distances come in
+      above or below prediction, and would the effect grow or shrink with launch height?</li>
+    <li>What would happen if you repeated the whole experiment with a ping-pong ball instead of a marble?
+      Be specific about which part of the analysis would break first.</li>
+    <li>Suppose the launcher were not quite horizontal. Treat the two cases separately: tilted slightly
+      <em>above</em> horizontal, and tilted slightly <em>below</em>. Which way does each error push your
+      measured distance, and which way does it push the v<sub>0</sub> you infer from it?</li>
+    <li>Does the height of the cup affect how easy it is to hit? Could you drop the ball into a tall
+      narrow pipe standing on the floor using the same predictive equation, or would you need to change
+      something?</li>
+    <li>Look at how your percent differences vary with launch height. If your measurement of <b>d</b>
+      carries a roughly fixed absolute error &mdash; a centimetre or two, regardless of the height &mdash;
+      what does that do to the <em>percent</em> difference at small heights compared to large ones? Does
+      that account for the pattern you actually see, or is something else going on?</li>
+    <li>Your predicted curve depends on a single number, v<sub>0</sub>, measured at one height. What would
+      change in your analysis if you instead determined v<sub>0</sub> separately at every height? What
+      would you gain, and what would you lose?</li>
+  </ol>
+
+  <div class="watch">
+    <b>One thing the rubric will not accept:</b> "human error." It explains nothing. If your percent
+    difference is under 10%, attribute it to ordinary experimental uncertainty and say so. If it is over
+    10%, you must identify specific error sources and <em>quantify</em> them &mdash; a named mechanism
+    with a number attached.
+  </div>
+
+  <h2>Extras</h2>
+  <p>Post a video to the discussion board showing your most impressive shot. What is the smallest cup you
+  can get the ball into? Say what height you fired from and what you predicted.</p>
+
+  <!-- ============ WHAT TO HAND IN ============ -->
+  <div class="ticket">
+    <div class="t-head">
+      <strong>&#10003; Before you submit</strong>
+      <span class="sub">Every line here maps to a row on the Lab 03 grading rubric.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="check-group">
+        <span class="gh">Format &amp; front matter</span>
+        <label><input type="checkbox"><span>Lab Template used, with names, title, and date in the heading</span></label>
+        <label><input type="checkbox"><span>Abstract: four sentences or fewer &mdash; theme, numerical results, percent difference. Nothing else.</span></label>
+        <label><input type="checkbox"><span>Introduction contains your own derivation of d = v<sub>0</sub>&radic;(2h/g), the variables defined, and a hypothesis you can later confirm or reject</span></label>
+      </div>
+
+      <div class="check-group">
+        <span class="gh">Methods</span>
+        <label><input type="checkbox"><span>Equipment described within the procedure, in paragraphs &mdash; not as a bare list</span></label>
+        <label><input type="checkbox"><span>Procedure in paragraph form, in your own words, detailed enough to follow &mdash; not copied from this handout</span></label>
+        <label><input type="checkbox"><span>Photo of the apparatus <em>and</em> a labelled sketch, with every component labelled and both measurement reference points marked &mdash; where h is measured from and to, and where d is measured from and to</span></label>
+      </div>
+
+      <div class="check-group">
+        <span class="gh">Results</span>
+        <label><input type="checkbox"><span>Table of the five-plus calibration trials at the first height, with mean and SEM</span></label>
+        <label><input type="checkbox"><span>Table of all launch heights, with predicted distance, mean measured distance, SEM, and percent difference</span></label>
+        <label><input type="checkbox"><span>Every table numbered, captioned, units and consistent significant digits, referenced in the text ("Table 1 shows&hellip;")</span></label>
+        <label><input type="checkbox"><span>The theory-versus-experiment graph: dashed calculated curve, measured points as markers with error bars, numbered as a Figure with a caption and described in the text</span></label>
+        <label><input type="checkbox"><span>A sample calculation, worked step by step with units, for <em>each</em> type: fall time, v<sub>0</sub>, uncertainty propagation in v<sub>0</sub>, predicted distance, mean and SEM, percent difference</span></label>
+        <label><input type="checkbox"><span>Whether the ball landed in the cup, stated plainly for each height &mdash; including the times it missed</span></label>
+      </div>
+
+      <div class="check-group">
+        <span class="gh">Discussion &amp; conclusion</span>
+        <label><input type="checkbox"><span>Discussion opens with "we experimentally determined that&hellip; &plusmn; error"</span></label>
+        <label><input type="checkbox"><span>States whether your introduction's hypothesis is confirmed, and argues confidence using the 10% rule</span></label>
+        <label><input type="checkbox"><span>The <em>pattern</em> in the percent differences across heights is addressed, not just their average</span></label>
+        <label><input type="checkbox"><span>Additional questions answered in a dedicated section, in paragraphs</span></label>
+        <label><input type="checkbox"><span>The phrase "human error" appears nowhere in the report</span></label>
+        <label><input type="checkbox"><span>Conclusion: 3&ndash;4 sentences &mdash; numerical results with percent difference, a definitive verified / not-verified statement, and one concrete way to improve the measurement</span></label>
+      </div>
+
+      <div class="check-group">
+        <span class="gh">References</span>
+        <label><input type="checkbox"><span>One to three references beyond the textbook &mdash; the handout, the M2 note pages, the walkthrough videos, and an outside source on projectile motion</span></label>
+        <label><input type="checkbox"><span>Author, title, and date given for each &mdash; a bare URL is not a citation</span></label>
+      </div>
+
+      <div class="score" id="checkScore">0 of 0 checked.</div>
+    </div>
+  </div>
+
+  <h2>Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB03_Projectile_Motion.pdf">
+      <span class="kind">Handout</span>
+      <span class="name">This lab, as a PDF</span>
+      <span class="hint">The whole page, printable. The calculator and the checklist only work on the web version.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB03_Projectile_Motion_Example_Workbook.xlsx">
+      <span class="kind">Optional</span>
+      <span class="name">Example workbook (XLSX)</span>
+      <span class="hint">The column layout for the calibration, the per-height predictions and the theory curve, filled with a worked example set so you can see the shape of a finished sheet.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB03_Rubric.docx">
+      <span class="kind">Required</span>
+      <span class="name">Lab 03 grading rubric (DOCX)</span>
+      <span class="hint">What each section is worth. Every line of the submission checklist above maps to a row here.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB03_Projectile_Motion_Example_Starter.docx">
+      <span class="kind">Required</span>
+      <span class="name">Report starter (DOCX)</span>
+      <span class="hint">The Lab Template with this lab's headings and equations already in place. Start here rather than from a blank page.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/Formatting_Data_Tables_for_Lab_Reports.html">
+      <span class="kind">Reference</span>
+      <span class="name">Formatting Data Tables for Lab Reports</span>
+      <span class="hint">Table numbering, captions, significant digits, units.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/Module_02/M2_N3_Freefall_vs_Horizontal_Launch.html">
+      <span class="kind">Reference</span>
+      <span class="name">M2 N3 &mdash; Freefall vs. Horizontal Launch</span>
+      <span class="hint">The independence-of-motion argument this lab tests.</span>
+    </a>
+  </div>
+
+  <p class="filenote">Abstract rules, section-by-section guidance and the submission window live in the
+  <b>Lab Information</b> module on Brightspace, alongside the Module&nbsp;2 Lab folder where you hand this in.</p>
+
+  <h2>References to get you started</h2>
+  <p>Your references should include material on projectile motion. Your textbook, this handout, and the
+  Module 2 note pages all count, and you need at least one source beyond the textbook. The note this lab
+  measures is
+  <a href="https://byungmooncho.github.io/PHY151/Module_02/M2_N3_Freefall_vs_Horizontal_Launch.html"
+     target="_blank" rel="noopener">Module&nbsp;2 Note&nbsp;3 &mdash; Freefall vs. Horizontal Launch</a>;
+  the angled-launch case you may want for the Extras is Note&nbsp;4.</p>
+  <ol class="refs">
+    <li>[Author's names], <i>Journal or Book title</i>, edition, Volume number, page number, (year).</li>
+  </ol>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 151
+    <span class="attrib">Revised from the PHY 151 Projectile Motion lab by Selim Araci and H. Trevor Johnson-Steigelman, used under CC BY-NC-SA.</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var G = 9.81;
+  function fmt(x, d){ return (Math.round(x * Math.pow(10,d)) / Math.pow(10,d)).toFixed(d); }
+
+  /* ---- predict-first probe ---- */
+  var probe = document.getElementById('probe');
+  if(probe){
+    var fb = document.getElementById('probeFb');
+    probe.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var right = btn.getAttribute('data-correct') === 'true';
+        probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+        btn.classList.add(right ? 'correct' : 'wrong');
+        fb.textContent = right
+          ? 'Right. d is proportional to √h, not to h — doubling the height buys you only √2 ≈ 1.41 times the range. Watch for this in your graph: the curve flattens as h grows.'
+          : 'Not quite. The height sets the fall time through h = ½gt², so t ∝ √h — and since d = v₀t, the distance goes as √h too. Double the height, multiply the range by about 1.41.';
+      });
+    });
+  }
+
+  /* ---- launch calculator ---- */
+  var btn = document.getElementById('calcBtn');
+  if(btn){
+    var inCalH = document.getElementById('calH'), inCalD = document.getElementById('calD'),
+        inNewH = document.getElementById('newH'), inMeasD = document.getElementById('measD');
+    var oV0 = document.getElementById('oV0'), oT = document.getElementById('oT'),
+        oD = document.getElementById('oD'), oPct = document.getElementById('oPct'),
+        oV = document.getElementById('oVerdict');
+
+    function reset(){
+      [oV0,oT,oD,oPct].forEach(function(e){ e.textContent = '—'; });
+      oV.textContent = 'Enter a calibration height and distance to begin.';
+    }
+    document.getElementById('calcClear').addEventListener('click', function(){
+      [inCalH,inCalD,inNewH,inMeasD].forEach(function(e){ e.value = ''; });
+      reset();
+    });
+
+    btn.addEventListener('click', function(){
+      var h0 = parseFloat(inCalH.value), d0 = parseFloat(inCalD.value);
+      if(!isFinite(h0) || !isFinite(d0) || h0 <= 0 || d0 <= 0){ reset(); return; }
+      var t0 = Math.sqrt(2*h0/G);
+      var v0 = d0 / t0;
+      oV0.textContent = fmt(v0,3) + ' m/s';
+
+      var h = parseFloat(inNewH.value);
+      if(!isFinite(h) || h <= 0){
+        oT.textContent = fmt(t0,4) + ' s';
+        oD.textContent = '—'; oPct.textContent = '—';
+        oV.textContent = 'Launch speed determined from your calibration run: v₀ = ' + fmt(v0,3)
+          + ' m/s, from a fall time of ' + fmt(t0,4) + ' s. Enter a new launch height to predict where the ball lands.';
+        return;
+      }
+      var t = Math.sqrt(2*h/G);
+      var d = v0 * t;
+      oT.textContent = fmt(t,4) + ' s';
+      oD.textContent = fmt(d,4) + ' m';
+
+      var md = parseFloat(inMeasD.value);
+      if(!isFinite(md) || md <= 0){
+        oPct.textContent = '—';
+        oV.textContent = 'Predicted landing distance: ' + fmt(d,3) + ' m from the point directly below the end of the launcher. '
+          + 'Write this in your notebook, place the cup, and fire — then come back and enter what you measured.';
+        return;
+      }
+      var pct = Math.abs(md - d) / d * 100;
+      var dir = md < d ? 'short of' : 'beyond';
+      oPct.textContent = fmt(pct,1) + '%';
+      var msg = 'Measured ' + fmt(pct,1) + '% ' + dir + ' the prediction. ';
+      if(pct < 10){
+        msg += 'Under 10% — the rubric lets you attribute this to ordinary experimental uncertainty, provided you say so explicitly and back it with your SEM.';
+      } else {
+        msg += 'Over 10% — the rubric requires specific, quantified error sources here, not a general appeal to uncertainty. Check your reference points first: h to the end of the launcher, d from the point directly beneath it.';
+      }
+      msg += ' Do this at every height and look at whether the sign and size of the miss trend with h — that pattern is the interesting result.';
+      oV.textContent = msg;
+    });
+  }
+
+  /* ---- submission checklist counter ---- */
+  var boxes = document.querySelectorAll('.check-group input[type=checkbox]');
+  var score = document.getElementById('checkScore');
+  if(score && boxes.length){
+    function tally(){
+      var done = 0;
+      boxes.forEach(function(b){ if(b.checked) done++; });
+      score.textContent = done + ' of ' + boxes.length + ' checked.'
+        + (done === boxes.length ? ' Ready to submit.' : '');
+    }
+    boxes.forEach(function(b){ b.addEventListener('change', tally); });
+    tally();
+  }
+})();
+</script>
+<!-- FLCC autosize reporter V4 - measures the content element, not the document.
+     See Cross_Course_Notes/Autosize_V4_Single_Source_Workflow.md
+     Added 2026-09-24: LB03 had no reporter at all, so its topic could never autosize. -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
