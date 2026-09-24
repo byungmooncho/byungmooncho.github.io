@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Note 4a — Wave Interference</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 105 module note page.
+     Same design system as the other module note pages. Self-contained;
+     upload via GitHub Pages and embed as an iframe.
+     ================================================================== */
+
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --line:#b7c6bc;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+  h3{ font-size:1.08rem; margin:1.5rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .figure{
+    border:1px solid var(--rule); border-radius:10px; padding:1rem;
+    margin:1.4rem 0; text-align:center;
+  }
+  .figure img, .figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+  .figure figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    color:var(--muted); margin-top:.5rem; text-align:left;
+  }
+  .figure figcaption b{ color:var(--green-deep); }
+  ol.steps{ counter-reset:step; list-style:none; margin:1rem 0; padding:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+    border-left:2px solid var(--rule); margin-left:.9rem;
+  }
+  ol.steps > li:last-child{ border-left-color:transparent; }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+    width:1.8rem; height:1.8rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.85rem; font-weight:600;
+  }
+  ol.steps.questions > li{ padding-bottom:1.4rem; }
+  .fillin{
+    display:inline-block; min-width:9rem; border-bottom:1px solid var(--line);
+    margin:0 .25rem;
+  }
+  .slot{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--green-deep); margin:.45rem 0 0; font-weight:600;
+  }
+  .slot .unit{ font-weight:400; color:var(--muted); }
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+  .probe{
+    border:2px solid var(--green); border-radius:10px;
+    padding:.9rem 1.1rem; margin:1.4rem 0; background:#fff;
+  }
+  .probe .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:700; display:block; margin-bottom:.3rem;
+  }
+  .probe .opts{ margin:.7rem 0 0; }
+  .probe .opt{
+    display:block; padding:.35rem 0 .35rem 1.9rem; position:relative;
+    font-size:1rem;
+  }
+  .probe .opt::before{
+    content:""; position:absolute; left:.2rem; top:.62rem;
+    width:1rem; height:1rem; border:1.5px solid var(--line); border-radius:50%;
+  }
+  .eqn{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px;
+    padding:.85rem 1rem; margin:1.1rem 0; text-align:center;
+  }
+  .eqn .math{
+    font-size:1.25rem; font-weight:700; color:var(--green-deep);
+    font-family:Charter, Georgia, serif; display:block;
+  }
+  .eqn .domain{
+    display:block; margin-top:.45rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem;
+    letter-spacing:.02em; color:var(--muted);
+  }
+  .eqn .domain b{ color:var(--amber); }
+  table.spec{
+    width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:.95rem;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  table.spec th, table.spec td{
+    border:1px solid var(--rule); padding:.5rem .6rem; text-align:left;
+  }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec td.blank{ height:2.1rem; }
+  .drawbox{
+    border:1px solid var(--line); border-radius:8px; height:9rem; margin:.5rem 0;
+    background:
+      repeating-linear-gradient(0deg,#f4f8f5 0 1px,transparent 1px 22px),
+      repeating-linear-gradient(90deg,#f4f8f5 0 1px,transparent 1px 22px);
+  }
+  .grid2{ display:grid; gap:1rem; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .downloads{ display:grid; gap:.8rem; margin:1.2rem 0; }
+  @media (min-width:560px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    display:block; border:1px solid var(--rule); border-radius:10px;
+    padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+    background:#fff; transition:border-color .15s, box-shadow .15s;
+  }
+  .dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+  .dl-card .kind{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--green); font-weight:700;
+  }
+  .dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+  .dl-card .hint{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.83rem; color:var(--muted);
+  }
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+
+@media print{
+  @page{ size: Letter; margin: .55in .5in; }
+  body{ font-size:11pt; }
+  .note-wrap{ max-width:none; padding:0; }
+  .synopsis, .tip, .figure, .probe, .eqn, ol.steps > li, table.spec{
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  h1, h2, h3{ break-after:avoid; page-break-after:avoid; }
+  .downloads{ display:none; }
+  .printfiles{ display:block !important; }
+}
+.printfiles{ display:none; }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1: Waves</span>
+    <span>Note 4a: Wave Interference</span>
+  </div>
+
+  <h1>Two Waves Can Add Up To Nothing</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In Note 3 you learned that a single wave is three numbers and a phase: amplitude
+<strong>A</strong>, wavelength <strong>&lambda;</strong>, frequency <strong>f</strong>, tied
+together by <strong>v = &lambda;f</strong> &mdash; and <strong>phase</strong>, the idea you only
+need once you have <em>two</em> waves to compare. This note is where that fourth idea earns its
+keep. Everything so far has been about one wave travelling on its own. What makes waves genuinely
+different from the rocks and baseballs of the rest of physics is what happens when two of them
+arrive at the same place at the same time. Particles collide and bounce. Waves do something no
+particle can do: they <strong>interfere</strong>. They add where they arrive in step, and they
+<em>subtract</em> where they arrive out of step &mdash; so completely that two loud sounds can
+produce silence. Interference, along with diffraction and refraction, is on the short list of
+behaviours that forced physicists to build a whole separate description for waving things. We
+start with interference, and we start with your own ears.
+  </div>
+
+  <div class="probe">
+    <span class="label">Before you read on &mdash; commit to an answer</span>
+    <p>Two people hold the ends of a long slinky stretched across the floor. At the same instant,
+    each of them flicks their end <em>upward</em> and sends a pulse travelling toward the other.
+    The two pulses race toward each other and meet in the middle. <b>At the moment they meet, and
+    just afterwards, what happens?</b></p>
+    <div class="opts">
+      <span class="opt">They bounce off each other and each travels back the way it came.</span>
+      <span class="opt">They briefly pile into one big pulse, then separate and keep going,
+      each one unchanged.</span>
+      <span class="opt">They merge permanently into a single pulse that continues in one
+      direction.</span>
+      <span class="opt">They cancel and both disappear.</span>
+    </div>
+    <p style="margin-top:.8rem"><b>Now the harder one.</b> Run it again, but this time one person
+    flicks <em>up</em> and the other flicks <em>down</em>. For one instant as they overlap, the
+    slinky lies completely flat &mdash; no pulse anywhere. Write one sentence saying where the
+    energy is at that instant.</p>
+    <p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+    <p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+  </div>
+
+  <h2>Particles bounce. Waves pass through.</h2>
+  <p>You already know what two baseballs do when they meet: they collide, and after the
+  collision neither one is doing what it was doing before. Two waves meeting in the same medium do
+  not collide at all. Each one simply keeps going as though the other were not there. The
+  disturbance you see <em>while</em> they overlap is nothing more than the two disturbances added
+  together, point by point, and once they have passed through each other both emerge with their
+  original shape and speed intact. This is the <strong>principle of superposition</strong>, and it
+  is the whole of this note in one sentence:</p>
+
+  <div class="eqn">
+    <span class="math">total displacement = displacement from wave 1 + displacement from wave 2</span>
+    <span class="domain">Holds wherever two waves share a medium and the disturbances are not
+    enormous. <b>Note the sign:</b> a displacement below equilibrium is negative, so &ldquo;adding&rdquo;
+    can make the total smaller &mdash; or zero.</span>
+  </div>
+
+  <p>That parenthetical is the entire surprise. Because displacements carry a sign, adding two
+  waves can produce <em>less</em> than either one alone. Nothing in your experience of colliding
+  objects prepares you for two things arriving somewhere and the result being nothing. It happens
+  only because a wave is a disturbance from equilibrium rather than a piece of stuff, and a
+  disturbance can point either way.</p>
+
+  <p>And notice what the flat-slinky moment tells you about energy. The slinky is flat for an
+  instant, but it is not <em>still</em>: every coil in that region is moving at maximum speed,
+  passing through equilibrium on its way to the other side. The energy never left. It moved out of
+  the shape of the medium and into the motion of the medium, and an instant later it moves back.
+  Destructive interference relocates energy; it never destroys it.</p>
+
+  <h2>Two ways for waves to add</h2>
+  <p>When two identical waves overlap, there are two extreme cases worth naming, and everything
+  else lies between them. Draw each one below: sketch the two waves lightly, then draw the sum
+  darker on top.</p>
+
+  <div class="grid2">
+    <div>
+      <h3>Constructive interference</h3>
+      <div class="drawbox"></div>
+      <p class="slot">Describe in words:</p>
+      <p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+      <p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+    </div>
+    <div>
+      <h3>Destructive interference</h3>
+      <div class="drawbox"></div>
+      <p class="slot">Describe in words:</p>
+      <p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+      <p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+    </div>
+  </div>
+
+  <p>Constructive interference is crest landing on crest and trough on trough: the two waves are
+  <strong>in phase</strong>, the displacements have the same sign everywhere, and the resultant
+  amplitude is the sum of the two. Destructive interference is crest landing on trough: the two
+  waves are <strong>180&deg; out of phase</strong>, the signs are opposite everywhere, and the
+  resultant amplitude is the difference. For two <em>identical</em> waves that difference is zero
+  &mdash; perfect cancellation.</p>
+
+  <div class="tip">
+    <span class="label">Careful</span>
+    Interference changes the <b>amplitude</b> of the result. It does not change the frequency, and
+    it does not change the wave speed. Two 800 Hz waves interfering give you a louder or quieter
+    800 Hz &mdash; never a different pitch.
+  </div>
+
+  <h2>Phase is set by distance</h2>
+  <p>So far this is a statement about two waves that are already in step or already opposed. The
+  useful question is the one you can actually control: <em>given two sources, where in the room do
+  you get each case?</em></p>
+
+  <p>Suppose two speakers play the identical tone, and both push air outward at the same instant
+  &mdash; they are <strong>in phase at the source</strong>. Stand somewhere and ask what each wave
+  has done on its way to you. A wave advances one full cycle for every wavelength it travels. So
+  if the two paths to your ear are the same length, both waves have turned through the same number
+  of cycles and arrive in step. If one path is longer by exactly one wavelength, that wave has
+  turned through one extra <em>whole</em> cycle &mdash; which puts it back in step again. Two extra
+  wavelengths, still in step. But if one path is longer by <em>half</em> a wavelength, that wave
+  arrives exactly opposed, and you get cancellation.</p>
+
+  <p>Write the difference in the two path lengths as &Delta; = |r<sub>A</sub> &minus; r<sub>B</sub>|.
+  Then:</p>
+
+  <div class="eqn">
+    <span class="math">&Delta; = n&lambda;  &nbsp;&rarr;&nbsp; constructive (LOUD)</span>
+    <span class="math" style="margin-top:.4rem">&Delta; = (n + &frac12;)&lambda;  &nbsp;&rarr;&nbsp; destructive (quiet)</span>
+    <span class="domain">n = 0, 1, 2, &hellip; &nbsp;&middot;&nbsp; <b>Valid only when the two sources
+    emit in phase with each other, at the same frequency, into the same medium.</b> Reverse the
+    wires on one speaker and the two results swap places. Different media &mdash; water on one side,
+    air on the other &mdash; and &lambda; is not the same on the two paths, so this form fails.</span>
+  </div>
+
+  <p>Read the two lines together and notice how economical this is. You do not need to know the
+  amplitude, the loudness, or how far away the speakers are. One length &mdash; the
+  <em>difference</em> of two distances &mdash; measured against one other length, the wavelength,
+  decides whether a spot in the room is loud or quiet. That is the whole rule, and you are about to
+  check it with a tape measure.</p>
+
+  <h2>The two-speaker walk</h2>
+  <p>Two speakers on the front bench play the same steady 800 Hz tone. The sound fills the room,
+  but it does not fill it <em>evenly</em>. Walk slowly along a line a few metres out, with one ear
+  plugged, and you will hear the tone rise and fall &mdash; loud, quiet, loud, quiet &mdash; even
+  though nothing about the speakers is changing. Those quiet spots are not the sound failing to
+  reach you. They are two sounds arriving and cancelling.</p>
+
+  <figure class="figure" id="fig1">
+    <svg viewBox="0 0 760 500" role="img" aria-labelledby="f1t"><title id="f1t">Room layout seen from above. Two speakers sit on a line at the top, 1.5 metres apart, both facing the same way. A walk line runs parallel to them 3 metres away. Faint arcs spread from each speaker representing wave crests one wavelength apart. Along the walk line, filled markers show loud positions at 0 and plus or minus 0.91 metres from the centre, and open markers show quiet positions at plus or minus 0.45 and plus or minus 1.46 metres. Two lines run from the two speakers to the quiet position at 0.45 metres, labelled r sub A and r sub B.</title>
+      <defs>
+        <clipPath id="n4a-below"><rect x="0" y="72" width="760" height="380"/></clipPath>
+        <marker id="n4a-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6a7a70"/></marker>
+      </defs>
+      <g clip-path="url(#n4a-below)" fill="none" stroke="#1e6b3c" stroke-width="1" opacity="0.18">
+        <circle cx="297.5" cy="70" r="47"/><circle cx="297.5" cy="70" r="94"/><circle cx="297.5" cy="70" r="141"/><circle cx="297.5" cy="70" r="188"/><circle cx="297.5" cy="70" r="235"/><circle cx="297.5" cy="70" r="282"/><circle cx="297.5" cy="70" r="329"/><circle cx="297.5" cy="70" r="376"/>
+        <circle cx="462.5" cy="70" r="47"/><circle cx="462.5" cy="70" r="94"/><circle cx="462.5" cy="70" r="141"/><circle cx="462.5" cy="70" r="188"/><circle cx="462.5" cy="70" r="235"/><circle cx="462.5" cy="70" r="282"/><circle cx="462.5" cy="70" r="329"/><circle cx="462.5" cy="70" r="376"/>
+      </g>
+      <text x="40" y="150" font-family="'Segoe UI', system-ui, sans-serif" font-size="12" fill="#1e6b3c">crests, one &#955; apart</text>
+
+      <line x1="225" y1="70" x2="535" y2="70" stroke="#b7c6bc" stroke-width="1" stroke-dasharray="3 4"/>
+      <g fill="#fff" stroke="#1d2b23" stroke-width="2">
+        <rect x="278" y="48" width="39" height="22" rx="2"/><rect x="443" y="48" width="39" height="22" rx="2"/>
+      </g>
+      <path d="M288,70 L307,70 L313,88 L282,88 Z" fill="#1d2b23"/>
+      <path d="M453,70 L472,70 L478,88 L447,88 Z" fill="#1d2b23"/>
+      <circle cx="297.5" cy="70" r="3.5" fill="#c77b1f"/><circle cx="462.5" cy="70" r="3.5" fill="#c77b1f"/>
+      <text x="297.5" y="38" font-family="'Segoe UI', system-ui, sans-serif" font-size="13" font-weight="600" fill="#134a29" text-anchor="middle">Speaker A</text>
+      <text x="462.5" y="38" font-family="'Segoe UI', system-ui, sans-serif" font-size="13" font-weight="600" fill="#134a29" text-anchor="middle">Speaker B</text>
+
+      <line x1="297.5" y1="108" x2="462.5" y2="108" stroke="#6a7a70" stroke-width="1.3" marker-start="url(#n4a-ar)" marker-end="url(#n4a-ar)"/>
+      <rect x="342" y="96" width="76" height="22" fill="#fff"/>
+      <text x="380" y="112" font-family="'Segoe UI', system-ui, sans-serif" font-size="13" font-weight="600" fill="#1d2b23" text-anchor="middle">d = 1.5 m</text>
+
+      <line x1="380" y1="70" x2="380" y2="430" stroke="#b7c6bc" stroke-width="1" stroke-dasharray="5 5"/>
+
+      <line x1="618" y1="70" x2="618" y2="400" stroke="#6a7a70" stroke-width="1.3" marker-start="url(#n4a-ar)" marker-end="url(#n4a-ar)"/>
+      <rect x="624" y="222" width="86" height="24" fill="#fff"/>
+      <text x="628" y="240" font-family="'Segoe UI', system-ui, sans-serif" font-size="13" font-weight="600" fill="#1d2b23">L = 3.0 m</text>
+
+      <line x1="297.5" y1="70" x2="429.5" y2="400" stroke="#c77b1f" stroke-width="1.8"/>
+      <line x1="462.5" y1="70" x2="429.5" y2="400" stroke="#c77b1f" stroke-width="1.8"/>
+      <text x="336" y="250" font-family="Charter, Georgia, serif" font-size="15" font-weight="700" fill="#c77b1f">r</text>
+      <text x="345" y="255" font-family="Charter, Georgia, serif" font-size="11" font-weight="700" fill="#c77b1f">A</text>
+      <text x="460" y="250" font-family="Charter, Georgia, serif" font-size="15" font-weight="700" fill="#c77b1f">r</text>
+      <text x="469" y="255" font-family="Charter, Georgia, serif" font-size="11" font-weight="700" fill="#c77b1f">B</text>
+
+      <line x1="180" y1="400" x2="580" y2="400" stroke="#1d2b23" stroke-width="2.4"/>
+      <g fill="#1e6b3c"><circle cx="380" cy="400" r="6.5"/><circle cx="280" cy="400" r="6.5"/><circle cx="480" cy="400" r="6.5"/></g>
+      <g fill="#fff" stroke="#c77b1f" stroke-width="2.8"><circle cx="330.5" cy="400" r="6"/><circle cx="429.5" cy="400" r="6"/><circle cx="219.4" cy="400" r="6"/><circle cx="540.6" cy="400" r="6"/></g>
+      <g font-family="'Segoe UI', system-ui, sans-serif" font-size="11" text-anchor="middle">
+        <text x="380" y="440" fill="#1e6b3c" font-weight="700">LOUD</text><text x="380" y="453" fill="#5c6b62">0</text>
+        <text x="280" y="440" fill="#1e6b3c" font-weight="700">LOUD</text><text x="280" y="453" fill="#5c6b62">0.91 m</text>
+        <text x="480" y="440" fill="#1e6b3c" font-weight="700">LOUD</text><text x="480" y="453" fill="#5c6b62">0.91 m</text>
+        <text x="330.5" y="474" fill="#c77b1f" font-weight="700">quiet</text><text x="330.5" y="487" fill="#5c6b62">0.45 m</text>
+        <text x="429.5" y="474" fill="#c77b1f" font-weight="700">quiet</text><text x="429.5" y="487" fill="#5c6b62">0.45 m</text>
+        <text x="219.4" y="474" fill="#c77b1f" font-weight="700">quiet</text><text x="219.4" y="487" fill="#5c6b62">1.46 m</text>
+        <text x="540.6" y="474" fill="#c77b1f" font-weight="700">quiet</text><text x="540.6" y="487" fill="#5c6b62">1.46 m</text>
+      </g>
+      <text x="60" y="396" font-family="'Segoe UI', system-ui, sans-serif" font-size="12" font-weight="600" fill="#1d2b23">walk this line</text>
+    </svg>
+    <figcaption><b>Fig 1.</b> The room from above. The faint arcs are crests, drawn one wavelength
+    apart; where two of them cross, crest meets crest and the sound is loud. Filled markers are the
+    loud positions, open markers the quiet ones, with their distance from the centre line. The two
+    amber lines are the two paths to the first quiet spot &mdash; those are the lengths you
+    measure. <b>The positions shown assume 800 Hz, speakers 1.5 m apart, walk line 3.0 m out.</b></figcaption>
+  </figure>
+
+  <p>Two details about the procedure are worth understanding rather than just obeying. <b>Plug one
+  ear.</b> Your two ears are about 18 cm apart, and at 800 Hz the wavelength is only 43 cm, so your
+  two ears sample two genuinely different points in the pattern and your brain averages them into
+  mush. One ear gives you one point. <b>And walk slowly.</b> The quiet spots are dips of perhaps
+  ten or twenty decibels, not silences &mdash; real rooms have reflections that partly fill them
+  in. You are listening for a clear minimum, not for nothing at all.</p>
+
+  <table class="spec">
+    <tr><th style="width:26%">Position on the line</th><th>Loud or quiet?</th><th>r<sub>A</sub> (m)</th><th>r<sub>B</sub> (m)</th><th>&Delta; = |r<sub>A</sub> &minus; r<sub>B</sub>| (m)</th><th>&Delta; &divide; &lambda;</th></tr>
+    <tr><td>centre (0 m)</td><td class="blank"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>first quiet spot</td><td class="blank"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>next loud spot</td><td class="blank"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>second quiet spot</td><td class="blank"></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2>Performance Expectations</h2>
+  <p>State the principle of superposition and use it to explain why two waves pass through each
+  other unchanged while two particles do not. Distinguish constructive from destructive
+  interference by the phase relationship between the two waves, and describe the resultant
+  amplitude in each case. Explain where the energy is at an instant of complete destructive
+  interference. Predict whether a given point is loud or quiet from the difference in path length
+  to two in-phase sources, using &Delta; = n&lambda; and &Delta; = (n + &frac12;)&lambda;. Measure
+  two path lengths in a real room, compute their difference, and compare it with the wavelength
+  obtained from v = &lambda;f. State the conditions under which those two relations hold.</p>
+
+  <h2>Instructions</h2>
+  <p>Answer questions 1&ndash;6 from the note itself. Questions 7&ndash;12 use the numbers your
+  class measured during the speaker walk &mdash; fill in the table above first. Take the speed of
+  sound as v = 343 m/s.</p>
+
+  <ol class="steps questions">
+    <li><p>In your own words, what does a <b>particle</b> do when it meets another particle, and
+    what does a <b>wave</b> do when it meets another wave? Name the one property of a wave that
+    makes the difference possible.</p></li>
+
+    <li><p>Two identical pulses, both upward, meet on a slinky. Sketch the medium at the instant
+    they fully overlap, and state the amplitude of what you drew in terms of the amplitude
+    <em>A</em> of one pulse.</p><p class="slot">Resultant amplitude = <span class="fillin"></span></p></li>
+
+    <li><p>Now one pulse is upward and one is downward, otherwise identical. Sketch the medium at
+    the instant they fully overlap. Then answer the question from the top of this note: <b>where is
+    the energy</b> at that instant? Your answer must not contain the word
+    &ldquo;destroyed.&rdquo;</p></li>
+
+    <li><p>A tone at 800 Hz travels through air at 343 m/s. Find its wavelength. <b>State the
+    equation first</b>, then substitute.</p><p class="slot">&lambda; = <span class="fillin"></span> <span class="unit">(equation)</span></p><p class="slot">&lambda; = <span class="fillin"></span> <span class="unit">m</span></p></li>
+
+    <li><p>Using your answer to question 4, what path difference &Delta; produces the <b>first</b>
+    quiet spot away from the centre line? And the <b>first</b> loud spot away from the centre
+    line?</p><p class="slot">first quiet: &Delta; = <span class="fillin"></span> <span class="unit">m</span></p><p class="slot">first loud (off centre): &Delta; = <span class="fillin"></span> <span class="unit">m</span></p></li>
+
+    <li><p>Explain <em>why</em> the point exactly halfway between the two speakers is always loud,
+    without doing any arithmetic. What is &Delta; there, and what does that say about the two
+    waves?</p></li>
+
+    <li><p>From your table: at the first quiet spot, what was &Delta;? Divide it by the wavelength
+    you found in question 4. How close is the result to &frac12;?</p><p class="slot">&Delta; &divide; &lambda; = <span class="fillin"></span></p></li>
+
+    <li><p>From your table: at the off-centre loud spot, what was &Delta; &divide; &lambda;? How
+    close is the result to a whole number?</p><p class="slot">&Delta; &divide; &lambda; = <span class="fillin"></span></p></li>
+
+    <li><p>Turn the measurement around. Suppose you did <em>not</em> know the frequency. Using only
+    your measured &Delta; at the first quiet spot and the fact that it should equal &lambda;/2,
+    compute &lambda;, then compute <em>f</em> from v = &lambda;f. How close is it to
+    800 Hz?</p><p class="slot">&lambda; from measurement = <span class="fillin"></span> <span class="unit">m</span></p><p class="slot">f = <span class="fillin"></span> <span class="unit">Hz</span></p></li>
+
+    <li><p>Name two things about the real room that would make your measured &Delta; differ from
+    the ideal value. For each one, say whether it would make the quiet spots harder to <em>hear</em>
+    or harder to <em>locate</em>.</p></li>
+
+    <li><p>Predict: if the tone were changed from 800 Hz to 1600 Hz and nothing else moved, what
+    happens to the spacing between the quiet spots along the walk line? Justify your answer from
+    &Delta; = (n + &frac12;)&lambda;, not from memory.</p></li>
+
+    <li><p>Predict: if the two speakers were moved <em>closer together</em> and the tone left alone,
+    what happens to the spacing between the quiet spots? (You will test both of these predictions in
+    the next note.)</p></li>
+  </ol>
+
+  <div class="tip">
+    <span class="label">Where this is going</span>
+    You now have a rule &mdash; &Delta; = n&lambda; for loud, &Delta; = (n + &frac12;)&lambda; for
+    quiet &mdash; and one room's worth of evidence for it, taken with your own ears and a tape
+    measure. One room is not a lot of evidence, and a classroom is a bad laboratory: you cannot
+    turn off the walls, you cannot change the speed of sound, and you certainly cannot see the
+    pattern. In Note 4b you take the same rule to a simulation where you <em>can</em> see it, in two
+    different media at once &mdash; ripples on water and sound in air &mdash; and where the
+    frequency and the source separation are knobs you turn. The predictions you just made in
+    questions 11 and 12 are the first things you will check.
+  </div>
+
+  <h2>Files for this note</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/M1_N4a_Wave_Interference.pdf">
+      <span class="kind">Read</span>
+      <span class="name">Note (PDF)</span>
+      <span class="hint">This whole note as a PDF &mdash; read it offline or keep it in your
+      binder.</span>
+    </a>
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/M1_N4a_Wave_Interference_Handout.pdf">
+      <span class="kind">Print</span>
+      <span class="name">Note handout (PDF)</span>
+      <span class="hint">Same content with answer space &mdash; print and write on it.</span>
+    </a>
+  </div>
+  <div class="printfiles">
+    <p style="font-size:.92rem"><b>Files for this note.</b> The read PDF and the printable
+    handout live at<br>
+    <code>byungmooncho.github.io/PHY105/handouts/M1_N4a_Wave_Interference.pdf</code><br>
+    <code>byungmooncho.github.io/PHY105/handouts/M1_N4a_Wave_Interference_Handout.pdf</code></p>
+  </div>
+
+<!-- =====================================================================
+     FOUNDATION LIST (rung 1 contract for N4a) — not shown to students.
+     Rung-2 and rung-3 items may only assume what is on this list.
+
+     F1. Superposition: overlapping waves add displacement by displacement,
+         signs included, and emerge unchanged. Particles do not.
+     F2. Constructive = in phase, amplitudes add. Destructive = 180° out of
+         phase, amplitudes subtract; identical waves cancel completely.
+     F3. At complete cancellation the energy is in the MOTION of the medium,
+         not the shape. Energy is relocated, never destroyed.
+     F4. Interference changes amplitude only — not frequency, not wave speed.
+     F5. For two sources IN PHASE, same f, same medium:
+         Δ = nλ → constructive;  Δ = (n+½)λ → destructive.
+         The in-phase-at-source condition is part of the rule, not a detail:
+         inverting one source swaps the two results. Different media on the
+         two paths invalidates this form entirely (λ differs per path).
+     F6. λ = v/f connects the geometric rule to a measurable frequency;
+         v = 343 m/s in air is the working value for this course.
+     F7. Null spacing grows with λ and shrinks as source separation grows —
+         stated as a prediction in Q11/Q12, TESTED in N4b, not proven here.
+
+     NOT laid down here (do not write items against these):
+       - two-slit formula d sin θ = nλ (small-angle geometry) — not introduced
+       - beats / interference in time — Module 2
+       - standing waves — Module 2
+       - intensity or decibels — not yet defined
+     ===================================================================== -->
+
+  <footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 105</footer>
+
+</div>
+
+<!-- Iframe auto-height reporter. Tells the D2L wrapper how tall this page
+     really is. Must stay just before </body>. See Autosize_Backfill_Runbook. -->
+<script>
+function reportHeight(){ parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 2 — Measuring an Invisible Wavelength</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 105 module note page.
+     Same design system as the other module note pages. Self-contained;
+     upload via GitHub Pages and embed as an iframe.
+     ================================================================== */
+
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --line:#b7c6bc;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+  h3{ font-size:1.08rem; margin:1.5rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .figure{
+    border:1px solid var(--rule); border-radius:10px; padding:1rem;
+    margin:1.4rem 0; text-align:center;
+  }
+  .figure img, .figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+  .figure figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    color:var(--muted); margin-top:.5rem; text-align:left;
+  }
+  .figure figcaption b{ color:var(--green-deep); }
+  ol.steps{ counter-reset:step; list-style:none; margin:1rem 0; padding:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+    border-left:2px solid var(--rule); margin-left:.9rem;
+  }
+  ol.steps > li:last-child{ border-left-color:transparent; }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+    width:1.8rem; height:1.8rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.85rem; font-weight:600;
+  }
+  ol.steps.questions > li{ padding-bottom:1.4rem; }
+  .fillin{
+    display:inline-block; min-width:9rem; border-bottom:1px solid var(--line);
+    margin:0 .25rem;
+  }
+  .slot{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--green-deep); margin:.45rem 0 0; font-weight:600;
+  }
+  .slot .unit{ font-weight:400; color:var(--muted); }
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+  .probe{
+    border:2px solid var(--green); border-radius:10px;
+    padding:.9rem 1.1rem; margin:1.4rem 0; background:#fff;
+  }
+  .probe .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:700; display:block; margin-bottom:.3rem;
+  }
+  .probe .opts{ margin:.7rem 0 0; }
+  .probe .opt{
+    display:block; padding:.35rem 0 .35rem 1.9rem; position:relative;
+    font-size:1rem;
+  }
+  .probe .opt::before{
+    content:""; position:absolute; left:.2rem; top:.62rem;
+    width:1rem; height:1rem; border:1.5px solid var(--line); border-radius:50%;
+  }
+  .eqn{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px;
+    padding:.85rem 1rem; margin:1.1rem 0; text-align:center;
+  }
+  .eqn .math{
+    font-size:1.25rem; font-weight:700; color:var(--green-deep);
+    font-family:Charter, Georgia, serif; display:block;
+  }
+  .eqn .domain{
+    display:block; margin-top:.45rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem;
+    letter-spacing:.02em; color:var(--muted);
+  }
+  .eqn .domain b{ color:var(--amber); }
+  table.spec{
+    width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:.95rem;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  table.spec th, table.spec td{
+    border:1px solid var(--rule); padding:.5rem .6rem; text-align:left;
+  }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec td.blank{ height:2.1rem; }
+  .drawbox{
+    border:1px solid var(--line); border-radius:8px; height:9rem; margin:.5rem 0;
+    background:
+      repeating-linear-gradient(0deg,#f4f8f5 0 1px,transparent 1px 22px),
+      repeating-linear-gradient(90deg,#f4f8f5 0 1px,transparent 1px 22px);
+  }
+  .grid2{ display:grid; gap:1rem; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .downloads{ display:grid; gap:.8rem; margin:1.2rem 0; }
+  @media (min-width:560px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    display:block; border:1px solid var(--rule); border-radius:10px;
+    padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+    background:#fff; transition:border-color .15s, box-shadow .15s;
+  }
+  .dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+  .dl-card .kind{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--green); font-weight:700;
+  }
+  .dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+  .dl-card .hint{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.83rem; color:var(--muted);
+  }
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+
+@media print{
+  @page{ size: Letter; margin: .55in .5in; }
+  body{ font-size:11pt; }
+  .note-wrap{ max-width:none; padding:0; }
+  .synopsis, .tip, .figure, .probe, .eqn, ol.steps > li, table.spec{
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  h1, h2, h3{ break-after:avoid; page-break-after:avoid; }
+  .downloads{ display:none; }
+  .printfiles{ display:block !important; }
+}
+.printfiles{ display:none; }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1: Waves</span>
+    <span>Lab 2: Measuring an Invisible Wavelength</span>
+  </div>
+
+  <h1>Lab 2 &mdash; Measuring a Wavelength You Cannot See</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In Lab 1 you measured an oscillation that sat still on a bench, and found its frequency and
+    amplitude with a stopwatch and a ruler. This lab measures something you cannot see, cannot
+    touch, and cannot hold still: the <strong>wavelength of a sound wave</strong> crossing the
+    room. The trick is the one you met in Note 4a. Two speakers playing the same tone produce
+    places where the sound is loud and places where it nearly vanishes, and those places are fixed
+    in space by one condition &mdash; the difference in the distances from the two speakers,
+    measured in wavelengths. Locate a quiet spot, measure two distances with a tape, subtract, and
+    you have measured half a wavelength of something moving at 343 metres per second. Then you
+    turn it around: from &lambda; and v = &lambda;f you can compute the frequency of the tone
+    &mdash; and unlike almost every measurement you will make this semester, <strong>you already
+    know the right answer</strong>, because the tone was dialed in. That makes this lab a test of
+    your method as much as a measurement, exactly as the calibrated simulation was in Lab 1.
+  </div>
+
+  <p><b>Performance Expectations:</b> Locate interference minima in a real room by ear and show by
+  repeat measurement that the locations are reproducible. Measure two path lengths and obtain a
+  wavelength from their difference using &Delta; = (n + &frac12;)&lambda;. Compute a frequency from
+  the measured wavelength using v = &lambda;f and compare it against the known dialed frequency as
+  a percentage error. Predict and then test how the pattern changes when the frequency is changed.
+  Perform the same measurement in a simulation that has no reflections, and use the comparison to
+  identify and explain the sources of error in the real-room measurement. Distinguish random error
+  (spread between trials) from systematic error (a consistent offset), citing evidence from your
+  own data.</p>
+
+  <p><b>Materials:</b> two speakers driven from one amplifier or one audio source; a laptop or
+  phone running a tone generator; a tape measure (5 m or longer); masking tape to mark the floor; a
+  phone with a sound-level app (phyphox, &ldquo;Audio Amplitude&rdquo;) &mdash; optional but
+  recommended; a computer or phone running the PhET <em>Wave Interference</em> simulation.</p>
+
+  <div class="tip">
+    <span class="label">Before you start</span>
+    Both speakers must play the <b>same</b> signal &mdash; one source, one amplifier. Stand at the
+    midpoint between them and confirm it is <b>loud</b> there. If the midpoint is quiet, one
+    speaker is wired backwards; tell your instructor before you take any data, because every number
+    in Part 1 will be shifted otherwise.
+  </div>
+
+  <h2>Part 1 &mdash; The real room</h2>
+
+  <h3>Setup</h3>
+  <p>Place the two speakers on the bench at the same height, facing the same direction, parallel
+  &mdash; not angled toward each other. Measure the distance <b>d</b> between the two speaker cones
+  and record it. Run a line of masking tape across the floor parallel to the speakers, roughly
+  <b>L</b> = 3 m out, and mark the point on it directly opposite the midpoint of the two speakers:
+  this is your <b>centre mark</b>, position 0. Set the tone generator to the frequency your
+  instructor gives you and record it. Take the speed of sound as v = 343 m/s.</p>
+
+  <table class="spec">
+    <tr><th>Speaker separation d (m)</th><th>Walk-line distance L (m)</th><th>Dialed frequency f (Hz)</th><th>Speed of sound v (m/s)</th><th>Expected &lambda; = v/f (m)</th></tr>
+    <tr><td class="blank"></td><td></td><td></td><td>343</td><td></td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Compute the expected &lambda; now, before you measure anything</span>
+    Writing down what you expect <em>before</em> you take data is what makes the comparison
+    afterwards meaningful. It is also the only way to catch a measurement that is wrong by a factor
+    of two &mdash; the most common failure in this lab &mdash; while you are still standing next to
+    the apparatus.
+  </div>
+
+  <h3>A. Find the quiet spots</h3>
+  <ol class="steps">
+    <li><p>Plug <b>one ear</b>. Keep your head in the same orientation for the whole walk. Start at
+    the centre mark and walk slowly along the tape to one side, listening for the tone to fade.</p></li>
+    <li><p>When you find the faintest point, stop and have your partner put a small piece of tape on
+    the floor at your feet. Keep walking &mdash; find the next loud spot, then the
+    <b>second</b> quiet spot, and mark that too.</p></li>
+    <li><p>Measure each mark's distance from the centre mark along the tape, and record it as
+    trial 1.</p></li>
+    <li><p><b>Swap people</b> and repeat the whole walk twice more, each time with a different
+    person listening, marking independently. Do not let the second and third walkers look at the
+    earlier marks before they commit.</p></li>
+    <li><p>Compute the average position of each null and the <b>spread</b> (largest minus smallest)
+    across your three trials.</p></li>
+  </ol>
+
+  <table class="spec">
+    <tr><th></th><th>Trial 1 (m)</th><th>Trial 2 (m)</th><th>Trial 3 (m)</th><th>Average (m)</th><th>Spread (m)</th></tr>
+    <tr><td><b>First</b> quiet spot from centre</td><td class="blank"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td><b>Second</b> quiet spot from centre</td><td class="blank"></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <p>That spread column is your <b>random error</b>, and it is data, not an embarrassment. Three
+  people disagreeing by 5 cm tells you something honest about how sharply a null can be located by
+  ear. Three people disagreeing by 50 cm tells you something else, and you should find out what
+  before continuing.</p>
+
+  <h3>B. Turn two distances into a wavelength</h3>
+  <ol class="steps">
+    <li><p>Stand at the <b>average</b> first-null position. Measure the distance from that point to
+    each speaker cone with the tape. Record r<sub>A</sub> and r<sub>B</sub>, then take
+    |r<sub>A</sub> &minus; r<sub>B</sub>|.</p></li>
+    <li><p>Repeat at the <b>average</b> second-null position.</p></li>
+    <li><p>For the first null, n = 0, so &Delta; = &frac12;&lambda; and therefore
+    <b>&lambda; = 2&Delta;</b>. For the second null, n = 1, so &Delta; = 3/2 &lambda; and
+    <b>&lambda; = 2&Delta;/3</b>. Compute &lambda; from each null separately.</p></li>
+    <li><p>Average your two values of &lambda;, and compare with the expected &lambda; from Table 0
+    as a percentage difference.</p></li>
+  </ol>
+
+  <table class="spec">
+    <tr><th>Null</th><th>n</th><th>r<sub>A</sub> (m)</th><th>r<sub>B</sub> (m)</th><th>&Delta; (m)</th><th>&lambda; from this null (m)</th></tr>
+    <tr><td>first</td><td>0</td><td class="blank"></td><td></td><td></td><td>&lambda; = 2&Delta; =</td></tr>
+    <tr><td>second</td><td>1</td><td class="blank"></td><td></td><td></td><td>&lambda; = 2&Delta;/3 =</td></tr>
+    <tr><td colspan="5" style="text-align:right"><b>Average &lambda;</b></td><td></td></tr>
+    <tr><td colspan="5" style="text-align:right"><b>Expected &lambda; (Table 0)</b></td><td></td></tr>
+    <tr><td colspan="5" style="text-align:right"><b>Percentage difference</b></td><td></td></tr>
+  </table>
+
+  <div class="eqn">
+    <span class="math">% difference = |measured &minus; expected| &divide; expected &times; 100%</span>
+    <span class="domain">Use this same form everywhere in your report. <b>Always divide by the
+    value you trust</b> &mdash; here, the expected one.</span>
+  </div>
+
+  <h3>C. Now measure the frequency you were given</h3>
+  <p>Your average &lambda; came from a tape measure and nothing else. Combine it with the speed of
+  sound to recover the frequency, then compare with the number that was dialed into the generator.</p>
+
+  <ol class="steps">
+    <li><p>Compute f = v / &lambda;<sub>measured</sub>.</p><p class="slot">f<sub>measured</sub> = <span class="fillin"></span> <span class="unit">Hz</span></p></li>
+    <li><p>Compare with the dialed frequency as a percentage difference.</p><p class="slot">% difference = <span class="fillin"></span></p></li>
+  </ol>
+
+  <h3>D. Change the frequency</h3>
+  <ol class="steps">
+    <li><p><b>Predict first, in writing:</b> your instructor will raise the tone to roughly double
+    the frequency. Before anything is changed, state what will happen to &lambda;, and what will
+    happen to the distance from the centre mark to the first quiet spot.</p>
+    <p class="slot">&lambda; will: <span class="fillin"></span></p>
+    <p class="slot">first-null distance will: <span class="fillin"></span></p></li>
+    <li><p>With the new frequency running, repeat section A once (one walk is enough) and find the
+    first quiet spot. Then repeat section B at that null to obtain a new &lambda;.</p></li>
+    <li><p>Fill in the comparison table. Was your prediction right?</p></li>
+  </ol>
+
+  <table class="spec">
+    <tr><th></th><th>Dialed f (Hz)</th><th>Expected &lambda; = v/f (m)</th><th>Measured first-null distance (m)</th><th>Measured &lambda; (m)</th></tr>
+    <tr><td>original tone</td><td class="blank"></td><td></td><td></td><td></td></tr>
+    <tr><td>higher tone</td><td class="blank"></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2>Part 2 &mdash; The same measurement with the room removed</h2>
+  <p>Your Part 1 numbers carry the room in them: sound bouncing off the walls, the floor, the
+  benches and the other students arrives at your ear along with the two direct paths, and partly
+  fills in the nulls. The simulation has none of that. It is the same experiment with every source
+  of error stripped out, which makes it the standard you judge Part 1 against &mdash; the same role
+  the calibrated oscillator played in Lab 1.</p>
+
+  <p>Open the PhET <em>Wave Interference</em> simulation and choose the <b>Interference</b> panel,
+  then switch it to <b>Sound</b>.</p>
+
+  <ol class="steps">
+    <li><p><b>Method 1 &mdash; measure &lambda; directly.</b> With one speaker running, use the
+    measuring tape to find the distance from one crest to the next.</p><p class="slot">&lambda;<sub>direct</sub> = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+
+    <li><p><b>Method 2 &mdash; measure &lambda; the way you did in Part 1.</b> Turn on both
+    speakers. Put a probe in the middle of a quiet band, measure the distance from it to each
+    speaker, subtract, and convert the path difference into a wavelength using the correct n for
+    the band you chose.</p>
+    <p class="slot">r<sub>A</sub> = <span class="fillin"></span> &nbsp; r<sub>B</sub> = <span class="fillin"></span> &nbsp; &Delta; = <span class="fillin"></span> <span class="unit">cm</span></p>
+    <p class="slot">n = <span class="fillin"></span> &nbsp;&nbsp; &lambda;<sub>path</sub> = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+
+    <li><p>Compare the two methods as a percentage difference.</p><p class="slot">% difference = <span class="fillin"></span></p></li>
+
+    <li><p>Repeat step 2 at a <b>different</b> quiet band, with a different n, and confirm you
+    recover the same &lambda;. If you do not, the most likely cause is that you have the wrong n
+    &mdash; count the bands outward from the centre line carefully.</p><p class="slot">second band: n = <span class="fillin"></span> &nbsp;&nbsp; &lambda; = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+  </ol>
+
+  <table class="spec">
+    <tr><th></th><th>Real room (Part 1)</th><th>Simulation (Part 2)</th></tr>
+    <tr><td>% difference between methods / from expected</td><td class="blank"></td><td></td></tr>
+    <tr><td>Spread between repeat trials</td><td class="blank"></td><td></td></tr>
+    <tr><td>How sharply defined was the quiet spot?</td><td class="blank"></td><td></td></tr>
+  </table>
+
+  <h2>Questions</h2>
+  <ol class="steps questions">
+    <li><p>State in your own words why a quiet spot exists at all. Your answer must use the words
+    <em>path</em>, <em>difference</em> and <em>phase</em>, and must not use the word
+    &ldquo;cancel&rdquo; without explaining what cancels what.</p></li>
+
+    <li><p>At the first quiet spot you set n = 0 and used &lambda; = 2&Delta;. Explain where the
+    factor of 2 comes from. What would you have computed if you had wrongly assumed the first quiet
+    spot was n = 1 &mdash; and by what factor would your &lambda; have been off?</p></li>
+
+    <li><p>The midpoint between the speakers is loud no matter what frequency is playing. Explain
+    why, in terms of &Delta;, without arithmetic.</p></li>
+
+    <li><p>Why did you take three independent walks in section A instead of trusting one? What
+    specifically did the <b>spread</b> column tell you that a single trial could not?</p></li>
+
+    <li><p>Your measured &lambda; differs from the expected &lambda;. Classify each of the following
+    as a source of <b>random</b> error or <b>systematic</b> error, and say which direction, if any,
+    a systematic one would push your result:
+    <br>(a) different people hearing the null at slightly different places;
+    <br>(b) sound reflecting off the back wall;
+    <br>(c) measuring to the front of the speaker box rather than to the cone;
+    <br>(d) the actual air temperature differing from the value assumed in v = 343 m/s.</p></li>
+
+    <li><p>In Part 1C you computed a frequency from a tape measure and compared it with a number
+    you already knew. What is the point of measuring something whose answer you have been told?
+    What does a small percentage difference license you to claim about the rest of your data?</p></li>
+
+    <li><p>The quiet spots in the room were never <em>silent</em>, but in the simulation the calm
+    bands are much cleaner. Name the thing the real room has that the simulation does not, and
+    explain how it fills in a null.</p></li>
+
+    <li><p>From your Part 1D data: when the frequency roughly doubled, what happened to the
+    wavelength and to the null spacing? Express the relationship between f and &lambda; as a
+    proportionality, and identify what was held constant to make it true.</p></li>
+
+    <li><p>Suppose you repeated this lab outdoors on a cold morning at &minus;5 &deg;C, where the
+    speed of sound is about 328 m/s rather than 343 m/s. Using the same dialed frequency, would the
+    quiet spots be closer together or farther apart than they were indoors? Justify from
+    v = &lambda;f and &Delta; = (n + &frac12;)&lambda;.</p></li>
+
+    <li><p>You have now measured the wavelength of something you cannot see, using only distances.
+    Describe in two or three sentences how you would use the same method to measure the wavelength
+    of <em>light</em>, and name the one practical difficulty that makes it much harder.</p></li>
+  </ol>
+
+  <div class="tip">
+    <span class="label">Lab report</span>
+    Follow the standard format in the <b>Writing Lab Reports</b> module &mdash; abstract, data
+    tables, and all required sections. This handout will not remind you of every part. Your
+    abstract must state your measured &lambda;, your measured f, and the percentage difference from
+    the dialed value, in that order, in one sentence.
+  </div>
+
+  <h2>Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://phet.colorado.edu/en/simulations/wave-interference">
+      <span class="kind">Run</span>
+      <span class="name">PhET &mdash; Wave Interference</span>
+      <span class="hint">For Part 2. Choose the <b>Interference</b> panel, then <b>Sound</b>.</span>
+    </a>
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/PHY105_LB02_Interference.pdf">
+      <span class="kind">Print</span>
+      <span class="name">Lab handout (PDF)</span>
+      <span class="hint">Print this and bring it to lab &mdash; the tables are on it.</span>
+    </a>
+  </div>
+  <div class="printfiles">
+    <p style="font-size:.92rem"><b>Files for this lab.</b> The simulation is at
+    <code>phet.colorado.edu/en/simulations/wave-interference</code> &mdash; <b>Interference</b>
+    panel, <b>Sound</b> mode.</p>
+  </div>
+
+<!-- =====================================================================
+     INSTRUCTOR NOTES — PHY105 Lab 2 (not shown to students)
+
+     Rests on: N4a (F1–F6) and N4b (F1–F5). Do not run before N4a is taught.
+
+     Apparatus as used 2026-09: Logitech Z313 2.1, satellites off the sub,
+     Walmart item 13216193. AC powered, satellites on separate leads so
+     separation is not tether-limited. STAY AT 800 Hz OR ABOVE — below a
+     couple hundred Hz the subwoofer takes over and the two-source geometry
+     collapses to one source in the middle.
+     Tone files: PHY105_M1_N4a_Tone_800Hz_DualMono.wav and _1200Hz_ in
+     Modules\Module_01\. Dual-mono on purpose — a stereo file with different
+     L and R destroys the experiment.
+
+     Geometry at d = 1.5 m, L = 3.0 m, 800 Hz (λ = 42.9 cm), exact path
+     difference, NOT small-angle:
+        centre        0      LOUD
+        first null    0.45 m
+        first side max 0.91 m
+        second null   1.46 m
+     At 1200 Hz (λ = 28.6 cm): first null 0.30 m, second null 0.97 m.
+     Small-angle d·x/L is off by ~8 cm by the second null — students who use
+     it will think their tape measure is wrong. Use exact values above.
+
+     Section D "roughly double": 800 → 1200 Hz is a factor 1.5, not 2.
+     Either dial 1600 Hz (λ = 21.4 cm, first null 0.22 m — tight but workable
+     at L = 3.0 m) or reword D as "raise the frequency" and let students find
+     the ratio from their own data. 1600 Hz nulls are close together; if the
+     room is reflective, prefer 1200 Hz and drop the word "double".
+
+     Expected results: λ within 10–15% is a good real-room outcome. Spread
+     between walkers of 5–10 cm is normal and is the point of section A.
+     A result off by exactly a factor of 2 means the student took the first
+     null as n = 1 — that is Question 2, deliberately.
+
+     Rung 2 (Sharpen) and any D2L items for this lab live in the Quiz project.
+     ===================================================================== -->
+
+  <footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 105</footer>
+
+</div>
+
+<!-- Iframe auto-height reporter. Tells the D2L wrapper how tall this page
+     really is. Must stay just before </body>. See Autosize_Backfill_Runbook. -->
+<script>
+function reportHeight(){ parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>

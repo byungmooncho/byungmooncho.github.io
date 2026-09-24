@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Note 4b — Interference You Can See</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 105 module note page.
+     Same design system as the other module note pages. Self-contained;
+     upload via GitHub Pages and embed as an iframe.
+     ================================================================== */
+
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --line:#b7c6bc;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+  h3{ font-size:1.08rem; margin:1.5rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .figure{
+    border:1px solid var(--rule); border-radius:10px; padding:1rem;
+    margin:1.4rem 0; text-align:center;
+  }
+  .figure img, .figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+  .figure figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    color:var(--muted); margin-top:.5rem; text-align:left;
+  }
+  .figure figcaption b{ color:var(--green-deep); }
+  ol.steps{ counter-reset:step; list-style:none; margin:1rem 0; padding:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+    border-left:2px solid var(--rule); margin-left:.9rem;
+  }
+  ol.steps > li:last-child{ border-left-color:transparent; }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+    width:1.8rem; height:1.8rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.85rem; font-weight:600;
+  }
+  ol.steps.questions > li{ padding-bottom:1.4rem; }
+  .fillin{
+    display:inline-block; min-width:9rem; border-bottom:1px solid var(--line);
+    margin:0 .25rem;
+  }
+  .slot{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--green-deep); margin:.45rem 0 0; font-weight:600;
+  }
+  .slot .unit{ font-weight:400; color:var(--muted); }
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+  .probe{
+    border:2px solid var(--green); border-radius:10px;
+    padding:.9rem 1.1rem; margin:1.4rem 0; background:#fff;
+  }
+  .probe .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:700; display:block; margin-bottom:.3rem;
+  }
+  .probe .opts{ margin:.7rem 0 0; }
+  .probe .opt{
+    display:block; padding:.35rem 0 .35rem 1.9rem; position:relative;
+    font-size:1rem;
+  }
+  .probe .opt::before{
+    content:""; position:absolute; left:.2rem; top:.62rem;
+    width:1rem; height:1rem; border:1.5px solid var(--line); border-radius:50%;
+  }
+  .eqn{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px;
+    padding:.85rem 1rem; margin:1.1rem 0; text-align:center;
+  }
+  .eqn .math{
+    font-size:1.25rem; font-weight:700; color:var(--green-deep);
+    font-family:Charter, Georgia, serif; display:block;
+  }
+  .eqn .domain{
+    display:block; margin-top:.45rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem;
+    letter-spacing:.02em; color:var(--muted);
+  }
+  .eqn .domain b{ color:var(--amber); }
+  table.spec{
+    width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:.95rem;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  table.spec th, table.spec td{
+    border:1px solid var(--rule); padding:.5rem .6rem; text-align:left;
+  }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec td.blank{ height:2.1rem; }
+  .drawbox{
+    border:1px solid var(--line); border-radius:8px; height:9rem; margin:.5rem 0;
+    background:
+      repeating-linear-gradient(0deg,#f4f8f5 0 1px,transparent 1px 22px),
+      repeating-linear-gradient(90deg,#f4f8f5 0 1px,transparent 1px 22px);
+  }
+  .grid2{ display:grid; gap:1rem; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .downloads{ display:grid; gap:.8rem; margin:1.2rem 0; }
+  @media (min-width:560px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    display:block; border:1px solid var(--rule); border-radius:10px;
+    padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+    background:#fff; transition:border-color .15s, box-shadow .15s;
+  }
+  .dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+  .dl-card .kind{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--green); font-weight:700;
+  }
+  .dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+  .dl-card .hint{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.83rem; color:var(--muted);
+  }
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+
+@media print{
+  @page{ size: Letter; margin: .55in .5in; }
+  body{ font-size:11pt; }
+  .note-wrap{ max-width:none; padding:0; }
+  .synopsis, .tip, .figure, .probe, .eqn, ol.steps > li, table.spec{
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  h1, h2, h3{ break-after:avoid; page-break-after:avoid; }
+  .downloads{ display:none; }
+  .printfiles{ display:block !important; }
+}
+.printfiles{ display:none; }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1: Waves</span>
+    <span>Note 4b: Interference You Can See</span>
+  </div>
+
+  <h1>The Same Rule In Water And In Air</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In Note 4a you found a rule with your ears and a tape measure: two in-phase sources make a
+    place <strong>loud</strong> when the two path lengths differ by a whole number of wavelengths,
+    and <strong>quiet</strong> when they differ by a whole number plus a half. One classroom is
+    thin evidence for a claim that broad, and a classroom is a poor laboratory besides &mdash; you
+    cannot switch off the walls, you cannot change the speed of sound, and you certainly cannot
+    <em>see</em> the pattern. In this note you take the same rule into the PhET <em>Wave
+    Interference</em> simulation, where the pattern is visible from above, where the frequency and
+    the source separation are knobs you can turn, and where the same experiment runs in two
+    completely different media: <strong>transverse ripples on water</strong> and
+    <strong>longitudinal sound in air</strong>. If one rule governs both, you have learned
+    something about waves rather than something about water.
+  </div>
+
+  <div class="probe">
+    <span class="label">Before you open the simulation &mdash; commit to an answer</span>
+    <p>Two taps drip into a water tank in step with each other, sending out circular ripples. You
+    look down on the tank from above and watch for a while. <b>What does the pattern of calm water
+    look like?</b></p>
+    <div class="opts">
+      <span class="opt">There is no calm water &mdash; the whole surface is choppy everywhere.</span>
+      <span class="opt">A set of calm rings, centred on the midpoint between the taps.</span>
+      <span class="opt">Calm lines that fan outward from between the taps, like spokes.</span>
+      <span class="opt">A random, shifting mess with no fixed pattern.</span>
+    </div>
+    <p style="margin-top:.8rem">Now say <em>why</em>, in one sentence, using the words
+    &ldquo;path&rdquo; and &ldquo;difference.&rdquo;</p>
+    <p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+    <p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+  </div>
+
+  <h2>Getting there</h2>
+  <p>Search for <b>&ldquo;wave interference phet&rdquo;</b> and open <em>Wave Interference</em>.
+  Choose the second panel, <b>Interference</b>. It opens on a water tank with two taps. Leave every
+  control at its default for now: frequency in the middle, amplitude at maximum, separation 3 cm.
+  Only the top tap is running.</p>
+
+  <div class="tip">
+    <span class="label">Two tools you will use constantly</span>
+    The <b>Water Level meter</b> (third item in the top right toolbox) has a <b>black</b> and a
+    <b>grey</b> probe. Drop a probe anywhere in the tank and it traces the height of the water at
+    that one point as time passes &mdash; exactly the &ldquo;stand still and watch&rdquo; view of
+    Note 3, Fig. 2. The <b>measuring tape</b> gives you distances in centimetres. Bright rings are
+    <b>crests</b>; dark rings are <b>troughs</b>.
+  </div>
+
+  <h2>Part 1 &mdash; One source: get the numbers</h2>
+  <p>Before two sources can be interesting, you need the three numbers for one. Run only the top
+  tap.</p>
+
+  <ol class="steps">
+    <li><p>Click the green button on the top tap so the drops fall and ripples spread.</p></li>
+    <li><p>Check the <b>Graph</b> box and pause the run. Measure the distance from one crest to the
+    next crest.</p><p class="slot">Wavelength, &lambda; = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+    <li><p>Uncheck Graph. Put one probe in the tank and watch its trace. Find the <b>period</b>
+    &mdash; the time from one peak of the trace to the next &mdash; then convert.</p><p class="slot">Period, T = <span class="fillin"></span> <span class="unit">s</span></p><p class="slot">Frequency, f = 1/T = <span class="fillin"></span> <span class="unit">Hz</span></p></li>
+    <li><p>Read the <b>amplitude</b> from the trace. One vertical tick mark is 1 cm.</p><p class="slot">Amplitude, A = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+    <li><p>Compute the <b>speed</b> of the ripples. State the equation first.</p><p class="slot">v = <span class="fillin"></span> <span class="unit">(equation)</span></p><p class="slot">v = <span class="fillin"></span> <span class="unit">cm/s</span></p></li>
+  </ol>
+
+  <h2>Part 2 &mdash; One source, two probes: phase is distance</h2>
+  <p>Still one tap. This part isolates the idea underneath everything else: how far a wave has
+  travelled determines where it is in its cycle. Two points at different distances from the
+  <em>same</em> source are at different phases, and you can see it directly on the two traces.</p>
+
+  <ol class="steps">
+    <li><p>Pause the run. Place the <b>black</b> probe on the first bright ring and the
+    <b>grey</b> probe on the second bright ring. Restart. Are the two traces completely
+    <b>in phase</b>?</p><p class="slot">In phase? <span class="fillin"></span></p><p>Why should you expect them to be? Answer before you move on.</p></li>
+
+    <li><p>Pause. Measure the distance from the drop point to each probe, and subtract.</p><p class="slot">to black: <span class="fillin"></span> <span class="unit">cm</span> &nbsp; to grey: <span class="fillin"></span> <span class="unit">cm</span></p><p class="slot">d<sub>con1</sub> = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+
+    <li><p>Still paused, move the <b>grey</b> probe out to the <b>third</b> bright ring. Measure
+    again and subtract.</p><p class="slot">d<sub>con2</sub> = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+
+    <li><p>How are d<sub>con1</sub> and d<sub>con2</sub> related to the wavelength you measured in
+    Part 1? Write each one as a multiple of &lambda;.</p><p class="slot">d<sub>con1</sub> = <span class="fillin"></span> &lambda; &nbsp;&nbsp; d<sub>con2</sub> = <span class="fillin"></span> &lambda;</p></li>
+
+    <li><p>Now find a position where the two traces are completely <b>out of phase</b>. Pause,
+    put the black probe on the first bright ring and the grey probe on the first <b>dark</b> ring
+    (not at the drop point). Restart and confirm.</p><p class="slot">Out of phase? <span class="fillin"></span></p><p>Why should you expect them to be?</p></li>
+
+    <li><p>Pause and measure both distances again.</p><p class="slot">d<sub>des1</sub> = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+
+    <li><p>Move the grey probe to the <b>second</b> dark ring and repeat.</p><p class="slot">d<sub>des2</sub> = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+
+    <li><p>Write d<sub>des1</sub> and d<sub>des2</sub> as multiples of &lambda;.</p><p class="slot">d<sub>des1</sub> = <span class="fillin"></span> &lambda; &nbsp;&nbsp; d<sub>des2</sub> = <span class="fillin"></span> &lambda;</p></li>
+
+    <li><p><b>Show</b>, using your four numbers, that in-phase points satisfy d = n&lambda; with
+    n = 0, 1, 2, &hellip; &mdash; an integer number of wavelengths.</p></li>
+
+    <li><p><b>Show</b>, using your four numbers, that out-of-phase points satisfy
+    d = (n + &frac12;)&lambda; &mdash; an integer plus a half.</p></li>
+  </ol>
+
+  <div class="tip">
+    <span class="label">What you have just done</span>
+    Nothing in Part 2 involved two sources. You measured how the phase of <em>one</em> wave depends
+    on how far it has travelled. That is the machinery. Two sources only make it visible, because
+    they let you compare two different travel distances at the same instant, in the same place.
+  </div>
+
+  <h2>Part 3 &mdash; Two sources in water: the pattern appears</h2>
+
+  <ol class="steps">
+    <li><p>Turn on the <b>second</b> tap and let the waves from both sources fill the tank. Do not
+    pause. Look at the whole tank from above and describe the pattern in one sentence. Then compare
+    it with the prediction you committed to at the top of this note &mdash; were you
+    right?</p></li>
+
+    <li><p>Place the <b>black</b> probe anywhere <em>except</em> a &ldquo;fuzzy&rdquo; band, and
+    the <b>grey</b> probe in the middle of a fuzzy band. Watch both traces while it runs.</p>
+    <p>How can you tell from its trace that the black probe sits at <b>constructive</b>
+    interference?</p><p class="slot"><span class="fillin" style="min-width:100%"></span></p>
+    <p>How can you tell that the grey probe sits at <b>destructive</b> interference?</p><p class="slot"><span class="fillin" style="min-width:100%"></span></p></li>
+
+    <li><p>Pause and measure four distances with the tape: from <em>each</em> tap to <em>each</em>
+    probe. Fill in the table, then take the two differences.</p>
+    <table class="spec">
+      <tr><th></th><th>from top tap (cm)</th><th>from bottom tap (cm)</th><th>&Delta; = difference (cm)</th><th>&Delta; &divide; &lambda;</th></tr>
+      <tr><td><b>black</b> probe (loud/constructive)</td><td class="blank"></td><td></td><td></td><td></td></tr>
+      <tr><td><b>grey</b> probe (calm/destructive)</td><td class="blank"></td><td></td><td></td><td></td></tr>
+    </table></li>
+
+    <li><p><b>Show</b> from your black-probe row that constructive interference occurs where
+    &Delta; = n&lambda;. Then explain <em>why</em>, using the phase relationship between the two
+    waves arriving there &mdash; not just the arithmetic.</p></li>
+
+    <li><p><b>Show</b> from your grey-probe row that destructive interference occurs where
+    &Delta; = (n + &frac12;)&lambda;. Again, explain why in terms of phase.</p></li>
+  </ol>
+
+  <h2>Part 4 &mdash; The same experiment in air</h2>
+  <p>Switch the simulation to <b>Sound</b>. The taps become speakers, the water surface becomes
+  air, and the transverse ripples become longitudinal pressure waves. Almost nothing about the
+  physical situation is the same. Leave all settings at their defaults.</p>
+
+  <ol class="steps">
+    <li><p>With one speaker running, measure the <b>wavelength</b> of the sound wave.</p><p class="slot">&lambda; = <span class="fillin"></span> <span class="unit">cm</span></p></li>
+
+    <li><p>Turn on both speakers. Put the black probe in a non-fuzzy region and the grey probe in a
+    fuzzy one, and measure the four distances as before.</p>
+    <table class="spec">
+      <tr><th></th><th>from top speaker (cm)</th><th>from bottom speaker (cm)</th><th>&Delta; (cm)</th><th>&Delta; &divide; &lambda;</th></tr>
+      <tr><td><b>black</b> probe (loud)</td><td class="blank"></td><td></td><td></td><td></td></tr>
+      <tr><td><b>grey</b> probe (quiet)</td><td class="blank"></td><td></td><td></td><td></td></tr>
+    </table></li>
+
+    <li><p>Do your two &Delta; &divide; &lambda; values come out to a whole number and a
+    whole-number-plus-a-half, the same way the water values did?</p><p class="slot"><span class="fillin" style="min-width:100%"></span></p></li>
+
+    <li><p>List three things that are <em>physically different</em> between the water case and the
+    sound case &mdash; the medium, the type of wave, the speed, the wavelength, what is actually
+    oscillating. Then state, in one sentence, what stayed the same.</p></li>
+  </ol>
+
+  <div class="eqn">
+    <span class="math">&Delta; = n&lambda; &nbsp;&rarr;&nbsp; constructive &nbsp;&nbsp;&middot;&nbsp;&nbsp; &Delta; = (n + &frac12;)&lambda; &nbsp;&rarr;&nbsp; destructive</span>
+    <span class="domain">Two sources in phase with each other, same frequency, same medium &mdash;
+    and now verified in <b>two different media</b>. The rule does not care what is waving. It cares
+    only about path difference measured in wavelengths.</span>
+  </div>
+
+  <h2>Part 5 &mdash; Testing your Note 4a predictions</h2>
+  <p>At the end of Note 4a you predicted what happens to the spacing of the quiet spots when the
+  frequency changes and when the sources move closer together. The classroom could not test either
+  one. This simulation can.</p>
+
+  <ol class="steps">
+    <li><p><b>Frequency.</b> Keeping the separation fixed, raise the frequency. What happens to
+    &lambda;? What happens to the spacing of the calm bands? Record both.</p><p class="slot">&lambda;: <span class="fillin"></span> &nbsp;&nbsp; band spacing: <span class="fillin"></span></p><p>Did your Note 4a prediction (Q11) hold?</p></li>
+
+    <li><p><b>Separation.</b> Return the frequency to its default and change the <b>separation</b>
+    of the two sources. Move them closer. What happens to the spacing of the calm
+    bands?</p><p class="slot">band spacing: <span class="fillin"></span></p><p>Did your Note 4a prediction (Q12) hold?</p></li>
+
+    <li><p>Set the separation to its <b>smallest</b> value, so the two sources are nearly on top of
+    each other. What happens to the pattern, and why? What is the largest path difference &Delta;
+    that two nearly-coincident sources can possibly produce?</p></li>
+
+    <li><p>The centre line, running straight out between the two sources, was loud in the classroom
+    and is bright in the simulation, at <em>every</em> frequency and <em>every</em> separation.
+    Explain why that one line is immune to both knobs.</p></li>
+  </ol>
+
+  <h2>Performance Expectations</h2>
+  <p>Measure wavelength, period, frequency and amplitude of a wave from a simulation, and compute
+  the wave speed from them. Explain why two points at different distances from a single source are
+  at different phases, and determine from measured distances whether two points are in phase or
+  out of phase. Determine experimentally that constructive interference occurs where the path
+  difference from two in-phase sources is an integer number of wavelengths and destructive
+  interference where it is an integer plus a half, and justify each using the phase relationship of
+  the arriving waves. Demonstrate that the same path-difference rule governs a transverse wave in
+  water and a longitudinal wave in air, and identify what is physically different and what is
+  conserved between the two cases. Predict and then verify how the interference pattern responds to
+  a change in frequency and to a change in source separation.</p>
+
+  <div class="tip">
+    <span class="label">Where this is going</span>
+    Interference is the first of the three behaviours that only waves have; diffraction and
+    refraction are the other two, and both are coming. But notice what you have also quietly built:
+    a <em>measuring instrument</em>. If you know the geometry and can find a quiet spot, you can
+    work backwards to the wavelength &mdash; and from the wavelength, to the frequency or the wave
+    speed. That trick is how the wavelength of light was first measured, long before anyone could
+    see a light wave, and it is the whole basis of Lab 2.
+  </div>
+
+  <h2>Files for this note</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://phet.colorado.edu/en/simulations/wave-interference">
+      <span class="kind">Run</span>
+      <span class="name">PhET &mdash; Wave Interference</span>
+      <span class="hint">Opens the simulation directly. Choose the <b>Interference</b> panel.</span>
+    </a>
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/M1_N4b_Interference_You_Can_See.pdf">
+      <span class="kind">Read</span>
+      <span class="name">Note (PDF)</span>
+      <span class="hint">This whole note as a PDF.</span>
+    </a>
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/M1_N4b_Interference_You_Can_See_Handout.pdf">
+      <span class="kind">Print</span>
+      <span class="name">Note handout (PDF)</span>
+      <span class="hint">Same content with answer space &mdash; print and write on it.</span>
+    </a>
+  </div>
+  <div class="printfiles">
+    <p style="font-size:.92rem"><b>Files for this note.</b> The simulation is at
+    <code>phet.colorado.edu/en/simulations/wave-interference</code> &mdash; choose the
+    <b>Interference</b> panel. The read PDF and the printable handout live at<br>
+    <code>byungmooncho.github.io/PHY105/handouts/M1_N4b_Interference_You_Can_See.pdf</code><br>
+    <code>byungmooncho.github.io/PHY105/handouts/M1_N4b_Interference_You_Can_See_Handout.pdf</code></p>
+  </div>
+
+<!-- =====================================================================
+     FOUNDATION LIST (rung 1 contract for N4b) — not shown to students.
+
+     F1. λ, T, f and A can be read off a simulated wave; v = λf follows.
+     F2. Phase at a point is set by distance travelled: points n wavelengths
+         apart from one source are in phase; (n+½) wavelengths apart are
+         180° out of phase. Established with ONE source before two are used.
+     F3. Δ = nλ (constructive) and Δ = (n+½)λ (destructive) verified by
+         direct measurement, in water AND in air.
+     F4. The rule is medium-independent: transverse water ripples and
+         longitudinal sound obey the same path-difference condition. What
+         differs is v, λ and what oscillates; what survives is Δ/λ.
+     F5. Band spacing increases with λ (lower f) and decreases as source
+         separation grows — now MEASURED, having been predicted in N4a Q11/Q12.
+     F6. The perpendicular bisector of the two sources has Δ = 0 for all f
+         and all separations, so it is always constructive.
+     F7. Interference run backwards is a measuring instrument: geometry plus
+         a located null yields λ, hence f or v. This is the premise of Lab 2.
+
+     NOT laid down here:
+       - d sin θ = nλ small-angle form — deliberately withheld; students work
+         with Δ directly all the way through Module 1.
+       - intensity, decibels, inverse-square falloff
+       - beats, standing waves — Module 2
+     ===================================================================== -->
+
+  <footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 105</footer>
+
+</div>
+
+<!-- Iframe auto-height reporter. Tells the D2L wrapper how tall this page
+     really is. Must stay just before </body>. See Autosize_Backfill_Runbook. -->
+<script>
+function reportHeight(){ parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>
