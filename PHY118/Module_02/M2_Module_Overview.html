@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 Overview — Motion in Two Dimensions</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 2 · Module overview
+     Replaces the inherited Trevor-template "Module 02 Overview" topic,
+     which predated the note pages and the converted reference set.
+     Relative motion dropped from the module 2026-09-25 (Cho).
+     Design system lifted from M2_Ch03a_Vector_Basics.html.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.5rem .65rem; text-align:left; vertical-align:top; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+  table.grid td.w{ white-space:nowrap; font-weight:600; color:var(--green-deep); }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:1.3rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>PHY 118 &middot; College Physics I</span>
+    <span>Module 2 Overview</span>
+  </div>
+
+  <h1>Motion in Two Dimensions</h1>
+
+  <div class="synopsis">
+    <span class="label">What this module is about</span>
+    Module&nbsp;1 followed things moving along a line. Almost nothing actually does. A thrown ball,
+    a car turning, a plane in a crosswind &mdash; all of them move in two directions at once, and the
+    equations you already know cannot describe them as they stand. This module builds the one tool that
+    fixes that: the <b>vector</b>. Once you can split a vector into perpendicular pieces, a
+    two-dimensional problem stops being new physics and becomes two Module&nbsp;1 problems side by side.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    The whole mathematical toolkit for this module is the right triangle &mdash; the Pythagorean theorem
+    and SOH-CAH-TOA. Nothing new is asked of your trigonometry. What is new is <em>what you point it at</em>.
+  </div>
+
+  <h2>How the module runs</h2>
+
+  <table class="grid">
+    <tr><th>Note</th><th>What it does</th></tr>
+    <tr><td class="w">N1</td><td><b>How Do Vectors Add?</b> Why vectors do not add like ordinary numbers, and the head-to-tail rule that says how they do.</td></tr>
+    <tr><td class="w">N2</td><td><b>Resolving A Vector.</b> Head-to-tail run backwards &mdash; one slanted vector split into perpendicular <i>x</i> and <i>y</i> pieces, then added component by component.</td></tr>
+    <tr><td class="w">N2a</td><td><b>Trig Definitions.</b> The right-triangle mechanics that make resolving exact instead of drawn: SOH-CAH-TOA, signs by quadrant, and recombining.</td></tr>
+    <tr><td class="w">N3</td><td><b>Freefall vs. Horizontal Launch.</b> The payoff &mdash; horizontal and vertical motion are independent, so a launched ball and a dropped ball land together.</td></tr>
+  </table>
+
+  <p>Work them in that order. N2a is the toolkit for N2, so treat the two as a pair rather than
+     separate topics.</p>
+
+  <div class="pe">
+    <div class="head">
+      <strong>By the end of this module</strong>
+      <span>you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">1</span><span>Add two or more vectors head-to-tail, and find the resultant's magnitude and direction by measurement.</span></li>
+      <li><span class="tick">2</span><span>Resolve a vector into perpendicular components using <i>F<sub>x</sub></i> = <i>F</i>&thinsp;cos&thinsp;&theta; and <i>F<sub>y</sub></i> = <i>F</i>&thinsp;sin&thinsp;&theta;.</span></li>
+      <li><span class="tick">3</span><span>Assign each component the correct sign from the quadrant the vector actually points into &mdash; a reference angle alone will not tell you.</span></li>
+      <li><span class="tick">4</span><span>Add vectors analytically by summing <i>x</i>-components and <i>y</i>-components separately, then recombine into a resultant.</span></li>
+      <li><span class="tick">5</span><span>Explain why the horizontal and vertical motions of a projectile are independent, and argue it from evidence.</span></li>
+      <li><span class="tick">6</span><span>Solve horizontally launched projectile problems &mdash; including finding fall time from drop height alone.</span></li>
+    </ul>
+    <div class="foot">Each note page carries its own, more specific Performance Expectations. These are the module-level ones.</div>
+  </div>
+
+  <h2>What is in the module</h2>
+
+  <table class="grid">
+    <tr><th>Piece</th><th>What it is</th></tr>
+    <tr><td class="w">Notes</td><td>The four note pages above. Read these first &mdash; they are the spine of the module.</td></tr>
+    <tr><td class="w">Module 2 Reference Pages</td><td>Seven web versions of Dr. Johnson-Steigelman's lecture slides, covering the same material a second way. Not graded. Use them when a note leaves you wanting the idea explained differently, or when you want a worked method laid out step by step.</td></tr>
+    <tr><td class="w">Lab 03</td><td>Projectile Motion. Graded lab report &mdash; the handout, the template and the workbook are all in the Lab&nbsp;03 folder.</td></tr>
+    <tr><td class="w">WebAssign</td><td>CP-HW03a and CP-HW03b. The quantitative practice; this is where the numbers live.</td></tr>
+    <tr><td class="w">Quizzes</td><td>Three module quizzes, low stakes, taken as you go.</td></tr>
+    <tr><td class="w">Exam</td><td>EX02, with exam corrections available afterwards under the posted guidelines.</td></tr>
+  </table>
+
+  <h3>Reading</h3>
+  <p>Chapter 3 &mdash; Vectors and Motion in Two Dimensions.</p>
+
+  <p class="tip"><span class="label">The one habit worth building now</span>
+    Draw the triangle before you reach for the calculator. Almost every error in this module is a sign
+    error or a swapped sine and cosine, and almost every one of those is caught by a sketch that takes
+    ten seconds. The picture is not a study aid here &mdash; it is part of the method.</p>
+
+  <p><b>Due dates are on the Course Schedule</b>, not on this page. Check there.</p>
+
+  <footer>
+    PHY 118 &middot; College Physics I &middot; Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits. V4. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
