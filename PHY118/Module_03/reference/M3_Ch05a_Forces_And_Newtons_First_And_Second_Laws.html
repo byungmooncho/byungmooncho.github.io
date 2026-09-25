@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 Ch05a — Forces and Newton's First and Second Laws</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 3 · Chapter 4 (College Physics) · Trevor slides 4a
+     "Forces – Newton's First and Second Laws" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "4a-Forces -Newtons Laws.pptx" (17 slides).
+     Tier B reference page: faithful transcription, figures redrawn only
+     where the slide is unreadable without one. No probe, no exit ticket.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short V5 iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* Trevor's "Check Yourself" clicker items, shown statically with the answer */
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check ol{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; margin:.4rem 0 .7rem; padding-left:1.4rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Chapter 4 · Slides 4a</span>
+  </div>
+
+  <h1>Forces and Newton&rsquo;s First and Second Laws</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Everyday experience says that motion needs a cause &mdash; stop pushing and the cart stops. Galileo
+    noticed that the stopping is the <em>friction</em>, not the motion, and that if you keep taking
+    friction away the cart keeps going further. Push that to its limit and you get the opposite rule:
+    an object does not need a force to keep moving, only to <b>change</b> how it is moving. Newton&rsquo;s
+    first law says that; the second law says how much change you get per newton of force.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Define</b> the terms force, mass, inertia and friction.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Identify</b> the forces acting on a body.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>State</b> Newton&rsquo;s First Law of Motion.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Draw</b> free body diagrams from a given description.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Determine</b> the acceleration of a body using Newton&rsquo;s Second Law.</span></li>
+    </ul>
+    <div class="foot">Newton&rsquo;s third law is carried by the sibling page
+      <b>Ch05b &middot; Newton&rsquo;s Third Law</b>.</div>
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Everything in Module&nbsp;1 and Module&nbsp;2. This chapter does not add new kinematics &mdash; it
+    supplies the <em>cause</em> of the acceleration you have been computing all along. The constant-acceleration
+    equations, vector components, and free-fall all get used here unchanged.
+  </div>
+
+  <h2>Friction is what stops things, not the absence of a push</h2>
+
+  <p>Reducing friction lets an object slide further. Objects do eventually stop &mdash; but they stop
+     <em>because of the frictional force</em>, not because motion runs out on its own. Galileo was among
+     the first to simplify the system this way and arrive at the <b>law of inertia</b>.</p>
+
+  <table class="defs">
+    <tr><td class="term">Inertia</td><td class="eq">&mdash;</td>
+        <td>the tendency of something to remain as it is. In physics, the tendency of an object to
+            keep its current state of motion.</td></tr>
+    <tr><td class="term">&nbsp;</td><td class="eq"></td>
+        <td><em>Inertia is directly proportional to the mass of an object.</em></td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Don&rsquo;t confuse</span>
+    Inertia is not momentum. They are closely related and both scale with mass, but inertia is a
+    <em>tendency</em>, not a quantity you compute and conserve.
+  </div>
+
+  <h2>Newton&rsquo;s First Law &mdash; inspiration from Galileo</h2>
+
+  <div class="mathblock">
+    <div class="head">Two statements, one law</div>
+    <div class="body">
+      <p style="margin:.2rem 0 .8rem">An object <b>at rest</b> remains at rest as long as no net force acts upon it.</p>
+      <p style="margin:.2rem 0 .8rem">An object moving at a <b>constant velocity</b> continues to move at that same
+         velocity as long as no net force acts upon it.</p>
+      <p class="why">Both say essentially the same thing: you change an object&rsquo;s velocity by applying a
+         net force &mdash; or, read the other way, if the net force on an object is zero, its velocity is constant.
+         <b>Forces cause accelerations.</b></p>
+    </div>
+  </div>
+
+  <div class="known">
+    <span class="label">Where this sits in Module 3</span>
+    This is the claim the module opens with. If a constant velocity needs no force, then no
+    experiment done inside a smoothly moving vehicle can tell you how fast it is going &mdash; only whether
+    it is speeding up, slowing down or turning. Velocity is relative; acceleration is not. That is why the
+    second law reads <span class="m">F</span>&nbsp;=&nbsp;<span class="m">ma</span> and not
+    <span class="m">F</span>&nbsp;=&nbsp;<span class="m">mv</span>.
+  </div>
+
+  <h2>Free body diagrams</h2>
+
+  <p>Sketch the situation where it helps &mdash; but do not draw the picture in the free body diagram
+     itself. Use a <b>dot</b> for the object and draw only the forces acting <em>on</em> it.</p>
+
+  <figure>
+    <svg class="sq" viewBox="0 0 300 260" role="img" aria-label="Free body diagram of a ball resting on a hand: hand force up, gravitational force down">
+      <line x1="150" y1="120" x2="150" y2="25" stroke="#c0392b" stroke-width="3"/>
+      <polygon points="150,14 145,30 155,30" fill="#c0392b"/>
+      <text class="lbl" x="163" y="65" fill="#c0392b">F</text>
+      <text class="sm" x="176" y="70" fill="#c0392b">h</text>
+      <circle cx="150" cy="120" r="6" fill="#1d2b23"/>
+      <line x1="150" y1="120" x2="150" y2="220" stroke="#1e6b3c" stroke-width="3"/>
+      <polygon points="150,231 145,215 155,215" fill="#1e6b3c"/>
+      <text class="lbl" x="163" y="180" fill="#1e6b3c">F</text>
+      <text class="sm" x="176" y="185" fill="#1e6b3c">g</text>
+    </svg>
+    <figcaption>A ball held still in your hand. Two forces act on the ball: the hand pushes up
+      (<span class="m">F</span><sub>h</sub>) and gravity pulls down (<span class="m">F</span><sub>g</sub>).
+      The ball is not accelerating, so they are equal in size.</figcaption>
+  </figure>
+
+  <div class="check">
+    <span class="label">Check yourself</span>
+    <p class="q">A projectile is in free fall. Which represents its free body diagram?</p>
+    <figure style="margin:.6rem 0">
+      <svg viewBox="0 0 560 150" role="img" aria-label="Four candidate free body diagrams">
+        <!-- 1 -->
+        <text x="30" y="24">1.</text>
+        <circle cx="60" cy="55" r="5" fill="#1d2b23"/>
+        <line x1="60" y1="55" x2="60" y2="115" stroke="#1e6b3c" stroke-width="2.5"/>
+        <polygon points="60,125 56,112 64,112" fill="#1e6b3c"/>
+        <!-- 2 -->
+        <text x="170" y="24">2.</text>
+        <circle cx="200" cy="55" r="5" fill="#1d2b23"/>
+        <line x1="200" y1="55" x2="200" y2="115" stroke="#1e6b3c" stroke-width="2.5"/>
+        <polygon points="200,125 196,112 204,112" fill="#1e6b3c"/>
+        <line x1="200" y1="55" x2="248" y2="55" stroke="#1d2b23" stroke-width="2.5"/>
+        <polygon points="258,55 245,51 245,59" fill="#1d2b23"/>
+        <!-- 3 -->
+        <text x="310" y="24">3.</text>
+        <circle cx="340" cy="55" r="5" fill="#1d2b23"/>
+        <line x1="340" y1="55" x2="340" y2="115" stroke="#1e6b3c" stroke-width="2.5"/>
+        <polygon points="340,125 336,112 344,112" fill="#1e6b3c"/>
+        <line x1="340" y1="55" x2="340" y2="18" stroke="#1d2b23" stroke-width="2.5"/>
+        <polygon points="340,8 336,21 344,21" fill="#1d2b23"/>
+        <!-- 4 -->
+        <text x="450" y="24">4.</text>
+        <circle cx="480" cy="55" r="5" fill="#1d2b23"/>
+      </svg>
+    </figure>
+    <div class="ans"><b>Answer: 1.</b> &ldquo;Free fall&rdquo; means gravity is the only force acting. There is no
+      forward force &mdash; the projectile&rsquo;s horizontal <em>velocity</em> needs no force to keep it
+      (first law), so option&nbsp;2 is the classic trap. An object in free fall has exactly one
+      non-zero component of <span class="m">a</span>: the vertical one. Its horizontal speed stays
+      constant for the whole flight while its vertical speed falls steadily through zero at the top and
+      turns negative on the way down.</div>
+  </div>
+
+  <div class="tip">
+    <span class="label">A wording flag</span>
+    Trevor&rsquo;s deck adds here that &ldquo;for the most part, the force of gravity causes the weight of
+    an object &mdash; however, sometimes we refer to the support force as though it were the weight.&rdquo;
+    In PHY&nbsp;118 we do <em>not</em> use &ldquo;weight&rdquo; that second way. The gravitational force is the
+    weight; the support force is the <b>normal force</b>, and the important point is that the two are equal only in the special case of no vertical acceleration.
+  </div>
+
+  <h2>Newton&rsquo;s Second Law</h2>
+
+  <p>The acceleration of an object is <b>directly proportional to the net force</b> and
+     <b>inversely proportional to its mass</b>.</p>
+
+  <div class="mathblock">
+    <div class="head">Three ways to write the same law</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">a&#8407;</span> = <span class="frac"><span class="top"><span class="m">F&#8407;</span><sub>net</sub></span><span class="bot"><span class="m">m</span></span></span>
+        &nbsp;&nbsp;&nbsp;
+        <span class="m">a&#8407;</span> = <span class="frac"><span class="top">&Sigma;<span class="m">F&#8407;</span></span><span class="bot"><span class="m">m</span></span></span>
+        &nbsp;&nbsp;&nbsp;
+        <span style="border:2px solid var(--blue); padding:.15rem .5rem; border-radius:4px">&Sigma;<span class="m">F&#8407;</span> = <span class="m">m&#8239;a&#8407;</span></span>
+      </div>
+      <p class="why">The first two are the &ldquo;real&rdquo; relationship &mdash; acceleration is the thing that
+        results. The boxed third form is how we usually <em>use</em> it, because in a problem you normally
+        know the mass and want the force, or know the forces and want the acceleration.</p>
+    </div>
+  </div>
+
+  <p>Acceleration and net force point in the <b>same direction</b>. Since both are vectors, the law holds
+     component by component:</p>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        &Sigma;<span class="m">F</span><sub>x</sub> = <span class="m">m&#8239;a</span><sub>x</sub>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        &Sigma;<span class="m">F</span><sub>y</sub> = <span class="m">m&#8239;a</span><sub>y</sub>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        &Sigma;<span class="m">F</span><sub>z</sub> = <span class="m">m&#8239;a</span><sub>z</sub>
+      </div>
+      <p class="why">This is the step that makes every incline, pulley and hanging-rope problem tractable:
+        one vector equation becomes two (or three) ordinary ones.</p>
+    </div>
+  </div>
+
+  <h2>Worked example &mdash; throwing an American football</h2>
+
+  <p>How much force is required to throw an American football at a speed of 20.0&nbsp;m/s? The mass of a
+     regulation inflated ball is 0.400&nbsp;kg, and your throwing motion accelerates it over
+     &Delta;<span class="m">x</span>&nbsp;=&nbsp;80.0&nbsp;cm.</p>
+
+  <div class="mathblock">
+    <div class="head">Newton&rsquo;s second law needs an acceleration &mdash; so find one first</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">v</span><sup>2</sup> = <span class="m">v</span><sub>o</sub><sup>2</sup> + 2<span class="m">a</span>(<span class="m">x</span> &minus; <span class="m">x</span><sub>o</sub>)
+        &nbsp;&rarr;&nbsp;
+        <span class="m">v</span><sup>2</sup> = 2<span class="m">a</span>(&Delta;<span class="m">x</span>)<br>
+        <span class="m">a</span> = <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot">2(&Delta;<span class="m">x</span>)</span></span>
+        = <span class="frac"><span class="top">(20.0&nbsp;m/s)<sup>2</sup></span><span class="bot">2(0.80&nbsp;m)</span></span>
+        = 250&nbsp;m/s<sup>2</sup><br>
+        &Sigma;<span class="m">F&#8407;</span> = <span class="m">m&#8239;a&#8407;</span>
+        = (0.400&nbsp;kg)(250&nbsp;m/s<sup>2</sup>)
+        = 10<span style="text-decoration:overline">0</span>&nbsp;N, in the direction of the throw
+      </div>
+      <p class="why">The bar over the final zero marks it as significant &mdash; three sig figs, not one. Force is a vector, so the answer is not complete until you say which way it points; here that is simply &ldquo;forward&rdquo;, along the throw.</p>
+    </div>
+  </div>
+
+  <h2>Two carts, same force, same time</h2>
+
+  <div class="check">
+    <span class="label">Check yourself</span>
+    <p class="q">A cart is initially at rest on a frictionless track. You apply a force for a short time,
+      giving the cart a final speed of <span class="m">v</span><sub>1</sub>. A second cart has twice the
+      mass of the first. If you apply the same force for the same amount of time, what is the speed of the
+      second cart?</p>
+    <ol>
+      <li>&frac14;&nbsp;<span class="m">v</span><sub>1</sub></li>
+      <li>4&nbsp;<span class="m">v</span><sub>1</sub></li>
+      <li>&frac12;&nbsp;<span class="m">v</span><sub>1</sub></li>
+      <li>2&nbsp;<span class="m">v</span><sub>1</sub></li>
+      <li><span class="m">v</span><sub>1</sub></li>
+    </ol>
+    <div class="ans"><b>Answer: 3 &mdash; half.</b> The final speed is proportional to both the force on the cart
+      and the time over which it acts, and inversely proportional to the mass.</div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Why, in two columns</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th>Cart 1 &nbsp;(<span class="m">m</span><sub>1</sub> = <span class="m">m</span>)</th>
+            <th>Cart 2 &nbsp;(<span class="m">m</span><sub>2</sub> = 2<span class="m">m</span>)</th></tr>
+        <tr>
+          <td><span class="m">F</span> = <span class="m">m&#8239;a</span><sub>1</sub> &nbsp;&rarr;&nbsp;
+              <span class="m">a</span><sub>1</sub> = <span class="m">F</span>/<span class="m">m</span></td>
+          <td><span class="m">F</span> = 2<span class="m">m&#8239;a</span><sub>2</sub> &nbsp;&rarr;&nbsp;
+              <span class="m">a</span><sub>2</sub> = <span class="m">F</span>/2<span class="m">m</span></td>
+        </tr>
+        <tr>
+          <td><span class="m">v</span><sub>1</sub> = 0 + <span class="m">a</span><sub>1</sub><span class="m">t</span>
+              = (<span class="m">F</span>/<span class="m">m</span>)<span class="m">t</span></td>
+          <td><span class="m">v</span><sub>2</sub> = 0 + <span class="m">a</span><sub>2</sub><span class="m">t</span>
+              = (<span class="m">F</span>/2<span class="m">m</span>)<span class="m">t</span> = &frac12;&nbsp;<span class="m">v</span><sub>1</sub></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="check">
+    <span class="label">Check yourself &mdash; the follow-up</span>
+    <p class="q">Same two carts, same force, same amount of time. The <em>total displacement</em> of the
+      heavier cart is&hellip;</p>
+    <ol>
+      <li>&frac14;&nbsp;<span class="m">x</span><sub>1</sub></li>
+      <li>4&nbsp;<span class="m">x</span><sub>1</sub></li>
+      <li>&frac12;&nbsp;<span class="m">x</span><sub>1</sub></li>
+      <li>2&nbsp;<span class="m">x</span><sub>1</sub></li>
+      <li><span class="m">x</span><sub>1</sub></li>
+    </ol>
+    <div class="ans"><b>Answer: 3 &mdash; half again.</b> With
+      <span class="m">x</span> = <span class="m">x</span><sub>o</sub> + <span class="m">v</span><sub>o</sub>&Delta;<span class="m">t</span> + &frac12;<span class="m">a</span>(&Delta;<span class="m">t</span>)<sup>2</sup>
+      and both carts starting from rest at the origin, only the <span class="m">a</span> differs:
+      <span class="m">x</span><sub>2</sub> = &frac12;(<span class="m">F</span>/2<span class="m">m</span>)(&Delta;<span class="m">t</span>)<sup>2</sup>
+      = &frac12;&nbsp;<span class="m">x</span><sub>1</sub>. Halving the acceleration halves the displacement
+      in the same time &mdash; the squared &Delta;<span class="m">t</span> is identical for both, so it does
+      not change the ratio.</div>
+  </div>
+
+  <h2>The first and second laws are consistent</h2>
+
+  <div class="mathblock">
+    <div class="body">
+      <p style="margin:.2rem 0 .6rem"><b>N&nbsp;I:</b> Forces cause accelerations. &nbsp;&nbsp;
+         <b>N&nbsp;II:</b> &Sigma;<span class="m">F&#8407;</span> = <span class="m">m&#8239;a&#8407;</span></p>
+      <p style="margin:.2rem 0">If &Sigma;<span class="m">F&#8407;</span> = <span class="m">F&#8407;</span><sub>net</sub> = 0, then <span class="m">a&#8407;</span> = 0.</p>
+      <p style="margin:.2rem 0">If <span class="m">a&#8407;</span> = 0, then the velocity is constant.</p>
+      <p style="margin:.2rem 0">If <span class="m">a&#8407;</span> &ne; 0, then the velocity &mdash; magnitude
+         <em>and</em> direction &mdash; changes, and therefore the state of motion changes as well.</p>
+      <p class="why">The first law is not a separate fact bolted onto the second. It is the
+        <span class="m">a&#8407;</span>&nbsp;=&nbsp;0 case of it, stated first because it is the one that
+        contradicts everyday intuition.</p>
+    </div>
+  </div>
+
+  <h2>No net force implies no <em>change</em> in velocity</h2>
+
+  <div class="tip">
+    <span class="label">Remember</span>
+    No acceleration does <b>not</b> imply no velocity. A skydiver at terminal speed has zero net force and
+    is falling at 50&nbsp;m/s.
+  </div>
+
+  <p>Trevor closes the deck with two pictures of this. A falling body with air resistance has a drag force
+     <span class="m">F&#8407;</span><sub>drag</sub> pointing up against a gravitational force
+     <span class="m">F&#8407;</span><sub>g</sub> pointing down; once the two grow equal the net force is zero
+     and the speed stops changing &mdash; <b>terminal velocity</b>. A projectile with air resistance does not
+     trace a symmetric parabola at all: it rises less high, falls more steeply, and lands well short of the
+     drag-free range. Both cases are taken up quantitatively on the sibling page
+     <b>Ch06a &middot; Drag Forces</b>.</p>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/4-1-development-of-force-concept" target="_blank" rel="noopener">4.1 Development of Force Concept</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/4-2-newtons-first-law-of-motion-inertia" target="_blank" rel="noopener">4.2 Newton&rsquo;s First Law</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/4-3-newtons-second-law-of-motion-concept-of-a-system" target="_blank" rel="noopener">4.3 Newton&rsquo;s Second Law</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/5-2-newtons-first-law" target="_blank" rel="noopener">5.2 Newton&rsquo;s First Law</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/5-3-newtons-second-law" target="_blank" rel="noopener">5.3 Newton&rsquo;s Second Law</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/5-7-drawing-free-body-diagrams" target="_blank" rel="noopener">5.7 Drawing Free-Body Diagrams</a></li>
+  </ul>
+  <p class="why">Trevor&rsquo;s slide 17 cites <em>University Physics Volume&nbsp;2</em>; that is the
+     electricity and magnetism volume, and the mechanics material is in Volume&nbsp;1. Corrected above.</p>
+
+  <footer>
+    This page is adapted from the presentation <em>Forces &ndash; Newton&rsquo;s First and Second Laws</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

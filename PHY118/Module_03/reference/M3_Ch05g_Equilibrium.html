@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 Ch05g — Equilibrium</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 3 · Chapter 4 (College Physics) · Trevor slides 09a + 04g
+     "Equilibrium - Forces" and "Equilibrium" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Merged from two source decks: "09a-Equilibrium Condition - Force.pptx" (5 slides, the definitional lead-in, from Trevor's statics branch) and "04g-Equilibrium.pptx" (9 slides, the worked hanging-rope problems).
+     Tier B reference page: faithful transcription, figures redrawn only
+     where the slide is unreadable without one. No probe, no exit ticket.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short V5 iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* Trevor's "Check Yourself" clicker items, shown statically with the answer */
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check ol{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; margin:.4rem 0 .7rem; padding-left:1.4rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Chapter 4 · Slides 09a, 04g</span>
+  </div>
+
+  <h1>Equilibrium</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Equilibrium is not &ldquo;not moving&rdquo;. It is &ldquo;not <em>accelerating</em>&rdquo; &mdash; which
+    is a much larger class of situations, and includes a hockey puck gliding across frictionless ice at
+    30&nbsp;m/s. Once you accept that, equilibrium problems become the easiest kind in the whole course:
+    set &Sigma;<span class="m">F&#8407;</span>&nbsp;=&nbsp;0, split it into components, and solve. The
+    hanging-sign problems at the end are the standard workout.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>State</b> the conditions for equilibrium.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Distinguish</b> static from dynamic equilibrium.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine</b> the force or forces required to keep an object in equilibrium.</span></li>
+    </ul>
+  </div>
+
+  <h2>The two conditions</h2>
+
+  <div class="mathblock">
+    <div class="head">An object is in equilibrium when both of these hold</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        &Sigma;<span class="m">F&#8407;</span> = 0
+        &nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;
+        &Sigma;<span class="m">&tau;&#8407;</span> = 0
+      </div>
+      <p class="why">The net <b>force</b> on the object is zero, and the net <b>torque</b> on it is zero.
+        Module&nbsp;3 works entirely with the first condition, because everything here is a point mass or is
+        treated as one. The torque condition is what the statics module is built on &mdash; it is stated
+        now so that &ldquo;equilibrium&rdquo; does not have to be redefined later.</p>
+    </div>
+  </div>
+
+  <table class="defs">
+    <tr><td class="term">Static equilibrium</td><td class="eq">&mdash;</td>
+        <td>in equilibrium <b>and at rest</b></td></tr>
+    <tr><td class="term">Dynamic equilibrium</td><td class="eq">&mdash;</td>
+        <td>in equilibrium <b>while moving</b> &mdash; at constant velocity</td></tr>
+  </table>
+
+  <div class="known">
+    <span class="label">This is Newton's first law wearing a different hat</span>
+    &ldquo;Net force zero&rdquo; and &ldquo;velocity constant&rdquo; are the same statement. So the
+    distinction between static and dynamic equilibrium is about the observer, not the physics: a box at
+    rest in the room is a box in dynamic equilibrium to someone walking past it at a steady pace. Which is the module&rsquo;s opening point exactly &mdash; there is no experiment that tells the two apart.
+  </div>
+
+  <h2>Are these objects in equilibrium?</h2>
+
+  <table class="grid">
+    <tr><th>Situation</th><th>Velocity</th><th>Acceleration</th><th>Net force</th><th>Equilibrium?</th></tr>
+    <tr><td>Box at rest on a level floor</td><td><span class="m">v</span> = 0</td>
+        <td><span class="m">a</span> = 0</td><td>&Sigma;<span class="m">F&#8407;</span> = 0</td>
+        <td><b>Yes</b> &mdash; static</td></tr>
+    <tr><td>Box pushed at a constant speed</td><td><span class="m">v</span> &ne; 0</td>
+        <td><span class="m">a</span> = 0</td><td>&Sigma;<span class="m">F&#8407;</span> = 0</td>
+        <td><b>Yes</b> &mdash; dynamic</td></tr>
+    <tr><td>Hockey puck on frictionless ice, no air resistance</td><td><span class="m">v</span> &ne; 0</td>
+        <td><span class="m">a</span> = 0</td><td>&Sigma;<span class="m">F&#8407;</span> = 0</td>
+        <td><b>Yes</b> &mdash; dynamic</td></tr>
+    <tr><td>Ball at the top of a vertical toss</td><td><span class="m">v</span> = 0</td>
+        <td><span class="m">a</span> = &minus;<span class="m">g</span> &ne; 0</td>
+        <td>&Sigma;<span class="m">F&#8407;</span> = <span class="m">F</span><sub>g</sub> &ne; 0</td>
+        <td><b>No</b></td></tr>
+    <tr><td>Object in uniform circular motion</td><td><span class="m">v</span> &ne; 0</td>
+        <td><span class="m">a</span> = <span class="m">a</span><sub>c</sub> &ne; 0</td>
+        <td>&Sigma;<span class="m">F&#8407;</span> = <span class="m">F</span><sub>c</sub> &ne; 0</td>
+        <td><b>No</b></td></tr>
+    <tr><td>Object sliding down a frictionless incline</td><td><span class="m">v</span> &ne; 0</td>
+        <td><span class="m">a</span> = <span class="m">g</span>&nbsp;sin&nbsp;&theta; &ne; 0</td>
+        <td>&Sigma;<span class="m">F&#8407;</span> = <span class="m">mg</span>&nbsp;sin&nbsp;&theta; &ne; 0</td>
+        <td><b>No</b></td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">The two rows to stare at</span>
+    The <b>ball at the top of a toss</b> has zero velocity and is <em>not</em> in equilibrium. The
+    <b>hockey puck</b> is moving fast and <em>is</em>. Between them they dispose of the intuition that
+    equilibrium has anything to do with being still. Acceleration is the only thing the definition looks at.
+  </div>
+
+  <div class="tip">
+    <span class="label">A slip in the source deck</span>
+    Trevor&rsquo;s slide writes &Sigma;<span class="m">F&#8407;</span> = <span class="m">F</span><sub>g</sub>
+    for the uniform-circular-motion case as well as for the tossed ball &mdash; the label was carried over
+    from the panel beside it. His own figure has it right: the net force there is the <b>centripetal</b>
+    force <span class="m">F</span><sub>c</sub>, pointing at the centre of the circle. Corrected in the table
+    above.
+  </div>
+
+  <h2>Hanging objects</h2>
+
+  <p>The standard problem: a sign hangs from two ropes at different angles, and you want the tension in
+     each. Three habits keep it clean:</p>
+
+  <ul>
+    <li><b>Make sure you are looking at the proper angles.</b> The angle in the equation is the one the rope
+        makes with your chosen axis, which may not be the one drawn on the diagram.</li>
+    <li><b>Work from the object, not the support.</b> Draw the free body diagram of the <em>sign</em>. The
+        ceiling has its own forces on it and they are not your problem.</li>
+    <li><b>Don&rsquo;t forget about gravity.</b> It is the force students leave off, because it is the one
+        with no rope attached to it.</li>
+  </ul>
+
+  <div class="mathblock">
+    <div class="head">Two directions, two equations, two unknowns</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th>Horizontal (<span class="m">x</span>)</th><th>Vertical (<span class="m">y</span>)</th></tr>
+        <tr><td>0 = &Sigma;<span class="m">F</span><sub>x</sub> = &minus;<span class="m">F</span><sub>lx</sub> + <span class="m">F</span><sub>rx</sub></td>
+            <td>0 = &Sigma;<span class="m">F</span><sub>y</sub> = <span class="m">F</span><sub>ly</sub> + <span class="m">F</span><sub>ry</sub> &minus; <span class="m">F</span><sub>g</sub></td></tr>
+        <tr><td>0 = &minus;<span class="m">F</span><sub>l</sub>&nbsp;cos&nbsp;&theta;<sub>l</sub> + <span class="m">F</span><sub>r</sub>&nbsp;cos&nbsp;&theta;<sub>r</sub></td>
+            <td>0 = <span class="m">F</span><sub>l</sub>&nbsp;sin&nbsp;&theta;<sub>l</sub> + <span class="m">F</span><sub>r</sub>&nbsp;sin&nbsp;&theta;<sub>r</sub> &minus; <span class="m">mg</span></td></tr>
+      </table>
+      <p class="why">Note the asymmetry: the horizontal components must <b>cancel</b> (one is negative), and
+        the vertical components must <b>add up to</b> the weight. That is the shape of every hanging problem
+        you will meet.</p>
+    </div>
+  </div>
+
+  <h3>Worked example &mdash; what is the tension in each of the ropes?</h3>
+
+  <p>A 10.0&nbsp;kg sign hangs from two ropes, the left at
+     &theta;<sub>l</sub>&nbsp;=&nbsp;30.0&deg; and the right at
+     &theta;<sub>r</sub>&nbsp;=&nbsp;45.0&deg; above the horizontal.</p>
+
+  <div class="mathblock">
+    <div class="head">Use the horizontal equation to eliminate one unknown</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">F</span><sub>l</sub> = <span class="m">F</span><sub>r</sub>&nbsp;<span class="frac"><span class="top">cos&nbsp;&theta;<sub>r</sub></span><span class="bot">cos&nbsp;&theta;<sub>l</sub></span></span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;substitute into the vertical equation:<br>
+        <span class="m">mg</span> = <span class="m">F</span><sub>r</sub>&nbsp;&#40;<span class="frac"><span class="top">cos&nbsp;45&deg;</span><span class="bot">cos&nbsp;30&deg;</span></span>&nbsp;sin&nbsp;30&deg; + sin&nbsp;45&deg;&#41;
+        = <span class="m">F</span><sub>r</sub>&nbsp;(1.1154)<br>
+        <span class="m">F</span><sub>r</sub> = <span class="frac"><span class="top"><span class="m">mg</span></span><span class="bot">1.1154</span></span>
+        = <span class="frac"><span class="top">(10.0&nbsp;kg)(9.80&nbsp;m/s<sup>2</sup>)</span><span class="bot">1.1154</span></span>
+        = 87.86&nbsp;N &rarr; <b><span class="m">F</span><sub>r</sub> = 87.9&nbsp;N</b><br>
+        <span class="m">F</span><sub>l</sub> = 87.86&nbsp;N&nbsp;<span class="frac"><span class="top">cos&nbsp;45&deg;</span><span class="bot">cos&nbsp;30&deg;</span></span>
+        = 71.74&nbsp;N &rarr; <b><span class="m">F</span><sub>l</sub> = 71.7&nbsp;N</b>
+      </div>
+      <p class="why">Sanity check the answer before you write it down. The two tensions sum to 159.6&nbsp;N
+        against a 98&nbsp;N weight &mdash; <em>more</em> than the thing they are holding up, because most of
+        each rope&rsquo;s pull is spent cancelling the other rope horizontally rather than lifting.
+        The shallower rope (30&deg;) carries the smaller tension here because the steeper one is doing more
+        of the lifting.</p>
+    </div>
+  </div>
+
+  <div class="known">
+    <span class="label">Push the result</span>
+    Flatten both angles toward horizontal and 1.1154 shrinks toward zero, so the tensions grow without
+    bound. That is why a clothesline can never be pulled perfectly straight, and why a tow rope stretched
+    taut between two cars is far more dangerous than a slack one.
+  </div>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/4-5-normal-tension-and-other-examples-of-forces" target="_blank" rel="noopener">4.5 Normal, Tension and Other Examples of Forces</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/9-1-the-first-condition-for-equilibrium" target="_blank" rel="noopener">9.1 The First Condition for Equilibrium</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/5-5-common-forces" target="_blank" rel="noopener">5.5 Common Forces</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/12-1-conditions-for-static-equilibrium" target="_blank" rel="noopener">12.1 Conditions for Static Equilibrium</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentations <em>Equilibrium &ndash; Forces</em> and <em>Equilibrium</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

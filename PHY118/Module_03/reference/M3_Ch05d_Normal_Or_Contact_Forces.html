@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 Ch05d — Normal or Contact Forces</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 3 · Chapter 4 (College Physics) · Trevor slides 04c
+     "Normal or Contact Forces" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "04c-Normal or Contact Forces.pptx" (6 slides).
+     Tier B reference page: faithful transcription, figures redrawn only
+     where the slide is unreadable without one. No probe, no exit ticket.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short V5 iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* Trevor's "Check Yourself" clicker items, shown statically with the answer */
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check ol{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; margin:.4rem 0 .7rem; padding-left:1.4rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Chapter 4 · Slides 04c</span>
+  </div>
+
+  <h1>Normal or Contact Forces</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A table holds a book up. Nothing about the table decided to do that &mdash; the force it supplies is
+    whatever is needed, in whatever direction the surface faces. Two habits follow. First, the normal force
+    points <b>perpendicular to the surface</b>, not upward, so a wall pushes sideways and a ramp pushes at an
+    angle. Second, its <em>size</em> is not a property of the object; it is an unknown you solve for, which
+    is why it is only sometimes equal to the object&rsquo;s weight.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Explain</b> the characteristics of a contact (normal) force.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Determine</b> the normal force on an object resting on a horizontal or tilted surface.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Recognise</b> when the normal force is <em>not</em> equal to the force of gravity.</span></li>
+    </ul>
+    <div class="foot">The accelerating case behind PE3 is carried by the sibling page
+      <b>Ch05e &middot; Normal Forces When Something Is Accelerating</b>.</div>
+  </div>
+
+  <h2>&ldquo;Normal&rdquo; means perpendicular</h2>
+
+  <div class="known">
+    <span class="label">It is a maths word, not a physics word</span>
+    In mathematics <b>normal</b> is the generic term for <em>perpendicular</em>. The normal force is the
+    force of contact between two objects, and it is perpendicular to the surface of contact. Calling it a
+    <b>contact force</b> means exactly the same thing.
+  </div>
+
+  <h2>An object on a frictionless incline</h2>
+
+  <p>Rotate the coordinate system so that the <span class="m">x</span>-axis is parallel to the incline and
+     the <span class="m">y</span>-axis is perpendicular to it. Gravity then splits into a component along
+     the surface and a component into it:</p>
+
+  <figure>
+    <svg viewBox="0 0 560 300" role="img" aria-label="Gravity resolved into components parallel and perpendicular to an incline, with the normal force perpendicular to the surface">
+      <!-- incline -->
+      <polygon points="40,250 420,250 420,120" fill="#fdf0e0" stroke="#2457b8" stroke-width="1.2"/>
+      <text class="lbl" x="392" y="243">&#952;</text>
+      <path d="M 372 250 A 48 48 0 0 0 384 224" fill="none" stroke="#2457b8" stroke-width="1"/>
+      <!-- block on the incline, at the midpoint of the slope -->
+      <g transform="translate(250,197)">
+        <circle cx="0" cy="0" r="6" fill="#1d2b23"/>
+        <!-- normal force: perpendicular to slope. slope direction (1,-0.342) normalised -> normal (0.342,1) up-left rotated -->
+        <line x1="0" y1="0" x2="-31" y2="-90" stroke="#8b1a10" stroke-width="3"/>
+        <polygon points="-34,-99 -24,-88 -38,-84" fill="#8b1a10"/>
+        <text class="lbl" x="-70" y="-60" fill="#8b1a10">F</text><text class="sm" x="-58" y="-55" fill="#8b1a10">N</text>
+        <!-- gravity straight down -->
+        <line x1="0" y1="0" x2="0" y2="76" stroke="#1e6b3c" stroke-width="3" stroke-dasharray="5 4"/>
+        <polygon points="0,86 -5,74 5,74" fill="#1e6b3c"/>
+        <text class="lbl" x="9" y="60" fill="#1e6b3c">F</text><text class="sm" x="21" y="65" fill="#1e6b3c">g</text>
+        <!-- parallel component: down the slope, direction (0.94,0.342) -->
+        <line x1="0" y1="0" x2="68" y2="25" stroke="#1e6b3c" stroke-width="3"/>
+        <polygon points="77,28 64,32 68,19" fill="#1e6b3c"/>
+        <text class="sm" x="44" y="-6" fill="#1e6b3c">F</text><text class="sm" x="52" y="-2" fill="#1e6b3c">g</text>
+        <text class="sm" x="60" y="-6" fill="#1e6b3c">sin &#952;</text>
+        <!-- perpendicular component: into the slope, direction (-0.342,0.94) -->
+        <line x1="0" y1="0" x2="-25" y2="69" stroke="#1e6b3c" stroke-width="3"/>
+        <polygon points="-28,78 -32,65 -19,67" fill="#1e6b3c"/>
+        <text class="sm" x="-92" y="52" fill="#1e6b3c">F</text><text class="sm" x="-84" y="56" fill="#1e6b3c">g</text>
+        <text class="sm" x="-76" y="52" fill="#1e6b3c">cos &#952;</text>
+        <text class="lbl" x="14" y="26">&#952;</text>
+      </g>
+    </svg>
+    <figcaption>The normal force is perpendicular to the surface, so it balances only the
+      <em>perpendicular</em> component of gravity. The parallel component has nothing opposing it &mdash;
+      which is why the object slides.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Two directions, two equations</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th><span class="m">y</span>-direction (perpendicular to the surface)</th>
+            <th><span class="m">x</span>-direction (parallel to the surface)</th></tr>
+        <tr>
+          <td><span class="m">m&#8239;a</span><sub>y</sub> = <span class="m">F</span><sub>N</sub> + <span class="m">F</span><sub>g&perp;</sub></td>
+          <td><span class="m">m&#8239;a</span><sub>x</sub> = <span class="m">F</span><sub>g&#8741;</sub></td>
+        </tr>
+        <tr>
+          <td><span class="m">m&#8239;a</span><sub>y</sub> = <span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g&perp;</sub></td>
+          <td><span class="m">m&#8239;a</span><sub>x</sub> = <span class="m">F</span><sub>g</sub>&nbsp;sin&nbsp;&theta;</td>
+        </tr>
+        <tr>
+          <td>0 = <span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g&perp;</sub>
+              &nbsp;&nbsp;<span class="why" style="display:inline">(it does not leave the surface)</span></td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td><b><span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub>&nbsp;cos&nbsp;&theta;</b></td>
+          <td><b><span class="m">a</span><sub>x</sub> = <span class="m">g</span>&nbsp;sin&nbsp;&theta;</b></td>
+        </tr>
+      </table>
+      <p class="why">Rotating the axes is what buys this. In the tilted frame the object does not accelerate
+        at all in <span class="m">y</span>, so that equation collapses to a statement about
+        <span class="m">F</span><sub>N</sub> alone.</p>
+    </div>
+  </div>
+
+  <div class="check">
+    <span class="label">Check yourself</span>
+    <p class="q">Assuming that there is no other force than gravity acting, the magnitude of
+      <span class="m">F</span><sub>N</sub> is always&hellip;</p>
+    <ol>
+      <li>Equal to <span class="m">F</span><sub>g</sub></li>
+      <li>Equal to or less than <span class="m">F</span><sub>g</sub></li>
+      <li>Greater than <span class="m">F</span><sub>g</sub></li>
+      <li>Has no relation to <span class="m">F</span><sub>g</sub></li>
+    </ol>
+    <div class="ans"><b>Answer: 2.</b> <span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub>&nbsp;cos&nbsp;&theta;,
+      and cos&nbsp;&theta;&nbsp;&le;&nbsp;1 for any real tilt. Equality holds only on level ground, where
+      &theta;&nbsp;=&nbsp;0. Tip the surface and the normal force falls off; stand it vertical and it
+      vanishes.<br><br>
+      <b>Read the caveat carefully.</b> &ldquo;No other force than gravity&rdquo; is doing real work in that
+      sentence. Lean on the object, or put it in an accelerating elevator, and
+      <span class="m">F</span><sub>N</sub> can exceed <span class="m">F</span><sub>g</sub> without limit.</div>
+  </div>
+
+  <h2>The normal force does not have to point up</h2>
+
+  <p>Hold a book against a wall. The wall is the surface, so the contact force points <b>horizontally, away
+     from the wall</b>. Gravity still pulls straight down, and friction &mdash; parallel to the surface, as
+     always &mdash; is what holds the book from sliding.</p>
+
+  <figure>
+    <svg class="sq" viewBox="0 0 320 300" role="img" aria-label="Free body diagram of a book held against a vertical wall: normal force horizontal, push horizontal the other way, friction up, gravity down">
+      <circle cx="160" cy="150" r="6" fill="#1d2b23"/>
+      <line x1="160" y1="150" x2="160" y2="52" stroke="#7d3fa0" stroke-width="3"/>
+      <polygon points="160,42 155,56 165,56" fill="#7d3fa0"/>
+      <text class="lbl" x="170" y="92" fill="#7d3fa0">F</text><text class="sm" x="182" y="97" fill="#7d3fa0">f</text>
+      <line x1="160" y1="150" x2="160" y2="248" stroke="#1e6b3c" stroke-width="3"/>
+      <polygon points="160,258 155,244 165,244" fill="#1e6b3c"/>
+      <text class="lbl" x="170" y="212" fill="#1e6b3c">F</text><text class="sm" x="182" y="217" fill="#1e6b3c">g</text>
+      <line x1="160" y1="150" x2="278" y2="150" stroke="#8b1a10" stroke-width="3"/>
+      <polygon points="288,150 274,145 274,155" fill="#8b1a10"/>
+      <text class="lbl" x="232" y="138" fill="#8b1a10">F</text><text class="sm" x="244" y="143" fill="#8b1a10">N</text>
+      <line x1="160" y1="150" x2="42" y2="150" stroke="#e05545" stroke-width="3"/>
+      <polygon points="32,150 46,145 46,155" fill="#e05545"/>
+      <text class="lbl" x="58" y="138" fill="#e05545">F</text><text class="sm" x="70" y="143" fill="#e05545">push</text>
+    </svg>
+    <figcaption>A book pressed against a wall. The normal force
+      <span class="m">F</span><sub>N</sub>&nbsp;=&nbsp;<span class="m">F</span><sub>wall,&hairsp;B</sub> is
+      horizontal, because the wall&rsquo;s surface is vertical. Here
+      <span class="m">F</span><sub>N</sub> has nothing to do with the book&rsquo;s weight at all &mdash; it is
+      set entirely by how hard you push.</figcaption>
+  </figure>
+
+  <h2>Be careful: the weight and the normal force are not always the same</h2>
+
+  <div class="tip">
+    <span class="label">The sentence this whole page exists for</span>
+    On level ground, with nothing accelerating, <span class="m">F</span><sub>N</sub> happens to equal
+    <span class="m">F</span><sub>g</sub>. That coincidence is so common that students start treating it as
+    the definition of the normal force. It is not. Tilt the surface and
+    <span class="m">F</span><sub>N</sub> drops by cos&nbsp;&theta;; turn the surface vertical and it is set
+    by your push instead; accelerate the floor and it changes again. It is also what a bathroom scale is actually reading &mdash; see page 05e.
+  </div>
+
+  <h3>Review</h3>
+  <ul>
+    <li>The <b>normal force</b> is the force of contact between two objects.</li>
+    <li>It is <b>perpendicular to the surface</b> &mdash; &ldquo;normal&rdquo; is the mathematical word for
+        perpendicular.</li>
+    <li>It <b>does not have to point straight up</b>. In fact it often does not.</li>
+    <li>It is <b>not</b> the object&rsquo;s weight. It is an unknown you solve for from Newton&rsquo;s second
+        law in the perpendicular direction.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/4-5-normal-tension-and-other-examples-of-forces" target="_blank" rel="noopener">4.5 Normal, Tension and Other Examples of Forces</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/5-5-common-forces" target="_blank" rel="noopener">5.5 Common Forces</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/6-2-friction" target="_blank" rel="noopener">6.2 Friction</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Normal or Contact Forces</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

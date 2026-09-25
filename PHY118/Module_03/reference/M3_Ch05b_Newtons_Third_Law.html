@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 Ch05b — Newton's Third Law</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 3 · Chapter 4 (College Physics) · Trevor slides 04d
+     "Newton's Third Law – Action and Reaction" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "04d-Newtons Third Law.pptx" (11 slides; slide 2 is blank in the original).
+     Tier B reference page: faithful transcription, figures redrawn only
+     where the slide is unreadable without one. No probe, no exit ticket.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short V5 iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* Trevor's "Check Yourself" clicker items, shown statically with the answer */
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check ol{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; margin:.4rem 0 .7rem; padding-left:1.4rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Chapter 4 · Slides 04d</span>
+  </div>
+
+  <h1>Newton&rsquo;s Third Law &mdash; Action and Reaction</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    &ldquo;Equal and opposite&rdquo; is the most-quoted and least-understood sentence in mechanics. The
+    trap is that plenty of force pairs are equal and opposite without being a third-law pair at all &mdash;
+    a mug sitting on a table is the standard example. The test is not the arrows; it is <em>which objects
+    the arrows are attached to</em>. Get that straight and the third law stops being a slogan and starts
+    being the extra equation that finishes a two-body problem.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>State</b> Newton&rsquo;s Third Law of Motion.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Identify</b> pairs of forces that are, and are not, third-law pairs.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Use</b> the third law as the extra relationship that closes a two-body problem.</span></li>
+    </ul>
+  </div>
+
+  <h2>The law</h2>
+
+  <div class="mathblock">
+    <div class="head">Newton&rsquo;s Third Law</div>
+    <div class="body">
+      <p style="margin:.2rem 0 .7rem">For every action, there is an equal and opposite reaction.</p>
+      <p style="margin:.2rem 0 .7rem">Whenever one object exerts a force on a second object, the second
+         exerts an equal and opposite force back on the first.</p>
+      <div class="mathline" style="text-align:center">
+        <span class="m">F&#8407;</span><sub>A&nbsp;on&nbsp;B</sub> = &minus;<span class="m">F&#8407;</span><sub>B&nbsp;on&nbsp;A</sub>
+      </div>
+      <p class="why">The subscripts are the whole content of the law. Write every force as
+        &ldquo;<em>what</em> on <em>what</em>&rdquo; and the pairs identify themselves.</p>
+    </div>
+  </div>
+
+  <h2>Be careful of &ldquo;equal and opposite&rdquo;</h2>
+
+  <p>Two forces that are equal and opposite <b>might not be</b> a third-law pair. A genuine N3 pair
+     always has all three of these:</p>
+
+  <table class="defs">
+    <tr><td class="term">2 objects</td><td class="eq">&mdash;</td><td>exactly two bodies are involved</td></tr>
+    <tr><td class="term">Same type</td><td class="eq">&mdash;</td><td>both members are the same kind of force &mdash; both gravitational, or both contact</td></tr>
+    <tr><td class="term">Different objects</td><td class="eq">&mdash;</td><td>the two forces act on <em>different</em> bodies, never on the same one</td></tr>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 620 300" role="img" aria-label="A mug on a table: the two forces on the mug are not a third-law pair; the true pairs act on different bodies">
+      <!-- table -->
+      <rect x="40" y="150" width="540" height="34" fill="#fdf6e3" stroke="#2457b8" stroke-width="1.2"/>
+      <text class="sm" x="50" y="172">table</text>
+      <!-- left mug: forces ON the mug -->
+      <rect x="120" y="96" width="62" height="54" fill="#f2f4f3" stroke="#2457b8" stroke-width="1.2"/>
+      <text class="sm" x="128" y="90">mug</text>
+      <line x1="140" y1="104" x2="140" y2="140" stroke="#1e6b3c" stroke-width="2.5"/>
+      <polygon points="140,148 136,136 144,136" fill="#1e6b3c"/>
+      <text class="sm" x="80" y="118" fill="#1e6b3c">F</text><text class="sm" x="88" y="122" fill="#1e6b3c">E on m</text>
+      <line x1="166" y1="146" x2="166" y2="108" stroke="#c0392b" stroke-width="2.5"/>
+      <polygon points="166,100 162,112 170,112" fill="#c0392b"/>
+      <text class="sm" x="190" y="120" fill="#c0392b">F</text><text class="sm" x="198" y="124" fill="#c0392b">T on m</text>
+      <text class="sm" x="70" y="215" style="font-size:12px">Both act ON THE MUG &mdash; equal and opposite,</text>
+      <text class="sm" x="70" y="231" style="font-size:12px">but <tspan font-weight="700">not</tspan> a third-law pair.</text>
+      <!-- right mug: the true partners -->
+      <rect x="420" y="96" width="62" height="54" fill="#f2f4f3" stroke="#2457b8" stroke-width="1.2"/>
+      <line x1="440" y1="104" x2="440" y2="140" stroke="#1e6b3c" stroke-width="2.5"/>
+      <polygon points="440,148 436,136 444,136" fill="#1e6b3c"/>
+      <text class="sm" x="378" y="118" fill="#1e6b3c">F</text><text class="sm" x="386" y="122" fill="#1e6b3c">E on m</text>
+      <line x1="466" y1="184" x2="466" y2="108" stroke="#c0392b" stroke-width="2.5"/>
+      <polygon points="466,100 462,112 470,112" fill="#c0392b"/>
+      <line x1="466" y1="160" x2="466" y2="196" stroke="#c0392b" stroke-width="2.5"/>
+      <polygon points="466,204 462,192 470,192" fill="#c0392b"/>
+      <text class="sm" x="490" y="196" fill="#c0392b">F</text><text class="sm" x="498" y="200" fill="#c0392b">m on T</text>
+      <!-- earth arc -->
+      <path d="M 330 285 Q 470 235 610 285" fill="none" stroke="#2457b8" stroke-width="1.2"/>
+      <line x1="470" y1="282" x2="470" y2="250" stroke="#1e6b3c" stroke-width="2.5"/>
+      <polygon points="470,242 466,254 474,254" fill="#1e6b3c"/>
+      <text class="sm" x="494" y="266" fill="#1e6b3c">F</text><text class="sm" x="502" y="270" fill="#1e6b3c">m on E</text>
+      <text class="sm" x="330" y="252" style="font-size:12px">Earth</text>
+    </svg>
+    <figcaption>Left: the two forces on the mug &mdash; gravity from the Earth and the table&rsquo;s contact
+      force &mdash; are equal and opposite because the mug is not accelerating, not because of the third law.
+      Right: the real partners. Gravity pairs with the mug&rsquo;s pull <em>on the Earth</em>; the table&rsquo;s
+      push pairs with the mug&rsquo;s push <em>on the table</em>. Each pair straddles two bodies.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">The one-line test</span>
+    If both arrows land on the same free body diagram, they are not a third-law pair. An N3 pair can
+    never appear together on one free body diagram.
+  </div>
+
+  <h2>The third law provides &ldquo;extra&rdquo; information</h2>
+
+  <div class="check">
+    <span class="label">Check yourself</span>
+    <p class="q">Two boxes are sitting side by side. You push on one box, which in turn pushes on the
+      other box. If the boxes stay in contact&hellip;</p>
+    <ol>
+      <li>The boxes have the same acceleration.</li>
+      <li>The bigger box has the larger acceleration.</li>
+      <li>The smaller box has the larger acceleration.</li>
+      <li>There is no relationship between the accelerations of the boxes.</li>
+    </ol>
+    <div class="ans"><b>Answer: 1.</b> &ldquo;Stay in contact&rdquo; is the physical statement that the gap
+      between them never changes &mdash; which is exactly the statement that their accelerations are equal.
+      That sentence, not the third law, is what ties the two boxes together. The third law is what lets you
+      write the <em>force</em> between them once and use it in both equations.</div>
+  </div>
+
+  <h2>Worked example &mdash; pushing on two boxes</h2>
+
+  <p>Two boxes sit on a frictionless surface. The larger box has a mass of 10.0&nbsp;kg, the smaller has
+     half that. You push on the larger box with a force of 20.0&nbsp;N. What is the contact force between
+     the boxes?</p>
+
+  <div class="mathblock">
+    <div class="head">Treat the pair as one body first, then each box separately</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">F</span><sub>p</sub> = (<span class="m">m</span><sub>10</sub> + <span class="m">m</span><sub>5</sub>)<span class="m">a</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">a</span> = <span class="frac"><span class="top"><span class="m">F</span><sub>p</sub></span><span class="bot"><span class="m">m</span><sub>10</sub> + <span class="m">m</span><sub>5</sub></span></span>
+        = <span class="frac"><span class="top">20&nbsp;N</span><span class="bot">15&nbsp;kg</span></span>
+        = 1.33&nbsp;m/s<sup>2</sup>
+      </div>
+      <p class="why">Gravity and the normal force cancel, so only the horizontal forces matter.</p>
+      <table class="grid">
+        <tr><th>Box 1 &mdash; 10&nbsp;kg (the one you push)</th><th>Box 2 &mdash; 5&nbsp;kg</th></tr>
+        <tr>
+          <td><span class="m">m</span><sub>10</sub><span class="m">a</span> = <span class="m">F</span><sub>p</sub> &minus; <span class="m">F</span><sub>c</sub></td>
+          <td><span class="m">m</span><sub>5</sub><span class="m">a</span> = +<span class="m">F</span><sub>c</sub></td>
+        </tr>
+        <tr>
+          <td>two forces act on it: your push forward, box&nbsp;2 pushing back</td>
+          <td>one horizontal force acts on it: box&nbsp;1 pushing forward</td>
+        </tr>
+        <tr>
+          <td>&mdash;</td>
+          <td>(5.0&nbsp;kg)(1.33&nbsp;m/s<sup>2</sup>) = <b>6.67&nbsp;N</b></td>
+        </tr>
+      </table>
+      <p class="why">Box 2 is the easier one to solve, because only the contact force acts on it
+        horizontally. That is the habit worth taking away: <b>start from the body with fewer forces on it.</b></p>
+    </div>
+  </div>
+
+  <h3>Now push from the other side</h3>
+
+  <p>Same two boxes, same 20.0&nbsp;N &mdash; but now you push the <em>small</em> box, which pushes the
+     large one. The acceleration of the pair is unchanged at 1.33&nbsp;m/s<sup>2</sup>, since the total mass
+     is the same. But now the 10&nbsp;kg box is the one with a single horizontal force on it:</p>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">m</span><sub>10</sub><span class="m">a</span> = <span class="m">F</span><sub>c</sub>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">F</span><sub>c</sub> = (10&nbsp;kg)(1.33&nbsp;m/s<sup>2</sup>) = <b>13.3&nbsp;N</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="known">
+    <span class="label">The point of doing it twice</span>
+    The contact force is <b>6.67&nbsp;N one way and 13.3&nbsp;N the other</b>, from the same 20&nbsp;N push on
+    the same two boxes. The third law is not what changed &mdash; at every instant, in both cases, box&nbsp;1
+    pushes box&nbsp;2 exactly as hard as box&nbsp;2 pushes box&nbsp;1. What changed is <em>how much mass the
+    contact force has to accelerate</em>. Push the big box and the contact force only has to move 5&nbsp;kg;
+    push the small box and it has to move 10&nbsp;kg.
+  </div>
+
+  <h2>It doesn&rsquo;t always seem to apply &mdash; but it always does</h2>
+
+  <p>A truck meets a car head-on. Everyone&rsquo;s intuition says the truck hits the car harder. It does not.
+     Newton&rsquo;s third law is a <b>given</b>: you may simply use it.</p>
+
+  <div class="mathblock">
+    <div class="head">Same force, different accelerations</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">F&#8407;</span><sub>t</sub> = &minus;<span class="m">F&#8407;</span><sub>c</sub>
+        &nbsp;&nbsp;<span class="why" style="display:inline">(third law)</span><br>
+        <span class="m">m</span><sub>t</sub><span class="m">a</span><sub>t</sub> = <span class="m">F</span><sub>t</sub>
+        &nbsp;&nbsp;and&nbsp;&nbsp;
+        <span class="m">F</span><sub>c</sub> = <span class="m">m</span><sub>c</sub><span class="m">a</span><sub>c</sub>
+        &nbsp;&nbsp;<span class="why" style="display:inline">(second law, each vehicle)</span><br>
+        &minus;<span class="m">m</span><sub>t</sub><span class="m">a</span><sub>t</sub> = <span class="m">m</span><sub>c</sub><span class="m">a</span><sub>c</sub>
+      </div>
+      <p class="why">The objects experience the <b>same force</b>, but the smaller object experiences the
+        <b>larger acceleration</b> &mdash; and acceleration, not force, is what injures the occupants. The
+        asymmetry everyone feels is real; it just lives in the mass, not in the force.</p>
+    </div>
+  </div>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/4-4-newtons-third-law-of-motion-symmetry-in-forces" target="_blank" rel="noopener">4.4 Newton&rsquo;s Third Law of Motion</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/5-4-newtons-third-law" target="_blank" rel="noopener">5.4 Newton&rsquo;s Third Law</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Newton&rsquo;s Third Law &ndash; Action and Reaction</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 Ch06b — Drag Forces in Liquids</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 151 · Module 3 · Chapter 6 (University Physics) · Trevor slides 05-bb
+     "Drag Forces in Liquids" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "05-bb-Drag forces in liquids.pptx" (6 slides). PHY 151 ONLY — this page is calculus-based and is deliberately NOT ported to PHY 118.
+     Tier B reference page: faithful transcription, figures redrawn only
+     where the slide is unreadable without one. No probe, no exit ticket.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short V5 iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* Trevor's "Check Yourself" clicker items, shown statically with the answer */
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check ol{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; margin:.4rem 0 .7rem; padding-left:1.4rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Chapter 6 · Slides 05-bb</span>
+    <span style="color:var(--amber); font-weight:600">Calculus</span>
+  </div>
+
+  <h1>Drag Forces in Liquids</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    In a liquid the resistive force is proportional to <span class="m">v</span>, not
+    <span class="m">v</span><sup>2</sup>. That looks like a smaller change than it is: because the force now
+    depends on the very quantity you are solving for, Newton&rsquo;s second law stops being an algebra
+    problem and becomes a <b>differential equation</b>. This page works that solution through from end to
+    end &mdash; and the answer, an exponential approach to a limiting speed, is a shape you will meet again
+    in circuits, in cooling, and in radioactive decay.
+  </div>
+
+  <div class="known">
+    <span class="label">PHY 151 only</span>
+    This page is calculus-based and has no PHY&nbsp;118 counterpart. The algebra-based course stops at the
+    sibling page <b>Ch06a &middot; Drag Forces</b> and its terminal-velocity result, which needs no calculus.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Describe</b> the motion of an object through a liquid.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Set up</b> Newton&rsquo;s second law as a differential equation with correct signs.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Solve</b> it by separation of variables for <span class="m">v</span>(<span class="m">t</span>) and <span class="m">x</span>(<span class="m">t</span>).</span></li>
+    </ul>
+  </div>
+
+  <h2>A different symbol, on purpose</h2>
+
+  <div class="mathblock">
+    <div class="head">The resistive force in a liquid</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">f</span><sub>R</sub> = &minus;<span class="m">bv</span>
+      </div>
+      <p class="why">Lower-case <span class="m">f</span> with a subscript R, to keep it separate from the
+        <span class="m">F</span><sub>D</sub> of drag in air. The negative sign denotes that the force is in
+        the <em>opposite</em> direction to the velocity. Draw a free body diagram and insert the proper
+        signs into Newton&rsquo;s second law carefully &mdash; this is the step where the whole calculation
+        is usually lost.</p>
+    </div>
+  </div>
+
+  <h2>Driven through a liquid</h2>
+
+  <div class="mathblock">
+    <div class="head">Newton&rsquo;s second law becomes a differential equation</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">m&#8239;a&#8407;</span> = &Sigma;<span class="m">F&#8407;</span> = <span class="m">F&#8407;</span> + <span class="m">f&#8407;</span><sub>R</sub>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">ma</span> = <span class="m">F</span> &minus; <span class="m">f</span><sub>R</sub>
+        &nbsp;&rarr;&nbsp;
+        <b><span class="m">m</span>&nbsp;<span class="frac"><span class="top"><span class="m">dv</span></span><span class="bot"><span class="m">dt</span></span></span> = <span class="m">F</span> &minus; <span class="m">bv</span></b>
+      </div>
+      <p class="why">The driving force <span class="m">F</span> is assumed <b>not</b> to depend on the speed
+        of the object. Only the resistive force does. That assumption is what makes the equation solvable
+        in closed form.</p>
+    </div>
+  </div>
+
+  <h3>Solving it &mdash; separation of variables</h3>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline">
+        <span class="m">m&#8239;dv</span> = (<span class="m">F</span> &minus; <span class="m">bv</span>)<span class="m">dt</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">dt</span> = <span class="frac"><span class="top"><span class="m">m</span></span><span class="bot">(<span class="m">F</span> &minus; <span class="m">bv</span>)</span></span><span class="m">dv</span><br>
+        <span class="frac"><span class="top">1</span><span class="bot"><span class="m">m</span></span></span>&#8747;<sub>0</sub><sup><span class="m">t</span></sup><span class="m">dt</span>
+        = &#8747;<sub>0</sub><sup><span class="m">v</span></sup><span class="frac"><span class="top">1</span><span class="bot">(<span class="m">F</span> &minus; <span class="m">bv</span>)</span></span><span class="m">dv</span>
+        &nbsp;&nbsp;<span class="why" style="display:inline">using &#8747;d<span class="m">x</span>/(<span class="m">A</span>&minus;<span class="m">Bx</span>) = (1/<span class="m">B</span>)ln(<span class="m">A</span>&minus;<span class="m">Bx</span>)</span><br>
+        &minus;<span class="frac"><span class="top"><span class="m">b</span></span><span class="bot"><span class="m">m</span></span></span><span class="m">t</span>
+        = ln(<span class="m">F</span> &minus; <span class="m">bv</span>) &minus; ln(<span class="m">F</span>)
+        = ln&nbsp;<span class="frac"><span class="top"><span class="m">F</span> &minus; <span class="m">bv</span></span><span class="bot"><span class="m">F</span></span></span><br>
+        <span class="m">e</span><sup>&minus;<span class="m">bt</span>/<span class="m">m</span></sup>
+        = <span class="frac"><span class="top"><span class="m">F</span> &minus; <span class="m">bv</span></span><span class="bot"><span class="m">F</span></span></span>
+        = 1 &minus; <span class="frac"><span class="top"><span class="m">b</span></span><span class="bot"><span class="m">F</span></span></span><span class="m">v</span>
+        &nbsp;&rarr;&nbsp;
+        <b><span class="m">v</span>(<span class="m">t</span>) = <span class="frac"><span class="top"><span class="m">F</span></span><span class="bot"><span class="m">b</span></span></span>&#40;1 &minus; <span class="m">e</span><sup>&minus;<span class="m">bt</span>/<span class="m">m</span></sup>&#41;</b>
+      </div>
+      <p class="why"><span class="m">F</span> is generally greater than <span class="m">bv</span>, so the
+        absolute value inside the logarithm is not &ldquo;absolutely&rdquo; necessary. These are the methods
+        taught in a Differential Equations course; you are seeing one worked instance of them, not the
+        general theory.</p>
+    </div>
+  </div>
+
+  <div class="known">
+    <span class="label">Read the answer</span>
+    At <span class="m">t</span>&nbsp;=&nbsp;0 the exponential is 1 and <span class="m">v</span>&nbsp;=&nbsp;0,
+    as it must be. As <span class="m">t</span>&nbsp;&rarr;&nbsp;&infin; the exponential dies and
+    <span class="m">v</span>&nbsp;&rarr;&nbsp;<span class="m">F</span>/<span class="m">b</span> &mdash; the
+    terminal velocity, reached asymptotically rather than at any finite time. The time constant is
+    <span class="m">m</span>/<span class="m">b</span>: heavier objects take longer to get there, and a
+    thicker liquid gets them there faster.
+  </div>
+
+  <h3>Position from the velocity</h3>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline">
+        <span class="frac"><span class="top"><span class="m">dx</span></span><span class="bot"><span class="m">dt</span></span></span>
+        = <span class="frac"><span class="top"><span class="m">F</span></span><span class="bot"><span class="m">b</span></span></span>&#40;1 &minus; <span class="m">e</span><sup>&minus;<span class="m">bt</span>/<span class="m">m</span></sup>&#41;
+        &nbsp;&rarr;&nbsp;integrate once more&nbsp;&rarr;<br>
+        <b><span class="m">x</span>(<span class="m">t</span>) = <span class="frac"><span class="top"><span class="m">F</span></span><span class="bot"><span class="m">b</span></span></span><span class="m">t</span>
+        + <span class="frac"><span class="top"><span class="m">mF</span></span><span class="bot"><span class="m">b</span><sup>2</sup></span></span>&#40;<span class="m">e</span><sup>&minus;<span class="m">bt</span>/<span class="m">m</span></sup> &minus; 1&#41;</b>
+      </div>
+      <p class="why">A straight line at the terminal speed, minus a fixed offset that the early sluggish
+        start cost you. The second term saturates at
+        &minus;<span class="m">mF</span>/<span class="m">b</span><sup>2</sup>, so long after release the
+        object is exactly that far behind where a no-drag object launched at terminal speed would be.</p>
+    </div>
+  </div>
+
+  <h2>Sinking &mdash; the same method, a different force</h2>
+
+  <p>An object sinking through water is acted upon by the force of gravity and the resistive force of the
+     water. Nothing about the method changes; only the identity of the driving force does:</p>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline">
+        <span class="m">ma</span> = <span class="m">F</span><sub>g</sub> &minus; <span class="m">f</span><sub>R</sub>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">m</span>&nbsp;<span class="frac"><span class="top"><span class="m">dv</span></span><span class="bot"><span class="m">dt</span></span></span>
+        = <span class="m">F</span><sub>g</sub> &minus; <span class="m">bv</span>
+        = <span class="m">mg</span> &minus; <span class="m">bv</span>
+      </div>
+      <p class="why">From here you would solve just like before &mdash; the only difference is the form of
+        the force. Substituting <span class="m">F</span>&nbsp;&rarr;&nbsp;<span class="m">mg</span> in the
+        result above gives a terminal speed of <span class="m">mg</span>/<span class="m">b</span> directly,
+        with no new work.</p>
+    </div>
+  </div>
+
+  <h3>Review</h3>
+  <ul>
+    <li>The resistive force through water depends on the <b>speed</b> of the object, to the first power.</li>
+    <li>That makes Newton&rsquo;s second law a differential equation.</li>
+    <li>The methods of differential equations &mdash; here, separation of variables &mdash; let us separate
+        it and integrate.</li>
+    <li>The result is an exponential approach to a terminal speed
+        <span class="m">F</span>/<span class="m">b</span>, with time constant
+        <span class="m">m</span>/<span class="m">b</span>.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/6-4-drag-force-and-terminal-speed" target="_blank" rel="noopener">6.4 Drag Force and Terminal Speed</a></li>
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/5-2-drag-forces" target="_blank" rel="noopener">5.2 Drag Forces</a> (the algebra-based treatment)</li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Drag Forces in Liquids</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 Ch05f — Verifying Newton's Second Law from Experimental Data</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 3 · Chapter 4 (College Physics) · Trevor slides Graphing N2L
+     "Verifying Newton's Law Using Experimental Data" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "Graphing Newton's Second Law.pptx" (7 slides). Added to the Module 3 set on 2026-09-25 although it has no D2L topic of its own — it is the analysis method behind the second-law lab and LB04.
+     Tier B reference page: faithful transcription, figures redrawn only
+     where the slide is unreadable without one. No probe, no exit ticket.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short V5 iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* Trevor's "Check Yourself" clicker items, shown statically with the answer */
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check ol{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; margin:.4rem 0 .7rem; padding-left:1.4rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Chapter 4 · Graphing N2L</span>
+  </div>
+
+  <h1>Verifying Newton&rsquo;s Second Law from Experimental Data</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    &Sigma;<span class="m">F&#8407;</span>&nbsp;=&nbsp;<span class="m">m&#8239;a&#8407;</span> is a claim about the
+    world, so it can be checked. Apply a known constant force to a cart, record where it is as a function
+    of time, and the shape of that curve hands you the acceleration. Do it again at eight different forces
+    and plot acceleration against force: if the law holds, the points fall on a straight line through the
+    origin, and the <b>slope of that line is 1/<span class="m">m</span></b>. You never put the cart on a
+    balance &mdash; you weigh it with a graph.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Use</b> experimental position-versus-time data to extract an acceleration.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Plot</b> acceleration against driving force and interpret the slope.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Determine</b> an object&rsquo;s mass from trendline data alone.</span></li>
+    </ul>
+    <div class="foot">This is the analysis method behind the Newton&rsquo;s-second-law lab.</div>
+  </div>
+
+  <h2>Step 1 &mdash; plot position against time</h2>
+
+  <p>Imagine an experiment where you apply a constant force to an object and measure position as a function
+     of time. Under a constant force the acceleration is constant, so the kinematics you already have says
+     the curve must be a <b>parabola</b>:</p>
+
+  <div class="mathblock">
+    <div class="head">Reading the acceleration off a fitted parabola</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">x</span> = <span class="m">x</span><sub>o</sub> + <span class="m">v</span><sub>o</sub><span class="m">t</span> + &frac12;<span class="m">at</span><sup>2</sup>
+        &nbsp;&nbsp;&harr;&nbsp;&nbsp;
+        <span class="m">y</span> = <span class="m">c</span> + <span class="m">bt</span> + <span class="m">at</span><sup>2</sup><sub>&nbsp;fit</sub>
+      </div>
+      <p class="why">Fit a quadratic to the data and match it term by term against the kinematic equation.
+        The coefficient of <span class="m">t</span><sup>2</sup> is <b>&frac12;<span class="m">a</span></b>,
+        so the acceleration is <b>twice the quadratic coefficient</b>. That one line is the whole trick.</p>
+    </div>
+  </div>
+
+  <h2>Step 2 &mdash; compare the plots at different forces</h2>
+
+  <p>Run it again at several forces. The curves <em>look</em> nearly identical &mdash; but the
+     <span class="m">y</span>-axis has a different scale on each. At a larger force the object is moving
+     farther in the same amount of time.</p>
+
+  <div class="tip">
+    <span class="label">A graph-reading habit worth keeping</span>
+    Two plots of the same shape are not two plots of the same thing. Always read the axis scale before
+    reading the curve. This is the single most common way to misread a lab plot.
+  </div>
+
+  <h2>Step 3 &mdash; plot the accelerations against the force</h2>
+
+  <table class="grid">
+    <tr><th>Force (N)</th><th>Quadratic fit to <span class="m">x</span>(<span class="m">t</span>)</th>
+        <th><span class="m">a</span> = 2 &times; (<span class="m">t</span><sup>2</sup> coefficient), m/s<sup>2</sup></th></tr>
+    <tr><td>0.049</td><td><span class="m">y</span> = 0.0104<span class="m">x</span><sup>2</sup> &minus; 0.0125<span class="m">x</span> + 0.0038</td><td>0.0208</td></tr>
+    <tr><td>0.098</td><td><span class="m">y</span> = 0.0219<span class="m">x</span><sup>2</sup> &minus; 0.0262<span class="m">x</span> + 0.0079</td><td>0.0438</td></tr>
+    <tr><td>0.147</td><td><span class="m">y</span> = 0.0303<span class="m">x</span><sup>2</sup> &minus; 0.0363<span class="m">x</span> + 0.0109</td><td>0.0606</td></tr>
+    <tr><td>0.196</td><td><span class="m">y</span> = 0.0417<span class="m">x</span><sup>2</sup> &minus; 0.0500<span class="m">x</span> + 0.0150</td><td>0.0834</td></tr>
+    <tr><td>0.245</td><td><span class="m">y</span> = 0.0530<span class="m">x</span><sup>2</sup> &minus; 0.0636<span class="m">x</span> + 0.0191</td><td>0.1060</td></tr>
+    <tr><td>0.294</td><td><span class="m">y</span> = 0.0636<span class="m">x</span><sup>2</sup> &minus; 0.0763<span class="m">x</span> + 0.0229</td><td>0.1272</td></tr>
+    <tr><td>0.343</td><td><span class="m">y</span> = 0.0730<span class="m">x</span><sup>2</sup> &minus; 0.0876<span class="m">x</span> + 0.0263</td><td>0.1460</td></tr>
+    <tr><td>0.392</td><td><span class="m">y</span> = 0.0824<span class="m">x</span><sup>2</sup> &minus; 0.0989<span class="m">x</span> + 0.0297</td><td>0.1648</td></tr>
+    <tr><td>0.441</td><td colspan="2">&mdash; two further runs, read from the acceleration plot: 0.186 and 0.206&nbsp;m/s<sup>2</sup></td></tr>
+    <tr><td>0.490</td><td colspan="2"></td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Corrected from the source deck</span>
+    Trevor&rsquo;s summary table lists an <em>Accel.</em> column reading 0.1152, 0.2280, 0.3489&hellip;
+    1.1630&nbsp;m/s<sup>2</sup>. Those values are about 5.6&times; the accelerations the fitted parabolas on
+    his own earlier slides actually give, and they disagree with the points plotted on his own
+    acceleration&ndash;force chart, which sit at 0.021&hellip;0.206 and match 2&nbsp;&times;&nbsp;(quadratic
+    coefficient) exactly. The table appears to belong to a different run &mdash; note that its implied mass,
+    0.421&nbsp;kg, is the reciprocal of the 2.38&nbsp;kg the fit returns. <b>The chart and the parabola fits
+    agree with each other and are used here.</b>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Why the straight line is the point</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">F</span> = <span class="m">ma</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">a</span> = <span class="frac"><span class="top">1</span><span class="bot"><span class="m">m</span></span></span><span class="m">F</span>
+        &nbsp;&nbsp;compared with&nbsp;&nbsp;
+        <span class="m">y</span> = (slope)<span class="m">x</span><br>
+        &rarr;&nbsp;&nbsp;slope = <span class="frac"><span class="top">1</span><span class="bot"><span class="m">m</span></span></span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="m">m</span> = <span class="frac"><span class="top">1</span><span class="bot">slope</span></span>
+      </div>
+      <p class="why">Plotting <span class="m">a</span> on the vertical axis against <span class="m">F</span>
+        on the horizontal is a deliberate choice. It puts the <em>measured</em> quantity on
+        <span class="m">y</span> and the <em>controlled</em> one on <span class="m">x</span>, and it makes
+        the unknown you actually want &mdash; the mass &mdash; fall out of the slope.</p>
+    </div>
+  </div>
+
+  <h2>Step 4 &mdash; determine the mass</h2>
+
+  <div class="mathblock">
+    <div class="head">Trendline: <span class="m">y</span> = 0.420<span class="m">x</span> + 0.001</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">m</span> = <span class="frac"><span class="top">1</span><span class="bot">slope</span></span>
+        = <span class="frac"><span class="top">1</span><span class="bot">0.420&nbsp;(m/s<sup>2</sup>)/N</span></span>
+        = <b>2.38&nbsp;kg</b>
+      </div>
+      <p class="why">The units do the checking for you: N &divide; (m/s<sup>2</sup>) = kg&nbsp;m/s<sup>2</sup>
+        &divide; m/s<sup>2</sup> = kg. If the slope&rsquo;s units do not reduce to an inverse mass, the axes
+        were plotted the wrong way round.</p>
+    </div>
+  </div>
+
+  <div class="known">
+    <span class="label">Two things the fits quietly tell you</span>
+    The intercept of the trendline is <b>+0.001</b>, not zero &mdash; but it is a thousandth of the largest
+    acceleration, so the line passes through the origin as well as the data can show. That is the real
+    result: <span class="m">a</span> is <em>proportional</em> to <span class="m">F</span>, with no offset.
+    And each position fit has a <b>negative linear term</b> and a small positive constant: the cart was
+    still sitting at rest when the clock started and only began moving a second or so in, which shifts the
+    parabola&rsquo;s vertex off <span class="m">t</span>&nbsp;=&nbsp;0. The quadratic coefficient is
+    unaffected, which is exactly why this method is robust.
+  </div>
+
+  <div class="tip">
+    <span class="label">A question worth carrying into the lab</span>
+    If your acceleration&ndash;force line does <em>not</em> pass through the origin &mdash; if you need a
+    finite force before you get any acceleration at all &mdash; what might that mean? Friction is the usual
+    answer, and the intercept measures it.
+  </div>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/4-3-newtons-second-law-of-motion-concept-of-a-system" target="_blank" rel="noopener">4.3 Newton&rsquo;s Second Law of Motion</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/5-3-newtons-second-law" target="_blank" rel="noopener">5.3 Newton&rsquo;s Second Law</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation
+    <em>Verifying Newton&rsquo;s Law Using Experimental Data</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

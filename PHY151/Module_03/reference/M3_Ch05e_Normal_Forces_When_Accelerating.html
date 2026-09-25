@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 Ch05e — Normal Forces When Something Is Accelerating</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 151 · Module 3 · Chapter 5 (University Physics) · Trevor slides 04f
+     "Normal Forces in Situations where an Acceleration is Present" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "04f-Elevators and Normal Forces.pptx" (9 slides). Added to the Module 3 set on 2026-09-25 although it has no D2L topic of its own — it is Note 9 in Trevor's words.
+     Tier B reference page: faithful transcription, figures redrawn only
+     where the slide is unreadable without one. No probe, no exit ticket.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     embedded in Brightspace via the short V5 iframe wrapper.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  /* Trevor's "Check Yourself" clicker items, shown statically with the answer */
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check ol{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; margin:.4rem 0 .7rem; padding-left:1.4rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Chapter 5 · Slides 04f</span>
+  </div>
+
+  <h1>Normal Forces When Something Is Accelerating</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A bathroom scale does not measure your mass, and it does not measure the Earth&rsquo;s pull on you. It
+    measures the <b>normal force between you and the floor</b> &mdash; nothing else. Stand still and that
+    number happens to equal your weight. Put the same scale in an accelerating elevator and it reads
+    something different, with your mass and the Earth both unchanged. The reading tracks
+    <em>acceleration</em>, and this page is where that shows up first.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Explain</b> what a scale actually measures.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Determine</b> the normal force on a body when the surface it rests on is accelerating.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Interpret</b> a scale reading to recover the acceleration and its direction.</span></li>
+    </ul>
+  </div>
+
+  <div class="known">
+    <span class="label">Where this sits in Module 3</span>
+    This is <a href="../M3_N9_Normal_Force_Does_Not_Always_Equal_Weight.html" target="_blank" rel="noopener">Note&nbsp;9</a>
+    in Trevor&rsquo;s words, and the far end of the module&rsquo;s Galilean-relativity arc. Note&nbsp;1 asks
+    what motion you can detect from inside a closed box. This page answers it with an instrument: a scale
+    detects <em>acceleration</em>, and is completely blind to how fast the elevator is travelling or which
+    way it is going.
+  </div>
+
+  <h2>Standing still</h2>
+
+  <div class="mathblock">
+    <div class="head">A bathroom scale measures the normal force between you and the floor</div>
+    <div class="body">
+      <div class="mathline">
+        &Sigma;<span class="m">F&#8407;</span> = <span class="m">m&#8239;a&#8407;</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">F&#8407;</span><sub>N</sub> + <span class="m">F&#8407;</span><sub>g</sub> = <span class="m">m&#8239;a&#8407;</span><br>
+        +<span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g</sub> = 0
+        &nbsp;&rarr;&nbsp;
+        +<span class="m">F</span><sub>N</sub> = +<span class="m">F</span><sub>g</sub>
+      </div>
+      <p class="why">You stand on the floor and you do not accelerate, so the net force is zero and the two
+        are equal. <b>This is the special case, not the rule.</b> It is also the only case in which the scale
+        reading and the weight agree.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Trevor&rsquo;s own note on vocabulary</span>
+    &ldquo;I seldom use the term <em>weight</em> when working on these types of problems. I usually use the
+    term <em>force due to gravity</em>, <span class="m">F</span><sub>g</sub>.&rdquo; That is the convention
+    PHY&nbsp;151 follows, and it is worth knowing that it is Trevor&rsquo;s too &mdash; the looser wording
+    that turns up on the Chapter&nbsp;5 opening deck is not how he works once the numbers start.
+  </div>
+
+  <h2>On an incline</h2>
+
+  <p>Put the scale on a ramp instead of level ground and the reading drops below your &ldquo;normal&rdquo;
+     weight, by the factor cos&nbsp;&theta; derived on the sibling page
+     <b>Ch05d &middot; Normal or Contact Forces</b>. Same person, same planet, smaller number.</p>
+
+  <h2>What if the floor accelerates?</h2>
+
+  <div class="check">
+    <span class="label">Check yourself</span>
+    <p class="q">A person is in an elevator that is accelerating upward. How does the upward normal force
+      <span class="m">F</span><sub>N</sub> caused by the floor and acting on the person compare to the force
+      of gravity <span class="m">F</span><sub>g</sub> acting on the person?</p>
+    <ol>
+      <li><span class="m">F</span><sub>N</sub> &gt; <span class="m">F</span><sub>g</sub></li>
+      <li><span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub></li>
+      <li><span class="m">F</span><sub>N</sub> &lt; <span class="m">F</span><sub>g</sub></li>
+    </ol>
+    <div class="ans"><b>Answer: 1.</b> Accelerating upward means the net force points upward. Gravity is
+      fixed, so the only force that can supply that net upward push is the floor &mdash; the normal force has
+      to grow. This is the pressed-into-the-floor feeling as a lift starts up.</div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">The general result</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">F&#8407;</span><sub>N</sub> + <span class="m">F&#8407;</span><sub>g</sub> = <span class="m">m&#8239;a&#8407;</span>
+        &nbsp;&rarr;&nbsp;
+        +<span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g</sub> = <span class="m">m</span>(&plusmn;<span class="m">a</span>)<br>
+        <b>+<span class="m">F</span><sub>N</sub> = +<span class="m">F</span><sub>g</sub> + <span class="m">m</span>(&plusmn;<span class="m">a</span>)</b>
+      </div>
+      <p class="why">The normal force and the force of gravity are <b>not equal to one another if the floor
+        and/or the person is accelerating.</b> The sign of <span class="m">a</span> carries the whole story:
+        accelerating up adds to the reading, accelerating down subtracts from it. Note what is
+        <em>absent</em> from this equation &mdash; the velocity. A lift cruising at 6&nbsp;m/s upward and one
+        cruising at 6&nbsp;m/s downward give identical readings, and both match standing still.</p>
+    </div>
+  </div>
+
+  <h2>What if the floor falls out from under you?</h2>
+
+  <div class="mathblock">
+    <div class="head">Free fall, worked through</div>
+    <div class="body">
+      <div class="mathline">
+        +<span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g</sub> = &minus;<span class="m">mg</span>
+        &nbsp;&rarr;&nbsp;
+        +<span class="m">F</span><sub>N</sub> = &minus;<span class="m">mg</span> + <span class="m">F</span><sub>g</sub>
+        = &minus;<span class="m">mg</span> + <span class="m">mg</span><br>
+        <b>+<span class="m">F</span><sub>N</sub> = 0</b>
+      </div>
+      <p class="why">Set the acceleration to <span class="m">&minus;g</span> &mdash; the lift cable has
+        snapped, or you are in orbit, which is the same thing &mdash; and the normal force goes to exactly
+        zero. <b>This condition is what people call &ldquo;weightlessness&rdquo;.</b> Gravity has not
+        switched off; <span class="m">F</span><sub>g</sub> is unchanged in every line above. What vanished
+        is the floor&rsquo;s push, and therefore the scale reading, and therefore the sensation.</p>
+    </div>
+  </div>
+
+  <div class="known">
+    <span class="label">A defensible piece of pedantry</span>
+    Trevor points out that if a textbook wants to be <em>consistent</em> about the word &ldquo;weight&rdquo;
+    &mdash; consistent with &ldquo;weightlessness&rdquo;, and with what a scale reads &mdash; it should call
+    <span class="m">F</span><sub>N</sub> the weight, and a few books do. PHY&nbsp;151 does not: here
+    <b>weight is the force of gravity</b>, and what the scale reads is the <b>normal force</b>. Both
+    conventions are internally coherent; mixing them is what produces the confusion, so we name the two
+    forces separately and never use one word for both.
+  </div>
+
+  <h2>Worked example &mdash; riding in an elevator</h2>
+
+  <p>You are standing in an elevator on a bathroom scale. When the elevator is moving at a constant speed
+     the scale reads 700.&nbsp;N. When the elevator accelerates, the reading is 800.&nbsp;N.</p>
+
+  <div class="pe">
+    <div class="head"><strong>a)</strong><span>What is the acceleration of the elevator?</span></div>
+    <div class="foot"><strong>b)</strong> &nbsp;Is the elevator accelerating upwards or downwards?</div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">The constant-speed reading is what gives you the mass</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">m</span> = <span class="frac"><span class="top"><span class="m">F</span><sub>g</sub></span><span class="bot"><span class="m">g</span></span></span>
+        = <span class="frac"><span class="top">700.&nbsp;N</span><span class="bot">9.80&nbsp;m/s<sup>2</sup></span></span>
+        = 71.4&nbsp;kg<br>
+        +<span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g</sub> = <span class="m">m&#8239;a</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">a</span> = <span class="frac"><span class="top"><span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g</sub></span><span class="bot"><span class="m">m</span></span></span>
+        = <span class="frac"><span class="top">800.&nbsp;N &minus; 700.&nbsp;N</span><span class="bot">71.4&nbsp;kg</span></span>
+        = <b>+1.4&nbsp;m/s<sup>2</sup></b>
+      </div>
+      <p class="why"><b>b)</b> Since <span class="m">a</span> came out <em>positive</em>, and up was chosen
+        as positive, the elevator is <b>accelerating upwards</b>. The constant-speed reading did double duty
+        here: it was the calibration that turned a force into a mass.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">A small inconsistency in the source</span>
+    Trevor&rsquo;s slide divides by 70.0&nbsp;kg rather than the 71.4&nbsp;kg that 700.&nbsp;N and
+    9.80&nbsp;m/s<sup>2</sup> actually give &mdash; the same 700.&nbsp;N example on his <em>Mass and
+    Weight</em> deck gets 71.4&nbsp;kg. It makes no difference to the printed answer (1.43 versus 1.40, both
+    +1.4&nbsp;m/s<sup>2</sup> to two figures), but the page uses the consistent value.
+  </div>
+
+  <div class="known">
+    <span class="label">Read the answer backwards</span>
+    You recovered the elevator&rsquo;s acceleration, and its direction, from a scale reading alone &mdash;
+    with no window, no reference to the building, and no knowledge of how fast the lift was moving or
+    whether it was going up or down. That is Note&nbsp;1&rsquo;s claim made operational: <b>acceleration is
+    detectable from inside; velocity is not.</b>
+  </div>
+
+  <h3>Review</h3>
+  <ul>
+    <li>The reading on a scale is essentially the <b>normal force</b> between you and the floor.</li>
+    <li>The normal force <b>can change</b>. The gravitational force generally does not.</li>
+    <li>They are equal only when there is no acceleration along the direction the surface pushes.</li>
+    <li>Zero normal force is &ldquo;weightlessness&rdquo; &mdash; and it is a statement about the floor,
+        not about gravity.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/4-5-normal-tension-and-other-examples-of-forces" target="_blank" rel="noopener">4.5 Normal, Tension and Other Examples of Forces</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/5-5-common-forces" target="_blank" rel="noopener">5.5 Common Forces</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/6-1-solving-problems-with-newtons-laws" target="_blank" rel="noopener">6.1 Solving Problems with Newton&rsquo;s Laws</a></li>
+    <li><a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a> &mdash;
+      Trevor&rsquo;s own site, which the source slide links for the scale-on-an-incline demonstration.</li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation
+    <em>Normal Forces in Situations where an Acceleration is Present</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
