@@ -274,6 +274,111 @@
   .calc li{ margin:.4rem 0; }
   .calc .line{ display:block; border-bottom:1px solid var(--rule); height:1.4rem;
     margin:.35rem 0 0; }
+
+  /* --- FLCC-SIM v1 · interactive widget ----------------------------------
+     LIFTABLE UNIT. This block plus the matching "FLCC-SIM v1" block in the
+     body are self-contained: copy both into any note page and nothing else
+     needs to change. No external files, no libraries.
+     Hidden until JS adds .on, so a no-JS reader sees nothing broken.
+     Hidden in print — the static figure above it carries the printed page.
+     ----------------------------------------------------------------------- */
+  .sim{ display:none; border:1px solid var(--rule); border-radius:8px;
+        padding:1rem 1rem .9rem; margin:1.2rem 0; background:#fbfdfc; }
+  .sim.on{ display:block; }
+  .sim .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+        letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+        font-weight:600; display:block; margin-bottom:.55rem; }
+  .sim-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:640px){ .sim-grid{ grid-template-columns:1.2fr 1fr; } }
+  .sim svg{ display:block; width:100%; height:auto; }
+  .sim-controls{ display:grid; gap:.55rem; margin:0 0 .9rem;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .sim-controls label{ display:grid; grid-template-columns:6.6em 1fr 6.4em;
+        gap:.6rem; align-items:center; }
+  .sim-controls .nm{ color:var(--muted); }
+  .sim-controls output{ font-variant-numeric:tabular-nums; font-weight:700;
+        color:var(--green); text-align:right; }
+  .sim-controls input[type=range]{ width:100%; accent-color:var(--green); }
+  .sim-read{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .sim-eq{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-variant-numeric:tabular-nums;
+        line-height:1.9; }
+  .sim-eq div{ white-space:nowrap; overflow-x:auto; }
+  .sim-eq .cond{ color:var(--muted); font-size:.82rem; line-height:1.5;
+        border-bottom:1px solid var(--rule); padding-bottom:.35rem; margin-bottom:.3rem; }
+  .sim-eq sub, .sim-tag sub, .sim-meter sub{ font-size:.72em; }
+  .sim-eq .sym{ color:var(--muted); display:inline-block; width:2.2em; }
+  .sim-eq .val{ font-weight:700; }
+  .sim-meter + .sim-meter{ margin-top:.85rem; }
+  .sim-meter .top{ display:flex; justify-content:space-between; gap:.8rem;
+        align-items:baseline; }
+  .sim-meter .top b{ font-weight:600; }
+  .sim-meter .n{ font-variant-numeric:tabular-nums; font-weight:700; white-space:nowrap; }
+  .sim-bar{ position:relative; height:12px; border:1px solid var(--rule);
+        border-radius:6px; background:#fff; overflow:hidden; margin:.3rem 0 .2rem; }
+  .sim-bar i{ position:absolute; top:0; bottom:0; left:0; display:block;
+        background:#1f5d8c; }
+  .sim-bar i.grn{ background:#1e6b3c; }
+  .sim-bar.over i{ background:repeating-linear-gradient(45deg,
+        #1f5d8c 0 6px, #9dbdd4 6px 12px); }
+  .sim-tag{ font-size:.79rem; color:var(--muted); }
+  .sim-scale{ position:relative; height:1.05em; margin:.35rem 0 .3rem;
+        font-size:.72rem; color:var(--muted); }
+  .sim-scale span{ position:absolute; top:0; white-space:nowrap; }
+  .sim-scale .z{ left:0; }
+  .sim-scale .e{ right:0; }
+  .sim-scale .mgt{ left:32.67%; transform:translateX(-50%); color:var(--green);
+        font-weight:600; }
+  .sim-scale .mgt::before{ content:""; position:absolute; left:50%; top:-.55em;
+        width:1px; height:.5em; background:var(--green); opacity:.75; }
+  /* signed meter: zero in the middle, negative to the left */
+  .sim-bar.signed::after{ content:""; position:absolute; left:50%; top:-2px; bottom:-2px;
+        width:1px; background:var(--muted); opacity:.55; }
+  .sim-bar i.acc{ background:#5c6b62; }
+  .sim-chip{ display:inline-block; font-family:"Segoe UI", system-ui, sans-serif;
+        font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700;
+        border:1px solid var(--rule); border-radius:999px; padding:.1rem .55rem;
+        background:#fff; color:var(--muted); vertical-align:.08em; }
+  .sim-chip.go{ border-color:var(--green); color:var(--green); background:var(--green-soft); }
+  /* two stacked frames, full width */
+  .sim-eq .sym{ width:5.8em; }
+  .sim-stack{ display:grid; gap:.85rem; grid-template-columns:1fr; }
+  .sim-panel{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.5rem .6rem .35rem; }
+  .sim-panel .cap{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+        letter-spacing:.04em; color:var(--green); font-weight:700; margin:0 0 .3rem;
+        display:flex; justify-content:space-between; gap:.8rem; align-items:baseline; }
+  .sim-panel .cap em{ font-style:normal; font-weight:400; color:var(--muted);
+        font-size:.75rem; text-align:right; }
+  .sim-btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem;
+        font-weight:600; color:#fff; background:var(--green); border:1px solid var(--green);
+        border-radius:6px; padding:.38rem .95rem; cursor:pointer; }
+  .sim-btn:hover{ filter:brightness(1.08); }
+  .sim-btn.ghost{ background:#fff; color:var(--green); }
+  .sim-btnrow{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;
+        margin:.1rem 0 .9rem; }
+  .sim-readrow{ display:grid; gap:1rem; grid-template-columns:1fr; margin-top:.9rem; }
+  @media (min-width:640px){ .sim-readrow{ grid-template-columns:1fr 1fr; } }
+  .sim-lock{ display:none; font-family:"Segoe UI", system-ui, sans-serif; font-size:.79rem;
+        color:var(--muted); background:var(--green-soft); border-left:3px solid var(--green);
+        border-radius:0 4px 4px 0; padding:.35rem .6rem; margin:-.2rem 0 .1rem; }
+  .sim-controls input[type=range]:disabled{ opacity:.45; cursor:not-allowed; }
+  .sim-controls input[type=range]:disabled + output{ opacity:.45; }
+  .sim-signs{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.5rem .65rem; margin:.7rem 0 0;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; }
+  .sim-signs .row{ display:grid; grid-template-columns:5.4em 1.6em 1fr; align-items:baseline;
+        gap:.4rem; }
+  .sim-signs.wide .row{ grid-template-columns:6.4em 4.6em 1fr; }
+  .sim-signs .k{ color:var(--muted); font-size:.79rem; }
+  .sim-signs .sg{ font-size:1.15rem; font-weight:700; text-align:center;
+        font-variant-numeric:tabular-nums; color:var(--ink); }
+  .sim-signs .w{ color:var(--muted); font-size:.79rem; }
+  .sim-signs .rel{ margin-top:.4rem; padding-top:.4rem; border-top:1px solid var(--rule);
+        font-size:.82rem; color:var(--green); }
+  .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+        color:var(--muted); margin:.9rem 0 0; }
+  @media print{ .sim{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -393,6 +498,132 @@
     </ol>
   </div>
 
+
+  <!-- ===== FLCC-SIM v1 · N3-a · the unit trap =============================
+       LIFTABLE UNIT. Movement 1's rule, shown as the failure it prevents.
+
+       Deliberately uses objects that are NOT in Tasks 1 or 2 (no 2.5 g penny,
+       no 70 kg adult), so the arithmetic the tasks ask for stays the
+       student's. What this shows is the ERROR MODE and the free check:
+       substitute grams and the answer is a thousand times too big, and the
+       units of the result say so before the number does.
+       ====================================================================== -->
+  <div class="sim" id="simN3a">
+    <span class="label">Try it — what the unit rule is protecting you from</span>
+
+    <div class="sim-btnrow">
+      <span class="sim-tag" style="margin-right:.1rem">Weigh a</span>
+      <button type="button" class="sim-btn"       id="u3o0" aria-pressed="true">paperclip</button>
+      <button type="button" class="sim-btn ghost" id="u3o1" aria-pressed="false">apple</button>
+      <button type="button" class="sim-btn ghost" id="u3o2" aria-pressed="false">textbook</button>
+      <button type="button" class="sim-btn ghost" id="u3o3" aria-pressed="false">bicycle</button>
+    </div>
+
+    <div class="sim-grid">
+      <div class="sim-read">
+        <div class="sim-panel" style="margin-bottom:.7rem">
+          <p class="cap">Substituted as written <em id="u3WrongTag">wrong</em></p>
+          <div class="sim-eq" style="margin:0" id="u3WrongBox">
+            <div><span class="sym">w =</span> <span id="u3WrongSub">m g</span></div>
+            <div><span class="sym">w =</span> <span class="val" id="u3WrongVal">—</span></div>
+          </div>
+        </div>
+        <div class="sim-panel">
+          <p class="cap">Converted first, then substituted <em>right</em></p>
+          <div class="sim-eq" style="margin:0">
+            <div class="cond" id="u3Conv">convert: 1.0 g = 0.0010 kg</div>
+            <div><span class="sym">w =</span> <span id="u3RightSub">m g</span></div>
+            <div><span class="sym">w =</span> <span class="val" id="u3RightVal">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sim-read">
+        <div class="sim-tag fixed" id="u3Say"></div>
+        <div class="sim-signs" style="margin-top:.7rem">
+          <div class="row"><span class="k">out by</span><span class="sg" id="u3Factor">—</span><span class="w" id="u3FactorW"></span></div>
+          <div class="rel" id="u3Rel"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sim-foot">Neither line is more arithmetic than the other — the only difference is a
+    conversion done first. The penny in Task 1 and the adult in Task 2 are not in this list on purpose;
+    those two are yours to work.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N3-a. Vanilla, stateless apart from which object is picked. */
+  (function(){
+    var root = document.getElementById('simN3a'); if(!root) return;
+    var $ = function(id){ return document.getElementById(id); };
+    var G = 9.8;
+    /* none of these is the penny (2.5 g) or the adult (70 kg) */
+    var OBJ = [
+      {n:'paperclip', vs:'1.0', u:'g',  kg:0.0010, kgs:'0.0010'},
+      {n:'apple',     vs:'150', u:'g',  kg:0.150,  kgs:'0.150' },
+      {n:'textbook',  vs:'1.2', u:'kg', kg:1.2,    kgs:'1.2'   },
+      {n:'bicycle',   vs:'12',  u:'kg', kg:12,     kgs:'12'    }
+    ];
+    var pick = 0;
+
+    function fmt(x){
+      if(x >= 100)  return x.toFixed(0);
+      if(x >= 1)    return x.toFixed(2);
+      return x.toFixed(4);
+    }
+
+    function draw(){
+      var o = OBJ[pick], grams = (o.u === 'g'), w = o.kg*G;
+
+      $('u3Conv').textContent = grams
+        ? 'convert: ' + o.vs + ' g = ' + o.kgs + ' kg'
+        : 'already in kilograms — nothing to convert';
+      $('u3RightSub').textContent = '(' + o.kgs + ' kg)(9.8 m/s²)';
+      $('u3RightVal').textContent = fmt(w) + ' N';
+
+      if(grams){
+        var bad = parseFloat(o.vs)*G;
+        $('u3WrongSub').textContent = '(' + o.vs + ' g)(9.8 m/s²)';
+        $('u3WrongVal').textContent = fmt(bad) + '  g·m/s²';
+        $('u3WrongTag').textContent = 'wrong';
+        $('u3WrongBox').style.opacity = '1';
+        $('u3Factor').textContent = '1000×';
+        $('u3FactorW').textContent = 'too big';
+        $('u3Rel').innerHTML = 'And look at the unit it came out in: <b>g·m/s² is not a '
+          + 'newton.</b> The units caught the mistake before the number did — that is the free check.';
+        $('u3Say').innerHTML = 'The number <b>' + o.vs + '</b> went straight into the equation without '
+          + 'its unit being dealt with. Nothing later in the calculation will warn you; the answer just '
+          + 'comes out a thousand times too heavy and looks perfectly ordinary.';
+      } else {
+        $('u3WrongSub').textContent = '(' + o.vs + ' kg)(9.8 m/s²)';
+        $('u3WrongVal').textContent = fmt(w) + ' N';
+        $('u3WrongTag').textContent = 'same thing here';
+        $('u3WrongBox').style.opacity = '.55';
+        $('u3Factor').textContent = '1×';
+        $('u3FactorW').textContent = 'no error';
+        $('u3Rel').innerHTML = 'This one was already in kilograms, so both routes agree. <b>That is '
+          + 'exactly why the rule has to be a habit</b> — it is invisible on the cases where it does '
+          + 'not matter, and silent on the ones where it does.';
+        $('u3Say').innerHTML = 'Nothing goes wrong here, because the mass was handed to you in SI '
+          + 'already. Switch to the paperclip or the apple to see what the rule is for.';
+      }
+
+      OBJ.forEach(function(_,i){
+        var b = $('u3o'+i), on = (i === pick);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.className = 'sim-btn' + (on ? '' : ' ghost');
+      });
+    }
+
+    OBJ.forEach(function(_,i){
+      $('u3o'+i).addEventListener('click', function(){ pick = i; draw(); });
+    });
+    draw();
+    root.classList.add('on');
+  })();
+  </script>
+
   <p class="movement">Movement 3 &mdash; the third law, with numbers</p>
 
   <h2>Equal forces, unequal accelerations</h2>
@@ -431,6 +662,197 @@
     force you felt. It is simply attached to a building, and a = F/m with an enormous m gives an
     acceleration too small to see. Nothing in that sentence requires the forces to have been unequal.</p>
   </div>
+
+
+  <!-- ===== FLCC-SIM v1 · N3-b · both sides of the push ====================
+       LIFTABLE UNIT. Movement 3's central result, foundation line 6.
+
+       Placed AFTER Task 3 and after the takeaway box, so the page has already
+       said in words what this shows in motion.
+
+       SHOWS: the two force arrows, always identical whatever the masses
+       (line 4); the two acceleration arrows, to scale, pulling apart as the
+       masses differ (line 6); and the wall (line 7) -- same force, no visible
+       response, which is the misconception the audit wants tested.
+
+       DOES NOT SHOW the two accelerations as numbers. Those are Task 3 steps
+       1 and 3. The ratio is shown, because it is the takeaway box's own
+       sentence and the shape of the result is the point.
+       ====================================================================== -->
+  <div class="sim" id="simN3b">
+    <span class="label">Try it — one push, two bodies</span>
+
+    <div class="sim-controls">
+      <label><span class="nm">The push</span>
+        <input id="p3F" type="range" min="20" max="200" step="10" value="100"
+               aria-label="Size of the push, in newtons">
+        <output id="p3FOut" for="p3F">100 N</output></label>
+      <label><span class="nm">You + trolley</span>
+        <input id="p3M1" type="range" min="40" max="200" step="10" value="100"
+               aria-label="Your mass with the trolley, in kilograms">
+        <output id="p3M1Out" for="p3M1">100 kg</output></label>
+      <label><span class="nm">Them + trolley</span>
+        <input id="p3M2" type="range" min="40" max="400" step="10" value="200"
+               aria-label="Their mass with the trolley, in kilograms">
+        <output id="p3M2Out" for="p3M2">200 kg</output></label>
+    </div>
+
+    <div class="sim-btnrow">
+      <button type="button" class="sim-btn ghost" id="p3Wall">Push a wall instead</button>
+      <button type="button" class="sim-btn ghost" id="p3Reset" style="margin-left:auto">Reset</button>
+    </div>
+
+    <div class="sim-panel" style="margin-bottom:.8rem">
+      <svg id="p3Svg" viewBox="0 0 620 230" role="img"
+           aria-label="Two people on trolleys with their hands touching. The two force arrows point away from each other and are always drawn the same length. Below them, two acceleration arrows are drawn to scale and are not the same length unless the masses are equal.">
+        <defs>
+          <marker id="p3Hf" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1f5d8c"/></marker>
+          <marker id="p3Ha" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#5c6b62"/></marker>
+        </defs>
+        <line x1="14" y1="140" x2="606" y2="140" stroke="#1d2b23" stroke-width="2"/>
+        <g id="p3FigL"></g>
+        <g id="p3FigR"></g>
+        <rect id="p3Wl" x="366" y="30" width="0" height="110" fill="#eef2ef" stroke="#1d2b23" stroke-width="2" opacity="0"/>
+        <line id="p3F1" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#p3Hf)"/>
+        <line id="p3F2" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#p3Hf)"/>
+        <text id="p3F1Tx" text-anchor="end"   font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1f5d8c">F on you</text>
+        <text id="p3F2Tx" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1f5d8c">F on them</text>
+        <line id="p3A1" stroke="#5c6b62" stroke-width="2.4" marker-end="url(#p3Ha)"/>
+        <line id="p3A2" stroke="#5c6b62" stroke-width="2.4" marker-end="url(#p3Ha)"/>
+        <text id="p3A1Tx" text-anchor="end"   font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">a</text>
+        <text id="p3A2Tx" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">a</text>
+        <text x="310" y="214" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10.5" fill="#5c6b62">acceleration arrows, both to the same scale</text>
+      </svg>
+    </div>
+
+    <div class="sim-readrow">
+      <div class="sim-read">
+        <div class="sim-eq" aria-live="polite" style="margin-bottom:.7rem">
+          <div class="cond" id="p3Cond">equal masses would give equal accelerations — these are not equal</div>
+          <div><span class="sym">on you</span> <span class="val" id="p3FA">100 N</span></div>
+          <div><span class="sym">on them</span> <span class="val" id="p3FB">100 N</span> <span class="sim-chip">always equal</span></div>
+        </div>
+        <div class="sim-signs wide">
+          <div class="row"><span class="k">a ratio</span><span class="sg" id="p3Ratio">2 : 1</span><span class="w" id="p3RatioW">you : them — the inverse of the masses</span></div>
+          <div class="rel" id="p3Rel"></div>
+        </div>
+      </div>
+      <div class="sim-read">
+        <div class="sim-tag fixed">Drag either mass and watch the two force arrows: they stay the same
+        length as each other, always. Only the acceleration arrows move apart. <b>The force is shared;
+        the acceleration is not.</b></div>
+      </div>
+    </div>
+
+    <p class="sim-foot">The two accelerations are not printed as numbers — those are Task 3, and they
+    are yours. What is drawn is their <em>ratio</em>, which is the inverse of the masses, and the shape
+    of that result is the thing the words above are trying to say. Push the wall to see the limit case:
+    the same force, and a response too small to see.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N3-b. Vanilla, no dependencies. */
+  (function(){
+    var root = document.getElementById('simN3b'); if(!root) return;
+    var $ = function(id){ return document.getElementById(id); };
+    var ns = 'http://www.w3.org/2000/svg';
+    var GY = 140, LX = 220, RX = 400;        /* far enough apart to read */
+    var PXPN = 0.42;                          /* force arrows, px per newton  */
+    var PXPA = 30;                            /* accel arrows, px per m/s^2   */
+    var WALL = 20000;
+    var F = $('p3F'), M1 = $('p3M1'), M2 = $('p3M2');
+    var wall = false;
+
+    function mk(t,a,p){ var e=document.createElementNS(ns,t);
+      for(var k in a) e.setAttribute(k,a[k]); p.appendChild(e); return e; }
+    function figure(gid, x, face){
+      var g = $(gid), f = GY, hip = f-34, sho = f-56, hd = sho-10;
+      function ln(x1,y1,x2,y2){ mk('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:'#1d2b23',
+        'stroke-width':2,'stroke-linecap':'round'},g); }
+      mk('rect',{x:x-22,y:f-10,width:44,height:10,rx:2,fill:'#fff',stroke:'#1d2b23','stroke-width':1.6},g);
+      mk('circle',{cx:x-13,cy:f+2,r:4,fill:'#fff',stroke:'#1d2b23','stroke-width':1.4},g);
+      mk('circle',{cx:x+13,cy:f+2,r:4,fill:'#fff',stroke:'#1d2b23','stroke-width':1.4},g);
+      ln(x,hip,x,sho); ln(x,hip,x-6,f-10); ln(x,hip,x+6,f-10);
+      ln(x,sho,x+face*20,sho+6);                        /* the pushing arm */
+      ln(x,sho,x-face*9,sho+22);
+      mk('circle',{cx:x,cy:hd,r:6.5,fill:'#fff',stroke:'#1d2b23','stroke-width':2},g);
+    }
+    figure('p3FigL', LX, 1); figure('p3FigR', RX, -1);
+
+    function seg(el,x1,y1,x2,y2){
+      el.setAttribute('x1',x1.toFixed(1)); el.setAttribute('y1',y1.toFixed(1));
+      el.setAttribute('x2',x2.toFixed(1)); el.setAttribute('y2',y2.toFixed(1));
+    }
+    function at(el,x,y){ el.setAttribute('x',x.toFixed(1)); el.setAttribute('y',y.toFixed(1)); }
+
+    function gcdRatio(a,b){
+      var s = Math.min(a,b), r1 = a/s, r2 = b/s;
+      var f1 = (Math.abs(r1-Math.round(r1))<1e-9), f2 = (Math.abs(r2-Math.round(r2))<1e-9);
+      if(f1 && f2 && Math.max(r1,r2) <= 40) return Math.round(r1)+' : '+Math.round(r2);
+      return r1.toFixed(1)+' : '+r2.toFixed(1);
+    }
+
+    function draw(){
+      var f = +F.value, m1 = +M1.value, m2 = wall ? WALL : +M2.value;
+      var a1 = f/m1, a2 = f/m2;
+      var Lf = f*PXPN, L1 = a1*PXPA, L2 = a2*PXPA;
+
+      /* the wall replaces the right-hand figure */
+      $('p3FigR').setAttribute('opacity', wall ? '0' : '1');
+      $('p3Wl').setAttribute('opacity', wall ? '1' : '0');
+      $('p3Wl').setAttribute('x', 244);
+      $('p3Wl').setAttribute('width', wall ? 220 : 0);
+      $('p3M2').disabled = wall;
+
+      seg($('p3F1'), LX-6, GY-72, LX-6-Lf, GY-72);       /* on you: leftward  */
+      var f2x = wall ? 250 : RX+6;                       /* start at the contact point */
+      seg($('p3F2'), f2x, GY-72, f2x+Lf, GY-72);         /* on them: rightward */
+      at($('p3F1Tx'), LX-10-Lf, GY-78);
+      at($('p3F2Tx'), f2x+4+Lf, GY-78);
+
+      seg($('p3A1'), LX-6, GY+34, LX-6-L1, GY+34);
+      seg($('p3A2'), RX+6, GY+34, RX+6+Math.min(L2,190), GY+34);
+      at($('p3A1Tx'), LX-10-L1, GY+38);
+      at($('p3A2Tx'), RX+10+Math.min(L2,190), GY+38);
+      $('p3A2').setAttribute('opacity', L2 < 0.6 ? '0' : '1');
+      $('p3A2Tx').setAttribute('opacity', L2 < 0.6 ? '0' : '1');
+
+      $('p3FOut').textContent  = f + ' N';
+      $('p3M1Out').textContent = m1 + ' kg';
+      $('p3M2Out').textContent = wall ? 'a wall' : (m2 + ' kg');
+      $('p3FA').textContent = f + ' N';
+      $('p3FB').textContent = f + ' N';
+
+      $('p3Ratio').textContent  = wall ? '\u226B' : gcdRatio(m2, m1);
+      $('p3RatioW').textContent = wall
+        ? 'you accelerate; the wall effectively does not'
+        : 'you : them \u2014 the inverse of the masses';
+      $('p3Cond').textContent = wall
+        ? 'the wall is attached to a building'
+        : (m1 === m2 ? 'equal masses — and only then are the accelerations equal'
+                     : 'equal forces, unequal masses');
+      $('p3Rel').innerHTML = wall
+        ? 'The wall feels <b>every newton you pushed with</b>. Its acceleration is not zero — it is '
+          + 'just F divided by something enormous, which is too small to see. Nothing here needs the '
+          + 'forces to have been unequal.'
+        : (m1 === m2
+            ? 'The one case where equal forces do give equal accelerations: equal masses.'
+            : 'The heavier one accelerates <b>less</b>, by exactly the factor its mass is larger. '
+              + 'a = F/m, applied to each body separately.');
+
+      $('p3Wall').className = 'sim-btn' + (wall ? '' : ' ghost');
+      $('p3Wall').textContent = wall ? 'Back to the trolley' : 'Push a wall instead';
+    }
+
+    [F,M1,M2].forEach(function(el){ el.addEventListener('input', draw); });
+    $('p3Wall').addEventListener('click', function(){ wall = !wall; draw(); });
+    $('p3Reset').addEventListener('click', function(){
+      wall = false; F.value = 100; M1.value = 100; M2.value = 200; draw();
+    });
+    draw();
+    root.classList.add('on');
+  })();
+  </script>
 
   <ol class="tasks" start="5">
     <li>Go back to the wall in N2 and finish the argument properly: name the quantity that makes the
@@ -488,6 +910,137 @@
     <p>That is the open question from N2, and <b>N4</b> closes it. Do the geometry now; collect the
     physics there.</p>
   </div>
+
+
+  <!-- ===== FLCC-SIM v1 · N3-c · aiming the launcher =======================
+       LIFTABLE UNIT. Movement 4, foundation line 8.
+
+       Placed after Task 4 and after the "aiming is not the same as hitting"
+       box, so nothing here pre-empts the reasoning.
+
+       SHOWS the triangle to scale, the aim line, the 45-degree reference, and
+       tan(theta) = H / X as a number -- which is Task 4 step 2, the ratio the
+       student is asked to write BEFORE substituting, and the sanity check in
+       step 4.
+
+       DOES NOT SHOW theta. Taking the arctangent is step 3, and that one is
+       the student's. The footnote says so rather than leaving them hunting.
+       ====================================================================== -->
+  <div class="sim" id="simN3c">
+    <span class="label">Try it — where to point the barrel</span>
+
+    <div class="sim-controls">
+      <label><span class="nm">Height H</span>
+        <input id="g3H" type="range" min="0.5" max="4" step="0.1" value="2"
+               aria-label="Height of the target above the launcher, in metres">
+        <output id="g3HOut" for="g3H">2.0 m</output></label>
+      <label><span class="nm">Distance X</span>
+        <input id="g3X" type="range" min="0.5" max="4" step="0.1" value="2.5"
+               aria-label="Horizontal distance to the target, in metres">
+        <output id="g3XOut" for="g3X">2.5 m</output></label>
+    </div>
+
+    <div class="sim-grid">
+      <svg id="g3Svg" viewBox="0 0 340 300" role="img"
+           aria-label="A right triangle with the launcher at the bottom left corner, the horizontal distance X along the ground and the height H up to the target. The aim line is the hypotenuse. A dashed line at 45 degrees shows where the aim line would sit if the height and the distance were equal.">
+        <defs>
+          <marker id="g3Ha" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1e6b3c"/></marker>
+        </defs>
+        <line id="g345" stroke="#5c6b62" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
+        <text id="g345Tx" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">45°</text>
+        <line id="g3Base" stroke="#1d2b23" stroke-width="1.8"/>
+        <line id="g3Rise" stroke="#1d2b23" stroke-width="1.8" stroke-dasharray="5 4"/>
+        <line id="g3Aim"  stroke="#1e6b3c" stroke-width="2.4" marker-end="url(#g3Ha)"/>
+        <rect id="g3Sq" fill="none" stroke="#5c6b62" stroke-width="1" opacity=".7"/>
+        <circle id="g3Tgt" r="7" fill="#fff" stroke="#a8551f" stroke-width="2.2"/>
+        <text id="g3XTx" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1d2b23">X</text>
+        <text id="g3HTx" text-anchor="start"  font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1d2b23">H</text>
+        <text id="g3ThTx" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1e6b3c">θ</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-eq" aria-live="polite">
+          <div class="cond">θ sits between the aim line and the ground</div>
+          <div><span class="sym">tan θ =</span> H / X</div>
+          <div><span class="sym">tan θ =</span> <span id="g3Sub">2.0 / 2.5</span></div>
+          <div><span class="sym">tan θ =</span> <span class="val" id="g3Tan">0.80</span></div>
+        </div>
+        <div class="sim-signs wide">
+          <div class="row"><span class="k">H against X</span><span class="sg" id="g3Cmp">&lt;</span><span class="w" id="g3CmpW">H is the shorter side</span></div>
+          <div class="rel" id="g3Rel"></div>
+        </div>
+        <div class="sim-tag fixed" style="margin-top:.7rem">Slide H past X and watch the aim line cross
+        the dashed 45° guide. That crossing <b>is</b> the check in Task 4: the angle is below 45° while
+        H &lt; X, and above it when H &gt; X. You never need the angle itself to know which side you
+        are on.</div>
+      </div>
+    </div>
+
+    <p class="sim-foot">The angle itself is not shown, and that is deliberate — taking the arctangent is
+    step 3 of Task 4. What is here is the ratio you are asked to write down before substituting
+    anything, and the picture that tells you whether your answer is believable once you have it.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N3-c. Vanilla, no dependencies, no state kept anywhere. */
+  (function(){
+    var root = document.getElementById('simN3c'); if(!root) return;
+    var $ = function(id){ return document.getElementById(id); };
+    var OX = 40, OY = 264, PPM = 58;      /* origin and pixels per metre, absolute */
+    var H = $('g3H'), X = $('g3X');
+
+    function seg(el,x1,y1,x2,y2){
+      el.setAttribute('x1',x1.toFixed(1)); el.setAttribute('y1',y1.toFixed(1));
+      el.setAttribute('x2',x2.toFixed(1)); el.setAttribute('y2',y2.toFixed(1));
+    }
+    function at(el,x,y){ el.setAttribute('x',x.toFixed(1)); el.setAttribute('y',y.toFixed(1)); }
+
+    function draw(){
+      var h = +H.value, x = +X.value;
+      var px = OX + x*PPM, py = OY - h*PPM;
+
+      seg($('g3Base'), OX, OY, px, OY);
+      seg($('g3Rise'), px, OY, px, py);
+      seg($('g3Aim'),  OX, OY, px, py);
+
+      /* the 45 degree reference, drawn the length of whichever side is longer */
+      var d = Math.max(h, x)*PPM;
+      seg($('g345'), OX, OY, OX + d, OY - d);
+      at($('g345Tx'), OX + d + 3, OY - d - 3);
+
+      $('g3Tgt').setAttribute('cx', px.toFixed(1));
+      $('g3Tgt').setAttribute('cy', py.toFixed(1));
+
+      /* right-angle mark at the foot of the rise */
+      $('g3Sq').setAttribute('x', (px-11).toFixed(1));
+      $('g3Sq').setAttribute('y', (OY-11).toFixed(1));
+      $('g3Sq').setAttribute('width', 11); $('g3Sq').setAttribute('height', 11);
+
+      at($('g3XTx'), (OX+px)/2, OY+16);
+      at($('g3HTx'), px+7, (OY+py)/2);
+      at($('g3ThTx'), OX+22, OY-9);
+
+      var tan = h/x;
+      $('g3HOut').textContent = h.toFixed(1) + ' m';
+      $('g3XOut').textContent = x.toFixed(1) + ' m';
+      $('g3Sub').textContent  = h.toFixed(1) + ' / ' + x.toFixed(1);
+      $('g3Tan').textContent  = tan.toFixed(2);
+
+      var near = Math.abs(h - x) < 0.05;
+      $('g3Cmp').textContent  = near ? '=' : (h < x ? '<' : '>');
+      $('g3CmpW').textContent = near ? 'the two sides are equal'
+                              : (h < x ? 'H is the shorter side' : 'H is the longer side');
+      $('g3Rel').innerHTML = near
+        ? 'H = X, so tan θ = 1 and the aim line lies <b>exactly on the 45° guide</b>.'
+        : (h < x ? 'tan θ &lt; 1, so the angle is <b>below 45°</b> — and the aim line sits under the guide.'
+                 : 'tan θ &gt; 1, so the angle is <b>above 45°</b> — and the aim line sits over the guide.');
+    }
+
+    [H,X].forEach(function(el){ el.addEventListener('input', draw); });
+    draw();
+    root.classList.add('on');
+  })();
+  </script>
 
   <div class="callback">
     <span class="label">Back to your prediction</span>
