@@ -422,10 +422,13 @@
       <span class="sim-tag">Or drag the time slider yourself.</span>
     </div>
 
+    <p class="sim-tag" style="margin:0 0 .6rem">One drop, described twice. The two panels are the
+    same event on the same scale — what changes between them is only who is doing the describing.</p>
+
     <div class="sim-stack">
       <div class="sim-panel">
-        <p class="cap">From the road <em>you are standing on the verge, watching it go past</em></p>
-        <svg id="s1SvgG" viewBox="0 0 560 170" role="img"
+        <p class="cap">From the road <em>you are on the verge. The ruler is painted on the road, so the van travels along it.</em></p>
+        <svg id="s1SvgG" viewBox="0 0 560 184" role="img"
              aria-label="The van seen from the roadside. The released ball travels forward with the van while it falls, tracing a curved path over the ground.">
           <defs>
             <marker id="s1Head" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#5c6b62"/></marker>
@@ -435,13 +438,13 @@
           <rect id="s1VanG" fill="none" stroke="#1d2b23" stroke-width="2" rx="4"/>
           <line id="s1FeetG" stroke="#1e6b3c" stroke-width="3"/>
           <circle id="s1BallG" r="5.5" fill="#a8551f"/>
-          <text id="s1MissG" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62"></text>
+          <text id="s1TravG" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62"></text>
         </svg>
       </div>
 
       <div class="sim-panel">
-        <p class="cap">From inside the van <em>you are the passenger — this is all you can see</em></p>
-        <svg id="s1SvgV" viewBox="0 0 560 170" role="img"
+        <p class="cap">From inside the van <em>no windows — so no road ruler. The floor is ruled from your feet.</em></p>
+        <svg id="s1SvgV" viewBox="0 0 560 184" role="img"
              aria-label="The same drop seen by the passenger. With steady speed the ball falls straight down to the feet. With any change of speed it drifts and misses.">
           <g id="s1RoadV"></g>
           <polyline id="s1PathV" fill="none" stroke="#a8551f" stroke-width="1.6" stroke-dasharray="4 4"/>
@@ -466,10 +469,12 @@
       </div>
     </div>
 
-    <p class="sim-foot">Both panels are drawn to the same scale, so you can read one against the other.
-    The speeds are small enough to fit the picture — the argument does not depend on the number, which
-    is the whole point. Drag the speed slider through its whole range and watch the lower panel: it does
-    not move. Then give the van the smallest change of speed and watch the ball miss.</p>
+    <p class="sim-foot">The upper panel is measured against the road; the lower one can only be
+    measured against the van itself, which is why its ruler starts at your feet. Both are the same
+    drop at the same scale. Drag the speed slider through its whole range: the upper panel sends the
+    van right across the road and the lower panel does not change at all — that is the point. Then give
+    the van the smallest change of speed and watch the ball miss your feet. The speeds here are small
+    enough to keep the van on screen; the argument does not depend on the number.</p>
   </div>
 
   <script>
@@ -485,26 +490,42 @@
     function px(m){ return m*PPM + 12; }
     function yy(m){ return GY - m*PPM; }
 
-    /* road surface + distance ticks, drawn once in each panel */
-    ['s1RoadG','s1RoadV'].forEach(function(gid){
-      var g = $(gid);
-      var l = document.createElementNS(ns,'line');
-      l.setAttribute('x1',6); l.setAttribute('y1',GY); l.setAttribute('x2',556); l.setAttribute('y2',GY);
-      l.setAttribute('stroke','#1d2b23'); l.setAttribute('stroke-width',2); g.appendChild(l);
+    /* XOFF centres the van in the lower panel. The lower panel is the SAME
+       SCALE as the upper one; what it must not carry is the road's ruler,
+       because the road is exactly the thing the passenger cannot see. */
+    var XOFF = 154;
+    function mk(tag,attrs,parent){
+      var e = document.createElementNS(ns,tag);
+      for(var k in attrs) e.setAttribute(k,attrs[k]);
+      parent.appendChild(e); return e;
+    }
+    function label(parent,x,y,txt,size){
+      mk('text',{x:x,y:y,'text-anchor':'middle','font-family':'Segoe UI, system-ui, sans-serif',
+                 'font-size':size||9.5,fill:'#5c6b62'},parent).textContent = txt;
+    }
+
+    /* UPPER PANEL — the road, with its painted ruler */
+    (function(){
+      var g = $('s1RoadG');
+      mk('line',{x1:6,y1:GY,x2:556,y2:GY,stroke:'#1d2b23','stroke-width':2},g);
       for(var m=0; m<=9; m++){
-        var k = document.createElementNS(ns,'line');
-        k.setAttribute('x1',px(m)); k.setAttribute('y1',GY);
-        k.setAttribute('x2',px(m)); k.setAttribute('y2',GY+6);
-        k.setAttribute('stroke','#5c6b62'); k.setAttribute('stroke-width',1); k.setAttribute('opacity','.6');
-        g.appendChild(k);
-        var tx = document.createElementNS(ns,'text');
-        tx.setAttribute('x',px(m)); tx.setAttribute('y',GY+19); tx.setAttribute('text-anchor','middle');
-        tx.setAttribute('font-family','Segoe UI, system-ui, sans-serif');
-        tx.setAttribute('font-size','9.5'); tx.setAttribute('fill','#5c6b62');
-        tx.textContent = m + (m===9 ? ' m' : '');
-        g.appendChild(tx);
+        mk('line',{x1:px(m),y1:GY,x2:px(m),y2:GY+6,stroke:'#5c6b62','stroke-width':1,opacity:'.6'},g);
+        label(g,px(m),GY+19,String(m));
       }
-    });
+      label(g,px(4.5),GY+32,'metres along the road',9.5);
+    })();
+
+    /* LOWER PANEL — no road. The van floor, ruled from the passenger's feet. */
+    (function(){
+      var g = $('s1RoadV'), F = px(X0+DX) + XOFF;
+      mk('line',{x1:F-96,y1:GY,x2:F+96,y2:GY,stroke:'#1d2b23','stroke-width':2},g);
+      for(var i=-6;i<=6;i++){
+        var d = i*0.25, x = F + d*PPM, major = (i%2===0);
+        mk('line',{x1:x,y1:GY,x2:x,y2:GY+(major?6:3),stroke:'#5c6b62','stroke-width':1,opacity:'.6'},g);
+        if(major) label(g,x,GY+19,(d===0?'0':(d>0?'+':'\u2212')+Math.abs(d).toFixed(1)));
+      }
+      label(g,F,GY+32,'metres from your feet',9.5);
+    })();
 
     function setRect(el,x,y,w,h){
       el.setAttribute('x',x.toFixed(1)); el.setAttribute('y',y.toFixed(1));
@@ -526,12 +547,16 @@
       setLine($('s1FeetG'), px(vanG+DX)-7, GY, px(vanG+DX)+7, GY);
       $('s1BallG').setAttribute('cx', px(ballG).toFixed(1));
       $('s1BallG').setAttribute('cy', yy(yBall).toFixed(1));
+      /* how far the van has travelled along the road, stated on the panel */
+      $('s1TravG').setAttribute('x', (px(vanG + VANL/2)).toFixed(1));
+      $('s1TravG').setAttribute('y', (yy(VANH) - 8).toFixed(1));
+      $('s1TravG').textContent = 'van has travelled ' + (vanG - X0).toFixed(2) + ' m';
 
       /* --- van frame: the van is still, the ball drifts by -1/2 a t^2 ------ */
       var ballV = X0 + DX - 0.5*A*t*t;
-      setRect($('s1VanV'), px(X0), yy(VANH), px(VANL), px(VANH));
-      setLine($('s1FeetV'), px(X0+DX)-7, GY, px(X0+DX)+7, GY);
-      $('s1BallV').setAttribute('cx', px(ballV).toFixed(1));
+      setRect($('s1VanV'), px(X0)+XOFF, yy(VANH), px(VANL), px(VANH));
+      setLine($('s1FeetV'), px(X0+DX)+XOFF-7, GY, px(X0+DX)+XOFF+7, GY);
+      $('s1BallV').setAttribute('cx', (px(ballV)+XOFF).toFixed(1));
       $('s1BallV').setAttribute('cy', yy(yBall).toFixed(1));
 
       /* traced paths */
@@ -539,7 +564,7 @@
       for(var i=0;i<=n;i++){
         var tt = t*i/n, yb = Math.max(0, H - 0.5*G*tt*tt);
         pg.push(px(X0+DX+V*tt).toFixed(1)+','+yy(yb).toFixed(1));
-        pv.push(px(X0+DX-0.5*A*tt*tt).toFixed(1)+','+yy(yb).toFixed(1));
+        pv.push((px(X0+DX-0.5*A*tt*tt)+XOFF).toFixed(1)+','+yy(yb).toFixed(1));
       }
       $('s1PathG').setAttribute('points', pg.join(' '));
       $('s1PathV').setAttribute('points', pv.join(' '));
@@ -555,12 +580,12 @@
       var showMiss = landed && Math.abs(landOff) > 0.005;
       $('s1MissLn').setAttribute('opacity', showMiss ? '1' : '0');
       if(showMiss){
-        setLine($('s1MissLn'), px(X0+DX), GY-5, px(X0+DX+landOff), GY-5);
-        $('s1MissV').setAttribute('x', px(X0+DX+landOff/2).toFixed(1));
+        setLine($('s1MissLn'), px(X0+DX)+XOFF, GY-5, px(X0+DX+landOff)+XOFF, GY-5);
+        $('s1MissV').setAttribute('x', (px(X0+DX+landOff/2)+XOFF).toFixed(1));
         $('s1MissV').setAttribute('y', (GY-11).toFixed(1));
         $('s1MissV').textContent = Math.abs(landOff).toFixed(2) + ' m';
       } else { $('s1MissV').textContent = landed ? 'at your feet' : ''; }
-      if(!landed){ $('s1MissV').setAttribute('x', px(X0+DX).toFixed(1)); $('s1MissV').setAttribute('y', (GY-10).toFixed(1)); }
+      if(!landed){ $('s1MissV').setAttribute('x', (px(X0+DX)+XOFF).toFixed(1)); $('s1MissV').setAttribute('y', (GY-11).toFixed(1)); }
 
       var chip = $('s1Chip');
       if(Math.abs(landOff) < 0.005){ chip.textContent = 'nothing to detect'; chip.className = 'sim-chip'; }
