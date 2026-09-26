@@ -703,15 +703,19 @@
     </div>
 
     <div class="sim-panel" style="margin-bottom:.8rem">
-      <svg id="p3Svg" viewBox="0 0 560 230" role="img"
+      <svg id="p3Svg" viewBox="0 0 560 234" role="img"
            aria-label="Two people on trolleys with their hands touching. The two force arrows point away from each other and are always drawn the same length. Below them, two acceleration arrows are drawn to scale and are not the same length unless the masses are equal.">
         <defs>
           <marker id="p3Hf" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1f5d8c"/></marker>
           <marker id="p3Ha" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#5c6b62"/></marker>
         </defs>
         <line x1="14" y1="140" x2="546" y2="140" stroke="#1d2b23" stroke-width="2"/>
+        <rect id="p3LoadL" fill="#eef2ef" stroke="#1d2b23" stroke-width="1.5"/>
+        <rect id="p3LoadR" fill="#eef2ef" stroke="#1d2b23" stroke-width="1.5"/>
         <g id="p3FigL"></g>
         <g id="p3FigR"></g>
+        <text id="p3MLTx" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" font-weight="600" fill="#1d2b23">100 kg</text>
+        <text id="p3MRTx" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" font-weight="600" fill="#1d2b23">200 kg</text>
         <rect id="p3Wl" x="366" y="30" width="0" height="110" fill="#eef2ef" stroke="#1d2b23" stroke-width="2" opacity="0"/>
         <line id="p3F1" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#p3Hf)"/>
         <line id="p3F2" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#p3Hf)"/>
@@ -721,7 +725,7 @@
         <line id="p3A2" stroke="#5c6b62" stroke-width="2.4" marker-end="url(#p3Ha)"/>
         <text id="p3A1Tx" text-anchor="end"   font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">a</text>
         <text id="p3A2Tx" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">a</text>
-        <text x="310" y="214" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10.5" fill="#5c6b62">acceleration arrows, both to the same scale</text>
+        <text x="280" y="218" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10.5" fill="#5c6b62">acceleration arrows, both to the same scale</text>
       </svg>
     </div>
 
@@ -769,9 +773,9 @@
       var g = $(gid), f = GY, hip = f-34, sho = f-56, hd = sho-10;
       function ln(x1,y1,x2,y2){ mk('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:'#1d2b23',
         'stroke-width':2,'stroke-linecap':'round'},g); }
-      mk('rect',{x:x-22,y:f-10,width:44,height:10,rx:2,fill:'#fff',stroke:'#1d2b23','stroke-width':1.6},g);
-      mk('circle',{cx:x-13,cy:f+2,r:4,fill:'#fff',stroke:'#1d2b23','stroke-width':1.4},g);
-      mk('circle',{cx:x+13,cy:f+2,r:4,fill:'#fff',stroke:'#1d2b23','stroke-width':1.4},g);
+      mk('rect',{x:x-25,y:f-10,width:50,height:10,rx:2,fill:'#fff',stroke:'#1d2b23','stroke-width':1.6},g);
+      mk('circle',{cx:x-15,cy:f+2,r:4,fill:'#fff',stroke:'#1d2b23','stroke-width':1.4},g);
+      mk('circle',{cx:x+15,cy:f+2,r:4,fill:'#fff',stroke:'#1d2b23','stroke-width':1.4},g);
       ln(x,hip,x,sho); ln(x,hip,x-6,f-10); ln(x,hip,x+6,f-10);
       ln(x,sho,x+face*32,sho+6);                        /* the pushing arm -- reaches contact */
       ln(x,sho,x-face*9,sho+22);
@@ -804,16 +808,33 @@
       $('p3Wl').setAttribute('width', wall ? 220 : 0);
       $('p3M2').disabled = wall;
 
+      /* the load on each trolley grows with its mass, so the sliders are
+         visible in the picture and not only in the numbers */
+      function load(id, m, x){
+        var h = Math.max(6, Math.min(m, 400)*0.13), w = 22;
+        var e = $(id);
+        e.setAttribute('x', (x - w/2).toFixed(1));
+        e.setAttribute('y', (GY - 10 - h).toFixed(1));
+        e.setAttribute('width', w); e.setAttribute('height', h.toFixed(1));
+      }
+      load('p3LoadL', m1, LX - 12);
+      $('p3LoadR').setAttribute('opacity', wall ? '0' : '1');
+      if(!wall) load('p3LoadR', m2, RX + 12);
+      $('p3MLTx').setAttribute('x', LX); $('p3MLTx').setAttribute('y', GY + 24);
+      $('p3MLTx').textContent = m1 + ' kg';
+      $('p3MRTx').setAttribute('x', RX); $('p3MRTx').setAttribute('y', GY + 24);
+      $('p3MRTx').textContent = wall ? 'a wall' : (m2 + ' kg');
+
       seg($('p3F1'), LX-6, GY-72, LX-6-Lf, GY-72);       /* on you: leftward  */
       var f2x = wall ? 264 : RX+6;                       /* start at the contact point */
       seg($('p3F2'), f2x, GY-72, f2x+Lf, GY-72);         /* on them: rightward */
       at($('p3F1Tx'), LX-10-Lf, GY-78);
       at($('p3F2Tx'), f2x+4+Lf, GY-78);
 
-      seg($('p3A1'), LX-6, GY+34, LX-6-L1, GY+34);
-      seg($('p3A2'), RX+6, GY+34, RX+6+Math.min(L2,190), GY+34);
-      at($('p3A1Tx'), LX-10-L1, GY+38);
-      at($('p3A2Tx'), RX+10+Math.min(L2,190), GY+38);
+      seg($('p3A1'), LX-6, GY+42, LX-6-L1, GY+42);
+      seg($('p3A2'), RX+6, GY+42, RX+6+Math.min(L2,190), GY+42);
+      at($('p3A1Tx'), LX-10-L1, GY+46);
+      at($('p3A2Tx'), RX+10+Math.min(L2,190), GY+46);
       $('p3A2').setAttribute('opacity', L2 < 0.6 ? '0' : '1');
       $('p3A2Tx').setAttribute('opacity', L2 < 0.6 ? '0' : '1');
 
@@ -931,10 +952,10 @@
     <span class="label">Try it — the arrow leaves as the monkey lets go</span>
 
     <div class="sim-controls">
-      <label><span class="nm">Aim</span>
-        <input id="k3Aim" type="range" min="0.4" max="3.2" step="0.05" value="2.9"
-               aria-label="Where along the target line you are aiming">
-        <output id="k3AimOut" for="k3Aim">above</output></label>
+      <label><span class="nm">Launch angle</span>
+        <input id="k3Ang" type="range" min="10" max="80" step="0.1" value="55"
+               aria-label="Angle of the launcher above the horizontal, in degrees">
+        <output id="k3AngOut" for="k3Ang">55.0°</output></label>
       <label><span class="nm">Arrow speed</span>
         <input id="k3V" type="range" min="4" max="14" step="0.5" value="9"
                aria-label="Speed the arrow leaves the barrel, in metres per second">
@@ -969,8 +990,9 @@
       <div class="sim-read">
         <div class="sim-signs wide">
           <div class="row"><span class="k">result</span><span class="sg" id="k3Mark">—</span><span class="w" id="k3MarkW">fire to find out</span></div>
-          <div class="rel" id="k3Rel">Point the launcher, then fire. The monkey lets go at the same
-          instant — it does not wait, and it does not know you are there.</div>
+          <div class="row" style="grid-template-columns:5.6em 1fr"><span class="k">speed splits</span><span class="w" id="k3Split">—</span></div>
+          <div class="rel" id="k3Rel">Set the angle, set the speed, then fire. The monkey lets go at
+          the same instant — it does not wait, and it does not know you are there.</div>
         </div>
         <div class="sim-tag fixed" style="margin-top:.7rem">Once you have found the aim that works,
         <b>change the speed and fire again</b>. And again. The arrow takes a different path every time
@@ -978,8 +1000,10 @@
       </div>
     </div>
 
-    <p class="sim-foot">Aiming straight at a falling target works, and it does not care how fast you
-    shoot. <b>Why</b> it works is the open question this note leaves for Note 4 — do not let watching
+    <p class="sim-foot">The two controls are independent: the angle turns the barrel, the speed
+    decides how hard it fires, and neither touches the other — watch the split under the result, the
+    same launch speed shared differently between across and up. Aiming straight at a falling target
+    works, and it does not care how fast you shoot. <b>Why</b> it works is the open question this note leaves for Note 4 — do not let watching
     it happen convince you that you have explained it.</p>
   </div>
 
@@ -992,7 +1016,7 @@
     var G = 9.8, PPM = 82, OX = 40, OY = 310;    /* absolute: 82 px per metre */
     var X = 2.5, H = 2.0;                        /* the setup from Task 4      */
     var SLOW = 3;                                /* seconds of animation per second of flight */
-    var AIM = $('k3Aim'), V = $('k3V');
+    var ANG = $('k3Ang'), V = $('k3V');
     var raf = null, t0 = 0, frozen = null;
 
     function px(m){ return OX + m*PPM; }
@@ -1011,8 +1035,9 @@
     })();
 
     function geom(){
-      var aim = +AIM.value, v = +V.value;
-      var th = Math.atan2(aim, X);
+      var v = +V.value;
+      var th = (+ANG.value)*Math.PI/180;       /* the angle IS the control now */
+      var aim = X*Math.tan(th);                /* where that line crosses the target */
       var tHit = X/(v*Math.cos(th));            /* when the arrow reaches the monkey's line */
       var tMonkeyDown = Math.sqrt(2*H/G);
       var yA = function(t){ return v*Math.sin(th)*t - 0.5*G*t*t; };
@@ -1025,7 +1050,7 @@
       if(g.tHit > g.tDown + 1e-9)  return {k:'short', gap:0};
       if(g.yA(g.tHit) <= 0)        return {k:'short', gap:0};
       var gap = g.yA(g.tHit) - g.yM(g.tHit);    /* = X tan(th) - H, speed-independent */
-      if(Math.abs(gap) < 0.05)     return {k:'hit', gap:0};
+      if(Math.abs(gap) < 0.03)     return {k:'hit', gap:0};
       return {k:(gap > 0 ? 'over' : 'under'), gap:Math.abs(gap)};
     }
 
@@ -1044,10 +1069,12 @@
       mk('rect',{x:px(0)-12,y:py(0.12),width:24,height:14,rx:2,fill:'#fff',
                  stroke:'#1d2b23','stroke-width':1.6},lg);
 
-      var d = g.aim - H;
-      $('k3AimOut').textContent = Math.abs(d) < 0.03 ? 'at the monkey'
-        : (d > 0 ? '+' : '−') + Math.abs(d).toFixed(2) + ' m';
+      $('k3AngOut').textContent = (+ANG.value).toFixed(1) + '°';
       $('k3VOut').textContent = g.v.toFixed(1) + ' m/s';
+      /* the two controls are independent; showing the split makes that plain */
+      $('k3Split').textContent = g.v.toFixed(1) + ' m/s  =  '
+        + (g.v*Math.cos(g.th)).toFixed(1) + ' across  +  '
+        + (g.v*Math.sin(g.th)).toFixed(1) + ' up';
       return g;
     }
 
@@ -1130,14 +1157,15 @@
       place(0, g); trace(0, g);
       $('k3Bang').setAttribute('opacity','0'); $('k3Gap').setAttribute('opacity','0');
       $('k3Mark').textContent = '—'; $('k3MarkW').textContent = 'fire to find out';
-      $('k3Rel').innerHTML = 'Point the launcher, then fire. The monkey lets go at the same instant — '
+      $('k3Rel').innerHTML = 'Set the angle, set the speed, then fire. The monkey lets go at the same instant — '
         + 'it does not wait, and it does not know you are there.';
     }
 
-    [AIM,V].forEach(function(el){ el.addEventListener('input', reset); });
+    [ANG,V].forEach(function(el){ el.addEventListener('input', reset); });
     $('k3Fire').addEventListener('click', fire);
-    $('k3Snap').addEventListener('click', function(){ AIM.value = H; reset(); });
-    $('k3Reset').addEventListener('click', function(){ AIM.value = 2.9; V.value = 9; reset(); });
+    $('k3Snap').addEventListener('click', function(){
+      ANG.value = (Math.atan2(H, X)*180/Math.PI).toFixed(1); reset(); });
+    $('k3Reset').addEventListener('click', function(){ ANG.value = 55; V.value = 9; reset(); });
     reset();
     root.classList.add('on');
   })();
