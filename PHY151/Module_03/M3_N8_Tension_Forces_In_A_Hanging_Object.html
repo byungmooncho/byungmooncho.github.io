@@ -278,7 +278,14 @@
   .sim-bar.over i{ background:repeating-linear-gradient(45deg,
         #1f5d8c 0 6px, #9dbdd4 6px 12px); }
   .sim-tag{ font-size:.79rem; color:var(--muted); }
-  .sim-tag.fixed{ color:var(--green); font-weight:600; }
+  .sim-scale{ position:relative; height:1.05em; margin:.35rem 0 .3rem;
+        font-size:.72rem; color:var(--muted); }
+  .sim-scale span{ position:absolute; top:0; white-space:nowrap; }
+  .sim-scale .z{ left:0; }
+  .sim-scale .e{ right:0; }
+  .sim-scale .mgt{ left:62.5%; transform:translateX(-50%); }
+  .sim-scale .mgt::before{ content:""; position:absolute; left:50%; top:-.5em;
+        width:1px; height:.45em; background:var(--muted); opacity:.6; }
   .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
         color:var(--muted); margin:.9rem 0 0; }
   @media print{ .sim{ display:none !important; } }
@@ -440,13 +447,13 @@
                aria-label="Angle theta measured from the ceiling, in degrees">
         <output id="simThOut" for="simTh">30°</output></label>
       <label><span class="nm">Mass m</span>
-        <input id="simM" type="range" min="1" max="10" step="0.5" value="2"
+        <input id="simM" type="range" min="2" max="5" step="0.5" value="2"
                aria-label="Mass of the hanging object, in kilograms">
         <output id="simMOut" for="simM">2.0 kg</output></label>
     </div>
 
     <div class="sim-grid">
-      <svg id="simSvg" viewBox="0 0 480 330" role="img"
+      <svg id="simSvg" viewBox="0 0 480 360" role="img"
            aria-label="A mass hanging from a ceiling by two strings of equal length. As the angle slider changes, the strings flatten or steepen and the two tension arrows change length. The numbers beside the figure give the tension and its two components.">
         <defs>
           <marker id="simHeadT" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f5d8c"/></marker>
@@ -464,7 +471,7 @@
         <text id="simMassTx" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">m</text>
         <text id="simT2Tx" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1f5d8c">T</text>
         <text id="simWTx" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#a8551f">mg</text>
-        <text id="simOff" x="22" y="318" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1f5d8c" opacity="0">the tension arrow is longer than this frame</text>
+        <text id="simOff" x="22" y="348" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1f5d8c" opacity="0">the tension arrow is longer than this frame</text>
       </svg>
 
       <div class="sim-read">
@@ -483,15 +490,17 @@
         <div class="sim-meter">
           <div class="top"><b>Horizontal pull, each string</b><span class="n" id="simTxN">17.0 N</span></div>
           <div class="sim-bar" id="simBarXw"><i id="simBarX"></i></div>
+          <div class="sim-scale" aria-hidden="true"><span class="z">0</span><span class="mgt">mg</span><span class="e">1.6&hairsp;mg</span></div>
           <div class="sim-tag" id="simTagX">T cos θ = mg / (2 tan θ)</div>
         </div>
       </div>
     </div>
 
-    <p class="sim-foot">Equal string lengths, so equal angles. The figure shows the two tensions and
-    the weight; the bars beside it split each tension into its two components. The weight arrow keeps
-    the same length at every setting and the tension arrows are drawn relative to it. Below about 12°
-    the tension arrow is longer than the frame will hold — the number does not stop.</p>
+    <p class="sim-foot">Equal string lengths, so equal angles. The figure is drawn to a fixed scale
+    in newtons, so every arrow — the weight included — changes length when you change the mass. The two
+    bars use a different scale: they are drawn as a fraction of the object's own weight, which is why
+    the vertical one holds still while you drag the angle. When an arrow would be longer than the frame
+    the drawing stops and the number keeps going.</p>
   </div>
 
   <script>
@@ -499,7 +508,11 @@
   (function(){
     var root = document.getElementById('simN8'); if(!root) return;
     var $ = function(id){ return document.getElementById(id); };
-    var G = 9.8, CX = 240, Y0 = 46, LW = 85, CAP = 185, MAXREF = 1.6;
+    var G = 9.8, CX = 240, Y0 = 46, CAP = 185, MAXREF = 1.6;
+    /* Absolute scale: the figure is drawn in newtons, not in multiples of mg,
+       so the weight arrow answers the mass slider. Full scale is the heaviest
+       setting: 5 kg -> mg = 49 N -> 130 px. */
+    var PXPN = 130/(5*G);
     var SPAN = 190, DROPMAX = 165;
     var th = $('simTh'), ms = $('simM');
 
@@ -531,11 +544,12 @@
       var D = Math.max(3, drop/t);
       var mx = CX, my = Y0 + drop;
       var mg = m*G, T = mg/(2*Math.sin(r)), Ty = mg/2, Tx = T*Math.cos(r);
+      var LW = mg*PXPN;
 
       /* geometry */
       var len = Math.sqrt(D*D + drop*drop);
       var ux = D/len, uy = drop/len;
-      var Lt = Math.min((T/mg)*LW, CAP);
+      var Lt = Math.min(T*PXPN, CAP);
 
       seg($('simS1'), mx-D, Y0, mx, my);
       seg($('simS2'), mx+D, Y0, mx, my);
@@ -547,7 +561,7 @@
       at($('simMassTx'), mx, my+4.5);
       at($('simT2Tx'), mx + ux*Lt + 10, my - uy*Lt + 14);
       at($('simWTx'), mx + 10, my + LW);
-      $('simOff').setAttribute('opacity', (T/mg)*LW > CAP ? '1' : '0');
+      $('simOff').setAttribute('opacity', T*PXPN > CAP ? '1' : '0');
 
       /* angle arc at the right anchor, dropped when the anchors crowd in */
       var show = D > 90, arc = $('simArc'), arcTx = $('simArcTx');
