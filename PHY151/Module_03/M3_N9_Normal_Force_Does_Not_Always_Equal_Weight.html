@@ -303,6 +303,11 @@
         margin:.1rem 0 .9rem; }
   .sim-readrow{ display:grid; gap:1rem; grid-template-columns:1fr; margin-top:.9rem; }
   @media (min-width:640px){ .sim-readrow{ grid-template-columns:1fr 1fr; } }
+  .sim-lock{ display:none; font-family:"Segoe UI", system-ui, sans-serif; font-size:.79rem;
+        color:var(--muted); background:var(--green-soft); border-left:3px solid var(--green);
+        border-radius:0 4px 4px 0; padding:.35rem .6rem; margin:-.2rem 0 .1rem; }
+  .sim-controls input[type=range]:disabled{ opacity:.45; cursor:not-allowed; }
+  .sim-controls input[type=range]:disabled + output{ opacity:.45; }
   .sim-signs{ border:1px solid var(--rule); border-radius:6px; background:#fff;
         padding:.5rem .65rem; margin:.7rem 0 0;
         font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; }
@@ -541,6 +546,8 @@
         <input id="s9A" type="range" min="-9.8" max="4" step="0.1" value="0"
                aria-label="Acceleration of the lift, in metres per second squared, positive upward">
         <output id="s9AOut" for="s9A">0.0 m/s²</output></label>
+      <div class="sim-lock" id="s9Lock">At rest, so <b>a is locked at zero</b> — an object that
+      stays put is not accelerating. Pick a direction of travel to unlock it.</div>
       <label><span class="nm">Your mass</span>
         <input id="s9M" type="range" min="40" max="90" step="5" value="60"
                aria-label="Your mass, in kilograms">
@@ -550,7 +557,7 @@
     <div class="sim-btnrow">
       <span class="sim-tag" style="margin-right:.1rem">The lift is</span>
       <button type="button" class="sim-btn ghost" id="s9Up" aria-pressed="false">going up · v &gt; 0</button>
-      <button type="button" class="sim-btn ghost" id="s9Z"  aria-pressed="false">v = 0</button>
+      <button type="button" class="sim-btn ghost" id="s9Z"  aria-pressed="false">at rest · v = 0</button>
       <button type="button" class="sim-btn" id="s9Dn" aria-pressed="true">going down · v &lt; 0</button>
       <button type="button" class="sim-btn ghost" id="s9Reset" style="margin-left:auto">Reset</button>
     </div>
@@ -628,10 +635,13 @@
     var PXPA = 9;                           /* acceleration arrow, px per m/s^2       */
     var FEETY = 268, CX = 142, CHEST = FEETY - 62, ARX = CX + 34;
     var A = $('s9A'), M = $('s9M');
-    var travel = -1;              /* -1 down, 0, +1 up. v = 0 is legitimate only as an
-                                     INSTANT -- the moment it starts or finishes moving --
-                                     never as a sustained state, which would force a = 0.
-                                     The labels below say so. */
+    var travel = -1;              /* -1 down, 0 at rest, +1 up.
+                                     AT REST MEANS a = 0. Selecting v = 0 forces the
+                                     acceleration to zero and disables its slider, so the
+                                     widget cannot be put into a state that does not exist.
+                                     (An earlier version allowed v = 0 with a non-zero a as
+                                     an instantaneous turning point. Correct, but a
+                                     distraction here, and it read as a bug twice.) */
 
     function mk(tag,attrs,parent){
       var e = document.createElementNS(ns,tag);
@@ -655,7 +665,11 @@
     function show(el,on){ el.setAttribute('opacity', on ? '1' : '0'); }
 
     function draw(){
-      var a = +A.value, v = travel, m = +M.value;
+      var v = travel;
+      if(v === 0 && +A.value !== 0) A.value = 0;      /* at rest => a = 0, always */
+      A.disabled = (v === 0);
+      $('s9Lock').style.display = (v === 0) ? 'block' : 'none';
+      var a = +A.value, m = +M.value;
       var mg = m*G, N = m*(G + a);
       if(N < 0) N = 0;                      /* the floor cannot pull you down */
 
@@ -689,8 +703,7 @@
       var steady = Math.abs(a) < 0.05, dir = v > 0 ? 'going up' : 'going down';
       $('s9Phase').textContent =
           (a <= -9.75)            ? 'in free fall \u2014 the cable is cut'
-        : (v === 0 && steady)     ? 'standing still'
-        : (v === 0)               ? 'momentarily at rest \u2014 the instant it starts or stops'
+        : (v === 0)               ? 'at rest on a floor \u2014 not moving, not accelerating'
         : steady                  ? dir + ' at a steady speed'
         : (Math.sign(a) === v)    ? dir + ', speeding up'
         :                           dir + ', slowing to a stop';
@@ -699,14 +712,15 @@
       var sgn = function(x){ return x > 0 ? '+' : (x < 0 ? '\u2212' : '0'); };
       $('s9SgV').textContent = sgn(v);
       $('s9SgA').textContent = steady ? '0' : sgn(a);
-      $('s9WdV').textContent = v === 0 ? 'not moving, this instant'
+      $('s9WdV').textContent = v === 0 ? 'at rest'
                              : (v > 0 ? 'travelling up' : 'travelling down');
       $('s9WdA').textContent = steady ? 'no acceleration'
                              : (a > 0 ? 'acceleration points up' : 'acceleration points down');
       $('s9Rel').innerHTML =
-          steady        ? 'a = 0, so the scale reads your <b>true weight</b> \u2014 whatever v is doing.'
-        : (v === 0)     ? 'v = 0 but a \u2260 0, so the scale is <b>already</b> reading '
-                          + (a > 0 ? 'heavy' : 'light') + ' \u2014 at the very instant it is not moving.'
+          (v === 0)     ? 'At rest, so a = 0 as well \u2014 and the scale reads your '
+                          + '<b>true weight</b>. This is one of only two cases where it does.'
+        : steady        ? 'a = 0, so the scale reads your <b>true weight</b> \u2014 moving, but not '
+                          + 'changing speed. The other case where scale and weight agree.'
         : (Math.sign(a) === v) ? 'same sign \u2192 <b>speeding up</b>. Reading: '
                           + (a > 0 ? '<b>heavy</b>' : '<b>light</b>') + ', because a is '
                           + (a > 0 ? 'positive' : 'negative') + '.'
