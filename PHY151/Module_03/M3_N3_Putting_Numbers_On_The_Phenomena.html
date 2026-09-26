@@ -703,13 +703,13 @@
     </div>
 
     <div class="sim-panel" style="margin-bottom:.8rem">
-      <svg id="p3Svg" viewBox="0 0 620 230" role="img"
+      <svg id="p3Svg" viewBox="0 0 560 230" role="img"
            aria-label="Two people on trolleys with their hands touching. The two force arrows point away from each other and are always drawn the same length. Below them, two acceleration arrows are drawn to scale and are not the same length unless the masses are equal.">
         <defs>
           <marker id="p3Hf" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1f5d8c"/></marker>
           <marker id="p3Ha" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#5c6b62"/></marker>
         </defs>
-        <line x1="14" y1="140" x2="606" y2="140" stroke="#1d2b23" stroke-width="2"/>
+        <line x1="14" y1="140" x2="546" y2="140" stroke="#1d2b23" stroke-width="2"/>
         <g id="p3FigL"></g>
         <g id="p3FigR"></g>
         <rect id="p3Wl" x="366" y="30" width="0" height="110" fill="#eef2ef" stroke="#1d2b23" stroke-width="2" opacity="0"/>
@@ -756,7 +756,7 @@
     var root = document.getElementById('simN3b'); if(!root) return;
     var $ = function(id){ return document.getElementById(id); };
     var ns = 'http://www.w3.org/2000/svg';
-    var GY = 140, LX = 220, RX = 400;        /* far enough apart to read */
+    var GY = 140, LX = 228, RX = 292;        /* hands meet at x = 260 */
     var PXPN = 0.42;                          /* force arrows, px per newton  */
     var PXPA = 30;                            /* accel arrows, px per m/s^2   */
     var WALL = 20000;
@@ -773,7 +773,7 @@
       mk('circle',{cx:x-13,cy:f+2,r:4,fill:'#fff',stroke:'#1d2b23','stroke-width':1.4},g);
       mk('circle',{cx:x+13,cy:f+2,r:4,fill:'#fff',stroke:'#1d2b23','stroke-width':1.4},g);
       ln(x,hip,x,sho); ln(x,hip,x-6,f-10); ln(x,hip,x+6,f-10);
-      ln(x,sho,x+face*20,sho+6);                        /* the pushing arm */
+      ln(x,sho,x+face*32,sho+6);                        /* the pushing arm -- reaches contact */
       ln(x,sho,x-face*9,sho+22);
       mk('circle',{cx:x,cy:hd,r:6.5,fill:'#fff',stroke:'#1d2b23','stroke-width':2},g);
     }
@@ -800,12 +800,12 @@
       /* the wall replaces the right-hand figure */
       $('p3FigR').setAttribute('opacity', wall ? '0' : '1');
       $('p3Wl').setAttribute('opacity', wall ? '1' : '0');
-      $('p3Wl').setAttribute('x', 244);
+      $('p3Wl').setAttribute('x', 258);
       $('p3Wl').setAttribute('width', wall ? 220 : 0);
       $('p3M2').disabled = wall;
 
       seg($('p3F1'), LX-6, GY-72, LX-6-Lf, GY-72);       /* on you: leftward  */
-      var f2x = wall ? 250 : RX+6;                       /* start at the contact point */
+      var f2x = wall ? 264 : RX+6;                       /* start at the contact point */
       seg($('p3F2'), f2x, GY-72, f2x+Lf, GY-72);         /* on them: rightward */
       at($('p3F1Tx'), LX-10-Lf, GY-78);
       at($('p3F2Tx'), f2x+4+Lf, GY-78);
@@ -912,132 +912,233 @@
   </div>
 
 
-  <!-- ===== FLCC-SIM v1 · N3-c · aiming the launcher =======================
-       LIFTABLE UNIT. Movement 4, foundation line 8.
+  <!-- ===== FLCC-SIM v1 · N3-c · the monkey and the hunter =================
+       LIFTABLE UNIT. Movement 4, and N2's falling-target demonstration.
 
-       Placed after Task 4 and after the "aiming is not the same as hitting"
-       box, so nothing here pre-empts the reasoning.
+       The arrow leaves the barrel at the instant the monkey lets go. Choose
+       where to aim, choose how fast, fire, and watch.
 
-       SHOWS the triangle to scale, the aim line, the 45-degree reference, and
-       tan(theta) = H / X as a number -- which is Task 4 step 2, the ratio the
-       student is asked to write BEFORE substituting, and the sanity check in
-       step 4.
+       Almost no text on purpose: this one is a DEMONSTRATION, not a
+       derivation. There is no equation panel and no angle readout. Aim is set
+       by a point on the target line, not by a number of degrees, so nothing
+       here can be read off as the answer to Task 4 step 3.
 
-       DOES NOT SHOW theta. Taking the arctangent is step 3, and that one is
-       the student's. The footnote says so rather than leaving them hunting.
+       Speed is the control that does nothing: at any speed fast enough to
+       arrive, aiming at the monkey hits. WHY it hits is N4's, and the page
+       says so two paragraphs above this.
        ====================================================================== -->
   <div class="sim" id="simN3c">
-    <span class="label">Try it — where to point the barrel</span>
+    <span class="label">Try it — the arrow leaves as the monkey lets go</span>
 
     <div class="sim-controls">
-      <label><span class="nm">Height H</span>
-        <input id="g3H" type="range" min="0.5" max="4" step="0.1" value="2"
-               aria-label="Height of the target above the launcher, in metres">
-        <output id="g3HOut" for="g3H">2.0 m</output></label>
-      <label><span class="nm">Distance X</span>
-        <input id="g3X" type="range" min="0.5" max="4" step="0.1" value="2.5"
-               aria-label="Horizontal distance to the target, in metres">
-        <output id="g3XOut" for="g3X">2.5 m</output></label>
+      <label><span class="nm">Aim</span>
+        <input id="k3Aim" type="range" min="0.4" max="3.2" step="0.05" value="2.9"
+               aria-label="Where along the target line you are aiming">
+        <output id="k3AimOut" for="k3Aim">above</output></label>
+      <label><span class="nm">Arrow speed</span>
+        <input id="k3V" type="range" min="4" max="14" step="0.5" value="9"
+               aria-label="Speed the arrow leaves the barrel, in metres per second">
+        <output id="k3VOut" for="k3V">9.0 m/s</output></label>
+    </div>
+
+    <div class="sim-btnrow">
+      <button type="button" class="sim-btn" id="k3Fire">Fire</button>
+      <button type="button" class="sim-btn ghost" id="k3Snap">Aim at the monkey</button>
+      <button type="button" class="sim-btn ghost" id="k3Reset" style="margin-left:auto">Reset</button>
     </div>
 
     <div class="sim-grid">
-      <svg id="g3Svg" viewBox="0 0 340 300" role="img"
-           aria-label="A right triangle with the launcher at the bottom left corner, the horizontal distance X along the ground and the height H up to the target. The aim line is the hypotenuse. A dashed line at 45 degrees shows where the aim line would sit if the height and the distance were equal.">
+      <svg id="k3Svg" viewBox="0 0 380 340" role="img"
+           aria-label="A launcher on the ground at the left and a monkey hanging from a branch to the right. A dashed line shows where the launcher is pointed. When fired, the arrow curves through the air while the monkey falls straight down, and the two either meet or they do not.">
         <defs>
-          <marker id="g3Ha" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1e6b3c"/></marker>
+          <marker id="k3Hd" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0,0 L10,3.5 L0,7 z" fill="#1e6b3c"/></marker>
         </defs>
-        <line id="g345" stroke="#5c6b62" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
-        <text id="g345Tx" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">45°</text>
-        <line id="g3Base" stroke="#1d2b23" stroke-width="1.8"/>
-        <line id="g3Rise" stroke="#1d2b23" stroke-width="1.8" stroke-dasharray="5 4"/>
-        <line id="g3Aim"  stroke="#1e6b3c" stroke-width="2.4" marker-end="url(#g3Ha)"/>
-        <rect id="g3Sq" fill="none" stroke="#5c6b62" stroke-width="1" opacity=".7"/>
-        <circle id="g3Tgt" r="7" fill="#fff" stroke="#a8551f" stroke-width="2.2"/>
-        <text id="g3XTx" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1d2b23">X</text>
-        <text id="g3HTx" text-anchor="start"  font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1d2b23">H</text>
-        <text id="g3ThTx" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1e6b3c">θ</text>
+        <line id="k3Ground" x1="10" y1="310" x2="370" y2="310" stroke="#1d2b23" stroke-width="2"/>
+        <line id="k3Pole" stroke="#5c6b62" stroke-width="1" stroke-dasharray="3 4" opacity=".5"/>
+        <line id="k3AimLn" stroke="#5c6b62" stroke-width="1.2" stroke-dasharray="5 4" opacity=".75"/>
+        <circle id="k3AimDot" r="4" fill="none" stroke="#5c6b62" stroke-width="1.4" opacity=".8"/>
+        <polyline id="k3TrA" fill="none" stroke="#1e6b3c" stroke-width="1.6" stroke-dasharray="3 3" opacity=".75"/>
+        <polyline id="k3TrM" fill="none" stroke="#a8551f" stroke-width="1.6" stroke-dasharray="3 3" opacity=".75"/>
+        <g id="k3Launcher"></g>
+        <g id="k3Monkey"></g>
+        <polygon id="k3Arrow" fill="#1e6b3c"/>
+        <circle id="k3Bang" r="0" fill="none" stroke="#1e6b3c" stroke-width="2.5" opacity="0"/>
+        <text id="k3Gap" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62" opacity="0"></text>
       </svg>
 
       <div class="sim-read">
-        <div class="sim-eq" aria-live="polite">
-          <div class="cond">θ sits between the aim line and the ground</div>
-          <div><span class="sym">tan θ =</span> H / X</div>
-          <div><span class="sym">tan θ =</span> <span id="g3Sub">2.0 / 2.5</span></div>
-          <div><span class="sym">tan θ =</span> <span class="val" id="g3Tan">0.80</span></div>
-        </div>
         <div class="sim-signs wide">
-          <div class="row"><span class="k">H against X</span><span class="sg" id="g3Cmp">&lt;</span><span class="w" id="g3CmpW">H is the shorter side</span></div>
-          <div class="rel" id="g3Rel"></div>
+          <div class="row"><span class="k">result</span><span class="sg" id="k3Mark">—</span><span class="w" id="k3MarkW">fire to find out</span></div>
+          <div class="rel" id="k3Rel">Point the launcher, then fire. The monkey lets go at the same
+          instant — it does not wait, and it does not know you are there.</div>
         </div>
-        <div class="sim-tag fixed" style="margin-top:.7rem">Slide H past X and watch the aim line cross
-        the dashed 45° guide. That crossing <b>is</b> the check in Task 4: the angle is below 45° while
-        H &lt; X, and above it when H &gt; X. You never need the angle itself to know which side you
-        are on.</div>
+        <div class="sim-tag fixed" style="margin-top:.7rem">Once you have found the aim that works,
+        <b>change the speed and fire again</b>. And again. The arrow takes a different path every time
+        and arrives at a different moment — and it still meets the monkey.</div>
       </div>
     </div>
 
-    <p class="sim-foot">The angle itself is not shown, and that is deliberate — taking the arctangent is
-    step 3 of Task 4. What is here is the ratio you are asked to write down before substituting
-    anything, and the picture that tells you whether your answer is believable once you have it.</p>
+    <p class="sim-foot">Aiming straight at a falling target works, and it does not care how fast you
+    shoot. <b>Why</b> it works is the open question this note leaves for Note 4 — do not let watching
+    it happen convince you that you have explained it.</p>
   </div>
 
   <script>
-  /* FLCC-SIM v1 — N3-c. Vanilla, no dependencies, no state kept anywhere. */
+  /* FLCC-SIM v1 — N3-c. Vanilla, no dependencies. */
   (function(){
     var root = document.getElementById('simN3c'); if(!root) return;
     var $ = function(id){ return document.getElementById(id); };
-    var OX = 40, OY = 264, PPM = 58;      /* origin and pixels per metre, absolute */
-    var H = $('g3H'), X = $('g3X');
+    var ns = 'http://www.w3.org/2000/svg';
+    var G = 9.8, PPM = 82, OX = 40, OY = 310;    /* absolute: 82 px per metre */
+    var X = 2.5, H = 2.0;                        /* the setup from Task 4      */
+    var SLOW = 3;                                /* seconds of animation per second of flight */
+    var AIM = $('k3Aim'), V = $('k3V');
+    var raf = null, t0 = 0, frozen = null;
 
-    function seg(el,x1,y1,x2,y2){
-      el.setAttribute('x1',x1.toFixed(1)); el.setAttribute('y1',y1.toFixed(1));
-      el.setAttribute('x2',x2.toFixed(1)); el.setAttribute('y2',y2.toFixed(1));
-    }
-    function at(el,x,y){ el.setAttribute('x',x.toFixed(1)); el.setAttribute('y',y.toFixed(1)); }
+    function px(m){ return OX + m*PPM; }
+    function py(m){ return OY - m*PPM; }
+    function mk(t,a,p){ var e=document.createElementNS(ns,t);
+      for(var k in a) e.setAttribute(k,a[k]); p.appendChild(e); return e; }
 
-    function draw(){
-      var h = +H.value, x = +X.value;
-      var px = OX + x*PPM, py = OY - h*PPM;
+    (function build(){
+      var g = $('k3Monkey');
+      mk('circle',{cx:0,cy:0,r:7,fill:'#fff',stroke:'#1d2b23','stroke-width':2},g);
+      mk('line',{x1:0,y1:7,x2:0,y2:20,stroke:'#1d2b23','stroke-width':2,'stroke-linecap':'round'},g);
+      mk('line',{x1:0,y1:11,x2:-8,y2:19,stroke:'#1d2b23','stroke-width':1.8,'stroke-linecap':'round'},g);
+      mk('line',{x1:0,y1:11,x2:8,y2:19,stroke:'#1d2b23','stroke-width':1.8,'stroke-linecap':'round'},g);
+      mk('line',{x1:0,y1:20,x2:-6,y2:28,stroke:'#1d2b23','stroke-width':1.8,'stroke-linecap':'round'},g);
+      mk('line',{x1:0,y1:20,x2:6,y2:28,stroke:'#1d2b23','stroke-width':1.8,'stroke-linecap':'round'},g);
+    })();
 
-      seg($('g3Base'), OX, OY, px, OY);
-      seg($('g3Rise'), px, OY, px, py);
-      seg($('g3Aim'),  OX, OY, px, py);
-
-      /* the 45 degree reference, drawn the length of whichever side is longer */
-      var d = Math.max(h, x)*PPM;
-      seg($('g345'), OX, OY, OX + d, OY - d);
-      at($('g345Tx'), OX + d + 3, OY - d - 3);
-
-      $('g3Tgt').setAttribute('cx', px.toFixed(1));
-      $('g3Tgt').setAttribute('cy', py.toFixed(1));
-
-      /* right-angle mark at the foot of the rise */
-      $('g3Sq').setAttribute('x', (px-11).toFixed(1));
-      $('g3Sq').setAttribute('y', (OY-11).toFixed(1));
-      $('g3Sq').setAttribute('width', 11); $('g3Sq').setAttribute('height', 11);
-
-      at($('g3XTx'), (OX+px)/2, OY+16);
-      at($('g3HTx'), px+7, (OY+py)/2);
-      at($('g3ThTx'), OX+22, OY-9);
-
-      var tan = h/x;
-      $('g3HOut').textContent = h.toFixed(1) + ' m';
-      $('g3XOut').textContent = x.toFixed(1) + ' m';
-      $('g3Sub').textContent  = h.toFixed(1) + ' / ' + x.toFixed(1);
-      $('g3Tan').textContent  = tan.toFixed(2);
-
-      var near = Math.abs(h - x) < 0.05;
-      $('g3Cmp').textContent  = near ? '=' : (h < x ? '<' : '>');
-      $('g3CmpW').textContent = near ? 'the two sides are equal'
-                              : (h < x ? 'H is the shorter side' : 'H is the longer side');
-      $('g3Rel').innerHTML = near
-        ? 'H = X, so tan θ = 1 and the aim line lies <b>exactly on the 45° guide</b>.'
-        : (h < x ? 'tan θ &lt; 1, so the angle is <b>below 45°</b> — and the aim line sits under the guide.'
-                 : 'tan θ &gt; 1, so the angle is <b>above 45°</b> — and the aim line sits over the guide.');
+    function geom(){
+      var aim = +AIM.value, v = +V.value;
+      var th = Math.atan2(aim, X);
+      var tHit = X/(v*Math.cos(th));            /* when the arrow reaches the monkey's line */
+      var tMonkeyDown = Math.sqrt(2*H/G);
+      var yA = function(t){ return v*Math.sin(th)*t - 0.5*G*t*t; };
+      var yM = function(t){ return H - 0.5*G*t*t; };
+      return {aim:aim, v:v, th:th, tHit:tHit, tDown:tMonkeyDown, yA:yA, yM:yM,
+              xA:function(t){ return v*Math.cos(th)*t; }};
     }
 
-    [H,X].forEach(function(el){ el.addEventListener('input', draw); });
-    draw();
+    function verdict(g){
+      if(g.tHit > g.tDown + 1e-9)  return {k:'short', gap:0};
+      if(g.yA(g.tHit) <= 0)        return {k:'short', gap:0};
+      var gap = g.yA(g.tHit) - g.yM(g.tHit);    /* = X tan(th) - H, speed-independent */
+      if(Math.abs(gap) < 0.05)     return {k:'hit', gap:0};
+      return {k:(gap > 0 ? 'over' : 'under'), gap:Math.abs(gap)};
+    }
+
+    function drawStatic(){
+      var g = geom(), v = verdict(g);
+      $('k3Pole').setAttribute('x1', px(X)); $('k3Pole').setAttribute('y1', py(0));
+      $('k3Pole').setAttribute('x2', px(X)); $('k3Pole').setAttribute('y2', py(3.3));
+      $('k3AimLn').setAttribute('x1', px(0)); $('k3AimLn').setAttribute('y1', py(0.12));
+      $('k3AimLn').setAttribute('x2', px(X)); $('k3AimLn').setAttribute('y2', py(g.aim));
+      $('k3AimDot').setAttribute('cx', px(X)); $('k3AimDot').setAttribute('cy', py(g.aim));
+
+      var lg = $('k3Launcher'); while(lg.firstChild) lg.removeChild(lg.firstChild);
+      var L = 34, c = Math.cos(g.th), s = Math.sin(g.th);
+      mk('line',{x1:px(0),y1:py(0.12),x2:px(0)+L*c,y2:py(0.12)-L*s,
+                 stroke:'#1d2b23','stroke-width':5,'stroke-linecap':'round'},lg);
+      mk('rect',{x:px(0)-12,y:py(0.12),width:24,height:14,rx:2,fill:'#fff',
+                 stroke:'#1d2b23','stroke-width':1.6},lg);
+
+      var d = g.aim - H;
+      $('k3AimOut').textContent = Math.abs(d) < 0.03 ? 'at the monkey'
+        : (d > 0 ? '+' : '−') + Math.abs(d).toFixed(2) + ' m';
+      $('k3VOut').textContent = g.v.toFixed(1) + ' m/s';
+      return g;
+    }
+
+    function place(t, g){
+      var xa = Math.min(g.xA(t), X + 0.35), ya = g.yA(t);
+      var ym = Math.max(0, g.yM(t));
+      var ang = Math.atan2(-(g.v*Math.sin(g.th) - G*t), g.v*Math.cos(g.th))*180/Math.PI;
+      var X0 = px(xa), Y0 = py(Math.max(ya, -0.1));
+      $('k3Arrow').setAttribute('points','-9,-3 9,0 -9,3');
+      $('k3Arrow').setAttribute('transform','translate('+X0.toFixed(1)+','+Y0.toFixed(1)+') rotate('+ang.toFixed(1)+')');
+      $('k3Monkey').setAttribute('transform','translate('+px(X).toFixed(1)+','+py(ym).toFixed(1)+')');
+    }
+
+    function trace(tEnd, g){
+      var a=[], m=[], n=48;
+      for(var i=0;i<=n;i++){
+        var t = tEnd*i/n;
+        a.push(px(Math.min(g.xA(t), X+0.35)).toFixed(1)+','+py(Math.max(g.yA(t),-0.1)).toFixed(1));
+        m.push(px(X).toFixed(1)+','+py(Math.max(0,g.yM(t))).toFixed(1));
+      }
+      $('k3TrA').setAttribute('points', a.join(' '));
+      $('k3TrM').setAttribute('points', m.join(' '));
+    }
+
+    function say(v, g){
+      var mark = $('k3Mark'), w = $('k3MarkW'), rel = $('k3Rel');
+      if(v.k === 'hit'){
+        mark.textContent = 'hit'; w.textContent = 'dead on';
+        rel.innerHTML = 'You aimed <b>straight at the monkey</b> and the arrow found it in mid-air. '
+          + 'Now change the speed and fire again — it will still find it.';
+      } else if(v.k === 'short'){
+        mark.textContent = '—'; w.textContent = 'never got there';
+        rel.innerHTML = 'Too slow. The arrow was still on its way when the monkey reached the ground. '
+          + 'Aiming correctly is not enough on its own — the shot also has to arrive.';
+      } else {
+        mark.textContent = 'miss'; w.textContent = 'passed ' + v.k + ' by ' + v.gap.toFixed(2) + ' m';
+        rel.innerHTML = 'The arrow crossed the monkey’s line <b>' + v.k + ' it</b>, by '
+          + v.gap.toFixed(2) + ' m. Notice that missing by aiming high does not help, even though the '
+          + 'monkey is falling.';
+      }
+    }
+
+    function stop(){ if(raf){ cancelAnimationFrame(raf); raf = null; } $('k3Fire').textContent = 'Fire'; }
+
+    function fire(){
+      stop();
+      var g = drawStatic(), v = verdict(g);
+      var tEnd = (v.k === 'short')
+        ? Math.min(g.tDown, 2*g.v*Math.sin(g.th)/G)
+        : g.tHit;
+      t0 = 0;
+      $('k3Bang').setAttribute('opacity','0');
+      $('k3Gap').setAttribute('opacity','0');
+      $('k3Fire').textContent = 'Firing…';
+      function step(ts){
+        if(!t0) t0 = ts;
+        var t = Math.min(tEnd, ((ts - t0)/1000)/SLOW);
+        place(t, g); trace(t, g);
+        if(t < tEnd){ raf = requestAnimationFrame(step); }
+        else {
+          raf = null; $('k3Fire').textContent = 'Fire again';
+          if(v.k === 'hit'){
+            $('k3Bang').setAttribute('cx', px(X)); $('k3Bang').setAttribute('cy', py(g.yM(tEnd)));
+            $('k3Bang').setAttribute('r', 15); $('k3Bang').setAttribute('opacity','1');
+          } else if(v.k !== 'short'){
+            $('k3Gap').setAttribute('x', px(X)+36);
+            $('k3Gap').setAttribute('y', py((g.yA(tEnd)+g.yM(tEnd))/2));
+            $('k3Gap').textContent = v.gap.toFixed(2) + ' m ' + v.k;
+            $('k3Gap').setAttribute('opacity','1');
+          }
+          say(v, g);
+        }
+      }
+      raf = requestAnimationFrame(step);
+    }
+
+    function reset(){
+      stop();
+      var g = drawStatic();
+      place(0, g); trace(0, g);
+      $('k3Bang').setAttribute('opacity','0'); $('k3Gap').setAttribute('opacity','0');
+      $('k3Mark').textContent = '—'; $('k3MarkW').textContent = 'fire to find out';
+      $('k3Rel').innerHTML = 'Point the launcher, then fire. The monkey lets go at the same instant — '
+        + 'it does not wait, and it does not know you are there.';
+    }
+
+    [AIM,V].forEach(function(el){ el.addEventListener('input', reset); });
+    $('k3Fire').addEventListener('click', fire);
+    $('k3Snap').addEventListener('click', function(){ AIM.value = H; reset(); });
+    $('k3Reset').addEventListener('click', function(){ AIM.value = 2.9; V.value = 9; reset(); });
+    reset();
     root.classList.add('on');
   })();
   </script>
