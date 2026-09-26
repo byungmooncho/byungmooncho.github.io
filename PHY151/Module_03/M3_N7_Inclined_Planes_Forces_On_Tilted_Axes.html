@@ -232,6 +232,75 @@
     font-weight:600; display:block; margin-bottom:.3rem;
   }
   .rule-box p{ margin:0; font-size:1.1rem; }
+
+  /* --- FLCC-SIM v1 · interactive widget ----------------------------------
+     LIFTABLE UNIT. This block plus the matching "FLCC-SIM v1" block in the
+     body are self-contained: copy both into any note page and nothing else
+     needs to change. No external files, no libraries.
+     Hidden until JS adds .on, so a no-JS reader sees nothing broken.
+     Hidden in print — the static figure above it carries the printed page.
+     ----------------------------------------------------------------------- */
+  .sim{ display:none; border:1px solid var(--rule); border-radius:8px;
+        padding:1rem 1rem .9rem; margin:1.2rem 0; background:#fbfdfc; }
+  .sim.on{ display:block; }
+  .sim .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+        letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+        font-weight:600; display:block; margin-bottom:.55rem; }
+  .sim-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:640px){ .sim-grid{ grid-template-columns:1.2fr 1fr; } }
+  .sim svg{ display:block; width:100%; height:auto; }
+  .sim-controls{ display:grid; gap:.55rem; margin:0 0 .9rem;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .sim-controls label{ display:grid; grid-template-columns:5.2em 1fr 4.8em;
+        gap:.6rem; align-items:center; }
+  .sim-controls .nm{ color:var(--muted); }
+  .sim-controls output{ font-variant-numeric:tabular-nums; font-weight:700;
+        color:var(--green); text-align:right; }
+  .sim-controls input[type=range]{ width:100%; accent-color:var(--green); }
+  .sim-read{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .sim-eq{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-variant-numeric:tabular-nums;
+        line-height:1.9; }
+  .sim-eq div{ white-space:nowrap; overflow-x:auto; }
+  .sim-eq .cond{ color:var(--muted); font-size:.82rem; line-height:1.5;
+        border-bottom:1px solid var(--rule); padding-bottom:.35rem; margin-bottom:.3rem; }
+  .sim-eq sub, .sim-tag sub, .sim-meter sub{ font-size:.72em; }
+  .sim-eq .sym{ color:var(--muted); display:inline-block; width:2.2em; }
+  .sim-eq .val{ font-weight:700; }
+  .sim-meter + .sim-meter{ margin-top:.85rem; }
+  .sim-meter .top{ display:flex; justify-content:space-between; gap:.8rem;
+        align-items:baseline; }
+  .sim-meter .top b{ font-weight:600; }
+  .sim-meter .n{ font-variant-numeric:tabular-nums; font-weight:700; white-space:nowrap; }
+  .sim-bar{ position:relative; height:12px; border:1px solid var(--rule);
+        border-radius:6px; background:#fff; overflow:hidden; margin:.3rem 0 .2rem; }
+  .sim-bar i{ position:absolute; top:0; bottom:0; left:0; display:block;
+        background:#1f5d8c; }
+  .sim-bar i.grn{ background:#1e6b3c; }
+  .sim-bar.over i{ background:repeating-linear-gradient(45deg,
+        #1f5d8c 0 6px, #9dbdd4 6px 12px); }
+  .sim-tag{ font-size:.79rem; color:var(--muted); }
+  .sim-scale{ position:relative; height:1.05em; margin:.35rem 0 .3rem;
+        font-size:.72rem; color:var(--muted); }
+  .sim-scale span{ position:absolute; top:0; white-space:nowrap; }
+  .sim-scale .z{ left:0; }
+  .sim-scale .e{ right:0; }
+  .sim-scale .mgt{ left:32.67%; transform:translateX(-50%); color:var(--green);
+        font-weight:600; }
+  .sim-scale .mgt::before{ content:""; position:absolute; left:50%; top:-.55em;
+        width:1px; height:.5em; background:var(--green); opacity:.75; }
+  /* signed meter: zero in the middle, negative to the left */
+  .sim-bar.signed::after{ content:""; position:absolute; left:50%; top:-2px; bottom:-2px;
+        width:1px; background:var(--muted); opacity:.55; }
+  .sim-bar i.acc{ background:#5c6b62; }
+  .sim-chip{ display:inline-block; font-family:"Segoe UI", system-ui, sans-serif;
+        font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700;
+        border:1px solid var(--rule); border-radius:999px; padding:.1rem .55rem;
+        background:#fff; color:var(--muted); vertical-align:.08em; }
+  .sim-chip.go{ border-color:var(--green); color:var(--green); background:var(--green-soft); }
+  .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+        color:var(--muted); margin:.9rem 0 0; }
+  @media print{ .sim{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -456,6 +525,228 @@
   slope means the slope is not steep enough to start the object moving at all. The expression is telling
   you the object stays where it is, and the angle where it changes its mind is the angle at which
   sin&nbsp;θ finally beats μ&nbsp;cos&nbsp;θ.</p>
+
+
+  <!-- ===== FLCC-SIM v1 · N7 incline ======================================
+       LIFTABLE UNIT (pairs with the "FLCC-SIM v1" block in the stylesheet).
+
+       Shows the PHENOMENON and the finished relationships (Eq. 1-4 on this
+       page). Shows NO derivation: tilting the axes, the force triangle and
+       the algebra are what the tasks ask the student to produce.
+
+       ONE SCALE, ABSOLUTE. Forces in newtons, acceleration in m/s^2, never
+       as multiples of mg or g, so every drawn quantity answers every slider.
+
+       The three things this is here to make visible:
+         - F_N starts AT mg and shrinks as cos(theta)   [foundation 4]
+         - a does not move when the mass slider moves    [foundation 5]
+         - a goes NEGATIVE below theta = arctan(mu), and that is the physics,
+           not an arithmetic slip                        [foundation 8, 9]
+
+       Colour: warm = gravity, green = normal force, blue = friction.
+       ====================================================================== -->
+  <div class="sim" id="simN7">
+    <span class="label">Try it — tilt the ramp</span>
+
+    <div class="sim-controls">
+      <label><span class="nm">Angle θ</span>
+        <input id="s7Th" type="range" min="0" max="90" step="1" value="30"
+               aria-label="Incline angle theta, in degrees">
+        <output id="s7ThOut" for="s7Th">30°</output></label>
+      <label><span class="nm">Friction μ</span>
+        <input id="s7Mu" type="range" min="0" max="1" step="0.05" value="0.1"
+               aria-label="Coefficient of friction mu">
+        <output id="s7MuOut" for="s7Mu">0.10</output></label>
+      <label><span class="nm">Mass m</span>
+        <input id="s7M" type="range" min="2" max="5" step="0.5" value="2"
+               aria-label="Mass of the block, in kilograms">
+        <output id="s7MOut" for="s7M">2.0 kg</output></label>
+    </div>
+
+    <div class="sim-grid">
+      <svg id="s7Svg" viewBox="0 0 360 360" role="img"
+           aria-label="A block on an incline rising to the right. As the angle increases the arrow perpendicular to the surface, the normal force, shortens while the downward weight arrow stays the same length, and the friction arrow up the slope shortens with the normal force. The numbers beside the figure give the normal force, the friction and the acceleration.">
+        <defs>
+          <marker id="s7Hg" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#a8551f"/></marker>
+          <marker id="s7Hn" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1e6b3c"/></marker>
+          <marker id="s7Hf" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f5d8c"/></marker>
+        </defs>
+        <path id="s7Ramp" fill="#f2f6f3" stroke="#1d2b23" stroke-width="1.8" stroke-linejoin="round"/>
+        <path id="s7Arc" fill="none" stroke="#1e6b3c" stroke-width="1.6"/>
+        <text id="s7ArcTx" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1e6b3c">θ</text>
+        <rect id="s7Block" width="26" height="26" rx="3" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+        <line id="s7Fgx" stroke="#a8551f" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#s7Hg)"/>
+        <line id="s7Fg"  stroke="#a8551f" stroke-width="2.4" marker-end="url(#s7Hg)"/>
+        <line id="s7Fn"  stroke="#1e6b3c" stroke-width="2.4" marker-end="url(#s7Hn)"/>
+        <line id="s7Ff"  stroke="#1f5d8c" stroke-width="2.4" marker-end="url(#s7Hf)"/>
+        <text id="s7FgTx"  text-anchor="start"  font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g</tspan></text>
+        <text id="s7FgxTx" text-anchor="end"    font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#a8551f">F<tspan baseline-shift="sub" font-size="8">g</tspan> sinθ</text>
+        <text id="s7FnTx"  text-anchor="end"    font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1e6b3c">F<tspan baseline-shift="sub" font-size="9">N</tspan></text>
+        <text id="s7FfTx"  text-anchor="start"  font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1f5d8c">f</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-eq" aria-live="polite">
+          <div class="cond">sin θ overtakes μ cos θ at θ = arctan μ = <span id="s7Slip">5.7°</span></div>
+          <div><span class="sym">a =</span> g(sin θ − μ cos θ)</div>
+          <div><span class="sym">a =</span> <span id="s7Sub">9.8(sin 30° − 0.10 cos 30°)</span></div>
+          <div><span class="sym">a =</span> <span class="val" id="s7A">+4.05 m/s²</span> <span class="sim-chip" id="s7Chip">slides</span></div>
+        </div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Normal force (F<sub>N</sub>)</b><span class="n" id="s7FnN">17.0 N</span></div>
+          <div class="sim-bar" id="s7BarNw"><i id="s7BarN" class="grn"></i></div>
+          <div class="sim-scale"><span class="z">0</span><span class="mgt" id="s7MgTick">mg</span><span class="e" id="s7FsLbl">50 N</span></div>
+          <div class="sim-tag">F<sub>N</sub> = mg cos θ — as big as the weight only on the flat</div>
+        </div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Friction (f)</b><span class="n" id="s7FfN">1.7 N</span></div>
+          <div class="sim-bar" id="s7BarFw"><i id="s7BarF"></i></div>
+          <div class="sim-tag">f = μF<sub>N</sub> — found from F<sub>N</sub>, never from mg</div>
+        </div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Acceleration (a)</b><span class="n" id="s7AN">+4.05 m/s²</span></div>
+          <div class="sim-bar signed" id="s7BarAw"><i id="s7BarA"></i></div>
+          <div class="sim-scale"><span class="z">−9.8</span><span class="e">+9.8 m/s²</span></div>
+          <div class="sim-tag fixed">a = g(sin θ − μ cos θ) — drag the mass: this one does not move</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sim-foot">The forces are drawn to one absolute scale in newtons, so every arrow answers
+    every slider. Watch three things. The weight arrow never changes as you tilt; the normal force
+    arrow starts at the weight and shrinks with cos θ, and the friction arrow shrinks in step with it.
+    The mass slider moves both bars and leaves the acceleration exactly where it was. And below the
+    slip angle the acceleration is negative, which is the equation telling you the block stays put.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N7. Vanilla, no dependencies, no state kept anywhere. */
+  (function(){
+    var root = document.getElementById('simN7'); if(!root) return;
+    var $ = function(id){ return document.getElementById(id); };
+    var G = 9.8, OX = 40, OY = 230, HYP = 230, BLK = 26;
+    /* Absolute scales. Forces: 5 kg -> mg = 49 N -> 115 px, bars full scale 50 N.
+       Acceleration bar: +/- 9.8 m/s^2 about a centre zero. */
+    var PXPN = 115/(5*G), FS = 50, AFS = G, CAP = 150;
+    var th = $('s7Th'), mu = $('s7Mu'), ms = $('s7M');
+
+    function seg(el,x1,y1,x2,y2){
+      el.setAttribute('x1',x1.toFixed(1)); el.setAttribute('y1',y1.toFixed(1));
+      el.setAttribute('x2',x2.toFixed(1)); el.setAttribute('y2',y2.toFixed(1));
+    }
+    function at(el,x,y){ el.setAttribute('x',x.toFixed(1)); el.setAttribute('y',y.toFixed(1)); }
+    /* place a label, then nudge it back inside the frame if its TEXT (not just
+       its anchor point) overhangs -- measured, because an end-anchored label
+       extends leftward by its own width. */
+    var LABELS = ['s7FgTx','s7FnTx','s7FfTx','s7FgxTx','s7ArcTx'];
+    function lab(el,x,y,anchor){ el.setAttribute('text-anchor',anchor); at(el,x,y); }
+    function fitLabels(){
+      var W = 360, pad = 3;
+      for(var i=0;i<LABELS.length;i++){
+        var e = document.getElementById(LABELS[i]); if(!e) continue;
+        var bb; try{ bb = e.getBBox(); }catch(err){ continue; }
+        var dx = 0;
+        if(bb.x < pad) dx = pad - bb.x;
+        else if(bb.x + bb.width > W - pad) dx = (W - pad) - (bb.x + bb.width);
+        if(dx) e.setAttribute('x', (parseFloat(e.getAttribute('x')) + dx).toFixed(1));
+      }
+    }
+
+    function draw(){
+      var d = +th.value, u = +mu.value, m = +ms.value, r = d*Math.PI/180;
+      var c = Math.cos(r), s = Math.sin(r);
+      var mg = m*G, Fn = mg*c, Ff = u*Fn, Fgx = mg*s;
+      var a = G*(s - u*c);
+      var slip = Math.atan(u)*180/Math.PI;
+
+      /* ramp: right triangle, hypotenuse HYP from the origin, rising to the right */
+      var tx = OX + HYP*c, ty = OY - HYP*s;
+      $('s7Ramp').setAttribute('d','M '+OX+' '+OY+' L '+tx.toFixed(1)+' '+OY+
+        ' L '+tx.toFixed(1)+' '+ty.toFixed(1)+' Z');
+
+      /* up-slope unit vector, and the outward normal */
+      var ux = c, uy = -s, nx = -s, ny = -c;
+      var px = OX + 0.55*HYP*c, py = OY - 0.55*HYP*s;      /* point on the surface */
+      var bx = px + nx*(BLK/2+1), by = py + ny*(BLK/2+1);  /* block centre, sitting on it */
+      var b = $('s7Block');
+      b.setAttribute('x',(bx-BLK/2).toFixed(1)); b.setAttribute('y',(by-BLK/2).toFixed(1));
+      b.setAttribute('transform','rotate('+(-d).toFixed(1)+' '+bx.toFixed(1)+' '+by.toFixed(1)+')');
+
+      var Lg  = mg*PXPN;
+      var Ln  = Math.min(Fn*PXPN, CAP);
+      var Lf  = Math.min(Ff*PXPN, CAP);
+      var Lgx = Math.min(Fgx*PXPN, CAP);
+
+      seg($('s7Fg'), bx, by, bx, by + Lg);
+      seg($('s7Fn'), bx, by, bx + nx*Ln, by + ny*Ln);
+      seg($('s7Fgx'), bx, by, bx - ux*Lgx, by - uy*Lgx);   /* down-slope */
+      lab($('s7FgTx'),  bx + 8, by + Lg, 'start');
+      lab($('s7FnTx'),  bx + nx*Ln - 6, by + ny*Ln - 4, 'end');
+      lab($('s7FgxTx'), bx - ux*Lgx - 6, by - uy*Lgx + 14, 'end');
+
+      /* friction acts up-slope, and only once something is trying to slide */
+      var showF = d > 0 && u > 0;
+      $('s7Ff').setAttribute('opacity', showF ? '1' : '0');
+      $('s7FfTx').setAttribute('opacity', showF ? '1' : '0');
+      if(showF){
+        seg($('s7Ff'), bx, by, bx + ux*Lf, by + uy*Lf);
+        lab($('s7FfTx'), bx + ux*Lf + 7, by + uy*Lf - 5, 'start');
+      }
+      $('s7Fgx').setAttribute('opacity', d > 0 ? '1' : '0');
+      $('s7FgxTx').setAttribute('opacity', d > 0 ? '1' : '0');
+
+      var showArc = d > 6, arc = $('s7Arc'), arcTx = $('s7ArcTx');
+      arc.setAttribute('opacity', showArc ? '1' : '0');
+      arcTx.setAttribute('opacity', showArc ? '1' : '0');
+      if(showArc){
+        var R = 38;
+        arc.setAttribute('d','M '+(OX+R)+' '+OY+' A '+R+' '+R+' 0 0 0 '+
+          (OX+R*c).toFixed(1)+' '+(OY-R*s).toFixed(1));
+        lab(arcTx, OX + R + 16, OY - R*s/2 - 2, 'middle');
+      }
+
+      $('s7ThOut').textContent = d + '°';
+      $('s7MuOut').textContent = u.toFixed(2);
+      $('s7MOut').textContent  = m.toFixed(1) + ' kg';
+      $('s7Slip').textContent  = slip.toFixed(1) + '°';
+      $('s7Sub').textContent   = '9.8(sin ' + d + '° − ' + u.toFixed(2) + ' cos ' + d + '°)';
+
+      var aTxt = (a >= 0 ? '+' : '−') + Math.abs(a).toFixed(2) + ' m/s²';
+      $('s7A').textContent = aTxt;
+      $('s7AN').textContent = aTxt;
+      $('s7FnN').textContent = Fn.toFixed(1) + ' N';
+      $('s7FfN').textContent = Ff.toFixed(1) + ' N';
+
+      var chip = $('s7Chip');
+      chip.textContent = a > 0 ? 'slides' : 'stays put';
+      chip.className = 'sim-chip' + (a > 0 ? ' go' : '');
+
+      $('s7BarN').style.width = (100*Math.min(1, Fn/FS)).toFixed(2) + '%';
+      $('s7BarF').style.width = (100*Math.min(1, Ff/FS)).toFixed(2) + '%';
+      $('s7BarNw').className = 'sim-bar' + (Fn > FS ? ' over' : '');
+      $('s7BarFw').className = 'sim-bar' + (Ff > FS ? ' over' : '');
+      var tickPct = 100*Math.min(1, mg/FS);
+      $('s7MgTick').style.left = tickPct.toFixed(2) + '%';
+      $('s7FsLbl').style.visibility = tickPct > 80 ? 'hidden' : 'visible';
+
+      var w = 50*Math.min(1, Math.abs(a)/AFS), bar = $('s7BarA');
+      bar.style.width = w.toFixed(2) + '%';
+      bar.style.left  = (a >= 0 ? 50 : 50 - w).toFixed(2) + '%';
+      bar.className = 'acc';
+
+      fitLabels();
+    }
+
+    th.addEventListener('input', draw);
+    mu.addEventListener('input', draw);
+    ms.addEventListener('input', draw);
+    draw();
+    root.classList.add('on');
+  })();
+  </script>
 
   <ol class="tasks" start="10">
     <li>Set the ramp at a shallow angle with the block on it, and slowly raise one end until the block
