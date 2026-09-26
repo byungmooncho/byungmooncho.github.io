@@ -303,6 +303,17 @@
         margin:.1rem 0 .9rem; }
   .sim-readrow{ display:grid; gap:1rem; grid-template-columns:1fr; margin-top:.9rem; }
   @media (min-width:640px){ .sim-readrow{ grid-template-columns:1fr 1fr; } }
+  .sim-signs{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.5rem .65rem; margin:.7rem 0 0;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; }
+  .sim-signs .row{ display:grid; grid-template-columns:5.4em 1.6em 1fr; align-items:baseline;
+        gap:.4rem; }
+  .sim-signs .k{ color:var(--muted); font-size:.79rem; }
+  .sim-signs .sg{ font-size:1.15rem; font-weight:700; text-align:center;
+        font-variant-numeric:tabular-nums; color:var(--ink); }
+  .sim-signs .w{ color:var(--muted); font-size:.79rem; }
+  .sim-signs .rel{ margin-top:.4rem; padding-top:.4rem; border-top:1px solid var(--rule);
+        font-size:.82rem; color:var(--green); }
   .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
         color:var(--muted); margin:.9rem 0 0; }
   @media print{ .sim{ display:none !important; } }
@@ -538,8 +549,9 @@
 
     <div class="sim-btnrow">
       <span class="sim-tag" style="margin-right:.1rem">The lift is</span>
-      <button type="button" class="sim-btn ghost" id="s9Up" aria-pressed="false">going up</button>
-      <button type="button" class="sim-btn" id="s9Dn" aria-pressed="true">going down</button>
+      <button type="button" class="sim-btn ghost" id="s9Up" aria-pressed="false">going up · v &gt; 0</button>
+      <button type="button" class="sim-btn ghost" id="s9Z"  aria-pressed="false">v = 0</button>
+      <button type="button" class="sim-btn" id="s9Dn" aria-pressed="true">going down · v &lt; 0</button>
       <button type="button" class="sim-btn ghost" id="s9Reset" style="margin-left:auto">Reset</button>
     </div>
 
@@ -585,11 +597,17 @@
           <div class="sim-tag" id="s9Say"></div>
         </div>
 
+        <div class="sim-signs">
+          <div class="row"><span class="k">sign of v</span><span class="sg" id="s9SgV">−</span><span class="w" id="s9WdV">travelling down</span></div>
+          <div class="row"><span class="k">sign of a</span><span class="sg" id="s9SgA">0</span><span class="w" id="s9WdA">no acceleration</span></div>
+          <div class="rel" id="s9Rel"></div>
+        </div>
         <div class="sim-tag" style="margin-top:.6rem">up is positive, so ΣF = N − mg = ma</div>
-        <div class="sim-tag fixed" style="margin-top:.55rem">Now switch between going up and going
-        down without touching the acceleration. The arrow outside the shaft turns over, the description
-        above changes from speeding up to slowing down — and <b>the reading does not move at all</b>.
-        A scale cannot tell up from down.</div>
+        <div class="sim-tag fixed" style="margin-top:.55rem"><b>There is no v in N = m(g + a).</b>
+        The two signs together tell you whether you are speeding up or slowing down — same sign, speeding
+        up; opposite, slowing down. But the reading follows the sign of <i>a</i> alone: heavy when a &gt; 0,
+        light when a &lt; 0, true weight when a = 0. Change v through all three and watch the number hold
+        still.</div>
       </div>
     </div>
 
@@ -610,9 +628,10 @@
     var PXPA = 9;                           /* acceleration arrow, px per m/s^2       */
     var FEETY = 268, CX = 142, CHEST = FEETY - 62, ARX = CX + 34;
     var A = $('s9A'), M = $('s9M');
-    var travel = -1;              /* -1 down, +1 up. Never 0: an object at rest
-                                     over any interval has a = 0, so 'at rest' and a
-                                     non-zero acceleration cannot both be true. */
+    var travel = -1;              /* -1 down, 0, +1 up. v = 0 is legitimate only as an
+                                     INSTANT -- the moment it starts or finishes moving --
+                                     never as a sustained state, which would force a = 0.
+                                     The labels below say so. */
 
     function mk(tag,attrs,parent){
       var e = document.createElementNS(ns,tag);
@@ -657,26 +676,49 @@
       }
 
       /* direction of travel, right of the shaft -- changes nothing else */
-      show($('s9ArrV'), true);
-      seg($('s9ArrV'), 262, ay, 262, ay - v*42);
-      at($('s9LabV'), 262, v > 0 ? ay - 54 : ay + 60);
-      $('s9LabV').textContent = v > 0 ? 'going up' : 'going down';
+      show($('s9ArrV'), v !== 0);
+      if(v !== 0) seg($('s9ArrV'), 262, ay, 262, ay - v*42);
+      at($('s9LabV'), 262, v === 0 ? ay + 4 : (v > 0 ? ay - 54 : ay + 60));
+      $('s9LabV').textContent = v === 0 ? 'v = 0' : (v > 0 ? 'going up' : 'going down');
 
       /* readout */
       $('s9AOut').textContent = a.toFixed(1) + ' m/s²';
       $('s9MOut').textContent = m + ' kg';
 
       /* name the state, so that no combination of the controls is nonsense */
-      var dir = v > 0 ? 'going up' : 'going down';
-      $('s9Phase').textContent = (a <= -9.75) ? 'in free fall \u2014 the cable is cut'
-        : (Math.abs(a) < 0.05) ? dir + ' at a steady speed (or standing still \u2014 same reading)'
-        : (Math.sign(a) === v) ? dir + ', speeding up'
-        : dir + ', slowing to a stop';
+      var steady = Math.abs(a) < 0.05, dir = v > 0 ? 'going up' : 'going down';
+      $('s9Phase').textContent =
+          (a <= -9.75)            ? 'in free fall \u2014 the cable is cut'
+        : (v === 0 && steady)     ? 'standing still'
+        : (v === 0)               ? 'momentarily at rest \u2014 the instant it starts or stops'
+        : steady                  ? dir + ' at a steady speed'
+        : (Math.sign(a) === v)    ? dir + ', speeding up'
+        :                           dir + ', slowing to a stop';
 
-      $('s9Up').setAttribute('aria-pressed', v > 0 ? 'true' : 'false');
-      $('s9Dn').setAttribute('aria-pressed', v < 0 ? 'true' : 'false');
-      $('s9Up').className = 'sim-btn' + (v > 0 ? '' : ' ghost');
-      $('s9Dn').className = 'sim-btn' + (v < 0 ? '' : ' ghost');
+      /* --- the sign panel ------------------------------------------------ */
+      var sgn = function(x){ return x > 0 ? '+' : (x < 0 ? '\u2212' : '0'); };
+      $('s9SgV').textContent = sgn(v);
+      $('s9SgA').textContent = steady ? '0' : sgn(a);
+      $('s9WdV').textContent = v === 0 ? 'not moving, this instant'
+                             : (v > 0 ? 'travelling up' : 'travelling down');
+      $('s9WdA').textContent = steady ? 'no acceleration'
+                             : (a > 0 ? 'acceleration points up' : 'acceleration points down');
+      $('s9Rel').innerHTML =
+          steady        ? 'a = 0, so the scale reads your <b>true weight</b> \u2014 whatever v is doing.'
+        : (v === 0)     ? 'v = 0 but a \u2260 0, so the scale is <b>already</b> reading '
+                          + (a > 0 ? 'heavy' : 'light') + ' \u2014 at the very instant it is not moving.'
+        : (Math.sign(a) === v) ? 'same sign \u2192 <b>speeding up</b>. Reading: '
+                          + (a > 0 ? '<b>heavy</b>' : '<b>light</b>') + ', because a is '
+                          + (a > 0 ? 'positive' : 'negative') + '.'
+        : 'opposite signs \u2192 <b>slowing down</b>. Reading: '
+                          + (a > 0 ? '<b>heavy</b>' : '<b>light</b>') + ', because a is '
+                          + (a > 0 ? 'positive' : 'negative') + '.';
+
+      [['s9Up',1],['s9Z',0],['s9Dn',-1]].forEach(function(q){
+        var on = v === q[1];
+        $(q[0]).setAttribute('aria-pressed', on ? 'true' : 'false');
+        $(q[0]).className = 'sim-btn' + (on ? '' : ' ghost');
+      });
       $('s9Sub').textContent  = m + '(9.8 ' + (a < 0 ? '− ' : '+ ') + Math.abs(a).toFixed(1) + ')';
       $('s9N').textContent    = N.toFixed(0) + ' N';
       $('s9NN').textContent   = N.toFixed(0) + ' N';
@@ -704,6 +746,7 @@
 
     [A,M].forEach(function(el){ el.addEventListener('input', draw); });
     $('s9Up').addEventListener('click', function(){ travel =  1; draw(); });
+    $('s9Z' ).addEventListener('click', function(){ travel =  0; draw(); });
     $('s9Dn').addEventListener('click', function(){ travel = -1; draw(); });
     $('s9Reset').addEventListener('click', function(){
       travel = -1; A.value = 0; M.value = 60; draw();
