@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N7 — Inclined Planes: Forces on Tilted Axes</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3; keep identical across all note pages.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider: dots spaced like a motion diagram ----------- */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--ink); border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.experiments{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.experiments li{ margin:.55rem 0; }
+  ol.experiments b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+  /* --- figures ---------------------------------------------------------- */
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:1rem 1rem .8rem; margin:1.2rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin:.7rem 0 0;
+  }
+  /* --- movement marker --------------------------------------------------- */
+  .movement{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--green);
+    font-weight:700; margin:2.6rem 0 .3rem;
+  }
+  /* --- domain-of-validity callout ---------------------------------------- */
+  .domain{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    background:var(--green-soft); border-radius:0 8px 8px 0;
+    padding:.85rem 1.05rem; margin:1.1rem 0;
+  }
+  .domain .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .domain p{ margin:0; } .domain p + p{ margin-top:.5rem; }
+  /* --- worked block ------------------------------------------------------ */
+  .worked{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1.1rem; margin:1.1rem 0; }
+  .worked .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem;
+  }
+  .worked table{ width:100%; border-collapse:collapse;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .worked td{ padding:.3rem .5rem; border-bottom:1px solid var(--rule); }
+  .worked tr:last-child td{ border-bottom:0; }
+  .worked td.n{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .worked .flip{ color:#8a3324; font-weight:600; }
+  /* --- tasks ------------------------------------------------------------- */
+  ol.tasks{ margin:.3rem 0 0; padding-left:1.3rem; }
+  ol.tasks li{ margin:.55rem 0; }
+  ol.tasks .space{ display:block; border-bottom:1px solid var(--rule); height:1.4rem; margin:.4rem 0 0; }
+  /* --- static (non-clickable) download card ------------------------------ */
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  /* --- looking ahead ----------------------------------------------------- */
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+
+  /* --- predict-first hook --------------------------------------------- */
+  .hook{
+    background:#fff; border:1.5px dashed var(--green);
+    padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px;
+  }
+  .hook .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .hook .commit{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    color:var(--muted); display:block; margin-top:.6rem;
+  }
+  
+
+  /* --- back to your prediction -------------------------------------------- */
+  .callback{
+    border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc;
+    padding:.9rem 1.1rem; margin:1.6rem 0;
+  }
+  .callback .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .callback p{ margin:0; }
+  .callback .space{ display:block; border-bottom:1px solid var(--rule);
+    height:1.5rem; margin:.5rem 0 0; }
+
+  /* --- boxed rule ------------------------------------------------------ */
+  .rule-box{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.9rem 1.1rem; margin:1.3rem 0;
+    background:var(--green-soft);
+  }
+  .rule-box .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .rule-box p{ margin:0; font-size:1.1rem; }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Note 7</span>
+  </div>
+
+  <h1>Inclined Planes — Forces on Tilted Axes</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    A cart on a level rail stays put. Raise one end and it runs away down the ramp. Nothing about that
+    is surprising — we have all ridden a bike up a hill and enjoyed the trip back down, and we all know
+    gravity is responsible. What is worth asking is <em>how much</em> of gravity gets through. An incline
+    is free fall with the gravity turned down, and the dial is the angle. That is exactly why Galileo
+    used ramps: they slow gravity to a speed a person with a water clock can actually measure.
+  </div>
+
+  <div class="hook">
+    <span class="label">Before you read on — predict</span>
+    A large adult and a small child each sit on a sled at the top of the same snowy hill, and both are
+    released at the same instant.
+    <br>Do they slide down at the <strong>same rate</strong>, or does one accelerate harder? Do they reach
+    the bottom together, or does one arrive first?
+    <span class="commit">Write down your answer and one sentence of reasoning before you read on. Galileo was the first person to settle this by measurement rather than argument.</span>
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <ol>
+      <li><b>Draw</b> the free-body diagram for an object on an incline, with the axes tilted to the slope,
+      and say why the normal force needs no resolving while the weight does.</li>
+      <li><b>Show</b> why the angle inside the force triangle equals the incline angle.</li>
+      <li><b>Resolve</b> the weight into components along and perpendicular to the surface, and derive
+      F<sub>N</sub>&nbsp;=&nbsp;mg&nbsp;cos&nbsp;θ.</li>
+      <li><b>Derive</b> a&nbsp;=&nbsp;g&nbsp;sin&nbsp;θ for a frictionless incline, and explain why the mass
+      does not appear in it.</li>
+      <li><b>Check</b> the 0° and 90° limits against the level-surface and free-fall results.</li>
+      <li><b>Determine</b> the hanging mass that holds an object in equilibrium on a frictionless incline.</li>
+      <li><b>Derive and use</b> a&nbsp;=&nbsp;g(sin&nbsp;θ&nbsp;−&nbsp;μ&nbsp;cos&nbsp;θ) when friction acts,
+      and interpret a negative result.</li>
+    </ol>
+  </div>
+
+  <p class="movement">Movement one · the frictionless incline</p>
+
+  <h2>Watch the normal force shrink</h2>
+  <p>Start with the object on the ramp and tilt it, step by step. Watch two things: what happens to the
+  normal force, and what happens to the friction that goes with it. The weight, meanwhile, does not move
+  at all — it points straight down at every angle and never changes size.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 744 182" role="img" aria-label="Four diagrams of a block on an incline at 0, 30, 60 and 80 degrees. The downward arrow labelled F g is the same length in all four panels. The arrow perpendicular to the surface, labelled F N, shortens as the angle increases, scaling as the cosine of the angle. At 0 degrees no friction arrow is drawn. At 30, 60 and 80 degrees a shorter arrow labelled f points up along the slope, and it shortens in step with F N."><line x1="20" y1="140" x2="162" y2="140" stroke="#d7e2da" stroke-width="1.1" stroke-dasharray="4 4"/><line x1="20" y1="140" x2="162.0" y2="140.0" stroke="#1d2b23" stroke-width="1.8"/><g transform="rotate(0 85.3 134.5)"><rect x="75.3" y="129.0" width="20" height="11" fill="#fff" stroke="#1d2b23" stroke-width="1.4" rx="2"/></g><line x1="85.3" y1="134.5" x2="85.3" y2="166.5" stroke="#a8551f" stroke-width="2.0" stroke-linecap="round"/><polygon points="85.3,166.5 82.7,160.6 88.0,160.6" fill="#a8551f"/><text x="96.3" y="167.5" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#a8551f">F<tspan baseline-shift="sub" font-size="7.5">g</tspan></text><line x1="85.3" y1="134.5" x2="85.3" y2="102.5" stroke="#1e6b3c" stroke-width="2.0" stroke-linecap="round"/><polygon points="85.3,102.5 88.0,108.4 82.7,108.4" fill="#1e6b3c"/><text x="77.3" y="100.5" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#1e6b3c">F<tspan baseline-shift="sub" font-size="7.5">N</tspan></text><text x="93.0" y="18.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">0&#176; &mdash; nothing to slide</text><text x="93.0" y="32.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="9" fill="#5c6b62">F<tspan baseline-shift="sub" font-size="7.5">N</tspan> = 1.00 mg</text><line x1="206" y1="140" x2="348" y2="140" stroke="#d7e2da" stroke-width="1.1" stroke-dasharray="4 4"/><line x1="206" y1="140" x2="329.0" y2="69.0" stroke="#1d2b23" stroke-width="1.8"/><path d="M 228 140 A 22 22 0 0 0 225.1 129.0" fill="none" stroke="#5c6b62" stroke-width="1.1"/><text x="242.0" y="135.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">30&#176;</text><g transform="rotate(-30 259.8 102.6)"><rect x="249.8" y="97.1" width="20" height="11" fill="#fff" stroke="#1d2b23" stroke-width="1.4" rx="2"/></g><line x1="259.8" y1="102.6" x2="259.8" y2="134.6" stroke="#a8551f" stroke-width="2.0" stroke-linecap="round"/><polygon points="259.8,134.6 257.2,128.6 262.5,128.6" fill="#a8551f"/><text x="270.8" y="135.6" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#a8551f">F<tspan baseline-shift="sub" font-size="7.5">g</tspan></text><line x1="259.8" y1="102.6" x2="246.0" y2="78.6" stroke="#1e6b3c" stroke-width="2.0" stroke-linecap="round"/><polygon points="246.0,78.6 251.2,82.4 246.6,85.0" fill="#1e6b3c"/><text x="238.0" y="76.6" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#1e6b3c">F<tspan baseline-shift="sub" font-size="7.5">N</tspan></text><line x1="259.8" y1="102.6" x2="271.8" y2="95.6" stroke="#1f5d8c" stroke-width="1.9" stroke-linecap="round"/><polygon points="271.8,95.6 268.6,100.1 266.3,96.2" fill="#1f5d8c"/><text x="277.8" y="92.6" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#1f5d8c">f</text><text x="279.0" y="18.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">~30&#176;</text><text x="279.0" y="32.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="9" fill="#5c6b62">F<tspan baseline-shift="sub" font-size="7.5">N</tspan> = 0.87 mg</text><line x1="186" y1="10" x2="186" y2="172" stroke="#d7e2da" stroke-width="1"/><line x1="392" y1="140" x2="534" y2="140" stroke="#d7e2da" stroke-width="1.1" stroke-dasharray="4 4"/><line x1="392" y1="140" x2="453.2" y2="34.0" stroke="#1d2b23" stroke-width="1.8"/><path d="M 414 140 A 22 22 0 0 0 403.0 120.9" fill="none" stroke="#5c6b62" stroke-width="1.1"/><text x="428.0" y="135.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">60&#176;</text><g transform="rotate(-60 415.4 88.5)"><rect x="405.4" y="83.0" width="20" height="11" fill="#fff" stroke="#1d2b23" stroke-width="1.4" rx="2"/></g><line x1="415.4" y1="88.5" x2="415.4" y2="120.5" stroke="#a8551f" stroke-width="2.0" stroke-linecap="round"/><polygon points="415.4,120.5 412.7,114.6 418.0,114.6" fill="#a8551f"/><text x="426.4" y="121.5" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#a8551f">F<tspan baseline-shift="sub" font-size="7.5">g</tspan></text><line x1="415.4" y1="88.5" x2="401.5" y2="80.5" stroke="#1e6b3c" stroke-width="2.0" stroke-linecap="round"/><polygon points="401.5,80.5 408.0,81.2 405.3,85.8" fill="#1e6b3c"/><text x="393.5" y="78.5" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#1e6b3c">F<tspan baseline-shift="sub" font-size="7.5">N</tspan></text><line x1="415.4" y1="88.5" x2="419.4" y2="81.6" stroke="#1f5d8c" stroke-width="1.9" stroke-linecap="round"/><polygon points="419.4,81.6 418.8,87.0 414.9,84.8" fill="#1f5d8c"/><text x="425.4" y="78.6" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#1f5d8c">f</text><text x="465.0" y="18.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">~60&#176;</text><text x="465.0" y="32.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="9" fill="#5c6b62">F<tspan baseline-shift="sub" font-size="7.5">N</tspan> = 0.50 mg</text><line x1="372" y1="10" x2="372" y2="172" stroke="#d7e2da" stroke-width="1"/><line x1="578" y1="140" x2="720" y2="140" stroke="#d7e2da" stroke-width="1.1" stroke-dasharray="4 4"/><line x1="578" y1="140" x2="596.7" y2="34.0" stroke="#1d2b23" stroke-width="1.8"/><path d="M 600 140 A 22 22 0 0 0 581.8 118.3" fill="none" stroke="#5c6b62" stroke-width="1.1"/><text x="614.0" y="135.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">80&#176;</text><g transform="rotate(-80 581.2 90.3)"><rect x="571.2" y="84.8" width="20" height="11" fill="#fff" stroke="#1d2b23" stroke-width="1.4" rx="2"/></g><line x1="581.2" y1="90.3" x2="581.2" y2="122.3" stroke="#a8551f" stroke-width="2.0" stroke-linecap="round"/><polygon points="581.2,122.3 578.5,116.3 583.8,116.3" fill="#a8551f"/><text x="592.2" y="123.3" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#a8551f">F<tspan baseline-shift="sub" font-size="7.5">g</tspan></text><line x1="581.2" y1="90.3" x2="575.7" y2="89.3" stroke="#1e6b3c" stroke-width="2.0" stroke-linecap="round"/><polygon points="575.7,89.3 582.0,87.7 581.1,93.0" fill="#1e6b3c"/><text x="567.7" y="87.3" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#1e6b3c">F<tspan baseline-shift="sub" font-size="7.5">N</tspan></text><line x1="581.2" y1="90.3" x2="581.7" y2="87.5" stroke="#1f5d8c" stroke-width="1.9" stroke-linecap="round"/><polygon points="581.7,87.5 583.0,92.9 578.6,92.1" fill="#1f5d8c"/><text x="587.7" y="84.5" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#1f5d8c">f</text><text x="651.0" y="18.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">~80&#176;</text><text x="651.0" y="32.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="9" fill="#5c6b62">F<tspan baseline-shift="sub" font-size="7.5">N</tspan> = 0.17 mg</text><line x1="558" y1="10" x2="558" y2="172" stroke="#d7e2da" stroke-width="1"/></svg>
+    <figcaption>The same object at four angles. <strong>The weight never changes</strong> — same arrow,
+    every panel. The normal force shortens as the ramp steepens, scaling as cos&nbsp;θ — and
+    <strong>friction shortens with it</strong>, because friction is μ times the normal force and nothing
+    else. At 0° nothing is trying to slide, so there is no friction at all. Carry the trend to 90° and
+    both arrows vanish together: no contact, no normal force, no friction — just the weight, and the
+    object falls. Draw all four in your guided notes before you read on.</figcaption>
+  </figure>
+
+  <ol class="tasks">
+    <li>At <b>90 degrees</b> you are back to two forces. Why? Draw it. At that angle the surface is
+    irrelevant to the motion — how would you describe what the object is doing?<span class="space"></span></li>
+  </ol>
+
+  <h2>Tilt the axes, not the physics</h2>
+  <div class="rule-box">
+    <span class="label">The rule the whole note rests on</span>
+    <p>&Sigma;F<sub>x</sub> = ma<sub>x</sub> &nbsp; and &nbsp; &Sigma;F<sub>y</sub> = ma<sub>y</sub></p>
+  </div>
+
+  <div class="domain">
+    <span class="label">Two directions, two equations, and they are yours to choose</span>
+    <p>Newton's second law is applied <strong>once in each of two perpendicular directions</strong>, and
+    the two are <em>independent</em> &mdash; what the forces do along x has no bearing on what they do
+    along y. <b>N3</b> got away with a single equation every time because every force in it lay along one
+    line. That was the special case, not the general one.</p>
+    <p>Nothing says the two directions have to be horizontal and vertical. <strong>Any two perpendicular
+    directions will do</strong>, and the law comes out the same in all of them. That freedom is the only
+    trick in this note: choose them along the slope, and the normal force lands entirely on one axis with
+    nothing to resolve.</p>
+    <p>Splitting a slanted vector into two perpendicular pieces is the resolution from
+    <b>Module&nbsp;2</b> &mdash; the same triangle, the same sine and cosine, applied to a force instead
+    of a displacement. If that machinery is rusty, repair it there rather than here; everything below
+    assumes it.</p>
+  </div>
+
+
+  <p>There is nothing new on an incline. It is the same vector analysis and the same kinematics as
+  everywhere else. The one move worth making is to <strong>define the axes along the plane</strong> —
+  x parallel to the surface, y perpendicular to it. You do not have to. It just means only one vector
+  needs resolving instead of two.</p>
+
+  <p>Two things stay true at every angle, and they are the whole reason the geometry works:
+  <strong>the weight always points straight down</strong>, and <strong>the normal force always points
+  90° away from the surface.</strong> Which means that on any nonzero incline they are no longer
+  opposite each other, and no longer the same size.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 350" role="img" aria-label="A block on an incline of angle theta rising to the right, drawn on a square grid rotated so one family of lines runs along the surface and the other perpendicular to it, filling the right-angled triangle. From a dot at the block, a solid arrow points straight down labelled F g. Two dashed arrows of its components leave the same dot: one perpendicular into the surface labelled F g cos theta, one down the slope labelled F g sin theta, with a right-angle mark between them and dashed lines completing the rectangle to the tip of F g. A solid arrow of equal length to F g cos theta points perpendicular away from the surface, labelled F N; both carry a tick mark showing they are the same length. The angle between F g and its perpendicular component is marked and equals theta."><clipPath id="fr"><rect x="44" y="18" width="632" height="314"/></clipPath><g clip-path="url(#fr)"><g transform="rotate(-25 70 300)"><line x1="-50" y1="612" x2="790" y2="612" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="586" x2="790" y2="586" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="560" x2="790" y2="560" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="534" x2="790" y2="534" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="508" x2="790" y2="508" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="482" x2="790" y2="482" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="456" x2="790" y2="456" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="430" x2="790" y2="430" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="404" x2="790" y2="404" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="378" x2="790" y2="378" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="352" x2="790" y2="352" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="326" x2="790" y2="326" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="300" x2="790" y2="300" stroke="#cfded4" stroke-width="1.6"/><line x1="-50" y1="274" x2="790" y2="274" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="248" x2="790" y2="248" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="222" x2="790" y2="222" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="196" x2="790" y2="196" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="170" x2="790" y2="170" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="144" x2="790" y2="144" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="118" x2="790" y2="118" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="92" x2="790" y2="92" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="66" x2="790" y2="66" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="40" x2="790" y2="40" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="14" x2="790" y2="14" stroke="#dfeae2" stroke-width="1"/><line x1="-50" y1="-12" x2="790" y2="-12" stroke="#dfeae2" stroke-width="1"/><line x1="-8" y1="-160" x2="-8" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="18" y1="-160" x2="18" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="44" y1="-160" x2="44" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="70" y1="-160" x2="70" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="96" y1="-160" x2="96" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="122" y1="-160" x2="122" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="148" y1="-160" x2="148" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="174" y1="-160" x2="174" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="200" y1="-160" x2="200" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="226" y1="-160" x2="226" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="252" y1="-160" x2="252" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="278" y1="-160" x2="278" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="304" y1="-160" x2="304" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="330" y1="-160" x2="330" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="356" y1="-160" x2="356" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="382" y1="-160" x2="382" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="408" y1="-160" x2="408" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="434" y1="-160" x2="434" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="460" y1="-160" x2="460" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="486" y1="-160" x2="486" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="512" y1="-160" x2="512" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="538" y1="-160" x2="538" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="564" y1="-160" x2="564" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="590" y1="-160" x2="590" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="616" y1="-160" x2="616" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="642" y1="-160" x2="642" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="668" y1="-160" x2="668" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="694" y1="-160" x2="694" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="720" y1="-160" x2="720" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="746" y1="-160" x2="746" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="772" y1="-160" x2="772" y2="630" stroke="#dfeae2" stroke-width="1"/><line x1="798" y1="-160" x2="798" y2="630" stroke="#dfeae2" stroke-width="1"/></g></g><line x1="70" y1="300" x2="541.3" y2="300" stroke="#5c6b62" stroke-width="1.2" stroke-dasharray="6 5" opacity=".7"/><line x1="541.3" y1="80.2" x2="541.3" y2="300" stroke="#5c6b62" stroke-width="1.2" stroke-dasharray="6 5" opacity=".7"/><polyline points="528.3,300 528.3,287 541.3,287" fill="none" stroke="#5c6b62" stroke-width="1.2" opacity=".8"/><line x1="70" y1="300" x2="541.3" y2="80.2" stroke="#1d2b23" stroke-width="2.2"/><path d="M 116 300 A 46 46 0 0 0 111.7 280.6" fill="none" stroke="#5c6b62" stroke-width="1.4"/><text x="132.0" y="290.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">&#952;</text><g transform="rotate(-25 274.19 196.51)"><rect x="257.19" y="189.01" width="34" height="15" fill="#ffffff" fill-opacity=".82" stroke="#1d2b23" stroke-width="1.5" rx="2"/></g><path d="M 320.2 295.1 L 274.2 316.5 L 228.2 217.9" fill="none" stroke="#a8551f" stroke-width="1" stroke-dasharray="3 4" opacity=".55"/><path d="M 278.8 206.5 L 268.9 211.1 L 264.2 201.2" fill="none" stroke="#a8551f" stroke-width="1" opacity=".7"/><line x1="274.2" y1="196.5" x2="234.6" y2="215.0" stroke="#a8551f" stroke-width="1.8" stroke-linecap="butt" stroke-dasharray="7 4"/><polygon points="228.2,217.9 233.7,212.1 236.2,217.5" fill="#a8551f"/><text x="216.2" y="219.9" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g</tspan> sin&#952;</text><line x1="274.2" y1="196.5" x2="317.2" y2="288.7" stroke="#a8551f" stroke-width="1.8" stroke-linecap="butt" stroke-dasharray="7 4"/><polygon points="320.2,295.1 314.3,289.6 319.7,287.1" fill="#a8551f"/><text x="334.2" y="308.1" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g</tspan> cos&#952;</text><line x1="274.2" y1="196.5" x2="274.2" y2="307.7" stroke="#a8551f" stroke-width="2.4" stroke-linecap="butt"/><polygon points="274.2,316.5 270.5,307.2 277.9,307.2" fill="#a8551f"/><text x="286.2" y="319.5" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g</tspan></text><line x1="274.2" y1="196.5" x2="231.9" y2="105.9" stroke="#1e6b3c" stroke-width="2.4" stroke-linecap="butt"/><polygon points="228.2,97.9 235.5,104.8 228.8,107.9" fill="#1e6b3c"/><text x="217.2" y="89.9" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1e6b3c">F<tspan baseline-shift="sub" font-size="9">N</tspan></text><line x1="253.4" y1="140.2" x2="244.4" y2="144.4" stroke="#1e6b3c" stroke-width="1.6"/><line x1="294.9" y1="252.8" x2="304.0" y2="248.6" stroke="#a8551f" stroke-width="1.6"/><path d="M 274.2 238.5 A 42 42 0 0 0 291.9 234.6" fill="none" stroke="#1e6b3c" stroke-width="2"/><text x="301.2" y="248.5" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1e6b3c">&#952;</text><circle cx="274.2" cy="196.5" r="2.6" fill="#1d2b23"/><line x1="391.3" y1="248.0" x2="359.8" y2="262.7" stroke="#5c6b62" stroke-width="1.6"/><polygon points="355.0,264.9 359.1,260.5 361.0,264.6" fill="#5c6b62"/><text x="342.3" y="274.8" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">+x</text><line x1="391.3" y1="248.0" x2="376.6" y2="216.5" stroke="#5c6b62" stroke-width="1.6"/><polygon points="374.4,211.7 378.7,215.9 374.7,217.7" fill="#5c6b62"/><text x="368.5" y="199.1" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">+y</text><text x="401.3" y="270.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">the axes turn with the plane</text></svg>
+    <figcaption><strong>The grid itself has been rotated to follow the plane</strong> — one family of lines
+    runs along the surface, the other perpendicular to it, and the tilted lattice fills the whole
+    right-angled triangle. That is the whole move: the axes turn with the
+    incline, so the normal force already lies along +y and needs no resolving. <strong>The tick marks
+    show F<sub>N</sub> and F<sub>g</sub>&nbsp;cos&nbsp;θ are the same length</strong> — equal and opposite
+    along +y, which is exactly what ΣF<sub>y</sub> = 0 means. The angle between the weight and its perpendicular component — marked in green —
+    <strong>is the incline angle</strong>. Prove that to yourself: the two right-angled triangles share
+    an angle, and in each of them the remaining angles must sum to 90°.</figcaption>
+  </figure>
+
+  <ol class="tasks" start="2">
+    <li>Which angle in the force triangle equals θ? Mark it, and <b>show why</b> it is the same as the
+    incline angle.<span class="space"></span></li>
+    <li>Write the component of F<sub>g</sub> perpendicular to the surface, and the component along it,
+    both in terms of F<sub>g</sub> and θ.<span class="space"></span></li>
+    <li>There is no net force along y. <b>Why?</b> Use that to write F<sub>N</sub> in terms of
+    F<sub>g</sub> and θ.<span class="space"></span></li>
+  </ol>
+
+  <h2>The key relationships</h2>
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>F</mi><mi>N</mi></msub><mo>=</mo><mi>m</mi><mi>g</mi>
+        <mi>cos</mi><mo>&#x2061;</mo><mi>&#x3B8;</mi>
+      </math>
+      <span class="use">the object stays on the surface, so ΣF<sub>y</sub> = 0 — <strong>true at any angle, with or without friction</strong></span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <msub><mi>F</mi><mrow><mi>g</mi><mo>,</mo><mi>x</mi></mrow></msub><mo>=</mo>
+        <mi>m</mi><mi>g</mi><mi>sin</mi><mo>&#x2061;</mo><mi>&#x3B8;</mi>
+      </math>
+      <span class="use">the down-slope pull — the only part of the weight that drives the motion</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>a</mi><mo>=</mo><mi>g</mi><mi>sin</mi><mo>&#x2061;</mo><mi>&#x3B8;</mi>
+      </math>
+      <span class="use"><strong>frictionless only.</strong> Note what is missing: the mass</span>
+    </li>
+  </ul>
+
+  <div class="domain">
+    <span class="label">Where these hold</span>
+    <p>The first two hold on any incline. <strong>The third assumes a frictionless surface</strong> — it
+    is what you get from ΣF<sub>x</sub> = mg&nbsp;sin&nbsp;θ = ma when nothing opposes the slide. Movement
+    two puts friction back in and the expression changes.</p>
+    <p>And from Note&nbsp;5: friction is <em>always</em> f&nbsp;=&nbsp;μF<sub>N</sub>. On this page
+    F<sub>N</sub> is no longer mg, so <strong>f is no longer μmg</strong> — the level-surface shortcut
+    stops working here. Find F<sub>N</sub> first, then multiply by μ.</p>
+  </div>
+
+  <ol class="tasks" start="5">
+    <li>The object slides down a frictionless ramp. <b>Why does it accelerate at all?</b><span class="space"></span></li>
+    <li>Use Newton's second law to show that a&nbsp;=&nbsp;g&nbsp;sin&nbsp;θ. Is this larger or smaller
+    than the free-fall acceleration?<span class="space"></span></li>
+    <li>Use that equation to explain why the object <b>is</b> in free fall when the incline is vertical.
+    How does that square with your physical intuition?<span class="space"></span></li>
+  </ol>
+
+  <h2>Back to the sled</h2>
+  <p>Look at a&nbsp;=&nbsp;g&nbsp;sin&nbsp;θ and notice what is <em>not</em> in it. There is no m. The
+  adult and the child accelerate identically and arrive together — for the same reason everything falls
+  at the same rate, which you established in Note&nbsp;4: the larger mass is pulled harder, and is
+  correspondingly harder to accelerate, and the two effects cancel exactly.</p>
+
+  <p>The angle is the only dial. At θ&nbsp;=&nbsp;0, sin&nbsp;θ&nbsp;=&nbsp;0 and nothing moves. At
+  θ&nbsp;=&nbsp;90°, sin&nbsp;θ&nbsp;=&nbsp;1 and a&nbsp;=&nbsp;g — free fall, with the surface gone.
+  Everything in between is free fall turned down by a factor of sin&nbsp;θ. Galileo's ramps were a way
+  of dividing gravity by a known number until it was slow enough to time by hand.</p>
+
+  <h2>Holding it still — the measurement</h2>
+  <p>Now connect the object over a smooth pulley to a hanging mass, chosen so the object does not move.</p>
+
+  <ol class="tasks" start="8">
+    <li>Which component of F<sub>g</sub> must the hanging weight cancel for the object to be in
+    equilibrium? Explain why it is that one and not the whole weight.<span class="space"></span></li>
+    <li>The object has a mass of 2&nbsp;kg and the incline is at 30°. <b>What hanging mass holds it
+    still?</b> Work it out first — then set it up and confirm your answer by measurement.<span class="space"></span></li>
+  </ol>
+
+  <p class="movement">Movement two · now put friction back</p>
+
+  <h2>A real ramp</h2>
+  <p>Nothing above is wrong; it is just frictionless. On a real surface the slide is opposed, and you
+  already know by how much — Note 5 gave you f&nbsp;=&nbsp;μF<sub>N</sub>, and this note has just told
+  you what F<sub>N</sub> is on a slope.</p>
+
+  <p>Perpendicular to the surface, nothing has changed: ΣF<sub>y</sub> = F<sub>N</sub> −
+  mg&nbsp;cos&nbsp;θ = 0. Along the surface there are now two forces instead of one:
+  ΣF<sub>x</sub> = mg&nbsp;sin&nbsp;θ − f = ma. Substitute f = μF<sub>N</sub> = μmg&nbsp;cos&nbsp;θ,
+  cancel the mass from every term, and:</p>
+
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>a</mi><mo>=</mo><mi>g</mi><mo stretchy="false">(</mo>
+        <mi>sin</mi><mo>&#x2061;</mo><mi>&#x3B8;</mi><mo>&#x2212;</mo>
+        <mi>&#x3BC;</mi><mi>cos</mi><mo>&#x2061;</mo><mi>&#x3B8;</mi>
+        <mo stretchy="false">)</mo>
+      </math>
+      <span class="use">sliding down a real incline — still no mass in it</span>
+    </li>
+  </ul>
+
+  <div class="worked">
+    <span class="label">Worked — rubber on ice, μ<sub>k</sub> = 0.1</span>
+    <table>
+      <tr><td>θ = 30°</td><td class="n">a = 9.8 (0.500 − 0.1 × 0.866)</td><td class="n">= +4.05 m/s²</td></tr>
+      <tr><td>θ = 5°</td><td class="n">a = 9.8 (0.087 − 0.1 × 0.996)</td><td class="n" ><span class="flip">= −0.12 m/s²</span></td></tr>
+    </table>
+  </div>
+
+  <p>That negative sign is not an arithmetic slip — it is the physics. A negative acceleration down the
+  slope means the slope is not steep enough to start the object moving at all. The expression is telling
+  you the object stays where it is, and the angle where it changes its mind is the angle at which
+  sin&nbsp;θ finally beats μ&nbsp;cos&nbsp;θ.</p>
+
+  <ol class="tasks" start="10">
+    <li>Set the ramp at a shallow angle with the block on it, and slowly raise one end until the block
+    <b>just</b> breaks loose. Record that angle. What is μ<sub>s</sub> for these two surfaces? Compare it
+    with the value you measured by dragging in Note 5 — same block, same surfaces, two completely
+    different methods.<span class="space"></span></li>
+  </ol>
+
+  <div class="ahead">
+    <b>Where this came from, and where it goes.</b> The normal force stopped equalling the weight back in
+    <b>Note 4</b>, on a level surface with an angled push, and again in <b>Note 9</b>, in a moving lift.
+    Here it stops for a third reason — geometry. Same equation each time: find F<sub>N</sub> from
+    ΣF&nbsp;=&nbsp;ma in the direction the object does not accelerate, then use it.
+  </div>
+
+  <div class="callback">
+    <span class="label">Back to your prediction</span>
+    <p>You predicted whether the adult and the child reach the bottom together. Was it right? Point to the place in a = g&thinsp;sin&thinsp;&theta; that settles it.</p>
+    <span class="space"></span><span class="space"></span>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY151/handouts/M3_N7_Inclined_Planes_Forces_On_Tilted_Axes_GuidedNotes_BLANK.pdf">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes &mdash; blank (PDF)</span>
+      <span class="hint">Print or open on a tablet; record your prediction about the sled, then draw all four panels before the video reveals them.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes — the worked resolution, both derivations and the two measurements.</span>
+    </div>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+
+<!-- ===================================================================
+     FOUNDATION LIST — for the quiz project (Lesson Package rung 2 / 3).
+     Items may go beyond the note, but not beyond this list.
+
+     FRICTIONLESS (movement one)
+     0. SIGMA-F = ma IS APPLIED ONCE PER DIRECTION -- Sigma-Fx = m*ax AND
+        Sigma-Fy = m*ay -- and the two equations are INDEPENDENT. The
+        directions need only be PERPENDICULAR; they are the solver's to
+        choose, and the law reads the same in any such pair. N3's
+        single-equation problems were the special case where every force
+        lay along one line. Resolving a slanted force into components is
+        MODULE 2's trigonometry, used here unchanged.
+     1. Tilt the axes to the slope: x along the surface, y perpendicular.
+        The normal force then needs no resolving; the weight does.
+     2. The weight ALWAYS points straight down and the normal force ALWAYS
+        points 90 degrees from the surface, at every angle -- so on any
+        nonzero incline they are neither opposite nor equal.
+     3. The angle inside the force triangle EQUALS the incline angle,
+        because both right triangles' non-right angles sum to 90 degrees.
+     4. F_g,x = mg sin(theta) down-slope; F_g,y = mg cos(theta) into the
+        surface. No acceleration perpendicular to the surface, so
+        F_N = mg cos(theta) -- true at ANY angle, with or without friction.
+        F_N shrinks as theta grows while F_g stays constant.
+     5. Frictionless: a = g sin(theta). NO MASS IN IT -- the adult and the
+        child arrive together, for the same reason as N4's equal fall rates.
+        Limits: theta = 0 gives a = 0 and F_N = mg; theta = 90 gives
+        F_N = 0 and a = g, i.e. free fall. An incline is free fall diluted
+        by sin(theta).
+     6. Equilibrium against a hanging mass: mg sin(theta) = m_H g, so
+        m_H = m sin(theta). Worked: 2 kg at 30 degrees needs 1 kg. The
+        hanging weight cancels the DOWN-SLOPE COMPONENT, not the weight.
+
+     WITH FRICTION (movement two) -- cites N5 lines 2 and 3
+     7. f = mu F_N ALWAYS (N5 line 2). On a slope F_N = mg cos(theta),
+        so f = mu mg cos(theta). The level-surface shortcut f = mu m g
+        (N5 line 3) DOES NOT APPLY HERE. Find F_N first, then multiply.
+     8. a = g(sin(theta) - mu cos(theta)), still mass-independent.
+        Worked at mu_k = 0.1: theta = 30 gives +4.05 m/s^2; theta = 5
+        gives -0.12 m/s^2. A NEGATIVE RESULT MEANS IT DOES NOT SLIDE --
+        the sign is the physics, not an arithmetic error.
+     9. mu_s = tan(theta) at the angle where it just breaks loose, giving a
+        second independent measurement of the coefficient measured by
+        dragging in N5.
+
+     NOT laid down here (do not write items against these):
+       - what mu is and what it depends on (that is N5)
+       - the normal force in an accelerating frame (N9)
+       - tension shared through a string over a pulley (N8; used
+         qualitatively in line 6 only)
+     =================================================================== -->
+
+
+<!-- Iframe auto-height reporter (V4). Tells the D2L wrapper how tall this page
+     really is. Measures .note-wrap, so the value is viewport-independent and can
+     come back down as well as up. Must stay just before </body>.
+     See Cross_Course_Notes/Autosize_Backfill_Runbook_Reference.md -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N1 — What Motion Can You Detect?</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3; keep identical across all note pages.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider: dots spaced like a motion diagram ----------- */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--ink); border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.experiments{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.experiments li{ margin:.55rem 0; }
+  ol.experiments b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+  /* --- the tool aside --------------------------------------------------- */
+  .aside{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.15rem; margin:1.6rem 0; background:#fbfdfc;
+  }
+  .aside .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .aside h3{ font-size:1.05rem; margin:0 0 .5rem; font-weight:700; }
+  .aside p{ margin:0 0 .6rem; }
+  .aside p:last-child{ margin-bottom:0; }
+
+  /* --- experiments ------------------------------------------------------ */
+  .exp{ border-left:3px solid var(--green); padding:.1rem 0 .1rem 1rem; margin:1.3rem 0; }
+  .exp h3{ font-size:1.05rem; margin:0 0 .35rem; font-weight:700; }
+  .exp p{ margin:0 0 .5rem; }
+  .exp .verdict{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    color:var(--green); font-weight:600; margin:0;
+  }
+
+  /* --- the claim -------------------------------------------------------- */
+  .claim{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    background:var(--green-soft); border-radius:0 8px 8px 0;
+    padding:1rem 1.15rem; margin:1.6rem 0;
+  }
+  .claim .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .claim p{ margin:0; font-size:1.12rem; }
+  .claim p + p{ margin-top:.6rem; font-size:1rem; }
+
+  /* --- check questions --------------------------------------------------- */
+  ol.checks{ margin:.4rem 0 0; padding-left:1.3rem; }
+  ol.checks li{ margin:.9rem 0; }
+  ol.checks .space{
+    display:block; border-bottom:1px solid var(--rule);
+    height:1.5rem; margin:.45rem 0 0;
+  }
+
+  /* --- looking ahead ---------------------------------------------------- */
+  .ahead{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted);
+  }
+  .ahead b{ color:var(--green); }
+
+  /* --- predict-first hook --------------------------------------------- */
+  .hook{
+    background:#fff; border:1.5px dashed var(--green);
+    padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px;
+  }
+  .hook .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .hook .commit{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    color:var(--muted); display:block; margin-top:.6rem;
+  }
+  
+
+  /* --- back to your prediction -------------------------------------------- */
+  .callback{
+    border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc;
+    padding:.9rem 1.1rem; margin:1.6rem 0;
+  }
+  .callback .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .callback p{ margin:0; }
+  .callback .space{ display:block; border-bottom:1px solid var(--rule);
+    height:1.5rem; margin:.5rem 0 0; }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Note 1</span>
+  </div>
+
+  <h1>What Motion Can You Detect?</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Before we can talk about forces, we have to settle something surprisingly slippery: which motions
+    are real, and which only look real because of where you happen to be standing. The answer turns out
+    to decide the shape of every law in this module — including why Newton's second law is about
+    <em>acceleration</em> and not about speed.
+  </div>
+
+  <div class="hook">
+    <span class="label">Before you read on — predict</span>
+    You are a passenger in a windowless van with no instruments, riding on a perfectly smooth, straight
+    road. Two questions:
+    <br>Can you tell, from inside, whether the van is <strong>parked</strong> or <strong>cruising at
+    60&nbsp;mph</strong>? And can you tell whether the driver has just <strong>hit the brakes</strong>?
+    <span class="commit">Commit to yes or no for each, and one sentence on how you would find out, before you read on.</span>
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <ol>
+      <li><b>Decide</b>, for a described situation inside a closed vehicle, whether the motion could be
+      detected from inside it — and say what experiment would settle it.</li>
+      <li><b>State</b> the principle of relativity in your own words, and explain how it follows from
+      inertia.</li>
+      <li><b>Explain</b> why static and dynamic equilibrium are the same physical state, not two states.</li>
+      <li><b>Explain</b> why Newton's second law relates force to acceleration rather than to velocity.</li>
+      <li><b>Draw</b> a free-body diagram for a single body, and say what belongs on it and what does not.</li>
+    </ol>
+  </div>
+
+  <h2>Three experiments you have already run</h2>
+  <p>You do not need a laboratory for any of these. You have done all three without noticing.</p>
+
+  <div class="exp">
+    <h3>1 · Drop a ball in the van</h3>
+    <p>Hold a ball at shoulder height and let go. Where does it land — at your feet, or somewhere behind
+    you, since the van moved forward while the ball was falling?</p>
+    <p class="verdict">At your feet. Exactly as it would if the van were parked in a driveway.</p>
+  </div>
+
+  <div class="exp">
+    <h3>2 · Coffee at 900 kilometres an hour</h3>
+    <p>A cup of coffee on a tray table at cruising altitude sits perfectly still. The aircraft is moving
+    faster than almost anything you will ever ride in, and the surface of the coffee does not know it.
+    Then the pilot throttles back, or hits turbulence, or lands — and it slops over the rim.</p>
+    <p class="verdict">Speed: undetectable. Change of speed: unmistakable.</p>
+  </div>
+
+  <div class="exp">
+    <h3>3 · Standing on the subway</h3>
+    <p>Watch the standing passengers. They lean back as the train pulls out, and forward as it brakes
+    into the next station. In between — at forty miles an hour through a tunnel — they stand up straight
+    and read their phones.</p>
+    <p class="verdict">Nobody braces against speed. Everybody braces against a change in it.</p>
+  </div>
+
+  <h2>What the three have in common</h2>
+  <p>In every case, no experiment performed <em>inside</em> the vehicle could reveal how fast it was
+  going. In every case, a change in that speed announced itself immediately, with no instruments at all.
+  Write out, in your own words:</p>
+
+  <ol class="checks">
+    <li>State the <b>Galilean principle of relativity</b> in your own words.<span class="space"></span></li>
+    <li>How is the principle of relativity connected to the idea of <b>inertia</b>?<span class="space"></span></li>
+    <li>State <b>Newton's first law</b>, and describe why it contains both of the ideas above.<span class="space"></span></li>
+  </ol>
+
+  <div class="claim">
+    <span class="label">The claim this note rests on</span>
+    <p>There is no experiment you can perform to decide which frame is <em>really</em> at rest.
+    <strong>Velocity cannot be measured absolutely — only relative to something else. Acceleration
+    can.</strong></p>
+    <p>Which is why Newton's second law is written <em>F</em>&nbsp;=&nbsp;<em>ma</em> and not
+    <em>F</em>&nbsp;=&nbsp;<em>mv</em>. A law built on velocity would give different answers to different
+    observers, and would not be a law at all. A law built on acceleration gives the same answer to
+    everyone — so acceleration is the quantity a force can be held responsible for.</p>
+  </div>
+
+  <h2>Does it hold? Four consequences to check</h2>
+  <p>If nothing distinguishes one steadily-moving frame from another, these four should now answer
+  themselves. If any of them still feels like a definition to memorise, the idea above has not landed
+  yet — go back to the three experiments.</p>
+
+  <ol class="checks">
+    <li>What is a <b>static equilibrium</b>? Give an example.<span class="space"></span></li>
+    <li>Can many forces act on an object that is in static equilibrium? Explain with a diagram.<span class="space"></span></li>
+    <li>"An object moving at constant velocity has zero net force, so the forces are in equilibrium."
+    True or false, and why?<span class="space"></span></li>
+    <li>What is a <b>dynamic equilibrium</b>, how does it differ from a static one — and <b>what is the
+    same in both</b>?<span class="space"></span></li>
+  </ol>
+
+  <div class="aside">
+    <span class="label">The tool for the rest of the module</span>
+    <h3>The free-body diagram</h3>
+    <p>One body. Every force acting <em>on</em> it. Nothing else — not the forces it exerts on other
+    things, not the forces acting on its surroundings, not the motion it happens to have.</p>
+    <p>That restriction sounds fussy now and will save you repeatedly later. It is the reason a force
+    and its Newton's-third-law partner can never appear on the same diagram: they act on two different
+    bodies, so they belong to two different diagrams.</p>
+    <ol class="checks">
+      <li>What is a <b>free-body diagram</b>? Give two examples.<span class="space"></span></li>
+    </ol>
+  </div>
+
+  <div class="ahead">
+    <b>Looking ahead.</b> This note makes a claim it cannot yet prove: that acceleration is detectable
+    and velocity is not. In <b>Note 9</b> you will test it with a bathroom scale in an elevator, and find
+    that the scale reports your acceleration precisely while remaining completely blind to which way you
+    are travelling. The claim made here is the thing you will measure there.
+  </div>
+
+  <div class="callback">
+    <span class="label">Back to your prediction</span>
+    <p>You predicted whether you could tell, from inside the windowless van, that it was moving &mdash; and whether you could tell it had braked. Which of your two answers was right, and which of the three experiments settled it?</p>
+    <span class="space"></span><span class="space"></span>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY151/handouts/M3_N1_What_Motion_Can_You_Detect_GuidedNotes_BLANK.pdf">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes &mdash; blank (PDF)</span>
+      <span class="hint">Print or open on a tablet; record your prediction before you read, and answer in your own words as we go.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes — compare your wording against the worked version.</span>
+    </div>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+
+<!-- ===================================================================
+     FOUNDATION LIST — for the quiz project (Lesson Package rung 2 / 3).
+     This note has now made the following solid. Items may go beyond the
+     note, but not beyond this list.
+
+     1. No experiment performed inside a steadily-moving frame can reveal
+        its velocity. All inertial frames are equivalent.
+     2. VELOCITY IS RELATIVE; ACCELERATION IS ABSOLUTE. A change of speed
+        announces itself without instruments; a steady speed does not.
+     3. Newton's first law is this principle plus inertia: with no net
+        force, a body keeps whatever velocity it has -- including zero.
+     4. Static (v = 0) and dynamic (v = constant) equilibrium are the SAME
+        physical state seen from two frames. In both, F_net = 0 and a = 0.
+        Nothing inside either can distinguish them.
+     5. The second law relates force to ACCELERATION, not velocity,
+        because only acceleration is the same for all observers. A law
+        written F = mv would give different answers to different observers.
+     6. A free-body diagram shows one body and every force acting ON it,
+        and nothing else. A third-law pair therefore never appears on one
+        diagram.
+
+     NOT laid down here (do not write items against these):
+       - F_net = ma applied numerically (that is N3)
+       - the third law itself, action/reaction pairs (N2, N3)
+       - weight, normal force, friction (N4, N5)
+       - the measurement of the claim in line 2 (N9)
+     =================================================================== -->
+
+
+<!-- Iframe auto-height reporter (V4). Tells the D2L wrapper how tall this page
+     really is. Measures .note-wrap, so the value is viewport-independent and can
+     come back down as well as up. Must stay just before </body>.
+     See Cross_Course_Notes/Autosize_Backfill_Runbook_Reference.md -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>

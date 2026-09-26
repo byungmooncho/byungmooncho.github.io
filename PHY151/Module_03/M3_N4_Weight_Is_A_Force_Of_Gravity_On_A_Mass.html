@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N4 — Weight Is a Force of Gravity on a Mass</title>
+<style>
+
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3 and M3 N9; keep identical across pages.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider ------------------------------------------------ */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  .strobe.uniform span + span{ margin-left:26px; }
+  /* decelerating divider: narrowing gaps — friction putting drag on motion */
+  .strobe.decel span:nth-child(2){ margin-left:82px; }
+  .strobe.decel span:nth-child(3){ margin-left:58px; }
+  .strobe.decel span:nth-child(4){ margin-left:38px; }
+  .strobe.decel span:nth-child(5){ margin-left:22px; }
+  .strobe.decel span:nth-child(6){ margin-left:10px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--ink); border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.tasks{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.tasks li{ margin:.55rem 0; }
+  ol.tasks b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- predict-first hook ------------------------------------------- */
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem;
+         margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook .commit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    color:var(--muted); display:block; margin-top:.6rem; }
+
+  /* --- activity ------------------------------------------------------- */
+  .steps{ margin:.3rem 0 0; padding-left:1.3rem; }
+  .steps li{ margin:.6rem 0; }
+  .datatable{ width:100%; border-collapse:collapse; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .datatable th, .datatable td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  .datatable thead th{ background:var(--green-soft); color:var(--green); font-size:.74rem;
+    letter-spacing:.06em; text-transform:uppercase; }
+  .datatable td.blank{ background:#fcfdfc; height:1.6rem; }
+  .plot-wrap{ border:1px solid var(--rule); border-radius:8px; padding:1rem 1rem .8rem; margin:1.1rem 0 0; }
+  .plot-wrap svg{ display:block; width:100%; height:auto; }
+  .plot-cap{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin:.6rem 0 0; }
+  .askbox{ border:1px solid var(--rule); border-left:4px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.85rem 1.05rem; margin:1.1rem 0 0; }
+  .askbox ol{ margin:.2rem 0 0; padding-left:1.2rem; }
+  .askbox li{ margin:.45rem 0; }
+
+  /* --- domain-of-validity callout -------------------------------------- */
+  .domain{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    background:var(--green-soft); border-radius:0 8px 8px 0;
+    padding:.85rem 1.05rem; margin:1.1rem 0;
+  }
+  .domain .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .domain p{ margin:0; }
+  .domain p + p{ margin-top:.5rem; }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+  /* --- figures ---------------------------------------------------------- */
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:1rem 1rem .8rem; margin:1.2rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin:.7rem 0 0;
+  }
+  /* --- movement marker --------------------------------------------------- */
+  .movement{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--green);
+    font-weight:700; margin:2.6rem 0 .3rem;
+  }
+  /* --- boxed rule -------------------------------------------------------- */
+  .rule-box{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.9rem 1.1rem; margin:1.3rem 0;
+    background:var(--green-soft);
+  }
+  .rule-box .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .rule-box p{ margin:0; font-size:1.1rem; }
+  /* --- worked block ------------------------------------------------------ */
+  .worked{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1.1rem; margin:1.1rem 0; }
+  .worked .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem;
+  }
+  .worked table{ width:100%; border-collapse:collapse;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .worked td{ padding:.3rem .5rem; border-bottom:1px solid var(--rule); }
+  .worked tr:last-child td{ border-bottom:0; }
+  .worked td.n{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  /* --- tasks space ------------------------------------------------------- */
+  ol.tasks .space{ display:block; border-bottom:1px solid var(--rule); height:1.4rem; margin:.4rem 0 0; }
+  /* --- looking ahead ----------------------------------------------------- */
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+
+  /* --- partner fill-in lines --------------------------------------------- */
+  ol.partners .pair{ display:block; margin:.5rem 0 .2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; color:var(--muted); }
+  ol.partners .fill{ display:inline-block; border-bottom:1px solid var(--rule);
+    width:13em; height:1.2em; vertical-align:-.25em; margin:0 .6em 0 .3em; }
+  ol.partners .fill.s{ width:9em; margin-right:0; }
+  @media (max-width:540px){ ol.partners .fill{ width:8em; } ol.partners .fill.s{ width:6em; } }
+
+  /* --- a previously open phenomenon, now closed ---------------------------- */
+  .closed{
+    border:1.5px solid var(--green); border-radius:8px; background:var(--green-soft);
+    padding:.95rem 1.1rem; margin:1.4rem 0;
+  }
+  .closed .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .closed .q{ font-weight:700; display:block; margin:.1rem 0 .6rem; }
+  .closed p{ margin:.55rem 0; }
+  .closed .fig{ background:#fff; }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 &middot; Forces</span>
+    <span>Note 4</span>
+  </div>
+
+  <h1>Weight Is a Force of Gravity on a Mass</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In everyday speech &ldquo;weight&rdquo; is a number on a bathroom scale, reported in pounds &mdash; a unit
+    of <em>mass</em>. In physics it is something else entirely: weight is a <strong>force</strong>, measured in
+    newtons, the pull of a planet on a mass. Mass belongs to the object and travels with it. Weight does not:
+    it is what a <em>particular planet</em> does to that object. This note measures the relationship between the
+    two, finds that it is a straight line, and shows why the slope of that line is the reason a feather and a
+    bowling ball fall together in a vacuum.
+  </div>
+
+  <div class="hook">
+    <span class="label">Before you read on &mdash; predict</span>
+    You hold a <strong>20&nbsp;kg</strong> mass in one hand and a <strong>10&nbsp;kg</strong> mass in the other,
+    and release them at the same instant. Gravity pulls <em>twice as hard</em> on the 20&nbsp;kg mass &mdash;
+    that much is not in dispute.
+    <br>Does it reach the floor first?
+    <span class="commit">Commit to yes or no, and write one sentence saying why, before you read further.</span>
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <ol>
+      <li><b>Distinguish</b> mass from weight by unit, by definition, and by what happens to each when the
+      object is moved to another planet.</li>
+      <li><b>Measure</b> weight against mass with a spring scale, plot the two, and <b>interpret</b> the slope
+      of the line, including its unit.</li>
+      <li><b>Explain</b> why every mass near a planet falls with the same acceleration, in terms of force
+      <em>and</em> inertia.</li>
+      <li><b>Identify</b> the third-law partner of an object&rsquo;s weight, and state which body it acts on.</li>
+      <li><b>Calculate</b> weight, mass, normal force, or <em>g</em> given the other quantities, on Earth or on
+      any other planet.</li>
+    </ol>
+  </div>
+
+  <p class="movement">Movement 1 &mdash; weight is not a property of the object</p>
+
+  <h2>Where does weight come from?</h2>
+
+  <p>Take a mass far out in deep space, nowhere near a star or a planet. It still has all the mass it ever had.
+  Push it and it still resists being pushed. But nothing is pulling on it, so it has <strong>no weight</strong>.
+  Bring that same object near a planet and a force appears on it, directed toward the planet&rsquo;s centre.
+  That force is its weight.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 300" role="img" aria-label="Two panels. On the left, far from any planet, a sphere of mass m with no force arrows on it, captioned same mass, no weight. On the right, near a planet, the same sphere hangs above a curved Earth; one arrow starts at the sphere and points down toward the Earth, labelled force of gravity on m, and a second equal arrow starts at the Earth surface and points up toward the sphere, labelled force of gravity on Earth."><line x1="360.0" y1="26" x2="360.0" y2="276" stroke="#d7e2da" stroke-width="1"/><text x="180.0" y="46.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">FAR FROM ANY PLANET</text><circle cx="180.0" cy="118" r="22" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><text x="180.0" y="124.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">m</text><text x="180.0" y="182.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">no arrows to draw</text><text x="180.0" y="214.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1e6b3c">same mass.</text><text x="180.0" y="233.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1e6b3c">no weight.</text><text x="180.0" y="268.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">nothing is pulling on it</text><text x="540.0" y="46.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">NEAR A PLANET</text><path d="M 410.0 330 A 130 130 0 0 1 670.0 330" fill="#f4f8f5" stroke="#1d2b23" stroke-width="1.8"/><text x="540.0" y="252.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">Earth, M</text><circle cx="540.0" cy="118" r="22" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><text x="540.0" y="124.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">m</text><line x1="524.0" y1="144.0" x2="524.0" y2="184.1" stroke="#a8551f" stroke-width="2.4"/><polygon points="524.0,192.0 520.7,183.6 527.3,183.6" fill="#a8551f"/><text x="514.0" y="168.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g</tspan> on m</text><line x1="556.0" y1="196.0" x2="556.0" y2="155.9" stroke="#a8551f" stroke-width="2.4"/><polygon points="556.0,148.0 559.3,156.4 552.7,156.4" fill="#a8551f"/><text x="566.0" y="168.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g</tspan> on Earth</text></svg>
+    <figcaption>Mass is carried by the object. Weight is not &mdash; it is the pull of a planet, and it exists
+    only when there is a planet to do the pulling. On the right, notice that the pull is <em>mutual</em>: the
+    planet pulls the mass down and the mass pulls the planet up, with equal strength. Those two arrows are
+    Newton&rsquo;s third-law pair, and they sit on <strong>two different bodies</strong>.</figcaption>
+  </figure>
+
+  <div class="domain">
+    <span class="label">A trap worth naming now</span>
+    <p>When an object rests on a table, the normal force pushing up on it is <strong>not</strong> the third-law
+    partner of its weight. Weight&rsquo;s partner is the object&rsquo;s pull on the <em>planet</em>, and that
+    force acts on the planet &mdash; it is not even in the object&rsquo;s free-body diagram.</p>
+    <p>The normal force is the partner of something else: the object <em>pushing down on the table</em>. That
+    push acts on the table; the normal force is the table pushing back, and it acts on the object. Two different
+    pairs, four different arrows, easily confused.</p>
+  </div>
+
+  <p>Naming a third-law partner is a skill, not a fact, so practise it here rather than taking my word
+  for it. For each situation below, name the partner of the force given, and &mdash; this is the part that
+  decides whether you have it &mdash; <b>say which body that partner acts on</b>.</p>
+
+  <ol class="tasks partners">
+    <li>A book rests on a table. Force given: <b>the table pushes up on the book</b>.
+    <span class="pair">partner <span class="fill"></span> acts on <span class="fill s"></span></span></li>
+    <li>The same book on the same table. Force given: <b>the Earth pulls down on the book</b>.
+    <span class="pair">partner <span class="fill"></span> acts on <span class="fill s"></span></span></li>
+    <li>The book is now in free fall, halfway to the floor. Force given: <b>the Earth pulls down on the
+    book</b>.
+    <span class="pair">partner <span class="fill"></span> acts on <span class="fill s"></span></span>
+    Has your answer changed from the previous question? Should it have?<span class="space"></span></li>
+  </ol>
+
+  <div class="domain">
+    <span class="label">How to check yourself</span>
+    <p>A third-law pair is always <b>the same interaction read in both directions</b>: if the first force is
+    &ldquo;A pulls B,&rdquo; the partner is &ldquo;B pulls A&rdquo; &mdash; same interaction, same size,
+    opposite direction, and <strong>never on the same body</strong>. Two forces that appear in the same
+    free-body diagram are therefore never a third-law pair, no matter how neatly they cancel.</p>
+  </div>
+
+  <p class="movement">Movement 2 &mdash; measure it</p>
+
+  <h2>Weight against mass</h2>
+
+  <p>Hang a known mass on a spring scale and read the force it registers. Repeat with different masses. You
+  are asking the scale a simple question: when the mass goes up, what does the pull do?</p>
+
+  <ol class="steps">
+    <li>Zero the spring scale with nothing hanging from it.</li>
+    <li>Hang each mass in turn and let it come to rest before you read the needle. Record the reading in
+    <b>newtons</b>.</li>
+    <li>Fill in the table. Keep the readings to the precision the scale actually gives you.</li>
+  </ol>
+
+  <table class="datatable">
+    <thead><tr><th style="width:50%">Mass, m (kg)</th><th>Weight, w (N)</th></tr></thead>
+    <tbody>
+      <tr><td>0.1</td><td class="blank"></td></tr>
+      <tr><td>0.2</td><td class="blank"></td></tr>
+      <tr><td>0.5</td><td class="blank"></td></tr>
+      <tr><td>0.7</td><td class="blank"></td></tr>
+      <tr><td>0.9</td><td class="blank"></td></tr>
+    </tbody>
+  </table>
+
+  <div class="plot-wrap">
+    <svg viewBox="0 0 720 380" role="img" aria-label="A blank grid for plotting weight in newtons on the vertical axis, marked 0 to 10, against mass in kilograms on the horizontal axis, marked 0 to 1. Both axes start at the origin."><line x1="139.2" y1="26" x2="139.2" y2="322" stroke="#e7efe9" stroke-width="1"/><line x1="200.4" y1="26" x2="200.4" y2="322" stroke="#e7efe9" stroke-width="1"/><line x1="261.6" y1="26" x2="261.6" y2="322" stroke="#e7efe9" stroke-width="1"/><line x1="322.8" y1="26" x2="322.8" y2="322" stroke="#e7efe9" stroke-width="1"/><line x1="384.0" y1="26" x2="384.0" y2="322" stroke="#e7efe9" stroke-width="1.4"/><line x1="445.2" y1="26" x2="445.2" y2="322" stroke="#e7efe9" stroke-width="1"/><line x1="506.4" y1="26" x2="506.4" y2="322" stroke="#e7efe9" stroke-width="1"/><line x1="567.6" y1="26" x2="567.6" y2="322" stroke="#e7efe9" stroke-width="1"/><line x1="628.8" y1="26" x2="628.8" y2="322" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="55.6" x2="690" y2="55.6" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="85.2" x2="690" y2="85.2" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="114.8" x2="690" y2="114.8" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="144.4" x2="690" y2="144.4" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="174.0" x2="690" y2="174.0" stroke="#e7efe9" stroke-width="1.4"/><line x1="78" y1="203.6" x2="690" y2="203.6" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="233.2" x2="690" y2="233.2" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="262.8" x2="690" y2="262.8" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="292.4" x2="690" y2="292.4" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="26" x2="78" y2="322" stroke="#1d2b23" stroke-width="1.6"/><line x1="78" y1="322" x2="690" y2="322" stroke="#1d2b23" stroke-width="1.6"/><line x1="78.0" y1="322" x2="78.0" y2="327" stroke="#1d2b23" stroke-width="1.2"/><text x="78.0" y="341.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0.0</text><line x1="200.4" y1="322" x2="200.4" y2="327" stroke="#1d2b23" stroke-width="1.2"/><text x="200.4" y="341.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0.2</text><line x1="322.8" y1="322" x2="322.8" y2="327" stroke="#1d2b23" stroke-width="1.2"/><text x="322.8" y="341.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0.4</text><line x1="445.2" y1="322" x2="445.2" y2="327" stroke="#1d2b23" stroke-width="1.2"/><text x="445.2" y="341.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0.6</text><line x1="567.6" y1="322" x2="567.6" y2="327" stroke="#1d2b23" stroke-width="1.2"/><text x="567.6" y="341.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0.8</text><line x1="690.0" y1="322" x2="690.0" y2="327" stroke="#1d2b23" stroke-width="1.2"/><text x="690.0" y="341.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">1.0</text><line x1="73" y1="26.0" x2="78" y2="26.0" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="30.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">10</text><line x1="73" y1="85.2" x2="78" y2="85.2" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="89.2" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">8</text><line x1="73" y1="144.4" x2="78" y2="144.4" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="148.4" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">6</text><line x1="73" y1="203.6" x2="78" y2="203.6" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="207.6" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">4</text><line x1="73" y1="262.8" x2="78" y2="262.8" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="266.8" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">2</text><line x1="73" y1="322.0" x2="78" y2="322.0" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="326.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0</text><text x="30" y="174.0" transform="rotate(-90 30 174.0)" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">weight, w (N)</text><text x="384.0" y="364.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">mass, m (kg)</text></svg>
+    <p class="plot-cap">Plot weight against mass. Draw the best straight line through your points &mdash; and
+    think about whether that line is entitled to pass through the origin.</p>
+  </div>
+
+  <div class="askbox">
+    <ol>
+      <li>Is the plot linear? What does that tell you about how weight depends on mass?</li>
+      <li>Find the slope, and give its unit. Do not skip the unit &mdash; it is the whole point of the next
+      question.</li>
+      <li>What does the slope represent? Where have you seen that number before?</li>
+    </ol>
+  </div>
+
+  <div class="rule-box">
+    <span class="label">The result</span>
+    <p><b>w = F<sub>g</sub> = mg</b></p>
+  </div>
+
+  <div class="domain">
+    <span class="label">Where this holds</span>
+    <p>This is the weight of a mass <strong>at or near the surface of a planet</strong>, where <em>g</em> is
+    effectively constant. Near Earth&rsquo;s surface <em>g</em>&nbsp;=&nbsp;9.8&nbsp;m/s&sup2;; far from the
+    surface it falls off, and on a different planet it is a different number entirely.</p>
+    <p>Note that N/kg and m/s&sup2; are the same unit. The slope you measured on a scale and the acceleration
+    you measured in free fall in Module 2 are the same quantity &mdash; which is the claim the next movement
+    has to justify.</p>
+  </div>
+
+  <p class="movement">Movement 3 &mdash; why everything falls together</p>
+
+  <h2>Your prediction, settled</h2>
+
+  <p>The <strong>proportional</strong> relationship between weight and mass is the important thing here. It says
+  that near the surface of a planet, everything &mdash; light or heavy &mdash; falls at the same acceleration,
+  <em>once air resistance is out of the way</em>. That qualifier is not a dodge: a sheet of paper loses to a
+  book because the air pushes on it, not because gravity treats it differently, and crumpling the paper into a
+  ball is enough to make it keep up. The claim below is about gravity alone.</p>
+
+  <p>Even stated that carefully it is a strange claim, because gravity really <em>does</em> pull harder on the
+  20&nbsp;kg mass. Twice as hard, exactly.</p>
+
+  <p>The resolution is that you only counted half of it. Newton&rsquo;s first law says a larger mass has more
+  inertia, so it takes more force to accelerate it by the same amount. The 20&nbsp;kg mass gets twice the force
+  &mdash; and needs twice the force. Write the second law and watch the mass leave:</p>
+
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>F</mi><mi>g</mi></msub><mo>=</mo><mi>m</mi><mi>a</mi></math>
+      <span class="use">the only force on a freely falling mass is its weight</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>=</mo><mfrac><msub><mi>F</mi><mi>g</mi></msub><mi>m</mi></mfrac><mo>=</mo><mfrac><mrow><mi>m</mi><mi>g</mi></mrow><mi>m</mi></mfrac><mo>=</mo><mi>g</mi></math>
+      <span class="use">the mass cancels &mdash; the acceleration does not depend on it</span>
+    </li>
+  </ul>
+
+  <p>Doubling the mass doubles the numerator and the denominator together. The ratio is fixed, and that fixed
+  ratio is <em>g</em>. This is why the slope of your graph had to come out as the free-fall acceleration: the
+  slope <em>is</em> <span style="white-space:nowrap">F<sub>g</sub>/m</span>.</p>
+
+  <div class="domain">
+    <span class="label">Worth stopping on &mdash; the m that cancelled was two different things</span>
+    <p>Look again at what cancelled. The <em>m</em> on top came from gravity: it says how strongly a planet
+    pulls on this object. The <em>m</em> underneath came from inertia: it says how hard this object is to
+    accelerate. Those are different properties. Nothing you have learned so far requires them to be the same
+    number.</p>
+    <p>Suppose they were not. Suppose an object could be twice as hard to pull on as another and only 1.5
+    times as hard to accelerate. Then the ratio would not cancel, heavier things really would fall faster,
+    and Galileo would have been wrong. The only reason free fall is universal is that <strong>gravitational
+    mass and inertial mass come out equal, for every material anyone has ever tested</strong>, to about one
+    part in 10<sup>15</sup>.</p>
+    <p>Nobody in this course will explain <em>why</em>. It is one of the few coincidences in physics that
+    turned out not to be a coincidence &mdash; Einstein took it as the starting point of general relativity.
+    File it next to the claim from <b>N1</b>: velocity is relative, acceleration is absolute. This is the
+    same kind of statement about what nature does not let you distinguish.</p>
+  </div>
+
+  <ol class="tasks" start="4">
+    <li>&ldquo;You drop a 20&nbsp;kg and a 10&nbsp;kg mass. The 20&nbsp;kg mass experiences twice as large a
+    force of gravity as the 10&nbsp;kg mass, but they still accelerate at the same rate, 9.8&nbsp;m/s&sup2;.&rdquo;
+    True or false?<span class="space"></span></li>
+    <li>Give the reason for your choice in one sentence. Your sentence must mention <b>both</b> force and
+    inertia &mdash; an answer that mentions only one of them is not an explanation.<span class="space"></span></li>
+    <li>Go back to your prediction in the box at the top. Was it right? If not, name the step in the reasoning
+    where it went wrong.<span class="space"></span></li>
+  </ol>
+
+  <div class="closed">
+    <span class="label">Open phenomenon 4, from N2 &mdash; now closed</span>
+    <span class="q">A target is released at the exact instant a ball is fired straight at it. Why do you
+    hit it every time, however fast you fire and however far away the target is?</span>
+
+    <p>Before you read the resolution, find what you wrote in N2 and put it where you can see it.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 720 330" role="img" aria-label="A launcher aimed along a dashed straight line at a target hanging from a support. The target is released at the instant of firing and falls straight down; the ball follows a curved path that sags below the aim line by the same amount. Both have fallen the same distance, one half g t squared, when they meet below the target starting position."><line x1="40" y1="292" x2="680" y2="292" stroke="#d7e2da" stroke-width="1.6"/><line x1="92" y1="242" x2="92" y2="292" stroke="#1d2b23" stroke-width="1.8"/><line x1="71.3" y1="245.5" x2="104.0" y2="236.0" stroke="#1d2b23" stroke-width="7" stroke-linecap="round"/><text x="92.0" y="310.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">launcher</text><rect x="574" y="44" width="52" height="9" fill="#eef4f0" stroke="#1d2b23" stroke-width="1.5"/><line x1="578" y1="44" x2="570" y2="32" stroke="#5c6b62" stroke-width="1.1"/><line x1="592" y1="44" x2="584" y2="32" stroke="#5c6b62" stroke-width="1.1"/><line x1="606" y1="44" x2="598" y2="32" stroke="#5c6b62" stroke-width="1.1"/><line x1="620" y1="44" x2="612" y2="32" stroke="#5c6b62" stroke-width="1.1"/><line x1="600" y1="53" x2="600" y2="79" stroke="#5c6b62" stroke-width="1.2" stroke-dasharray="4 4"/><line x1="104" y1="236" x2="616" y2="87.4" stroke="#5c6b62" stroke-width="1.4" stroke-dasharray="6 5"/><text x="300.0" y="150.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">you aim straight at the target</text><path d="M 104 236 Q 352.0 164.0 600 174" fill="none" stroke="#1e6b3c" stroke-width="2.4"/><text x="286.0" y="232.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1e6b3c">the ball&rsquo;s actual path</text><circle cx="600" cy="92" r="13" fill="none" stroke="#5c6b62" stroke-width="1.3" stroke-dasharray="3 3"/><text x="578.0" y="70.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="10.5" fill="#5c6b62">released as you fire</text><line x1="600" y1="106" x2="600" y2="159" stroke="#5c6b62" stroke-width="1.4" stroke-dasharray="5 4"/><circle cx="600" cy="174" r="13" fill="#fff" stroke="#1d2b23" stroke-width="2"/><text x="600.0" y="204.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">they meet here</text><line x1="614" y1="92" x2="652" y2="92" stroke="#d7e2da" stroke-width="1.2"/><line x1="614" y1="174" x2="652" y2="174" stroke="#d7e2da" stroke-width="1.2"/><line x1="644.0" y1="172.0" x2="644.0" y2="100.2" stroke="#1f5d8c" stroke-width="1.8"/><polygon points="644.0,94.0 646.6,100.5 641.4,100.5" fill="#1f5d8c"/><line x1="644.0" y1="94.0" x2="644.0" y2="165.8" stroke="#1f5d8c" stroke-width="1.8"/><polygon points="644.0,172.0 641.4,165.5 646.6,165.5" fill="#1f5d8c"/><text x="654.0" y="129.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1f5d8c">&#189;gt&sup2;</text><text x="654.0" y="145.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">the same</text><text x="654.0" y="158.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">for both</text></svg>
+      <figcaption>Aim the launcher straight at the target &mdash; along the dashed line &mdash; and fire
+      at the instant the target is released. The ball does not travel along that line, because it is
+      falling. Neither does the target stay where it was, for the same reason.</figcaption>
+    </figure>
+
+    <p>The resolution is two moves, and you already have both of them.</p>
+
+    <p><b>From Module 2:</b> the horizontal and vertical parts of a projectile&rsquo;s motion do not
+    interfere with each other. Firing the ball horizontally does nothing whatever to how it falls. In the
+    time <em>t</em> it takes to cross the room, it drops &frac12;gt&sup2; below the line you aimed along.</p>
+
+    <p><b>From this note:</b> the target drops &frac12;gt&sup2; too &mdash; the <em>same</em>
+    &frac12;gt&sup2;, because every object near the Earth falls with the same acceleration whatever its
+    mass. A steel ball and a stuffed toy, a 20&nbsp;kg target and a 10&nbsp;kg one: same <em>g</em>,
+    same drop, same time.</p>
+
+    <p>So both of them fall away from the aim line by exactly the same amount at every instant. The drop
+    <strong>cancels out of the aiming problem entirely</strong>. Aiming straight at where the target
+    <em>was</em> is correct, not approximately but exactly, and it stays correct for any launch speed and
+    any distance. That is why it never misses.</p>
+  </div>
+
+  <ol class="tasks" start="7">
+    <li>Compare this with the guess you wrote in N2. Which part did you already have, and which part were
+    you missing?<span class="space"></span></li>
+    <li>Fire the ball <b>twice as fast</b>. Do you still hit the target? What changes about
+    <em>where</em> and <em>when</em> you hit it?<span class="space"></span></li>
+    <li>Now break it. Name a change to the demonstration that would make the shot miss &mdash; and say
+    which of the two moves above your change destroys.<span class="space"></span></li>
+  </ol>
+
+  <p class="movement">Movement 4 &mdash; weight, normal force, and other planets</p>
+
+  <h2>An object at rest on a level floor</h2>
+
+  <p>A mass sitting still on a floor is not accelerating, so the forces on it must cancel. There are two: its
+  weight pulling down, and the normal force from the floor pushing up. They must be equal in size and opposite
+  in direction.</p>
+
+  <div class="domain">
+    <span class="label">Where F<sub>N</sub> = mg holds &mdash; and where it does not</span>
+    <p>The general statement is always &Sigma;F&nbsp;=&nbsp;ma applied along the vertical. The shortcut
+    <b>F<sub>N</sub> = mg</b> follows from it only when the surface is <strong>level</strong> and the object has
+    <strong>no vertical acceleration</strong>.</p>
+    <p>Tilt the surface and it fails &mdash; that restriction is lifted in <b>N7</b>, where F<sub>N</sub> becomes
+    mg&nbsp;cos&thinsp;&theta;. Accelerate the object vertically and it fails again &mdash; lifted in <b>N9</b>,
+    where a scale in a moving elevator stops reading mg. Do not carry F<sub>N</sub>&nbsp;=&nbsp;mg into either
+    of those situations.</p>
+  </div>
+
+  <ol class="tasks" start="10">
+    <li>An obese cat with a mass of 46&nbsp;kg rests on the floor. Find its weight and the magnitude of the
+    normal force on it, and draw its free-body diagram.<span class="space"></span><span class="space"></span></li>
+    <li>A cat weighs 57.3&nbsp;N. What is its mass? Resting on a floor, what normal force acts on it? If the cat
+    is sent to another planet, what is its mass there?<span class="space"></span><span class="space"></span></li>
+    <li>On the Moon, a person of mass 70&nbsp;kg weighs 112&nbsp;N. What is the acceleration due to gravity on
+    the Moon?<span class="space"></span></li>
+    <li>A 65&nbsp;kg astronaut weighs 638&nbsp;N on Earth. What is the astronaut&rsquo;s <b>mass</b> on Mars,
+    where g&nbsp;=&nbsp;3.4&nbsp;m/s&sup2;? What is the astronaut&rsquo;s <b>weight</b> there?<span class="space"></span><span class="space"></span></li>
+  </ol>
+
+  <div class="rule-box">
+    <span class="label">The habit to build</span>
+    <p>Mass is given in kilograms and never changes. Weight is given in newtons and changes with the planet.
+    If a quantity in a problem is in kg it is a mass; if it is in N it is a force. Check the unit before you
+    decide which one you have been handed.</p>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY151/handouts/M3_N4_Weight_Is_A_Force_Of_Gravity_On_A_Mass_GuidedNotes_BLANK.pdf">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes &mdash; blank (PDF)</span>
+      <span class="hint">Coming soon. Print it, make the prediction in the hook, and take the spring-scale data
+      on paper.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes &mdash; check your slope and its unit against the key.</span>
+    </div>
+  </div>
+
+  <p class="ahead"><b>Looking ahead.</b> You now have the normal force on a level, non-accelerating surface.
+  <b>N5</b> shows that friction is set by that normal force, not by weight &mdash; a distinction that only
+  matters once the surface stops being level. <b>N7</b> tilts the surface, and <b>N9</b> puts the whole thing in
+  an elevator, where a scale stops agreeing with mg altogether.</p>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 151
+  </footer>
+
+</div>
+
+<!-- ===================================================================
+     FOUNDATION LIST -- for the quiz project (Lesson Package rung 2 / 3).
+     Items may go beyond the note, but not beyond this list.
+
+     1. MASS (kg) is a property of the object and is the same everywhere.
+        WEIGHT (N) is a FORCE -- the pull of a particular planet on that
+        mass -- and is zero far from any planet. A "weight" quoted in lb
+        is really a mass, which is why everyday usage misleads.
+     2. w = F_g = mg, at or near the surface of a planet, where g is
+        effectively constant. Near Earth's surface g = 9.8 m/s^2.
+     3. A plot of weight vs. mass is LINEAR THROUGH THE ORIGIN, and its
+        SLOPE IS g. Its unit is N/kg, which is the same unit as m/s^2 --
+        the scale measurement and the free-fall measurement give the same
+        number because the slope IS F_g/m.
+     4. EVERY MASS NEAR A PLANET FALLS WITH THE SAME ACCELERATION, ONCE
+        AIR RESISTANCE IS OUT OF THE WAY. Paper loses to a book because
+        of the air, not because gravity treats it differently; crumpling
+        the paper is enough to make it keep up. Reason for the rest:
+        a = F_g/m = mg/m = g. A larger mass gets a proportionally larger
+        gravitational force AND has proportionally more inertia; the two
+        effects cancel exactly. An explanation naming only one of the two
+        is not an explanation.
+     5. WEIGHT'S THIRD-LAW PARTNER IS THE OBJECT'S PULL ON THE PLANET, and
+        it acts ON THE PLANET -- it never appears in the object's own
+        free-body diagram. The NORMAL FORCE IS NOT WEIGHT'S PARTNER: it is
+        the partner of the object pushing down on the surface.
+     5a. THE TEST FOR A PAIR: same interaction read in both directions
+        ("A pulls B" / "B pulls A"), equal size, opposite direction, and
+        NEVER ON THE SAME BODY. Two forces in the same free-body diagram
+        are therefore never a third-law pair, however neatly they cancel.
+        Students are drilled on this in N4 by naming the partner AND the
+        body it acts on, for a book at rest and the same book in free
+        fall -- items may use that same two-part answer format.
+     6. For an object at rest on a LEVEL surface with NO VERTICAL
+        ACCELERATION, the vertical forces cancel and F_N = mg. This is a
+        consequence of Sigma-F = ma, not a definition.
+     7. THE DOMAIN OF F_N = mg IS LEVEL AND NON-ACCELERATING. Tilt the
+        surface and it fails (lifted in N7: F_N = mg cos theta). Accelerate
+        the object vertically and it fails (lifted in N9).
+     8. Moving an object to another planet CHANGES ITS WEIGHT AND LEAVES
+        ITS MASS UNCHANGED. Given any two of w, m, g the third follows:
+        g = w/m.
+     7a. THE FALLING-TARGET DEMONSTRATION (N2's open phenomenon 4) IS
+        CLOSED HERE. Aiming straight at a target that is released as you
+        fire always hits, because ball and target fall the SAME 1/2 g t^2
+        away from the aim line at every instant, so the drop cancels out
+        of the aiming problem. It holds for ANY launch speed and ANY
+        distance; a faster shot hits sooner and higher, not more surely.
+        TWO DEPENDENCIES, and items must respect both: the independence
+        of horizontal and vertical motion is MODULE 2's (not established
+        here), and mass-independent free fall is line 4 above.
+     8a. THE m THAT CANCELLED WAS TWO DIFFERENT PROPERTIES: gravitational
+        mass (how hard the planet pulls) on top, inertial mass (how hard
+        the object is to accelerate) underneath. Free fall is universal
+        only because THOSE TWO COME OUT EQUAL. Testable at the level of:
+        "if inertial mass did not scale with gravitational mass, heavier
+        objects WOULD fall faster." NOT testable beyond that -- no general
+        relativity, no Eotvos experiment numbers, no equivalence-principle
+        vocabulary required of students.
+     9. UNIT DISCIPLINE: a quantity in kg is a mass, a quantity in N is a
+        force. Read the unit before deciding which was given.
+
+     NOT laid down here (do not write items against these):
+       - friction of any kind (N5)
+       - inclines or resolving forces on tilted axes (N7)
+       - tension, strings, pulleys (N6, N8)
+       - scale readings in an accelerating frame / apparent weight (N9)
+       - universal gravitation, G, or the 1/r^2 dependence (not in M3)
+     =================================================================== -->
+
+
+<!-- Iframe auto-height reporter (V4). Tells the D2L wrapper how tall this page
+     really is. Measures .note-wrap, so the value is viewport-independent and can
+     come back down as well as up. Must stay just before </body>.
+     See Cross_Course_Notes/Autosize_Backfill_Runbook_Reference.md -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>

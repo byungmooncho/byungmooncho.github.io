@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N8 — Tension Forces in a Hanging Object</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3; keep identical across all note pages.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider: dots spaced like a motion diagram ----------- */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--ink); border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.experiments{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.experiments li{ margin:.55rem 0; }
+  ol.experiments b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+  /* --- figures ---------------------------------------------------------- */
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:1rem 1rem .8rem; margin:1.2rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin:.7rem 0 0;
+  }
+  /* --- movement marker --------------------------------------------------- */
+  .movement{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--green);
+    font-weight:700; margin:2.6rem 0 .3rem;
+  }
+  /* --- domain-of-validity callout ---------------------------------------- */
+  .domain{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    background:var(--green-soft); border-radius:0 8px 8px 0;
+    padding:.85rem 1.05rem; margin:1.1rem 0;
+  }
+  .domain .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .domain p{ margin:0; } .domain p + p{ margin-top:.5rem; }
+  /* --- worked block ------------------------------------------------------ */
+  .worked{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1.1rem; margin:1.1rem 0; }
+  .worked .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem;
+  }
+  .worked table{ width:100%; border-collapse:collapse;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .worked td{ padding:.3rem .5rem; border-bottom:1px solid var(--rule); }
+  .worked tr:last-child td{ border-bottom:0; }
+  .worked td.n{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .worked .flip{ color:#8a3324; font-weight:600; }
+  /* --- tasks ------------------------------------------------------------- */
+  ol.tasks{ margin:.3rem 0 0; padding-left:1.3rem; }
+  ol.tasks li{ margin:.55rem 0; }
+  ol.tasks .space{ display:block; border-bottom:1px solid var(--rule); height:1.4rem; margin:.4rem 0 0; }
+  /* --- static (non-clickable) download card ------------------------------ */
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  /* --- looking ahead ----------------------------------------------------- */
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+
+  /* --- predict-first hook --------------------------------------------- */
+  .hook{
+    background:#fff; border:1.5px dashed var(--green);
+    padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px;
+  }
+  .hook .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .hook .commit{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    color:var(--muted); display:block; margin-top:.6rem;
+  }
+  
+
+  /* --- back to your prediction -------------------------------------------- */
+  .callback{
+    border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc;
+    padding:.9rem 1.1rem; margin:1.6rem 0;
+  }
+  .callback .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .callback p{ margin:0; }
+  .callback .space{ display:block; border-bottom:1px solid var(--rule);
+    height:1.5rem; margin:.5rem 0 0; }
+
+  /* --- component table (ported from N9; was missing here) ------------------ */
+  .phases{
+    width:100%; border-collapse:collapse; margin:.8rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+  }
+  .phases th, .phases td{
+    border:1px solid var(--rule); padding:.42rem .6rem; text-align:left;
+  }
+  .phases thead th{
+    background:var(--green-soft); color:var(--green);
+    font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
+  }
+  .phases td.num{ font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .phases td.blank{ background:#fcfdfc; height:1.55rem; }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Note 8</span>
+  </div>
+
+  <h1>Tension Forces in a Hanging Object</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    An object held in mid-air by two strings is the simplest two-dimensional equilibrium there is, and
+    it hides a genuinely surprising result. The strings do not share the load in any fixed way — how
+    hard they pull depends entirely on the <em>angle</em> they make, and as they flatten toward
+    horizontal the tension does not level off. It runs away to infinity. This note is where you resolve
+    vectors into components and sum them separately, which is how every mechanics problem from here on
+    is going to work.
+  </div>
+
+  <div class="hook">
+    <span class="label">Before you read on — predict</span>
+    A heavy sign hangs from two wires fixed to a wall. It sags in the middle and looks untidy, so you
+    tighten both wires to pull it up closer to horizontal.
+    <br>Does tightening the wires make them <strong>safer</strong>, or <strong>more likely to snap</strong>?
+    <span class="commit">Commit to one, with a sentence of reasoning, before you turn the page.</span>
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <ol>
+      <li><b>Draw</b> the free-body diagram of an object hung by two strings, and state which way a
+      tension force acts.</li>
+      <li><b>Resolve</b> each tension into horizontal and vertical components and build the component
+      table, with the correct sign on each entry.</li>
+      <li><b>Write</b> ΣF<sub>x</sub> = 0 and ΣF<sub>y</sub> = 0 as two independent equations, and use the
+      first to show T<sub>1</sub> = T<sub>2</sub> when the angles are equal.</li>
+      <li><b>Derive</b> T = mg / (2 sin θ) and use it.</li>
+      <li><b>Predict</b> how the tension changes as the strings are lengthened or shortened, and explain
+      why a perfectly horizontal string is impossible.</li>
+      <li><b>Explain</b> why the vertical components are the same at every angle while the horizontal
+      components are not.</li>
+    </ol>
+  </div>
+
+  <div class="domain">
+    <span class="label">One convention, fixed for this whole note</span>
+    <p><strong>θ is measured from the ceiling — that is, from the horizontal.</strong> Every equation on
+    this page assumes it. Get this wrong and every sine becomes a cosine.</p>
+    <p>Check it on the figure below before you go on: when the strings are <em>nearly horizontal</em>,
+    θ is <em>small</em>. When they hang <em>straight down</em>, θ = 90°.</p>
+  </div>
+
+  <h2>The setup</h2>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 380" role="img" aria-label="An object of mass m hangs from a hatched ceiling by two strings of equal length. Each string makes an angle theta with the ceiling, measured from the horizontal. From the object, two solid arrows labelled T1 and T2 point away along each string toward its anchor. Dashed arrows show each tension resolved into a horizontal component labelled T cos theta and a vertical component labelled T sin theta. A solid arrow points straight down labelled F g equals m g."><line x1="80.0" y1="52" x2="640.0" y2="52" stroke="#1d2b23" stroke-width="3"/><line x1="90.0" y1="52" x2="79.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="120.0" y1="52" x2="109.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="150.0" y1="52" x2="139.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="180.0" y1="52" x2="169.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="210.0" y1="52" x2="199.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="240.0" y1="52" x2="229.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="270.0" y1="52" x2="259.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="300.0" y1="52" x2="289.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="330.0" y1="52" x2="319.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="360.0" y1="52" x2="349.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="390.0" y1="52" x2="379.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="420.0" y1="52" x2="409.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="450.0" y1="52" x2="439.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="480.0" y1="52" x2="469.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="510.0" y1="52" x2="499.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="540.0" y1="52" x2="529.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="570.0" y1="52" x2="559.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="600.0" y1="52" x2="589.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="630.0" y1="52" x2="619.0" y2="41" stroke="#5c6b62" stroke-width="1.2" opacity=".7"/><line x1="150.0" y1="52" x2="360.0" y2="199.04358302403904" stroke="#1d2b23" stroke-width="1.6"/><line x1="570.0" y1="52" x2="360.0" y2="199.04358302403904" stroke="#1d2b23" stroke-width="1.6"/><path d="M 196.0 52 A 46 46 0 0 1 187.7 78.4" fill="none" stroke="#1e6b3c" stroke-width="1.8"/><text x="212.0" y="72.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1e6b3c">&#952;</text><path d="M 524.0 52 A 46 46 0 0 0 532.3 78.4" fill="none" stroke="#1e6b3c" stroke-width="1.8"/><text x="508.0" y="72.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1e6b3c">&#952;</text><text x="360.0" y="32.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1e6b3c">&#952; is measured from the ceiling &mdash; from the HORIZONTAL</text><circle cx="360.0" cy="199.04358302403904" r="21" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><text x="360.0" y="204.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1d2b23">m</text><line x1="360.0" y1="199.0" x2="268.2" y2="134.8" stroke="#1f5d8c" stroke-width="2.2"/><polygon points="261.7,130.2 270.5,132.3 266.6,137.7" fill="#1f5d8c"/><text x="255.7" y="120.2" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1f5d8c">T<tspan baseline-shift="sub" font-size="9">1</tspan></text><line x1="360.0" y1="199.0" x2="451.8" y2="134.8" stroke="#1f5d8c" stroke-width="2.2"/><polygon points="458.3,130.2 453.4,137.7 449.5,132.3" fill="#1f5d8c"/><text x="464.3" y="120.2" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1f5d8c">T<tspan baseline-shift="sub" font-size="9">2</tspan></text><line x1="261.7" y1="199.0" x2="261.7" y2="130.2" stroke="#1f5d8c" stroke-width="1" stroke-dasharray="3 4" opacity=".4"/><line x1="360.0" y1="199.0" x2="267.9" y2="199.0" stroke="#1f5d8c" stroke-width="1.5" stroke-dasharray="6 4"/><polygon points="261.7,199.0 268.2,196.4 268.2,201.6" fill="#1f5d8c"/><line x1="353.0" y1="199.0" x2="353.0" y2="136.4" stroke="#1f5d8c" stroke-width="1.5" stroke-dasharray="6 4"/><polygon points="353.0,130.2 355.6,136.7 350.4,136.7" fill="#1f5d8c"/><line x1="458.3" y1="199.0" x2="458.3" y2="130.2" stroke="#1f5d8c" stroke-width="1" stroke-dasharray="3 4" opacity=".4"/><line x1="360.0" y1="199.0" x2="452.1" y2="199.0" stroke="#1f5d8c" stroke-width="1.5" stroke-dasharray="6 4"/><polygon points="458.3,199.0 451.8,201.6 451.8,196.4" fill="#1f5d8c"/><line x1="367.0" y1="199.0" x2="367.0" y2="136.4" stroke="#1f5d8c" stroke-width="1.5" stroke-dasharray="6 4"/><polygon points="367.0,130.2 369.6,136.7 364.4,136.7" fill="#1f5d8c"/><text x="415.0" y="215.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1f5d8c">T<tspan baseline-shift="sub" font-size="8">2</tspan> cos&#952;</text><text x="305.0" y="215.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1f5d8c">T<tspan baseline-shift="sub" font-size="8">1</tspan> cos&#952;</text><text x="344.0" y="149.5" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1f5d8c">T<tspan baseline-shift="sub" font-size="8">1</tspan> sin&#952;</text><text x="380.0" y="163.3" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1f5d8c">T<tspan baseline-shift="sub" font-size="8">2</tspan> sin&#952;</text><line x1="360.0" y1="199.0" x2="360.0" y2="303.1" stroke="#a8551f" stroke-width="2.4"/><polygon points="360.0,311.0 356.7,302.7 363.3,302.7" fill="#a8551f"/><text x="372.0" y="311.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g</tspan> = mg</text></svg>
+    <figcaption>Tension always <strong>pulls</strong>, along the string, away from the object — never
+    pushes. Each tension is resolved into a horizontal component T&nbsp;cos&nbsp;θ and a vertical
+    component T&nbsp;sin&nbsp;θ. Note that the two horizontal components point in <em>opposite</em>
+    directions while both vertical components point <em>up</em>. That difference is the whole result.</figcaption>
+  </figure>
+
+  <ol class="tasks">
+    <li>Draw this free-body diagram yourself. Two tension forces pointing away from the object along the
+    strings, and the weight. Mark θ at each string.<span class="space"></span></li>
+    <li>Resolve each tension into its two perpendicular components, head to tail. Which side of the
+    right-angled triangle is adjacent to θ, and which is opposite?<span class="space"></span></li>
+    <li>Write T<sub>1x</sub>, T<sub>1y</sub>, T<sub>2x</sub> and T<sub>2y</sub> in terms of T and θ.
+    <b>Watch the signs</b> — a vector pointing left takes a negative sign, and so does one pointing
+    down.<span class="space"></span></li>
+  </ol>
+
+  <h2>Two directions, two equations</h2>
+  <p>The object is in equilibrium horizontally <em>and</em> vertically, so the forces add to zero in
+  each direction <strong>separately</strong>. That is two independent equations, and it is the habit
+  this note is really teaching. Fill the table from your own diagram.</p>
+
+  <table class="phases">
+    <thead>
+      <tr><th></th><th>T<sub>1</sub></th><th>T<sub>2</sub></th><th>F<sub>g</sub></th><th>Sum</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>x-component</td><td class="blank"></td><td class="blank"></td><td>N/A</td><td class="blank"></td></tr>
+      <tr><td>y-component</td><td class="blank"></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+    </tbody>
+  </table>
+
+  <ol class="tasks" start="4">
+    <li>The strings are the same length, so the angles are the same. What does the <b>x-equation</b> then
+    tell you about T<sub>1</sub> and T<sub>2</sub>?<span class="space"></span></li>
+    <li>Use the <b>y-equation</b>, with T<sub>1</sub> = T<sub>2</sub> = T, to show that
+    T&nbsp;=&nbsp;mg&nbsp;/&nbsp;(2&nbsp;sin&nbsp;θ).<span class="space"></span></li>
+  </ol>
+
+  <h2>The key relationships</h2>
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mi>T</mi><mi>sin</mi><mo>&#x2061;</mo><mi>&#x3B8;</mi><mo>=</mo><mi>m</mi><mi>g</mi></math>
+      <span class="use">the vertical components carry the whole weight, between them</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi><mo>=</mo><mfrac><mrow><mi>m</mi><mi>g</mi></mrow><mrow><mn>2</mn><mi>sin</mi><mo>&#x2061;</mo><mi>&#x3B8;</mi></mrow></mfrac></math>
+      <span class="use"><strong>equal angles only.</strong> θ from the horizontal</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>T</mi><mi>y</mi></msub><mo>=</mo><mfrac><mrow><mi>m</mi><mi>g</mi></mrow><mn>2</mn></mfrac></math>
+      <span class="use">each string's vertical pull — <strong>the same at every angle</strong></span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>T</mi><mi>x</mi></msub><mo>=</mo><mfrac><mrow><mi>m</mi><mi>g</mi></mrow><mrow><mn>2</mn><mi>tan</mi><mo>&#x2061;</mo><mi>&#x3B8;</mi></mrow></mfrac></math>
+      <span class="use">the horizontal pull — <strong>unbounded</strong> as θ → 0</span>
+    </li>
+  </ul>
+
+  <div class="domain">
+    <span class="label">Where these hold</span>
+    <p>All four assume <strong>equal angles</strong>, which follows from equal string lengths. If the
+    strings are different lengths the angles differ, T<sub>1</sub> ≠ T<sub>2</sub>, and you go back to
+    the component table — which still works. Only the shortcut breaks, not the method.</p>
+  </div>
+
+  <h2>What the angle does</h2>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 330" role="img" aria-label="A graph of tension divided by m g against the angle from the ceiling, from 0 to 90 degrees. The curve falls steeply from above 3 at small angles, passes through 1 at 30 degrees, and flattens to 0.5 at 90 degrees. A dashed horizontal line at 0.5 is labelled m g over 2, the floor. A dashed vertical line near 0 degrees is labelled theta approaching zero, T approaching infinity."><line x1="78.0" y1="26" x2="78.0" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="132.7" y1="26" x2="132.7" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="187.3" y1="26" x2="187.3" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="242.0" y1="26" x2="242.0" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="296.7" y1="26" x2="296.7" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="351.3" y1="26" x2="351.3" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="406.0" y1="26" x2="406.0" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="460.7" y1="26" x2="460.7" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="515.3" y1="26" x2="515.3" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="570.0" y1="26" x2="570.0" y2="272" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="233.6" x2="570" y2="233.6" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="195.1" x2="570" y2="195.1" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="156.7" x2="570" y2="156.7" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="118.2" x2="570" y2="118.2" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="79.8" x2="570" y2="79.8" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="41.4" x2="570" y2="41.4" stroke="#e7efe9" stroke-width="1"/><line x1="78" y1="233.6" x2="570" y2="233.6" stroke="#1e6b3c" stroke-width="1.5" stroke-dasharray="7 5"/><text x="578" y="237.6" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1e6b3c">mg/2 &mdash; the floor</text><polyline points="127.2,26.3 129.9,39.1 132.7,50.6 135.4,61.1 138.1,70.6 140.9,79.2 143.6,87.1 146.3,94.4 149.1,101.1 151.8,107.3 154.5,113.1 157.3,118.5 160.0,123.5 162.7,128.2 165.5,132.6 168.2,136.7 170.9,140.5 173.7,144.2 176.4,147.6 179.1,150.9 181.9,153.9 184.6,156.9 187.3,159.6 190.1,162.2 192.8,164.7 195.5,167.1 198.3,169.4 201.0,171.6 203.7,173.6 206.5,175.6 209.2,177.5 211.9,179.3 214.7,181.0 217.4,182.7 220.1,184.3 222.9,185.9 225.6,187.3 228.3,188.8 231.1,190.1 233.8,191.4 236.5,192.7 239.3,193.9 242.0,195.1 244.7,196.3 247.5,197.4 250.2,198.4 252.9,199.5 255.7,200.5 258.4,201.4 261.1,202.4 263.9,203.3 266.6,204.1 269.3,205.0 272.1,205.8 274.8,206.6 277.5,207.4 280.3,208.1 283.0,208.9 285.7,209.6 288.5,210.3 291.2,210.9 293.9,211.6 296.7,212.2 299.4,212.8 302.1,213.4 304.9,214.0 307.6,214.6 310.3,215.1 313.1,215.6 315.8,216.2 318.5,216.7 321.3,217.2 324.0,217.6 326.7,218.1 329.5,218.6 332.2,219.0 334.9,219.4 337.7,219.9 340.4,220.3 343.1,220.7 345.9,221.1 348.6,221.5 351.3,221.8 354.1,222.2 356.8,222.5 359.5,222.9 362.3,223.2 365.0,223.6 367.7,223.9 370.5,224.2 373.2,224.5 375.9,224.8 378.7,225.1 381.4,225.4 384.1,225.6 386.9,225.9 389.6,226.2 392.3,226.4 395.1,226.7 397.8,226.9 400.5,227.2 403.3,227.4 406.0,227.6 408.7,227.8 411.5,228.1 414.2,228.3 416.9,228.5 419.7,228.7 422.4,228.9 425.1,229.0 427.9,229.2 430.6,229.4 433.3,229.6 436.1,229.8 438.8,229.9 441.5,230.1 444.3,230.2 447.0,230.4 449.7,230.5 452.5,230.7 455.2,230.8 457.9,231.0 460.7,231.1 463.4,231.2 466.1,231.3 468.9,231.5 471.6,231.6 474.3,231.7 477.1,231.8 479.8,231.9 482.5,232.0 485.3,232.1 488.0,232.2 490.7,232.3 493.5,232.4 496.2,232.5 498.9,232.6 501.7,232.6 504.4,232.7 507.1,232.8 509.9,232.8 512.6,232.9 515.3,233.0 518.1,233.0 520.8,233.1 523.5,233.1 526.3,233.2 529.0,233.2 531.7,233.3 534.5,233.3 537.2,233.4 539.9,233.4 542.7,233.4 545.4,233.4 548.1,233.5 550.9,233.5 553.6,233.5 556.3,233.5 559.1,233.5 561.8,233.5 564.5,233.6 567.3,233.6 570.0,233.6" fill="none" stroke="#1f5d8c" stroke-width="2.4"/><line x1="78" y1="26" x2="78" y2="272" stroke="#1d2b23" stroke-width="1.6"/><line x1="78" y1="272" x2="570" y2="272" stroke="#1d2b23" stroke-width="1.6"/><line x1="78.0" y1="272" x2="78.0" y2="277" stroke="#1d2b23" stroke-width="1.2"/><text x="78.0" y="291.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0&#176;</text><line x1="160.0" y1="272" x2="160.0" y2="277" stroke="#1d2b23" stroke-width="1.2"/><text x="160.0" y="291.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">15&#176;</text><line x1="242.0" y1="272" x2="242.0" y2="277" stroke="#1d2b23" stroke-width="1.2"/><text x="242.0" y="291.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">30&#176;</text><line x1="324.0" y1="272" x2="324.0" y2="277" stroke="#1d2b23" stroke-width="1.2"/><text x="324.0" y="291.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">45&#176;</text><line x1="406.0" y1="272" x2="406.0" y2="277" stroke="#1d2b23" stroke-width="1.2"/><text x="406.0" y="291.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">60&#176;</text><line x1="488.0" y1="272" x2="488.0" y2="277" stroke="#1d2b23" stroke-width="1.2"/><text x="488.0" y="291.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">75&#176;</text><line x1="570.0" y1="272" x2="570.0" y2="277" stroke="#1d2b23" stroke-width="1.2"/><text x="570.0" y="291.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">90&#176;</text><line x1="73" y1="233.6" x2="78" y2="233.6" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="237.6" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0.5</text><line x1="73" y1="195.1" x2="78" y2="195.1" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="199.1" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">1</text><line x1="73" y1="118.2" x2="78" y2="118.2" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="122.2" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">2</text><line x1="73" y1="41.4" x2="78" y2="41.4" stroke="#1d2b23" stroke-width="1.2"/><text x="68.0" y="45.4" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">3</text><text x="32" y="149.0" transform="rotate(-90 32 149.0)" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">tension &#247; mg</text><text x="324.0" y="316.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">angle from the ceiling, &#952;</text><line x1="127.2" y1="26" x2="127.2" y2="272" stroke="#a8551f" stroke-width="1.2" stroke-dasharray="4 4"/><text x="135.2" y="42.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#a8551f">&#952; &#8594; 0: T &#8594; &#8734;</text><text x="566.0" y="221.6" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1e6b3c">T = mg/2</text></svg>
+    <figcaption>Tension in each string as the angle changes, for a fixed weight. The curve never goes
+    below <strong>mg/2</strong> — that is the floor, reached only when both strings hang vertically. Going
+    the other way there is no ceiling at all: as θ → 0 the tension runs to infinity.</figcaption>
+  </figure>
+
+  <ol class="tasks" start="6">
+    <li>An object of mass 2 kg hangs with the strings at 30° from the ceiling. Find the tension in each
+    string.<span class="space"></span></li>
+    <li>You replace the strings with <b>longer</b> ones, same anchor points. What happens to θ, and what
+    happens to T? Explain using the equation.<span class="space"></span></li>
+    <li>Now use strings so short that they are almost horizontal. What happens to T, and what would that
+    mean in practice?<span class="space"></span></li>
+    <li>If you want the tension as <b>small as possible</b>, should the strings be long or short? What is
+    the smallest tension you could ever achieve?<span class="space"></span></li>
+    <li>You can never actually reach a 0° angle — perfectly horizontal strings. Why not? What happens to
+    the string before you get there?<span class="space"></span></li>
+  </ol>
+
+  <h2>Why the two components behave so differently</h2>
+  <p>This is the part worth slowing down for. Each string's <em>vertical</em> pull is
+  T&nbsp;sin&nbsp;θ, and substituting T&nbsp;=&nbsp;mg/(2&nbsp;sin&nbsp;θ) gives exactly
+  <strong>mg/2</strong> — the sines cancel. The two strings always split the weight evenly between them,
+  at any angle. They have no choice: the weight is the only thing they have to hold up.</p>
+
+  <p>The <em>horizontal</em> components are a different story. They are not holding anything up — they
+  are pulling against each other, and nothing caps how hard. As the strings flatten, each must pull
+  harder and harder sideways just to keep its vertical share at mg/2. That is where the tension runs
+  away, and it is why the answer to the sign question is <strong>more likely to snap</strong>.</p>
+
+  <ol class="tasks" start="11">
+    <li>As θ increases, what happens to the <b>vertical</b> component of the tension? And to the
+    <b>horizontal</b> component? Justify both from the equations.<span class="space"></span></li>
+  </ol>
+
+  <h2>Check it on the bench</h2>
+  <ol class="tasks" start="12">
+    <li>Set up a 2 kg object hung by two strings at <b>30° from the horizontal</b>. Calculate the tension
+    first. Then measure it, and compare. If your measured value sits below the calculation, check your
+    angle before you doubt the physics — a few degrees matters a great deal down at this end of the
+    curve.<span class="space"></span></li>
+  </ol>
+
+  <div class="ahead">
+    <b>Where this goes.</b> The component table you built here is the general method — it does not care
+    whether the angles are equal, whether there are two strings or three, or whether the surface is
+    tilted. <b>Note 7</b> used the same move with the axes rotated to a slope. Any problem with forces in
+    two directions gets solved this way: resolve, sum each direction separately, set each sum to zero if
+    nothing is accelerating.
+  </div>
+
+  <div class="callback">
+    <span class="label">Back to your prediction</span>
+    <p>You predicted whether tightening the wires makes them safer or more likely to snap. Was it right? Point to the term in T = mg&thinsp;/&thinsp;(2&thinsp;sin&thinsp;&theta;) that decides it.</p>
+    <span class="space"></span><span class="space"></span>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY151/handouts/M3_N8_Tension_Forces_In_A_Hanging_Object_GuidedNotes_BLANK.pdf">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes &mdash; blank (PDF)</span>
+      <span class="hint">Print or open on a tablet; record your prediction about the sign, then build the component table from your own diagram.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes — the worked table, the derivation and the bench measurement.</span>
+    </div>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+
+<!-- ===================================================================
+     FOUNDATION LIST — for the quiz project (Lesson Package rung 2 / 3).
+     Items may go beyond the note, but not beyond this list.
+
+     CONVENTION: theta is measured FROM THE CEILING (from the horizontal).
+     Both inherited sources agree -- Trevor's tension item says "below the
+     support above", WebAssign's spiderweb problems say "below the
+     horizontal". Any item written against "from the vertical" is wrong.
+
+     1. Tension always PULLS, along the string, away from the object.
+        It never pushes.
+     2. Two-dimensional equilibrium is TWO INDEPENDENT STATEMENTS:
+        sum Fx = 0 AND sum Fy = 0. Build the component table, sign each
+        entry (left negative, down negative), sum each row.
+     3. Equal string lengths => equal angles => the x-equation forces
+        T1 = T2 = T.
+     4. The y-equation then gives 2 T sin(theta) = mg, so
+        T = mg / (2 sin theta).   EQUAL ANGLES ONLY.
+     5. Each string's VERTICAL component is T sin(theta) = mg/2 -- THE SAME
+        AT EVERY ANGLE. The two strings always split the weight evenly;
+        the sines cancel.
+     6. Each string's HORIZONTAL component is T cos(theta) = mg/(2 tan
+        theta), which is UNBOUNDED as theta -> 0. The horizontal components
+        hold nothing up; they pull against each other.
+     7. Longer string => larger theta => smaller T. The MINIMUM possible
+        tension is mg/2, at theta = 90 (both strings vertical).
+     8. theta = 0 is impossible: T -> infinity, so the string breaks first.
+        Worked: 2 kg at 30 degrees gives T = 20 N.
+
+     NOT laid down here (do not write items against these):
+       - unequal angles as a worked case (the METHOD in line 2 covers it;
+         the shortcut in line 4 does not)
+       - pulleys and shared tension through a single string (that is N6)
+       - friction, inclines, accelerating frames (N5, N7, N9)
+     =================================================================== -->
+
+
+<!-- Iframe auto-height reporter (V4). Tells the D2L wrapper how tall this page
+     really is. Measures .note-wrap, so the value is viewport-independent and can
+     come back down as well as up. Must stay just before </body>.
+     See Cross_Course_Notes/Autosize_Backfill_Runbook_Reference.md -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>

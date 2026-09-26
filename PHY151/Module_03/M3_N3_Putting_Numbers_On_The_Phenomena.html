@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N3 — Putting Numbers on the Phenomena</title>
+<style>
+
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3 and M3 N9; keep identical across pages.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider ------------------------------------------------ */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  .strobe.uniform span + span{ margin-left:26px; }
+  /* decelerating divider: narrowing gaps — friction putting drag on motion */
+  .strobe.decel span:nth-child(2){ margin-left:82px; }
+  .strobe.decel span:nth-child(3){ margin-left:58px; }
+  .strobe.decel span:nth-child(4){ margin-left:38px; }
+  .strobe.decel span:nth-child(5){ margin-left:22px; }
+  .strobe.decel span:nth-child(6){ margin-left:10px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--ink); border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.tasks{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.tasks li{ margin:.55rem 0; }
+  ol.tasks b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- predict-first hook ------------------------------------------- */
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem;
+         margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook .commit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    color:var(--muted); display:block; margin-top:.6rem; }
+
+  /* --- activity ------------------------------------------------------- */
+  .steps{ margin:.3rem 0 0; padding-left:1.3rem; }
+  .steps li{ margin:.6rem 0; }
+  .datatable{ width:100%; border-collapse:collapse; margin:.9rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .datatable th, .datatable td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  .datatable thead th{ background:var(--green-soft); color:var(--green); font-size:.74rem;
+    letter-spacing:.06em; text-transform:uppercase; }
+  .datatable td.blank{ background:#fcfdfc; height:1.6rem; }
+  .plot-wrap{ border:1px solid var(--rule); border-radius:8px; padding:1rem 1rem .8rem; margin:1.1rem 0 0; }
+  .plot-wrap svg{ display:block; width:100%; height:auto; }
+  .plot-cap{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin:.6rem 0 0; }
+  .askbox{ border:1px solid var(--rule); border-left:4px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.85rem 1.05rem; margin:1.1rem 0 0; }
+  .askbox ol{ margin:.2rem 0 0; padding-left:1.2rem; }
+  .askbox li{ margin:.45rem 0; }
+
+  /* --- domain-of-validity callout -------------------------------------- */
+  .domain{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    background:var(--green-soft); border-radius:0 8px 8px 0;
+    padding:.85rem 1.05rem; margin:1.1rem 0;
+  }
+  .domain .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .domain p{ margin:0; }
+  .domain p + p{ margin-top:.5rem; }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+  /* --- figures ---------------------------------------------------------- */
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:1rem 1rem .8rem; margin:1.2rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin:.7rem 0 0;
+  }
+  /* --- movement marker --------------------------------------------------- */
+  .movement{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--green);
+    font-weight:700; margin:2.6rem 0 .3rem;
+  }
+  /* --- boxed rule -------------------------------------------------------- */
+  .rule-box{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.9rem 1.1rem; margin:1.3rem 0;
+    background:var(--green-soft);
+  }
+  .rule-box .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .rule-box p{ margin:0; font-size:1.1rem; }
+  /* --- worked block ------------------------------------------------------ */
+  .worked{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1.1rem; margin:1.1rem 0; }
+  .worked .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem;
+  }
+  .worked table{ width:100%; border-collapse:collapse;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .worked td{ padding:.3rem .5rem; border-bottom:1px solid var(--rule); }
+  .worked tr:last-child td{ border-bottom:0; }
+  .worked td.n{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  /* --- tasks space ------------------------------------------------------- */
+  ol.tasks .space{ display:block; border-bottom:1px solid var(--rule); height:1.4rem; margin:.4rem 0 0; }
+  /* --- looking ahead ----------------------------------------------------- */
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+
+  /* --- partner fill-in lines --------------------------------------------- */
+  ol.partners .pair{ display:block; margin:.5rem 0 .2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; color:var(--muted); }
+  ol.partners .fill{ display:inline-block; border-bottom:1px solid var(--rule);
+    width:13em; height:1.2em; vertical-align:-.25em; margin:0 .6em 0 .3em; }
+  ol.partners .fill.s{ width:9em; margin-right:0; }
+  @media (max-width:540px){ ol.partners .fill{ width:8em; } ol.partners .fill.s{ width:6em; } }
+
+  /* --- a previously open phenomenon, now closed ---------------------------- */
+  .closed{
+    border:1.5px solid var(--green); border-radius:8px; background:var(--green-soft);
+    padding:.95rem 1.1rem; margin:1.4rem 0;
+  }
+  .closed .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .closed .q{ font-weight:700; display:block; margin:.1rem 0 .6rem; }
+  .closed p{ margin:.55rem 0; }
+  .closed .fig{ background:#fff; }
+
+  /* --- back to your prediction -------------------------------------------- */
+  .callback{
+    border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc;
+    padding:.9rem 1.1rem; margin:1.6rem 0;
+  }
+  .callback .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .callback p{ margin:0; }
+  .callback .space{ display:block; border-bottom:1px solid var(--rule);
+    height:1.5rem; margin:.5rem 0 0; }
+  /* --- worked-arithmetic frame -------------------------------------------- */
+  .calc{ border:1px solid var(--rule); border-radius:8px; padding:.85rem 1rem;
+    margin:1rem 0; background:#fbfdfc;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .calc .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); font-weight:600; display:block; margin-bottom:.45rem; }
+  .calc ol{ margin:0; padding-left:1.2rem; }
+  .calc li{ margin:.4rem 0; }
+  .calc .line{ display:block; border-bottom:1px solid var(--rule); height:1.4rem;
+    margin:.35rem 0 0; }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 &middot; Forces</span>
+    <span>Note 3</span>
+  </div>
+
+  <h1>Putting Numbers on the Phenomena</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In <b>N2</b> you watched things happen and said which law was responsible. That is half of physics.
+    The other half is <em>how much</em> &mdash; and it is the half that decides whether a bridge stands
+    up. This note goes back to the same demonstrations and works out the numbers: what the penny weighs,
+    how hard each person on a trolley accelerates, and where to point the launcher. The physics is not
+    new. What is new is the discipline of getting an answer you can defend.
+  </div>
+
+  <div class="hook">
+    <span class="label">Before you read on &mdash; predict</span>
+    You are on a trolley with a total mass of <strong>100&nbsp;kg</strong>. You push on someone else
+    whose trolley and body come to <strong>200&nbsp;kg</strong>. Two separate questions, and they do not
+    have the same answer:
+    <br>Do the two of you feel the <strong>same size force</strong>?
+    <br>Do the two of you get the <strong>same acceleration</strong>?
+    <span class="commit">Answer both, yes or no, with one sentence each, before you read on.</span>
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <ol>
+      <li><b>Convert</b> a mass given in grams to kilograms before substituting it, and <b>show</b> the
+      conversion as a step rather than doing it in your head.</li>
+      <li><b>Carry</b> units through every line of a calculation and <b>state</b> the unit of the
+      answer. An answer without a unit is not an answer.</li>
+      <li><b>Compute</b> the weight of a mass from w = mg.</li>
+      <li><b>Apply</b> a = F/m to each member of an interacting pair, and <b>explain</b> why the two
+      accelerations differ although the two forces do not.</li>
+      <li><b>Use</b> trigonometry to find a launch angle from a height and a distance.</li>
+      <li><b>Check</b> whether an answer is reasonable before writing it down, and say what made you
+      accept it.</li>
+    </ol>
+  </div>
+
+  <p class="movement">Movement 1 &mdash; the rules of the road</p>
+
+  <h2>How to get an answer you can defend</h2>
+
+  <p>Every calculation in this module follows the same four steps, and the marks are in the steps, not
+  the final number. A right answer with no working is worth less than a wrong answer whose working
+  shows exactly where it went off &mdash; because the second one can be repaired and the first one
+  cannot be trusted.</p>
+
+  <div class="rule-box">
+    <span class="label">Every time</span>
+    <p>convert &rarr; substitute &rarr; carry the units &rarr; check it is reasonable</p>
+  </div>
+
+  <div class="domain">
+    <span class="label">The unit rule</span>
+    <p>Physics equations are written for <strong>SI units</strong>: kilograms, metres, seconds, newtons.
+    Grams, centimetres and minutes must be converted <em>before</em> they go into an equation, not
+    afterwards. A mass of 2.5&nbsp;g put into w = mg as &ldquo;2.5&rdquo; gives an answer a thousand
+    times too big, and nothing later in the calculation will warn you.</p>
+    <p>Carry the unit on every line. If the units of your answer come out as something that is not a
+    newton when you were looking for a force, the algebra is wrong &mdash; and you have just caught it
+    for free.</p>
+  </div>
+
+  <p class="movement">Movement 2 &mdash; what the penny weighs</p>
+
+  <h2>From mass to weight</h2>
+
+  <p>In N2 the penny fell into the cup once the card was gone. It fell because of a force: the pull of
+  the Earth on it, which we call its <strong>weight</strong>. Weight is a force and is measured in
+  newtons. Mass is the amount of stuff and is measured in kilograms. The two are related by</p>
+
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>w</mi><mo>=</mo><msub><mi>F</mi><mi>g</mi></msub><mo>=</mo><mi>m</mi><mi>g</mi></math>
+      <span class="use">g = 9.8 m/s&sup2; near the Earth&rsquo;s surface</span>
+    </li>
+  </ul>
+
+  <div class="domain">
+    <span class="label">Borrowed for now &mdash; earned in N4</span>
+    <p>You are being handed w = mg here as a tool to calculate with. <strong>Why</strong> weight should
+    be proportional to mass, why the constant is the same <em>g</em> that appears in free fall, and why
+    that means a heavy object and a light one fall together &mdash; all of that is <b>N4</b>&rsquo;s
+    job, and you should not take it on trust for longer than that.</p>
+    <p>This note is about the arithmetic. Do not let a clean calculation persuade you that you have
+    understood the physics behind it; those are two different achievements.</p>
+  </div>
+
+  <div class="calc">
+    <span class="label">Task 1 &mdash; a penny</span>
+    <ol>
+      <li>The mass of a penny is <b>2.5&nbsp;g</b>. Convert it to kilograms, and write the conversion as
+      its own line.<span class="line"></span></li>
+      <li>Find its weight. Show the substitution with units attached.<span class="line"></span><span class="line"></span></li>
+      <li>Is the answer reasonable? Say what you compared it with.<span class="line"></span></li>
+    </ol>
+  </div>
+
+  <div class="calc">
+    <span class="label">Task 2 &mdash; an adult</span>
+    <ol>
+      <li>A typical adult has a mass of <b>70&nbsp;kg</b>. Find the weight, with units on every
+      number.<span class="line"></span><span class="line"></span></li>
+      <li>Your answer is a number of newtons. Roughly how many pounds is that, and does the comparison
+      make sense to you?<span class="line"></span></li>
+    </ol>
+  </div>
+
+  <p class="movement">Movement 3 &mdash; the third law, with numbers</p>
+
+  <h2>Equal forces, unequal accelerations</h2>
+
+  <p>N2 established that you cannot get yourself moving without pushing on something else, and that the
+  push and the push back are equal in size and opposite in direction. Now put numbers on it, because the
+  numbers reveal something the words hide.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 320" role="img" aria-label="Two people on wheeled trolleys, hands touching at the centre. One is labelled you plus trolley 100 kilograms, the other the other pair 200 kilograms. Two force arrows of equal length point outward from the contact, each labelled 100 newtons. Below, two acceleration arrows of unequal length point outward: the lighter pair gets 1.0 metres per second squared, twice as long as the heavier pair at 0.5."><text x="270.0" y="44.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">you + trolley &middot; 100 kg</text><text x="450.0" y="44.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">the other pair &middot; 200 kg</text><rect x="208" y="172" width="124" height="12" rx="3" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><circle cx="240" cy="194" r="10" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><circle cx="300" cy="194" r="10" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><rect x="388" y="172" width="124" height="12" rx="3" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><circle cx="420" cy="194" r="10" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><circle cx="480" cy="194" r="10" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><circle cx="270" cy="84" r="18" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><line x1="270" y1="102" x2="270" y2="150" stroke="#1d2b23" stroke-width="1.8"/><line x1="270" y1="150" x2="254" y2="172" stroke="#1d2b23" stroke-width="1.8"/><line x1="270" y1="150" x2="286" y2="172" stroke="#1d2b23" stroke-width="1.8"/><circle cx="450" cy="84" r="18" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><line x1="450" y1="102" x2="450" y2="150" stroke="#1d2b23" stroke-width="1.8"/><line x1="450" y1="150" x2="434" y2="172" stroke="#1d2b23" stroke-width="1.8"/><line x1="450" y1="150" x2="466" y2="172" stroke="#1d2b23" stroke-width="1.8"/><line x1="270" y1="120" x2="356" y2="120" stroke="#1d2b23" stroke-width="1.8"/><line x1="450" y1="120" x2="364" y2="120" stroke="#1d2b23" stroke-width="1.8"/><line x1="360" y1="108" x2="360" y2="210" stroke="#d7e2da" stroke-width="1.2" stroke-dasharray="4 4"/><line x1="40" y1="206" x2="680" y2="206" stroke="#d7e2da" stroke-width="1.6"/><line x1="352.0" y1="150.0" x2="299.9" y2="150.0" stroke="#1f5d8c" stroke-width="2.6"/><polygon points="292.0,150.0 300.4,146.7 300.4,153.3" fill="#1f5d8c"/><text x="322.0" y="142.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1f5d8c">100 N</text><line x1="368.0" y1="150.0" x2="420.1" y2="150.0" stroke="#1f5d8c" stroke-width="2.6"/><polygon points="428.0,150.0 419.6,153.3 419.6,146.7" fill="#1f5d8c"/><text x="398.0" y="142.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1f5d8c">100 N</text><line x1="300.0" y1="246.0" x2="227.9" y2="246.0" stroke="#5c6b62" stroke-width="2.6"/><polygon points="220.0,246.0 228.4,242.7 228.4,249.3" fill="#5c6b62"/><text x="260.0" y="238.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">a = 1.0 m/s&sup2;</text><line x1="420.0" y1="246.0" x2="452.1" y2="246.0" stroke="#5c6b62" stroke-width="2.6"/><polygon points="460.0,246.0 451.6,249.3 451.6,242.7" fill="#5c6b62"/><text x="440.0" y="238.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">a = 0.5 m/s&sup2;</text><text x="360.0" y="292.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1e6b3c">the force arrows match. the acceleration arrows do not.</text></svg>
+    <figcaption>The two force arrows are drawn the same length because the two forces really are the
+    same size &mdash; that is the third law, and it is not negotiable. The two acceleration arrows are
+    drawn to scale, and they are <strong>not</strong> the same. Nothing has gone wrong: the forces are
+    equal and the masses are not.</figcaption>
+  </figure>
+
+  <div class="calc">
+    <span class="label">Task 3 &mdash; both sides of the push</span>
+    <ol>
+      <li>You and your trolley come to 100&nbsp;kg. You push with 100&nbsp;N. Find your
+      acceleration.<span class="line"></span><span class="line"></span></li>
+      <li>The other person and their trolley come to 200&nbsp;kg. What force acts on <em>them</em>?
+      State it before you calculate anything.<span class="line"></span></li>
+      <li>Find their acceleration.<span class="line"></span><span class="line"></span></li>
+      <li>Compare the two accelerations. Write the comparison as a ratio, and say what that ratio is
+      the ratio <em>of</em>.<span class="line"></span></li>
+    </ol>
+  </div>
+
+  <div class="domain">
+    <span class="label">The thing worth taking away</span>
+    <p>Equal and opposite forces do <strong>not</strong> mean equal and opposite effects. The force is
+    shared; the acceleration is not, because a = F/m and the two bodies bring different masses to the
+    same interaction.</p>
+    <p>This is why the wall in N2 did not visibly move when you pushed it. The wall felt exactly the
+    force you felt. It is simply attached to a building, and a = F/m with an enormous m gives an
+    acceleration too small to see. Nothing in that sentence requires the forces to have been unequal.</p>
+  </div>
+
+  <ol class="tasks" start="5">
+    <li>Go back to the wall in N2 and finish the argument properly: name the quantity that makes the
+    wall&rsquo;s response invisible, and say what would have to be true for you to see the wall move.<span class="space"></span></li>
+    <li>In <b>N1</b> you met the claim that velocity is relative but acceleration is absolute. You and
+    the other person disagree about who is moving. Do you disagree about the <em>accelerations</em>?
+    Use your two numbers to answer.<span class="space"></span></li>
+  </ol>
+
+  <div class="domain">
+    <span class="label">One line only &mdash; so far</span>
+    <p>Every calculation in this note has had its forces along a <strong>single line</strong>: the weight
+    straight down, the pushes straight along the floor. That is why one equation was enough each time.</p>
+    <p>When the forces are not all in a line, &Sigma;F&nbsp;=&nbsp;ma does not change and does not get
+    harder. It just gets applied <strong>once in each of two perpendicular directions</strong>:</p>
+    <p style="text-align:center"><b>&Sigma;F<sub>x</sub> = ma<sub>x</sub></b> &nbsp;&nbsp;and&nbsp;&nbsp;
+    <b>&Sigma;F<sub>y</sub> = ma<sub>y</sub></b></p>
+    <p>The two are <em>independent</em>: what happens along x has no say in what happens along y. Breaking
+    a slanted force into those two pieces is the resolution you did in <b>Module&nbsp;2</b> &mdash; same
+    trigonometry, nothing new. <b>N7</b> and <b>N8</b> are where this gets used, and N7 makes the further
+    point that you get to <em>choose</em> which two perpendicular directions to use.</p>
+  </div>
+
+  <p class="movement">Movement 4 &mdash; aiming the launcher</p>
+
+  <h2>Where to point the barrel</h2>
+
+  <p>The last of N2&rsquo;s demonstrations was the falling target: aim straight at it, fire as it is
+  released, and you hit it every time. Before you can fire you have to aim, and aiming is a geometry
+  problem with no physics in it at all.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 372" role="img" aria-label="A right triangle drawn to the proportions of the task. A launcher sits on the ground at the left corner, angled upward along the hypotenuse. The horizontal side is labelled X, how far away. The vertical side on the right is labelled H, how high, running up to a target. The dashed hypotenuse from the launcher to the target is the aim line, and the angle between the ground and the aim line at the launcher is marked theta."><line x1="70" y1="318" x2="650" y2="318" stroke="#d7e2da" stroke-width="1.6"/><line x1="160" y1="318" x2="500" y2="318" stroke="#1d2b23" stroke-width="1.6"/><line x1="500" y1="318" x2="500" y2="46" stroke="#1d2b23" stroke-width="1.6"/><line x1="160" y1="318" x2="500" y2="46" stroke="#5c6b62" stroke-width="1.5" stroke-dasharray="7 5"/><path d="M 485 318 L 485 303 L 500 303" fill="none" stroke="#1d2b23" stroke-width="1.2"/><path d="M 226 318 A 66 66 0 0 0 211.5 276.8" fill="none" stroke="#1e6b3c" stroke-width="1.8"/><text x="246.0" y="296.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1e6b3c">&theta;</text><line x1="136.6" y1="336.7" x2="183.4" y2="299.3" stroke="#1d2b23" stroke-width="7" stroke-linecap="round"/><text x="170.0" y="362.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">launcher</text><circle cx="500" cy="46" r="14" fill="#fff" stroke="#1d2b23" stroke-width="2"/><text x="500.0" y="20.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">target</text><text x="330.0" y="342.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">X &mdash; how far away</text><text x="516.0" y="182.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">H &mdash; how high</text><text x="296.0" y="150.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">aim along here</text></svg>
+    <figcaption>The launcher is on the ground a distance X from the target, which hangs a height H
+    above it. The aim line is the hypotenuse, and &theta; is the angle you set on the launcher. Three
+    quantities, one right angle &mdash; which is enough.</figcaption>
+  </figure>
+
+  <div class="calc">
+    <span class="label">Task 4 &mdash; the launch angle</span>
+    <ol>
+      <li>Draw the setup in your own notes and label X, H and &theta;.<span class="line"></span><span class="line"></span></li>
+      <li>Which pair of sides does &theta; sit between, and therefore which trigonometric ratio do you
+      need? Write the ratio before putting any numbers in.<span class="line"></span></li>
+      <li>With X = 2.5&nbsp;m and H = 2.0&nbsp;m, find &theta;.<span class="line"></span><span class="line"></span></li>
+      <li>Check it: is your angle less than or greater than 45&deg;, and does that match the picture?<span class="line"></span></li>
+    </ol>
+  </div>
+
+  <div class="domain">
+    <span class="label">Aiming is not the same as hitting</span>
+    <p>You have just worked out where to <em>point</em> the launcher. You have not shown why the shot
+    <em>lands</em> &mdash; because both the ball and the target fall away from that aim line while the
+    ball is in flight, and nothing here says why those two falls should match.</p>
+    <p>That is the open question from N2, and <b>N4</b> closes it. Do the geometry now; collect the
+    physics there.</p>
+  </div>
+
+  <div class="callback">
+    <span class="label">Back to your prediction</span>
+    <p>You answered two questions at the top: whether the forces are equal, and whether the
+    accelerations are equal. Which of your two answers was right? If you gave the same answer to both,
+    name the step in Task 3 that separates them.</p>
+    <span class="space"></span><span class="space"></span>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY151/handouts/M3_N3_Putting_Numbers_On_The_Phenomena_GuidedNotes_BLANK.pdf">
+      <span class="kind">Before class</span>
+      <span class="name">Guided notes &mdash; blank (PDF)</span>
+      <span class="hint">Print it and work the tasks on paper. Bring a calculator and the Reference
+      Tables.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes &mdash; check your units line by line, not just
+      your final numbers.</span>
+    </div>
+  </div>
+
+  <p class="ahead"><b>Looking ahead.</b> <b>N4</b> earns w = mg properly and closes the falling-target
+  question you set up here. From there the module works through one force at a time &mdash; friction in
+  <b>N5</b>, then inclines, tension, and finally the accelerating frame in <b>N9</b> &mdash; and every
+  one of them uses the four steps from Movement 1.</p>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 151
+  </footer>
+
+</div>
+
+<!-- ===================================================================
+     FOUNDATION LIST -- for the quiz project (Lesson Package rung 2 / 3).
+     Items may go beyond the note, but not beyond this list.
+
+     1. SI FIRST: a quantity must be converted to kilograms, metres and
+        seconds BEFORE it is substituted into an equation, and the
+        conversion is shown as its own line. 2.5 g -> 0.0025 kg.
+     2. UNITS ARE CARRIED THROUGH EVERY LINE and stated on the answer. An
+        answer without a unit is not an answer. If the units of the result
+        are not the units of the quantity sought, the algebra is wrong --
+        this is a free error check, not bookkeeping.
+     3. w = F_g = mg, with g = 9.8 m/s^2 near the Earth's surface.
+        BORROWED HERE AS A TOOL ONLY. Worked: 2.5 g penny -> 0.0245 N;
+        70 kg adult -> 686 N. WHY weight is proportional to mass, and why
+        the constant is the free-fall g, IS N4's -- items testing the
+        reasoning behind w = mg belong to N4, not here. Items here test
+        the CALCULATION.
+     4. THE FORCES IN A THIRD-LAW PAIR ARE NUMERICALLY EQUAL. 100 N one
+        way, 100 N the other. (Established qualitatively in N2; here it
+        is used as a number.)
+     5. a = F/m APPLIED TO EACH BODY SEPARATELY. Worked: 100 N on 100 kg
+        gives 1.0 m/s^2; the same 100 N on 200 kg gives 0.5 m/s^2, in the
+        opposite direction.
+     6. EQUAL FORCES DO NOT GIVE EQUAL ACCELERATIONS. The ratio of the two
+        accelerations is the INVERSE ratio of the two masses. This is the
+        note's central result and the one worth most items.
+     7. A MASSIVE ENOUGH BODY SHOWS NO VISIBLE RESPONSE. The wall in N2
+        feels the full force; a = F/m with a very large m gives an
+        acceleration too small to observe. Nothing about this requires the
+        forces to be unequal -- that is the misconception to test against.
+     8. TRIGONOMETRIC SETUP: with a target a height H up and a distance X
+        away, the aim angle satisfies tan(theta) = H / X. Worked:
+        H = 2.0 m, X = 2.5 m -> tan(theta) = 0.8 -> theta = 38.7 degrees.
+        Sanity check: H < X so theta < 45 degrees.
+     8a. FORCES IN A LINE ARE A SPECIAL CASE. Sigma-F = ma is applied
+        ONCE PER DIRECTION: Sigma-Fx = m*ax AND Sigma-Fy = m*ay, and the
+        two are INDEPENDENT of each other. Everything worked in this note
+        is one-dimensional; the two-dimensional machinery is set up in N7
+        (which adds that the two perpendicular directions are YOURS TO
+        CHOOSE) and used in N8. Resolving a slanted force into components
+        is MODULE 2's trigonometry, unchanged.
+        Testable here only at the level of: recognising that a problem
+        needs one equation or two, and that the axes are independent.
+     9. AN ANSWER IS CHECKED FOR REASONABLENESS BEFORE IT IS WRITTEN DOWN,
+        and the student can say what they compared it with.
+
+     NOT laid down here (do not write items against these):
+       - ENERGY OF ANY KIND. Part III of the source master (PE = mgh,
+         KE = 1/2 mv^2, conservation, solving for v) IS CUT from this note
+         by decision of 2026-09-25. Energy gets its own module. NO item in
+         Module 3 or its assessments may use PE, KE or conservation.
+       - momentum, impulse, collisions -- including the ball-on-ball
+         demonstration these numbers used to serve (N2 open phenomenon 3)
+       - WHY the falling-target shot lands (N4). This note establishes the
+         AIMING GEOMETRY ONLY. An item asking why the shot hits belongs to
+         N4's list.
+       - why all masses fall at the same rate (N4)
+       - friction, normal force, inclines, tension (N5-N8)
+       - projectile motion beyond the static geometry above; the
+         independence of horizontal and vertical motion is Module 2's
+     =================================================================== -->
+
+
+<!-- Iframe auto-height reporter (V4). Tells the D2L wrapper how tall this page
+     really is. Measures .note-wrap, so the value is viewport-independent and can
+     come back down as well as up. Must stay just before </body>.
+     See Cross_Course_Notes/Autosize_Backfill_Runbook_Reference.md -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>
