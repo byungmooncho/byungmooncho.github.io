@@ -675,21 +675,19 @@
               stroke="#d7e2da" stroke-width="2" fill="none"/>
         <!-- person on a trolley, moved as one group -->
         <g id="n2bRider">
-          <rect x="152" y="176" width="74" height="9" rx="2" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
-          <circle cx="166" cy="191" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
-          <circle cx="212" cy="191" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
-          <circle cx="190" cy="104" r="12" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
-          <line x1="190" y1="116" x2="190" y2="158" stroke="#1d2b23" stroke-width="1.8"/>
-          <line x1="190" y1="158" x2="166" y2="176" stroke="#1d2b23" stroke-width="1.8"/>
-          <line x1="190" y1="158" x2="216" y2="172" stroke="#1d2b23" stroke-width="1.8"/>
-          <line id="n2bArm" x1="190" y1="126" x2="74" y2="126" stroke="#1d2b23" stroke-width="1.8"/>
+          <rect x="78" y="176" width="74" height="9" rx="2" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="92" cy="191" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="138" cy="191" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="116" cy="100" r="12" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="116" y1="112" x2="116" y2="160" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="116" y1="160" x2="94" y2="176" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="116" y1="160" x2="142" y2="172" stroke="#1d2b23" stroke-width="1.8"/>
+          <line id="n2bArm" x1="116" y1="124" x2="74" y2="124" stroke="#1d2b23" stroke-width="1.8"/>
         </g>
         <!-- the interaction pair: always drawn the same length as each other -->
         <g id="n2bPair" opacity="0">
-          <line id="n2bFwall" x1="74" y1="88" x2="74" y2="88" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#n2bHead)"/>
-          <text id="n2bTwall" x="78" y="74" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1f5d8c">on the wall</text>
-          <line id="n2bFyou" x1="80" y1="150" x2="80" y2="150" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#n2bHead)"/>
-          <text id="n2bTyou" x="78" y="140" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1f5d8c">on you</text>
+          <line id="n2bFwall" x1="74" y1="106" x2="74" y2="106" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#n2bHead)"/>
+          <line id="n2bFyou" x1="74" y1="142" x2="74" y2="142" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#n2bHead)"/>
         </g>
         <text id="n2bState" x="18" y="26" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">Ready.</text>
       </svg>
@@ -713,9 +711,11 @@
       </div>
     </div>
 
-    <p class="sim-foot">Watch what each body does, not just what is done to it. The two forces are the
-    same size as each other and they point opposite ways; one body rolls away and the other does not
-    move at all. Both of those things are true at once, and neither one explains itself.</p>
+    <p class="sim-foot">Both arrows start where the hands meet the wall and point opposite ways: the
+    upper one is <b>your push on the wall</b>, the lower one is <b>the wall's push on you</b>. Watch
+    what each body does, not just what is done to it. The two forces are the same size as each other;
+    one body rolls away and the other does not move at all. Both of those things are true at once, and
+    neither one explains itself.</p>
   </div>
 
   <script>
@@ -729,19 +729,27 @@
   (function(){
     var root = document.getElementById('simN2b'); if(!root) return;
     var ids = ['n2bGo','n2bRider','n2bArm','n2bPair','n2bFwall','n2bFyou','n2bState','n2bVerdict'];
+    /* n2bTwall / n2bTyou were removed: on-figure labels collided with the rider
+       once it started moving, and the readout bars name both forces already. */
     var el = {}, i;
     for(i=0;i<ids.length;i++){ el[ids[i]] = document.getElementById(ids[i]); if(!el[ids[i]]) return; }
 
-    var LEN=62;            /* ONE length. Both arrows are drawn from it. */
-    var PUSH_T=0.55, ACC=520, GLIDE_MAX=250;
+    var LEN=34;            /* ONE length. Both arrows are drawn from it. */
+    var PUSH_T=0.55, ACC=225, GLIDE_MAX=250;   /* ACC*PUSH_T^2/2 = 34px of travel
+                                                  while the hands are on the wall:
+                                                  the arm goes from bent to straight,
+                                                  and no further. */
     var raf=null;
 
     function pair(show){
       if(!show){ el.n2bPair.setAttribute('opacity','0'); return; }
-      el.n2bFwall.setAttribute('x1',74+LEN); el.n2bFwall.setAttribute('y1',88);
-      el.n2bFwall.setAttribute('x2',74);      el.n2bFwall.setAttribute('y2',88);   /* onto the wall */
-      el.n2bFyou.setAttribute('x1',80);       el.n2bFyou.setAttribute('y1',150);
-      el.n2bFyou.setAttribute('x2',80+LEN);   el.n2bFyou.setAttribute('y2',150);   /* onto you */
+      /* Both arrows leave the SAME point -- the hands on the wall -- and go
+         opposite ways, one into the wall and one into you. Stacked above and
+         below the arm so neither runs through a figure. */
+      el.n2bFwall.setAttribute('x1',74);      el.n2bFwall.setAttribute('y1',106);
+      el.n2bFwall.setAttribute('x2',74-LEN);  el.n2bFwall.setAttribute('y2',106);  /* onto the wall */
+      el.n2bFyou.setAttribute('x1',74);       el.n2bFyou.setAttribute('y1',142);
+      el.n2bFyou.setAttribute('x2',74+LEN);   el.n2bFyou.setAttribute('y2',142);   /* onto you */
       el.n2bPair.setAttribute('opacity','1');
     }
     function moveRider(d, contact){
@@ -756,7 +764,7 @@
          away with an arm still stretched out to where the wall used to be reads
          as someone pushing thin air, which is exactly the thing this page is
          teaching against. It retracts to a bent post-push pose. */
-      el.n2bArm.setAttribute('x2', contact ? (74-d) : 166);
+      el.n2bArm.setAttribute('x2', contact ? (74-d) : 92);
     }
     function reset(){
       if(raf){ cancelAnimationFrame(raf); raf=null; }
