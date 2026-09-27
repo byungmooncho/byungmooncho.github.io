@@ -246,7 +246,7 @@
         letter-spacing:.08em; text-transform:uppercase; color:var(--green);
         font-weight:600; display:block; margin-bottom:.55rem; }
   .sim-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
-  @media (min-width:640px){ .sim-grid{ grid-template-columns:1.35fr 1fr; } }
+  @media (min-width:640px){ .sim-grid{ grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); } }
   .sim svg{ display:block; width:100%; height:auto; }
   .sim-controls{ display:grid; gap:.55rem; margin:0 0 .9rem;
         font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
@@ -490,7 +490,7 @@
           <div class="top"><b>Total mass (denominator)</b><span class="n" id="n6DenN">1.200 kg</span></div>
           <div class="sim-bar fixed"><i id="n6BarDen" style="width:80%"></i><span class="ghost" id="n6Ghost" style="left:80%;width:0;display:none"></span></div>
           <div class="sim-tag" id="n6DenTag">this is the one to watch</div>
-          <div class="sim-tag" id="n6GhostTag" style="display:none">the hatched part is what the other button would have added here</div>
+          <div class="sim-tag" id="n6GhostTag" style="visibility:hidden">the hatched part is what the other button would have added here</div>
         </div>
 
         <p class="sim-withheld">No free-body diagrams, no tension, and no graph of <em>a</em> against
@@ -556,8 +556,7 @@
 
       /* the counterpart, printed and ticked */
       el.n6VsThis.textContent  = (move?'move it: ':'add it: ')+a.toFixed(2);
-      el.n6VsOther.textContent = (move?'add it: ':'move it: ')+O.a.toFixed(2)
-        + (d>0 ? '' : '   (the same until you move the slider)');
+      el.n6VsOther.textContent = (move?'add it: ':'move it: ')+O.a.toFixed(2);
       /* the counterpart as a hatched GAP, not a tick: its width is the mass the
          other button would have added on top of the live bar */
       var wThis = Math.min(100,(den/(MC0+MH0+DMAX))*100);
@@ -565,7 +564,9 @@
       el.n6Ghost.style.left  = Math.min(wThis,wThat).toFixed(1)+'%';
       el.n6Ghost.style.width = Math.abs(wThat-wThis).toFixed(1)+'%';
       el.n6Ghost.style.display = (Math.abs(O.den-den)<1e-9) ? 'none' : 'block';
-      el.n6GhostTag.style.display = el.n6Ghost.style.display==='none' ? 'none' : 'block';
+      /* visibility, not display: the line keeps its box either way, so the
+         readout column never changes size and the figure never jumps */
+      el.n6GhostTag.style.visibility = el.n6Ghost.style.display==='none' ? 'hidden' : 'visible';
 
       /* the drawing answers the slider: load leaves the cart only in move mode */
       el.n6CartLoad.setAttribute('height',(8+mc*18).toFixed(1));
