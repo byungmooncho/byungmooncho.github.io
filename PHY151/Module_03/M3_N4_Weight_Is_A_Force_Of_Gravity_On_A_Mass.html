@@ -250,6 +250,53 @@
   .closed .q{ font-weight:700; display:block; margin:.1rem 0 .6rem; }
   .closed p{ margin:.55rem 0; }
   .closed .fig{ background:#fff; }
+  /* --- FLCC-SIM v1 · interactive widget ----------------------------------
+     LIFTABLE UNIT. This block plus the matching "FLCC-SIM v1" block in the
+     body are self-contained: copy both into any note page and nothing else
+     needs to change. No external files, no libraries.
+     Hidden until JS adds .on, so a no-JS reader sees nothing broken.
+     Hidden in print — the static figure above it carries the printed page.
+     ----------------------------------------------------------------------- */
+  .sim{ display:none; border:1px solid var(--rule); border-radius:8px;
+        padding:1rem 1rem .9rem; margin:1.2rem 0; background:#fbfdfc; }
+  .sim.on{ display:block; }
+  .sim .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+        letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+        font-weight:600; display:block; margin-bottom:.55rem; }
+  .sim-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:640px){ .sim-grid{ grid-template-columns:1.35fr 1fr; } }
+  .sim svg{ display:block; width:100%; height:auto; }
+  .sim-controls{ display:grid; gap:.55rem; margin:0 0 .9rem;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .sim-controls label{ display:grid; grid-template-columns:3.4em 1fr 7.6em;
+        gap:.6rem; align-items:center; }
+  .sim-controls .nm{ color:var(--muted); }
+  .sim-controls output{ font-variant-numeric:tabular-nums; font-weight:700;
+        color:var(--green); text-align:right; }
+  .sim-controls input[type=range]{ width:100%; accent-color:var(--green); }
+  .sim-go{ font:inherit; font-family:"Segoe UI", system-ui, sans-serif;
+        font-size:.86rem; font-weight:600; color:#fff; background:var(--green);
+        border:0; border-radius:6px; padding:.45rem .95rem; cursor:pointer; }
+  .sim-go:disabled{ opacity:.45; cursor:default; }
+  .sim-read{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .sim-meter + .sim-meter{ margin-top:.85rem; }
+  .sim-meter .top{ display:flex; justify-content:space-between; gap:.8rem;
+        align-items:baseline; }
+  .sim-meter .top b{ font-weight:600; }
+  .sim-bar{ position:relative; height:12px; border:1px solid var(--rule);
+        border-radius:6px; background:#fff; overflow:hidden; margin:.3rem 0 .2rem; }
+  .sim-bar i{ position:absolute; top:0; bottom:0; left:0; display:block;
+        background:#1f5d8c; }
+  .sim-bar.fixed i{ background:#1e6b3c; }
+  .sim-tag{ font-size:.79rem; color:var(--muted); }
+  .sim-verdict{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-weight:700; color:var(--green);
+        min-height:1.2em; }
+  .sim-withheld{ border-left:3px solid var(--rule); padding:.15rem 0 .15rem .7rem;
+        margin:.9rem 0 0; font-size:.82rem; color:var(--muted); }
+  .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+        color:var(--muted); margin:.9rem 0 0; }
+  @media print{ .sim{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -406,6 +453,165 @@
   <p class="movement">Movement 3 &mdash; why everything falls together</p>
 
   <h2>Your prediction, settled</h2>
+
+  <!-- ===== FLCC-SIM v1 · N4  two masses, one acceleration =================
+       LIFTABLE UNIT (pairs with the "FLCC-SIM v1" block in the stylesheet).
+
+       TWO controls, and NEITHER of them changes the answer. That is the whole
+       device: drag both masses through their entire range, watch the weight
+       arrows grow and shrink by a factor of four, and watch the two bodies go
+       on landing at the same instant. It settles the hook at the top of the
+       page -- 20 kg in one hand, 10 kg in the other -- by letting the student
+       fail to break it.
+
+       WITHHELD ON PURPOSE, and this page is unusually strict about it:
+         - no newtons on the arrows. Movement 2 has the student hang masses on
+           a spring scale and record the readings.
+         - no slope, no plot of w against m. That IS Movement 2's task.
+         - no value of g anywhere. "What does the slope represent? Where have
+           you seen that number before?" is the payoff of Movement 2 and
+           printing 9.8 here throws it away.
+         - no algebra. Movement 3 has the student cancel the mass themselves.
+       So the arrows are drawn to scale and never numbered, and the widget says
+       so rather than leaving a reader hunting for a readout that is missing.
+
+       Arrows are drawn on ONE absolute scale, px per unit of pull, fixed from
+       the heaviest setting -- never normalised per body, or the heavier mass's
+       arrow would sit frozen while its slider moved.
+       Colour: warm = gravity, per the page's figure convention.
+       ====================================================================== -->
+  <div class="sim" id="simN4">
+    <span class="label">Try it &mdash; two masses, dropped together</span>
+
+    <div class="sim-controls">
+      <label><span class="nm">Left</span>
+        <input id="n4mA" type="range" min="5" max="20" step="1" value="10"
+               aria-label="Mass of the left object, in kilograms">
+        <output id="n4mAOut" for="n4mA">10 kg</output></label>
+      <label><span class="nm">Right</span>
+        <input id="n4mB" type="range" min="5" max="20" step="1" value="20"
+               aria-label="Mass of the right object, in kilograms">
+        <output id="n4mBOut" for="n4mB">20 kg</output></label>
+    </div>
+    <p style="margin:.2rem 0 .9rem"><button class="sim-go" id="n4Go" type="button">Release both</button></p>
+
+    <div class="sim-grid">
+      <svg id="n4Svg" viewBox="0 0 480 232" role="img"
+           aria-label="Two objects held at the same height above a floor, with a downward arrow on each showing the pull of gravity drawn to scale. Changing either mass changes the size of that object and the length of its arrow. Releasing them shows both reaching the floor at the same instant, whatever the two masses are.">
+        <defs>
+          <marker id="n4Head" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#a8551f"/></marker>
+        </defs>
+        <line x1="18" y1="206" x2="462" y2="206" stroke="#1d2b23" stroke-width="1.8"/>
+        <line id="n4Hold" x1="150" y1="34" x2="330" y2="34" stroke="#d7e2da" stroke-width="2" stroke-dasharray="5 4"/>
+        <g id="n4A">
+          <circle id="n4BodyA" cx="150" cy="56" r="16" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+          <line id="n4ArrA" x1="150" y1="56" x2="150" y2="120" stroke="#a8551f" stroke-width="2.6" marker-end="url(#n4Head)"/>
+        </g>
+        <g id="n4B">
+          <circle id="n4BodyB" cx="330" cy="56" r="16" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+          <line id="n4ArrB" x1="330" y1="56" x2="330" y2="120" stroke="#a8551f" stroke-width="2.6" marker-end="url(#n4Head)"/>
+        </g>
+        <text id="n4LabA" x="150" y="226" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62">10 kg</text>
+        <text id="n4LabB" x="330" y="226" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62">20 kg</text>
+        <text id="n4State" x="18" y="24" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">Held at the same height.</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-verdict" id="n4Verdict" aria-live="polite"><span style="color:#5c6b62;font-weight:400">press <b>Release both</b></span></div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Pull on the left one</b></div>
+          <div class="sim-bar"><i id="n4BarA" style="width:50%"></i></div>
+        </div>
+        <div class="sim-meter">
+          <div class="top"><b>Pull on the right one</b></div>
+          <div class="sim-bar"><i id="n4BarB" style="width:100%"></i></div>
+          <div class="sim-tag">drawn to the same scale &mdash; these two are allowed to differ, and they do</div>
+        </div>
+
+        <p class="sim-withheld">Deliberately unnumbered. What those pulls are in newtons, how they
+        plot against mass, and what the slope of that line turns out to be are all yours to measure
+        in the next movement.</p>
+      </div>
+    </div>
+
+    <p class="sim-foot">Two controls, and neither one changes the answer. Drag both masses through
+    their whole range: the arrows grow and shrink by a factor of four, the objects change size, and
+    the two of them still reach the floor at the same instant. Gravity really does pull harder on the
+    heavier one &mdash; that part of your prediction was right.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N4. Vanilla, no dependencies, no state kept anywhere.
+
+     ONE fall, shared. Both bodies read their position from the same elapsed
+     time and the same acceleration, so there is no code path in which one can
+     land before the other -- the equality is structural, not a coincidence of
+     two separate integrations that happen to agree. */
+  (function(){
+    var root = document.getElementById('simN4'); if(!root) return;
+    var ids = ['n4mA','n4mB','n4mAOut','n4mBOut','n4Go','n4BodyA','n4BodyB','n4ArrA','n4ArrB',
+               'n4LabA','n4LabB','n4State','n4Verdict','n4BarA','n4BarB'];
+    var el = {}, i;
+    for(i=0;i<ids.length;i++){ el[ids[i]] = document.getElementById(ids[i]); if(!el[ids[i]]) return; }
+
+    var TOP=56, FLOOR=206, MMAX=20, PX_PER_KG=5.2, ACC=900, raf=null;
+
+    function radius(m){ return 11 + m*0.55; }
+    function draw(){
+      var a=+el.n4mA.value, b=+el.n4mB.value;
+      el.n4mAOut.textContent=a+' kg'; el.n4mBOut.textContent=b+' kg';
+      el.n4LabA.textContent=a+' kg';  el.n4LabB.textContent=b+' kg';
+      el.n4BodyA.setAttribute('r',radius(a)); el.n4BodyB.setAttribute('r',radius(b));
+      el.n4BarA.style.width=(a/MMAX*100)+'%'; el.n4BarB.style.width=(b/MMAX*100)+'%';
+      arrows(+el.n4BodyA.getAttribute('cy'), +el.n4BodyB.getAttribute('cy'), true);
+    }
+    function arrows(ya, yb, show){
+      var a=+el.n4mA.value, b=+el.n4mB.value;
+      var op = show ? '1' : '0';
+      el.n4ArrA.setAttribute('opacity',op); el.n4ArrB.setAttribute('opacity',op);
+      if(!show) return;
+      /* ONE absolute scale for both: px per kg of pull, same number each side */
+      el.n4ArrA.setAttribute('y1',ya+radius(a)); el.n4ArrA.setAttribute('y2',ya+radius(a)+a*PX_PER_KG);
+      el.n4ArrB.setAttribute('y1',yb+radius(b)); el.n4ArrB.setAttribute('y2',yb+radius(b)+b*PX_PER_KG);
+    }
+    function place(y){
+      el.n4BodyA.setAttribute('cy',y); el.n4BodyB.setAttribute('cy',y);
+    }
+    function reset(){
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      place(TOP); draw();
+      el.n4State.textContent='Held at the same height.';
+      el.n4Verdict.innerHTML='<span style="color:#5c6b62;font-weight:400">press <b>Release both</b></span>';
+      el.n4Go.disabled=false;
+    }
+    function run(){
+      var t0=null; el.n4Go.disabled=true; el.n4Verdict.innerHTML='&nbsp;';
+      var ra=radius(+el.n4mA.value), rb=radius(+el.n4mB.value);
+      var stopY = FLOOR - Math.max(ra,rb);     /* both stop on the same fall */
+      function frame(ts){
+        if(t0===null) t0=ts;
+        var t=(ts-t0)/1000;
+        var y = TOP + 0.5*ACC*t*t;             /* ONE y. Both bodies use it. */
+        if(y < stopY){
+          place(y); arrows(y,y,false);
+          el.n4State.textContent='Falling.';
+          raf=requestAnimationFrame(frame); return;
+        }
+        el.n4BodyA.setAttribute('cy',FLOOR-ra); el.n4BodyB.setAttribute('cy',FLOOR-rb);
+        arrows(FLOOR-ra,FLOOR-rb,true);
+        el.n4State.textContent='Both down.';
+        el.n4Verdict.textContent='They landed together.';
+        el.n4Go.disabled=false; raf=null;
+      }
+      raf=requestAnimationFrame(frame);
+    }
+    el.n4mA.addEventListener('input',function(){ reset(); });
+    el.n4mB.addEventListener('input',function(){ reset(); });
+    el.n4Go.addEventListener('click',function(){ if(raf) return; run(); });
+    reset(); root.classList.add('on');
+  })();
+  </script>
 
   <p>The <strong>proportional</strong> relationship between weight and mass is the important thing here. It says
   that near the surface of a planet, everything &mdash; light or heavy &mdash; falls at the same acceleration,
