@@ -638,6 +638,155 @@
     cancel. Only the force in Diagram 2 is in <em>your</em> free-body diagram, and it is the one that accelerates you.</figcaption>
   </figure>
 
+  <!-- ===== FLCC-SIM v1 · N2-b  pushing off the wall ========================
+       LIFTABLE UNIT (shares the "FLCC-SIM v1" stylesheet block added for N2-a).
+
+       DELIBERATELY MINIMAL, and the reason is rule 1a. This page's tasks ask
+       the student to say WHICH force accelerates them, to explain why the wall
+       did not move without calling the forces unequal, to redraw the diagram
+       with the wall as the object of interest, and to say what pushing harder
+       does to their acceleration. A free-body toggle answers the third
+       outright; a push-strength slider showing accelerations answers the
+       second and fourth. So this widget has NO slider and NO diagrams.
+
+       What it does show is the pair and the asymmetry: two arrows that are
+       always the same length, and two bodies that do wildly different things.
+       The observation is the widget's job. The explanation is the student's.
+
+       Both arrows are blue because both are contact forces (page convention);
+       they are told apart by side and by label, and they sit clear of the
+       figures they act on. Nothing is normalised and nothing is numbered.
+       ====================================================================== -->
+  <div class="sim" id="simN2b">
+    <span class="label">Try it &mdash; push off the wall</span>
+
+    <p style="margin:.2rem 0 .9rem"><button class="sim-go" id="n2bGo" type="button">Push off</button></p>
+
+    <div class="sim-grid">
+      <svg id="n2bSvg" viewBox="0 0 480 232" role="img"
+           aria-label="Side view of a person sitting on a trolley with their hands against a wall. Pressing the button shows two arrows of equal length pointing in opposite directions, one on the wall and one on the person, and then the person rolls away to the right while the wall stays exactly where it is.">
+        <defs>
+          <marker id="n2bHead" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1f5d8c"/></marker>
+        </defs>
+        <line x1="18" y1="200" x2="462" y2="200" stroke="#d7e2da" stroke-width="2"/>
+        <!-- the wall -->
+        <rect x="40" y="46" width="34" height="154" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+        <path d="M40,200 L30,210 M52,200 L42,210 M64,200 L54,210 M74,200 L64,210"
+              stroke="#d7e2da" stroke-width="2" fill="none"/>
+        <!-- person on a trolley, moved as one group -->
+        <g id="n2bRider">
+          <rect x="152" y="176" width="74" height="9" rx="2" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="166" cy="191" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="212" cy="191" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="190" cy="104" r="12" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="190" y1="116" x2="190" y2="158" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="190" y1="158" x2="166" y2="176" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="190" y1="158" x2="216" y2="172" stroke="#1d2b23" stroke-width="1.8"/>
+          <line id="n2bArm" x1="190" y1="126" x2="78" y2="126" stroke="#1d2b23" stroke-width="1.8"/>
+        </g>
+        <!-- the interaction pair: always drawn the same length as each other -->
+        <g id="n2bPair" opacity="0">
+          <line id="n2bFwall" x1="74" y1="88" x2="74" y2="88" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#n2bHead)"/>
+          <text id="n2bTwall" x="78" y="74" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1f5d8c">on the wall</text>
+          <line id="n2bFyou" x1="80" y1="150" x2="80" y2="150" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#n2bHead)"/>
+          <text id="n2bTyou" x="78" y="140" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1f5d8c">on you</text>
+        </g>
+        <text id="n2bState" x="18" y="26" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">Ready.</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-verdict" id="n2bVerdict" aria-live="polite"><span style="color:#5c6b62;font-weight:400">press <b>Push off</b></span></div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Your push on the wall</b></div>
+          <div class="sim-bar"><i id="n2bBar1" style="width:64%"></i></div>
+        </div>
+        <div class="sim-meter">
+          <div class="top"><b>The wall's push on you</b></div>
+          <div class="sim-bar"><i id="n2bBar2" style="width:64%"></i></div>
+          <div class="sim-tag">same length, every time, in both directions</div>
+        </div>
+
+        <p class="sim-withheld">No free-body diagrams here, and no numbers. Which of these two belongs
+        in <em>your</em> diagram &mdash; and why the wall stays put although it is pushed just as hard
+        &mdash; is what the questions below are for.</p>
+      </div>
+    </div>
+
+    <p class="sim-foot">Watch what each body does, not just what is done to it. The two forces are the
+    same size as each other and they point opposite ways; one body rolls away and the other does not
+    move at all. Both of those things are true at once, and neither one explains itself.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N2-b. Vanilla, no dependencies, no state kept anywhere.
+
+     The two arrows are drawn from ONE length variable, so they cannot drift
+     apart: there is no code path in which they differ. The rider's motion is
+     integrated from a constant push over a fixed contact time; the wall has no
+     motion code at all, which is the honest way to draw a thing that does not
+     move. No slider: see the block comment above. */
+  (function(){
+    var root = document.getElementById('simN2b'); if(!root) return;
+    var ids = ['n2bGo','n2bRider','n2bArm','n2bPair','n2bFwall','n2bFyou','n2bState','n2bVerdict'];
+    var el = {}, i;
+    for(i=0;i<ids.length;i++){ el[ids[i]] = document.getElementById(ids[i]); if(!el[ids[i]]) return; }
+
+    var LEN=62;            /* ONE length. Both arrows are drawn from it. */
+    var PUSH_T=0.55, ACC=520, GLIDE_MAX=250;
+    var raf=null;
+
+    function pair(show){
+      if(!show){ el.n2bPair.setAttribute('opacity','0'); return; }
+      el.n2bFwall.setAttribute('x1',74+LEN); el.n2bFwall.setAttribute('y1',88);
+      el.n2bFwall.setAttribute('x2',74);      el.n2bFwall.setAttribute('y2',88);   /* onto the wall */
+      el.n2bFyou.setAttribute('x1',80);       el.n2bFyou.setAttribute('y1',150);
+      el.n2bFyou.setAttribute('x2',80+LEN);   el.n2bFyou.setAttribute('y2',150);   /* onto you */
+      el.n2bPair.setAttribute('opacity','1');
+    }
+    function moveRider(d, contact){
+      el.n2bRider.setAttribute('transform','translate('+d.toFixed(2)+',0)');
+      /* While the hands are on the wall the arm has to REACH the wall: the whole
+         rider group is translated by d, so the arm's far end goes to 78-d to stay
+         put in the picture. Letting it ride along was the first cut's bug -- the
+         hands left the wall while the caption still said they were on it. */
+      el.n2bArm.setAttribute('x2', contact ? (78-d) : 148);
+    }
+    function reset(){
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      moveRider(0, true); el.n2bArm.setAttribute('x2',78); pair(false);
+      el.n2bState.textContent='Ready.';
+      el.n2bVerdict.innerHTML='<span style="color:#5c6b62;font-weight:400">press <b>Push off</b></span>';
+      el.n2bGo.disabled=false;
+    }
+    function run(){
+      var t0=null, d=0, v=0, last=null;
+      el.n2bGo.disabled=true; el.n2bVerdict.innerHTML='&nbsp;';
+      function frame(ts){
+        if(t0===null){ t0=ts; last=ts; }
+        var t=(ts-t0)/1000, dt=Math.min(0.05,(ts-last)/1000); last=ts;
+        if(t<PUSH_T){
+          pair(true);
+          v += ACC*dt; d += v*dt;
+          moveRider(d, true);
+          el.n2bState.textContent='Hands on the wall. Both forces are acting now.';
+          raf=requestAnimationFrame(frame); return;
+        }
+        pair(false);
+        d += v*dt; moveRider(Math.min(d,GLIDE_MAX), false);
+        el.n2bState.textContent='Nothing is pushing anyone now.';
+        if(d<GLIDE_MAX){ raf=requestAnimationFrame(frame); return; }
+        el.n2bVerdict.textContent='You moved. The wall did not.';
+        el.n2bState.textContent='Same two forces. Two very different outcomes.';
+        el.n2bGo.disabled=false; raf=null;
+      }
+      raf=requestAnimationFrame(frame);
+    }
+    el.n2bGo.addEventListener('click',function(){ if(raf) return; reset(); run(); });
+    reset(); root.classList.add('on');
+  })();
+  </script>
+
   <ol class="tasks" start="5">
     <li>Three things you notice, three things you wonder.<span class="space"></span><span class="space"></span></li>
   </ol>
