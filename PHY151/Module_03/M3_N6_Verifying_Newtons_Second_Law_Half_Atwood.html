@@ -288,6 +288,15 @@
   .sim-eq sub, .sim-meter sub{ font-size:.72em; }
   .sim-eq .sym{ color:var(--muted); display:inline-block; width:2.4em; }
   .sim-eq .val{ font-weight:700; }
+  .sim-bar .ghost{ position:absolute; top:0; bottom:0;
+        background:repeating-linear-gradient(45deg,
+          rgba(92,107,98,.30) 0 5px, rgba(92,107,98,.08) 5px 10px);
+        border-right:2px solid var(--muted); }
+  .sim-vs{ display:flex; gap:1.1rem; align-items:baseline; flex-wrap:wrap;
+        margin:.35rem 0 0; padding-top:.35rem; border-top:1px solid var(--rule);
+        font-variant-numeric:tabular-nums; white-space:normal; }
+  .sim-vs b{ color:var(--green); }
+  .sim-vs .other{ color:var(--muted); font-weight:400; }
   .sim-seg{ display:flex; gap:.4rem; flex-wrap:wrap; margin:0 0 .9rem; }
   .sim-seg button{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem;
         padding:.4rem .7rem; border:1px solid var(--rule); background:#fff;
@@ -465,6 +474,10 @@
           <div><span class="sym">a =</span> F<sub>g,H</sub> / (m<sub>c</sub> + m<sub>H</sub>)</div>
           <div><span class="sym">a =</span> <span id="n6Sub">1.96 / (1.000 + 0.200)</span></div>
           <div><span class="sym">a =</span> <span class="val" id="n6A">1.63 m/s&sup2;</span></div>
+          <div class="sim-vs">
+            <span><b id="n6VsThis">add it: 1.63</b></span>
+            <span class="other" id="n6VsOther">move it: 1.63</span>
+          </div>
         </div>
 
         <div class="sim-meter">
@@ -475,8 +488,9 @@
 
         <div class="sim-meter">
           <div class="top"><b>Total mass (denominator)</b><span class="n" id="n6DenN">1.200 kg</span></div>
-          <div class="sim-bar fixed"><i id="n6BarDen" style="width:80%"></i></div>
+          <div class="sim-bar fixed"><i id="n6BarDen" style="width:80%"></i><span class="ghost" id="n6Ghost" style="left:80%;width:0;display:none"></span></div>
           <div class="sim-tag" id="n6DenTag">this is the one to watch</div>
+          <div class="sim-tag" id="n6GhostTag" style="display:none">the hatched part is what the other button would have added here</div>
         </div>
 
         <p class="sim-withheld">No free-body diagrams, no tension, and no graph of <em>a</em> against
@@ -485,9 +499,11 @@
       </div>
     </div>
 
-    <p class="sim-foot">Both buttons put the same &Delta; on the hanger. Only one of them leaves the
-    total mass alone, and that is the whole difference between an experiment that tests
-    <em>F</em> = <em>ma</em> and one that cannot.</p>
+    <p class="sim-foot">Both buttons put the same &Delta; on the hanger, and the greyed figure is always
+    what the <em>other</em> button would give you at this same &Delta;. The hatched strip on the lower bar is
+    the mass that button would have added. Only one of them leaves that mass alone, and that is
+    the whole difference between an experiment that tests <em>F</em> = <em>ma</em> and one that
+    cannot.</p>
   </div>
 
   <script>
@@ -500,18 +516,30 @@
   (function(){
     var root = document.getElementById('simN6'); if(!root) return;
     var ids = ['n6ModeAdd','n6ModeMove','n6D','n6DOut','n6Sub','n6A','n6NumN','n6DenN',
-               'n6BarNum','n6BarDen','n6DenTag','n6CartLoad','n6Hang','n6Acc'];
+               'n6BarNum','n6BarDen','n6DenTag','n6CartLoad','n6Hang','n6Acc',
+               'n6VsThis','n6VsOther','n6Ghost','n6GhostTag'];
     var el = {}, i;
     for(i=0;i<ids.length;i++){ el[ids[i]] = document.getElementById(ids[i]); if(!el[ids[i]]) return; }
 
     var MC0=1.000, MH0=0.200, G=9.8, DMAX=0.30;
     var move=false;
 
+    /* BOTH modes are computed on every draw, not only the selected one.
+       The contrast used to live in the toggle, which asked the student to hold
+       the other mode's numbers in their head while they pressed a button --
+       nobody does that. The counterpart is now printed beside the live value
+       and ticked on the bar, so the comparison is one glance instead of two
+       presses, and it still works with the page on a projector. */
+    function solve(d, moving){
+      var mc = moving ? MC0-d : MC0;        /* <-- the only line that differs */
+      var mH = MH0+d;
+      var num = mH*G, den = mc+mH;
+      return {mc:mc, mH:mH, num:num, den:den, a:num/den};
+    }
     function draw(){
       var d=parseFloat(el.n6D.value);
-      var mc = move ? MC0-d : MC0;          /* <-- the only line that differs */
-      var mH = MH0+d;
-      var num = mH*G, den = mc+mH, a = num/den;
+      var S=solve(d,move), O=solve(d,!move);      /* selected, and the other one */
+      var mc=S.mc, mH=S.mH, num=S.num, den=S.den, a=S.a;
 
       el.n6DOut.textContent=d.toFixed(2)+' kg';
       el.n6Sub.textContent=num.toFixed(2)+' / ('+mc.toFixed(3)+' + '+mH.toFixed(3)+')';
@@ -525,6 +553,19 @@
       el.n6DenTag.textContent = move
         ? 'unchanged — every gram the hanger gained came off the cart'
         : 'climbing with the numerator, which is why a barely moves';
+
+      /* the counterpart, printed and ticked */
+      el.n6VsThis.textContent  = (move?'move it: ':'add it: ')+a.toFixed(2);
+      el.n6VsOther.textContent = (move?'add it: ':'move it: ')+O.a.toFixed(2)
+        + (d>0 ? '' : '   (the same until you move the slider)');
+      /* the counterpart as a hatched GAP, not a tick: its width is the mass the
+         other button would have added on top of the live bar */
+      var wThis = Math.min(100,(den/(MC0+MH0+DMAX))*100);
+      var wThat = Math.min(100,(O.den/(MC0+MH0+DMAX))*100);
+      el.n6Ghost.style.left  = Math.min(wThis,wThat).toFixed(1)+'%';
+      el.n6Ghost.style.width = Math.abs(wThat-wThis).toFixed(1)+'%';
+      el.n6Ghost.style.display = (Math.abs(O.den-den)<1e-9) ? 'none' : 'block';
+      el.n6GhostTag.style.display = el.n6Ghost.style.display==='none' ? 'none' : 'block';
 
       /* the drawing answers the slider: load leaves the cart only in move mode */
       el.n6CartLoad.setAttribute('height',(8+mc*18).toFixed(1));
