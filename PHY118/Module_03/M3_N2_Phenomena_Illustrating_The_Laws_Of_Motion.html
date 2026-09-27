@@ -281,6 +281,53 @@
   .callback p{ margin:0; }
   .callback .space{ display:block; border-bottom:1px solid var(--rule);
     height:1.5rem; margin:.5rem 0 0; }
+  /* --- FLCC-SIM v1 · interactive widget ----------------------------------
+     LIFTABLE UNIT. This block plus the matching "FLCC-SIM v1" block in the
+     body are self-contained: copy both into any note page and nothing else
+     needs to change. No external files, no libraries.
+     Hidden until JS adds .on, so a no-JS reader sees nothing broken.
+     Hidden in print — the static figure above it carries the printed page.
+     ----------------------------------------------------------------------- */
+  .sim{ display:none; border:1px solid var(--rule); border-radius:8px;
+        padding:1rem 1rem .9rem; margin:1.2rem 0; background:#fbfdfc; }
+  .sim.on{ display:block; }
+  .sim .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+        letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+        font-weight:600; display:block; margin-bottom:.55rem; }
+  .sim-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:640px){ .sim-grid{ grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); } }
+  .sim svg{ display:block; width:100%; height:auto; }
+  .sim-controls{ display:grid; gap:.55rem; margin:0 0 .9rem;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .sim-controls label{ display:grid; grid-template-columns:3.4em 1fr 7.6em;
+        gap:.6rem; align-items:center; }
+  .sim-controls .nm{ color:var(--muted); }
+  .sim-controls output{ font-variant-numeric:tabular-nums; font-weight:700;
+        color:var(--green); text-align:right; }
+  .sim-controls input[type=range]{ width:100%; accent-color:var(--green); }
+  .sim-go{ font:inherit; font-family:"Segoe UI", system-ui, sans-serif;
+        font-size:.86rem; font-weight:600; color:#fff; background:var(--green);
+        border:0; border-radius:6px; padding:.45rem .95rem; cursor:pointer; }
+  .sim-go:disabled{ opacity:.45; cursor:default; }
+  .sim-read{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .sim-meter + .sim-meter{ margin-top:.85rem; }
+  .sim-meter .top{ display:flex; justify-content:space-between; gap:.8rem;
+        align-items:baseline; }
+  .sim-meter .top b{ font-weight:600; }
+  .sim-bar{ position:relative; height:12px; border:1px solid var(--rule);
+        border-radius:6px; background:#fff; overflow:hidden; margin:.3rem 0 .2rem; }
+  .sim-bar i{ position:absolute; top:0; bottom:0; left:0; display:block;
+        background:#1f5d8c; }
+  .sim-bar.fixed i{ background:#1e6b3c; }
+  .sim-tag{ font-size:.79rem; color:var(--muted); }
+  .sim-verdict{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-weight:700; color:var(--green);
+        min-height:1.2em; }
+  .sim-withheld{ border-left:3px solid var(--rule); padding:.15rem 0 .15rem .7rem;
+        margin:.9rem 0 0; font-size:.82rem; color:var(--muted); }
+  .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+        color:var(--muted); margin:.9rem 0 0; }
+  @media print{ .sim{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -353,6 +400,192 @@
     the penny &mdash; you never touch it.</figcaption>
   </figure>
 
+  <!-- ===== FLCC-SIM v1 · N2-a  the card flick ==============================
+       LIFTABLE UNIT (pairs with the "FLCC-SIM v1" block in the stylesheet).
+
+       THE INVARIANT THIS EXISTS FOR: the force the card puts on the penny is
+       the SAME at every flick speed. The bar for it does not move while the
+       speed slider runs its whole range. What changes is only how LONG that
+       force acts — and that is the whole phenomenon.
+
+       WITHHELD ON PURPOSE: no masses, no coefficient, no force in newtons, no
+       contact time in milliseconds, no speed the penny picks up. Task 2 asks
+       the student what force acts and roughly how large an effect it can have;
+       printing any of that would hand it over. The omission is labelled in the
+       widget so a missing readout does not read as a bug.
+
+       The arrow is labelled "force from the card", not "friction" — the tasks
+       ask the student to name it. The figcaption above already says the card
+       is the only thing touching the penny.
+
+       Drawn in one consistent picture-space, never normalised. Colour follows
+       the page: blue = contact force, neutral grey = motion.
+       ====================================================================== -->
+  <div class="sim" id="simN2a">
+    <span class="label">Try it &mdash; flick the card</span>
+
+    <div class="sim-controls">
+      <label><span class="nm">Flick</span>
+        <input id="n2aV" type="range" min="1" max="10" step="0.1" value="2"
+               aria-label="How fast the card is flicked, from a slow push to a sharp flick">
+        <output id="n2aVOut" for="n2aV">slow</output></label>
+    </div>
+    <p style="margin:.2rem 0 .9rem"><button class="sim-go" id="n2aGo" type="button">Flick it</button></p>
+
+    <div class="sim-grid">
+      <svg id="n2aSvg" viewBox="0 0 480 232" role="img"
+           aria-label="Side view of a cup with a card lying across its mouth and a penny resting on the card. Pressing the button slides the card out sideways. While the card is still under the penny an arrow shows the force the card puts on the penny; that arrow is the same length at every flick speed. A slow flick leaves the penny travelling with the card; a sharp flick leaves it over the mouth and it falls into the cup.">
+        <defs>
+          <marker id="n2aHeadF" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1f5d8c"/></marker>
+          <marker id="n2aHeadM" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#5c6b62"/></marker>
+        </defs>
+        <line x1="18" y1="205" x2="462" y2="205" stroke="#d7e2da" stroke-width="2"/>
+        <path id="n2aCup" d="M170,110 L185,205 L295,205 L310,110" fill="#fff" stroke="#1d2b23" stroke-width="1.8" stroke-linejoin="round"/>
+        <line x1="170" y1="110" x2="310" y2="110" stroke="#1d2b23" stroke-width="1.8"/>
+        <g id="n2aCardG">
+          <rect id="n2aCard" x="140" y="99" width="200" height="9" rx="2" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <line id="n2aCardV" stroke="#5c6b62" stroke-width="2" marker-end="url(#n2aHeadM)" opacity="0"/>
+        </g>
+        <g id="n2aPennyG">
+          <ellipse id="n2aPenny" cx="240" cy="91" rx="17" ry="7" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+          <line id="n2aF" stroke="#1f5d8c" stroke-width="2.4" marker-end="url(#n2aHeadF)" opacity="0"/>
+          <text id="n2aFTx" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1f5d8c" opacity="0">force from the card</text>
+        </g>
+        <text id="n2aState" x="18" y="26" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">Ready.</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-verdict" id="n2aVerdict" aria-live="polite">&nbsp;</div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Force the card puts on the penny</b></div>
+          <div class="sim-bar fixed"><i id="n2aBarF" style="width:46%"></i></div>
+          <div class="sim-tag">the same at every flick speed &mdash; drag the slider and watch it refuse to move</div>
+        </div>
+
+        <div class="sim-meter">
+          <div class="top"><b>How long that force acts</b></div>
+          <div class="sim-bar"><i id="n2aBarT"></i></div>
+          <div class="sim-tag">the only thing the flick changes</div>
+        </div>
+
+        <p class="sim-withheld">No numbers here on purpose. How much sideways speed that force gives
+        the penny is what the questions below ask you to work out.</p>
+      </div>
+    </div>
+
+    <p class="sim-foot">The card is the only thing touching the penny, and it touches it only while it
+    is still underneath. Flick slowly and it stays underneath for a long time; flick sharply and it is
+    gone almost at once. Nothing about the penny changes between the two runs.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N2-a. Vanilla, no dependencies, no state kept anywhere.
+
+     The motion is INTEGRATED, not scripted: while the card is still under the
+     penny the penny accelerates at a fixed rate A_PX — the same on every run —
+     and it can never end up moving faster than the card it is sitting on.
+     Contact ends when the card's trailing edge has slipped 75px past the penny.
+     Nothing about the run is hard-coded per speed; the outcome falls out.
+
+     Shown in slow motion, and it says so: a real sharp flick is over in a few
+     thousandths of a second, which is the whole point and also unwatchable. */
+  (function(){
+    var root = document.getElementById('simN2a'); if(!root) return;
+    var ids = ['n2aV','n2aVOut','n2aGo','n2aCard','n2aCardV','n2aPenny','n2aF','n2aFTx',
+               'n2aState','n2aVerdict','n2aBarF','n2aBarT','n2aSvg'];
+    var el = {}, i;
+    for(i=0;i<ids.length;i++){ el[ids[i]] = document.getElementById(ids[i]); if(!el[ids[i]]) return; }
+
+    var CARD_X0=140, PENNY_X0=240, PENNY_Y0=91, RIM_R=310, CUP_FLOOR=192, PENNY_R=17;
+    var SLIP=100;         /* px of slip before the card's edge clears the penny */
+    var A_PX=180;         /* the penny's acceleration while the card is under it.
+                             CONSTANT. This is the quantity the flick does not change.
+                             Set to GRAV/5, i.e. a coefficient of about 0.2. */
+    var GRAV=900;         /* the fall, same picture-space units */
+    var TIME=0.35;        /* slow motion */
+    var raf=null;
+
+    function cardSpeed(v){ return 100*v; }
+    function words(v){ return v<2.2?'a slow push':(v<4?'a firm push':(v<7?'a flick':'a sharp flick')); }
+    /* contact time, ignoring the penny's own small motion — used for the bar only */
+    function contact(v){ return SLIP/cardSpeed(v); }
+
+    function setBars(v){
+      el.n2aBarT.style.width = (Math.min(1, contact(v)/contact(1))*100).toFixed(1)+'%';
+      el.n2aVOut.textContent = words(v);
+    }
+    function reset(){
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      el.n2aCard.setAttribute('x',CARD_X0);
+      el.n2aPenny.setAttribute('cx',PENNY_X0); el.n2aPenny.setAttribute('cy',PENNY_Y0);
+      el.n2aF.setAttribute('opacity','0'); el.n2aFTx.setAttribute('opacity','0');
+      el.n2aState.textContent='Ready.'; el.n2aVerdict.innerHTML='<span style="color:#5c6b62;font-weight:400">press <b>Flick it</b></span>'; el.n2aGo.disabled=false;
+    }
+    function drawForce(px){
+      el.n2aF.setAttribute('x1',px+PENNY_R+3); el.n2aF.setAttribute('y1',PENNY_Y0);
+      el.n2aF.setAttribute('x2',px+PENNY_R+3+56); el.n2aF.setAttribute('y2',PENNY_Y0);  /* FIXED length */
+      el.n2aF.setAttribute('opacity','1');
+      el.n2aFTx.setAttribute('x',px+PENNY_R+3); el.n2aFTx.setAttribute('y',PENNY_Y0-14);
+      el.n2aFTx.setAttribute('opacity','1');
+    }
+    function run(){
+      var v=parseFloat(el.n2aV.value), cs=cardSpeed(v);
+      var cardD=0, pennyD=0, pennyV=0, last=null, phase='contact', fallT=0, rode=false;
+      el.n2aGo.disabled=true; el.n2aVerdict.innerHTML='&nbsp;';
+      function frame(ts){
+        if(last===null) last=ts;
+        var dt=Math.min(0.05,(ts-last)/1000)*TIME; last=ts;
+        if(phase==='contact'){
+          cardD += cs*dt;
+          pennyV = Math.min(pennyV + A_PX*dt, cs);   /* it cannot outrun the card */
+          pennyD += pennyV*dt;
+          if(pennyV>=cs){ rode=true; }               /* moving with the card now */
+          el.n2aCard.setAttribute('x',CARD_X0+cardD);
+          el.n2aPenny.setAttribute('cx',PENNY_X0+pennyD);
+          drawForce(PENNY_X0+pennyD);
+          el.n2aState.textContent='The card is still under the penny.  (slow motion)';
+          if(rode){ phase='ride'; }
+          else if(cardD-pennyD>=SLIP){ phase='free'; }
+          raf=requestAnimationFrame(frame); return;
+        }
+        if(phase==='ride'){
+          cardD += cs*dt; pennyD += cs*dt;
+          el.n2aCard.setAttribute('x',CARD_X0+cardD);
+          el.n2aPenny.setAttribute('cx',Math.min(PENNY_X0+pennyD,462));
+          el.n2aF.setAttribute('opacity','0'); el.n2aFTx.setAttribute('opacity','0');
+          if(PENNY_X0+pennyD<462){ raf=requestAnimationFrame(frame); return; }
+          el.n2aVerdict.textContent='The penny went with the card.';
+          el.n2aState.textContent='The card stayed under it long enough to carry it clear.';
+          el.n2aGo.disabled=false; raf=null; return;
+        }
+        /* free: the card is gone and nothing holds the penny up */
+        cardD += cs*dt; el.n2aCard.setAttribute('x',Math.min(CARD_X0+cardD,540));
+        el.n2aF.setAttribute('opacity','0'); el.n2aFTx.setAttribute('opacity','0');
+        fallT += dt;
+        pennyD += pennyV*dt;
+        var px=PENNY_X0+pennyD, py=PENNY_Y0+0.5*GRAV*fallT*fallT;
+        el.n2aPenny.setAttribute('cx',Math.min(px,462));
+        el.n2aPenny.setAttribute('cy',Math.min(py,CUP_FLOOR));
+        el.n2aState.textContent='Nothing is holding the penny up.  (slow motion)';
+        if(py<CUP_FLOOR){ raf=requestAnimationFrame(frame); return; }
+        if(px < RIM_R-PENNY_R){
+          el.n2aVerdict.textContent='In the cup.';
+          el.n2aState.textContent='The penny was left behind, then fell.';
+        } else {
+          el.n2aVerdict.textContent='It missed the cup.';
+          el.n2aState.textContent='The card carried it past the rim before letting go.';
+        }
+        el.n2aGo.disabled=false; raf=null;
+      }
+      raf=requestAnimationFrame(frame);
+    }
+    el.n2aV.addEventListener('input',function(){ setBars(parseFloat(el.n2aV.value)); reset(); });
+    el.n2aGo.addEventListener('click',run);
+    setBars(parseFloat(el.n2aV.value)); reset(); root.classList.add('on');
+  })();
+  </script>
+
   <ol class="tasks">
     <li>Write at least three things you <b>notice</b> and three things you <b>wonder</b>. No explanations
     yet.<span class="space"></span><span class="space"></span></li>
@@ -404,6 +637,188 @@
     one belongs to a <strong>different body's diagram</strong> &mdash; which is exactly why they do not
     cancel. Only the force in Diagram 2 is in <em>your</em> free-body diagram, and it is the one that accelerates you.</figcaption>
   </figure>
+
+  <!-- ===== FLCC-SIM v1 · N2-b  pushing off the wall ========================
+       LIFTABLE UNIT (shares the "FLCC-SIM v1" stylesheet block added for N2-a).
+
+       DELIBERATELY MINIMAL, and the reason is rule 1a. This page's tasks ask
+       the student to say WHICH force accelerates them, to explain why the wall
+       did not move without calling the forces unequal, to redraw the diagram
+       with the wall as the object of interest, and to say what pushing harder
+       does to their acceleration. A free-body toggle answers the third
+       outright; a push-strength slider showing accelerations answers the
+       second and fourth. So this widget has NO slider and NO diagrams.
+
+       What it does show is the pair and the asymmetry: two arrows that are
+       always the same length, and two bodies that do wildly different things.
+       The observation is the widget's job. The explanation is the student's.
+
+       Both arrows are blue because both are contact forces (page convention);
+       they are told apart by side and by label, and they sit clear of the
+       figures they act on. Nothing is normalised and nothing is numbered.
+       ====================================================================== -->
+  <div class="sim" id="simN2b">
+    <span class="label">Try it &mdash; push off the wall</span>
+
+    <div class="sim-controls">
+      <label><span class="nm">Push</span>
+        <input id="n2bP" type="range" min="1" max="10" step="1" value="5"
+               aria-label="How hard you push against the wall">
+        <output id="n2bPOut" for="n2bP">a firm push</output></label>
+    </div>
+    <p style="margin:.2rem 0 .9rem"><button class="sim-go" id="n2bGo" type="button">Push off</button></p>
+
+    <div class="sim-grid">
+      <svg id="n2bSvg" viewBox="0 0 480 232" role="img"
+           aria-label="Side view of a person sitting on a trolley with their hands against a wall. Pressing the button shows two arrows of equal length pointing in opposite directions, one on the wall and one on the person, and then the person rolls away to the right while the wall stays exactly where it is.">
+        <defs>
+          <marker id="n2bHead" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1f5d8c"/></marker>
+        </defs>
+        <line x1="18" y1="200" x2="462" y2="200" stroke="#d7e2da" stroke-width="2"/>
+        <!-- the wall -->
+        <rect x="20" y="46" width="54" height="154" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+        <path d="M20,200 L10,210 M32,200 L22,210 M44,200 L34,210 M56,200 L46,210 M68,200 L58,210"
+              stroke="#d7e2da" stroke-width="2" fill="none"/>
+        <!-- person on a trolley, moved as one group -->
+        <g id="n2bRider">
+          <rect x="78" y="176" width="74" height="9" rx="2" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="92" cy="191" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="138" cy="191" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="116" cy="100" r="12" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="116" y1="112" x2="116" y2="160" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="116" y1="160" x2="94" y2="176" stroke="#1d2b23" stroke-width="1.8"/>
+          <line x1="116" y1="160" x2="142" y2="172" stroke="#1d2b23" stroke-width="1.8"/>
+          <line id="n2bArm" x1="116" y1="124" x2="74" y2="124" stroke="#1d2b23" stroke-width="1.8"/>
+        </g>
+        <!-- the interaction pair: always drawn the same length as each other -->
+        <g id="n2bPair" opacity="0">
+          <line id="n2bFwall" x1="74" y1="106" x2="74" y2="106" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#n2bHead)"/>
+          <line id="n2bFyou" x1="74" y1="142" x2="74" y2="142" stroke="#1f5d8c" stroke-width="2.6" marker-end="url(#n2bHead)"/>
+        </g>
+        <text id="n2bState" x="18" y="26" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">Ready.</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-verdict" id="n2bVerdict" aria-live="polite"><span style="color:#5c6b62;font-weight:400">press <b>Push off</b></span></div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Your push on the wall</b></div>
+          <div class="sim-bar"><i id="n2bBar1" style="width:64%"></i></div>
+        </div>
+        <div class="sim-meter">
+          <div class="top"><b>The wall's push on you</b></div>
+          <div class="sim-bar"><i id="n2bBar2" style="width:64%"></i></div>
+          <div class="sim-tag">push as hard as you like: these two move together and stay equal</div>
+        </div>
+
+        <p class="sim-withheld">No free-body diagrams here, and no numbers. Which of these two belongs
+        in <em>your</em> diagram &mdash; and why the wall stays put although it is pushed just as hard
+        &mdash; is what the questions below are for.</p>
+      </div>
+    </div>
+
+    <p class="sim-foot">Both arrows start where the hands meet the wall and point opposite ways: the
+    upper one is <b>your push on the wall</b>, the lower one is <b>the wall's push on you</b>. The
+    slider changes how hard you push &mdash; and there is no setting, anywhere in its range, at which
+    the two stop being the same size, or at which the wall moves. Watch what each body does, not just
+    what is done to it. Both of those things are true at once, and neither one explains itself.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N2-b. Vanilla, no dependencies, no state kept anywhere.
+
+     The two arrows are drawn from ONE length variable, so they cannot drift
+     apart: there is no code path in which they differ. The rider's motion is
+     integrated from a constant push over a fixed contact time; the wall has no
+     motion code at all, which is the honest way to draw a thing that does not
+     move. No slider: see the block comment above. */
+  (function(){
+    var root = document.getElementById('simN2b'); if(!root) return;
+    var ids = ['n2bGo','n2bP','n2bPOut','n2bRider','n2bArm','n2bPair','n2bFwall','n2bFyou',
+               'n2bState','n2bVerdict','n2bBar1','n2bBar2'];
+    /* n2bTwall / n2bTyou were removed: on-figure labels collided with the rider
+       once it started moving, and the readout bars name both forces already. */
+    var el = {}, i;
+    for(i=0;i<ids.length;i++){ el[ids[i]] = document.getElementById(ids[i]); if(!el[ids[i]]) return; }
+
+    /* ONE length, computed once per push from the slider. Both arrows are drawn
+       from it, so they cannot come apart however hard you push. */
+    function lenFor(push){ return 16 + push*3.2; }
+    function words(push){ return push<3?'a gentle push':(push<6?'a firm push':(push<9?'a hard push':'a shove')); }
+    /* Contact lasts for a FIXED 34px -- one arm-extension, bent to straight --
+       and never longer, whatever the push. So a harder push does not mean a
+       longer shove: it means the same extension crossed faster, which is both
+       what your arm actually does and the reason the drawing never stretches. */
+    var D_CONTACT=34, GLIDE_MAX=250;
+    function accFor(push){ return 45*push; }
+    var raf=null;
+
+    function bars(){
+      var w=(+el.n2bP.value)*10;
+      el.n2bBar1.style.width=w+'%'; el.n2bBar2.style.width=w+'%';   /* one number, both bars */
+      el.n2bPOut.textContent=words(+el.n2bP.value);
+    }
+    function pair(show){
+      var LEN=lenFor(+el.n2bP.value);
+      if(!show){ el.n2bPair.setAttribute('opacity','0'); return; }
+      /* Both arrows leave the SAME point -- the hands on the wall -- and go
+         opposite ways, one into the wall and one into you. Stacked above and
+         below the arm so neither runs through a figure. */
+      el.n2bFwall.setAttribute('x1',74);      el.n2bFwall.setAttribute('y1',106);
+      el.n2bFwall.setAttribute('x2',74-LEN);  el.n2bFwall.setAttribute('y2',106);  /* onto the wall */
+      el.n2bFyou.setAttribute('x1',74);       el.n2bFyou.setAttribute('y1',142);
+      el.n2bFyou.setAttribute('x2',74+LEN);   el.n2bFyou.setAttribute('y2',142);   /* onto you */
+      el.n2bPair.setAttribute('opacity','1');
+    }
+    function moveRider(d, contact){
+      el.n2bRider.setAttribute('transform','translate('+d.toFixed(2)+',0)');
+      /* Contact is drawn, not assumed, in BOTH directions.
+         While the hands are on the wall the arm has to REACH the wall: the whole
+         rider group is translated by d, so the arm's far end goes to 74-d to stay
+         on the wall's face in the picture. Letting it ride along was the first
+         cut's bug -- the hands left the wall while the caption still said they
+         were on it.
+         Once contact is over the arm must stop reaching, too: a figure gliding
+         away with an arm still stretched out to where the wall used to be reads
+         as someone pushing thin air, which is exactly the thing this page is
+         teaching against. It retracts to a bent post-push pose. */
+      el.n2bArm.setAttribute('x2', contact ? (74-d) : 92);
+    }
+    function reset(){
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      moveRider(0, true); el.n2bArm.setAttribute('x2',74); pair(false); bars();
+      el.n2bState.textContent='Ready.';
+      el.n2bVerdict.innerHTML='<span style="color:#5c6b62;font-weight:400">press <b>Push off</b></span>';
+      el.n2bGo.disabled=false;
+    }
+    function run(){
+      var last=null, d=0, v=0, ACC=accFor(+el.n2bP.value);
+      el.n2bGo.disabled=true; el.n2bVerdict.innerHTML='&nbsp;';
+      function frame(ts){
+        if(last===null) last=ts;
+        var dt=Math.min(0.05,(ts-last)/1000); last=ts;
+        if(d < D_CONTACT){
+          pair(true);
+          v += ACC*dt; d = Math.min(d + v*dt, D_CONTACT);
+          moveRider(d, true);
+          el.n2bState.textContent='Hands on the wall. Both forces are acting now.';
+          raf=requestAnimationFrame(frame); return;
+        }
+        pair(false);
+        d += v*dt; moveRider(Math.min(d,GLIDE_MAX), false);
+        el.n2bState.textContent='Nothing is pushing anyone now.';
+        if(d<GLIDE_MAX){ raf=requestAnimationFrame(frame); return; }
+        el.n2bVerdict.textContent='You moved. The wall did not.';
+        el.n2bState.textContent='Same two forces. Two very different outcomes.';
+        el.n2bGo.disabled=false; raf=null;
+      }
+      raf=requestAnimationFrame(frame);
+    }
+    el.n2bP.addEventListener('input',function(){ reset(); });
+    el.n2bGo.addEventListener('click',function(){ if(raf) return; reset(); run(); });
+    reset(); root.classList.add('on');
+  })();
+  </script>
 
   <ol class="tasks" start="5">
     <li>Three things you notice, three things you wonder.<span class="space"></span><span class="space"></span></li>
