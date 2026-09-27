@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHY 118 Lab 04 — Newton’s Second Law</title>
+<style>
+  /* ==================================================================
+     FLCC Physics lab page — PHY 118 Module 3
+     Matches the LB02/LB03 lab-page template (same tokens, same blocks).
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:2rem 0 .8rem; font-weight:700; }
+  h3{ font-size:1.02rem; margin:1.4rem 0 .4rem; font-weight:700; color:var(--green-deep);
+      font-family:"Segoe UI", system-ui, sans-serif; }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* due-date / logistics strip */
+  .logistics{
+    display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin:1.1rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+  }
+  .logistics .chip{
+    background:#fff; border:1px solid var(--rule); border-radius:20px; padding:.3rem .85rem;
+  }
+  .logistics .chip b{ color:var(--green-deep); }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* boxed callout, gradient head (prior-knowledge / explain / safety) */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior p:last-child{ margin-bottom:0; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* procedure steps */
+  ol.steps{ padding-left:1.3rem; }
+  ol.steps > li{ margin:.65rem 0; }
+  ul.kit{ padding-left:1.3rem; }
+  ul.kit li{ margin:.3rem 0; }
+
+  /* equation block */
+  .eqn{
+    font-family:"Cambria Math","Segoe UI",Georgia,serif; font-size:1.15rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:600; letter-spacing:.02em;
+  }
+  .eqn small{ display:block; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+    font-weight:400; color:var(--muted); margin-top:.4rem; letter-spacing:0; }
+
+  /* data tables the student must produce */
+  table.spec{ width:100%; border-collapse:collapse; margin:.9rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  table.spec th, table.spec td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec caption{ caption-side:top; text-align:left; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.8rem; color:var(--muted); padding-bottom:.35rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* warning / watch-out */
+  .watch{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.3rem 0; background:#fffdf8;
+  }
+  .watch b{ color:#9a5c10; }
+
+  /* interactive tool panel */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .sim canvas{ display:block; width:100%; height:auto; background:#fff; }
+  .grid2{ display:grid; gap:.7rem 1.2rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .ctrl input[type=number], .ctrl input[type=text], .ctrl textarea{
+    font:inherit; font-size:.92rem; width:100%; box-sizing:border-box;
+    padding:.4rem .55rem; border:1px solid var(--rule); border-radius:6px; background:#fff;
+  }
+  .ctrl textarea{ min-height:5.5rem; font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; font-size:.85rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .verdict{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; margin-top:.9rem;
+    padding:.65rem .9rem; border-radius:8px; background:#fff; border:1px solid var(--rule);
+    min-height:1.2em;
+  }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* submission checklist */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .check-group{ margin:0 0 1.1rem; }
+  .check-group > .gh{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--green); font-weight:700; display:block; margin-bottom:.4rem;
+  }
+  .check-group label{ display:flex; gap:.6rem; align-items:flex-start;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; margin-bottom:.4rem; cursor:pointer; background:#fff; }
+  .check-group label:hover{ border-color:var(--green); }
+  .check-group input{ margin-top:.2rem; accent-color:var(--green); flex:none; }
+  .check-group input:checked + span{ color:var(--muted); text-decoration:line-through; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:.6rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule);
+  }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  .refs{ font-size:.95rem; }
+  .refs li{ margin:.4rem 0; }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+  footer .attrib{ display:block; margin-top:.3rem; }
+
+  .eqn .domain{
+    display:block; margin-top:.6rem; padding-top:.55rem; border-top:1px dashed var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:400;
+    line-height:1.55; color:var(--muted); letter-spacing:0; text-align:left;
+  }
+  .eqn .domain b{ color:var(--green-deep); }
+  .filenote{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted);
+    margin:.7rem 0 0; line-height:1.55;
+  }
+
+  /* ---- apparatus diagram (added 2026-09-24) ---- */
+  .apparatus{ margin:1.4rem 0; padding:0; }
+  .apparatus svg{ display:block; width:100%; height:auto; }
+  .apparatus .cap{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted);
+    text-align:center; margin-top:.5rem; line-height:1.5;
+  }
+  .apparatus .frame{ border:1px solid var(--rule); border-radius:8px; background:#fff; padding:.6rem; }
+  .ap-solid{ fill:none; stroke:var(--ink); stroke-width:2; }
+  .ap-thin{ fill:none; stroke:var(--ink); stroke-width:1.2; }
+  .ap-dash{ fill:none; stroke:var(--muted); stroke-width:1.4; stroke-dasharray:5 4; }
+  .ap-traj{ fill:none; stroke:var(--green); stroke-width:2.2; stroke-dasharray:7 5; }
+  .ap-dim{ fill:none; stroke:var(--green-deep); stroke-width:1.6; }
+  .ap-warn{ fill:none; stroke:#c0392b; stroke-width:1.6; }
+  .ap-shelf{ fill:#e8e4f0; stroke:var(--ink); stroke-width:1.5; }
+  .ap-tube{ fill:#cfd8d3; stroke:var(--ink); stroke-width:1.5; }
+  .ap-ball{ fill:var(--ink); }
+  .ap-paper{ fill:#fff; stroke:var(--ink); stroke-width:1; }
+  .ap-carbon{ fill:#4a4a52; stroke:var(--ink); stroke-width:1; }
+  .ap-t{ font-family:"Segoe UI", system-ui, sans-serif; font-size:14px; fill:var(--ink); }
+  .ap-t.lbl{ font-weight:700; fill:var(--green-deep); font-size:16px; }
+  .ap-t.sm{ font-size:12.5px; fill:var(--muted); }
+  .ap-t.bad{ font-size:12.5px; fill:#c0392b; font-weight:600; }
+  @media print{
+    /* ---- compact print pass, 2026-09-24 -------------------------------
+       Screen layout is untouched; this only tightens the photocopy.
+       Body drops from 1.06rem/1.65 to 0.86rem/1.4 (~10.3pt), which is
+       still comfortably above the ~9pt floor for a bench-side handout. */
+    @page{ margin:0.45in; }
+    body{ font-size:.80rem; line-height:1.34; }
+    .note-wrap{ max-width:none; margin:0; padding:0; }
+
+    h1{ font-size:1.5rem; margin:.2rem 0 .15rem; }
+    h2{ font-size:1.02rem; margin:.95rem 0 .4rem; page-break-after:avoid; }
+    h3{ font-size:.92rem; margin:.7rem 0 .3rem;  }
+    p{ margin:.45rem 0; }
+
+    .eyebrow{ margin-bottom:.15rem; }
+    .synopsis{ padding:.6rem .8rem; margin:.7rem 0; }
+    .logistics{ margin:.5rem 0; gap:.4rem; }
+    .pe{ margin:.8rem 0; }
+    .pe ul{ padding:.25rem .35rem; }
+    .pe li{ padding:.28rem .4rem; gap:.5rem; }
+    .pe li .tick{ width:1.25rem; height:1.25rem; font-size:.62rem; }
+
+    .sign-note, .note-link, .watch, .prior, .probe{
+      padding:.6rem .8rem; margin:.7rem 0;
+    }
+    .sign-note, .note-link, .probe{  }
+    .prior .body{ padding:.55rem .8rem .6rem; }
+    .prior .cases{ gap:.45rem; }
+    .case{ padding:.5rem .55rem; }
+
+    .eqn{ padding:.55rem .7rem; margin:.6rem 0; font-size:1rem; page-break-inside:avoid; }
+    .eqn .domain{ margin-top:.4rem; padding-top:.35rem; font-size:.73rem; line-height:1.4; }
+
+    ol.steps, ul.steps{ margin:.5rem 0; padding-left:1.15rem; }
+    ol.steps > li, ul.steps > li{ margin:.3rem 0; }
+    ul{ margin:.45rem 0; }
+    li{ margin:.22rem 0; }
+
+    .apparatus{ margin:.7rem 0; page-break-inside:avoid; }
+    .apparatus .frame{ padding:.35rem; }
+    .apparatus svg{ max-height:2.9in; }
+    .apparatus .cap{ font-size:.74rem; margin-top:.3rem; line-height:1.4; }
+
+    /* the interactive tool is dead on paper — keep the heading and the note,
+       drop the controls and the empty readouts */
+    .sim .buttons, .sim .controls input, .sim .readout{ display:none; }
+    .sim{ padding:.5rem .7rem; margin:.6rem 0; }
+
+    .ticket{ margin:.8rem 0; }
+    .ticket .t-body{ padding:.5rem .7rem; }
+    .check-group{ margin:.5rem 0; }
+    .check-group label{ margin:.18rem 0; }
+    .gh{ margin-top:.45rem; }
+
+    .downloads{ gap:.4rem; margin:.6rem 0; }
+    .dl-card{ padding:.5rem .7rem; }
+    .dl-card .hint{ font-size:.73rem; }
+    .filenote{ font-size:.76rem; margin-top:.5rem; }
+    .refs{ margin:.4rem 0; }
+    footer{ margin-top:.9rem; padding-top:.5rem; font-size:.72rem; }
+  }
+
+  @media print{
+    body{ font-size:10.5pt; }
+    .note-wrap{ max-width:none; padding:0; }
+    .btn, .sim .buttons{ display:none !important; }
+    .sim, .ticket, .pe, .prior{ break-inside:avoid; }
+    h2{ break-after:avoid; }
+    .verdict, .readout, .sim .panel .ctrl textarea{ display:none; }
+    a{ color:inherit; text-decoration:none; }
+    /* probe options stay visible on paper, as a plain lettered list */
+    .probe .opts{ counter-reset:opt; }
+    .probe .opt{ cursor:default; border:none; padding:.12rem 0 .12rem 1.6rem; position:relative; background:none; }
+    .probe .opt::before{
+      counter-increment:opt; content:"(" counter(opt, upper-alpha) ")";
+      position:absolute; left:0; font-weight:600; color:#5c6b62;
+    }
+    .probe .feedback{ display:none; }
+    /* the tick badges need a hair more room at print metrics */
+    .pe li .tick{ width:1.7rem; height:1.7rem; font-size:.66rem; }
+    .check-group label{ break-inside:avoid; }
+  }
+
+.sign-note{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; line-height:1.55; color:var(--ink,#1d2b23); background:#fdf6ea; border-left:3px solid var(--amber,#c77b1f); border-radius:0 6px 6px 0; padding:.6rem .85rem; margin:.9rem 0; }
+  .note-link{
+    background:#fff; border:1px solid var(--rule); border-left:4px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.85rem 1.05rem; margin:1rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .note-link b{ color:var(--green-deep); }
+.sign-note b{ color:#8a5512; }
+
+  /* ---- LB04 additions ---- */
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .ctrl select{ font:inherit; }
+  table.spec tbody td b{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>PHY 118 &middot; Module 3 &mdash; Forces</span>
+    <span>Lab 04</span>
+  </div>
+
+  <h1>Newton's Second Law: Measuring the Mass of a System From a Graph</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Newton's second law says <b>a = F / M</b>. Written that way it is a claim about a straight line:
+    if you hold the mass of a system fixed and increase the force driving it, the acceleration should
+    rise <em>in proportion</em>, and the slope of acceleration against force should be
+    <b>1 / M</b> &mdash; one over the total mass of everything that is moving. This lab puts both halves
+    of that claim on one graph. A cart on a track is pulled by a hanging mass over a pulley. To raise the
+    driving force without changing the mass being driven, you move mass from the cart to the hanger
+    rather than adding any. Five runs of position-versus-time data give you five accelerations; plotting
+    them against the five driving forces gives you a line whose slope is a mass you never put on a scale.
+    Then you weigh the system and see whether the graph was telling the truth.
+
+    <div class="logistics">
+      <span class="chip"><b>Due</b> see the Module 3 Lab folder on Brightspace</span>
+      <span class="chip"><b>Report</b> Full lab report &mdash; use the Lab Template</span>
+      <span class="chip"><b>Pairs with</b> M3 N6</span>
+      <span class="chip"><b>Data</b> provided &mdash; this is a virtual lab</span>
+    </div>
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>what you should be able to do when this lab is written up</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Draw a free-body diagram for each body in a
+        connected system</b> and mark the single acceleration they share, choosing a positive direction
+        for each body separately along its own direction of motion.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Write &Sigma;F = ma for each body and combine
+        the two equations</b> by eliminating the tension, arriving at
+        a = F<sub>g,H</sub> / M<sub>T</sub> without being handed it.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Explain why mass is <em>transferred</em> and
+        not added</b> &mdash; that is, why this procedure, and not the obvious one, is what makes force
+        the single variable under test.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Extract an acceleration from position-versus-time
+        data</b> by fitting a parabola to the part of the run where the system is actually accelerating,
+        and taking a = 2 &times; the quadratic coefficient.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Interpret the slope of a graph as a physical
+        quantity</b>, including its units &mdash; here, obtaining a mass from the slope of acceleration
+        against force, together with the uncertainty that slope carries.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Judge a verification against stated criteria</b>,
+        deciding on the evidence whether Newton's second law was confirmed, and accounting for the
+        difference between the mass from your graph and the mass from the scale.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ THE N6 BRIDGE ============ -->
+  <h2>Start from Note 6 &mdash; this lab is that note, measured</h2>
+
+  <div class="note-link">
+    <b>Note 6 is not background reading for this lab. It is the lab.</b> The half Atwood machine you
+    drew in class, the two free-body diagrams you filled in, and the derivation you worked through to
+    a = M<sub>H</sub>g / (M<sub>H</sub> + M<sub>C</sub>) are the Introduction, the Experimental section
+    and the Analysis plan of the report you are about to write. You are expected to bring that note into
+    the report and build on it &mdash; not to cite it in passing, and not to re-derive it from scratch as
+    though you had never seen it.
+  </div>
+
+  <table class="spec">
+    <caption>Where each part of Note 6 belongs in this report. The rubric awards points for these.</caption>
+    <thead>
+      <tr><th style="width:30%">Report section</th><th>What Note 6 gives you</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Introduction</b></td>
+        <td>The statement of the second law and what "verify" means here, plus <b>your own derivation</b>
+          of a = F<sub>g,H</sub> / M<sub>T</sub> from the two equations. Define every symbol. End with a
+          hypothesis you can later confirm or reject.</td>
+      </tr>
+      <tr>
+        <td><b>Experimental</b></td>
+        <td>The labelled setup drawing and both free-body diagrams, redrawn by you. State the sign
+          convention you chose for each body. Describe how the data were collected and
+          &mdash; explicitly &mdash; <b>how the total system mass was held constant while the hanging
+          mass increased, and why that matters.</b></td>
+      </tr>
+      <tr>
+        <td><b>Analysis</b></td>
+        <td>The rearrangement a = (1 / M<sub>T</sub>) &times; F<sub>g,H</sub>, read as the equation of a
+          straight line: acceleration on the vertical axis, driving force on the horizontal,
+          <b>slope = 1 / M<sub>T</sub></b>. This is what tells you the graph can weigh the system.</td>
+      </tr>
+      <tr>
+        <td><b>Discussion</b></td>
+        <td>Three results from the note that your data should be checked against: the tension is
+          <b>less than</b> the weight of the hanging mass; the acceleration is <b>less than</b> g; and the
+          cart and the hanging mass share one acceleration even though they move in different
+          directions.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Read or reprint the note here:
+  <a href="https://byungmooncho.github.io/PHY118/Module_03/M3_N6_Verifying_Newtons_Second_Law_Half_Atwood.html"
+     target="_blank" rel="noopener">Module&nbsp;3 Note&nbsp;6 &mdash; Verifying Newton's Second Law with a
+  Half Atwood Machine</a>.</p>
+
+  <!-- ============ THE PHYSICS ============ -->
+  <h2>The physics you are using</h2>
+
+  <div class="sign-note"><b>Sign convention here.</b> This system bends around a pulley, so a single
+  pair of axes cannot serve both bodies. Choose a positive direction <em>for each body separately,
+  along its own direction of motion</em>: for the cart, take the direction it travels along the track as
+  positive; for the hanging mass, take <b>downward</b> as positive. Both bodies then have the same
+  positive acceleration <b>a</b>, and the string carries the one tension <b>T</b> that connects them.
+  This is the convention your note uses, and it is the reason the two equations combine as cleanly as
+  they do.</div>
+
+  <p>The cart feels three forces, but only the tension acts along its direction of motion. Vertically the
+  normal force and the weight cancel, so the cart's equation is just:</p>
+
+  <div class="eqn">
+    T &nbsp;=&nbsp; M<sub>C</sub> a
+    <span class="domain"><b>Where this holds:</b> a horizontal track with negligible friction, with the
+    string pulling horizontally. If the track is not level, or if friction is not negligible, a term is
+    missing from this equation &mdash; and you will see the evidence for that in your own graph.</span>
+  </div>
+
+  <p>The hanging mass feels its weight downward and the tension upward. Taking down as positive for this
+  body:</p>
+
+  <div class="eqn">
+    F<sub>g,H</sub> &minus; T &nbsp;=&nbsp; M<sub>H</sub> a &nbsp;&nbsp;&nbsp;where F<sub>g,H</sub> = M<sub>H</sub> g
+    <span class="domain"><b>Note what this says before you solve it:</b> because the right-hand side is
+    positive, T must be <em>smaller</em> than F<sub>g,H</sub>. The tension is not the weight of the
+    hanging mass. If it were, the net force on the hanger would be zero and nothing would accelerate.</span>
+  </div>
+
+  <p>Eliminate T between the two and solve for the acceleration:</p>
+
+  <div class="eqn">
+    a &nbsp;=&nbsp; M<sub>H</sub> g &frasl; (M<sub>H</sub> + M<sub>C</sub>)
+    &nbsp;=&nbsp; F<sub>g,H</sub> &frasl; M<sub>T</sub>
+    <span class="domain"><b>Read the denominator carefully.</b> It is the <em>total</em> mass &mdash;
+    cart, the masses riding on it, and the hanging mass, all of it. The whole system accelerates
+    together, so the whole system's mass resists. This is the single most common place to go wrong in
+    this lab.</span>
+  </div>
+
+  <p>Now rearrange it the way the note does, into the form of a straight line:</p>
+
+  <div class="eqn">
+    a &nbsp;=&nbsp; ( 1 &frasl; M<sub>T</sub> ) &times; F<sub>g,H</sub>
+    <span class="domain"><b>This is y = mx.</b> Put a on the vertical axis and F<sub>g,H</sub> on the
+    horizontal axis, keep M<sub>T</sub> fixed across every run, and the data should fall on a straight
+    line through the origin whose slope is 1/M<sub>T</sub>. The slope has units of
+    (m/s&sup2;)/N = 1/kg, so one divided by the slope is a mass in kilograms.</span>
+  </div>
+
+  <div class="prior">
+    <div class="head"><span class="spark">&#9678;</span><strong>The two things you must confirm</strong></div>
+    <div class="body">
+      <p>"Verifying Newton's second law" is not a vague aim. In this lab it means two specific,
+      checkable claims, and your Discussion has to address both by name:</p>
+      <div class="cases" style="grid-template-columns:1fr 1fr;">
+        <div class="case">
+          <b>&#9312; The relationship is linear</b>
+          <small>Acceleration rises in proportion to the driving force. Not merely "increases" &mdash;
+          <em>in proportion</em>, a straight line, and one consistent with passing through the
+          origin.</small>
+        </div>
+        <div class="case">
+          <b>&#9313; The slope is 1 / M<sub>T</sub></b>
+          <small>The number the graph gives you is the total mass of the system, and it agrees with the
+          mass you get by weighing the components.</small>
+        </div>
+      </div>
+      <p style="margin-top:1rem;">A straight line alone does not verify the second law &mdash; plenty of
+      wrong theories predict straight lines. It is the slope <em>matching a mass measured independently</em>
+      that turns a graph into a verification.</p>
+    </div>
+  </div>
+
+  <!-- ============ PREDICT FIRST ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first. The hanger carries 100&nbsp;g and the system accelerates at some rate.
+    You now take a further 100&nbsp;g <em>off the cart</em> and put it on the hanger, doubling the hanging
+    mass. What happens to the acceleration?</p>
+    <div class="opts">
+      <button class="opt" data-correct="true">It doubles.</button>
+      <button class="opt" data-correct="false">It roughly doubles, but falls a little short.</button>
+      <button class="opt" data-correct="false">It increases by less than double, because the hanging mass is in the denominator too.</button>
+      <button class="opt" data-correct="false">It stays the same &mdash; no mass entered or left the system.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <div class="watch">
+    <b>Why that question is the whole design of this lab.</b> Had you <em>added</em> 100&nbsp;g from
+    outside instead of transferring it, the acceleration would not have doubled: the extra mass would
+    appear in the numerator <em>and</em> in the denominator, and you would be changing two things at once
+    with no way to tell which caused what. Transferring mass changes the driving force while leaving
+    M<sub>T</sub> alone, which is the only reason the slope of your graph means anything. Your
+    Experimental section must say this in your own words.
+  </div>
+
+  <!-- ============ APPARATUS ============ -->
+  <h2>The apparatus</h2>
+
+  <p>The equipment is from Vernier. A low-friction cart runs on a level track about 2.0&nbsp;m long. An
+  ultrasonic motion sensor at one end records the cart's position many times a second. At the far end the
+  string passes over a pulley at the table edge and down to a hanger. The hanging mass falls, the string
+  pulls the cart, and the two move together.</p>
+
+  <figure class="apparatus">
+    <div class="frame">
+    <svg viewBox="0 0 720 430" role="img" aria-label="A cart carrying four masses sits on a level track on a table. An ultrasonic sensor faces it from the left. A string runs from the cart, over a pulley at the right edge of the table, down to a hanger. Arrows beside the cart and beside the hanger are both labelled a, marking the one acceleration they share. A dashed curve shows a mass being moved from the cart to the hanger." xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYToyNzRjN2ExMC02YTRhLTRhNjQtOWM0ZS1hZjA1OTdiODVmZWUAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaFjGlBTTT23MBu41d75MkhYAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDoxMDA3MWYxNS04ZGYxLTQyMmMtODE4ZC01YmI2ZGZjOGYzNjRscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoK66+sqO+XOlsrO0c88HdYgAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggw52mdla8Wi04QaIwBhJfgS40NpbC0VbXAKrExTbYnG6kZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaAdnwLF4w+Jth8k32zUGqGAAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYILu81xmlAxKP9KaIWKr70rMrmi1/3kEaz5pNfHqhDzCEZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GQHuZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjI3NGM3YTEwLTZhNGEtNGE2NC05YzRlLWFmMDU5N2I4NWZlZS9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjY1YmU2MmRhLWI0MWEtNDg1Yy05ZDNjLTNmMWE3Mzk5Y2RhNXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCDDnaZ2VrxaLThBojAGEl+BLjQ2lsLRVtcAqsTFNticbqJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggGKf+T/2+CGVAnWkw4V1pUy2a8J1m957vT+oZZoW8Cf2iY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggjqDQuH62mxturR8+IauxcV8yMxb4DWpKuIBTWV9APQt0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQNMOCT0YEwTuY8kAdO4nqnna6cfvPM+lt1vAtLji57tkxDfCKWLv2keUcjdoxqn6YIaUq1czjWiikzF+0si2ceY=</c2pa:manifest></metadata>
+      <defs>
+        <marker id="apArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 1 L 9 5 L 0 9 z" fill="#134a29"></path>
+        </marker>
+        <marker id="apArrowS" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 9 1 L 0 5 L 9 9 z" fill="#134a29"></path>
+        </marker>
+        <marker id="apArrowT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 1 L 9 5 L 0 9 z" fill="#c77b1f"></path>
+        </marker>
+      </defs>
+
+      <!-- floor and table -->
+      <line class="ap-solid" x1="20" y1="415" x2="700" y2="415"></line>
+      <text class="ap-t sm" x="24" y="408">floor</text>
+      <rect class="ap-shelf" x="60" y="255" width="595" height="10"></rect>
+      <rect class="ap-shelf" x="88" y="265" width="22" height="150"></rect>
+      <rect class="ap-shelf" x="606" y="265" width="22" height="150"></rect>
+
+      <!-- track -->
+      <rect class="ap-tube" x="130" y="246" width="512" height="9" rx="3"></rect>
+
+      <!-- ultrasonic sensor -->
+      <rect class="ap-tube" x="104" y="214" width="42" height="32" rx="4"></rect>
+      <circle cx="146" cy="230" r="6" fill="#4a4a52"></circle>
+      <path class="ap-dash" d="M156,230 q14,-8 26,0 M162,230 q20,-12 38,0"></path>
+      <text class="ap-t sm" x="104" y="188">ultrasonic sensor</text>
+      <text class="ap-t sm" x="104" y="202">records position vs. time</text>
+
+      <!-- cart and the masses riding on it -->
+      <rect x="250" y="222" width="100" height="24" rx="3" fill="#7aa88c" stroke="#1d2b23" stroke-width="1.5"></rect>
+      <circle cx="270" cy="250" r="6" fill="#4a4a52"></circle>
+      <circle cx="330" cy="250" r="6" fill="#4a4a52"></circle>
+      <text class="ap-t lbl" x="288" y="240" text-anchor="middle">M</text>
+      <text class="ap-t" x="302" y="243" font-size="12" fill="#134a29" font-weight="700">C</text>
+      <rect x="258" y="206" width="20" height="16" rx="2" fill="#4a4a52"></rect>
+      <rect x="284" y="206" width="20" height="16" rx="2" fill="#4a4a52"></rect>
+      <rect x="310" y="206" width="20" height="16" rx="2" fill="#4a4a52"></rect>
+      <rect x="284" y="190" width="20" height="16" rx="2" fill="#4a4a52"></rect>
+
+      <!-- string, pulley, hanger -->
+      <line class="ap-thin" x1="350" y1="232" x2="634" y2="232"></line>
+      <text class="ap-t lbl" x="470" y="224" text-anchor="middle">T</text>
+      <circle cx="642" cy="240" r="12" fill="none" stroke="#1d2b23" stroke-width="2"></circle>
+      <circle cx="642" cy="240" r="3" fill="#1d2b23"></circle>
+      <path class="ap-thin" d="M634,232 A12,12 0 0 1 654,240"></path>
+      <line class="ap-thin" x1="654" y1="240" x2="654" y2="332"></line>
+      <rect x="641" y="332" width="26" height="8" fill="#4a4a52"></rect>
+      <rect x="644" y="340" width="20" height="14" rx="2" fill="#4a4a52"></rect>
+      <rect x="644" y="354" width="20" height="14" rx="2" fill="#4a4a52"></rect>
+      <text class="ap-t lbl" x="676" y="356">M</text>
+      <text class="ap-t" x="690" y="359" font-size="12" fill="#134a29" font-weight="700">H</text>
+
+      <!-- the one shared acceleration -->
+      <line class="ap-dim" x1="382" y1="292" x2="466" y2="292" marker-end="url(#apArrow)"></line>
+      <text class="ap-t lbl" x="474" y="297">a</text>
+      <line class="ap-dim" x1="654" y1="378" x2="654" y2="404" marker-end="url(#apArrow)"></line>
+      <text class="ap-t lbl" x="666" y="396">a</text>
+      <text class="ap-t sm" x="382" y="312">one acceleration, shared by both</text>
+
+      <!-- track length -->
+      <line class="ap-dim" x1="130" y1="342" x2="596" y2="342" marker-start="url(#apArrowS)" marker-end="url(#apArrow)"></line>
+      <text class="ap-t sm" x="363" y="360" text-anchor="middle">level track, about 2.0 m</text>
+
+      <!-- the transfer: the procedure that makes the experiment work -->
+      <path d="M300,186 C420,132 706,180 672,322" stroke="#c77b1f" stroke-width="1.8"
+            stroke-dasharray="6 5" fill="none" marker-end="url(#apArrowT)"></path>
+      <text class="ap-t" x="150" y="118" fill="#9a5c10" font-weight="600" font-size="14">between runs, MOVE a mass from the cart to the hanger</text>
+      <text class="ap-t sm" x="150" y="136" fill="#9a5c10">never add one &mdash; the total mass must not change</text>
+    </svg>
+    </div>
+    <figcaption class="cap"><b>Figure A.</b> The half Atwood machine. One light string runs from the cart over the pulley at the table edge and carries a single tension <b>T</b> throughout. The cart and everything on it, plus the hanger and everything on it, form one system of total mass M<sub>T</sub> moving with one acceleration <b>a</b> &mdash; which is why the same letter labels the arrow on the track and the arrow below the hanger. The orange path is the procedure that makes the experiment work: mass is moved from cart to hanger between runs, so the driving force F<sub>g,H</sub> = M<sub>H</sub>g rises while M<sub>T</sub> stays exactly the same.</figcaption>
+  </figure>
+
+  <div class="watch">
+    <b>This is a virtual lab.</b> The five runs were recorded for you and are provided as Vernier
+    Graphical Analysis files, and as a spreadsheet of the same position-and-time numbers if you would
+    rather work there. You are still responsible for the analysis, the graph and the uncertainty
+    &mdash; the measurement is what has been done for you, not the physics.
+  </div>
+
+  <h3>The masses</h3>
+  <p>Weighed on the laboratory scale:</p>
+
+  <table class="spec">
+    <caption>The components of the system. These three numbers, added, are your accepted mass.</caption>
+    <thead><tr><th>Component</th><th>Mass</th></tr></thead>
+    <tbody>
+      <tr><td>Cart</td><td>510.72 g</td></tr>
+      <tr><td>Block mass carried on the cart</td><td>537.30 g</td></tr>
+      <tr><td>Hanging masses, all five together</td><td>500.00 g</td></tr>
+      <tr><td><b>Total system mass M<sub>T</sub> (accepted)</b></td><td><b>1548.02 g = 1.54802 kg</b></td></tr>
+    </tbody>
+  </table>
+
+  <p>Every one of the five hanging masses starts out on the cart. Whichever ones are hanging at any
+  moment, the sum above is unchanged &mdash; which is exactly the point.</p>
+
+  <!-- ============ PART I ============ -->
+  <h2>Part I &mdash; The data</h2>
+
+  <p>Five runs were recorded, with 100, 200, 300, 400 and 500&nbsp;g on the hanger. In each run the cart
+  begins at rest near the sensor, is released, accelerates along the track, and finally stops when the
+  hanger reaches the floor or the cart reaches the end of the track.</p>
+
+  <ol class="steps">
+    <li>Download the data (the cards at the foot of this page). Open a run in Graphical Analysis, or open
+      the workbook if you prefer to work in a spreadsheet &mdash; they contain the same numbers.</li>
+    <li>For each run, compute the <b>driving force</b> F<sub>g,H</sub> = M<sub>H</sub> g, in newtons,
+      from the hanging mass in kilograms. Do this by hand once, in full, with units, as your sample
+      calculation.</li>
+    <li>Plot position against time and look at the shape before you fit anything. You should be able to
+      see the three phases with your eye: a flat stretch before release, a curved accelerating stretch,
+      and whatever happens after the motion ends.</li>
+  </ol>
+
+  <!-- ============ PART II ============ -->
+  <h2>Part II &mdash; Getting an acceleration out of each run</h2>
+
+  <p>Nothing in this experiment measures acceleration directly. What you have is position against time,
+  and for motion from rest under a constant acceleration, that is a parabola:</p>
+
+  <div class="eqn">
+    x(t) &nbsp;=&nbsp; x<sub>0</sub> + v<sub>0</sub> t + &frac12; a t&sup2;
+    <span class="domain"><b>Where this holds:</b> constant acceleration only &mdash; which is why the fit
+    window matters so much. Fit a parabola to a stretch of data where the acceleration was <em>not</em>
+    constant and the number you get is not an acceleration, it is an average of several things.</span>
+  </div>
+
+  <p>Fit a quadratic to each run. The coefficient of t&sup2; in that fit is &frac12;a, so:</p>
+
+  <div class="eqn">a &nbsp;=&nbsp; 2 &times; (quadratic coefficient)</div>
+
+  <div class="watch">
+    <b>Fit only the part of the run where the system is accelerating.</b> Do not include the flat stretch
+    before release, and do not include anything after the hanger lands or the cart reaches the end
+    &mdash; the sensor produces genuine nonsense there, including dropouts and reflections. Say in your
+    report what time window you used for each run and how you chose it. This is not a formality: refitting
+    these runs over slightly different windows shifts the individual accelerations by a few percent, and
+    an examiner cannot check your work without knowing which points you kept.
+  </div>
+
+  <p>Record for each run: the hanging mass, the driving force, the fit window you used, the quadratic
+  coefficient, the acceleration, and the uncertainty the fit reports for that coefficient.</p>
+
+  <!-- ============ PART III ============ -->
+  <h2>Part III &mdash; The graph that weighs the system</h2>
+
+  <p>Plot your five accelerations on the vertical axis against the five driving forces on the horizontal
+  axis, and fit a straight line. From the rearranged equation, the slope of that line is
+  1/M<sub>T</sub>.</p>
+
+  <figure class="apparatus">
+    <div class="frame">
+    <svg viewBox="0 0 620 330" role="img" aria-label="Acceleration plotted against driving force. Five points lie close to a straight line rising from near the origin. A slope triangle is marked on the line and labelled slope equals one over total mass.">
+      <defs>
+        <marker id="gArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 1 L 9 5 L 0 9 z" fill="#1d2b23"></path>
+        </marker>
+      </defs>
+      <!-- axes -->
+      <line class="ap-solid" x1="80" y1="280" x2="80" y2="30" marker-end="url(#gArrow)"></line>
+      <line class="ap-solid" x1="80" y1="280" x2="540" y2="280" marker-end="url(#gArrow)"></line>
+      <text class="ap-t lbl" x="40" y="46">a</text>
+      <text class="ap-t sm" x="22" y="64">(m/s&sup2;)</text>
+      <text class="ap-t lbl" x="520" y="308">F</text>
+      <text class="ap-t sm" x="392" y="308">driving force (N)</text>
+
+      <!-- fitted line -->
+      <line x1="80" y1="272" x2="500" y2="62" stroke="#1e6b3c" stroke-width="2.4"></line>
+
+      <!-- data points -->
+      <circle cx="164" cy="228" r="5.5" fill="#134a29"></circle>
+      <circle cx="248" cy="188" r="5.5" fill="#134a29"></circle>
+      <circle cx="332" cy="140" r="5.5" fill="#134a29"></circle>
+      <circle cx="416" cy="106" r="5.5" fill="#134a29"></circle>
+      <circle cx="500" cy="58" r="5.5" fill="#134a29"></circle>
+
+      <!-- slope triangle -->
+      <line class="ap-dash" x1="300" y1="156" x2="420" y2="156"></line>
+      <line class="ap-dash" x1="420" y1="156" x2="420" y2="96"></line>
+      <text class="ap-t sm" x="342" y="174">&Delta;F</text>
+      <text class="ap-t sm" x="428" y="130">&Delta;a</text>
+      <text class="ap-t lbl" x="130" y="74">slope = &Delta;a / &Delta;F = 1 / M</text>
+      <text class="ap-t" x="344" y="78" font-size="13" fill="#134a29" font-weight="700">T</text>
+      <text class="ap-t" x="130" y="94" font-size="13" fill="#5c6b62">units: (m/s&sup2;) / N = 1/kg</text>
+
+      <!-- intercept magnifier -->
+      <circle class="ap-warn" cx="80" cy="272" r="16" fill="none"></circle>
+      <line class="ap-thin" x1="96" y1="282" x2="150" y2="306" stroke="#c0392b"></line>
+      <text class="ap-t bad" x="154" y="310">watch the intercept</text>
+    </svg>
+    </div>
+    <figcaption class="cap"><b>Figure B.</b> What the analysis is doing. The slope carries the physics;
+    one divided by it is the total mass of everything that moved. The intercept ought to be zero
+    &mdash; no force, no acceleration &mdash; so if yours is not, that is a result in its own right and
+    not a rounding error.</figcaption>
+  </figure>
+
+  <h3>Getting the mass, and its uncertainty, from the slope</h3>
+
+  <div class="eqn">
+    M<sub>T</sub> &nbsp;=&nbsp; 1 &frasl; slope
+    <span class="domain"><b>Check the units as you go.</b> A slope in 1/kg inverts to a mass in kg. If
+    your slope came out in some other combination of units, you have mixed grams with kilograms
+    somewhere, and the mass you report will be wrong by a factor of a thousand.</span>
+  </div>
+
+  <p>Your fitting tool reports an uncertainty on the slope. Because the mass is one over the slope, that
+  uncertainty propagates as:</p>
+
+  <div class="eqn">
+    &delta;M<sub>T</sub> &nbsp;=&nbsp; &delta;(slope) &frasl; (slope)&sup2;
+    <span class="domain">Equivalently, the <em>fractional</em> uncertainty carries straight across:
+    &delta;M/M = &delta;(slope)/slope. Quote your experimental mass as M &plusmn; &delta;M, with both
+    numbers to a sensible precision.</span>
+  </div>
+
+  <h3>The comparison</h3>
+  <p>Compare the mass from your graph with the accepted mass of 1548.02&nbsp;g:</p>
+
+  <div class="eqn">
+    % error = |M<sub>experimental</sub> &minus; M<sub>accepted</sub>| &frasl; M<sub>accepted</sub> &times; 100%
+  </div>
+
+  <p>Then ask the question the percentage on its own cannot answer: is your experimental mass
+  <em>higher</em> or <em>lower</em> than the accepted mass, and is that the direction you would expect?
+  Work out what a real half Atwood machine does that the ideal one in Note 6 does not, and decide which
+  way each of those effects would push your result. A percentage with a sign attached and a mechanism
+  behind it is worth far more than a small percentage on its own.</p>
+
+  <!-- ============ CALCULATOR ============ -->
+  <h2>Check your analysis</h2>
+  <p>Paste your five force-and-acceleration pairs below to check the line you fitted. Your report still
+  has to show the graph and a sample calculation worked by hand, with units &mdash; this tool checks
+  arithmetic, it does not replace the analysis.</p>
+
+  <div class="sim">
+    <div class="sim-head"><span>&#9679;</span> Tool &middot; Fit a against F, and read off the mass</div>
+    <div class="panel">
+      <div class="ctrl">
+        <label for="pairs">One run per line: driving force in N, then acceleration in m/s&sup2;,
+          separated by a comma, a tab or a space</label>
+        <textarea id="pairs" spellcheck="false" placeholder="0.98  0.577&#10;1.96  1.158&#10;2.94  1.714&#10;3.92  2.390&#10;4.90  2.973"></textarea>
+      </div>
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="accMass">Accepted total mass (g)</label>
+          <input type="number" id="accMass" step="any" inputmode="decimal" value="1548.02">
+        </div>
+        <div class="ctrl">
+          <label for="fitMode">Fit</label>
+          <select id="fitMode" style="font:inherit;font-size:.92rem;width:100%;box-sizing:border-box;padding:.4rem .55rem;border:1px solid #d7e2da;border-radius:6px;background:#fff;">
+            <option value="int">With an intercept (recommended)</option>
+            <option value="org">Forced through the origin</option>
+          </select>
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="fitBtn">Fit</button>
+        <button class="btn" id="fitClear">Clear</button>
+      </div>
+      <div class="readout">
+        <span class="chip">slope = <b id="oSlope">&mdash;</b></span>
+        <span class="chip">intercept = <b id="oInt">&mdash;</b></span>
+        <span class="chip">R&sup2; = <b id="oR2">&mdash;</b></span>
+        <span class="chip">M from slope = <b id="oM">&mdash;</b></span>
+        <span class="chip">% error = <b id="oErr">&mdash;</b></span>
+      </div>
+      <div class="verdict" id="oVerdict">Paste at least three runs to begin.</div>
+      <div class="hint-row">Uses g = 9.8 m/s&sup2; where a force is computed from a mass. Uncertainties are
+      the standard least-squares errors on the fitted parameters.</div>
+    </div>
+  </div>
+
+  <!-- ============ DISCUSSION ============ -->
+  <h2>Questions for your discussion</h2>
+  <p>Work these into your Discussion and Additional Questions sections, in <b>sentences and paragraphs</b>
+  &mdash; never as a numbered list, and never by restating the question before answering it. Do not limit
+  yourself to these; add any other insight you have.</p>
+
+  <ol class="questions">
+    <li>Why was a stopwatch not used to time these runs? Make the argument quantitative: take one of your
+      runs, work out roughly how long the accelerating phase lasted, and compare that with a realistic
+      human reaction time. What percentage error would a stopwatch have introduced?</li>
+    <li>The cart travels horizontally and the hanging mass travels vertically. They move in different
+      directions, yet the whole analysis assumes they share one acceleration. Why is that legitimate, and
+      what physical property of the string is doing the work in that assumption? What would you expect to
+      see in the data if that assumption failed?</li>
+    <li>Does the tension in the string equal the weight of the hanging mass? Answer from your equations,
+      not from intuition, and then say what would have to be true of the apparatus for the two to become
+      equal.</li>
+    <li>Your accelerations are all smaller than g, in every run, with no exceptions. Explain why that had
+      to be so before any data were taken. What would the acceleration become if the cart's mass could be
+      made vanishingly small, and does your equation agree?</li>
+    <li>Explain, in your own words, why the procedure moves mass from the cart to the hanger instead of
+      simply adding mass to the hanger. What specifically would go wrong with the graph if mass had been
+      added, and would the relationship still have come out looking linear?</li>
+    <li>Look at your intercept. In an ideal experiment it is zero, because zero force should produce zero
+      acceleration. Is yours zero within its uncertainty? If it is not, work out what constant force would
+      account for it, and say whether the sign of that force makes physical sense for this apparatus.</li>
+    <li>What factors would make the mass from your graph differ from the mass on the scale? For each one
+      you name, say which <em>direction</em> it pushes the result, and estimate its size if you can. At
+      least one thing in this apparatus has mass, is being accelerated, and never appears anywhere in your
+      total &mdash; find it.</li>
+    <li>Refit one of your runs using a slightly different time window &mdash; a few points more at one end,
+      a few fewer at the other. How much does the acceleration change? What does that tell you about the
+      precision you are entitled to claim?</li>
+    <li>This lab varies the force at constant mass. Describe the complementary experiment that would vary
+      the mass at constant force, say what you would plot to make <em>that</em> relationship come out as a
+      straight line, and explain what the slope would mean.</li>
+  </ol>
+
+  <div class="watch">
+    <b>One thing the rubric will not accept:</b> "human error." It explains nothing, and in a virtual lab
+    where the data were collected by a machine it explains even less. If your percent error is under 10%,
+    attribute it to ordinary experimental uncertainty and say so explicitly, backed by the uncertainty on
+    your slope. If it is over 10%, you must identify specific error sources and <em>quantify</em> them
+    &mdash; a named mechanism with a number attached.
+  </div>
+
+  <!-- ============ WHAT TO HAND IN ============ -->
+  <div class="ticket">
+    <div class="t-head">
+      <strong>&#10003; Before you submit</strong>
+      <span class="sub">Every line here maps to a row on the Lab 04 grading rubric.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="check-group">
+        <span class="gh">Format &amp; front matter</span>
+        <label><input type="checkbox"><span>Lab Template used, with names, title, and date in the heading</span></label>
+        <label><input type="checkbox"><span>Abstract: four sentences or fewer &mdash; theme, the experimental mass with its uncertainty, the percent error. Nothing else.</span></label>
+        <label><input type="checkbox"><span>Introduction carries <em>your own</em> derivation of a = F<sub>g,H</sub>/M<sub>T</sub> from the two equations, every symbol defined, and a hypothesis you can later confirm or reject</span></label>
+        <label><input type="checkbox"><span>The rearrangement to a = (1/M<sub>T</sub>)F is shown, and the report says in words why that makes the slope a mass</span></label>
+      </div>
+
+      <div class="check-group">
+        <span class="gh">Experimental</span>
+        <label><input type="checkbox"><span>Labelled sketch of the half Atwood setup, redrawn by you &mdash; not this page's figure pasted in</span></label>
+        <label><input type="checkbox"><span>Free-body diagram for <em>each</em> body, with the sign convention chosen for each stated explicitly</span></label>
+        <label><input type="checkbox"><span>Procedure in paragraph form, in your own words, including how the position-time data were collected and converted into an acceleration</span></label>
+        <label><input type="checkbox"><span><b>The constant-total-mass strategy is explained</b> &mdash; that mass was moved from cart to hanger rather than added, and why that is what makes force the single variable</span></label>
+      </div>
+
+      <div class="check-group">
+        <span class="gh">Results</span>
+        <label><input type="checkbox"><span>Table of the five runs: hanging mass, driving force, fit window, quadratic coefficient, acceleration, and the fit's uncertainty</span></label>
+        <label><input type="checkbox"><span>At least one position-versus-time graph shown with its fitted parabola, so the reader can see which points were used</span></label>
+        <label><input type="checkbox"><span>The acceleration-versus-force graph, with the fitted line, axes labelled with units, numbered as a Figure with a caption and described in the text</span></label>
+        <label><input type="checkbox"><span>Every table numbered, captioned, with units and consistent significant digits, referenced in the text ("Table 1 shows&hellip;")</span></label>
+        <label><input type="checkbox"><span>Experimental mass quoted as M &plusmn; &delta;M, with the propagation from the slope's uncertainty shown</span></label>
+        <label><input type="checkbox"><span>A sample calculation, worked step by step with units, for <em>each</em> type: driving force, acceleration from the fit, mass from the slope, uncertainty propagation, percent error</span></label>
+      </div>
+
+      <div class="check-group">
+        <span class="gh">Discussion &amp; conclusion</span>
+        <label><input type="checkbox"><span>Discussion opens with "we experimentally determined that&hellip; &plusmn; error"</span></label>
+        <label><input type="checkbox"><span><b>Both</b> verification criteria addressed by name: that the relationship is linear, <em>and</em> that the slope equals 1/M<sub>T</sub></span></label>
+        <label><input type="checkbox"><span>The intercept is discussed, not ignored</span></label>
+        <label><input type="checkbox"><span>The direction of the discrepancy is explained, not just its size</span></label>
+        <label><input type="checkbox"><span>States whether your introduction's hypothesis is confirmed, and argues confidence using the 10% rule</span></label>
+        <label><input type="checkbox"><span>Additional questions answered in a dedicated section, in paragraphs</span></label>
+        <label><input type="checkbox"><span>The phrase "human error" appears nowhere in the report</span></label>
+        <label><input type="checkbox"><span>Conclusion: 3&ndash;4 sentences &mdash; the numerical result with percent error, a definitive verified / not-verified statement, and one concrete way to improve the measurement</span></label>
+      </div>
+
+      <div class="check-group">
+        <span class="gh">References</span>
+        <label><input type="checkbox"><span>One to three references beyond the textbook &mdash; this handout, Note 6, and an outside source on Newton's second law or on the analysis software</span></label>
+        <label><input type="checkbox"><span>Author, title, and date given for each &mdash; a bare URL is not a citation</span></label>
+      </div>
+
+      <div class="score" id="checkScore">0 of 0 checked.</div>
+    </div>
+  </div>
+
+  <!-- ============ FILES ============ -->
+  <h2>Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB04_Newtons_Second_Law.pdf" target="_blank" rel="noopener">
+      <span class="kind">Handout</span>
+      <span class="name">This lab, as a PDF</span>
+      <span class="hint">The whole page, printable. The calculator and the checklist only work on the web version.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB04_Data_Files.zip" target="_blank" rel="noopener">
+      <span class="kind">Required</span>
+      <span class="name">The five runs (Graphical Analysis)</span>
+      <span class="hint">100 g through 500 g hanging, as .gambl files. Open each in Vernier Graphical Analysis and fit the accelerating part of the curve.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB04_Newtons_Second_Law_Example_Workbook.xlsx" target="_blank" rel="noopener">
+      <span class="kind">Required</span>
+      <span class="name">Data and analysis workbook (XLSX)</span>
+      <span class="hint">The same five runs as position-and-time columns, plus the analysis layout with live formulas, and a worked example sheet so you can see the shape of a finished analysis.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB04_Rubric.docx" target="_blank" rel="noopener">
+      <span class="kind">Required</span>
+      <span class="name">Lab 04 grading rubric (DOCX)</span>
+      <span class="hint">What each section is worth. Every line of the submission checklist above maps to a row here.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB04_Newtons_Second_Law_Example_Starter.docx" target="_blank" rel="noopener">
+      <span class="kind">Required</span>
+      <span class="name">Report starter (DOCX)</span>
+      <span class="hint">The Lab Template with this lab's headings in place. Lighter than Lab 3's &mdash; see the note inside it.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/Module_03/M3_N6_Verifying_Newtons_Second_Law_Half_Atwood.html" target="_blank" rel="noopener">
+      <span class="kind">Start here</span>
+      <span class="name">M3 N6 &mdash; Verifying Newton's Second Law with a Half Atwood Machine</span>
+      <span class="hint">The note this lab measures. Its derivation and diagrams belong in your Introduction and Experimental sections.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/Formatting_Data_Tables_for_Lab_Reports.html" target="_blank" rel="noopener">
+      <span class="kind">Reference</span>
+      <span class="name">Formatting Data Tables for Lab Reports</span>
+      <span class="hint">Table numbering, captions, significant digits, units.</span>
+    </a>
+  </div>
+
+  <p class="filenote">Abstract rules, section-by-section guidance and the submission window live in the
+  <b>Lab Information</b> module on Brightspace, alongside the Module&nbsp;3 Lab folder where you hand this in.</p>
+
+  <h2>References to get you started</h2>
+  <p>Your references should include material on Newton's second law and on the software used to analyse
+  the motion. Your textbook, this handout and the Module 3 note pages all count, and you need at least one
+  source beyond the textbook. The note this lab measures is
+  <a href="https://byungmooncho.github.io/PHY118/Module_03/M3_N6_Verifying_Newtons_Second_Law_Half_Atwood.html"
+     target="_blank" rel="noopener">Module&nbsp;3 Note&nbsp;6</a>.</p>
+  <ol class="refs">
+    <li>[Author's names], <i>Journal or Book title</i>, edition, Volume number, page number, (year).</li>
+  </ol>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 118
+    <span class="attrib">Revised from the PHY 118 Newton's Second Law lab by H. Trevor Johnson-Steigelman, used under CC BY-NC-SA.</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function fmt(x, d){
+    if(!isFinite(x)) return '—';
+    return (Math.round(x * Math.pow(10,d)) / Math.pow(10,d)).toFixed(d);
+  }
+
+  /* ---- predict-first probe ---- */
+  var probe = document.getElementById('probe');
+  if(probe){
+    var fb = document.getElementById('probeFb');
+    probe.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var right = btn.getAttribute('data-correct') === 'true';
+        probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+        btn.classList.add(right ? 'correct' : 'wrong');
+        fb.textContent = right
+          ? 'Right, and for a reason worth stating carefully. a = F/M_T. Transferring the mass doubled F while leaving M_T untouched, so a doubles exactly. Had you ADDED 100 g from outside instead, M_T would have risen too, the extra mass would sit in the numerator and the denominator at once, and the acceleration would have gone up by less than double. That difference is the entire design of this lab.'
+          : 'Not this time — and the option you picked is the right answer to a different question. Adding mass to the hanger does put it in both numerator and denominator, so the acceleration would rise by less than double. But nothing was added here: 100 g moved from the cart to the hanger, so M_T is unchanged and only F went up. a = F/M_T with M_T fixed gives exactly double.';
+      });
+    });
+  }
+
+  /* ---- a-vs-F fitter ---- */
+  var btn = document.getElementById('fitBtn');
+  if(btn){
+    var ta = document.getElementById('pairs'),
+        accIn = document.getElementById('accMass'),
+        modeIn = document.getElementById('fitMode'),
+        oSlope = document.getElementById('oSlope'), oInt = document.getElementById('oInt'),
+        oR2 = document.getElementById('oR2'), oM = document.getElementById('oM'),
+        oErr = document.getElementById('oErr'), oV = document.getElementById('oVerdict');
+
+    function reset(msg){
+      [oSlope,oInt,oR2,oM,oErr].forEach(function(e){ e.textContent = '—'; });
+      oV.textContent = msg || 'Paste at least three runs to begin.';
+    }
+    document.getElementById('fitClear').addEventListener('click', function(){
+      ta.value = ''; reset();
+    });
+
+    function parse(txt){
+      var out = [];
+      txt.split(/[\r\n]+/).forEach(function(line){
+        var t = line.trim();
+        if(!t) return;
+        var p = t.split(/[,\t ;]+/).filter(function(s){ return s.length; });
+        if(p.length < 2) return;
+        var F = parseFloat(p[0]), a = parseFloat(p[1]);
+        if(isFinite(F) && isFinite(a)) out.push([F,a]);
+      });
+      return out;
+    }
+
+    btn.addEventListener('click', function(){
+      var pts = parse(ta.value);
+      if(pts.length < 3){ reset('Need at least three runs with a force and an acceleration on each line.'); return; }
+
+      var n = pts.length, mode = modeIn.value;
+      var F = pts.map(function(p){ return p[0]; }), A = pts.map(function(p){ return p[1]; });
+      var mF = F.reduce(function(s,x){ return s+x; },0)/n;
+      var mA = A.reduce(function(s,x){ return s+x; },0)/n;
+      var slope, inter, dSlope, dInter, resid, dof;
+
+      if(mode === 'org'){
+        var sFF = 0, sFA = 0;
+        for(var i=0;i<n;i++){ sFF += F[i]*F[i]; sFA += F[i]*A[i]; }
+        slope = sFA/sFF; inter = 0; dof = n-1;
+        resid = A.map(function(a,i){ return a - slope*F[i]; });
+        var se0 = Math.sqrt(resid.reduce(function(s,r){ return s+r*r; },0)/dof);
+        dSlope = se0/Math.sqrt(sFF); dInter = 0;
+      } else {
+        var Sxx = 0, Sxy = 0;
+        for(var j=0;j<n;j++){ Sxx += (F[j]-mF)*(F[j]-mF); Sxy += (F[j]-mF)*(A[j]-mA); }
+        if(Sxx <= 0){ reset('All your forces are the same — there is no line to fit.'); return; }
+        slope = Sxy/Sxx; inter = mA - slope*mF; dof = n-2;
+        resid = A.map(function(a,i){ return a - (slope*F[i] + inter); });
+        var se = Math.sqrt(resid.reduce(function(s,r){ return s+r*r; },0)/Math.max(dof,1));
+        dSlope = se/Math.sqrt(Sxx);
+        dInter = se*Math.sqrt(1/n + mF*mF/Sxx);
+      }
+
+      var ssTot = A.reduce(function(s,a){ return s + (a-mA)*(a-mA); },0);
+      var ssRes = resid.reduce(function(s,r){ return s+r*r; },0);
+      var r2 = ssTot > 0 ? 1 - ssRes/ssTot : NaN;
+
+      if(slope <= 0){ reset('That slope is zero or negative — check the order of your columns; force comes first, acceleration second.'); return; }
+
+      var M = 1/slope, dM = dSlope/(slope*slope);
+      var accG = parseFloat(accIn.value);
+      var acc = isFinite(accG) && accG > 0 ? accG/1000 : null;
+
+      oSlope.textContent = fmt(slope,4) + ' ± ' + fmt(dSlope,4) + ' kg⁻¹';
+      oInt.textContent = mode === 'org' ? 'forced to 0' : (fmt(inter,4) + ' ± ' + fmt(dInter,4) + ' m/s²');
+      oR2.textContent = fmt(r2,5);
+      oM.textContent = fmt(M,4) + ' ± ' + fmt(dM,4) + ' kg';
+
+      var msg = '';
+      /* criterion 1 */
+      if(r2 >= 0.99){
+        msg += 'Criterion ① — linearity: R² = ' + fmt(r2,5) + '. The points lie on a straight line to well within their scatter, so acceleration is proportional to force. ';
+      } else if(r2 >= 0.95){
+        msg += 'Criterion ① — linearity: R² = ' + fmt(r2,5) + ', which is a line but a loose one. Before you accept it, look at whether the residuals are scattered or curved — a systematic curve means something other than noise. ';
+      } else {
+        msg += 'Criterion ① — linearity: R² = ' + fmt(r2,5) + '. That is not a straight line. Check your fit windows and your unit conversions before going further. ';
+      }
+      /* criterion 2 */
+      if(acc){
+        var err = Math.abs(M-acc)/acc*100;
+        oErr.textContent = fmt(err,2) + '%';
+        var dir = M > acc ? 'heavier than' : 'lighter than';
+        msg += 'Criterion ② — the slope: it gives M = ' + fmt(M,4) + ' ± ' + fmt(dM,4) + ' kg, which is ' + fmt(err,2) + '% ' + dir + ' the ' + fmt(acc,4) + ' kg on the scale. ';
+        if(err < 10){
+          msg += 'Under 10%, so the rubric lets you attribute the difference to ordinary experimental uncertainty — but only if you say so explicitly and back it with the uncertainty on your slope. ';
+        } else {
+          msg += 'Over 10%, so the rubric requires specific, quantified error sources here. ';
+        }
+        if(M > acc){
+          msg += 'Your graph says the system was harder to accelerate than its weighed mass accounts for, which is what anything resisting the motion but absent from your mass total would do. ';
+        }
+      } else {
+        oErr.textContent = '—';
+      }
+      /* intercept */
+      if(mode !== 'org'){
+        if(Math.abs(inter) > 2*dInter && dInter > 0){
+          var fFric = -inter*M;
+          msg += 'Your intercept is ' + fmt(inter,4) + ' m/s², which is more than twice its own uncertainty, so it is unlikely to be nothing. ';
+          if(inter < 0){
+            msg += 'A negative intercept means a threshold: about ' + fmt(fFric,3) + ' N of driving force would have been used up before the system moved at all. Say what in this apparatus could produce a roughly constant opposing force of that size.';
+          } else {
+            msg += 'A positive intercept means the fit wants acceleration with no force, which nothing physical here can produce — treat it as a sign that something is off in the fit or the data reduction.';
+          }
+        } else {
+          msg += 'Your intercept is zero within its own uncertainty, which is what the theory demands: no force, no acceleration. Say so in the Discussion rather than leaving it unmentioned.';
+        }
+      }
+      oV.textContent = msg;
+    });
+  }
+
+  /* ---- submission checklist counter ---- */
+  var boxes = document.querySelectorAll('.check-group input[type=checkbox]');
+  var score = document.getElementById('checkScore');
+  if(score && boxes.length){
+    var tally = function(){
+      var done = 0;
+      boxes.forEach(function(b){ if(b.checked) done++; });
+      score.textContent = done + ' of ' + boxes.length + ' checked.'
+        + (done === boxes.length ? ' Ready to submit.' : '');
+    };
+    boxes.forEach(function(b){ b.addEventListener('change', tally); });
+    tally();
+  }
+})();
+</script>
+<!-- FLCC autosize reporter V5 - listener-safe ordering, measures .note-wrap.
+     See Cross_Course_Notes/Autosize_V4_Single_Source_Workflow.md and the V5 note. -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
