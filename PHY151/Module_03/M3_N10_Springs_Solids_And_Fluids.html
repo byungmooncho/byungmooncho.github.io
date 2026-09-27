@@ -274,6 +274,78 @@
   .calc li{ margin:.4rem 0; }
   .calc .line{ display:block; border-bottom:1px solid var(--rule); height:1.4rem;
     margin:.35rem 0 0; }
+  /* --- FLCC-SIM v1 · interactive widget ----------------------------------
+     LIFTABLE UNIT. This block plus the matching "FLCC-SIM v1" block in the
+     body are self-contained: copy both into any note page and nothing else
+     needs to change. No external files, no libraries.
+     Hidden until JS adds .on, so a no-JS reader sees nothing broken.
+     Hidden in print — the static figure above it carries the printed page.
+     ----------------------------------------------------------------------- */
+  .sim{ display:none; border:1px solid var(--rule); border-radius:8px;
+        padding:1rem 1rem .9rem; margin:1.2rem 0; background:#fbfdfc; }
+  .sim.on{ display:block; }
+  .sim .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+        letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+        font-weight:600; display:block; margin-bottom:.55rem; }
+  .sim-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:640px){ .sim-grid{ grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); } }
+  .sim svg{ display:block; width:100%; height:auto; }
+  .sim-controls{ display:grid; gap:.55rem; margin:0 0 .9rem;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .sim-controls label{ display:grid; grid-template-columns:3.4em 1fr 7.6em;
+        gap:.6rem; align-items:center; }
+  .sim-controls .nm{ color:var(--muted); }
+  .sim-controls output{ font-variant-numeric:tabular-nums; font-weight:700;
+        color:var(--green); text-align:right; }
+  .sim-controls input[type=range]{ width:100%; accent-color:var(--green); }
+  .sim-go{ font:inherit; font-family:"Segoe UI", system-ui, sans-serif;
+        font-size:.86rem; font-weight:600; color:#fff; background:var(--green);
+        border:0; border-radius:6px; padding:.45rem .95rem; cursor:pointer; }
+  .sim-go:disabled{ opacity:.45; cursor:default; }
+  .sim-read{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .sim-meter + .sim-meter{ margin-top:.85rem; }
+  .sim-meter .top{ display:flex; justify-content:space-between; gap:.8rem;
+        align-items:baseline; }
+  .sim-meter .top b{ font-weight:600; }
+  .sim-bar{ position:relative; height:12px; border:1px solid var(--rule);
+        border-radius:6px; background:#fff; overflow:hidden; margin:.3rem 0 .2rem; }
+  .sim-bar i{ position:absolute; top:0; bottom:0; left:0; display:block;
+        background:#1f5d8c; }
+  .sim-bar.fixed i{ background:#1e6b3c; }
+  .sim-tag{ font-size:.79rem; color:var(--muted); }
+  .sim-verdict{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-weight:700; color:var(--green);
+        min-height:1.2em; }
+  .sim-withheld{ border-left:3px solid var(--rule); padding:.15rem 0 .15rem .7rem;
+        margin:.9rem 0 0; font-size:.82rem; color:var(--muted); }
+  .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+        color:var(--muted); margin:.9rem 0 0; }
+  .sim-eq{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-variant-numeric:tabular-nums;
+        line-height:1.9; }
+  .sim-eq div{ white-space:nowrap; overflow-x:auto; }
+  .sim-eq .cond{ color:var(--muted); font-size:.82rem; line-height:1.5;
+        border-bottom:1px solid var(--rule); padding-bottom:.35rem; margin-bottom:.3rem;
+        white-space:normal; }
+  .sim-eq sub, .sim-meter sub{ font-size:.72em; }
+  .sim-eq .sym{ color:var(--muted); display:inline-block; width:2.4em; }
+  .sim-eq .val{ font-weight:700; }
+  .sim-bar .ghost{ position:absolute; top:0; bottom:0;
+        background:repeating-linear-gradient(45deg,
+          rgba(92,107,98,.30) 0 5px, rgba(92,107,98,.08) 5px 10px);
+        border-right:2px solid var(--muted); }
+  .sim-vs{ display:flex; gap:1.1rem; align-items:baseline; flex-wrap:wrap;
+        margin:.35rem 0 0; padding-top:.35rem; border-top:1px solid var(--rule);
+        font-variant-numeric:tabular-nums; white-space:normal; }
+  .sim-vs b{ color:var(--green); }
+  .sim-vs .other{ color:var(--muted); font-weight:400; }
+  .sim-seg{ display:flex; gap:.4rem; flex-wrap:wrap; margin:0 0 .9rem; }
+  .sim-seg button{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem;
+        padding:.4rem .7rem; border:1px solid var(--rule); background:#fff;
+        color:var(--muted); border-radius:6px; cursor:pointer; }
+  .sim-seg button[aria-pressed="true"]{ background:var(--green-soft);
+        border-color:var(--green); color:var(--green); font-weight:700; }
+  @media print{ .sim{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -452,6 +524,177 @@
   <p class="movement">Movement 4 &mdash; fluids</p>
 
   <h2>Drag, and why falling stops speeding up</h2>
+
+  <!-- ===== FLCC-SIM v1 · N10  drag climbs to meet the weight ===============
+       LIFTABLE UNIT (pairs with the "FLCC-SIM v1" block in the stylesheet).
+
+       THE INVARIANT IS THE BALANCE, NOT THE SPEED. Change the mass, change the
+       frontal area, and terminal velocity moves a long way -- but the weight
+       bar never moves during a fall, the drag bar always climbs to meet it,
+       and the speed always levels off at the instant they match. Never sooner,
+       never later, at any setting. That is the thing the movement is about,
+       and it is the part a static figure cannot show.
+
+       It also carries the contrast the movement opens with. Friction in N5 has
+       no v in it. Drag does: the drag bar grows while the body speeds up, and
+       stops growing when the body does.
+
+       NOT THE SKYDIVER. Task 6 asks for m = 100 kg, A = 2 m2, rho = 1.3,
+       C_D = 0.7. This is a ball -- kilograms not hundreds, C_D = 0.5, rho =
+       1.2 -- so none of the widget's settings can be read off as that answer.
+       Same call as N3-a, which uses a paperclip and an apple rather than the
+       2.5 g penny the tasks are built on.
+
+       PRINTS v_term substituted, per playbook rule 1: the expression is
+       already Eq. 3 on this page, so nothing leaks. WITHHELD: the sum of
+       forces and the step that sets a = 0 -- tasks 4 and 5 ask for exactly
+       that derivation.
+
+       Axes are FIXED, not scaled to each run, or the curve would look
+       identical at every setting and the sliders would appear to do nothing.
+       ====================================================================== -->
+  <div class="sim" id="simN10">
+    <span class="label">Try it &mdash; drop a ball and watch the drag catch up</span>
+
+    <div class="sim-controls">
+      <label><span class="nm">Mass</span>
+        <input id="n10M" type="range" min="0.2" max="3" step="0.1" value="1"
+               aria-label="Mass of the ball, in kilograms">
+        <output id="n10MOut" for="n10M">1.0 kg</output></label>
+      <label><span class="nm">Area</span>
+        <input id="n10A" type="range" min="0.02" max="0.20" step="0.01" value="0.05"
+               aria-label="Frontal area of the ball, in square metres">
+        <output id="n10AOut" for="n10A">0.05 m&sup2;</output></label>
+    </div>
+    <p style="margin:.2rem 0 .9rem"><button class="sim-go" id="n10Go" type="button">Drop it</button></p>
+
+    <div class="sim-grid">
+      <svg id="n10Svg" viewBox="0 0 480 232" role="img"
+           aria-label="A ball falling beside a graph of its speed against time. The speed curve starts steep and flattens onto a dashed line, the terminal velocity, which moves up or down as the mass and frontal area sliders change.">
+        <defs>
+          <marker id="n10Head" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0,0 L10,3.5 L0,7 z" fill="#5c6b62"/></marker>
+        </defs>
+        <line x1="26" y1="26" x2="26" y2="206" stroke="#d7e2da" stroke-width="2" stroke-dasharray="4 4"/>
+        <circle id="n10Ball" cx="26" cy="34" r="9" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+        <line x1="96" y1="206" x2="462" y2="206" stroke="#1d2b23" stroke-width="1.6"/>
+        <line x1="96" y1="206" x2="96" y2="26" stroke="#1d2b23" stroke-width="1.6"/>
+        <text x="90" y="22" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">75</text>
+        <text x="90" y="210" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">0</text>
+        <text x="84" y="120" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">m/s</text>
+        <text x="462" y="222" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">12 s</text>
+        <line id="n10Term" x1="96" y1="120" x2="462" y2="120" stroke="#1e6b3c" stroke-width="1.6" stroke-dasharray="6 5"/>
+        <text id="n10TermTx" x="458" y="114" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1e6b3c">terminal velocity</text>
+        <path id="n10Trace" fill="none" stroke="#1f5d8c" stroke-width="2.2"/>
+        <text id="n10State" x="96" y="18" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62">Ready.</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-eq" aria-live="polite">
+          <div class="cond">a ball, C<sub>D</sub> = 0.5, in air of density 1.2 kg/m&sup3;</div>
+          <div><span class="sym">v =</span> &radic;(2mg / C<sub>D</sub>&rho;A)</div>
+          <div><span class="sym">v =</span> <span class="val" id="n10V">25.6 m/s</span></div>
+        </div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Weight</b><span class="n" id="n10WN">9.8 N</span></div>
+          <div class="sim-bar fixed"><i id="n10BarW" style="width:33%"></i></div>
+          <div class="sim-tag">constant all the way down &mdash; it has no v in it</div>
+        </div>
+        <div class="sim-meter">
+          <div class="top"><b>Drag</b><span class="n" id="n10DN">0.0 N</span></div>
+          <div class="sim-bar"><i id="n10BarD" style="width:0%"></i></div>
+          <div class="sim-tag" id="n10DTag">starts at nothing, because the ball starts at rest</div>
+        </div>
+
+        <p class="sim-withheld">No sum of forces and no step setting <em>a</em> = 0 &mdash; that
+        derivation is tasks 4 and 5, just below.</p>
+      </div>
+    </div>
+
+    <p class="sim-foot">Terminal velocity moves a long way as you change the ball, but the rule
+    behind it never does: the speed levels off at the instant the drag bar reaches the weight bar,
+    at every setting. Nothing is holding the ball up when that happens &mdash; the two forces have
+    simply become equal, and it keeps falling, fast.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N10. Vanilla, no dependencies, no state kept anywhere.
+
+     The fall is INTEGRATED from dv/dt = g - (C_D rho A / 2m) v^2, not drawn
+     from the closed form, so the curve and the printed terminal velocity are
+     independently arrived at: if the integration were wrong the trace would
+     miss the dashed line, and the test asserts that it does not. */
+  (function(){
+    var root = document.getElementById('simN10'); if(!root) return;
+    var ids = ['n10M','n10A','n10MOut','n10AOut','n10Go','n10Ball','n10Term','n10Trace',
+               'n10State','n10V','n10WN','n10DN','n10BarW','n10BarD','n10DTag'];
+    var el={}, i; for(i=0;i<ids.length;i++){ el[ids[i]]=document.getElementById(ids[i]); if(!el[ids[i]]) return; }
+
+    var G=9.8, CD=0.5, RHO=1.2;
+    var X0=96, X1=462, Y0=206, Y1=26, VMAX=75, TMAX=12, FMAX=35;
+    var raf=null;
+
+    function vterm(m,A){ return Math.sqrt(2*m*G/(CD*RHO*A)); }
+    function ypx(v){ return Y0-(Math.min(v,VMAX)/VMAX)*(Y0-Y1); }
+    function xpx(t){ return X0+(Math.min(t,TMAX)/TMAX)*(X1-X0); }
+    function drag(v,A){ return 0.5*CD*RHO*A*v*v; }
+
+    function statics(){
+      var m=+el.n10M.value, A=+el.n10A.value, vt=vterm(m,A);
+      el.n10MOut.textContent=m.toFixed(1)+' kg';
+      el.n10AOut.textContent=A.toFixed(2)+' m²';
+      el.n10V.textContent=vt.toFixed(1)+' m/s';
+      el.n10WN.textContent=(m*G).toFixed(1)+' N';
+      el.n10BarW.style.width=Math.min(100,(m*G/FMAX)*100).toFixed(1)+'%';
+      el.n10Term.setAttribute('y1',ypx(vt)); el.n10Term.setAttribute('y2',ypx(vt));
+      document.getElementById('n10TermTx').setAttribute('y',(ypx(vt)-6).toFixed(1));
+      return {m:m,A:A,vt:vt};
+    }
+    function reset(){
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      statics();
+      el.n10Trace.setAttribute('d','');
+      el.n10Ball.setAttribute('cy',34);
+      el.n10DN.textContent='0.0 N'; el.n10BarD.style.width='0%';
+      el.n10DTag.textContent='starts at nothing, because the ball starts at rest';
+      el.n10State.textContent='Ready.'; el.n10Go.disabled=false;
+    }
+    function run(){
+      var s=statics(), m=s.m, A=s.A, vt=s.vt;
+      var v=0, t=0, pts='', last=null, levelled=false;
+      el.n10Go.disabled=true;
+      function frame(ts){
+        if(last===null) last=ts;
+        var real=Math.min(0.05,(ts-last)/1000); last=ts;
+        var dt=real*4;                       /* 4x, so 25 s of fall is watchable */
+        /* integrate, in small steps so the curve is the physics and not the frame rate */
+        var n=8, h=dt/n, k;
+        for(k=0;k<n;k++){ v += (G - (CD*RHO*A/(2*m))*v*v)*h; t += h; }
+        pts += (pts?'L':'M')+xpx(t).toFixed(1)+','+ypx(v).toFixed(1)+' ';
+        el.n10Trace.setAttribute('d',pts);
+        var D=drag(v,A);
+        el.n10DN.textContent=D.toFixed(1)+' N';
+        el.n10BarD.style.width=Math.min(100,(D/FMAX)*100).toFixed(1)+'%';
+        el.n10Ball.setAttribute('cy',(34+Math.min(162,t*14)).toFixed(1));
+        if(!levelled && v>0.995*vt){ levelled=true;
+          el.n10DTag.textContent='it has reached the weight — the speed stops changing here';
+          el.n10State.textContent='Drag has caught the weight. Still falling, at ' + vt.toFixed(1) + ' m/s.'; }
+        else if(!levelled){ el.n10State.textContent='Speeding up, and the drag is climbing.';
+          /* the caption has to keep up with its own bar: it read 'starts at
+             nothing' while the bar sat at 9 N */
+          el.n10DTag.textContent='climbing with the speed — this one HAS a v in it'; }
+        if(t<TMAX){ raf=requestAnimationFrame(frame); return; }
+        if(!levelled){ el.n10State.textContent='Still speeding up \u2014 this one needs longer than 12 s.'; }
+        el.n10Go.disabled=false; raf=null;
+      }
+      raf=requestAnimationFrame(frame);
+    }
+    el.n10M.addEventListener('input',reset);
+    el.n10A.addEventListener('input',reset);
+    el.n10Go.addEventListener('click',function(){ if(raf) return; reset(); run(); });
+    reset(); root.classList.add('on');
+  })();
+  </script>
 
   <p>Drag is friction in a fluid &mdash; air, water, honey. It opposes motion, exactly as surface
   friction does. But it differs from the friction of <b>N5</b> in one decisive way, and that difference
