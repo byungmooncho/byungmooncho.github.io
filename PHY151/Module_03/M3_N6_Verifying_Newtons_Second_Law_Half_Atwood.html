@@ -232,6 +232,69 @@
   .callback p{ margin:0; }
   .callback .space{ display:block; border-bottom:1px solid var(--rule);
     height:1.5rem; margin:.5rem 0 0; }
+  /* --- FLCC-SIM v1 · interactive widget ----------------------------------
+     LIFTABLE UNIT. This block plus the matching "FLCC-SIM v1" block in the
+     body are self-contained: copy both into any note page and nothing else
+     needs to change. No external files, no libraries.
+     Hidden until JS adds .on, so a no-JS reader sees nothing broken.
+     Hidden in print — the static figure above it carries the printed page.
+     ----------------------------------------------------------------------- */
+  .sim{ display:none; border:1px solid var(--rule); border-radius:8px;
+        padding:1rem 1rem .9rem; margin:1.2rem 0; background:#fbfdfc; }
+  .sim.on{ display:block; }
+  .sim .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+        letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+        font-weight:600; display:block; margin-bottom:.55rem; }
+  .sim-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:640px){ .sim-grid{ grid-template-columns:1.35fr 1fr; } }
+  .sim svg{ display:block; width:100%; height:auto; }
+  .sim-controls{ display:grid; gap:.55rem; margin:0 0 .9rem;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .sim-controls label{ display:grid; grid-template-columns:3.4em 1fr 7.6em;
+        gap:.6rem; align-items:center; }
+  .sim-controls .nm{ color:var(--muted); }
+  .sim-controls output{ font-variant-numeric:tabular-nums; font-weight:700;
+        color:var(--green); text-align:right; }
+  .sim-controls input[type=range]{ width:100%; accent-color:var(--green); }
+  .sim-go{ font:inherit; font-family:"Segoe UI", system-ui, sans-serif;
+        font-size:.86rem; font-weight:600; color:#fff; background:var(--green);
+        border:0; border-radius:6px; padding:.45rem .95rem; cursor:pointer; }
+  .sim-go:disabled{ opacity:.45; cursor:default; }
+  .sim-read{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .sim-meter + .sim-meter{ margin-top:.85rem; }
+  .sim-meter .top{ display:flex; justify-content:space-between; gap:.8rem;
+        align-items:baseline; }
+  .sim-meter .top b{ font-weight:600; }
+  .sim-bar{ position:relative; height:12px; border:1px solid var(--rule);
+        border-radius:6px; background:#fff; overflow:hidden; margin:.3rem 0 .2rem; }
+  .sim-bar i{ position:absolute; top:0; bottom:0; left:0; display:block;
+        background:#1f5d8c; }
+  .sim-bar.fixed i{ background:#1e6b3c; }
+  .sim-tag{ font-size:.79rem; color:var(--muted); }
+  .sim-verdict{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-weight:700; color:var(--green);
+        min-height:1.2em; }
+  .sim-withheld{ border-left:3px solid var(--rule); padding:.15rem 0 .15rem .7rem;
+        margin:.9rem 0 0; font-size:.82rem; color:var(--muted); }
+  .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+        color:var(--muted); margin:.9rem 0 0; }
+  .sim-eq{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-variant-numeric:tabular-nums;
+        line-height:1.9; }
+  .sim-eq div{ white-space:nowrap; overflow-x:auto; }
+  .sim-eq .cond{ color:var(--muted); font-size:.82rem; line-height:1.5;
+        border-bottom:1px solid var(--rule); padding-bottom:.35rem; margin-bottom:.3rem;
+        white-space:normal; }
+  .sim-eq sub, .sim-meter sub{ font-size:.72em; }
+  .sim-eq .sym{ color:var(--muted); display:inline-block; width:2.4em; }
+  .sim-eq .val{ font-weight:700; }
+  .sim-seg{ display:flex; gap:.4rem; flex-wrap:wrap; margin:0 0 .9rem; }
+  .sim-seg button{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem;
+        padding:.4rem .7rem; border:1px solid var(--rule); background:#fff;
+        color:var(--muted); border-radius:6px; cursor:pointer; }
+  .sim-seg button[aria-pressed="true"]{ background:var(--green-soft);
+        border-color:var(--green); color:var(--green); font-weight:700; }
+  @media print{ .sim{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -335,6 +398,154 @@
   </ol>
 
   <h2>Why your prediction was probably wrong</h2>
+
+  <!-- ===== FLCC-SIM v1 · N6  add it, or move it =============================
+       LIFTABLE UNIT (pairs with the "FLCC-SIM v1" block in the stylesheet).
+
+       THE INVARIANT IS THE DENOMINATOR. Two ways of putting the same mass on
+       the hanger, one slider, and the thing to watch is the TOTAL MASS bar:
+       in "add to the hanger" it climbs with the driving weight, and the
+       acceleration crawls; in "move it from the cart" it does not move at all
+       while the driving weight climbs exactly as before. That is the trick the
+       note turns on, and it is much easier to believe after watching a bar
+       refuse to move than after reading that it does not.
+
+       PRINTS the finished relationship substituted, per playbook rule 1 --
+       a = F(g,H)/(m_c + m_H) is already an equation on this page, so nothing
+       leaks. Notation follows the page: m_c, m_H, F(g,H), T.
+
+       WITHHELD: no free-body diagrams, no tension value, no algebra, and above
+       all NO PLOT of a against the hanging weight -- "what shape should the
+       graph be, and what does its slope represent?" is the last task on the
+       page. Same call as N5, which plots friction against the pull rather than
+       against the normal force the lab wants.
+       ====================================================================== -->
+  <div class="sim" id="simN6">
+    <span class="label">Try it &mdash; add it, or move it</span>
+
+    <div class="sim-seg" role="group" aria-label="How the extra mass gets onto the hanger">
+      <button type="button" id="n6ModeAdd" aria-pressed="true">add to the hanger</button>
+      <button type="button" id="n6ModeMove" aria-pressed="false">move it from the cart</button>
+    </div>
+
+    <div class="sim-controls">
+      <label><span class="nm">&Delta;</span>
+        <input id="n6D" type="range" min="0" max="0.30" step="0.02" value="0"
+               aria-label="Extra mass placed on the hanger, in kilograms">
+        <output id="n6DOut" for="n6D">0.00 kg</output></label>
+    </div>
+
+    <div class="sim-grid">
+      <svg id="n6Svg" viewBox="0 0 480 232" role="img"
+           aria-label="A cart on a track, a string over a pulley at the table edge, and a hanging mass. A slider moves mass onto the hanger, either by adding it or by taking it off the cart, and the load drawn on the cart and on the hanger changes to match.">
+        <defs>
+          <marker id="n6Head" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0,0 L10,3.5 L0,7 z" fill="#5c6b62"/></marker>
+        </defs>
+        <line x1="26" y1="132" x2="330" y2="132" stroke="#1d2b23" stroke-width="2.4"/>
+        <line x1="330" y1="132" x2="330" y2="214" stroke="#1d2b23" stroke-width="2.4"/>
+        <line x1="26" y1="132" x2="26" y2="214" stroke="#1d2b23" stroke-width="2.4"/>
+        <circle cx="342" cy="121" r="12" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+        <g id="n6CartG">
+          <rect id="n6CartLoad" x="152" y="84" width="62" height="18" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.4"/>
+          <rect x="146" y="102" width="74" height="16" rx="2" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/>
+          <circle cx="160" cy="126" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.4"/>
+          <circle cx="206" cy="126" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.4"/>
+        </g>
+        <line id="n6String" x1="220" y1="109" x2="342" y2="109" stroke="#1d2b23" stroke-width="1.3"/>
+        <line x1="354" y1="121" x2="354" y2="152" stroke="#1d2b23" stroke-width="1.3"/>
+        <rect id="n6Hang" x="336" y="152" width="36" height="18" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.4"/>
+        <line id="n6Acc" x1="236" y1="60" x2="278" y2="60" stroke="#5c6b62" stroke-width="2.2" marker-end="url(#n6Head)"/>
+        <text id="n6AccTx" x="236" y="50" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62">a</text>
+        <text x="26" y="230" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">green blocks are the movable mass</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-eq" aria-live="polite">
+          <div class="cond">one acceleration, shared &mdash; cart and hanger move as one</div>
+          <div><span class="sym">a =</span> F<sub>g,H</sub> / (m<sub>c</sub> + m<sub>H</sub>)</div>
+          <div><span class="sym">a =</span> <span id="n6Sub">1.96 / (1.000 + 0.200)</span></div>
+          <div><span class="sym">a =</span> <span class="val" id="n6A">1.63 m/s&sup2;</span></div>
+        </div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Driving weight (numerator)</b><span class="n" id="n6NumN">1.96 N</span></div>
+          <div class="sim-bar"><i id="n6BarNum" style="width:40%"></i></div>
+          <div class="sim-tag">goes up the same way whichever button you pick</div>
+        </div>
+
+        <div class="sim-meter">
+          <div class="top"><b>Total mass (denominator)</b><span class="n" id="n6DenN">1.200 kg</span></div>
+          <div class="sim-bar fixed"><i id="n6BarDen" style="width:80%"></i></div>
+          <div class="sim-tag" id="n6DenTag">this is the one to watch</div>
+        </div>
+
+        <p class="sim-withheld">No free-body diagrams, no tension, and no graph of <em>a</em> against
+        the hanging weight &mdash; that plot, its shape and its slope are the last thing this page
+        asks you for.</p>
+      </div>
+    </div>
+
+    <p class="sim-foot">Both buttons put the same &Delta; on the hanger. Only one of them leaves the
+    total mass alone, and that is the whole difference between an experiment that tests
+    <em>F</em> = <em>ma</em> and one that cannot.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N6. Vanilla, no dependencies, no state kept anywhere.
+
+     The two modes differ in ONE line -- whether mc loses what mH gains -- and
+     everything else, the arithmetic and the drawing, is shared. That is
+     deliberate: the note's claim is that these two procedures differ in
+     exactly one respect, and the code says so too. */
+  (function(){
+    var root = document.getElementById('simN6'); if(!root) return;
+    var ids = ['n6ModeAdd','n6ModeMove','n6D','n6DOut','n6Sub','n6A','n6NumN','n6DenN',
+               'n6BarNum','n6BarDen','n6DenTag','n6CartLoad','n6Hang','n6Acc'];
+    var el = {}, i;
+    for(i=0;i<ids.length;i++){ el[ids[i]] = document.getElementById(ids[i]); if(!el[ids[i]]) return; }
+
+    var MC0=1.000, MH0=0.200, G=9.8, DMAX=0.30;
+    var move=false;
+
+    function draw(){
+      var d=parseFloat(el.n6D.value);
+      var mc = move ? MC0-d : MC0;          /* <-- the only line that differs */
+      var mH = MH0+d;
+      var num = mH*G, den = mc+mH, a = num/den;
+
+      el.n6DOut.textContent=d.toFixed(2)+' kg';
+      el.n6Sub.textContent=num.toFixed(2)+' / ('+mc.toFixed(3)+' + '+mH.toFixed(3)+')';
+      el.n6A.textContent=a.toFixed(2)+' m/s²';
+      el.n6NumN.textContent=num.toFixed(2)+' N';
+      el.n6DenN.textContent=den.toFixed(3)+' kg';
+
+      /* one absolute scale each, fixed from the extreme settings */
+      el.n6BarNum.style.width=Math.min(100,(num/((MH0+DMAX)*G))*100).toFixed(1)+'%';
+      el.n6BarDen.style.width=Math.min(100,(den/(MC0+MH0+DMAX))*100).toFixed(1)+'%';
+      el.n6DenTag.textContent = move
+        ? 'unchanged — every gram the hanger gained came off the cart'
+        : 'climbing with the numerator, which is why a barely moves';
+
+      /* the drawing answers the slider: load leaves the cart only in move mode */
+      el.n6CartLoad.setAttribute('height',(8+mc*18).toFixed(1));
+      el.n6CartLoad.setAttribute('y',(102-(8+mc*18)).toFixed(1));
+      el.n6Hang.setAttribute('height',(12+mH*78).toFixed(1));
+
+      /* acceleration arrow, on the same px-per-unit at every setting */
+      el.n6Acc.setAttribute('x2',(236+a*24).toFixed(1));
+    }
+    function setMode(m){
+      move=m;
+      el.n6ModeAdd.setAttribute('aria-pressed', m?'false':'true');
+      el.n6ModeMove.setAttribute('aria-pressed', m?'true':'false');
+      draw();
+    }
+    el.n6ModeAdd.addEventListener('click',function(){ setMode(false); });
+    el.n6ModeMove.addEventListener('click',function(){ setMode(true); });
+    el.n6D.addEventListener('input',draw);
+    setMode(false); root.classList.add('on');
+  })();
+  </script>
   <p>Look at where the two masses appear. The hanging mass sits in the <strong>numerator</strong>, because
   its weight is what drives the system. But it also sits in the <strong>denominator</strong>, because it is
   part of what has to be accelerated. The cart is being dragged along, and so is the hanger.</p>
