@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N9 — Normal Force Does Not Always Equal Weight</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3; keep identical across all note pages.
+     Adds, for the Lesson Package format: .hook (rung 0) and .phases.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider: dots spaced like a motion diagram ----------- */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- predict-first hook ------------------------------------------- */
+  .hook{
+    background:#fff; border:1.5px dashed var(--green);
+    padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px;
+  }
+  .hook .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .hook .commit{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    color:var(--muted); display:block; margin-top:.6rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--ink); border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe ol{ margin:.1rem 0 0; padding-left:1.25rem; }
+  .pe li{ margin:.3rem 0; }
+  .pe b{ color:var(--green); }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.experiments{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.experiments li{ margin:.55rem 0; }
+  ol.experiments b{ font-weight:700; }
+
+  /* --- the rule ------------------------------------------------------ */
+  .rule-box{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.9rem 1.1rem; margin:1.3rem 0;
+    background:var(--green-soft);
+  }
+  .rule-box .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .rule-box p{ margin:0; font-size:1.1rem; }
+
+  /* --- blank plot for the student's own trace ------------------------- */
+  .plot-wrap{ border:1px solid var(--rule); border-radius:8px; padding:1rem 1rem .8rem; margin:1rem 0 0; }
+  .plot-wrap svg{ display:block; width:100%; height:auto; }
+  .plot-cap{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted);
+    margin:.6rem 0 0;
+  }
+
+  /* --- phase table ---------------------------------------------------- */
+  .phases{
+    width:100%; border-collapse:collapse; margin:.8rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+  }
+  .phases th, .phases td{
+    border:1px solid var(--rule); padding:.42rem .6rem; text-align:left;
+  }
+  .phases thead th{
+    background:var(--green-soft); color:var(--green);
+    font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
+  }
+  .phases td.num{ font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .phases tr.same td{ color:var(--muted); }
+  .phases td.blank{ background:#fcfdfc; height:1.55rem; }
+  .tbl-note{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin:.5rem 0 0;
+  }
+  @media (max-width:540px){
+    .phases{ font-size:.82rem; }
+    .phases th, .phases td{ padding:.35rem .4rem; }
+  }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+  /* --- back to your prediction -------------------------------------------- */
+  .callback{
+    border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc;
+    padding:.9rem 1.1rem; margin:1.6rem 0;
+  }
+  .callback .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .callback p{ margin:0; }
+  .callback .space{ display:block; border-bottom:1px solid var(--rule);
+    height:1.5rem; margin:.5rem 0 0; }
+
+  /* --- FLCC-SIM v1 · interactive widget ----------------------------------
+     LIFTABLE UNIT. This block plus the matching "FLCC-SIM v1" block in the
+     body are self-contained: copy both into any note page and nothing else
+     needs to change. No external files, no libraries.
+     Hidden until JS adds .on, so a no-JS reader sees nothing broken.
+     Hidden in print — the static figure above it carries the printed page.
+     ----------------------------------------------------------------------- */
+  .sim{ display:none; border:1px solid var(--rule); border-radius:8px;
+        padding:1rem 1rem .9rem; margin:1.2rem 0; background:#fbfdfc; }
+  .sim.on{ display:block; }
+  .sim .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+        letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+        font-weight:600; display:block; margin-bottom:.55rem; }
+  .sim-grid{ display:grid; gap:1rem; grid-template-columns:1fr; align-items:start; }
+  @media (min-width:640px){ .sim-grid{ grid-template-columns:1.2fr 1fr; } }
+  .sim svg{ display:block; width:100%; height:auto; }
+  .sim-controls{ display:grid; gap:.55rem; margin:0 0 .9rem;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  .sim-controls label{ display:grid; grid-template-columns:6.6em 1fr 6.4em;
+        gap:.6rem; align-items:center; }
+  .sim-controls .nm{ color:var(--muted); }
+  .sim-controls output{ font-variant-numeric:tabular-nums; font-weight:700;
+        color:var(--green); text-align:right; }
+  .sim-controls input[type=range]{ width:100%; accent-color:var(--green); }
+  .sim-read{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .sim-eq{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.6rem .75rem; margin:0 0 .9rem; font-variant-numeric:tabular-nums;
+        line-height:1.9; }
+  .sim-eq div{ white-space:nowrap; overflow-x:auto; }
+  .sim-eq .cond{ color:var(--muted); font-size:.82rem; line-height:1.5;
+        border-bottom:1px solid var(--rule); padding-bottom:.35rem; margin-bottom:.3rem; }
+  .sim-eq sub, .sim-tag sub, .sim-meter sub{ font-size:.72em; }
+  .sim-eq .sym{ color:var(--muted); display:inline-block; width:2.2em; }
+  .sim-eq .val{ font-weight:700; }
+  .sim-meter + .sim-meter{ margin-top:.85rem; }
+  .sim-meter .top{ display:flex; justify-content:space-between; gap:.8rem;
+        align-items:baseline; }
+  .sim-meter .top b{ font-weight:600; }
+  .sim-meter .n{ font-variant-numeric:tabular-nums; font-weight:700; white-space:nowrap; }
+  .sim-bar{ position:relative; height:12px; border:1px solid var(--rule);
+        border-radius:6px; background:#fff; overflow:hidden; margin:.3rem 0 .2rem; }
+  .sim-bar i{ position:absolute; top:0; bottom:0; left:0; display:block;
+        background:#1f5d8c; }
+  .sim-bar i.grn{ background:#1e6b3c; }
+  .sim-bar.over i{ background:repeating-linear-gradient(45deg,
+        #1f5d8c 0 6px, #9dbdd4 6px 12px); }
+  .sim-tag{ font-size:.79rem; color:var(--muted); }
+  .sim-scale{ position:relative; height:1.05em; margin:.35rem 0 .3rem;
+        font-size:.72rem; color:var(--muted); }
+  .sim-scale span{ position:absolute; top:0; white-space:nowrap; }
+  .sim-scale .z{ left:0; }
+  .sim-scale .e{ right:0; }
+  .sim-scale .mgt{ left:32.67%; transform:translateX(-50%); color:var(--green);
+        font-weight:600; }
+  .sim-scale .mgt::before{ content:""; position:absolute; left:50%; top:-.55em;
+        width:1px; height:.5em; background:var(--green); opacity:.75; }
+  /* signed meter: zero in the middle, negative to the left */
+  .sim-bar.signed::after{ content:""; position:absolute; left:50%; top:-2px; bottom:-2px;
+        width:1px; background:var(--muted); opacity:.55; }
+  .sim-bar i.acc{ background:#5c6b62; }
+  .sim-chip{ display:inline-block; font-family:"Segoe UI", system-ui, sans-serif;
+        font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700;
+        border:1px solid var(--rule); border-radius:999px; padding:.1rem .55rem;
+        background:#fff; color:var(--muted); vertical-align:.08em; }
+  .sim-chip.go{ border-color:var(--green); color:var(--green); background:var(--green-soft); }
+  /* two stacked frames, full width */
+  .sim-eq .sym{ width:5.8em; }
+  .sim-stack{ display:grid; gap:.85rem; grid-template-columns:1fr; }
+  .sim-panel{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.5rem .6rem .35rem; }
+  .sim-panel .cap{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+        letter-spacing:.04em; color:var(--green); font-weight:700; margin:0 0 .3rem;
+        display:flex; justify-content:space-between; gap:.8rem; align-items:baseline; }
+  .sim-panel .cap em{ font-style:normal; font-weight:400; color:var(--muted);
+        font-size:.75rem; text-align:right; }
+  .sim-btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem;
+        font-weight:600; color:#fff; background:var(--green); border:1px solid var(--green);
+        border-radius:6px; padding:.38rem .95rem; cursor:pointer; }
+  .sim-btn:hover{ filter:brightness(1.08); }
+  .sim-btn.ghost{ background:#fff; color:var(--green); }
+  .sim-btnrow{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;
+        margin:.1rem 0 .9rem; }
+  .sim-readrow{ display:grid; gap:1rem; grid-template-columns:1fr; margin-top:.9rem; }
+  @media (min-width:640px){ .sim-readrow{ grid-template-columns:1fr 1fr; } }
+  .sim-lock{ display:none; font-family:"Segoe UI", system-ui, sans-serif; font-size:.79rem;
+        color:var(--muted); background:var(--green-soft); border-left:3px solid var(--green);
+        border-radius:0 4px 4px 0; padding:.35rem .6rem; margin:-.2rem 0 .1rem; }
+  .sim-controls input[type=range]:disabled{ opacity:.45; cursor:not-allowed; }
+  .sim-controls input[type=range]:disabled + output{ opacity:.45; }
+  .sim-signs{ border:1px solid var(--rule); border-radius:6px; background:#fff;
+        padding:.5rem .65rem; margin:.7rem 0 0;
+        font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; }
+  .sim-signs .row{ display:grid; grid-template-columns:5.4em 1.6em 1fr; align-items:baseline;
+        gap:.4rem; }
+  .sim-signs .k{ color:var(--muted); font-size:.79rem; }
+  .sim-signs .sg{ font-size:1.15rem; font-weight:700; text-align:center;
+        font-variant-numeric:tabular-nums; color:var(--ink); }
+  .sim-signs .w{ color:var(--muted); font-size:.79rem; }
+  .sim-signs .rel{ margin-top:.4rem; padding-top:.4rem; border-top:1px solid var(--rule);
+        font-size:.82rem; color:var(--green); }
+  .sim-foot{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+        color:var(--muted); margin:.9rem 0 0; }
+  @media print{ .sim{ display:none !important; } }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Note 9</span>
+  </div>
+
+  <h1>Normal Force Does Not Always Equal Weight</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Every scale on Earth measures the <em>normal force</em> — how hard the surface pushes back on you —
+    not your true weight. The two agree only when you are not accelerating. In this note you will
+    alter a scale's reading with your own motion, record the normal force with a Vernier force
+    platform while riding an elevator, and explain every feature of that graph with Newton's second law.
+  </div>
+
+  <div class="hook">
+    <span class="label">Before you read on — predict</span>
+    You step on a bathroom scale in an elevator on the second floor and ride down to the ground floor,
+    where the elevator comes to a stop. During that ride down, does the scale ever read <em>more</em>
+    than your true weight?
+    <span class="commit">Write down yes or no, and one sentence saying why, before you turn the page. You will check it against the recorded graph.</span>
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <ol>
+      <li><b>Apply</b> ΣF = ma to an object on a scale, with up as positive, and solve for the normal force.</li>
+      <li><b>State</b>, for a given phase of an elevator ride, whether the scale reads more than, less than, or equal to <em>mg</em>, and which way the acceleration points.</li>
+      <li><b>Read</b> a normal-force-versus-time graph and label each plateau with the motion that produced it.</li>
+      <li><b>Explain</b> why a scale reads zero in free fall.</li>
+      <li><b>Determine</b> the normal force on an object on a level surface when an applied force is directed at an angle.</li>
+    </ol>
+  </div>
+
+  <h2>The four experiments</h2>
+  <ol class="experiments">
+    <li><b>Spring scale:</b> hang a mass, then accelerate the scale up and down. Watch the reading at every phase — starting, moving, stopping.</li>
+    <li><b>Digital scale, tilted:</b> the reading drops as the angle steepens. Your free-body diagram explains why — the scale reads a force component, not a mass.</li>
+    <li><b>Bathroom scale squats:</b> stand still, then squat down and up. Which way does the needle deflect at each phase of the motion, and what does that tell you?</li>
+    <li><b>The elevator ride — your data:</b> you ride with the Vernier force platform under your feet, starting from the second floor and descending. It traces normal force vs. time for the whole trip. Every bump and dip in that graph is Newton's second law speaking, and you will plot and tabulate it yourself below.</li>
+  </ol>
+
+  <div class="strobe uniform" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>constant velocity — scale reads true weight</small>
+  </div>
+
+  <h2>Watch: working through the note</h2>
+  <div class="video-slot">
+    <span class="label">Walkthrough video · ~15 min</span>
+    <!-- ================================================================
+         REPLACE the placeholder div below with your video embed iframe:
+         <div class="video-frame"><iframe src="YOUR_EMBED_URL" allowfullscreen
+              title="M3 N9 walkthrough with Dr. Cho"></iframe></div>
+         ================================================================ -->
+    <div class="video-frame">
+      <div class="video-placeholder">Video embed goes here — print the guided notes below before you press play.</div>
+    </div>
+  </div>
+
+  <div class="strobe accel" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>accelerating — scale reads more or less than mg</small>
+  </div>
+
+  <h2>The key relationships</h2>
+  <p>All of these come from one idea: apply <em>ΣF = ma</em> to the object standing on the scale, with up as positive.</p>
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>N</mi><mo>=</mo><mi>m</mi><mi>g</mi>
+      </math>
+      <span class="use">at rest <em>or</em> at constant velocity — the only case where the scale shows true weight</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>N</mi><mo>=</mo><mi>m</mi><mo stretchy="false">(</mo><mi>g</mi><mo>+</mo><mi>a</mi><mo stretchy="false">)</mo>
+      </math>
+      <span class="use">a is signed: positive when it points up (scale reads heavy), negative when it points down (light)</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>N</mi><mo>=</mo><mn>0</mn>
+        <mspace width="0.6em"/><mtext>when</mtext><mspace width="0.6em"/>
+        <mi>a</mi><mo>=</mo><mo>&#x2212;</mo><mi>g</mi>
+      </math>
+      <span class="use">free fall — apparent weightlessness, the scale reads zero</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>N</mi><mo>=</mo><mi>m</mi><mi>g</mi><mo>&#x00B1;</mo>
+        <mi>F</mi><mo>&#x2062;</mo><mi>sin</mi><mo>&#x2061;</mo><mi>&#x03B8;</mi>
+      </math>
+      <span class="use">level surface, no vertical acceleration, applied force at angle θ: plus when you push down on it, minus when you pull up</span>
+    </li>
+  </ul>
+
+  <h2>Record your ride</h2>
+  <p>You will ride the elevator with the force platform under your feet, from the second floor down to
+  the ground floor and back. The meter traces the normal force against time for the whole trip. Before
+  you look at the trace, <strong>sketch what you expect</strong> on the axes below; then draw what the
+  meter actually recorded on top of it, and mark where the two differ.</p>
+
+  <div class="plot-wrap">
+    <svg viewBox="0 0 760 380" role="img"
+     aria-label="Blank grid for plotting normal force in newtons on the vertical axis against time in seconds on the horizontal axis. A dashed horizontal reference line across the middle is labelled true weight. Nine intervals along the time axis are labelled a through i.">
+  <rect x="62" y="26" width="674" height="292" fill="#ffffff"/>
+  <line x1="99.4" y1="26" x2="99.4" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="136.9" y1="26" x2="136.9" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="174.3" y1="26" x2="174.3" y2="318" stroke="#e7efe9" stroke-width="1.4"/><line x1="211.8" y1="26" x2="211.8" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="249.2" y1="26" x2="249.2" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="286.7" y1="26" x2="286.7" y2="318" stroke="#e7efe9" stroke-width="1.4"/><line x1="324.1" y1="26" x2="324.1" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="361.6" y1="26" x2="361.6" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="399.0" y1="26" x2="399.0" y2="318" stroke="#e7efe9" stroke-width="1.4"/><line x1="436.4" y1="26" x2="436.4" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="473.9" y1="26" x2="473.9" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="511.3" y1="26" x2="511.3" y2="318" stroke="#e7efe9" stroke-width="1.4"/><line x1="548.8" y1="26" x2="548.8" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="586.2" y1="26" x2="586.2" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="623.7" y1="26" x2="623.7" y2="318" stroke="#e7efe9" stroke-width="1.4"/><line x1="661.1" y1="26" x2="661.1" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="698.6" y1="26" x2="698.6" y2="318" stroke="#e7efe9" stroke-width="1"/><line x1="62" y1="55.2" x2="736" y2="55.2" stroke="#e7efe9" stroke-width="1"/><line x1="62" y1="84.4" x2="736" y2="84.4" stroke="#e7efe9" stroke-width="1"/><line x1="62" y1="113.6" x2="736" y2="113.6" stroke="#e7efe9" stroke-width="1"/><line x1="62" y1="142.8" x2="736" y2="142.8" stroke="#e7efe9" stroke-width="1"/><line x1="62" y1="172.0" x2="736" y2="172.0" stroke="#e7efe9" stroke-width="1.4"/><line x1="62" y1="201.2" x2="736" y2="201.2" stroke="#e7efe9" stroke-width="1"/><line x1="62" y1="230.4" x2="736" y2="230.4" stroke="#e7efe9" stroke-width="1"/><line x1="62" y1="259.6" x2="736" y2="259.6" stroke="#e7efe9" stroke-width="1"/><line x1="62" y1="288.8" x2="736" y2="288.8" stroke="#e7efe9" stroke-width="1"/>
+  <line x1="62" y1="172.0" x2="736" y2="172.0"
+        stroke="#1e6b3c" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text x="730" y="165.0" text-anchor="end"
+        font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#1e6b3c">
+    true weight, mg</text>
+  <line x1="62" y1="26" x2="62" y2="318" stroke="#1d2b23" stroke-width="1.6"/>
+  <line x1="62" y1="318" x2="736" y2="318" stroke="#1d2b23" stroke-width="1.6"/>
+  <line x1="136.9" y1="318" x2="136.9" y2="323" stroke="#b9c9be" stroke-width="1"/><line x1="211.8" y1="318" x2="211.8" y2="323" stroke="#b9c9be" stroke-width="1"/><line x1="286.7" y1="318" x2="286.7" y2="323" stroke="#b9c9be" stroke-width="1"/><line x1="361.6" y1="318" x2="361.6" y2="323" stroke="#b9c9be" stroke-width="1"/><line x1="436.4" y1="318" x2="436.4" y2="323" stroke="#b9c9be" stroke-width="1"/><line x1="511.3" y1="318" x2="511.3" y2="323" stroke="#b9c9be" stroke-width="1"/><line x1="586.2" y1="318" x2="586.2" y2="323" stroke="#b9c9be" stroke-width="1"/><line x1="661.1" y1="318" x2="661.1" y2="323" stroke="#b9c9be" stroke-width="1"/><text x="99.4" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">a</text><text x="174.3" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">b</text><text x="249.2" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">c</text><text x="324.1" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">d</text><text x="399.0" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">e</text><text x="473.9" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">f</text><text x="548.8" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">g</text><text x="623.7" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">h</text><text x="698.6" y="335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">i</text>
+  <text x="18" y="172.0" transform="rotate(-90 18 172.0)"
+        text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">
+    normal force, N (N)</text>
+  <text x="399.0" y="368" text-anchor="middle"
+        font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">
+    time, t (s)</text>
+  <text x="54" y="176.0" text-anchor="end"
+        font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">mg</text>
+</svg>
+    <p class="plot-cap">Normal force vs. time for one full trip. The dashed line is your true weight,
+    <em>mg</em> — measure it standing still before you start. The letters a–i mark the nine phases of
+    the ride listed in the table below.</p>
+  </div>
+
+  <h2>Tabulate what you recorded</h2>
+  <p>Work from your own trace. Fill in the last three columns: what the scale read, which way the
+  acceleration pointed during that phase, and its value.</p>
+
+  <table class="phases">
+    <thead>
+      <tr><th>Phase</th><th>What the elevator is doing</th><th>Scale reads</th><th>Direction of a</th><th>a (m/s²)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>a</td><td>at rest on the second floor</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td>b</td><td>starts moving down — speeding up</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td>c</td><td>moving down at constant speed</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td>d</td><td>still moving down, slowing to a stop</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td>e</td><td>at rest on the ground floor</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td>f</td><td>starts moving up — speeding up</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td>g</td><td>moving up at constant speed</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td>h</td><td>still moving up, slowing to a stop</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td>i</td><td>back at rest on the second floor</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+    </tbody>
+  </table>
+  <p class="tbl-note">To get the last column from your own numbers: your mass is m = (true weight) / 9.8,
+  and the acceleration during any phase is |a| = |N − mg| / m. Two pairs of rows in your table should
+  come out with the same reading as each other — find them, and say what that tells you about what a
+  scale can and cannot detect.</p>
+
+  <h2>The rule that explains the whole graph</h2>
+
+  <div class="rule-box">
+    <span class="label">Remember this one</span>
+    <p>The sign of <em>a</em> is set by whether you are <strong>speeding up or slowing down</strong> —
+    not by which way you are moving.</p>
+  </div>
+
+  <p>An elevator going down is not automatically "lighter." It reads light while it is
+  <em>picking up speed</em> downward, and heavy while it is <em>slowing to a stop</em> at the bottom,
+  because slowing a downward motion means accelerating upward. That is why one trip produces four
+  different plateaus rather than one, and why two of them are indistinguishable from the other two.</p>
+
+  <p><strong>So: your prediction.</strong> Look at what you recorded on the way down. The reading does
+  rise above your true weight — during the slowdown at the bottom. Anyone who predicted "no, going
+  down always feels lighter" was reading the direction of motion instead of the direction of the
+  acceleration.</p>
+
+  <h2>Free fall: the scale reads zero</h2>
+  <p>If the cable is cut, the elevator, you and the scale all fall with <em>a</em> = −g together. Put
+  that into <em>N</em> = <em>m</em>(<em>g</em> + <em>a</em>) and you get <em>N</em> = 0. In your own
+  words from class: the reading is zero because you cannot push on the floor — the floor is falling
+  away from you exactly as fast as you are. Your mass has not changed and gravity has not switched
+  off; only the contact force has gone.</p>
+
+  <div class="strobe uniform" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+
+  <!-- ===== FLCC-SIM v1 · N9 elevator ======================================
+       LIFTABLE UNIT (pairs with the "FLCC-SIM v1" block in the stylesheet).
+
+       DELIBERATELY NOT the ride. This page asks the student to sketch the
+       expected N-vs-t trace, then plot their own recorded one, then fill a
+       nine-phase table. A widget that animated the ride, or that labelled
+       phases "b - starts moving down", would do all three for them.
+
+       So this is driven by the ACCELERATION directly, with the direction of
+       travel as a separate control that changes nothing. What it shows:
+
+         1/4. The velocity control moves the arrow outside the shaft and
+              NOTHING else. The scale cannot tell which way you are going.
+              That is why the student's table will contain two pairs of rows
+              that read the same -- but the widget never says which rows.
+         2.   N = m(g + a), substituted live, a signed.
+         3.   a -> -g takes the reading to exactly zero.
+
+       Placed AFTER the free-fall section, so everything it can show is
+       something the page has already said.
+
+       Colour: green = normal force, warm = gravity. Velocity and acceleration
+       are NOT forces, so both are grey -- told apart by side of the shaft,
+       by dash, and by label.
+       ====================================================================== -->
+  <div class="sim" id="simN9">
+    <span class="label">Try it — the scale is not weighing you</span>
+
+    <div class="sim-controls">
+      <label><span class="nm">Acceleration</span>
+        <input id="s9A" type="range" min="-9.8" max="4" step="0.1" value="0"
+               aria-label="Acceleration of the lift, in metres per second squared, positive upward">
+        <output id="s9AOut" for="s9A">0.0 m/s²</output></label>
+      <div class="sim-lock" id="s9Lock">At rest, so <b>a is locked at zero</b> — an object that
+      stays put is not accelerating. Pick a direction of travel to unlock it.</div>
+      <label><span class="nm">Your mass</span>
+        <input id="s9M" type="range" min="40" max="90" step="5" value="60"
+               aria-label="Your mass, in kilograms">
+        <output id="s9MOut" for="s9M">60 kg</output></label>
+    </div>
+
+    <div class="sim-btnrow">
+      <span class="sim-tag" style="margin-right:.1rem">The lift is</span>
+      <button type="button" class="sim-btn ghost" id="s9Up" aria-pressed="false">going up · v &gt; 0</button>
+      <button type="button" class="sim-btn ghost" id="s9Z"  aria-pressed="false">at rest · v = 0</button>
+      <button type="button" class="sim-btn" id="s9Dn" aria-pressed="true">going down · v &lt; 0</button>
+      <button type="button" class="sim-btn ghost" id="s9Reset" style="margin-left:auto">Reset</button>
+    </div>
+
+    <div class="sim-grid">
+      <svg id="s9Svg" viewBox="0 0 300 320" role="img"
+           aria-label="A person standing on a bathroom scale inside an elevator car. An arrow beside the car shows the direction of travel and an arrow on the other side shows the acceleration. The normal force and the weight are drawn on the person. Changing the direction of travel does not change the reading.">
+        <defs>
+          <marker id="s9Hn" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#1e6b3c"/></marker>
+          <marker id="s9Hg" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#a8551f"/></marker>
+          <marker id="s9Hm" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto"><path d="M0,0 L11,4 L0,8 z" fill="#5c6b62"/></marker>
+        </defs>
+
+        <line x1="62" y1="60" x2="62" y2="324" stroke="#5c6b62" stroke-width="1" opacity=".35"/>
+        <line x1="238" y1="60" x2="238" y2="324" stroke="#5c6b62" stroke-width="1" opacity=".35"/>
+        <rect x="76" y="116" width="148" height="166" rx="4" fill="#fff" stroke="#1d2b23" stroke-width="2"/>
+        <line x1="76" y1="282" x2="224" y2="282" stroke="#1d2b23" stroke-width="2.5"/>
+        <rect x="114" y="268" width="56" height="14" rx="2" fill="#f2f6f3" stroke="#1d2b23" stroke-width="1.4"/>
+        <g id="s9Fig"></g>
+
+        <line id="s9ArrN" stroke="#1e6b3c" stroke-width="2.4" marker-end="url(#s9Hn)"/>
+        <line id="s9ArrW" stroke="#a8551f" stroke-width="2.4" marker-end="url(#s9Hg)"/>
+        <text id="s9LabN" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1e6b3c">N</text>
+        <text id="s9LabW" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#a8551f">mg</text>
+
+        <line id="s9ArrA" stroke="#5c6b62" stroke-width="2.2" marker-end="url(#s9Hm)"/>
+        <text id="s9LabA" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">a</text>
+        <line id="s9ArrV" stroke="#5c6b62" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#s9Hm)"/>
+        <text id="s9LabV" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">at rest</text>
+      </svg>
+
+      <div class="sim-read">
+        <div class="sim-eq" aria-live="polite">
+          <div class="cond" id="s9Phase">going down at a steady speed</div>
+          <div><span class="sym">N =</span> m(g + a)</div>
+          <div><span class="sym">N =</span> <span id="s9Sub">60(9.8 + 0.0)</span></div>
+          <div><span class="sym">N =</span> <span class="val" id="s9N">588 N</span> <span class="sim-chip" id="s9Chip">true weight</span></div>
+        </div>
+
+        <div class="sim-meter">
+          <div class="top"><b>What the scale reads</b><span class="n" id="s9NN">588 N</span></div>
+          <div class="sim-bar" id="s9Barw"><i id="s9Bar" class="grn"></i></div>
+          <div class="sim-scale"><span class="z">0</span><span class="mgt" id="s9MgTick">mg</span><span class="e" id="s9FsLbl">1300 N</span></div>
+          <div class="sim-tag" id="s9Say"></div>
+        </div>
+
+        <div class="sim-signs">
+          <div class="row"><span class="k">sign of v</span><span class="sg" id="s9SgV">−</span><span class="w" id="s9WdV">travelling down</span></div>
+          <div class="row"><span class="k">sign of a</span><span class="sg" id="s9SgA">0</span><span class="w" id="s9WdA">no acceleration</span></div>
+          <div class="rel" id="s9Rel"></div>
+        </div>
+        <div class="sim-tag" style="margin-top:.6rem">up is positive, so ΣF = N − mg = ma</div>
+        <div class="sim-tag fixed" style="margin-top:.55rem"><b>There is no v in N = m(g + a).</b>
+        The two signs together tell you whether you are speeding up or slowing down — same sign, speeding
+        up; opposite, slowing down. But the reading follows the sign of <i>a</i> alone: heavy when a &gt; 0,
+        light when a &lt; 0, true weight when a = 0. Change v through all three and watch the number hold
+        still.</div>
+      </div>
+    </div>
+
+    <p class="sim-foot">This is not your ride and it draws no trace — the graph and the nine-phase
+    table are yours to record and fill in. It only lets you set one acceleration at a time and see
+    what the floor has to push with. Take the acceleration all the way to &minus;9.8 and the reading
+    reaches exactly zero, with your mass unchanged and gravity still on.</p>
+  </div>
+
+  <script>
+  /* FLCC-SIM v1 — N9. Vanilla, no dependencies, no state kept anywhere. */
+  (function(){
+    var root = document.getElementById('simN9'); if(!root) return;
+    var $ = function(id){ return document.getElementById(id); };
+    var ns = 'http://www.w3.org/2000/svg';
+    var G = 9.8, FS = 1300;                 /* bar full scale, newtons  */
+    var PXPN = 88/1242;                     /* force arrows, px per newton (absolute) */
+    var PXPA = 9;                           /* acceleration arrow, px per m/s^2       */
+    var FEETY = 268, CX = 142, CHEST = FEETY - 62, ARX = CX + 34;
+    var A = $('s9A'), M = $('s9M');
+    var travel = -1;              /* -1 down, 0 at rest, +1 up.
+                                     AT REST MEANS a = 0. Selecting v = 0 forces the
+                                     acceleration to zero and disables its slider, so the
+                                     widget cannot be put into a state that does not exist.
+                                     (An earlier version allowed v = 0 with a non-zero a as
+                                     an instantaneous turning point. Correct, but a
+                                     distraction here, and it read as a bug twice.) */
+
+    function mk(tag,attrs,parent){
+      var e = document.createElementNS(ns,tag);
+      for(var k in attrs) e.setAttribute(k,attrs[k]);
+      parent.appendChild(e); return e;
+    }
+    (function buildFigure(){
+      var g = $('s9Fig'), f = FEETY, hip = f-38, sho = f-62, hd = sho-11;
+      function ln(x1,y1,x2,y2){ mk('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:'#1d2b23',
+        'stroke-width':2,'stroke-linecap':'round'},g); }
+      ln(CX,hip,CX,sho); ln(CX,hip,CX-7,f); ln(CX,hip,CX+7,f);
+      ln(CX,sho,CX-10,sho+24); ln(CX,sho,CX+10,sho+24);
+      mk('circle',{cx:CX,cy:hd,r:7,fill:'#fff',stroke:'#1d2b23','stroke-width':2},g);
+    })();
+
+    function seg(el,x1,y1,x2,y2){
+      el.setAttribute('x1',x1.toFixed(1)); el.setAttribute('y1',y1.toFixed(1));
+      el.setAttribute('x2',x2.toFixed(1)); el.setAttribute('y2',y2.toFixed(1));
+    }
+    function at(el,x,y){ el.setAttribute('x',x.toFixed(1)); el.setAttribute('y',y.toFixed(1)); }
+    function show(el,on){ el.setAttribute('opacity', on ? '1' : '0'); }
+
+    function draw(){
+      var v = travel;
+      if(v === 0 && +A.value !== 0) A.value = 0;      /* at rest => a = 0, always */
+      A.disabled = (v === 0);
+      $('s9Lock').style.display = (v === 0) ? 'block' : 'none';
+      var a = +A.value, m = +M.value;
+      var mg = m*G, N = m*(G + a);
+      if(N < 0) N = 0;                      /* the floor cannot pull you down */
+
+      /* forces on the person */
+      var Ln = N*PXPN, Lw = mg*PXPN;
+      seg($('s9ArrN'), ARX, CHEST, ARX, CHEST - Ln);
+      seg($('s9ArrW'), ARX, CHEST, ARX, CHEST + Lw);
+      show($('s9ArrN'), N > 0.5); show($('s9LabN'), N > 0.5);
+      at($('s9LabN'), ARX + 7, CHEST - Ln - 3);
+      at($('s9LabW'), ARX + 7, CHEST + Lw + 3);
+
+      /* acceleration, left of the shaft */
+      var La = Math.abs(a)*PXPA, ay = 190;
+      show($('s9ArrA'), Math.abs(a) > 0.049); show($('s9LabA'), Math.abs(a) > 0.049);
+      if(Math.abs(a) > 0.049){
+        seg($('s9ArrA'), 40, ay, 40, ay - Math.sign(a)*La);
+        at($('s9LabA'), 40, ay - Math.sign(a)*La - (a>0?8:-16));
+      }
+
+      /* direction of travel, right of the shaft -- changes nothing else */
+      show($('s9ArrV'), v !== 0);
+      if(v !== 0) seg($('s9ArrV'), 262, ay, 262, ay - v*42);
+      at($('s9LabV'), 262, v === 0 ? ay + 4 : (v > 0 ? ay - 54 : ay + 60));
+      $('s9LabV').textContent = v === 0 ? 'v = 0' : (v > 0 ? 'going up' : 'going down');
+
+      /* readout */
+      $('s9AOut').textContent = a.toFixed(1) + ' m/s²';
+      $('s9MOut').textContent = m + ' kg';
+
+      /* name the state, so that no combination of the controls is nonsense */
+      var steady = Math.abs(a) < 0.05, dir = v > 0 ? 'going up' : 'going down';
+      $('s9Phase').textContent =
+          (a <= -9.75)            ? 'in free fall \u2014 the cable is cut'
+        : (v === 0)               ? 'at rest on a floor \u2014 not moving, not accelerating'
+        : steady                  ? dir + ' at a steady speed'
+        : (Math.sign(a) === v)    ? dir + ', speeding up'
+        :                           dir + ', slowing to a stop';
+
+      /* --- the sign panel ------------------------------------------------ */
+      var sgn = function(x){ return x > 0 ? '+' : (x < 0 ? '\u2212' : '0'); };
+      $('s9SgV').textContent = sgn(v);
+      $('s9SgA').textContent = steady ? '0' : sgn(a);
+      $('s9WdV').textContent = v === 0 ? 'at rest'
+                             : (v > 0 ? 'travelling up' : 'travelling down');
+      $('s9WdA').textContent = steady ? 'no acceleration'
+                             : (a > 0 ? 'acceleration points up' : 'acceleration points down');
+      $('s9Rel').innerHTML =
+          (v === 0)     ? 'At rest, so a = 0 as well \u2014 and the scale reads your '
+                          + '<b>true weight</b>. This is one of only two cases where it does.'
+        : steady        ? 'a = 0, so the scale reads your <b>true weight</b> \u2014 moving, but not '
+                          + 'changing speed. The other case where scale and weight agree.'
+        : (Math.sign(a) === v) ? 'same sign \u2192 <b>speeding up</b>. Reading: '
+                          + (a > 0 ? '<b>heavy</b>' : '<b>light</b>') + ', because a is '
+                          + (a > 0 ? 'positive' : 'negative') + '.'
+        : 'opposite signs \u2192 <b>slowing down</b>. Reading: '
+                          + (a > 0 ? '<b>heavy</b>' : '<b>light</b>') + ', because a is '
+                          + (a > 0 ? 'positive' : 'negative') + '.';
+
+      [['s9Up',1],['s9Z',0],['s9Dn',-1]].forEach(function(q){
+        var on = v === q[1];
+        $(q[0]).setAttribute('aria-pressed', on ? 'true' : 'false');
+        $(q[0]).className = 'sim-btn' + (on ? '' : ' ghost');
+      });
+      $('s9Sub').textContent  = m + '(9.8 ' + (a < 0 ? '− ' : '+ ') + Math.abs(a).toFixed(1) + ')';
+      $('s9N').textContent    = N.toFixed(0) + ' N';
+      $('s9NN').textContent   = N.toFixed(0) + ' N';
+
+      var chip = $('s9Chip'), near = Math.abs(a) < 0.05;
+      if(N < 0.5){ chip.textContent = 'weightless'; chip.className = 'sim-chip go'; }
+      else if(near){ chip.textContent = 'true weight'; chip.className = 'sim-chip'; }
+      else { chip.textContent = a > 0 ? 'reads heavy' : 'reads light'; chip.className = 'sim-chip go'; }
+
+      $('s9Bar').style.width = (100*Math.min(1, N/FS)).toFixed(2) + '%';
+      var tick = 100*Math.min(1, mg/FS);
+      $('s9MgTick').style.left = tick.toFixed(2) + '%';
+      $('s9FsLbl').style.visibility = tick > 80 ? 'hidden' : 'visible';
+
+      $('s9Say').innerHTML = N < 0.5
+        ? 'Free fall. Gravity is pulling on you exactly as hard as it always was — the weight arrow '
+          + 'has not changed. What has gone is the floor: it is falling away as fast as you are, so it '
+          + 'has nothing to push you with, and the scale has nothing to read.'
+        : near
+          ? 'No acceleration, so the scale happens to agree with your weight. This is the only case '
+            + 'where it does.'
+          : (a > 0 ? 'The floor must push <b>harder than your weight</b> to accelerate you upward.'
+                   : 'The floor pushes <b>less hard than your weight</b>, so the net force is downward.');
+    }
+
+    [A,M].forEach(function(el){ el.addEventListener('input', draw); });
+    $('s9Up').addEventListener('click', function(){ travel =  1; draw(); });
+    $('s9Z' ).addEventListener('click', function(){ travel =  0; draw(); });
+    $('s9Dn').addEventListener('click', function(){ travel = -1; draw(); });
+    $('s9Reset').addEventListener('click', function(){
+      travel = -1; A.value = 0; M.value = 60; draw();
+    });
+    draw();
+    root.classList.add('on');
+  })();
+  </script>
+
+  <div class="callback">
+    <span class="label">Back to your prediction</span>
+    <p>You predicted whether the scale ever reads more than your true weight during a ride down. Was it right? Name the phase of the ride that settles it, and say which way a points there.</p>
+    <span class="space"></span><span class="space"></span>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <!-- Point these hrefs at files in this course's Manage Files area
+         (Insert Quicklink → Course File), NOT at external storage. -->
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY118/handouts/M3_N9_Normal_Force_Does_Not_Always_Equal_Weight_GuidedNotes_BLANK.pdf">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes &mdash; blank (PDF)</span>
+      <span class="hint">Print or open on a tablet; record your prediction, sketch your elevator trace, and fill the phase table from your own data.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes — the worked trace and the completed phase table, to check your own against.</span>
+    </div>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<!-- ===================================================================
+     FOUNDATION LIST — for the quiz project (Lesson Package rung 2 / 3).
+     This note has now made the following solid. Items may go beyond the
+     note, but not beyond this list.
+
+     1. A scale reads the NORMAL FORCE, not weight. They agree only when
+        a = 0 (at rest OR at constant velocity).
+     2. Up positive: SF = N - mg = ma, so N = m(g + a), with a signed.
+     3. a up  => N > mg (heavy).  a down => N < mg (light).
+        a = -g => N = 0 (apparent weightlessness); mass and gravity unchanged,
+        only the contact force is gone.
+     4. THE SIGN OF a IS SET BY SPEEDING UP vs SLOWING DOWN, NOT BY THE
+        DIRECTION OF MOTION. Four phases: start down (light), slow while
+        descending (heavy), start up (heavy), slow while ascending (light).
+        The scale cannot distinguish direction of travel.
+     5. |a| is recoverable from the trace: |a| = |N - mg| / m.
+        Worked: true weight 700 N, plateaus at 650 and 750 N => |a| = 0.71 m/s2.
+     6. On a level surface with no vertical acceleration and an applied force
+        at angle theta: N = mg + F sin(theta) if pushed downward into the
+        surface, N = mg - F sin(theta) if pulled upward away from it.
+        The normal force responds to everything vertical, not just weight.
+
+     NOT laid down here (do not write items against these):
+       - inclines (that is N7: N = mg cos theta)
+       - friction of any kind
+       - rotating frames / centripetal apparent weight
+     =================================================================== -->
+
+<!-- Iframe auto-height reporter (V4). Tells the D2L wrapper how tall this page
+     really is. Measures .note-wrap, so the value is viewport-independent and can
+     come back down as well as up. Must stay just before </body>.
+     See Cross_Course_Notes/Autosize_Backfill_Runbook_Reference.md -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>

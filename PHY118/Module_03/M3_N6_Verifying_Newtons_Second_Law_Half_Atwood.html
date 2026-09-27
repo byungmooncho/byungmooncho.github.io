@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N6 — Verifying Newton's Second Law with a Half Atwood Machine</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3; keep identical across all note pages.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{
+    font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700;
+  }
+
+  /* --- strobe divider: dots spaced like a motion diagram ----------- */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{
+    width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--ink); border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.experiments{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.experiments li{ margin:.55rem 0; }
+  ol.experiments b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+  /* --- figures ---------------------------------------------------------- */
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:1rem 1rem .8rem; margin:1.2rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    color:var(--muted); margin:.7rem 0 0;
+  }
+  /* --- movement marker --------------------------------------------------- */
+  .movement{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--green);
+    font-weight:700; margin:2.6rem 0 .3rem;
+  }
+  /* --- domain-of-validity callout ---------------------------------------- */
+  .domain{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    background:var(--green-soft); border-radius:0 8px 8px 0;
+    padding:.85rem 1.05rem; margin:1.1rem 0;
+  }
+  .domain .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .domain p{ margin:0; } .domain p + p{ margin-top:.5rem; }
+  /* --- worked block ------------------------------------------------------ */
+  .worked{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1.1rem; margin:1.1rem 0; }
+  .worked .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem;
+  }
+  .worked table{ width:100%; border-collapse:collapse;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .worked td{ padding:.3rem .5rem; border-bottom:1px solid var(--rule); }
+  .worked tr:last-child td{ border-bottom:0; }
+  .worked td.n{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .worked .flip{ color:#8a3324; font-weight:600; }
+  /* --- tasks ------------------------------------------------------------- */
+  ol.tasks{ margin:.3rem 0 0; padding-left:1.3rem; }
+  ol.tasks li{ margin:.55rem 0; }
+  ol.tasks .space{ display:block; border-bottom:1px solid var(--rule); height:1.4rem; margin:.4rem 0 0; }
+  /* --- static (non-clickable) download card ------------------------------ */
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  /* --- looking ahead ----------------------------------------------------- */
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+
+  /* --- predict-first hook --------------------------------------------- */
+  .hook{
+    background:#fff; border:1.5px dashed var(--green);
+    padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px;
+  }
+  .hook .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .hook .commit{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    color:var(--muted); display:block; margin-top:.6rem;
+  }
+  
+  /* --- boxed rule ------------------------------------------------------ */
+  .rule-box{
+    border:1px solid var(--green); border-left:5px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.9rem 1.1rem; margin:1.3rem 0;
+    background:var(--green-soft);
+  }
+  .rule-box .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .rule-box p{ margin:0; font-size:1.1rem; }
+
+
+  /* --- back to your prediction -------------------------------------------- */
+  .callback{
+    border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc;
+    padding:.9rem 1.1rem; margin:1.6rem 0;
+  }
+  .callback .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.3rem;
+  }
+  .callback p{ margin:0; }
+  .callback .space{ display:block; border-bottom:1px solid var(--rule);
+    height:1.5rem; margin:.5rem 0 0; }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Note 6</span>
+  </div>
+
+  <h1>Verifying Newton's Second Law with a Half Atwood Machine</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Newton's second law fits in five characters, but it makes a testable promise: double the net force
+    on an object and its acceleration doubles; double the mass and the acceleration halves. This note
+    puts that promise on trial with a cart on a track pulled by a hanging mass. The interesting part is
+    that the obvious experiment <em>does not work</em> — and finding out why is most of the physics.
+  </div>
+
+  <div class="hook">
+    <span class="label">Before you read on — predict</span>
+    The cart is pulled by a hanging mass and accelerates. You now <strong>double the hanging mass</strong>,
+    which doubles the force pulling the system along.
+    <br>Does the acceleration double?
+    <span class="commit">Commit to yes or no, with one sentence of reasoning, before you turn the page.</span>
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <ol>
+      <li><b>Draw</b> a free-body diagram for each body in a connected two-body system, and mark the
+      positive direction of acceleration on each.</li>
+      <li><b>Write</b> ΣF = ma for each body along its own direction of motion.</li>
+      <li><b>Combine</b> the two equations to predict the system's acceleration, and explain why the total
+      mass appears in the denominator.</li>
+      <li><b>Explain</b> why adding mass to the hanger does not double the acceleration.</li>
+      <li><b>Describe</b> a procedure that tests F = ma by changing the net force while holding the total
+      mass fixed.</li>
+    </ol>
+  </div>
+
+  <h2>The apparatus</h2>
+
+  <figure class="fig">
+    <svg viewBox="0 0 700 290" role="img" aria-label="A half Atwood machine. A cart of mass m c sits on a horizontal hatched track. A string leaves the cart horizontally, passes over a pulley at the end of the track, and descends to a hanging mass m H. A green arrow above the cart points right, labelled a. A green arrow beside the hanging mass points down, also labelled a."><line x1="60" y1="120" x2="470" y2="120" stroke="#1d2b23" stroke-width="3"/><line x1="68" y1="120" x2="58" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="97" y1="120" x2="87" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="126" y1="120" x2="116" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="155" y1="120" x2="145" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="184" y1="120" x2="174" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="213" y1="120" x2="203" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="242" y1="120" x2="232" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="271" y1="120" x2="261" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="300" y1="120" x2="290" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="329" y1="120" x2="319" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="358" y1="120" x2="348" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="387" y1="120" x2="377" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="416" y1="120" x2="406" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="445" y1="120" x2="435" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><line x1="474" y1="120" x2="464" y2="130" stroke="#5c6b62" stroke-width="1.1" opacity=".6"/><rect x="162.0" y="84" width="76" height="36" rx="4" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><text x="200.0" y="107.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">m<tspan baseline-shift="sub" font-size="9">c</tspan></text><circle cx="179" cy="117" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.4"/><circle cx="221" cy="117" r="6" fill="#fff" stroke="#1d2b23" stroke-width="1.4"/><line x1="238.0" y1="102.0" x2="492" y2="102.0" stroke="#1d2b23" stroke-width="1.5"/><path d="M 492 102.0 A 18 18 0 0 1 510 120.0" fill="none" stroke="#1d2b23" stroke-width="1.5"/><circle cx="492" cy="120.0" r="18" fill="#fff" fill-opacity="0" stroke="#1d2b23" stroke-width="1.8"/><circle cx="492" cy="120.0" r="2.6" fill="#1d2b23"/><line x1="510" y1="120.0" x2="510" y2="212" stroke="#1d2b23" stroke-width="1.5"/><rect x="487.0" y="212" width="46" height="42" rx="3" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/><text x="510.0" y="238.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">m<tspan baseline-shift="sub" font-size="9">H</tspan></text><line x1="262.0" y1="56.0" x2="323.2" y2="56.0" stroke="#1e6b3c" stroke-width="2.2"/><polygon points="332.0,56.0 322.7,59.7 322.7,52.3" fill="#1e6b3c"/><text x="297.0" y="48.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1e6b3c">a</text><line x1="572.0" y1="218.0" x2="572.0" y2="273.2" stroke="#1e6b3c" stroke-width="2.2"/><polygon points="572.0,282.0 568.3,272.7 575.7,272.7" fill="#1e6b3c"/><text x="586.0" y="254.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1e6b3c">a</text></svg>
+    <figcaption>The cart and the hanging mass are tied together by a string over a pulley, so they are
+    not two separate problems. They move as one unit: whatever speed the hanging mass gains, the cart
+    gains the same, at the same instant. <strong>One acceleration, shared.</strong></figcaption>
+  </figure>
+
+  <div class="domain">
+    <span class="label">What the string does</span>
+    <p>Over a light string and a frictionless pulley, <strong>the tension is the same at both ends</strong>.
+    The pulley changes the direction the string pulls, not how hard it pulls.</p>
+    <p>That single fact is what ties the two free-body diagrams together: the same symbol T appears in
+    both, which is what makes two equations solvable for two unknowns.</p>
+  </div>
+
+  <h2>Two bodies, two diagrams</h2>
+  <p>Each body gets its own free-body diagram, with its own positive direction chosen along the way
+  <em>it</em> moves. The cart's positive direction is along the track; the hanging mass's is straight
+  down. That is allowed, and it is what keeps both accelerations positive.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 320" role="img" aria-label="Two free-body diagrams side by side. On the left, the cart: normal force up, weight down, and tension pointing right in the direction of its acceleration. On the right, the hanging mass: tension up and its weight down, with the weight drawn longer, and the positive direction of acceleration marked downward."><rect x="30" y="26" width="300" height="268" rx="8" fill="none" stroke="#d7e2da" stroke-width="1"/><text x="180.0" y="50.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">THE CART &mdash; taking +a along the track</text><rect x="154" y="134" width="52" height="32" rx="3" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/><circle cx="180" cy="150" r="2.6" fill="#1d2b23"/><line x1="180.0" y1="150.0" x2="180.0" y2="79.9" stroke="#1e6b3c" stroke-width="2.2"/><polygon points="180.0,72.0 183.3,80.4 176.7,80.4" fill="#1e6b3c"/><text x="170.0" y="66.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1e6b3c">F<tspan baseline-shift="sub" font-size="9">N</tspan></text><line x1="180.0" y1="150.0" x2="180.0" y2="220.1" stroke="#a8551f" stroke-width="2.2"/><polygon points="180.0,228.0 176.7,219.6 183.3,219.6" fill="#a8551f"/><text x="170.0" y="238.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g,c</tspan></text><line x1="180.0" y1="150.0" x2="268.1" y2="150.0" stroke="#1f5d8c" stroke-width="2.2"/><polygon points="276.0,150.0 267.6,153.3 267.6,146.7" fill="#1f5d8c"/><text x="284.0" y="155.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1f5d8c">T</text><text x="180.0" y="268.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">no vertical acceleration &#8658; F<tspan baseline-shift="sub" font-size="9">N</tspan> = F<tspan baseline-shift="sub" font-size="9">g,c</tspan></text><line x1="64.0" y1="74.0" x2="113.8" y2="74.0" stroke="#1e6b3c" stroke-width="1.8"/><polygon points="120.0,74.0 113.5,76.6 113.5,71.4" fill="#1e6b3c"/><text x="128.0" y="79.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1e6b3c">+a</text><rect x="390" y="26" width="300" height="268" rx="8" fill="none" stroke="#d7e2da" stroke-width="1"/><text x="540.0" y="50.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="11.5" fill="#5c6b62">THE HANGING MASS &mdash; taking +a downward</text><rect x="514" y="134" width="52" height="32" rx="3" fill="#fff" stroke="#1d2b23" stroke-width="1.6"/><circle cx="540" cy="150" r="2.6" fill="#1d2b23"/><line x1="540.0" y1="150.0" x2="540.0" y2="65.9" stroke="#1f5d8c" stroke-width="2.2"/><polygon points="540.0,58.0 543.3,66.4 536.7,66.4" fill="#1f5d8c"/><text x="530.0" y="52.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1f5d8c">T</text><line x1="540.0" y1="150.0" x2="540.0" y2="250.1" stroke="#a8551f" stroke-width="2.4"/><polygon points="540.0,258.0 536.7,249.6 543.3,249.6" fill="#a8551f"/><text x="530.0" y="268.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#a8551f">F<tspan baseline-shift="sub" font-size="9">g,H</tspan></text><text x="556.0" y="100.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="11" fill="#5c6b62">T &lt; F<tspan baseline-shift="sub" font-size="9">g,H</tspan>, or it would not fall</text><line x1="452.0" y1="66.0" x2="452.0" y2="103.8" stroke="#1e6b3c" stroke-width="1.8"/><polygon points="452.0,110.0 449.4,103.5 454.6,103.5" fill="#1e6b3c"/><text x="464.0" y="92.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#1e6b3c">+a</text></svg>
+    <figcaption>The cart has no vertical acceleration, so its normal force and weight cancel and neither
+    appears in the horizontal equation — tension is the only horizontal force on it. The hanging mass has
+    two forces along its direction of motion, and its weight must be the larger of the two, or it would
+    not accelerate downward at all.</figcaption>
+  </figure>
+
+  <ol class="tasks">
+    <li>Draw the setup in your guided notes — track, cart, pulley, string, hanging mass. Getting the
+    geometry down is half of getting the physics right.<span class="space"></span></li>
+    <li>Draw both free-body diagrams, one per object, and mark +a on each.<span class="space"></span></li>
+    <li>Write Newton's second law for the <b>cart</b>, along the track.<span class="space"></span></li>
+    <li>Write Newton's second law for the <b>hanging mass</b>, taking down as positive.<span class="space"></span></li>
+  </ol>
+
+  <h2>Putting them together</h2>
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi><mo>=</mo><msub><mi>m</mi><mi>c</mi></msub><mi>a</mi></math>
+      <span class="use">the cart — tension is its only horizontal force</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>F</mi><mrow><mi>g</mi><mo>,</mo><mi>H</mi></mrow></msub><mo>&#x2212;</mo><mi>T</mi><mo>=</mo><msub><mi>m</mi><mi>H</mi></msub><mi>a</mi></math>
+      <span class="use">the hanging mass — gravity wins, but only by m<sub>H</sub>a</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>=</mo><mfrac><msub><mi>F</mi><mrow><mi>g</mi><mo>,</mo><mi>H</mi></mrow></msub><mrow><msub><mi>m</mi><mi>c</mi></msub><mo>+</mo><msub><mi>m</mi><mi>H</mi></msub></mrow></mfrac></math>
+      <span class="use">substitute the first into the second — the driving weight over the <strong>total</strong> mass</span>
+    </li>
+  </ul>
+
+  <ol class="tasks" start="5">
+    <li>Substitute the cart equation into the hanging-mass equation and solve for a. Show every step.<span class="space"></span></li>
+  </ol>
+
+  <h2>Why your prediction was probably wrong</h2>
+  <p>Look at where the two masses appear. The hanging mass sits in the <strong>numerator</strong>, because
+  its weight is what drives the system. But it also sits in the <strong>denominator</strong>, because it is
+  part of what has to be accelerated. The cart is being dragged along, and so is the hanger.</p>
+
+  <p>So doubling the hanging mass does <em>not</em> double the acceleration. You increased the force, but
+  you increased the total mass at the same time, and the two effects partly cancel. This is the trap in
+  the apparatus: <strong>with this setup you cannot change the force without also changing the mass.</strong>
+  Which would seem to make it useless for testing F = ma — except for one trick.</p>
+
+  <div class="rule-box">
+    <span class="label">The trick that makes the experiment work</span>
+    <p>Do not <em>add</em> mass to the hanger. <strong>Move</strong> it there from the cart.</p>
+  </div>
+
+  <p>Take a small mass Δ off the cart and hang it on the string instead. The system becomes
+  (m<sub>c</sub>&nbsp;−&nbsp;Δ) and (m<sub>H</sub>&nbsp;+&nbsp;Δ). The <strong>total</strong> mass in the
+  denominator has not changed by a gram — but the driving weight in the numerator has gone up. Now the
+  only thing varying is the net force, which is precisely the experiment Newton's second law asks for.</p>
+
+  <ol class="tasks" start="6">
+    <li>Describe the verification strategy in your own words: what do you change, what do you hold fixed,
+    what do you measure, and <b>what pattern must the data show</b> if F = ma is telling the truth?<span class="space"></span></li>
+    <li>Now design the <b>other</b> half of the test — the one that checks a ∝ 1/m. What would you vary
+    this time, and what would you keep constant?<span class="space"></span></li>
+    <li>Run it. Transfer the mass in equal steps, record the acceleration each time, and plot a against
+    the hanging weight. What shape should the graph be, and what does its slope represent?<span class="space"></span></li>
+  </ol>
+
+  <div class="ahead">
+    <b>Where this sits.</b> The shared-tension idea used here is developed properly in <b>Note 8</b>, where
+    a hanging object is held by two strings at an angle and you resolve each tension into components.
+    Here you only need the one fact — same string, same tension — because both bodies move along a single
+    line. The two-body method itself, writing one equation per object and linking them through a shared
+    unknown, is the pattern behind every connected-system problem you will meet.
+  </div>
+
+  <div class="callback">
+    <span class="label">Back to your prediction</span>
+    <p>You predicted whether doubling the hanging mass doubles the acceleration. Was it right? Point to the term in a = F<sub>g,H</sub>&thinsp;/&thinsp;(m<sub>c</sub>&nbsp;+&nbsp;m<sub>H</sub>) that your reasoning left out.</p>
+    <span class="space"></span><span class="space"></span>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY118/handouts/M3_N6_Verifying_Newtons_Second_Law_Half_Atwood_GuidedNotes_BLANK.pdf">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes &mdash; blank (PDF)</span>
+      <span class="hint">Print or open on a tablet; record your prediction about doubling the hanging mass, then draw the setup and both free-body diagrams before the video reveals them.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 3 closes — both equations, the combination, and a worked set of transfer data.</span>
+    </div>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 118
+  </footer>
+
+</div>
+
+<!-- ===================================================================
+     FOUNDATION LIST — for the quiz project (Lesson Package rung 2 / 3).
+     Items may go beyond the note, but not beyond this list.
+
+     1. Two bodies tied by a string over a pulley move as ONE unit: they
+        share a single acceleration a, at every instant.
+     2. Over a light string and a frictionless pulley THE TENSION IS THE
+        SAME AT BOTH ENDS. The pulley changes the direction of the pull,
+        not its size. (Developed properly in N8; needed here only as this
+        one fact.)
+     3. Each body gets its OWN free-body diagram and its OWN positive
+        direction, chosen along the way that body moves.
+     4. Cart: T = m_c a (no vertical acceleration, so F_N and F_g,c cancel
+        and never enter the horizontal equation).
+        Hanger: F_g,H - T = m_H a. Note T < F_g,H, or it would not fall.
+     5. Combining: a = F_g,H / (m_c + m_H) -- the driving weight over the
+        TOTAL mass. The cart is dragged along, and so is the hanger.
+     6. THE HANGING MASS APPEARS IN BOTH NUMERATOR AND DENOMINATOR, so
+        doubling it does NOT double the acceleration. With this apparatus
+        you cannot change the force without also changing the mass.
+     7. THE FIX IS TO TRANSFER, NOT ADD: move a mass delta from the cart to
+        the hanger, giving (m_c - delta) and (m_H + delta). Total mass is
+        unchanged; the driving force rises. Only then is the net force the
+        single variable, which is what tests F = ma.
+     8. The converse test -- a proportional to 1/m -- holds the hanging
+        mass fixed and adds mass to the cart only.
+
+     NOT laid down here (do not write items against these):
+       - resolving tension into components, or unequal angles (N8)
+       - friction anywhere in the system (N5); this track is frictionless
+       - inclines (N7)
+     =================================================================== -->
+
+
+<!-- Iframe auto-height reporter (V4). Tells the D2L wrapper how tall this page
+     really is. Measures .note-wrap, so the value is viewport-independent and can
+     come back down as well as up. Must stay just before </body>.
+     See Cross_Course_Notes/Autosize_Backfill_Runbook_Reference.md -->
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>
