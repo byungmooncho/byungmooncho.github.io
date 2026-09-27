@@ -660,6 +660,12 @@
   <div class="sim" id="simN2b">
     <span class="label">Try it &mdash; push off the wall</span>
 
+    <div class="sim-controls">
+      <label><span class="nm">Push</span>
+        <input id="n2bP" type="range" min="1" max="10" step="1" value="5"
+               aria-label="How hard you push against the wall">
+        <output id="n2bPOut" for="n2bP">a firm push</output></label>
+    </div>
     <p style="margin:.2rem 0 .9rem"><button class="sim-go" id="n2bGo" type="button">Push off</button></p>
 
     <div class="sim-grid">
@@ -670,8 +676,8 @@
         </defs>
         <line x1="18" y1="200" x2="462" y2="200" stroke="#d7e2da" stroke-width="2"/>
         <!-- the wall -->
-        <rect x="40" y="46" width="34" height="154" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
-        <path d="M40,200 L30,210 M52,200 L42,210 M64,200 L54,210 M74,200 L64,210"
+        <rect x="20" y="46" width="54" height="154" fill="#fff" stroke="#1d2b23" stroke-width="1.8"/>
+        <path d="M20,200 L10,210 M32,200 L22,210 M44,200 L34,210 M56,200 L46,210 M68,200 L58,210"
               stroke="#d7e2da" stroke-width="2" fill="none"/>
         <!-- person on a trolley, moved as one group -->
         <g id="n2bRider">
@@ -702,7 +708,7 @@
         <div class="sim-meter">
           <div class="top"><b>The wall's push on you</b></div>
           <div class="sim-bar"><i id="n2bBar2" style="width:64%"></i></div>
-          <div class="sim-tag">same length, every time, in both directions</div>
+          <div class="sim-tag">push as hard as you like: these two move together and stay equal</div>
         </div>
 
         <p class="sim-withheld">No free-body diagrams here, and no numbers. Which of these two belongs
@@ -712,10 +718,10 @@
     </div>
 
     <p class="sim-foot">Both arrows start where the hands meet the wall and point opposite ways: the
-    upper one is <b>your push on the wall</b>, the lower one is <b>the wall's push on you</b>. Watch
-    what each body does, not just what is done to it. The two forces are the same size as each other;
-    one body rolls away and the other does not move at all. Both of those things are true at once, and
-    neither one explains itself.</p>
+    upper one is <b>your push on the wall</b>, the lower one is <b>the wall's push on you</b>. The
+    slider changes how hard you push &mdash; and there is no setting, anywhere in its range, at which
+    the two stop being the same size, or at which the wall moves. Watch what each body does, not just
+    what is done to it. Both of those things are true at once, and neither one explains itself.</p>
   </div>
 
   <script>
@@ -728,20 +734,32 @@
      move. No slider: see the block comment above. */
   (function(){
     var root = document.getElementById('simN2b'); if(!root) return;
-    var ids = ['n2bGo','n2bRider','n2bArm','n2bPair','n2bFwall','n2bFyou','n2bState','n2bVerdict'];
+    var ids = ['n2bGo','n2bP','n2bPOut','n2bRider','n2bArm','n2bPair','n2bFwall','n2bFyou',
+               'n2bState','n2bVerdict','n2bBar1','n2bBar2'];
     /* n2bTwall / n2bTyou were removed: on-figure labels collided with the rider
        once it started moving, and the readout bars name both forces already. */
     var el = {}, i;
     for(i=0;i<ids.length;i++){ el[ids[i]] = document.getElementById(ids[i]); if(!el[ids[i]]) return; }
 
-    var LEN=34;            /* ONE length. Both arrows are drawn from it. */
-    var PUSH_T=0.55, ACC=225, GLIDE_MAX=250;   /* ACC*PUSH_T^2/2 = 34px of travel
-                                                  while the hands are on the wall:
-                                                  the arm goes from bent to straight,
-                                                  and no further. */
+    /* ONE length, computed once per push from the slider. Both arrows are drawn
+       from it, so they cannot come apart however hard you push. */
+    function lenFor(push){ return 16 + push*3.2; }
+    function words(push){ return push<3?'a gentle push':(push<6?'a firm push':(push<9?'a hard push':'a shove')); }
+    /* Contact lasts for a FIXED 34px -- one arm-extension, bent to straight --
+       and never longer, whatever the push. So a harder push does not mean a
+       longer shove: it means the same extension crossed faster, which is both
+       what your arm actually does and the reason the drawing never stretches. */
+    var D_CONTACT=34, GLIDE_MAX=250;
+    function accFor(push){ return 45*push; }
     var raf=null;
 
+    function bars(){
+      var w=(+el.n2bP.value)*10;
+      el.n2bBar1.style.width=w+'%'; el.n2bBar2.style.width=w+'%';   /* one number, both bars */
+      el.n2bPOut.textContent=words(+el.n2bP.value);
+    }
     function pair(show){
+      var LEN=lenFor(+el.n2bP.value);
       if(!show){ el.n2bPair.setAttribute('opacity','0'); return; }
       /* Both arrows leave the SAME point -- the hands on the wall -- and go
          opposite ways, one into the wall and one into you. Stacked above and
@@ -768,20 +786,20 @@
     }
     function reset(){
       if(raf){ cancelAnimationFrame(raf); raf=null; }
-      moveRider(0, true); el.n2bArm.setAttribute('x2',74); pair(false);
+      moveRider(0, true); el.n2bArm.setAttribute('x2',74); pair(false); bars();
       el.n2bState.textContent='Ready.';
       el.n2bVerdict.innerHTML='<span style="color:#5c6b62;font-weight:400">press <b>Push off</b></span>';
       el.n2bGo.disabled=false;
     }
     function run(){
-      var t0=null, d=0, v=0, last=null;
+      var last=null, d=0, v=0, ACC=accFor(+el.n2bP.value);
       el.n2bGo.disabled=true; el.n2bVerdict.innerHTML='&nbsp;';
       function frame(ts){
-        if(t0===null){ t0=ts; last=ts; }
-        var t=(ts-t0)/1000, dt=Math.min(0.05,(ts-last)/1000); last=ts;
-        if(t<PUSH_T){
+        if(last===null) last=ts;
+        var dt=Math.min(0.05,(ts-last)/1000); last=ts;
+        if(d < D_CONTACT){
           pair(true);
-          v += ACC*dt; d += v*dt;
+          v += ACC*dt; d = Math.min(d + v*dt, D_CONTACT);
           moveRider(d, true);
           el.n2bState.textContent='Hands on the wall. Both forces are acting now.';
           raf=requestAnimationFrame(frame); return;
@@ -796,6 +814,7 @@
       }
       raf=requestAnimationFrame(frame);
     }
+    el.n2bP.addEventListener('input',function(){ reset(); });
     el.n2bGo.addEventListener('click',function(){ if(raf) return; reset(); run(); });
     reset(); root.classList.add('on');
   })();
