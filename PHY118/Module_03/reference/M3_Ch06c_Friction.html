@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 Ch06c — Friction</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 3 · Chapter 5 (College Physics) · Trevor slides 05a
+     "Friction" — web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "05a-Friction.pptx" (10 slides, drawing weight 235 — the
+     heaviest deck in the Module 3 set). Tier B reference page; every ramp
+     diagram and the static-vs-kinetic graph are carried across and redrawn.
+     No probe, no exit ticket.
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 3 reference index.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{ background:var(--green-soft); border-bottom:1px solid var(--rule); padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .pe .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{ flex:none; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem; }
+  .pe li .txt b{ font-weight:600; }
+  .pe .foot{ border-top:1px solid var(--rule); background:#fbfdfc; padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+  table.grid td.num{ text-align:right; font-variant-numeric:tabular-nums; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:380px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 · Forces</span>
+    <span>Chapter 5 · Slides 05a</span>
+  </div>
+
+  <h1>Friction</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Friction comes in two kinds and they behave quite differently. <b>Kinetic</b> friction, once something is
+    sliding, has a fixed size: <span class="m">&mu;</span><sub>k</sub><span class="m">F</span><sub>N</sub>,
+    and that is that. <b>Static</b> friction, while nothing is moving, supplies <em>exactly whatever is
+    needed</em> to prevent motion &mdash; up to a ceiling of
+    <span class="m">&mu;</span><sub>s</sub><span class="m">F</span><sub>N</sub>, past which the object breaks
+    loose. The inequality is the whole subject: static friction is a &le;, kinetic friction is an =.
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this lesson, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Distinguish</b> static from kinetic friction, and say which one takes an equals sign.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Draw</b> the free-body diagram for an object on an incline when friction is present.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Find</b> the acceleration of an object slipping down a ramp with friction.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Determine</b> the angle at which a stationary object begins to slip, and connect it to <span class="m">&mu;</span><sub>s</sub>.</span></li>
+    </ul>
+    <div class="foot">The frictionless ramp is the sibling page <b>05h &middot; Objects on Inclines</b>; read
+      that first if the rotated axes are unfamiliar.</div>
+  </div>
+
+  <h2 id="two-types-of-friction">Two types of friction</h2>
+
+  <table class="grid">
+    <tr><th>Kinetic friction</th><th>Static friction</th></tr>
+    <tr>
+      <td>Acts while the surfaces are <b>sliding</b> past each other.</td>
+      <td>Acts while the surfaces are <b>not</b> sliding.</td>
+    </tr>
+    <tr>
+      <td><span class="m">F</span><sub>k</sub> = <span class="m">&mu;</span><sub>k</sub><span class="m">F</span><sub>N</sub>
+        &mdash; a fixed size, set by the surfaces and the normal force.</td>
+      <td><span class="m">F</span><sub>s</sub> &le; <span class="m">&mu;</span><sub>s</sub><span class="m">F</span><sub>N</sub>
+        &mdash; whatever is needed to hold things still, no more.</td>
+    </tr>
+    <tr>
+      <td>Direction: opposes the sliding.</td>
+      <td>Direction: opposes the <em>impending</em> sliding.</td>
+    </tr>
+  </table>
+
+  <div class="known">
+    <span class="label">The sign that does the work</span>
+    Almost every friction mistake is an equals sign where an inequality belongs. A block sitting still on a
+    ramp does <em>not</em> have
+    <span class="m">&mu;</span><sub>s</sub><span class="m">F</span><sub>N</sub> of friction on it; it has
+    exactly as much as it needs, which is usually less. The maximum only shows up at the instant it starts to
+    slip.
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 560 300" role="img" aria-label="Graph of friction force against applied force. Along a diagonal line, static friction grows exactly as fast as the applied force, up to a peak equal to mu-s times the normal force. At that point the object breaks loose and the friction drops to a constant horizontal line at mu-k times the normal force.">
+      <!-- axes -->
+      <line x1="70" y1="250" x2="520" y2="250" stroke="#1d2b23" stroke-width="1.5"/>
+      <polygon points="530,250 516,245 516,255" fill="#1d2b23"/>
+      <line x1="70" y1="250" x2="70" y2="40" stroke="#1d2b23" stroke-width="1.5"/>
+      <polygon points="70,30 65,44 75,44" fill="#1d2b23"/>
+      <text class="sm" x="430" y="272">applied force</text>
+      <text class="sm" x="22" y="40">friction</text>
+      <!-- static region: y = x, 45 degrees, up to peak -->
+      <line x1="70" y1="250" x2="270" y2="80" stroke="#2457b8" stroke-width="3"/>
+      <!-- break point -->
+      <circle cx="270" cy="80" r="5" fill="#2457b8"/>
+      <line x1="70" y1="80" x2="270" y2="80" stroke="#2457b8" stroke-width="1" stroke-dasharray="4 3"/>
+      <text class="sm" x="12" y="84" fill="#2457b8">&#956;</text>
+      <text class="sm" x="21" y="88" fill="#2457b8">s</text>
+      <text class="sm" x="27" y="84" fill="#2457b8">F</text>
+      <text class="sm" x="35" y="88" fill="#2457b8">N</text>
+      <!-- drop to kinetic -->
+      <line x1="270" y1="80" x2="270" y2="140" stroke="#c0392b" stroke-width="2" stroke-dasharray="5 4"/>
+      <circle cx="270" cy="140" r="5" fill="#c0392b"/>
+      <!-- kinetic region: constant -->
+      <line x1="270" y1="140" x2="500" y2="140" stroke="#c0392b" stroke-width="3"/>
+      <line x1="70" y1="140" x2="270" y2="140" stroke="#c0392b" stroke-width="1" stroke-dasharray="4 3"/>
+      <text class="sm" x="12" y="144" fill="#c0392b">&#956;</text>
+      <text class="sm" x="21" y="148" fill="#c0392b">k</text>
+      <text class="sm" x="27" y="144" fill="#c0392b">F</text>
+      <text class="sm" x="35" y="148" fill="#c0392b">N</text>
+      <!-- region labels -->
+      <text class="sm" x="152" y="224" fill="#2457b8">static &mdash; nothing moves</text>
+      <text class="sm" x="152" y="238" fill="#2457b8">friction matches the push</text>
+      <text class="sm" x="340" y="122" fill="#c0392b">kinetic &mdash; sliding, constant</text>
+      <line x1="270" y1="250" x2="270" y2="256" stroke="#1d2b23" stroke-width="1.5"/>
+      <text class="sm" x="236" y="272">breaks loose</text>
+    </svg>
+    <figcaption>Static friction is not a number until the object is about to move. It rises along the
+      diagonal, matching whatever is applied, until it hits its ceiling
+      <span class="m">&mu;</span><sub>s</sub><span class="m">F</span><sub>N</sub>. After that the object
+      slides and friction settles at the lower, constant
+      <span class="m">&mu;</span><sub>k</sub><span class="m">F</span><sub>N</sub>.</figcaption>
+  </figure>
+
+  <h2 id="where-friction-comes-from">Where friction comes from</h2>
+
+  <ul>
+    <li>Very few surfaces are actually smooth.</li>
+    <li>Indentations in each surface become <b>interlocked</b>.</li>
+    <li>Even for very smooth surfaces, <b>weak molecular bonds</b> form wherever two surfaces touch.</li>
+  </ul>
+
+  <figure>
+    <svg class="sq" viewBox="0 0 420 180" role="img" aria-label="Two rough surfaces magnified. The jagged profile of a block rests on the jagged profile of a table, and the two sets of bumps interlock at the points where they touch.">
+      <!-- upper (block): underside protrudes to y=92 at x=54,102,150,198,246,294,342 -->
+      <path d="M 30 30 L 390 30 L 390 70 L 366 68 L 342 92 L 318 66 L 294 88 L 270 72 L 246 92 L 222 64 L 198 84 L 174 70 L 150 92 L 126 68 L 102 88 L 78 72 L 54 86 L 30 70 Z"
+            fill="#cdd9f0" stroke="#2457b8" stroke-width="1.2"/>
+      <text class="sm" x="40" y="24" fill="#2457b8">block</text>
+      <!-- lower (table): only three of its peaks reach y=92, so only three points actually meet -->
+      <path d="M 30 150 L 390 150 L 390 114 L 366 116 L 342 92 L 318 120 L 294 106 L 270 112 L 246 92 L 222 118 L 198 100 L 174 114 L 150 92 L 126 116 L 102 98 L 78 112 L 54 104 L 30 114 Z"
+            fill="#e8ece9" stroke="#5c6b62" stroke-width="1.2"/>
+      <text class="sm" x="40" y="172" fill="#5c6b62">table</text>
+      <!-- the three contact points -->
+      <circle cx="342" cy="92" r="8" fill="none" stroke="#c0392b" stroke-width="1.6"/>
+      <circle cx="246" cy="92" r="8" fill="none" stroke="#c0392b" stroke-width="1.6"/>
+      <circle cx="150" cy="92" r="8" fill="none" stroke="#c0392b" stroke-width="1.6"/>
+      <text class="sm" x="106" y="56" fill="#c0392b">the surfaces touch only at these points</text>
+      <line x1="246" y1="62" x2="246" y2="82" stroke="#c0392b" stroke-width="1" stroke-dasharray="3 3"/>
+    </svg>
+    <figcaption>Magnified, the two surfaces touch at a small number of high points. Sliding means dragging
+      those points over each other and breaking the bonds that form at them &mdash; which is why friction
+      depends on how hard the surfaces are pressed together, and not on the apparent area.</figcaption>
+  </figure>
+
+  <h3 id="some-common-coefficients">Some common coefficients of friction</h3>
+
+  <table class="grid">
+    <tr><th>System</th><th>Static <span class="m">&mu;</span><sub>s</sub></th><th>Kinetic <span class="m">&mu;</span><sub>k</sub></th></tr>
+    <tr><td>Rubber on dry concrete</td><td class="num">1.0</td><td class="num">0.7</td></tr>
+    <tr><td>Rubber on wet concrete</td><td class="num">0.7</td><td class="num">0.5</td></tr>
+    <tr><td>Wood on wood</td><td class="num">0.5</td><td class="num">0.3</td></tr>
+    <tr><td>Waxed wood on wet snow</td><td class="num">0.14</td><td class="num">0.1</td></tr>
+    <tr><td>Metal on wood</td><td class="num">0.5</td><td class="num">0.3</td></tr>
+    <tr><td>Steel on steel (dry)</td><td class="num">0.6</td><td class="num">0.3</td></tr>
+    <tr><td>Steel on steel (oiled)</td><td class="num">0.05</td><td class="num">0.03</td></tr>
+    <tr><td>Teflon on steel</td><td class="num">0.04</td><td class="num">0.04</td></tr>
+    <tr><td>Bone lubricated by synovial fluid</td><td class="num">0.016</td><td class="num">0.015</td></tr>
+    <tr><td>Shoes on wood</td><td class="num">0.9</td><td class="num">0.7</td></tr>
+    <tr><td>Shoes on ice</td><td class="num">0.1</td><td class="num">0.05</td></tr>
+    <tr><td>Ice on ice</td><td class="num">0.1</td><td class="num">0.03</td></tr>
+    <tr><td>Steel on ice</td><td class="num">0.04</td><td class="num">0.02</td></tr>
+  </table>
+  <p class="why">Source: OpenStax, <em>College Physics</em>, &sect;5.1 Friction. Two things are worth reading
+     off this table rather than memorising it. <span class="m">&mu;</span><sub>s</sub> is larger than
+     <span class="m">&mu;</span><sub>k</sub> on every row but one &mdash; it is always harder to start
+     something sliding than to keep it sliding. And Teflon on steel is the exception where they are equal,
+     which is roughly what &ldquo;non-stick&rdquo; means.</p>
+
+  <div class="known">
+    <span class="label">&mu; is just a number</span>
+    A coefficient of friction has no units. It is a ratio of two forces, so the newtons cancel &mdash; which
+    is why the same <span class="m">&mu;</span> works whether you measure in newtons or pounds, and why a
+    friction-versus-normal-force plot has a dimensionless slope.
+  </div>
+
+  <h2 id="a-mass-on-a-ramp-with-friction">A mass on a ramp with friction</h2>
+
+  <p>Same rotated axes as the frictionless case. The only change to the free-body diagram is one more force,
+     <b>along the surface</b>, opposing the motion or the impending motion.</p>
+
+  <figure>
+    <svg viewBox="0 0 620 300" role="img" aria-label="An object on a thirty degree incline with friction. On the left the incline and block. In the middle a free body diagram showing the normal force perpendicular to the slope, friction up along the slope, and the weight straight down. On the right the same with the weight resolved into components perpendicular and parallel to the slope.">
+      <!-- LEFT: incline with block -->
+      <polygon points="20,250 300,250 300,88" fill="#fdf0e0" stroke="#2457b8" stroke-width="1.2"/>
+      <text class="lbl" x="268" y="243">&#952;</text>
+      <path d="M 250 250 A 50 50 0 0 0 256 225" fill="none" stroke="#2457b8" stroke-width="1"/>
+      <g transform="translate(160,169)">
+        <rect x="-17" y="-17" width="34" height="34" transform="rotate(-30)" fill="#cdd9f0" stroke="#2457b8" stroke-width="1.2"/>
+        <line x1="-52" y1="30" x2="52" y2="-30" stroke="#c77b1f" stroke-width="1.6"/>
+        <polygon points="60,-34.6 47,-32 51,-24" fill="#c77b1f"/>
+        <text class="sm" x="62" y="-38" fill="#c77b1f">+x</text>
+        <line x1="30" y1="52" x2="-30" y2="-52" stroke="#c77b1f" stroke-width="1.6"/>
+        <polygon points="-34.6,-60 -32,-47 -24,-51" fill="#c77b1f"/>
+        <text class="sm" x="-44" y="-56" fill="#c77b1f">+y</text>
+      </g>
+
+      <!-- MIDDLE: FBD unresolved, with friction -->
+      <g transform="translate(400,150)">
+        <text class="sm" x="-50" y="-104">with friction</text>
+        <circle cx="0" cy="0" r="5" fill="#1d2b23"/>
+        <!-- normal -->
+        <line x1="0" y1="0" x2="-41" y2="-71" stroke="#8b1a10" stroke-width="3"/>
+        <polygon points="-46.5,-80.6 -37,-73.4 -45,-68.8" fill="#8b1a10"/>
+        <text class="lbl" x="-30" y="-74" fill="#8b1a10">F</text><text class="sm" x="-18" y="-69" fill="#8b1a10">N</text>
+        <!-- friction: UP the slope -->
+        <line x1="0" y1="0" x2="60.6" y2="-35" stroke="#7d3fa0" stroke-width="3"/>
+        <polygon points="70.1,-40.5 57.1,-38.4 61.3,-30.6" fill="#7d3fa0"/>
+        <text class="lbl" x="44" y="-44" fill="#7d3fa0">F</text><text class="sm" x="56" y="-39" fill="#7d3fa0">f</text>
+        <!-- weight -->
+        <line x1="0" y1="0" x2="0" y2="78" stroke="#1e6b3c" stroke-width="3"/>
+        <polygon points="0,89 -4.6,78 4.6,78" fill="#1e6b3c"/>
+        <text class="lbl" x="8" y="74" fill="#1e6b3c">F</text><text class="sm" x="20" y="79" fill="#1e6b3c">g</text>
+      </g>
+
+      <!-- RIGHT: resolved -->
+      <g transform="translate(540,150)">
+        <text class="sm" x="-34" y="-104">resolved</text>
+        <circle cx="0" cy="0" r="5" fill="#1d2b23"/>
+        <line x1="0" y1="0" x2="-41" y2="-71" stroke="#8b1a10" stroke-width="3"/>
+        <polygon points="-46.5,-80.6 -37,-73.4 -45,-68.8" fill="#8b1a10"/>
+        <text class="lbl" x="-30" y="-74" fill="#8b1a10">F</text><text class="sm" x="-18" y="-69" fill="#8b1a10">N</text>
+        <line x1="0" y1="0" x2="43" y2="-24.8" stroke="#7d3fa0" stroke-width="3"/>
+        <polygon points="52.5,-30.3 39.5,-28.2 43.7,-20.4" fill="#7d3fa0"/>
+        <text class="lbl" x="30" y="-34" fill="#7d3fa0">F</text><text class="sm" x="42" y="-29" fill="#7d3fa0">f</text>
+        <line x1="0" y1="0" x2="0" y2="78" stroke="#1e6b3c" stroke-width="2" stroke-dasharray="5 4"/>
+        <polygon points="0,89 -4.6,78 4.6,78" fill="#1e6b3c"/>
+        <text class="lbl" x="6" y="86" fill="#1e6b3c">F</text><text class="sm" x="18" y="91" fill="#1e6b3c">g</text>
+        <line x1="0" y1="0" x2="33.8" y2="58.5" stroke="#1e6b3c" stroke-width="3"/>
+        <polygon points="39.3,68 29.8,60.8 37.8,56.2" fill="#1e6b3c"/>
+        <text class="sm" x="42" y="52" fill="#1e6b3c">F</text><text class="sm" x="50" y="56" fill="#1e6b3c">g&#8869;</text>
+        <line x1="0" y1="0" x2="-33.8" y2="19.5" stroke="#1e6b3c" stroke-width="3"/>
+        <polygon points="-43.3,25 -36.1,15.5 -31.5,23.5" fill="#1e6b3c"/>
+        <text class="sm" x="-72" y="34" fill="#1e6b3c">F</text><text class="sm" x="-64" y="38" fill="#1e6b3c">g&#8741;</text>
+        <line x1="33.8" y1="58.5" x2="0" y2="78" stroke="#1e6b3c" stroke-width="1" stroke-dasharray="4 3"/>
+        <line x1="-33.8" y1="19.5" x2="0" y2="78" stroke="#1e6b3c" stroke-width="1" stroke-dasharray="4 3"/>
+        <path d="M 0 34 A 34 34 0 0 0 17 29.4" fill="none" stroke="#c77b1f" stroke-width="1.3"/>
+        <text class="lbl" x="7" y="26" fill="#c77b1f">&#952;</text>
+      </g>
+    </svg>
+    <figcaption>Friction is drawn <em>up</em> the slope here because the block is tending to slide
+      <em>down</em> it. Friction has no preferred direction of its own &mdash; decide which way the object is
+      going (or would go) first, then point friction the other way.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">How big is it?</span>
+    The force of friction is smaller than both <span class="m">F</span><sub>N</sub> and
+    <span class="m">F</span><sub>&#8741;</sub> in the figure &mdash; but which <span class="m">&mu;</span>
+    to use, and whether to use an equals sign at all, depends on <em>what the object is doing</em>. The next
+    three cases are the three answers.
+  </div>
+
+  <h2 id="case-1-while-slipping">Case 1 &mdash; while slipping</h2>
+
+  <p>The object is already sliding down the ramp. Friction is kinetic, so it takes an equals sign.</p>
+
+  <div class="mathblock">
+    <div class="head">An object slides down an incline. What is its acceleration?</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th><span class="m">y</span>-direction (perpendicular)</th>
+            <th><span class="m">x</span>-direction (along the slope)</th></tr>
+        <tr>
+          <td><span class="m">m&#8239;a</span><sub>y</sub> = <span class="m">F</span><sub>N</sub> + <span class="m">F</span><sub>g&perp;</sub></td>
+          <td><span class="m">m&#8239;a</span><sub>x</sub> = <span class="m">F</span><sub>&#8741;</sub> + <span class="m">F</span><sub>fk</sub></td>
+        </tr>
+        <tr>
+          <td>0 = <span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g&perp;</sub></td>
+          <td><span class="m">m&#8239;a</span><sub>x</sub> = <span class="m">m&#8239;g</span>&nbsp;sin&nbsp;&theta; &minus; <span class="m">&mu;</span><sub>k</sub><span class="m">F</span><sub>N</sub></td>
+        </tr>
+        <tr>
+          <td><b><span class="m">F</span><sub>N</sub> = <span class="m">m&#8239;g</span>&nbsp;cos&nbsp;&theta;</b></td>
+          <td><span class="m">m&#8239;a</span><sub>x</sub> = <span class="m">m&#8239;g</span>&nbsp;sin&nbsp;&theta; &minus; <span class="m">&mu;</span><sub>k</sub><span class="m">m&#8239;g</span>&nbsp;cos&nbsp;&theta;</td>
+        </tr>
+        <tr>
+          <td>&mdash;</td>
+          <td><b><span class="m">a</span><sub>x</sub> = <span class="m">g</span>&#8239;(sin&nbsp;&theta; &minus; <span class="m">&mu;</span><sub>k</sub>&nbsp;cos&nbsp;&theta;)</b></td>
+        </tr>
+      </table>
+      <p class="why"><b>The masses cancel out.</b> Just as on the frictionless ramp, the acceleration does
+        not depend on how heavy the block is &mdash; because friction is proportional to the normal force,
+        which is itself proportional to the mass. Both terms carry an <span class="m">m</span> and both lose
+        it.</p>
+    </div>
+  </div>
+
+  <h2 id="case-2-sitting-still-at-an-arbitrary-angle">Case 2 &mdash; sitting still at an arbitrary angle</h2>
+
+  <p>The object is on the ramp and is <em>not</em> moving. What is the force of friction acting on it?</p>
+
+  <div class="mathblock">
+    <div class="head">An object sits on an incline and does not move</div>
+    <div class="body">
+      <p class="mathline">
+        <span class="m">m&#8239;a</span><sub>x</sub> = <span class="m">F</span><sub>&#8741;</sub> &minus; <span class="m">F</span><sub>fs</sub>
+        &nbsp;&nbsp;and&nbsp;&nbsp; <span class="m">a</span><sub>x</sub> = 0
+      </p>
+      <p class="mathline">
+        &rArr;&nbsp;&nbsp;<b><span class="m">F</span><sub>fs</sub> = <span class="m">F</span><sub>&#8741;</sub> = <span class="m">m&#8239;g</span>&nbsp;sin&nbsp;&theta;</b>
+      </p>
+      <p class="why">Note what did <em>not</em> happen: <span class="m">&mu;</span><sub>s</sub> never
+        appeared. The static friction here is determined entirely by the requirement that nothing moves. It
+        is whatever balances the parallel component of gravity &mdash; and all we know about
+        <span class="m">&mu;</span><sub>s</sub> is that it is big enough to allow this, i.e.
+        <span class="m">m&#8239;g</span>&nbsp;sin&nbsp;&theta; &le;
+        <span class="m">&mu;</span><sub>s</sub><span class="m">m&#8239;g</span>&nbsp;cos&nbsp;&theta;.</p>
+    </div>
+  </div>
+
+  <h2 id="case-3-just-starting-to-slip">Case 3 &mdash; just starting to slip</h2>
+
+  <p>Now tilt the ramp up slowly until the object breaks loose. At that exact angle, static friction is at
+     its maximum and the object is still (just) not accelerating. That is the one moment when the
+     inequality becomes an equality.</p>
+
+  <div class="mathblock">
+    <div class="head">At what angle does it start to slip?</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th><span class="m">y</span>-direction</th><th><span class="m">x</span>-direction</th></tr>
+        <tr>
+          <td>0 = <span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g&perp;</sub></td>
+          <td><span class="m">m&#8239;a</span><sub>x</sub> = <span class="m">F</span><sub>&#8741;</sub> &minus; <span class="m">F</span><sub>fs</sub></td>
+        </tr>
+        <tr>
+          <td><span class="m">F</span><sub>N</sub> = <span class="m">m&#8239;g</span>&nbsp;cos&nbsp;&theta;</td>
+          <td>0 = <span class="m">m&#8239;g</span>&nbsp;sin&nbsp;&theta; &minus; <span class="m">&mu;</span><sub>s</sub><span class="m">F</span><sub>N</sub></td>
+        </tr>
+        <tr>
+          <td>&mdash;</td>
+          <td>0 = <span class="m">m&#8239;g</span>&nbsp;sin&nbsp;&theta; &minus; <span class="m">&mu;</span><sub>s</sub><span class="m">m&#8239;g</span>&nbsp;cos&nbsp;&theta;</td>
+        </tr>
+        <tr>
+          <td>&mdash;</td>
+          <td>0 = sin&nbsp;&theta; &minus; <span class="m">&mu;</span><sub>s</sub>&nbsp;cos&nbsp;&theta;</td>
+        </tr>
+      </table>
+      <p class="mathline" style="margin-top:.8rem">
+        <span class="m">&mu;</span><sub>s</sub>&nbsp;cos&nbsp;&theta; = sin&nbsp;&theta;
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <b><span class="m">&mu;</span><sub>s</sub> =
+        <span class="frac"><span class="top">sin&nbsp;&theta;</span><span class="bot">cos&nbsp;&theta;</span></span>
+        = tan&nbsp;&theta;</b>
+      </p>
+      <p class="why">Both the mass and <span class="m">g</span> cancel. The angle at which something slips
+        depends on <em>nothing but the two surfaces</em> &mdash; not on how heavy the object is, and not on
+        what planet you are on.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">This is a measurement, not just an identity</span>
+    <span class="m">&mu;</span><sub>s</sub>&nbsp;=&nbsp;tan&nbsp;&theta; turns a protractor into a
+    coefficient-of-friction meter. Put the object on a board, tilt until it goes, read the angle, take the
+    tangent. It is an entirely independent route to <span class="m">&mu;</span> from the
+    drag-it-with-a-force-sensor method, and the two agreeing is a genuinely good check.
+  </div>
+
+  <h3 id="review">Review</h3>
+  <ul>
+    <li>Friction is caused by uneven surfaces and by weak molecular bonds where they touch.</li>
+    <li><b>Kinetic</b> friction is constant: <span class="m">F</span><sub>k</sub> = <span class="m">&mu;</span><sub>k</sub><span class="m">F</span><sub>N</sub>.</li>
+    <li><b>Static</b> friction is just what is needed, up to a maximum:
+        <span class="m">F</span><sub>s</sub> &le; <span class="m">&mu;</span><sub>s</sub><span class="m">F</span><sub>N</sub>.</li>
+    <li>Slipping down a ramp: <span class="m">a</span><sub>x</sub> = <span class="m">g</span>&#8239;(sin&nbsp;&theta; &minus; <span class="m">&mu;</span><sub>k</sub>&nbsp;cos&nbsp;&theta;).</li>
+    <li>At the angle where it breaks loose: <span class="m">&mu;</span><sub>s</sub> = tan&nbsp;&theta;.</li>
+  </ul>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/5-1-friction" target="_blank" rel="noopener">5.1 Friction</a>
+      (the source of the coefficient table above)</li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/6-2-friction" target="_blank" rel="noopener">6.2 Friction</a></li>
+  </ul>
+  <p class="why">The source deck cites <em>University Physics Volume 2</em> for this material. Volume 2 is
+     the electricity-and-magnetism volume; friction is in Volume 1, &sect;6.2, and the citation has been
+     corrected accordingly.</p>
+
+  <footer>
+    This page is adapted from the presentation <em>Friction</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
