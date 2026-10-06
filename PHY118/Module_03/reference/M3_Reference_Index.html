@@ -228,5 +228,45 @@ window.addEventListener("load", reportHeight);
 window.addEventListener("resize", reportHeight);
 new ResizeObserver(reportHeight).observe(document.body);
 </script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - fixes the first-paint WIDTH race.
+
+   The V4 reporter above fires on load, on window resize, and from a
+   ResizeObserver on document.body. Measured 2026-10-06: none of those fire when
+   only the frame's WIDTH changes. Inside Brightspace the frame is briefly
+   collapsed at first paint, so a page reported its ~60px-wide height (11358px
+   for a page that is really 1967px) and the V5 wrapper kept that number forever.
+   Seen live on the M3 and M4 reference indexes; it is a race, so a reload can
+   hide it.
+
+   This re-measures a few times while layout settles, and posts only when the
+   number actually changes. It does NOT change any page's height, so every
+   declared wrapper baseline stays valid. Remove it only together with a reporter
+   that re-fires on a width-only change. */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){
+    var el = document.querySelector('.note-wrap') || document.body;
+    var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height
+      + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+  }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    var w = document.querySelector('.note-wrap'); if (w) ro.observe(w);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
 </body>
 </html>
