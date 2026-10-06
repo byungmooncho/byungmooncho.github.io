@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M4 Ch08b — Conservative and Non-Conservative Forces</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 118 · Module 4 · Chapter 7 (College Physics) · Trevor slides 07e
+     "Conservative and Non-Conservative Forces" — web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "07e-Conservative and Nonconservative Forces.pptx" (14 slides,
+     one of them hidden in the source — see the log entry).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     The deck's last two content slides (Thermal Energy, Dissipative Forces)
+     are the lead-in to the 07h material and are carried in full on the sibling
+     page Ch08c. Here they appear only as the closing hinge, so the two pages
+     do not duplicate each other.
+
+     CALCULUS. None on this page, by design. The two-route computation that
+     proves gravity is conservative is algebra and trigonometry throughout, and
+     is all here. No line integrals, no unit-vector notation.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 4 reference index. Never framed, so this
+     page has no wrapper of its own.
+
+     PROVENANCE. Written from Trevor's deck, for PHY 118. This is a hand-edited
+     draft (2026-10-06): edit it directly, against the source deck. It is not
+     generated from anything and nothing propagates into it.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .intg{ font-size:1.5em; line-height:0; vertical-align:-.25em; font-family:"Cambria Math", Cambria, serif; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 4 &middot; Energy and Momentum</span>
+    <span>Chapter 7 (College Physics) &middot; Slides 07e</span>
+  </div>
+
+  <h1>Conservative and Non-Conservative Forces</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Carry a box from A to B by two different routes and ask how much work gravity did. The answer is
+    the same both times, and it depends only on how much <em>higher</em> B is than A &mdash; not on the
+    route. Any force that behaves that way is <b>conservative</b>, and it is exactly the property that
+    lets us define a potential energy for it. Friction fails the test: the longer the route, the more
+    work friction does. That one difference is what separates energy you can get back from energy you
+    cannot.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    The dot product, work as <span class="m">Fd</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>,
+    kinetic energy, gravitational potential energy
+    <span class="m">U</span>&nbsp;=&nbsp;<span class="m">mgh</span>, and the friction force
+    <span class="m">F</span><sub>f</sub>&nbsp;=&nbsp;<span class="m">&mu;F</span><sub>N</sub> from
+    Module&nbsp;3. The algebra below is longer than usual, but nothing in it is new.
+  </div>
+
+  <h2 id="conservative-forces">Conservative forces &mdash; the path does not matter</h2>
+
+  <p>Move an object from A to B along two different paths. If the work done by the force is the same
+     for both, the force is conservative, and the change in potential energy between A and B is a
+     property of the two points alone.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Two sketches, each showing a point A at lower left and a point B at upper right. In the first, two different straight-line routes connect them. In the second, two different curved routes connect them. Both carry the labels U sub A and U sub B.">
+      <defs>
+        <marker id="cfA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+
+      <!-- LEFT: two straight routes -->
+      <text x="155" y="26" text-anchor="middle" font-weight="700">Two straight routes</text>
+      <polyline points="70,230 150,80 268,88" fill="none" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#cfA)"/>
+      <line x1="70" y1="230" x2="268" y2="92" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#cfA)"/>
+      <circle cx="70" cy="230" r="5.5" fill="var(--ink)"/>
+      <circle cx="278" cy="88" r="5.5" fill="var(--ink)"/>
+      <text class="lbl" x="58" y="222" text-anchor="end">U<tspan baseline-shift="sub" font-size="10">A</tspan></text>
+      <text class="lbl" x="66" y="252" text-anchor="middle">A</text>
+      <text class="lbl" x="292" y="104" text-anchor="start">U<tspan baseline-shift="sub" font-size="10">B</tspan></text>
+      <text class="lbl" x="282" y="72" text-anchor="middle">B</text>
+
+      <!-- RIGHT: two curved routes -->
+      <text x="470" y="26" text-anchor="middle" font-weight="700">Two curved routes</text>
+      <path d="M382 230 Q 400 110 470 92 Q 540 76 580 88" fill="none" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#cfA)"/>
+      <path d="M382 234 Q 450 215 486 170 Q 520 126 578 96" fill="none" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#cfA)"/>
+      <circle cx="382" cy="232" r="5.5" fill="var(--ink)"/>
+      <circle cx="590" cy="90" r="5.5" fill="var(--ink)"/>
+      <text class="lbl" x="370" y="224" text-anchor="end">U<tspan baseline-shift="sub" font-size="10">A</tspan></text>
+      <text class="lbl" x="378" y="254" text-anchor="middle">A</text>
+      <text class="lbl" x="604" y="106" text-anchor="start">U<tspan baseline-shift="sub" font-size="10">B</tspan></text>
+      <text class="lbl" x="594" y="74" text-anchor="middle">B</text>
+
+      <text class="sm" x="320" y="288" text-anchor="middle">Regardless of the path, the change in potential energy is the same.</text>
+    </svg>
+    <figcaption>Four routes from A to B. For a conservative force, every one of them gives the same
+      work, and therefore the same
+      &Delta;<span class="m">U</span>&nbsp;=&nbsp;<span class="m">U</span><sub>B</sub>&nbsp;&minus;&nbsp;<span class="m">U</span><sub>A</sub>.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Definitions, and the minus sign</div>
+    <div class="body">
+      <table class="defs">
+        <tr><td class="term"><span class="m">W</span><sub>c</sub></td><td class="eq">&equiv;</td>
+            <td>work done by conservative forces</td></tr>
+        <tr><td class="term"><span class="m">F</span><sub>c</sub></td><td class="eq">&equiv;</td>
+            <td>a conservative force</td></tr>
+      </table>
+      <div class="mathline" style="text-align:center">
+        <span class="m">W</span><sub>c</sub> = &Sigma;&thinsp;(<span class="m">F&#8407;</span><sub>c</sub> &middot; <span class="m">ds&#8407;</span>)<sub>path</sub>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        &Delta;<span class="m">U</span> = <span class="m">U</span><sub>f</sub> &minus; <span class="m">U</span><sub>i</sub> = &minus;<span class="m">W</span><sub>c</sub>
+      </div>
+      <p class="why">The minus sign is a definition, but it fits. Lower the box and gravity does
+        positive work on it &mdash; and the box has <em>less</em> gravitational potential energy than
+        before. Work done by the conservative force and change in potential energy always run in
+        opposite directions, because the potential energy is the bank account the force draws on.</p>
+    </div>
+  </div>
+
+
+  <h2 id="gravity-passes-the-test">Gravity passes the test &mdash; worked two ways</h2>
+
+  <p>Trevor does not assert that gravity is conservative; he computes it. Take a side view of a box
+     moved from one corner to the opposite corner of a rectangle, first by going straight up and then
+     across, and second by going directly along the diagonal. The two routes have different lengths and
+     different angles between the force and the displacement, so there is real work to do.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Three vector sketches. First: a displacement arrow pointing up with the gravitational force arrow pointing down, the angle between them marked one hundred eighty degrees. Second: a right triangle with horizontal leg x, vertical leg y and hypotenuse the square root of x squared plus y squared, with the angle theta at the base and phi at the top. Third: a displacement arrow pointing right with the gravitational force pointing down, the angle marked ninety degrees.">
+      <defs>
+        <marker id="cfB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+        <marker id="cfBg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="cfBk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--ink)"/></marker>
+      </defs>
+
+      <!-- panel 1: straight up -->
+      <line x1="70" y1="190" x2="70" y2="56" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#cfB)"/>
+      <text class="lbl" x="54" y="120" text-anchor="end" fill="var(--blue)">y</text>
+      <line x1="94" y1="104" x2="94" y2="196" stroke="var(--green)" stroke-width="2.6" marker-end="url(#cfBg)"/>
+      <text class="lbl" x="110" y="170" fill="var(--green)">F<tspan baseline-shift="sub" font-size="10">g</tspan></text>
+      <path d="M78 96 A 18 18 0 0 1 90 110" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+      <text class="sm" x="106" y="96">180&#176;</text>
+      <text class="sm" x="82" y="226" text-anchor="middle">straight up</text>
+
+      <!-- panel 2: the triangle -->
+      <line x1="250" y1="190" x2="250" y2="66" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#cfB)"/>
+      <line x1="250" y1="60" x2="408" y2="60" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#cfB)"/>
+      <line x1="250" y1="190" x2="412" y2="64" stroke="var(--ink)" stroke-width="2.6" marker-end="url(#cfBk)"/>
+      <text class="lbl" x="236" y="130" text-anchor="end" fill="var(--blue)">y</text>
+      <text class="lbl" x="330" y="50" text-anchor="middle" fill="var(--blue)">x</text>
+      <text class="lbl" x="372" y="142" text-anchor="middle">&#8730;(x<tspan baseline-shift="super" font-size="10">2</tspan><tspan baseline-shift="baseline">+ y</tspan><tspan baseline-shift="super" font-size="10">2</tspan><tspan baseline-shift="baseline">)</tspan></text>
+      <path d="M250 162 A 28 28 0 0 0 272 172" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+      <text class="lbl" x="264" y="160" fill="var(--muted)">&#952;</text>
+      <path d="M382 78 A 26 26 0 0 0 388 62" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+      <text class="lbl" x="366" y="86" fill="var(--muted)">&#966;</text>
+      <text class="sm" x="330" y="226" text-anchor="middle">the two routes share the same corners</text>
+
+      <!-- panel 3: straight across -->
+      <line x1="486" y1="80" x2="616" y2="80" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#cfB)"/>
+      <text class="lbl" x="552" y="66" text-anchor="middle" fill="var(--blue)">x</text>
+      <line x1="486" y1="80" x2="486" y2="178" stroke="var(--green)" stroke-width="2.6" marker-end="url(#cfBg)"/>
+      <text class="lbl" x="462" y="140" text-anchor="end" fill="var(--green)">F<tspan baseline-shift="sub" font-size="10">g</tspan></text>
+      <path d="M504 80 A 18 18 0 0 1 486 98" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+      <text class="sm" x="512" y="104">90&#176;</text>
+      <text class="sm" x="552" y="226" text-anchor="middle">straight across</text>
+    </svg>
+    <figcaption>Where the angles come from. Going straight up, the displacement and the gravitational
+      force are opposite &mdash; 180&deg;. Going straight across, they are perpendicular &mdash; 90&deg;.
+      Along the diagonal the angle is 180&deg;&nbsp;&minus;&nbsp;<span class="m">&theta;</span>, with
+      <span class="m">&theta;</span> the angle the diagonal makes with the vertical leg.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Route 1 &mdash; up, then across</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th>Path <span class="m">y</span> (vertical leg)</th><th>Path <span class="m">x</span> (horizontal leg)</th></tr>
+        <tr>
+          <td><span class="m">W</span><sub>gy</sub> = <span class="m">F&#8407;</span> &middot; <span class="m">d&#8407;</span></td>
+          <td><span class="m">W</span><sub>gx</sub> = <span class="m">F&#8407;</span> &middot; <span class="m">d&#8407;</span></td>
+        </tr>
+        <tr>
+          <td><span class="m">W</span><sub>gy</sub> = <span class="m">F</span><sub>g</sub>&thinsp;<span class="m">d</span>&nbsp;cos&nbsp;180&deg;</td>
+          <td><span class="m">W</span><sub>gx</sub> = <span class="m">F</span><sub>g</sub>&thinsp;<span class="m">x</span>&nbsp;cos&nbsp;90&deg;</td>
+        </tr>
+        <tr>
+          <td><span class="m">W</span><sub>gy</sub> = <span class="m">m g y</span>&thinsp;(&minus;1)</td>
+          <td><span class="m">W</span><sub>gx</sub> = <span class="m">m g x</span>&thinsp;(0)</td>
+        </tr>
+        <tr>
+          <td><b><span class="m">W</span><sub>gy</sub> = &minus;<span class="m">m g y</span></b></td>
+          <td><b><span class="m">W</span><sub>gx</sub> = 0</b></td>
+        </tr>
+      </table>
+      <div class="mathline" style="text-align:center">
+        <span class="m">W</span><sub>g1</sub> = <span class="m">W</span><sub>gy</sub> + <span class="m">W</span><sub>gx</sub>
+        = 0 &minus; <span class="m">m g y</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <b><span class="m">W</span><sub>g1</sub> = &minus;<span class="m">m g y</span></b>
+      </div>
+      <p class="why">The horizontal leg contributes nothing at all &mdash; cos&nbsp;90&deg;&nbsp;=&nbsp;0.
+        Gravity does no work on anything moving horizontally, however far it goes. That is already half
+        of why the path does not matter.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Route 2 &mdash; straight along the diagonal</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">W</span><sub>g2</sub> = <span class="m">F&#8407;</span> &middot; <span class="m">d&#8407;</span><br>
+        <span class="m">W</span><sub>g2</sub> = <span class="m">F</span><sub>g</sub>&nbsp;&radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>)&nbsp;cos(180&deg; &minus; <span class="m">&theta;</span>)<br>
+        <span class="m">W</span><sub>g2</sub> = <span class="m">m g</span>&nbsp;&radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>)&nbsp;(cos&nbsp;180&deg;&nbsp;cos&nbsp;<span class="m">&theta;</span> + sin&nbsp;180&deg;&nbsp;sin&nbsp;<span class="m">&theta;</span>)<br>
+        <span class="m">W</span><sub>g2</sub> = <span class="m">m g</span>&nbsp;&radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>)&nbsp;((&minus;1)&nbsp;cos&nbsp;<span class="m">&theta;</span> + (0)&nbsp;sin&nbsp;<span class="m">&theta;</span>)<br>
+        <span class="m">W</span><sub>g2</sub> = &minus;<span class="m">m g</span>&nbsp;&radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>)&nbsp;cos&nbsp;<span class="m">&theta;</span><br>
+        <span class="m">W</span><sub>g2</sub> = &minus;<span class="m">m g</span>&nbsp;&radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>)&nbsp;&middot;
+          <span class="frac"><span class="top"><span class="m">y</span></span><span class="bot">&radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>)</span></span><br>
+        <b><span class="m">W</span><sub>g2</sub> = &minus;<span class="m">m g y</span></b>
+      </div>
+      <p class="why">The angle-sum identity turns cos(180&deg;&nbsp;&minus;&nbsp;<span class="m">&theta;</span>)
+        into &minus;cos&nbsp;<span class="m">&theta;</span>, and then
+        cos&nbsp;<span class="m">&theta;</span> is just the adjacent side <span class="m">y</span> over
+        the hypotenuse. The hypotenuse cancels, and with it every trace of <span class="m">x</span>.
+        <b>Same answer as route 1.</b></p>
+    </div>
+  </div>
+
+  <h2 id="go-around-the-path">Go around the path &mdash; and get nothing</h2>
+
+  <p>Put the two results side by side, then reverse one of them. Going out along the legs and back
+     along the diagonal returns the object to where it started, and the total work done by gravity on
+     the round trip is zero.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Two right triangles. In the first, the vertical leg is labelled minus m g y, the horizontal leg zero and the diagonal minus m g y, with arrows running up the leg, across the top and along the diagonal in the same outward direction. In the second the diagonal arrow is reversed and labelled plus m g y.">
+      <defs>
+        <marker id="cfC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+        <marker id="cfCd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="#17408f"/></marker>
+      </defs>
+
+      <!-- LEFT -->
+      <text x="160" y="26" text-anchor="middle" font-weight="700">Compare the paths</text>
+      <line x1="120" y1="196" x2="120" y2="66" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#cfC)"/>
+      <line x1="120" y1="60" x2="264" y2="60" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#cfC)"/>
+      <line x1="120" y1="196" x2="268" y2="64" stroke="#17408f" stroke-width="3" marker-end="url(#cfCd)"/>
+      <text class="lbl" x="192" y="50" text-anchor="middle" fill="var(--blue)">0</text>
+      <text class="lbl" x="108" y="134" text-anchor="end" fill="var(--blue)">&#8722;m g y</text>
+      <text class="lbl" x="214" y="170" text-anchor="middle" fill="#17408f">&#8722;m g y</text>
+      <path d="M120 168 A 28 28 0 0 0 142 178" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+      <text class="lbl" x="136" y="166" fill="var(--muted)">&#952;</text>
+      <text class="sm" x="160" y="238" text-anchor="middle">The work is the same</text>
+      <text class="sm" x="160" y="254" text-anchor="middle">along both paths.</text>
+
+      <!-- RIGHT -->
+      <text x="460" y="26" text-anchor="middle" font-weight="700">Reverse the path</text>
+      <line x1="420" y1="196" x2="420" y2="66" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#cfC)"/>
+      <line x1="420" y1="60" x2="564" y2="60" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#cfC)"/>
+      <line x1="568" y1="62" x2="416" y2="198" stroke="#17408f" stroke-width="3" marker-end="url(#cfCd)"/>
+      <text class="lbl" x="492" y="50" text-anchor="middle" fill="var(--blue)">0</text>
+      <text class="lbl" x="408" y="134" text-anchor="end" fill="var(--blue)">&#8722;m g y</text>
+      <text class="lbl" x="518" y="170" text-anchor="middle" fill="#17408f">+m g y</text>
+      <path d="M420 168 A 28 28 0 0 0 442 178" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+      <text class="lbl" x="436" y="166" fill="var(--muted)">&#952;</text>
+      <text class="sm" x="460" y="238" text-anchor="middle">The work done all the way</text>
+      <text class="sm" x="460" y="254" text-anchor="middle">around the path is zero.</text>
+
+      <text class="sm" x="320" y="288" text-anchor="middle">(&#8722;mgy) + 0 + (+mgy) = 0</text>
+    </svg>
+    <figcaption>One figure, two states. Reversing a leg flips the sign of the work done on it, because
+      it flips the angle between the force and the displacement by 180&deg;. Going out one way and back
+      the other therefore cancels exactly &mdash; the signature of a conservative force.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Three equivalent statements</span>
+    &ldquo;The work is path-independent&rdquo;, &ldquo;the work around any closed loop is zero&rdquo;, and
+    &ldquo;a potential energy can be defined for this force&rdquo; all say the same thing. If you can show
+    any one of them for a force, you have shown all three.
+  </div>
+
+  <h2 id="non-conservative-forces">Non-conservative forces &mdash; the path is everything</h2>
+
+  <p>Now run the same experiment with friction. Look down on a box being dragged around a floor,
+     first along two legs of a right triangle and then along the hypotenuse. Friction always opposes the
+     motion, so the angle is 180&deg; on <em>every</em> leg, whichever way you go &mdash; and the work is
+     negative on every leg, with nothing to cancel it.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 316" role="img" aria-label="Top view of a box on a floor at three positions forming a right triangle. Arrows show two routes between the same two corners: one along the vertical leg then the horizontal leg, the other straight along the hypotenuse.">
+      <defs>
+        <marker id="cfD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--ink)"/></marker>
+      </defs>
+
+      <text class="sm" x="60" y="40">Top view of a box on a floor.</text>
+
+      <rect x="150" y="56" width="52" height="46" fill="#fbe3cd" stroke="var(--amber)" stroke-width="1.5"/>
+      <rect x="150" y="212" width="52" height="46" fill="#fbe3cd" stroke="var(--amber)" stroke-width="1.5"/>
+      <rect x="430" y="56" width="52" height="46" fill="#fbe3cd" stroke="var(--amber)" stroke-width="1.5"/>
+
+      <line x1="176" y1="212" x2="176" y2="110" stroke="var(--ink)" stroke-width="2.4" marker-end="url(#cfD)"/>
+      <line x1="182" y1="79" x2="422" y2="79" stroke="var(--ink)" stroke-width="2.4" marker-end="url(#cfD)"/>
+      <line x1="182" y1="212" x2="426" y2="86" stroke="var(--ink)" stroke-width="2.4" marker-end="url(#cfD)"/>
+
+      <text class="lbl" x="300" y="66" text-anchor="middle">x</text>
+      <text class="lbl" x="162" y="166" text-anchor="end">y</text>
+      <text class="lbl" x="316" y="168" text-anchor="middle" fill="var(--blue)" transform="rotate(-27 316 168)">&#8730;(x<tspan baseline-shift="super" font-size="10">2</tspan><tspan baseline-shift="baseline">+ y</tspan><tspan baseline-shift="super" font-size="10">2</tspan><tspan baseline-shift="baseline">)</tspan></text>
+
+      <text class="sm" x="60" y="284">Friction opposes the motion on every leg, so every leg costs energy.</text>
+      <text class="sm" x="60" y="302">The longer the route, the more work friction does.</text>
+    </svg>
+    <figcaption>The same two corners, two routes, a floor with friction. Unlike the gravity case,
+      nothing here is zero and nothing cancels: the two routes have different lengths and therefore
+      different amounts of work done against friction.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Route 1 &mdash; along the legs</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th>Along <span class="m">y</span></th><th>Along <span class="m">x</span></th></tr>
+        <tr>
+          <td><span class="m">W</span><sub>fy</sub> = <span class="m">F</span><sub>f</sub>&thinsp;<span class="m">y</span>&nbsp;cos&nbsp;180&deg;</td>
+          <td><span class="m">W</span><sub>fx</sub> = <span class="m">F</span><sub>f</sub>&thinsp;<span class="m">x</span>&nbsp;cos&nbsp;180&deg;</td>
+        </tr>
+        <tr>
+          <td><b><span class="m">W</span><sub>fy</sub> = &minus;<span class="m">&mu;F</span><sub>N</sub>&thinsp;<span class="m">y</span></b></td>
+          <td><b><span class="m">W</span><sub>fx</sub> = &minus;<span class="m">&mu;F</span><sub>N</sub>&thinsp;<span class="m">x</span></b></td>
+        </tr>
+      </table>
+      <div class="mathline" style="text-align:center">
+        <span class="m">W</span><sub>f1</sub> = &minus;<span class="m">&mu;F</span><sub>N</sub>&thinsp;(<span class="m">x</span> + <span class="m">y</span>)
+      </div>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Route 2 &mdash; along the hypotenuse</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">W</span><sub>f2</sub> = <span class="m">F</span><sub>f</sub>&nbsp;&radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>)&nbsp;cos&nbsp;180&deg;<br>
+        <b><span class="m">W</span><sub>f2</sub> = &minus;<span class="m">&mu;F</span><sub>N</sub>&nbsp;&radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>)</b>
+      </div>
+      <p class="why">And (<span class="m">x</span>&nbsp;+&nbsp;<span class="m">y</span>) is <em>not</em>
+        &radic;(<span class="m">x</span><sup>2</sup>+<span class="m">y</span><sup>2</sup>) &mdash; it is
+        always larger, by the triangle inequality. So the two routes give different answers, and the
+        longer one costs more. There is no cancelling on the way back either: reverse the trip and
+        friction reverses with you, so the round trip costs <em>double</em>, not zero.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Why there is no &ldquo;friction potential energy&rdquo;</span>
+    A potential energy has to be a function of position alone &mdash; one number per point in space. If
+    the work depended on how you got there, no such function could exist, because the same point would
+    need different values. That is the real reason non-conservative forces get no potential energy:
+    not a convention, an impossibility.
+  </div>
+
+  <h2 id="mechanical-energy">Mechanical energy &mdash; the ramp, with and without friction</h2>
+
+  <p>Trevor brings both cases together on one picture: a block released from height
+     <span class="m">h</span><sub>i</sub> at the top of a ramp of angle <span class="m">&theta;</span>,
+     sliding down to <span class="m">h</span><sub>f</sub>&nbsp;=&nbsp;0. Mechanical energy is kinetic
+     plus potential, and what changes it is the work done by the non-conservative forces.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="A right-triangle ramp with a block on its slope. The vertical height of the ramp is marked H, the drop of the block delta h, the starting height h sub i and the finishing height h sub f at the base where h equals zero. The ramp angle at the base is theta.">
+      <defs>
+        <marker id="cfE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--ink)"/></marker>
+      </defs>
+
+      <polygon points="120,70 120,236 520,236" fill="#dce7f6" stroke="var(--blue)" stroke-width="1.5"/>
+      <g transform="rotate(22.5 182 94)">
+        <rect x="158" y="72" width="48" height="44" fill="#fbe3cd" stroke="var(--amber)" stroke-width="1.6"/>
+      </g>
+
+      <!-- H: full ramp height -->
+      <line x1="96" y1="70" x2="96" y2="236" stroke="var(--ink)" stroke-width="1.6" marker-start="url(#cfE)" marker-end="url(#cfE)"/>
+      <text class="lbl" x="84" y="158" text-anchor="end">H</text>
+
+      <!-- delta h: block drop -->
+      <line x1="182" y1="118" x2="182" y2="236" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#cfE)"/>
+      <text class="lbl" x="196" y="182">&#916;h</text>
+
+      <text class="lbl" x="152" y="64" text-anchor="middle">h<tspan baseline-shift="sub" font-size="10">i</tspan></text>
+      <text class="lbl" x="150" y="256" text-anchor="middle">h<tspan baseline-shift="sub" font-size="10">f</tspan></text>
+      <text class="lbl" x="250" y="256" text-anchor="middle">h = 0</text>
+
+      <path d="M470 236 A 50 50 0 0 0 476 214" fill="none" stroke="var(--muted)" stroke-width="1.6"/>
+      <text class="lbl" x="452" y="228" fill="var(--muted)">&#952;</text>
+
+      <line x1="120" y1="246" x2="520" y2="246" stroke="var(--rule)" stroke-width="1" stroke-dasharray="4 4"/>
+      <text class="sm" x="560" y="250" text-anchor="end">the reference level, h = 0</text>
+      <text class="sm" x="320" y="290" text-anchor="middle">Distance travelled along the slope is H / sin &#952;.</text>
+    </svg>
+    <figcaption>The ramp both cases share. <span class="m">H</span> is the full height of the ramp,
+      &Delta;<span class="m">h</span> the height the block actually drops, and
+      <span class="m">h</span>&nbsp;=&nbsp;0 is the reference level at the base. The distance the block
+      slides along the surface is <span class="m">H</span>&thinsp;/&thinsp;sin&nbsp;<span class="m">&theta;</span>,
+      which is what friction acts over.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Without friction &mdash; mechanical energy is conserved</div>
+    <div class="body">
+      <div class="mathline">
+        &Delta;<span class="m">K</span> + &Delta;<span class="m">U</span> = &Delta;<span class="m">E</span><sub>mech</sub> = <span class="m">W</span><sub>nc</sub> = 0<br>
+        &frac12;<span class="m">mv</span><sub>f</sub><sup>2</sup> &minus; &frac12;<span class="m">mv</span><sub>i</sub><sup>2</sup> + <span class="m">mgh</span><sub>f</sub> &minus; <span class="m">mgh</span><sub>i</sub> = 0<br>
+        &frac12;<span class="m">mv</span><sub>f</sub><sup>2</sup> &minus; 0 + 0 &minus; <span class="m">mgh</span><sub>i</sub> = 0<br>
+        <b>&frac12;<span class="m">mv</span><sub>f</sub><sup>2</sup> = <span class="m">mgh</span><sub>i</sub></b>
+      </div>
+      <p class="why">Released from rest, finishing at the reference level, so
+        <span class="m">v</span><sub>i</sub>&nbsp;=&nbsp;0 and
+        <span class="m">h</span><sub>f</sub>&nbsp;=&nbsp;0 and two of the four terms vanish. Every joule
+        of potential energy the block loses turns up as kinetic energy. Notice what is <em>not</em> in the
+        answer: the ramp angle, and the mass.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">With friction &mdash; mechanical energy is not conserved</div>
+    <div class="body">
+      <div class="mathline">
+        &Delta;<span class="m">K</span> + &Delta;<span class="m">U</span> = &Delta;<span class="m">E</span><sub>mech</sub> = <span class="m">W</span><sub>nc</sub> = <span class="m">F&#8407;</span><sub>f</sub> &middot; <span class="m">d&#8407;</span><br>
+        &frac12;<span class="m">mv</span><sub>f</sub><sup>2</sup> &minus; &frac12;<span class="m">mv</span><sub>i</sub><sup>2</sup> + <span class="m">mgh</span><sub>f</sub> &minus; <span class="m">mgh</span><sub>i</sub>
+          = <span class="m">&mu;F</span><sub>N</sub>&thinsp;<span class="frac"><span class="top"><span class="m">H</span></span><span class="bot">sin&nbsp;<span class="m">&theta;</span></span></span>&nbsp;cos&nbsp;180&deg;<br>
+        &frac12;<span class="m">mv</span><sub>f</sub><sup>2</sup> &minus; &frac12;<span class="m">mv</span><sub>i</sub><sup>2</sup> + <span class="m">mgh</span><sub>f</sub> &minus; <span class="m">mgh</span><sub>i</sub>
+          = <span class="m">&mu;mg</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>&thinsp;<span class="frac"><span class="top"><span class="m">H</span></span><span class="bot">sin&nbsp;<span class="m">&theta;</span></span></span>&thinsp;(&minus;1)<br>
+        &frac12;<span class="m">mv</span><sub>f</sub><sup>2</sup> &minus; <span class="m">mgH</span>
+          = &minus;<span class="m">&mu;mg</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>&thinsp;<span class="frac"><span class="top"><span class="m">H</span></span><span class="bot">sin&nbsp;<span class="m">&theta;</span></span></span><br>
+        <b>&frac12;<span class="m">mv</span><sub>f</sub><sup>2</sup> = <span class="m">mgH</span> &minus; <span class="m">&mu;mg</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>&thinsp;<span class="frac"><span class="top"><span class="m">H</span></span><span class="bot">sin&nbsp;<span class="m">&theta;</span></span></span></b>
+      </div>
+      <p class="why">Two things to read off. The normal force on a ramp is
+        <span class="m">F</span><sub>N</sub>&nbsp;=&nbsp;<span class="m">mg</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>
+        &mdash; the Module&nbsp;3 result, used here unchanged. And the sliding distance is
+        <span class="m">H</span>&thinsp;/&thinsp;sin&nbsp;<span class="m">&theta;</span>, not
+        <span class="m">H</span>; friction acts along the slope, not along the drop. The final speed is
+        the frictionless answer minus a term, which is what &ldquo;apply what you know about the
+        world&rdquo; should have told you before any algebra started.</p>
+    </div>
+  </div>
+
+  <h2 id="be-careful-of-the-signs">Be careful of the signs</h2>
+
+  <p>The sign of <span class="m">W</span><sub>nc</sub> is where this material most often goes wrong,
+     and the confusion is partly the textbooks&rsquo; fault.</p>
+
+  <table class="defs">
+    <tr><td class="term">Almost always negative</td><td class="eq">&mdash;</td>
+        <td><span class="m">W</span><sub>nc</sub> is negative in nearly every problem you will meet,
+            because friction acts opposite to the motion.</td></tr>
+    <tr><td class="term">Books differ</td><td class="eq">&mdash;</td>
+        <td>Some texts build the minus sign into the symbol; some do not. OpenStax
+            <em>College Physics</em> does not &mdash; which is the convention Trevor prefers, and the one
+            used here.</td></tr>
+    <tr><td class="term">So</td><td class="eq">&mdash;</td>
+        <td>Write cos&nbsp;180&deg; explicitly and let it supply the &minus;1. Do not also put a minus
+            sign in front by hand.</td></tr>
+  </table>
+
+  <div class="mathblock">
+    <div class="head">Reading the terms</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">W</span><sub>nc</sub> = &Delta;<span class="m">K</span> + &Delta;<span class="m">U</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        0 = &Delta;<span class="m">K</span> + &Delta;<span class="m">U</span> &minus; <span class="m">W</span><sub>nc</sub><br>
+        0 = &frac12;<span class="m">m</span>(<span class="m">v</span><sub>f</sub><sup>2</sup> &minus; <span class="m">v</span><sub>i</sub><sup>2</sup>)
+          + <span class="m">mg</span>(<span class="m">h</span><sub>f</sub> &minus; <span class="m">h</span><sub>i</sub>)
+          &minus; (<span class="m">F</span><sub>f</sub>&thinsp;<span class="m">d</span>&thinsp;(&minus;1))
+      </div>
+      <table class="grid">
+        <tr><th>Term</th><th>What it is, physically</th></tr>
+        <tr><td>&frac12;<span class="m">m</span>(<span class="m">v</span><sub>f</sub><sup>2</sup> &minus; <span class="m">v</span><sub>i</sub><sup>2</sup>)</td>
+            <td>Increase in speed and kinetic energy</td></tr>
+        <tr><td><span class="m">mg</span>(<span class="m">h</span><sub>f</sub> &minus; <span class="m">h</span><sub>i</sub>)</td>
+            <td>Decrease in potential energy</td></tr>
+        <tr><td><span class="m">F</span><sub>f</sub>&thinsp;<span class="m">d</span>&thinsp;(&minus;1)</td>
+            <td>Energy &ldquo;removed&rdquo; by friction</td></tr>
+      </table>
+      <p class="why">&ldquo;Removed&rdquo; is in quotation marks on Trevor&rsquo;s slide for a reason. The
+        energy is not destroyed; it has left the mechanical account and turned up as thermal energy in
+        the block and the ramp.</p>
+    </div>
+  </div>
+
+  <h2 id="where-the-energy-goes">Where the energy goes</h2>
+
+  <p>Pull a box across a floor at constant speed. The net force is zero, so the pull equals the
+     friction, and all the work you do goes somewhere other than kinetic energy:</p>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">W</span><sub>nc</sub> = <span class="m">F</span><sub>f</sub>&nbsp;&Delta;<span class="m">d</span>&nbsp;cos&nbsp;180&deg; = &minus;<span class="m">F</span><sub>f</sub>&nbsp;&Delta;<span class="m">d</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        &Delta;<span class="m">E</span><sub>th</sub> = +<span class="m">F</span><sub>f</sub>&nbsp;&Delta;<span class="m">d</span>
+      </div>
+      <p class="why">The mechanical energy lost and the thermal energy gained are the same number with
+        opposite signs. Sand a board or drill a hole and you can feel the result. The microscopic
+        picture behind &Delta;<span class="m">E</span><sub>th</sub> &mdash; kinetic energy of individual
+        atoms, and why thermal energy is not the same thing as heat &mdash; is taken up in full on the
+        sibling page <b>Ch08c &middot; Dissipative Forces and Thermal Energy</b>.</p>
+    </div>
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Conservative</td><td class="eq">&mdash;</td>
+        <td>If no non-conservative forces are present, the work required to move from one spot to
+            another is <b>path-independent</b>.</td></tr>
+    <tr><td class="term">Non-conservative</td><td class="eq">&mdash;</td>
+        <td>If non-conservative forces are present, that work is <b>path-dependent</b>.</td></tr>
+    <tr><td class="term">The effect</td><td class="eq">&mdash;</td>
+        <td>Non-conservative forces tend to cause objects to slow down and/or heat up.</td></tr>
+    <tr><td class="term">The bookkeeping</td><td class="eq">&mdash;</td>
+        <td>&Delta;<span class="m">K</span> + &Delta;<span class="m">U</span> = &Delta;<span class="m">E</span><sub>mech</sub> = <span class="m">W</span><sub>nc</sub>.
+            Set <span class="m">W</span><sub>nc</sub> = 0 and you have conservation of mechanical
+            energy.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <p class="why" style="margin:.1rem 0 .7rem">Your textbook for this course is <em>College Physics</em>. The second entry below is a different OpenStax book, listed as an optional extra resource if you want to see the same material treated at a higher mathematical level. It is not required reading, and nothing on this page depends on it.</p>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/7-4-conservative-forces-and-potential-energy" target="_blank" rel="noopener">7.4 Conservative Forces and Potential Energy</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/7-5-nonconservative-forces" target="_blank" rel="noopener">7.5 Nonconservative Forces</a></li>
+    <li><b>Extra resource.</b> Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/8-2-conservative-and-non-conservative-forces" target="_blank" rel="noopener">8.2 Conservative and Non-Conservative Forces</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/8-4-potential-energy-diagrams-and-stability" target="_blank" rel="noopener">8.4 Potential Energy Diagrams and Stability</a></li>
+  </ul>
+  <p class="why">Trevor&rsquo;s closing slide cites <em>University Physics Volume&nbsp;2</em>; that is the
+     electricity and magnetism volume, and the mechanics material is in Volume&nbsp;1. Corrected above,
+     as on the Module&nbsp;3 pages.</p>
+
+  <footer>
+    This page is adapted from the presentation <em>Conservative and Non-Conservative Forces</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>

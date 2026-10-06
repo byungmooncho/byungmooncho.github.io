@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M4 Ch07c — Work Done by Variable Forces</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 151 · Module 4 · Chapter 7 (University Physics) · Trevor slides 07f
+     "Work done by Variable Forces" — web-page version of the lecture slides
+     by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Source deck: "07f-Variable Forces.pptx" (10 slides).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     CALCULUS FENCING. This is the only M4 page that needs it. The integral
+     treatment (deck slides 6 and 7, and the integral half of slide 5) sits
+     inside the calculus fences and is stripped for PHY 118. The GRAPHICAL half —
+     area under F–x, the Hooke triangle, the three-graph comparison — is
+     algebra-level and deliberately stays OUTSIDE the fence so 118 keeps it.
+     The fence uses the calculus-layer class, NOT `calc` (which is the worked-
+     calculation box). Markers are CSS comments inside <style> and HTML comments
+     in the body.
+
+     PHY 118 has its own copy of this page, written for College Physics from the
+     same deck. It is NOT generated from this file and a change here does not
+     propagate there — the notes mirror is not used on the deck track (playbook
+     Step 1). If a correction belongs on both, make it on both.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 4 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .intg{ font-size:1.5em; line-height:0; vertical-align:-.25em; font-family:"Cambria Math", Cambria, serif; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+/* CALC-151:start */
+  .calc151{ border:1px solid var(--blue); border-left:4px solid var(--blue); background:#f7f9fd; border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.6rem 0; }
+  .calc151 .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.3rem; }
+  .calc151 .mathblock{ margin:1rem 0; background:#fff; }
+/* CALC-151:end */
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 4 &middot; Energy and Momentum</span>
+    <span>Chapter 7 (University Physics) &middot; Slides 07f</span>
+  </div>
+
+  <h1>Work Done by Variable Forces</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    <span class="m">W</span>&nbsp;=&nbsp;<span class="m">Fd</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>
+    assumes the force holds still while the object moves. A spring does not: the further you stretch
+    it, the harder it pulls back. The fix is to stop treating work as a product and start treating it
+    as an <b>area</b> &mdash; the area between the force curve and the distance axis on a force&ndash;distance
+    graph. For straight-line graphs that area is a rectangle or a triangle and plain geometry gives
+    the work exactly.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Work as <span class="m">F&#8407;</span>&nbsp;&middot;&nbsp;<span class="m">d&#8407;</span>, the dot
+    product, and the spring force <span class="m">F</span><sub>s</sub>&nbsp;=&nbsp;<span class="m">k</span>&nbsp;&Delta;<span class="m">x</span>
+    from the springs material in Module&nbsp;3. Nothing new is assumed here beyond the area of a
+    rectangle and the area of a triangle.
+  </div>
+
+  <h2 id="finding-the-work-done-graphically">Finding the work done graphically</h2>
+
+  <p>Start with the easy case &mdash; a constant force
+     <span class="m">F</span>(<span class="m">x</span>)&nbsp;=&nbsp;<span class="m">F</span><sub>o</sub>
+     pushing parallel to the motion. Plot force against position and the graph is a flat line. The work
+     is the familiar product, and on the graph that product is the area of a rectangle.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A force versus position graph for a constant force. The curve is a horizontal line at height F sub o running from x sub 1 to x sub 2, and the rectangle beneath it is shaded and labelled work in newton metres.">
+      <defs>
+        <marker id="vfA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--amber)"/></marker>
+        <marker id="vfAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="vfAb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+
+      <!-- vector inset: F parallel to d -->
+      <line x1="150" y1="42" x2="248" y2="42" stroke="var(--red)" stroke-width="3" marker-end="url(#vfAr)"/>
+      <text class="lbl" x="196" y="32" text-anchor="middle" fill="var(--red)">F</text>
+      <line x1="150" y1="58" x2="330" y2="58" stroke="var(--blue)" stroke-width="3" marker-end="url(#vfAb)"/>
+      <text class="lbl" x="240" y="78" text-anchor="middle" fill="var(--blue)">d</text>
+      <text class="sm" x="360" y="54">force and displacement are parallel, so cos&#952; = 1</text>
+
+      <!-- axes -->
+      <line x1="90" y1="280" x2="600" y2="280" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfA)"/>
+      <line x1="90" y1="280" x2="90" y2="105" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfA)"/>
+      <text class="lbl" x="612" y="285">x</text>
+      <text class="sm" transform="translate(58,215) rotate(-90)" text-anchor="middle">Force (N)</text>
+
+      <!-- rectangle -->
+      <rect x="190" y="170" width="250" height="110" fill="var(--green-soft)" stroke="none"/>
+      <line x1="190" y1="170" x2="440" y2="170" stroke="var(--red)" stroke-width="3"/>
+      <line x1="190" y1="170" x2="190" y2="280" stroke="var(--rule)" stroke-width="1"/>
+      <line x1="440" y1="170" x2="440" y2="280" stroke="var(--rule)" stroke-width="1"/>
+      <line x1="84" y1="170" x2="96" y2="170" stroke="var(--amber)" stroke-width="2"/>
+      <text class="lbl" x="74" y="175" text-anchor="end">F<tspan baseline-shift="sub" font-size="10">o</tspan></text>
+
+      <text class="sm" x="315" y="218" text-anchor="middle" font-style="italic">work</text>
+      <text class="sm" x="315" y="234" text-anchor="middle" font-style="italic">(N&#183;m)</text>
+
+      <text class="lbl" x="190" y="300" text-anchor="middle">x<tspan baseline-shift="sub" font-size="10">1</tspan></text>
+      <text class="lbl" x="440" y="300" text-anchor="middle">x<tspan baseline-shift="sub" font-size="10">2</tspan></text>
+      <path d="M190 308 L190 314 L440 314 L440 308" fill="none" stroke="var(--muted)" stroke-width="1"/>
+      <text class="lbl" x="315" y="328" text-anchor="middle">(x<tspan dy="4" font-size="10">2</tspan><tspan dy="-4"> &#8722; x</tspan><tspan dy="4" font-size="10">1</tspan><tspan dy="-4">)</tspan></text>
+    </svg>
+    <figcaption>A constant force on a force&ndash;position graph. The shaded rectangle has height
+      <span class="m">F</span><sub>o</sub> and width (<span class="m">x</span><sub>2</sub>&nbsp;&minus;&nbsp;<span class="m">x</span><sub>1</sub>),
+      so its area is exactly <span class="m">F</span><sub>o</sub>(<span class="m">x</span><sub>2</sub>&nbsp;&minus;&nbsp;<span class="m">x</span><sub>1</sub>)
+      &mdash; the work done.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The area <em>is</em> the work &mdash; check the units</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">W</span> = <span class="m">F&#8407;</span> &middot; <span class="m">d&#8407;</span>
+        &nbsp;=&nbsp; <span class="m">F d</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="m">W</span> = <span class="m">F</span><sub>o</sub>&thinsp;(<span class="m">x</span><sub>2</sub> &minus; <span class="m">x</span><sub>1</sub>)
+      </div>
+      <p class="why">Height is measured in newtons and width in metres, so the area carries units of
+        N&middot;m &mdash; which is the joule. That is not a coincidence to be memorised; it is the
+        reason the area interpretation works at all, and it is the check to run whenever you read work
+        off a graph.</p>
+    </div>
+  </div>
+
+  <h2 id="variable-forces">Variable forces &mdash; the spring</h2>
+
+  <p>Now let the force change as the object moves. The standard example is a spring: pull the block
+     out by &Delta;<span class="m">x</span> and the spring pulls back with
+     <span class="m">F</span><sub>s</sub>&nbsp;=&nbsp;<span class="m">k</span>&nbsp;&Delta;<span class="m">x</span>.
+     The force is not one number any more, so there is no single <span class="m">F</span> to put in
+     <span class="m">W</span>&nbsp;=&nbsp;<span class="m">Fd</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>.
+     The graph, though, is still perfectly well behaved &mdash; it is a straight line through the origin
+     with slope <span class="m">k</span>, and the area under it is a triangle.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 310" role="img" aria-label="On the left, a block on a frictionless surface attached by a spring to a wall, drawn twice: relaxed, and stretched by delta x. On the right, the spring force plotted against stretch is a straight line of slope k, and the shaded triangle under it has area one half k delta x squared.">
+      <defs>
+        <marker id="vfB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--amber)"/></marker>
+        <marker id="vfBb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+
+      <!-- delta x caliper -->
+      <line x1="150" y1="34" x2="212" y2="34" stroke="var(--blue)" stroke-width="2" marker-start="url(#vfBb)" marker-end="url(#vfBb)"/>
+      <text class="lbl" x="181" y="24" text-anchor="middle" fill="var(--blue)">&#916;x</text>
+      <line x1="150" y1="40" x2="150" y2="250" stroke="var(--amber)" stroke-width="1" stroke-dasharray="5 4"/>
+      <line x1="212" y1="40" x2="212" y2="250" stroke="var(--amber)" stroke-width="1" stroke-dasharray="5 4"/>
+
+      <!-- panel 1: relaxed -->
+      <rect x="28" y="56" width="14" height="74" fill="var(--rule)" stroke="var(--ink)" stroke-width="1"/>
+      <polyline points="42,93 54,80 66,106 78,80 90,106 102,80 114,106 124,93"
+                fill="none" stroke="var(--ink)" stroke-width="2"/>
+      <text class="lbl" x="83" y="70" text-anchor="middle">k</text>
+      <rect x="124" y="70" width="52" height="46" fill="var(--green-soft)" stroke="var(--ink)" stroke-width="1.4"/>
+      <text class="lbl" x="150" y="99" text-anchor="middle">m</text>
+      <line x1="28" y1="130" x2="300" y2="130" stroke="var(--ink)" stroke-width="2"/>
+      <text class="sm" x="300" y="124" text-anchor="end">relaxed</text>
+
+      <!-- panel 2: stretched -->
+      <rect x="28" y="176" width="14" height="74" fill="var(--rule)" stroke="var(--ink)" stroke-width="1"/>
+      <polyline points="42,213 58,198 74,228 90,198 106,228 122,198 138,228 152,213 186,213"
+                fill="none" stroke="var(--ink)" stroke-width="2"/>
+      <text class="lbl" x="97" y="188" text-anchor="middle">k</text>
+      <rect x="186" y="190" width="52" height="46" fill="var(--green-soft)" stroke="var(--ink)" stroke-width="1.4"/>
+      <text class="lbl" x="212" y="219" text-anchor="middle">m</text>
+      <line x1="28" y1="250" x2="300" y2="250" stroke="var(--ink)" stroke-width="2"/>
+      <text class="sm" x="300" y="244" text-anchor="end">stretched by &#916;x</text>
+
+      <text class="lbl" x="164" y="286" text-anchor="middle">F<tspan baseline-shift="sub" font-size="10">s</tspan> = k &#916;x</text>
+
+      <!-- right: F vs stretch -->
+      <line x1="370" y1="240" x2="612" y2="240" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfB)"/>
+      <line x1="370" y1="240" x2="370" y2="60" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfB)"/>
+      <text class="sm" x="500" y="262" text-anchor="middle" font-style="italic">stretch (m)</text>
+      <text class="sm" transform="translate(344,160) rotate(-90)" text-anchor="middle" font-style="italic">Force (N)</text>
+
+      <polygon points="370,240 560,240 560,96" fill="var(--green-soft)"/>
+      <line x1="370" y1="240" x2="560" y2="96" stroke="var(--red)" stroke-width="3"/>
+      <line x1="560" y1="96" x2="560" y2="240" stroke="var(--blue)" stroke-width="2"/>
+      <text class="lbl" x="572" y="92" fill="var(--red)">k &#916;x</text>
+      <text class="lbl" x="465" y="232" text-anchor="middle" fill="var(--blue)">&#916;x</text>
+      <text class="sm" x="520" y="178" text-anchor="middle" font-style="italic">&#189; bh</text>
+      <text class="sm" x="408" y="112" font-style="italic">slope = k, in N/m</text>
+      <path d="M452 118 Q 440 142 428 160" fill="none" stroke="var(--amber)" stroke-width="1.6" marker-end="url(#vfB)"/>
+    </svg>
+    <figcaption>The spring force grows in direct proportion to the stretch, so its force&ndash;distance
+      graph is a straight line of slope <span class="m">k</span>. The work done is the shaded triangle:
+      base &Delta;<span class="m">x</span>, height <span class="m">k</span>&nbsp;&Delta;<span class="m">x</span>,
+      area &frac12;<span class="m">k</span>(&Delta;<span class="m">x</span>)<sup>2</sup>.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Reading the triangle</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">W</span> = <span class="m">F</span><sub>s</sub>&nbsp;&Delta;<span class="m">x</span>&nbsp;cos&nbsp;<span class="m">&theta;</span><br>
+        <span class="m">W</span> = &frac12;&nbsp;(<span class="m">k</span>&nbsp;&Delta;<span class="m">x</span>) &middot; &Delta;<span class="m">x</span>&nbsp;&nbsp;cos&nbsp;0&deg;<br>
+        <span class="m">W</span> = &frac12;&nbsp;<span class="m">k</span>&nbsp;(&Delta;<span class="m">x</span>)<sup>2</sup>
+      </div>
+      <p class="why">The &frac12; is the only thing that distinguishes this from the constant-force
+        result, and it comes straight from the shape of the region &mdash; a triangle rather than a
+        rectangle. Another way to say it: over the stretch, the spring force runs from 0 up to
+        <span class="m">k</span>&nbsp;&Delta;<span class="m">x</span>, so its <em>average</em> value is
+        half the final value.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Watch the sign convention</span>
+    This is the work done <em>against</em> the spring in stretching it &mdash; the force you apply and
+    the displacement point the same way, so cos&nbsp;0&deg;&nbsp;=&nbsp;+1. The spring&rsquo;s own force
+    points back toward equilibrium, opposite the displacement, so the spring does
+    &minus;&frac12;<span class="m">k</span>(&Delta;<span class="m">x</span>)<sup>2</sup> of work over the
+    same stretch. Decide which force you are asking about <em>before</em> you pick the sign.
+  </div>
+
+  <h2 id="when-you-can-use-geometry">When you can use geometry</h2>
+
+  <p>Any force&ndash;distance graph made of straight lines can be handled with nothing more than the
+     areas of rectangles and triangles. Two cases cover almost everything you will meet: a spring
+     stretched from its relaxed length, and a spring stretched further from an already-stretched
+     position.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 340" role="img" aria-label="Two force versus distance graphs side by side. On the left, a triangle rising from the origin to F sub 2. On the right, a trapezoid rising from F sub 1 to F sub 2, which splits into a rectangle plus a triangle.">
+      <defs>
+        <marker id="vfC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--amber)"/></marker>
+      </defs>
+
+      <!-- LEFT: triangle from origin -->
+      <text x="155" y="26" text-anchor="middle" font-weight="700">Starting from relaxed</text>
+      <line x1="70" y1="250" x2="290" y2="250" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfC)"/>
+      <line x1="70" y1="250" x2="70" y2="60" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfC)"/>
+      <text class="sm" x="180" y="272" text-anchor="middle" font-style="italic">distance (m)</text>
+      <text class="sm" transform="translate(46,170) rotate(-90)" text-anchor="middle" font-style="italic">Force (N)</text>
+
+      <polygon points="70,250 250,250 250,92" fill="var(--green-soft)"/>
+      <line x1="70" y1="250" x2="250" y2="92" stroke="var(--violet)" stroke-width="3"/>
+      <line x1="250" y1="92" x2="250" y2="250" stroke="var(--blue)" stroke-width="2"/>
+      <line x1="64" y1="92" x2="258" y2="92" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4 4"/>
+      <text class="lbl" x="58" y="97" text-anchor="end">F<tspan baseline-shift="sub" font-size="10">2</tspan></text>
+      <text class="sm" x="186" y="200" text-anchor="middle" font-style="italic">work</text>
+
+      <text class="lbl" x="155" y="300" text-anchor="middle">W = &#189; F<tspan baseline-shift="sub" font-size="10">2</tspan> &#916;x</text>
+      <text class="lbl" x="155" y="326" text-anchor="middle">W = &#189; k (&#916;x)<tspan baseline-shift="super" font-size="10">2</tspan></text>
+
+      <!-- RIGHT: trapezoid -->
+      <text x="460" y="26" text-anchor="middle" font-weight="700">Starting already stretched</text>
+      <line x1="370" y1="250" x2="600" y2="250" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfC)"/>
+      <line x1="370" y1="250" x2="370" y2="60" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfC)"/>
+      <text class="sm" x="485" y="272" text-anchor="middle" font-style="italic">distance (m)</text>
+      <text class="sm" transform="translate(346,170) rotate(-90)" text-anchor="middle" font-style="italic">Force (N)</text>
+
+      <polygon points="400,250 560,250 560,92 400,170" fill="var(--green-soft)"/>
+      <line x1="400" y1="170" x2="560" y2="92" stroke="var(--violet)" stroke-width="3"/>
+      <line x1="400" y1="170" x2="400" y2="250" stroke="var(--blue)" stroke-width="2"/>
+      <line x1="560" y1="92" x2="560" y2="250" stroke="var(--blue)" stroke-width="2"/>
+      <line x1="400" y1="170" x2="568" y2="170" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="364" y1="92" x2="568" y2="92" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4 4"/>
+      <text class="lbl" x="358" y="97" text-anchor="end">F<tspan baseline-shift="sub" font-size="10">2</tspan></text>
+      <text class="lbl" x="378" y="164" text-anchor="start">F<tspan baseline-shift="sub" font-size="10">1</tspan></text>
+      <text class="sm" x="492" y="152" text-anchor="middle" font-style="italic">triangle</text>
+      <text class="sm" x="480" y="216" text-anchor="middle" font-style="italic">rectangle</text>
+
+      <text class="lbl" x="460" y="300" text-anchor="middle">W = &#189; (F<tspan baseline-shift="sub" font-size="10">2</tspan> &#8722; F<tspan baseline-shift="sub" font-size="10">1</tspan>) &#916;x + F<tspan baseline-shift="sub" font-size="10">1</tspan> &#916;x</text>
+      <text class="lbl" x="460" y="326" text-anchor="middle">W = &#189; k (&#916;x)<tspan baseline-shift="super" font-size="10">2</tspan> + k x<tspan baseline-shift="sub" font-size="10">1</tspan> &#916;x</text>
+    </svg>
+    <figcaption>Two straight-line cases. On the left the region is a single triangle. On the right it
+      is a trapezoid, which splits into the rectangle underneath
+      (<span class="m">F</span><sub>1</sub>&Delta;<span class="m">x</span>) plus the triangle on top
+      (&frac12;(<span class="m">F</span><sub>2</sub>&minus;<span class="m">F</span><sub>1</sub>)&Delta;<span class="m">x</span>).</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The trapezoid, step by step</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">W</span> = &frac12;(<span class="m">F</span><sub>2</sub> &minus; <span class="m">F</span><sub>1</sub>)&Delta;<span class="m">x</span> + <span class="m">F</span><sub>1</sub>&Delta;<span class="m">x</span><br>
+        <span class="m">W</span> = &frac12;(<span class="m">k x</span><sub>2</sub> &minus; <span class="m">k x</span><sub>1</sub>)&Delta;<span class="m">x</span> + <span class="m">F</span><sub>1</sub>&Delta;<span class="m">x</span><br>
+        <span class="m">W</span> = &frac12;<span class="m">k</span>(<span class="m">x</span><sub>2</sub> &minus; <span class="m">x</span><sub>1</sub>)&Delta;<span class="m">x</span> + <span class="m">k x</span><sub>1</sub>&Delta;<span class="m">x</span><br>
+        <span class="m">W</span> = &frac12;<span class="m">k</span>(&Delta;<span class="m">x</span>)<sup>2</sup> + <span class="m">k x</span><sub>1</sub>&Delta;<span class="m">x</span>
+      </div>
+      <p class="why">The left-hand case is the right-hand case with
+        <span class="m">x</span><sub>1</sub>&nbsp;=&nbsp;0 &mdash; the extra
+        <span class="m">k x</span><sub>1</sub>&Delta;<span class="m">x</span> term vanishes. So there is
+        really one result here, not two, and it is worth recognising that rather than memorising both.</p>
+    </div>
+  </div>
+
+  <h2 id="when-the-force-or-the-direction-varies">When the force <em>or</em> the direction varies</h2>
+
+  <p>Straight-line graphs are the friendly case. In general the force can change size <em>and</em>
+     direction while the object travels a curved path, and then no single rectangle or triangle will do.
+     Trevor&rsquo;s move here is the one that underlies every integral you will ever meet: chop the path
+     into pieces short enough that the force is near enough constant over each one, work out
+     <span class="m">F</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>&nbsp;&Delta;&#8467; for each
+     piece, and add them up.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 700" role="img" aria-label="Top panel: a curved path through x y space divided into eight segments labelled delta l one through delta l eight, with a downward force arrow drawn at each segment. Bottom panel: a bar chart of F cosine theta against travel distance, with positive bars for the first and last segments, near zero bars where the path is flat, and negative bars where the path climbs.">
+      <defs>
+        <marker id="vfD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--amber)"/></marker>
+        <marker id="vfDg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="vfDb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+
+      <!-- ===== PANEL A: the path ===== -->
+      <line x1="90" y1="400" x2="612" y2="400" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfD)"/>
+      <line x1="90" y1="400" x2="90" y2="110" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfD)"/>
+      <text class="lbl" x="624" y="405">x</text>
+      <text class="lbl" x="74" y="118">y</text>
+
+      <!-- the smooth path, drawn faintly behind the segments -->
+      <path d="M130 300 Q 207 322 290 298 Q 372 272 455 206 Q 512 192 565 224"
+            fill="none" stroke="var(--blue)" stroke-width="7" opacity="0.22"/>
+
+      <!-- eight straight segments -->
+      <line x1="130" y1="300" x2="180" y2="312" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#vfDb)"/>
+      <line x1="180" y1="312" x2="235" y2="314" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#vfDb)"/>
+      <line x1="235" y1="314" x2="290" y2="298" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#vfDb)"/>
+      <line x1="290" y1="298" x2="345" y2="262" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#vfDb)"/>
+      <line x1="345" y1="262" x2="400" y2="228" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#vfDb)"/>
+      <line x1="400" y1="228" x2="455" y2="206" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#vfDb)"/>
+      <line x1="455" y1="206" x2="510" y2="200" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#vfDb)"/>
+      <line x1="510" y1="200" x2="565" y2="224" stroke="var(--blue)" stroke-width="2.6" marker-end="url(#vfDb)"/>
+
+      <!-- segment labels -->
+      <text class="lbl" x="155" y="288" text-anchor="middle" fill="var(--blue)">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">1</tspan></text>
+      <text class="lbl" x="207" y="301" text-anchor="middle" fill="var(--blue)">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">2</tspan></text>
+      <text class="lbl" x="262" y="292" text-anchor="middle" fill="var(--blue)">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">3</tspan></text>
+      <text class="lbl" x="313" y="265" text-anchor="middle" fill="var(--blue)">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">4</tspan></text>
+      <text class="lbl" x="368" y="231" text-anchor="middle" fill="var(--blue)">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">5</tspan></text>
+      <text class="lbl" x="424" y="202" text-anchor="middle" fill="var(--blue)">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">6</tspan></text>
+      <text class="lbl" x="482" y="186" text-anchor="middle" fill="var(--blue)">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">7</tspan></text>
+      <text class="lbl" x="546" y="196" text-anchor="middle" fill="var(--blue)">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">8</tspan></text>
+
+      <!-- the force at each segment: same direction, changing magnitude -->
+      <line x1="155" y1="306" x2="155" y2="344" stroke="var(--green)" stroke-width="2.4" marker-end="url(#vfDg)"/>
+      <line x1="207" y1="313" x2="207" y2="361" stroke="var(--green)" stroke-width="2.4" marker-end="url(#vfDg)"/>
+      <line x1="262" y1="306" x2="262" y2="362" stroke="var(--green)" stroke-width="2.4" marker-end="url(#vfDg)"/>
+      <line x1="317" y1="280" x2="317" y2="340" stroke="var(--green)" stroke-width="2.4" marker-end="url(#vfDg)"/>
+      <line x1="372" y1="245" x2="372" y2="309" stroke="var(--green)" stroke-width="2.4" marker-end="url(#vfDg)"/>
+      <line x1="427" y1="217" x2="427" y2="277" stroke="var(--green)" stroke-width="2.4" marker-end="url(#vfDg)"/>
+      <line x1="482" y1="203" x2="482" y2="256" stroke="var(--green)" stroke-width="2.4" marker-end="url(#vfDg)"/>
+      <line x1="537" y1="212" x2="537" y2="258" stroke="var(--green)" stroke-width="2.4" marker-end="url(#vfDg)"/>
+
+      <!-- theta on the first segment -->
+      <path d="M146 312 A 24 24 0 0 0 160 334" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+      <text class="lbl" x="166" y="340" fill="var(--muted)">&#952;<tspan baseline-shift="sub" font-size="10">1</tspan></text>
+      <text class="sm" x="600" y="378" text-anchor="end">green arrows: the force on each piece</text>
+
+      <!-- ===== PANEL B: F cos theta vs travel distance ===== -->
+      <line x1="100" y1="560" x2="612" y2="560" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfD)"/>
+      <line x1="100" y1="660" x2="100" y2="462" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfD)"/>
+      <text class="lbl" x="624" y="565" fill="var(--amber)">&#8467;</text>
+      <text class="sm" transform="translate(72,560) rotate(-90)" text-anchor="middle" font-style="italic">F cos &#952;</text>
+
+      <rect x="124" y="522" width="48" height="38" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.4"/>
+      <rect x="180" y="554" width="48" height="6"  fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.4"/>
+      <rect x="236" y="560" width="48" height="30" fill="#f6e6e3" stroke="var(--red)" stroke-width="1.4"/>
+      <rect x="292" y="560" width="48" height="48" fill="#f6e6e3" stroke="var(--red)" stroke-width="1.4"/>
+      <rect x="348" y="560" width="48" height="60" fill="#f6e6e3" stroke="var(--red)" stroke-width="1.4"/>
+      <rect x="404" y="560" width="48" height="52" fill="#f6e6e3" stroke="var(--red)" stroke-width="1.4"/>
+      <rect x="460" y="560" width="48" height="8"  fill="#f6e6e3" stroke="var(--red)" stroke-width="1.4"/>
+      <rect x="516" y="526" width="48" height="34" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.4"/>
+
+      <text class="lbl" x="148" y="662" text-anchor="middle">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">1</tspan></text>
+      <text class="lbl" x="204" y="662" text-anchor="middle">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">2</tspan></text>
+      <text class="lbl" x="260" y="662" text-anchor="middle">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">3</tspan></text>
+      <text class="lbl" x="316" y="662" text-anchor="middle">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">4</tspan></text>
+      <text class="lbl" x="372" y="662" text-anchor="middle">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">5</tspan></text>
+      <text class="lbl" x="428" y="662" text-anchor="middle">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">6</tspan></text>
+      <text class="lbl" x="484" y="662" text-anchor="middle">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">7</tspan></text>
+      <text class="lbl" x="540" y="662" text-anchor="middle">&#916;&#8467;<tspan baseline-shift="sub" font-size="10">8</tspan></text>
+      <text class="sm" x="344" y="688" text-anchor="middle" font-style="italic">travel distance</text>
+      <text class="sm" x="124" y="494">above the axis: positive work</text>
+      <text class="sm" x="600" y="494" text-anchor="end">below the axis: negative work</text>
+    </svg>
+    <figcaption>Chop the path into eight short pieces. Over each one the force is close enough to
+      constant that <span class="m">F</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>&nbsp;&Delta;&#8467;
+      is a good estimate of the work, and the total is the sum of the eight bars below. Where the path
+      runs <em>with</em> the force the bar is positive; where it climbs <em>against</em> the force the bar
+      is negative; where the two are perpendicular the bar is nearly zero.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Add up the pieces</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">W</span> = &Sigma;<sub style="font-size:.75em">&thinsp;<span class="m">i</span>&thinsp;=&thinsp;1</sub><sup style="font-size:.75em">&thinsp;8</sup>
+        &nbsp;<span class="m">F</span><sub>i</sub>&nbsp;cos&nbsp;<span class="m">&theta;</span><sub>i</sub>&nbsp;&Delta;&#8467;<sub>i</sub>
+      </div>
+      <p class="why">Each term is a bar in the lower panel: its height is
+        <span class="m">F</span><sub>i</sub>&nbsp;cos&nbsp;<span class="m">&theta;</span><sub>i</sub> and
+        its width is &Delta;&#8467;<sub>i</sub>, so each term is an area and the sum is the total signed
+        area. Make the pieces shorter and the estimate improves, because the force has less room to
+        change across any one of them.</p>
+    </div>
+  </div>
+
+<!-- CALC-151:start -->
+  <div class="calc151">
+    <span class="label">For PHY 151 &mdash; with calculus</span>
+    <p style="margin:.2rem 0 .6rem">Making the pieces shorter without limit is exactly what the integral
+      is for. Trevor writes the transition on the same slide: the sum becomes an integral, the
+      &Delta;&#8467; becomes <span class="m">d</span>&#8467;, and the index on
+      <span class="m">&theta;</span> becomes a dependence on position.</p>
+
+    <div class="mathblock">
+      <div class="body">
+        <div class="mathline" style="text-align:center">
+          <span class="m">W</span> = <span class="intg">&#8747;</span>&nbsp;<span class="m">F</span><sub>i</sub>(&#8467;)&nbsp;cos&nbsp;<span class="m">&theta;</span><sub>i</sub>&nbsp;<span class="m">d</span>&#8467;<sub>i</sub>
+          &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+          <span class="m">W</span> = <span class="intg">&#8747;</span>&nbsp;<span class="m">F</span>(&#8467;)&nbsp;cos&nbsp;<span class="m">&theta;</span>(<span class="m">x</span>,&thinsp;<span class="m">y</span>)&nbsp;<span class="m">d</span>&#8467;
+        </div>
+      </div>
+    </div>
+
+    <p style="margin:.6rem 0 .4rem">The same two straight-line cases from the geometry section can be
+      done as integrals instead, and they must of course agree. The graphs are the same graphs; only the
+      bookkeeping changes.</p>
+
+    <div class="mathblock">
+      <div class="head">The two spring cases, by integration</div>
+      <div class="body">
+        <table class="grid">
+          <tr><th>Starting from relaxed</th><th>Starting already stretched</th></tr>
+          <tr>
+            <td class="m"><span class="intg">&#8747;</span><sub>0</sub><sup><span class="m">x</span><sub>2</sub></sup>&nbsp;<span class="m">k x dx</span></td>
+            <td class="m"><span class="intg">&#8747;</span><sub><span class="m">x</span><sub>1</sub></sub><sup><span class="m">x</span><sub>2</sub></sup>&nbsp;<span class="m">k x dx</span></td>
+          </tr>
+          <tr>
+            <td>= &frac12;<span class="m">k</span>&thinsp;[<span class="m">x</span><sup>2</sup>]<sub>0</sub><sup><span class="m">x</span></sup>
+                = &frac12;<span class="m">k</span>(<span class="m">x</span><sup>2</sup> &minus; 0<sup>2</sup>)</td>
+            <td>= &frac12;<span class="m">k</span>&thinsp;[<span class="m">x</span><sup>2</sup>]<sub><span class="m">x</span><sub>1</sub></sub><sup><span class="m">x</span><sub>2</sub></sup></td>
+          </tr>
+          <tr>
+            <td><b>= &frac12;<span class="m">k x</span><sup>2</sup></b></td>
+            <td><b>= &frac12;<span class="m">k</span>(<span class="m">x</span><sub>2</sub><sup>2</sup> &minus; <span class="m">x</span><sub>1</sub><sup>2</sup>)</b></td>
+          </tr>
+        </table>
+        <p class="why">Expand the right-hand result and you get
+          &frac12;<span class="m">k</span>(&Delta;<span class="m">x</span>)<sup>2</sup> + <span class="m">k x</span><sub>1</sub>&Delta;<span class="m">x</span>
+          &mdash; the trapezoid answer, as it must be. The integral is not a different physics; it is a
+          way of computing the same area when the boundary is not a straight line.</p>
+      </div>
+    </div>
+
+    <div class="mathblock">
+      <div class="head">The general work integral</div>
+      <div class="body">
+        <div class="mathline">
+          <span class="m">W</span> = <span class="intg">&#8747;</span><sub><span class="m">a</span></sub><sup><span class="m">b</span></sup>&nbsp;<span class="m">F&#8407;</span> &middot; <span class="m">dr&#8407;</span>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="why" style="display:inline">general work integral</span><br>
+          <span class="m">W</span> = <span class="intg">&#8747;</span><sub><span class="m">a</span></sub><sup><span class="m">b</span></sup>&nbsp;<span class="m">F</span>(<span class="m">x</span>)<span style="font-style:normal">&icirc;</span> &middot; <span style="font-style:normal">&icirc;</span>&nbsp;<span class="m">dx</span>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="why" style="display:inline">force and displacement parallel</span><br>
+          <span class="m">W</span> = <span class="intg">&#8747;</span><sub><span class="m">a</span></sub><sup><span class="m">b</span></sup>&nbsp;(<span class="m">F</span><sub>x</sub>&thinsp;<span style="font-style:normal">&icirc;</span> + <span class="m">F</span><sub>y</sub>&thinsp;<span style="font-style:normal">&#309;</span> + <span class="m">F</span><sub>z</sub>&thinsp;<span style="font-style:normal">k&#770;</span>) &middot; (<span class="m">dx</span>&thinsp;<span style="font-style:normal">&icirc;</span> + <span class="m">dy</span>&thinsp;<span style="font-style:normal">&#309;</span> + <span class="m">dz</span>&thinsp;<span style="font-style:normal">k&#770;</span>)
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="why" style="display:inline">with multiple components</span>
+        </div>
+        <p class="why">As long as the force changes <em>as a function</em> of position, the analytic
+          integral is available. Trevor&rsquo;s deck writes the unit vectors as
+          <span style="font-style:normal">x&#770; y&#770; z&#770;</span>; PHY&nbsp;151 uses
+          <span style="font-style:normal">&icirc;&nbsp;&#309;&nbsp;k&#770;</span>, matching the textbook and
+          WebAssign, so they are written that way here.</p>
+      </div>
+    </div>
+  </div>
+<!-- CALC-151:end -->
+
+  <h2 id="be-careful-of-the-units">Be careful of the units when looking at graphs</h2>
+
+  <p>The area trick is not about work. It is about what happens whenever you multiply the quantity on
+     the vertical axis by the quantity on the horizontal one &mdash; and three graphs that look nearly
+     identical give three completely different physical quantities. Read the axis labels, not the
+     shape.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 290" role="img" aria-label="Three nearly identical trapezoidal graphs side by side. Force against distance gives work in newton metres; velocity against time gives displacement in metres; force against time gives impulse in newton seconds.">
+      <defs>
+        <marker id="vfE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--amber)"/></marker>
+      </defs>
+
+      <!-- panel 1 -->
+      <line x1="60" y1="170" x2="196" y2="170" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfE)"/>
+      <line x1="60" y1="170" x2="60" y2="52" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfE)"/>
+      <polygon points="82,170 170,170 170,78 82,128" fill="var(--green-soft)"/>
+      <line x1="82" y1="128" x2="170" y2="78" stroke="var(--violet)" stroke-width="3"/>
+      <line x1="82" y1="128" x2="82" y2="170" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="170" y1="78" x2="170" y2="170" stroke="var(--blue)" stroke-width="1.6"/>
+      <text class="sm" x="128" y="142" text-anchor="middle" font-style="italic">work</text>
+      <text class="sm" x="128" y="156" text-anchor="middle" font-style="italic">(N&#183;m)</text>
+      <text class="sm" x="128" y="192" text-anchor="middle" font-style="italic">distance (m)</text>
+      <text class="sm" transform="translate(38,112) rotate(-90)" text-anchor="middle" font-style="italic">Force (N)</text>
+      <text class="sm" x="104" y="44" fill="var(--violet)" font-style="italic">slope (N/m)</text>
+      <text class="lbl" x="128" y="236" text-anchor="middle">W = F &#183; d</text>
+
+      <!-- panel 2 -->
+      <line x1="272" y1="170" x2="408" y2="170" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfE)"/>
+      <line x1="272" y1="170" x2="272" y2="52" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfE)"/>
+      <polygon points="294,170 382,170 382,78 294,128" fill="var(--green-soft)"/>
+      <line x1="294" y1="128" x2="382" y2="78" stroke="var(--red)" stroke-width="3"/>
+      <line x1="294" y1="128" x2="294" y2="170" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="382" y1="78" x2="382" y2="170" stroke="var(--blue)" stroke-width="1.6"/>
+      <text class="sm" x="340" y="142" text-anchor="middle" font-style="italic">displacement</text>
+      <text class="sm" x="340" y="156" text-anchor="middle" font-style="italic">(m)</text>
+      <text class="sm" x="340" y="192" text-anchor="middle" font-style="italic">time (s)</text>
+      <text class="sm" transform="translate(250,112) rotate(-90)" text-anchor="middle" font-style="italic">velocity (m/s)</text>
+      <text class="sm" x="314" y="44" fill="var(--red)" font-style="italic">slope (m/s&#178;)</text>
+      <text class="lbl" x="340" y="236" text-anchor="middle">&#916;x = v<tspan dy="4" font-size="10">ave</tspan><tspan dy="-4"> &#916;t</tspan></text>
+
+      <!-- panel 3 -->
+      <line x1="484" y1="170" x2="620" y2="170" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfE)"/>
+      <line x1="484" y1="170" x2="484" y2="52" stroke="var(--amber)" stroke-width="2" marker-end="url(#vfE)"/>
+      <polygon points="506,170 594,170 594,78 506,128" fill="var(--green-soft)"/>
+      <line x1="506" y1="128" x2="594" y2="78" stroke="#8a5a1a" stroke-width="3"/>
+      <line x1="506" y1="128" x2="506" y2="170" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="594" y1="78" x2="594" y2="170" stroke="var(--blue)" stroke-width="1.6"/>
+      <text class="sm" x="552" y="142" text-anchor="middle" font-style="italic">impulse</text>
+      <text class="sm" x="552" y="156" text-anchor="middle" font-style="italic">(N&#183;s)</text>
+      <text class="sm" x="552" y="192" text-anchor="middle" font-style="italic">time (s)</text>
+      <text class="sm" transform="translate(462,112) rotate(-90)" text-anchor="middle" font-style="italic">Force (N)</text>
+      <text class="sm" x="526" y="44" fill="#8a5a1a" font-style="italic">slope (N/s)</text>
+      <text class="lbl" x="552" y="236" text-anchor="middle">Impulse = F &#916;t</text>
+
+      <text class="sm" x="320" y="272" text-anchor="middle">Same shape, three different quantities &#8212; the axes decide, not the picture.</text>
+    </svg>
+    <figcaption>The best figure in Trevor&rsquo;s Module&nbsp;4 material, and the one that ties the whole
+      module together. Area under force&ndash;distance is work; area under velocity&ndash;time is
+      displacement; area under force&ndash;time is impulse. The slope of each line carries its own units
+      too. Impulse is taken up on the sibling page <b>Ch09a &middot; Momentum and Impulse</b>.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">The habit worth forming</span>
+    Before you compute an area on any graph in this course, multiply the units on the two axes and see
+    what comes out. N&nbsp;&times;&nbsp;m gives joules, so that area is work. (m/s)&nbsp;&times;&nbsp;s
+    gives metres, so that area is a displacement. N&nbsp;&times;&nbsp;s gives N&middot;s, so that area is
+    an impulse. The units tell you what you have computed, which is more reliable than remembering
+    which graph was which.
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">The rule</td><td class="eq">&mdash;</td>
+        <td>The work done can be found from a force&ndash;distance graph by determining the area between
+            the force function and the <span class="m">x</span>-axis.</td></tr>
+    <tr><td class="term">Straight lines</td><td class="eq">&mdash;</td>
+        <td>Rectangles and triangles are enough. A trapezoid is a rectangle plus a triangle.</td></tr>
+    <tr><td class="term">The spring</td><td class="eq">&mdash;</td>
+        <td><span class="m">W</span>&nbsp;=&nbsp;&frac12;<span class="m">k</span>(&Delta;<span class="m">x</span>)<sup>2</sup>
+            from the relaxed length; add <span class="m">k x</span><sub>1</sub>&Delta;<span class="m">x</span>
+            if it was already stretched.</td></tr>
+    <tr><td class="term">Curved paths</td><td class="eq">&mdash;</td>
+        <td>Chop into short pieces, compute
+            <span class="m">F</span>&nbsp;cos&nbsp;<span class="m">&theta;</span>&nbsp;&Delta;&#8467; on each,
+            and add &mdash; signs included.</td></tr>
+    <tr><td class="term">Units first</td><td class="eq">&mdash;</td>
+        <td>Multiply the two axis units to find out what the area means.</td></tr>
+  </table>
+
+  <p>For more complicated variable forces, methods from the calculus determine the same area
+     analytically. In PHY&nbsp;151 that is the usual route; in College Physics the graphical method is
+     the whole story, and it is enough for every spring problem in the course.</p>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/7-1-work-the-scientific-definition" target="_blank" rel="noopener">7.1 Work: The Scientific Definition</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/7-1-work" target="_blank" rel="noopener">7.1 Work</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/8-1-potential-energy-of-a-system" target="_blank" rel="noopener">8.1 Potential Energy of a System</a></li>
+  </ul>
+  <p class="why">Trevor&rsquo;s closing slide cites <em>University Physics Volume&nbsp;2</em>; that is the
+     electricity and magnetism volume, and the mechanics material is in Volume&nbsp;1. Corrected above,
+     as on the Module&nbsp;3 pages.</p>
+
+  <footer>
+    This page is adapted from the presentation <em>Work done by Variable Forces</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
