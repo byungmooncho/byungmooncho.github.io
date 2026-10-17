@@ -231,7 +231,8 @@
   .rev{ margin:.5rem 0 1rem; }
   .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
   .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
-  .rev .rbtn[disabled]{ color:var(--muted); border-color:var(--rule); background:#fff; cursor:default; }
+  .rev .rbtn.locked{ color:var(--muted); border-color:var(--rule); background:#fff; }
+  .rev .rlock{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:#8a1a1a; margin:.35rem 0 0; } .rev .rbtn.pulse{ outline:3px solid #e07a10; outline-offset:2px; }
   .rev .rbody{ margin-top:.6rem; } .rev .rempty table.doc td{ height:2.3rem; }
   .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
   .ahead b{ color:var(--green); } .ahead h2{ display:none; }
@@ -492,14 +493,22 @@ said the losses were equal, you were giving friction a potential energy it has n
 
 
 <script>
-/* Answers open in page order: each "Show" button unlocks only after the previous one has been opened. */
+/* Answers open in page order: each "Show" button unlocks only after the previous one has been opened.
+   A locked button is not silent: clicking it explains, and points at the button that is next in line. */
 (function(){
   var btns=[].slice.call(document.querySelectorAll('.rev .rbtn')); if(!btns.length) return;
-  function gate(){ var unlocked=true;
-    btns.forEach(function(b){ var d=document.getElementById(b.getAttribute('aria-controls')); var opened=b.getAttribute('data-opened')==='1';
-      b.disabled=!unlocked; b.title = unlocked ? '' : 'Open the one above first';
-      if(!opened) unlocked=false; }); }
+  function next(){ for(var i=0;i<btns.length;i++){ if(btns[i].getAttribute('data-opened')!=='1') return i; } return -1; }
+  function gate(){ var n=next();
+    btns.forEach(function(b,i){ var locked = n>-1 && i>n; b.classList.toggle('locked', locked);
+      b.setAttribute('aria-disabled', locked?'true':'false'); b.title = locked ? 'Open the one above first' : ''; }); }
+  function tell(b){ var n=next(); var m=b.parentNode.querySelector('.rlock');
+    if(!m){ m=document.createElement('div'); m.className='rlock'; b.parentNode.insertBefore(m, b.nextSibling); }
+    var k=btns.indexOf(b)-n; m.textContent='Locked — open the one above first (' + (k===1?'the previous':'the next unopened') + ' “' + btns[n].getAttribute('data-label') + '” button, ' + k + ' above).';
+    m.hidden=false; clearTimeout(m._t); m._t=setTimeout(function(){ m.hidden=true; }, 6000);
+    var t=btns[n]; t.classList.add('pulse'); setTimeout(function(){ t.classList.remove('pulse'); }, 2500);
+    if(t.getBoundingClientRect().top<0) t.scrollIntoView({block:'center', behavior:'smooth'}); }
   btns.forEach(function(b){ b.addEventListener('click', function(){
+    if(b.classList.contains('locked')){ tell(b); return; }
     var d=document.getElementById(b.getAttribute('aria-controls')); var open=d.hidden; d.hidden=!open;
     var e=document.getElementById(b.getAttribute('aria-controls')+'E'); if(e) e.hidden=open;
     if(open) b.setAttribute('data-opened','1');
