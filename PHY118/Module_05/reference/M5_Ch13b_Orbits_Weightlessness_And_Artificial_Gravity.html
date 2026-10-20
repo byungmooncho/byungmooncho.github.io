@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch13b &mdash; Orbits, Weightlessness and Artificial Gravity</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 118 - Module 5 - Chapter 6 (College Physics) - Trevor slides 06i
+     "There is No Gravity in Space & other Mythconceptions" - web-page version
+     of the lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     32 slides, of which a dozen are video clips and film stills. The deck's
+     unique content - and all this page carries - is: what a scale actually
+     measures, why free fall reads zero, orbital speed and period from first
+     principles, and the Hermes artificial-gravity calculation.
+
+     DELIBERATELY NOT REPEATED HERE, because they are already built elsewhere
+     in this reference set and a reference page should not say the same thing
+     twice:
+       - Newton's cannonball (s13) -> Ch13a
+       - the inverse-square law (s16) and the LEO force chart (s20) -> Ch13a
+       - centripetal vs centrifugal (s23) and the rotating-ring figure
+         (s25-s26) -> Ch06c
+     Each is cross-referenced in prose by slug instead.
+
+     NOT REPRODUCED (third-party): clips and stills from Gravity (c) 2013
+     Warner Brothers and The Martian (c) 2015 20th Century Fox, the Apollo 15
+     hammer-and-feather footage, the Rick Mercer Report clip, the Bugs Bunny
+     clip, the giphy weightlessness loops, and the Cmglee/Geo Swan orbit
+     comparison. The page says what each showed.
+
+     This page is AUTHORED for this course from the deck, not generated from
+     any other page (playbook Step 1). The deck carries no unit-vector
+     notation and no calculus.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check ol{ margin:.3rem 0 .6rem 1.2rem; padding:0; }
+  .check li{ margin:.15rem 0; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+  table.grid td.num{ text-align:right; font-variant-numeric:tabular-nums; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .rad{ border-top:1px solid currentColor; padding:0 .15em; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 6 (College Physics) &middot; Slides 06i</span>
+  </div>
+
+  <h1>Orbits, Weightlessness and Artificial Gravity</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Astronauts float, so there must be no gravity up there. It sounds like a deduction and it is a
+    myth &mdash; <b>Ch13a</b> already showed that at Space Station altitude gravity is still about
+    88% of what it is on the ground. The resolution is that floating has nothing to do with gravity
+    being absent. It has to do with what a bathroom scale actually measures, and what happens to
+    that reading when the floor falls away.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    From <b>Ch13a</b>: gravity at 400&nbsp;km is barely reduced. From <b>Ch06a</b>: the centripetal
+    force is whatever real force points at the centre. From <b>Ch06c</b>: a rotating frame invents
+    an outward force for the observer inside it. This page is those three facts pointed at one
+    misconception.
+  </div>
+
+  <div class="check">
+    <span class="label">Trevor's opening question</span>
+    <p class="q">The reason an astronaut in orbit around the Earth feels &ldquo;weightless&rdquo; is&hellip;</p>
+    <ol>
+      <li>the astronaut is too far away from Earth to feel its gravity</li>
+      <li>the astronaut is falling</li>
+      <li>a psychological effect associated with motion</li>
+      <li>the astronaut's acceleration is zero</li>
+      <li>the gravity from the Moon and the Earth cancel each other out</li>
+    </ol>
+    <div class="ans"><b>2 &mdash; the astronaut is falling.</b> Note that 4 is also wrong in an
+      interesting way: the astronaut's acceleration is emphatically <em>not</em> zero. It is
+      <span class="m">g</span>, directed at the centre of the Earth, which is exactly what keeps
+      them in orbit.</div>
+  </div>
+
+  <h2 id="what-is-weight">What a scale actually measures</h2>
+
+  <p>Stand on a bathroom scale on a level floor. You are not accelerating, so the forces balance,
+     and the number you read is the size of the force between you and the scale &mdash; the
+     <b>normal force</b>.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 280" role="img" aria-label="A person standing on a scale on a level floor. The normal force points up from the scale and the weight points down, and the two arrows are drawn the same length.">
+      <defs>
+        <marker id="w1b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+        <marker id="w1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+      <line x1="60" y1="232" x2="300" y2="232" stroke="var(--ink)" stroke-width="3"/>
+      <line x1="66" y1="232" x2="58" y2="242" stroke="var(--muted)" stroke-width="1.3"/>
+      <line x1="96" y1="232" x2="88" y2="242" stroke="var(--muted)" stroke-width="1.3"/>
+      <line x1="126" y1="232" x2="118" y2="242" stroke="var(--muted)" stroke-width="1.3"/>
+      <line x1="156" y1="232" x2="148" y2="242" stroke="var(--muted)" stroke-width="1.3"/>
+      <line x1="186" y1="232" x2="178" y2="242" stroke="var(--muted)" stroke-width="1.3"/>
+      <line x1="216" y1="232" x2="208" y2="242" stroke="var(--muted)" stroke-width="1.3"/>
+      <line x1="246" y1="232" x2="238" y2="242" stroke="var(--muted)" stroke-width="1.3"/>
+      <line x1="276" y1="232" x2="268" y2="242" stroke="var(--muted)" stroke-width="1.3"/>
+
+      <rect x="126" y="214" width="76" height="18" rx="3" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.5"/>
+      <text class="sm" x="164" y="227" text-anchor="middle">scale</text>
+
+      <line x1="156" y1="214" x2="164" y2="186" stroke="var(--ink)" stroke-width="2.4"/>
+      <line x1="172" y1="214" x2="164" y2="186" stroke="var(--ink)" stroke-width="2.4"/>
+      <line x1="164" y1="186" x2="164" y2="148" stroke="var(--ink)" stroke-width="2.6"/>
+      <line x1="144" y1="166" x2="184" y2="166" stroke="var(--ink)" stroke-width="2.2"/>
+      <circle cx="164" cy="136" r="11" fill="var(--ink)"/>
+
+      <line x1="252" y1="170" x2="252" y2="106" stroke="var(--blue)" stroke-width="2.8" marker-end="url(#w1b)"/>
+      <line x1="252" y1="170" x2="252" y2="234" stroke="var(--green)" stroke-width="2.8" marker-end="url(#w1g)"/>
+      <circle cx="252" cy="170" r="5" fill="var(--ink)"/>
+      <text class="lbl" x="264" y="128" fill="var(--blue)">F<tspan font-size="11">N</tspan></text>
+      <text class="lbl" x="264" y="214" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+
+      <text class="sm" x="360" y="120">Not accelerating, so</text>
+      <text class="lbl" x="360" y="150">&Sigma;F = 0 &nbsp;&rArr;&nbsp; F<tspan font-size="11">N</tspan> = F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="360" y="182">and the scale reads your weight</text>
+      <text class="sm" x="360" y="200">only because those two happen</text>
+      <text class="sm" x="360" y="218">to be equal here.</text>
+    </svg>
+    <figcaption>On a level, stationary floor the normal force equals the weight &mdash; which is why
+      the scale seems to be measuring gravity. It is not. It is measuring contact.</figcaption>
+  </figure>
+
+  <h2 id="accelerating-floor">What if the floor accelerates?</h2>
+
+  <p>Now the two forces are no longer forced to be equal, and the number on the scale moves even
+     though your mass and the Earth's pull have not changed at all. Take + towards the ceiling.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Three panels. In the first the floor accelerates upwards and the normal force arrow is longer than the weight. In the second the floor is stationary and the two are equal. In the third the floor is in free fall, the normal force has vanished, and only the weight remains.">
+      <defs>
+        <marker id="w2b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+        <marker id="w2g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="w2k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--amber)"/></marker>
+      </defs>
+
+      <!-- panel 1 -->
+      <line x1="40" y1="214" x2="190" y2="214" stroke="var(--ink)" stroke-width="3"/>
+      <line x1="60" y1="206" x2="60" y2="166" stroke="var(--amber)" stroke-width="2.2" marker-end="url(#w2k)"/>
+      <text class="sm" x="50" y="160" fill="var(--amber)">a</text>
+      <circle cx="130" cy="170" r="5" fill="var(--ink)"/>
+      <line x1="130" y1="170" x2="130" y2="76" stroke="var(--blue)" stroke-width="2.8" marker-end="url(#w2b)"/>
+      <line x1="130" y1="170" x2="130" y2="226" stroke="var(--green)" stroke-width="2.8" marker-end="url(#w2g)"/>
+      <text class="lbl" x="142" y="104" fill="var(--blue)">F<tspan font-size="11">N</tspan></text>
+      <text class="lbl" x="142" y="210" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="115" y="252" text-anchor="middle">floor accelerating up</text>
+      <text class="sm" x="115" y="270" text-anchor="middle">scale reads <tspan font-weight="700">more</tspan></text>
+
+      <!-- panel 2 -->
+      <line x1="240" y1="214" x2="390" y2="214" stroke="var(--ink)" stroke-width="3"/>
+      <circle cx="320" cy="170" r="5" fill="var(--ink)"/>
+      <line x1="320" y1="170" x2="320" y2="114" stroke="var(--blue)" stroke-width="2.8" marker-end="url(#w2b)"/>
+      <line x1="320" y1="170" x2="320" y2="226" stroke="var(--green)" stroke-width="2.8" marker-end="url(#w2g)"/>
+      <text class="lbl" x="332" y="134" fill="var(--blue)">F<tspan font-size="11">N</tspan></text>
+      <text class="lbl" x="332" y="210" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="315" y="252" text-anchor="middle">floor at rest</text>
+      <text class="sm" x="315" y="270" text-anchor="middle">scale reads your weight</text>
+
+      <!-- panel 3 -->
+      <line x1="450" y1="214" x2="600" y2="214" stroke="var(--ink)" stroke-width="3" stroke-dasharray="7 5"/>
+      <line x1="470" y1="176" x2="470" y2="222" stroke="var(--amber)" stroke-width="2.2" marker-end="url(#w2k)"/>
+      <text class="sm" x="452" y="172" fill="var(--amber)">a = g</text>
+      <circle cx="530" cy="170" r="5" fill="var(--ink)"/>
+      <line x1="530" y1="170" x2="530" y2="226" stroke="var(--green)" stroke-width="2.8" marker-end="url(#w2g)"/>
+      <text class="lbl" x="542" y="210" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="lbl" x="542" y="132" fill="var(--blue)">F<tspan font-size="11">N</tspan> = 0</text>
+      <text class="sm" x="525" y="252" text-anchor="middle">floor in free fall</text>
+      <text class="sm" x="525" y="270" text-anchor="middle">scale reads <tspan font-weight="700">zero</tspan></text>
+    </svg>
+    <figcaption>Same person, same planet, three readings. The weight arrow never changes; only the
+      contact force does.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Where the zero comes from</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        +<span class="m">F</span><sub>N</sub> + &minus;<span class="m">F</span><sub>g</sub>
+        = <span class="m">m</span>(&plusmn;<span class="m">a</span>)
+        &nbsp;&rArr;&nbsp;
+        <span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub> + <span class="m">m</span>(&plusmn;<span class="m">a</span>)
+      </div>
+      <div class="mathline" style="text-align:center">
+        in free fall, <span class="m">a</span> = <span class="m">a</span><sub>g</sub> downwards:
+        &nbsp;&nbsp;
+        <span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub> &minus; <span class="m">m</span><span class="m">a</span><sub>g</sub>
+        = <span class="m">m</span><span class="m">a</span><sub>g</sub> &minus; <span class="m">m</span><span class="m">a</span><sub>g</sub>
+        = <b>0</b>
+      </div>
+      <p class="why">Trevor's conclusion, and the whole point of the deck: <b>that is
+        &ldquo;weightlessness&rdquo;.</b> Not the absence of gravity &mdash; the absence of
+        <em>contact</em>. Gravity is still pulling with its full strength; there is simply nothing
+        pushing back, because the floor is falling at exactly the same rate you are.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">The honest name for it</span>
+    What the astronaut experiences is better called <b>free fall</b> than weightlessness. The word
+    &ldquo;weightless&rdquo; invites the very mistake the deck is about, because it sounds like a
+    statement about gravity when it is a statement about the scale.
+  </div>
+
+  <h2 id="orbit-is-falling">An orbit is falling &mdash; and missing</h2>
+
+  <p>Trevor reaches for Newton's own argument here: a projectile fired horizontally fast enough
+     will miss the ground and go into orbit. That figure is on <b>Ch13a</b> and is not repeated.
+     What matters for this page is the consequence: <b>everything in orbit is in free fall</b>, so
+     everything in orbit reads zero on a scale, while gravity does all the work of bending the
+     path.</p>
+
+  <h2 id="orbital-speed">How fast is that?</h2>
+
+  <p>Set the gravitational force equal to the centripetal force it has to supply, and the mass
+     cancels.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="The Earth with a circular orbit drawn just above its surface. A satellite on the orbit has a velocity arrow drawn tangent to the circle and a gravitational force arrow pointing in towards the centre of the Earth.">
+      <defs>
+        <marker id="o1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="o1v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--violet)"/></marker>
+      </defs>
+      <circle cx="210" cy="150" r="100" fill="#cfe0f5" stroke="var(--blue)" stroke-width="2"/>
+      <circle cx="210" cy="150" r="124" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="7 5"/>
+      <circle cx="210" cy="150" r="4" fill="var(--ink)"/>
+      <text class="lbl" x="210" y="172" text-anchor="middle">r</text>
+      <line x1="210" y1="150" x2="297.7" y2="62.3" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="4 4"/>
+
+      <circle cx="297.7" cy="62.3" r="8" fill="var(--violet)"/>
+      <line x1="297.7" y1="62.3" x2="353.7" y2="118.3" stroke="var(--violet)" stroke-width="2.8" marker-end="url(#o1v)"/>
+      <text class="lbl" x="358" y="118" fill="var(--violet)">v</text>
+      <line x1="292" y1="68" x2="246" y2="114" stroke="var(--green)" stroke-width="2.8" marker-end="url(#o1g)"/>
+      <text class="lbl" x="300" y="100" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+
+      <text class="sm" x="430" y="96">Gravity is the centripetal</text>
+      <text class="sm" x="430" y="114">force, so</text>
+      <text class="lbl" x="430" y="148">a<tspan font-size="11">c</tspan> = v&sup2;/r = a<tspan font-size="11">g</tspan></text>
+      <text class="lbl" x="430" y="186">v = &radic;<tspan style="text-decoration:overline">a<tspan font-size="11">g</tspan> r</tspan></text>
+      <text class="sm" x="430" y="216">&mdash; and the satellite's own</text>
+      <text class="sm" x="430" y="234">mass is nowhere in it.</text>
+    </svg>
+    <figcaption>The velocity is tangent, the force is inward, and the two together are an orbit.
+      Any mass will do: a bolt and a space station at the same altitude orbit at the same speed.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Orbital speed just above the surface</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">v</span> = &radic;<span class="rad"><span class="m">a</span><sub>g</sub><span class="m">r</span></span>
+        = &radic;<span class="rad">(9.8 m/s<sup>2</sup>)(6.37 &times; 10<sup>6</sup> m)</span>
+        = 7900 m/s = <b>7.9 km/s</b>
+      </div>
+      <p class="why">For scale, the speed of sound is 343&nbsp;m/s &mdash; so a low orbit is about
+        <b>23 times the speed of sound</b>. That number is the real reason getting to orbit is hard.
+        Altitude is cheap; the speed is what costs.</p>
+    </div>
+  </div>
+
+  <h2 id="orbital-period">How long does one lap take?</h2>
+
+  <div class="mathblock">
+    <div class="head">Period, from speed and circumference</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">T</span> =
+        <span class="frac"><span class="top">2&pi;<span class="m">r</span></span><span class="bot"><span class="m">v</span></span></span>
+        =
+        <span class="frac"><span class="top">2&pi;<span class="m">r</span></span><span class="bot">&radic;<span class="rad"><span class="m">r</span><span class="m">a</span><sub>g</sub></span></span></span>
+        = 2&pi;&radic;<span class="rad"><span class="m">r</span>/<span class="m">a</span><sub>g</sub></span>
+      </div>
+      <p class="why">Trevor's margin note &mdash; <em>iff constant</em> &mdash; is doing real work:
+        this assumes a circular orbit at constant speed. Everything below inherits that assumption.</p>
+    </div>
+  </div>
+
+  <table class="grid">
+    <tr><th>Orbit</th><th class="num">Radius</th><th class="num"><span class="m">a</span><sub>g</sub> there</th><th class="num">Period</th></tr>
+    <tr><td>Skimming the surface</td><td class="num">6 370 000 m</td><td class="num">9.80 m/s<sup>2</sup></td><td class="num">5065 s = <b>84.4 min</b></td></tr>
+    <tr><td>Space Station, <span class="m">h</span> = 416 km</td><td class="num">6 786 000 m</td><td class="num">9.80 m/s<sup>2</sup></td><td class="num">5228 s = <b>87.1 min</b></td></tr>
+    <tr><td>&hellip; using the real <span class="m">a</span><sub>g</sub> up there</td><td class="num">6 786 000 m</td><td class="num">8.66 m/s<sup>2</sup></td><td class="num">5563 s = <b>92.7 min</b></td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Two cautions, both Trevor's own</span>
+    <b>Use the radius of the orbit, not the height above the Earth</b> &mdash; add
+    <span class="m">r</span><sub>E</sub> to the altitude first. And his second note is worth
+    following up: <em>maybe</em> <span class="m">a</span><sub>g</sub> <em>isn't really
+    9.8&nbsp;m/s<sup>2</sup> up there.</em> It is not; at that radius it is 8.66, and putting that
+    in gives 92.7&nbsp;minutes against the Station's actual &asymp;93. The third row of the table is
+    what his own caveat produces when you take it seriously. He also notes the real orbit is
+    slightly elliptical.
+  </div>
+
+  <h2 id="artificial-gravity">Does Hermes provide &ldquo;full&rdquo; Earth gravity?</h2>
+
+  <p>The way to avoid free fall on a long voyage is to spin the ship, so the outer wall becomes a
+     floor that can push &mdash; the arrangement set out on <b>Ch06c</b>. The interesting question
+     is how well a particular design would work, and Trevor runs the numbers on a fictional one:
+     the <em>Hermes</em> from <em>The Martian</em>.</p>
+
+  <p>His method is worth more than the answer. The film gives no specification, so he measured the
+     ring off a frame of the film, using a window of known height (about 5.25&nbsp;ft) as the scale,
+     and timed one rotation from the footage: <span class="m">r</span> = 52.5&nbsp;ft =
+     16.0&nbsp;m, <span class="m">T</span> = 31.60&nbsp;s. The still itself is copyright and is not
+     reproduced here.</p>
+
+  <div class="mathblock">
+    <div class="head">Spin rate to surface gravity</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">a</span><sub>g</sub> =
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        &nbsp;with&nbsp;
+        <span class="m">v</span> =
+        <span class="frac"><span class="top">2&pi;<span class="m">r</span></span><span class="bot"><span class="m">T</span></span></span>
+        &nbsp;&rArr;&nbsp;
+        <span class="m">a</span><sub>g</sub> =
+        <span class="frac"><span class="top">4&pi;<sup>2</sup><span class="m">r</span></span><span class="bot"><span class="m">T</span><sup>2</sup></span></span>
+      </div>
+      <div class="mathline" style="text-align:center">
+        =
+        <span class="frac"><span class="top">4&pi;<sup>2</sup>(16.0 m)</span><span class="bot">(31.60 s)<sup>2</sup></span></span>
+        = <b>0.63 m/s<sup>2</sup></b>
+      </div>
+      <p class="why">Earth is 9.81&nbsp;m/s<sup>2</sup>. Pluto is 0.60. So the <em>Hermes</em> ring,
+        as filmed, delivers <b>Pluto gravity</b> &mdash; about one sixteenth of Earth's, and less
+        than half the Moon's. Enough to let a dropped pen find the floor eventually; not enough to
+        stop the bone loss the mission was presumably spinning to prevent.</p>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 310" role="img" aria-label="A bar chart comparing surface gravity. The Hermes ring at 0.63 metres per second squared and Pluto at 0.60 are almost identical and very short bars; the Moon is 1.62, Mars 3.72, and Earth 9.81 is by far the longest.">
+      <line x1="150" y1="46" x2="150" y2="262" stroke="var(--ink)" stroke-width="1.6"/>
+      <line x1="150" y1="262" x2="590" y2="262" stroke="var(--ink)" stroke-width="1.6"/>
+
+      <rect x="150" y="54"  width="27"  height="26" fill="var(--violet)"/>
+      <rect x="150" y="96"  width="26"  height="26" fill="#b9b2cf"/>
+      <rect x="150" y="138" width="70"  height="26" fill="#9fb3c8"/>
+      <rect x="150" y="180" width="160" height="26" fill="#7f9fb8"/>
+      <rect x="150" y="222" width="422" height="26" fill="var(--blue)"/>
+
+      <text class="sm" x="142" y="72"  text-anchor="end">Hermes ring</text>
+      <text class="sm" x="142" y="114" text-anchor="end">Pluto</text>
+      <text class="sm" x="142" y="156" text-anchor="end">the Moon</text>
+      <text class="sm" x="142" y="198" text-anchor="end">Mars</text>
+      <text class="sm" x="142" y="240" text-anchor="end">Earth</text>
+
+      <text class="sm" x="185" y="72">0.63</text>
+      <text class="sm" x="184" y="114">0.60</text>
+      <text class="sm" x="228" y="156">1.62</text>
+      <text class="sm" x="318" y="198">3.72</text>
+      <text class="sm" x="564" y="240" text-anchor="end" fill="#ffffff">9.81</text>
+
+      <text class="sm" x="150" y="280" text-anchor="middle">0</text>
+      <text class="sm" x="236" y="280" text-anchor="middle">2</text>
+      <text class="sm" x="322" y="280" text-anchor="middle">4</text>
+      <text class="sm" x="408" y="280" text-anchor="middle">6</text>
+      <text class="sm" x="494" y="280" text-anchor="middle">8</text>
+      <text class="sm" x="580" y="280" text-anchor="middle">10</text>
+      <text class="sm" x="370" y="300" text-anchor="middle">acceleration due to gravity (m/s&sup2;)</text>
+    </svg>
+    <figcaption>The <em>Hermes</em> ring against the real thing. To reach a full
+      <span class="m">g</span> at that radius the ring would have to turn roughly four times
+      faster &mdash; a period of about eight seconds instead of thirty-two.</figcaption>
+  </figure>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Weight</td><td class="eq">&mdash;</td>
+        <td>what a scale reads is the <b>normal force</b>, not the gravitational force. On a level,
+            stationary floor they happen to be equal.</td></tr>
+    <tr><td class="term">Weightlessness</td><td class="eq">&mdash;</td>
+        <td><span class="m">F</span><sub>N</sub> = 0, which happens when the floor is falling as
+            fast as you are. Gravity is unchanged. <b>Free fall</b> is the better word.</td></tr>
+    <tr><td class="term">Orbit</td><td class="eq">&mdash;</td>
+        <td>free fall that keeps missing the ground. Gravity supplies the centripetal force, so
+            <span class="m">v</span> = &radic;<span class="rad"><span class="m">a</span><sub>g</sub><span class="m">r</span></span>
+            &mdash; independent of the orbiting mass.</td></tr>
+    <tr><td class="term">Numbers to hold</td><td class="eq">&mdash;</td>
+        <td>low orbit is 7.9&nbsp;km/s, about 23 times the speed of sound, and one lap takes
+            roughly 85&ndash;93 minutes.</td></tr>
+    <tr><td class="term">Use the orbital radius</td><td class="eq">&mdash;</td>
+        <td>not the altitude. Add the planet's radius first.</td></tr>
+    <tr><td class="term">Artificial gravity</td><td class="eq">&mdash;</td>
+        <td><span class="m">a</span><sub>g</sub> = 4&pi;<sup>2</sup><span class="m">r</span>/<span class="m">T</span><sup>2</sup>.
+            Spinning a ring is the only way to get a floor that pushes, and the numbers are
+            demanding &mdash; <em>Hermes</em> manages Pluto.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      the textbook for this course &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/6-6-satellites-and-keplers-laws-an-argument-for-simplicity" target="_blank" rel="noopener">6.6 Satellites and Kepler's Laws</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/6-5-newtons-universal-law-of-gravitation" target="_blank" rel="noopener">6.5 Newton's Universal Law of Gravitation</a></li>
+    <li><b>Extra resource.</b> Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/13-4-satellite-orbits-and-energy" target="_blank" rel="noopener">13.4 Satellite Orbits and Energy</a></li>
+    <li>Trevor's own sources for the <em>Hermes</em> estimate: Brian Koberlein,
+      <a href="https://briankoberlein.com/2015/10/06/the-science-behind-the-martian-hermes-spacecraft/" target="_blank" rel="noopener">The science behind <em>The Martian</em>'s Hermes spacecraft</a>, and
+      <a href="https://www.wired.com/2015/08/spinning-spacecraft-martian-work/" target="_blank" rel="noopener">Wired, &ldquo;Would the spinning spacecraft in <em>The Martian</em> work?&rdquo;</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>There is No Gravity in Space &amp; other
+    Mythconceptions</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
