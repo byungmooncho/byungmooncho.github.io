@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch06a &mdash; Centripetal Force</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 151 - Module 5 - Chapter 6 (University Physics) - Trevor slides 06b
+     "Circular Motion / Centripetal Force" - web-page version of the lecture
+     slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     Chapter follows the CONTENT: centripetal force is University Physics 6.3
+     (with the acceleration in 4.4), not the deck folder's 06b.
+
+     Slides 2 and 4 carry the SAME circle geometry, slide 4 with r and phi added.
+     Drawn once, from the richer slide-4 version - scoring the gap, not the deck
+     (playbook Step 0a; the M4 Ch05d precedent where a duplicate figure was
+     built and then reverted).
+
+     PHY 118 has its own page for this deck, written for College Physics from
+     the same deck. It is NOT generated from this file and a change here does
+     not propagate there (playbook Step 1). The component derivation below is
+     the place the two pages genuinely differ: 118 does not use unit-vector
+     notation at all.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 6 (University Physics) &middot; Slides 06b</span>
+  </div>
+
+  <h1>Centripetal Force</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Go round a bend at a steady 30&nbsp;mph and your speedometer says nothing is happening. Your
+    stomach disagrees, and your stomach is right: velocity is a vector, the direction is changing,
+    so there is an acceleration &mdash; and it points at the centre of the turn. Everything on this
+    page follows from that one observation, including the most-misused phrase in the module. The
+    centripetal force is not a new force. It is a <em>job</em>, and some real force has to do it.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Vector subtraction from Module&nbsp;2, Newton's second law and free-body diagrams from
+    Module&nbsp;3, and from <b>Ch10a</b> the fact that the centripetal acceleration can also be
+    written <span class="m">a</span><sub>c</sub> = <span class="m">&omega;</span><sup>2</sup><span class="m">r</span>.
+    This page is where <span class="m">v</span><sup>2</sup>/<span class="m">r</span> itself comes from.
+  </div>
+
+  <h2 id="changing-velocity">The velocity is changing even though the speed is not</h2>
+
+  <p>Take two instants a short time apart, with the object at symmetric positions either side of the
+     top of the circle. The two velocity vectors have the <em>same length</em> &mdash; the speed has
+     not changed &mdash; but they point in different directions, so
+     <span class="m">v&#8407;</span><sub>2</sub> &minus; <span class="m">v&#8407;</span><sub>1</sub>
+     is not zero.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 350" role="img" aria-label="A dashed circle with two radii drawn symmetrically either side of the vertical, each making an angle theta with it, so the angle between them is phi. At the end of each radius a velocity vector is drawn tangent to the circle, one pointing up and to the right and one pointing down and to the right, both the same length. The radius is labelled r.">
+      <defs>
+        <marker id="c1v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green-deep)"/></marker>
+      </defs>
+
+      <line x1="200" y1="96.7" x2="410" y2="96.7" stroke="var(--rule)" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <line x1="300" y1="60" x2="300" y2="325" stroke="var(--rule)" stroke-width="1.4" stroke-dasharray="3 4"/>
+
+      <circle cx="300" cy="195" r="120" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-dasharray="6 5"/>
+      <circle cx="300" cy="195" r="5" fill="var(--blue)"/>
+
+      <line x1="300" y1="195" x2="231.2" y2="96.7" stroke="var(--ink)" stroke-width="1.8"/>
+      <line x1="300" y1="195" x2="368.8" y2="96.7" stroke="var(--ink)" stroke-width="1.8"/>
+
+      <!-- phi between the radii -->
+      <path d="M258.7,136 A72,72 0 0 1 341.3,136" fill="none" stroke="var(--blue)" stroke-width="1.6"/>
+      <text class="lbl" x="300" y="128" text-anchor="middle" fill="var(--blue)">&phi;</text>
+      <text class="lbl" x="284" y="152" text-anchor="end">&theta;</text>
+      <text class="lbl" x="316" y="152">&theta;</text>
+      <text class="lbl" x="232" y="122" text-anchor="end">r</text>
+
+      <!-- velocity vectors, tangent, equal length -->
+      <line x1="231.2" y1="96.7" x2="300.8" y2="47.9" stroke="var(--green-deep)" stroke-width="2.8" marker-end="url(#c1v)"/>
+      <line x1="368.8" y1="96.7" x2="438.4" y2="145.5" stroke="var(--green-deep)" stroke-width="2.8" marker-end="url(#c1v)"/>
+      <text class="lbl" x="243" y="62" fill="var(--green-deep)">v<tspan font-size="11">1</tspan></text>
+      <text class="lbl" x="392" y="168" fill="var(--green-deep)">v<tspan font-size="11">2</tspan></text>
+
+      <text class="sm" x="300" y="342" text-anchor="middle">directions: + is in, &minus; is out</text>
+
+      <text class="sm" x="470" y="112">the two speeds are equal,</text>
+      <text class="sm" x="470" y="130">|v<tspan font-size="9">1</tspan>| = |v<tspan font-size="9">2</tspan>| = v;</text>
+      <text class="sm" x="470" y="156">only the direction</text>
+      <text class="sm" x="470" y="174">has changed.</text>
+      <text class="sm" x="470" y="212">&phi; = 2&theta;</text>
+    </svg>
+    <figcaption>Two instants either side of the top of the circle. Equal speeds, different
+      directions &mdash; and that difference is the whole of the acceleration.</figcaption>
+  </figure>
+
+  <p>Put the two vectors tail to tail and the difference is the vector that closes the triangle from
+     the head of <span class="m">v&#8407;</span><sub>1</sub> to the head of
+     <span class="m">v&#8407;</span><sub>2</sub>. Its direction is the thing to notice: with the
+     object at the top of the circle, <b>it points straight down &mdash; at the centre.</b></p>
+
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Two equal-length vectors v1 and v2 drawn tail to tail from the same point, one up and to the right and one down and to the right. A third vector, delta v, runs from the head of v1 straight down to the head of v2.">
+      <defs>
+        <marker id="c2v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green-deep)"/></marker>
+        <marker id="c2d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+      </defs>
+
+      <line x1="160" y1="130" x2="282.9" y2="43.9" stroke="var(--green-deep)" stroke-width="2.8" marker-end="url(#c2v)"/>
+      <line x1="160" y1="130" x2="282.9" y2="216.1" stroke="var(--green-deep)" stroke-width="2.8" marker-end="url(#c2v)"/>
+      <line x1="282.9" y1="43.9" x2="282.9" y2="216.1" stroke="var(--red)" stroke-width="2.8" marker-end="url(#c2d)"/>
+
+      <text class="lbl" x="196" y="72" fill="var(--green-deep)">v<tspan font-size="11">1</tspan></text>
+      <text class="lbl" x="196" y="200" fill="var(--green-deep)">v<tspan font-size="11">2</tspan></text>
+      <text class="lbl" x="296" y="132" fill="var(--red)">&#916;v</text>
+
+      <text class="lbl" x="380" y="78">&#916;v = v<tspan font-size="11">2</tspan> &minus; v<tspan font-size="11">1</tspan></text>
+      <text class="lbl" x="380" y="112">v<tspan font-size="11">1</tspan> + &#916;v = v<tspan font-size="11">2</tspan></text>
+      <text class="lbl" x="380" y="162">a<tspan font-size="11">c</tspan> = &#916;v / &#916;t</text>
+      <text class="sm" x="380" y="190">so the acceleration points</text>
+      <text class="sm" x="380" y="208">the same way &#916;v does &mdash;</text>
+      <text class="sm" x="380" y="226">at the centre of the circle.</text>
+    </svg>
+    <figcaption>The velocity triangle. <span class="m">&#916;v&#8407;</span> is what survives when two
+      equal-length vectors are subtracted, and it aims at the centre.</figcaption>
+  </figure>
+
+  <p><b>Centripetal</b> means <em>centre-seeking</em>, and that is all the word claims. The
+     acceleration is called the centripetal acceleration; the net force producing it, by Newton's
+     second law, is called the centripetal force.</p>
+
+  <h2 id="where-v2r-comes-from">Where <span class="m">v</span><sup>2</sup>/<span class="m">r</span> comes from</h2>
+
+  <p>Trevor derives it rather than quoting it, and the derivation is worth following once because it
+     explains the square. Resolve the two velocities into components, using the angle
+     <span class="m">&theta;</span> from the figure above.</p>
+
+  <div class="mathblock">
+    <div class="head">Subtracting the two velocities</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">v&#8407;</span><sub>2</sub> = <span class="m">v</span> cos <span class="m">&theta;</span> <span class="m">i&#770;</span> &minus; <span class="m">v</span> sin <span class="m">&theta;</span> <span class="m">j&#770;</span><br>
+        <span class="m">v&#8407;</span><sub>1</sub> = <span class="m">v</span> cos <span class="m">&theta;</span> <span class="m">i&#770;</span> + <span class="m">v</span> sin <span class="m">&theta;</span> <span class="m">j&#770;</span>
+      </div>
+      <div class="mathline" style="border-top:1.5px solid var(--rule); padding-top:.4rem">
+        <span class="m">v&#8407;</span><sub>2</sub> &minus; <span class="m">v&#8407;</span><sub>1</sub>
+        = &minus;2<span class="m">v</span> sin <span class="m">&theta;</span> <span class="m">j&#770;</span>
+      </div>
+      <p class="why">The horizontal components are identical and cancel; only the vertical parts
+        survive, and they survive <em>doubled</em>, pointing in the &minus;<span class="m">j&#770;</span>
+        direction &mdash; towards the centre. The magnitude is 2<span class="m">v</span> sin <span class="m">&theta;</span>.</p>
+    </div>
+  </div>
+
+  <p>Now the time. In that interval the object travels the arc between the two positions, which is
+     2<span class="m">r&theta;</span> long &mdash; the arc length from <b>Ch10a</b>, with the angle
+     counted on both sides of the vertical. At speed <span class="m">v</span> that takes
+     &Delta;<span class="m">t</span> = 2<span class="m">r&theta;</span>/<span class="m">v</span>.</p>
+
+  <div class="mathblock">
+    <div class="head">Dividing by the time, then letting the angle shrink</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">a</span><sub>c</sub> =
+        <span class="frac"><span class="top">2<span class="m">v</span> sin <span class="m">&theta;</span></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+        =
+        <span class="frac"><span class="top">2<span class="m">v</span> sin <span class="m">&theta;</span></span><span class="bot">2<span class="m">r&theta;</span>/<span class="m">v</span></span></span>
+        =
+        <span class="frac"><span class="top">2<span class="m">v</span><sup>2</sup> sin <span class="m">&theta;</span></span><span class="bot">2<span class="m">r&theta;</span></span></span>
+      </div>
+      <div class="mathline" style="text-align:center">
+        for small <span class="m">&theta;</span>, &nbsp; sin <span class="m">&theta;</span> &rarr; <span class="m">&theta;</span>
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">a</span><sub>c</sub> =
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+      </div>
+      <p class="why">Trevor asks the small-angle question rather than answering it: <em>for small
+        angles, how are</em> sin <span class="m">&theta;</span> <em>and</em> <span class="m">&theta;</span>
+        <em>related?</em> They become equal, which is only true with
+        <span class="m">&theta;</span> in radians &mdash; the reason the whole module insists on them.
+        The <span class="m">v</span><sup>2</sup> arrives honestly: one factor of
+        <span class="m">v</span> from the size of &Delta;<span class="m">v&#8407;</span>, the other from
+        the fact that going faster also shortens &Delta;<span class="m">t</span>.</p>
+    </div>
+  </div>
+
+  <h2 id="not-an-extra-force">The centripetal force is not an extra force</h2>
+
+  <p>This is the sentence to carry out of the module. The centripetal force is <b>not</b> a new
+     interaction that appears when something goes in a circle. It is the <em>net</em> force in the
+     centre-seeking direction, produced by forces that were already on your free-body diagram.</p>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        &Sigma;<span class="m">F&#8407;</span> = <span class="m">F&#8407;</span><sub>1</sub> + <span class="m">F&#8407;</span><sub>2</sub>
+        = <span class="m">m</span><span class="m">a&#8407;</span><sub>c</sub> = <span class="m">F&#8407;</span><sub>c</sub>
+      </div>
+    </div>
+  </div>
+
+  <p>Trevor's case is an aeroplane turning. It banks, which tilts the lift vector; the lift is the
+     only force besides gravity, and it is doing two jobs at once.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 320" role="img" aria-label="Three panels. First, a banked aeroplane seen from behind with a lift vector perpendicular to its wings and a weight vector straight down. Second, the same two vectors alone as a free-body diagram. Third, the lift resolved into a vertical component balancing the weight and a horizontal component pointing in towards the centre of the turn. Below, the turn seen from above, with arrows pointing inward all round the circle.">
+      <defs>
+        <marker id="c3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="c3g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="c3f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="#f0b9b2"/></marker>
+      </defs>
+
+      <!-- panel A: the banked plane -->
+      <line x1="55" y1="170" x2="145" y2="130" stroke="var(--muted)" stroke-width="2.4"/>
+      <ellipse cx="100" cy="150" rx="15" ry="9" fill="#e7ebe8" stroke="var(--muted)" stroke-width="1.4" transform="rotate(-24 100 150)"/>
+      <line x1="100" y1="150" x2="130.5" y2="81.4" stroke="var(--red)" stroke-width="2.6" marker-end="url(#c3r)"/>
+      <line x1="100" y1="150" x2="100" y2="220" stroke="var(--green)" stroke-width="2.6" marker-end="url(#c3g)"/>
+      <text class="lbl" x="136" y="76" fill="var(--red)">F<tspan font-size="11">lift</tspan></text>
+      <text class="lbl" x="106" y="236" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="100" y="258" text-anchor="middle">banked, from behind</text>
+
+      <!-- panel B: the FBD -->
+      <circle cx="270" cy="150" r="4" fill="var(--ink)"/>
+      <line x1="270" y1="150" x2="300.5" y2="81.4" stroke="var(--red)" stroke-width="2.6" marker-end="url(#c3r)"/>
+      <line x1="270" y1="150" x2="270" y2="220" stroke="var(--green)" stroke-width="2.6" marker-end="url(#c3g)"/>
+      <text class="lbl" x="306" y="76" fill="var(--red)">F<tspan font-size="11">lift</tspan></text>
+      <text class="lbl" x="276" y="236" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="270" y="258" text-anchor="middle">just the two forces</text>
+
+      <!-- panel C: resolved -->
+      <circle cx="450" cy="150" r="4" fill="var(--ink)"/>
+      <line x1="450" y1="150" x2="480.5" y2="81.4" stroke="#f0b9b2" stroke-width="2.6" marker-end="url(#c3f)"/>
+      <line x1="450" y1="150" x2="450" y2="81.4" stroke="var(--red)" stroke-width="2.6" marker-end="url(#c3r)"/>
+      <line x1="450" y1="150" x2="500.5" y2="150" stroke="var(--red)" stroke-width="2.6" marker-end="url(#c3r)"/>
+      <line x1="450" y1="150" x2="450" y2="220" stroke="var(--green)" stroke-width="2.6" marker-end="url(#c3g)"/>
+      <text class="sm" x="450" y="66" text-anchor="middle">vertical</text>
+      <text class="lbl" x="424" y="112" text-anchor="end" fill="var(--red)">F<tspan font-size="11">ly</tspan></text>
+      <text class="lbl" x="506" y="143" fill="var(--red)">F<tspan font-size="11">lx</tspan></text>
+      <text class="sm" x="546" y="154">horizontal</text>
+      <text class="lbl" x="426" y="236" text-anchor="end" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="450" y="258" text-anchor="middle">resolved into components</text>
+
+      <!-- the turn, from above -->
+      <ellipse cx="300" cy="292" rx="150" ry="22" fill="none" stroke="var(--blue)" stroke-width="1.6"/>
+      <circle cx="300" cy="292" r="4" fill="var(--blue)"/>
+      <line x1="170" y1="292" x2="236" y2="292" stroke="var(--red)" stroke-width="2" marker-end="url(#c3r)"/>
+      <line x1="430" y1="292" x2="364" y2="292" stroke="var(--red)" stroke-width="2" marker-end="url(#c3r)"/>
+      <line x1="248" y1="274" x2="286" y2="286" stroke="var(--red)" stroke-width="2" marker-end="url(#c3r)"/>
+      <line x1="352" y1="274" x2="314" y2="286" stroke="var(--red)" stroke-width="2" marker-end="url(#c3r)"/>
+      <text class="sm" x="470" y="296">the turn, from above</text>
+    </svg>
+    <figcaption>The lift does both jobs: its vertical component holds the aeroplane up, its
+      horizontal component is the entire centripetal force. Nothing was added to the diagram to make
+      the turn happen.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Two directions, two different statements</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th style="width:50%">Vertical</th><th>Horizontal</th></tr>
+        <tr>
+          <td>&Sigma;<span class="m">F&#8407;</span><sub>y</sub> = 0</td>
+          <td>&Sigma;<span class="m">F&#8407;</span><sub>x</sub> = <span class="m">m</span><span class="m">a</span><sub>x</sub></td>
+        </tr>
+        <tr>
+          <td><span class="m">F</span><sub>ly</sub> = <span class="m">F</span><sub>g</sub></td>
+          <td><span class="m">F</span><sub>lx</sub> = <span class="m">m</span><span class="m">a</span><sub>c</sub></td>
+        </tr>
+      </table>
+      <p class="why">The aeroplane is not rising or falling, so the vertical equation is an
+        equilibrium statement. It <em>is</em> accelerating horizontally &mdash; that is what turning
+        means &mdash; so the horizontal equation is Newton's second law with
+        <span class="m">a</span><sub>c</sub> on the right.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Never draw it on the free-body diagram</span>
+    If you add an arrow labelled &ldquo;<span class="m">F</span><sub>c</sub>&rdquo; next to the lift,
+    the tension or the normal force, you have counted the same force twice.
+    <span class="m">F</span><sub>c</sub> is the <em>name of the sum</em>, not another arrow. Draw the
+    real forces, resolve them, and whatever is left pointing at the centre <em>is</em>
+    <span class="m">m</span><span class="m">a</span><sub>c</sub>.
+  </div>
+
+  <h2 id="unit-check">Unit check</h2>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">F</span><sub>c</sub> = <span class="m">m</span><span class="m">a</span><sub>c</sub> =
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        &nbsp;&rarr;&nbsp; kg
+        <span class="frac"><span class="top">(m/s)<sup>2</sup></span><span class="bot">m</span></span>
+        = kg
+        <span class="frac"><span class="top">m<sup>2</sup></span><span class="bot">m&middot;s<sup>2</sup></span></span>
+        = kg
+        <span class="frac"><span class="top">m</span><span class="bot">s<sup>2</sup></span></span>
+        = N
+      </div>
+      <p class="why">It had to come out in newtons, and checking that it does is the cheapest
+        possible test of the algebra above.</p>
+    </div>
+  </div>
+
+  <h2 id="horizontal-circles">Horizontal circles &mdash; a worked case</h2>
+
+  <p>Trevor's example, and the cleanest one in the set because exactly one force acts in the
+     centre-seeking direction: a ball on a string, swung on a frictionless level table around a nail
+     the string can slide freely on.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Top view of a ball on a string moving round a dashed circular path. The string, of length r, runs from the nail at the centre to the ball, and the tension arrow on the ball points along the string in towards the centre. Beside the figure the given values: mass 1.00 kilograms, radius 0.75 metres, speed 10.0 metres per second.">
+      <defs>
+        <marker id="c4r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+      </defs>
+      <text class="sm" x="80" y="36">top view</text>
+      <circle cx="170" cy="130" r="95" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="6 5"/>
+      <circle cx="170" cy="130" r="4" fill="var(--ink)"/>
+      <line x1="170" y1="130" x2="242.8" y2="68.9" stroke="var(--blue)" stroke-width="2"/>
+      <circle cx="242.8" cy="68.9" r="9" fill="#d9d2ea" stroke="var(--violet)" stroke-width="1.6"/>
+      <text class="lbl" x="224" y="120" fill="var(--blue)">r</text>
+      <line x1="242.8" y1="68.9" x2="200.7" y2="104.3" stroke="var(--red)" stroke-width="2.6" marker-end="url(#c4r)"/>
+      <text class="lbl" x="206" y="64" text-anchor="end" fill="var(--red)">F<tspan font-size="11">T</tspan></text>
+
+      <text class="lbl" x="370" y="80">m = 1.00 kg</text>
+      <text class="lbl" x="370" y="118">r = 0.75 m</text>
+      <text class="lbl" x="370" y="156">v = 10.0 m/s</text>
+      <text class="lbl" x="370" y="200">F<tspan font-size="11">T</tspan> = F<tspan font-size="11">c</tspan> = ?</text>
+    </svg>
+    <figcaption>The table is frictionless and level, so the normal force and the weight cancel and
+      the tension is the only horizontal force. The tension <em>is</em> the centripetal force here
+      &mdash; not a contributor to it.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Solving it</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">F</span><sub>T</sub> = <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        = 1.00 kg
+        <span class="frac"><span class="top">(10.0 m/s)<sup>2</sup></span><span class="bot">0.75 m</span></span>
+        =
+        <span class="frac"><span class="top">100</span><span class="bot">0.75</span></span>
+        <span class="frac"><span class="top">kg&middot;m<sup>2</sup></span><span class="bot">m&middot;s<sup>2</sup></span></span>
+        = 133 N
+      </div>
+      <p class="why">133&nbsp;N on a 1&nbsp;kg ball &mdash; about the weight of a 13.5&nbsp;kg mass.
+        Circular motion at ordinary speeds on a short radius demands large forces, which is why the
+        string matters and why the question is always whether the real force can supply it.</p>
+    </div>
+  </div>
+
+  <h2 id="comparing">Comparing centripetal accelerations</h2>
+
+  <p>Because <span class="m">v</span> is squared and <span class="m">r</span> is not, the two
+     variables do not have equal say. Trevor's four cases are drawn to scale, and the comparison is
+     the point of the slide.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Four circles drawn to scale. The first two have the same small radius r, the second two a radius twice as large. The first and third carry a velocity arrow of length v, the second and fourth an arrow twice as long for 2v. Below each, the centripetal acceleration: v squared over r, four times that, half of it, and twice it.">
+      <defs>
+        <marker id="c5v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green-deep)"/></marker>
+      </defs>
+
+      <circle cx="80" cy="130" r="34" fill="none" stroke="var(--blue)" stroke-width="1.8"/>
+      <line x1="80" y1="130" x2="114" y2="130" stroke="var(--muted)" stroke-width="1.2"/>
+      <circle cx="104" cy="106" r="5" fill="var(--ink)"/>
+      <line x1="104" y1="106" x2="75.7" y2="77.7" stroke="var(--green-deep)" stroke-width="2.4" marker-end="url(#c5v)"/>
+      <text class="lbl" x="58" y="70" fill="var(--green-deep)">v</text>
+      <text class="lbl" x="92" y="148">r</text>
+
+      <circle cx="210" cy="130" r="34" fill="none" stroke="var(--blue)" stroke-width="1.8"/>
+      <line x1="210" y1="130" x2="244" y2="130" stroke="var(--muted)" stroke-width="1.2"/>
+      <circle cx="234" cy="106" r="5" fill="var(--ink)"/>
+      <line x1="234" y1="106" x2="177.4" y2="49.4" stroke="var(--green-deep)" stroke-width="2.4" marker-end="url(#c5v)"/>
+      <text class="lbl" x="152" y="42" fill="var(--green-deep)">2v</text>
+      <text class="lbl" x="222" y="148">r</text>
+
+      <circle cx="380" cy="130" r="60" fill="none" stroke="var(--blue)" stroke-width="1.8"/>
+      <line x1="380" y1="130" x2="440" y2="130" stroke="var(--muted)" stroke-width="1.2"/>
+      <circle cx="422.4" cy="87.6" r="5" fill="var(--ink)"/>
+      <line x1="422.4" y1="87.6" x2="394.1" y2="59.3" stroke="var(--green-deep)" stroke-width="2.4" marker-end="url(#c5v)"/>
+      <text class="lbl" x="376" y="52" fill="var(--green-deep)">v</text>
+      <text class="lbl" x="400" y="148">2r</text>
+
+      <circle cx="545" cy="130" r="60" fill="none" stroke="var(--blue)" stroke-width="1.8"/>
+      <line x1="545" y1="130" x2="605" y2="130" stroke="var(--muted)" stroke-width="1.2"/>
+      <circle cx="587.4" cy="87.6" r="5" fill="var(--ink)"/>
+      <line x1="587.4" y1="87.6" x2="530.8" y2="31" stroke="var(--green-deep)" stroke-width="2.4" marker-end="url(#c5v)"/>
+      <text class="lbl" x="502" y="24" fill="var(--green-deep)">2v</text>
+      <text class="lbl" x="565" y="148">2r</text>
+
+      <text class="lbl" x="80"  y="228" text-anchor="middle">a<tspan font-size="11">1</tspan> = v&sup2;/r</text>
+      <text class="lbl" x="210" y="228" text-anchor="middle">a<tspan font-size="11">2</tspan> = 4v&sup2;/r</text>
+      <text class="lbl" x="380" y="228" text-anchor="middle">a<tspan font-size="11">3</tspan> = v&sup2;/2r</text>
+      <text class="lbl" x="545" y="228" text-anchor="middle">a<tspan font-size="11">4</tspan> = 2v&sup2;/r</text>
+
+      <text class="lbl" x="210" y="262" text-anchor="middle" fill="var(--green-deep)">= 4a<tspan font-size="11">1</tspan></text>
+      <text class="lbl" x="380" y="262" text-anchor="middle" fill="var(--green-deep)">= &frac12;a<tspan font-size="11">1</tspan></text>
+      <text class="lbl" x="545" y="262" text-anchor="middle" fill="var(--green-deep)">= 2a<tspan font-size="11">1</tspan></text>
+    </svg>
+    <figcaption>Circles and arrows drawn to scale. Doubling the speed quadruples the centripetal
+      acceleration; doubling the radius only halves it. Do both and you are still up by a factor of
+      two.</figcaption>
+  </figure>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Uniform circular motion</td><td class="eq">&mdash;</td>
+        <td>moving at constant <em>speed</em> in a circular path. The velocity is still changing.</td></tr>
+    <tr><td class="term">Centripetal acceleration</td><td class="eq">&mdash;</td>
+        <td><span class="m">a</span><sub>c</sub> = <span class="m">v</span><sup>2</sup>/<span class="m">r</span>,
+            directed at the centre. Proportional to the <em>square</em> of the speed and inversely
+            proportional to the radius.</td></tr>
+    <tr><td class="term">Centripetal force</td><td class="eq">&mdash;</td>
+        <td><span class="m">F</span><sub>c</sub> = <span class="m">m</span><span class="m">a</span><sub>c</sub> = <span class="m">m</span><span class="m">v</span><sup>2</sup>/<span class="m">r</span>
+            &mdash; the net force in the centre-seeking direction. It can be caused by one force or
+            by several. <b>It is not an extra force acting on the object.</b></td></tr>
+    <tr><td class="term">Also worth holding</td><td class="eq">&mdash;</td>
+        <td>in angular terms, <span class="m">a</span><sub>c</sub> = <span class="m">&omega;</span><sup>2</sup><span class="m">r</span> (<b>Ch10a</b>).</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/4-4-uniform-circular-motion" target="_blank" rel="noopener">4.4 Uniform Circular Motion</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/6-3-centripetal-force" target="_blank" rel="noopener">6.3 Centripetal Force</a></li>
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/6-2-centripetal-acceleration" target="_blank" rel="noopener">6.2 Centripetal Acceleration</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/6-3-centripetal-force" target="_blank" rel="noopener">6.3 Centripetal Force</a></li>
+  </ul>
+  <p class="why">Trevor&rsquo;s closing slide cites <em>University Physics Volume&nbsp;2</em>; that is the
+     electricity and magnetism volume, and the mechanics material is in Volume&nbsp;1. Corrected above,
+     as on the Module&nbsp;3 and Module&nbsp;4 pages.</p>
+
+  <footer>
+    This page is adapted from the presentation <em>Circular Motion &mdash; Centripetal Force</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
