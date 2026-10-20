@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch10a &mdash; Angular Variables</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 151 - Module 5 - Chapter 10 (University Physics) - Trevor slides 06a
+     "Angular Variables" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     Chapter number follows the CONTENT, not the deck folder. Trevor files this
+     deck in his "Chapter 06a - Circular Motion" section, but every equation on
+     it is University Physics 10.1-10.2 (rotational variables, rotation with
+     constant angular acceleration). Same rule that made M4's Ch08a page out of
+     the 07c/07d decks.
+
+     PHY 118 has its own page for this deck, written for College Physics from
+     the same deck. It is NOT generated from this file and a change here does
+     not propagate there (playbook Step 1). If a correction belongs on both,
+     make it on both.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 10 (University Physics) &middot; Slides 06a</span>
+  </div>
+
+  <h1>Angular Variables</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A spinning wheel is awkward to describe with <span class="m">x</span>, <span class="m">v</span>
+    and <span class="m">a</span>, because every point on it has a different speed and none of them
+    goes anywhere. Measure the <em>angle</em> instead and the problem collapses: one number
+    describes the whole rigid body, and the kinematics you already know comes across unchanged,
+    symbol for symbol. This page sets up that translation and then links it back &mdash; because
+    the tyre still has to grip the road, and that is a linear speed.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Everything from Module 1: <span class="m">v</span> = &Delta;<span class="m">x</span>/&Delta;<span class="m">t</span>,
+    <span class="m">a</span> = &Delta;<span class="m">v</span>/&Delta;<span class="m">t</span>, and the
+    three kinematics equations for constant acceleration. Nothing on this page is a new law. It is
+    the same kinematics with new letters, plus the two equations that convert between them.
+  </div>
+
+  <h2 id="angular-position">Angular position, and why radians</h2>
+
+  <p>Pick a reference line through the axis &mdash; conventionally the horizontal &mdash; and the
+     <b>angular position</b> <span class="m">&theta;</span> of any mark on the object is the angle
+     from that line to the mark. One number now describes the whole rigid body, because every point
+     on it turns through the same angle.</p>
+
+  <p>The angle is measured in <b>radians</b>, not degrees, and the definition is geometric rather
+     than arbitrary: <b>one radian is the angle whose arc length equals the radius.</b></p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A circle with a horizontal reference line through its centre and a radius drawn up and to the right. The angle between them is theta, the radius is r, and the arc cut off on the rim between the reference line and the radius is s. A curved arrow outside the circle shows the counter-clockwise direction as positive. Beside the circle, the relations s equals r theta, one revolution equals two pi radians equals 360 degrees, and circumference equals 2 pi r.">
+      <defs>
+        <marker id="f1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green-deep)"/></marker>
+      </defs>
+
+      <!-- reference axes -->
+      <line x1="55" y1="175" x2="345" y2="175" stroke="var(--rule)" stroke-width="1.6"/>
+      <line x1="190" y1="40" x2="190" y2="310" stroke="var(--rule)" stroke-width="1.6"/>
+
+      <!-- the rim -->
+      <circle cx="190" cy="175" r="115" fill="none" stroke="var(--ink)" stroke-width="3"/>
+
+      <!-- arc s -->
+      <path d="M305,175 A115,115 0 0 0 260.8,84.4" fill="none" stroke="var(--blue)" stroke-width="6" stroke-linecap="round"/>
+
+      <!-- the radius at 52 degrees, and the reference radius -->
+      <line x1="190" y1="175" x2="260.8" y2="84.4" stroke="var(--red)" stroke-width="2.4"/>
+      <line x1="190" y1="175" x2="305" y2="175" stroke="var(--red)" stroke-width="2.4"/>
+
+      <!-- theta arc -->
+      <path d="M236,175 A46,46 0 0 0 218.3,138.8" fill="none" stroke="var(--red)" stroke-width="1.8"/>
+      <text class="lbl" x="247" y="156" fill="var(--red)">&theta;</text>
+
+      <!-- labels -->
+      <text class="lbl" x="200" y="122">r</text>
+      <text class="lbl" x="318" y="110" fill="var(--blue)">s</text>
+
+      <!-- positive direction -->
+      <path d="M88.9,90.1 A132,132 0 0 0 60,152.1" fill="none" stroke="var(--green-deep)" stroke-width="2" marker-start="url(#f1a)"/>
+      <text class="lbl" x="66" y="74" fill="var(--green-deep)">+</text>
+
+      <!-- right-hand relations -->
+      <text class="lbl" x="400" y="95">s = r &theta;</text>
+      <text class="sm" x="400" y="115">arc length</text>
+
+      <text class="lbl" x="400" y="160">1 rad: s = r</text>
+      <text class="sm" x="400" y="180">the arc is one radius long</text>
+
+      <text class="lbl" x="400" y="225">1 rev = 2&pi; rad = 360&deg;</text>
+      <text class="lbl" x="400" y="252">180&deg; = &pi; rad</text>
+
+      <text class="lbl" x="400" y="295">C = 2&pi;r = &pi;D</text>
+    </svg>
+    <figcaption>Angular position is an angle measured from a reference line; the arc it cuts off on
+      the rim is <span class="m">s</span> = <span class="m">r&theta;</span>. Counter-clockwise is
+      positive, clockwise negative.</figcaption>
+  </figure>
+
+  <table class="defs">
+    <tr><td class="term"><span class="m">&theta;</span></td><td class="eq">&mdash;</td>
+        <td>angular position, in radians</td></tr>
+    <tr><td class="term"><span class="m">s</span></td><td class="eq">&mdash;</td>
+        <td>arc length &mdash; the distance actually travelled along the rim</td></tr>
+    <tr><td class="term"><span class="m">r</span></td><td class="eq">&mdash;</td>
+        <td>radius; <span class="m">D</span> is the diameter, <span class="m">C</span> the circumference</td></tr>
+  </table>
+
+  <div class="check">
+    <span class="label">Trevor's question</span>
+    <p class="q">What is the dimension of a radian?</p>
+    <p style="margin:.2rem 0 .5rem">A. degrees &nbsp;&middot;&nbsp; B. [L] &nbsp;&middot;&nbsp; C. [L]<sup>2</sup> &nbsp;&middot;&nbsp; D. [1]</p>
+    <div class="ans"><b>D &mdash; a radian is dimensionless.</b> Solve
+      <span class="m">C</span> = <span class="m">&pi;D</span> for <span class="m">&pi;</span> and you get
+      <span class="m">C</span>/<span class="m">D</span> = [L]/[L]. The same thing happens to the angle:
+      <span class="m">&theta;</span> = <span class="m">s</span>/<span class="m">r</span> = [L]/[L].
+      A radian is a ratio of two lengths, so &ldquo;rad&rdquo; is a reminder of what you measured, not a
+      unit that has to balance in a dimensional check.</div>
+  </div>
+
+  <h2 id="angular-velocity">Angular velocity</h2>
+
+  <p>Exactly as linear speed is displacement over time, <b>angular velocity</b>
+     <span class="m">&omega;</span> is angular displacement over time.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="A circle with two radii drawn, one at a small angle theta-i from the horizontal and one at a larger angle theta-f. The angle between them is labelled delta theta. Beside the circle, delta theta equals theta-f minus theta-i, and omega equals delta theta over delta t, in radians per second.">
+      <defs>
+        <marker id="f2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green-deep)"/></marker>
+      </defs>
+
+      <line x1="50" y1="160" x2="300" y2="160" stroke="var(--rule)" stroke-width="1.6"/>
+      <line x1="170" y1="40" x2="170" y2="280" stroke="var(--rule)" stroke-width="1.6"/>
+      <circle cx="170" cy="160" r="100" fill="none" stroke="var(--ink)" stroke-width="3"/>
+
+      <!-- swept arc on the rim -->
+      <path d="M265.1,129.1 A100,100 0 0 0 190.8,62.2" fill="none" stroke="var(--blue)" stroke-width="6" stroke-linecap="round"/>
+
+      <line x1="170" y1="160" x2="265.1" y2="129.1" stroke="var(--red)" stroke-width="2.4"/>
+      <line x1="170" y1="160" x2="190.8" y2="62.2" stroke="var(--red)" stroke-width="2.4"/>
+
+      <path d="M227.1,141.5 A60,60 0 0 0 182.5,101.3" fill="none" stroke="var(--red)" stroke-width="1.8" marker-end="url(#f2a)"/>
+
+      <text class="lbl" x="232" y="160" fill="var(--red)">&theta;<tspan font-size="11">i</tspan></text>
+      <text class="lbl" x="172" y="46" text-anchor="middle" fill="var(--red)">&theta;<tspan font-size="11">f</tspan></text>
+      <text class="lbl" x="216" y="106" fill="var(--red)">&#916;&theta;</text>
+
+      <text class="lbl" x="360" y="115">&#916;&theta; = &theta;<tspan font-size="11">f</tspan> &minus; &theta;<tspan font-size="11">i</tspan></text>
+      <text class="lbl" x="360" y="175">&omega; = &#916;&theta; / &#916;t</text>
+      <text class="sm" x="360" y="198">angular velocity, in rad/s</text>
+      <text class="sm" x="360" y="240">Same sign convention: a positive &#916;&theta;</text>
+      <text class="sm" x="360" y="256">means counter-clockwise.</text>
+    </svg>
+    <figcaption>Angular velocity is the rate at which the angular position changes. Every point on
+      the rigid body shares it, however far from the axis it sits.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Angular velocity</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">&omega;</span> =
+        <span class="frac"><span class="top">&Delta;<span class="m">&theta;</span></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+        &nbsp;=&nbsp;
+        <span class="frac"><span class="top"><span class="m">&theta;</span><sub>f</sub> &minus; <span class="m">&theta;</span><sub>i</sub></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+      </div>
+      <p class="why">Units are rad/s. Because a radian is dimensionless, rad/s is really just
+        s<sup>&minus;1</sup> &mdash; which is why the radian can appear and disappear in a unit
+        conversion without anything going wrong.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">In the limit &mdash; PHY 151</span>
+    Trevor writes the average quantities with &Delta;. <em>University Physics</em> defines the
+    instantaneous versions the way you would expect:
+    <span class="m">&omega;</span> = d<span class="m">&theta;</span>/d<span class="m">t</span> and,
+    below, <span class="m">&alpha;</span> = d<span class="m">&omega;</span>/d<span class="m">t</span>.
+    Every equation on this page is the constant-<span class="m">&alpha;</span> case, where the two
+    agree.
+  </div>
+
+  <h3 id="why-clockwise">Why clockwise is clockwise</h3>
+
+  <p>The two conventions point opposite ways, and Trevor's aside explains the collision. Mathematics
+     measures angles counter-clockwise from the <span class="m">x</span>-axis. Clocks run the other
+     way because they inherited the shadow of a sundial: in the northern hemisphere the sun is due
+     south and highest at noon, and as it travels east to west the shadow sweeps clockwise.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Two panels side by side. On the left, the mathematical convention: a circle with x and y axes and a curved arrow sweeping counter-clockwise from the x-axis, marked positive. On the right, a clock face with 12, 3, 6 and 9 marked and hands at 12 and 3, with a curved arrow sweeping clockwise.">
+      <defs>
+        <marker id="f3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green-deep)"/></marker>
+        <marker id="f3b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+      </defs>
+
+      <!-- left: maths -->
+      <line x1="60" y1="130" x2="240" y2="130" stroke="var(--rule)" stroke-width="1.6"/>
+      <line x1="150" y1="42" x2="150" y2="218" stroke="var(--rule)" stroke-width="1.6"/>
+      <circle cx="150" cy="130" r="72" fill="none" stroke="var(--ink)" stroke-width="3"/>
+      <line x1="150" y1="130" x2="205.1" y2="83.7" stroke="var(--red)" stroke-width="2.2"/>
+      <path d="M186,130 A36,36 0 0 0 173.1,100.9" fill="none" stroke="var(--red)" stroke-width="1.8" marker-end="url(#f3a)"/>
+      <text class="lbl" x="192" y="124" fill="var(--red)">&theta;</text>
+      <text class="sm" x="150" y="232" text-anchor="middle">Mathematics: counter-clockwise is +</text>
+
+      <!-- right: clock -->
+      <circle cx="450" cy="130" r="72" fill="none" stroke="var(--ink)" stroke-width="3"/>
+      <text x="450" y="76" text-anchor="middle">12</text>
+      <text x="508" y="135" text-anchor="middle">3</text>
+      <text x="450" y="192" text-anchor="middle">6</text>
+      <text x="392" y="135" text-anchor="middle">9</text>
+      <line x1="450" y1="130" x2="450" y2="86" stroke="var(--ink)" stroke-width="3"/>
+      <line x1="450" y1="130" x2="494" y2="130" stroke="var(--ink)" stroke-width="3"/>
+      <path d="M468,78 A56,56 0 0 1 502,112" fill="none" stroke="var(--red)" stroke-width="1.8" marker-end="url(#f3b)"/>
+      <text class="sm" x="450" y="232" text-anchor="middle">The clock: the sundial's shadow ran this way</text>
+    </svg>
+    <figcaption>Two conventions, opposite senses, and only one of them is physics. Trevor's sundial
+      photograph showed the shadow moving from the morning side to the afternoon side past a noon
+      mark; the geometry is drawn here instead.</figcaption>
+  </figure>
+
+  <h2 id="other-units">Other units, and the trap in them</h2>
+
+  <p>Rotation rates arrive in whatever unit the device was sold in &mdash; rpm, rev/s, degrees per
+     second. Trevor's worked case is a 45&nbsp;rpm record, converted in one chain:</p>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">&omega;</span> = 45
+        <span class="frac"><span class="top">rev</span><span class="bot">min</span></span>
+        &times;
+        <span class="frac"><span class="top">1 min</span><span class="bot">60 s</span></span>
+        &times;
+        <span class="frac"><span class="top">2&pi; rad</span><span class="bot">1 rev</span></span>
+        =
+        <span class="frac"><span class="top">3&pi;</span><span class="bot">2</span></span>
+        <span class="frac"><span class="top">rad</span><span class="bot">s</span></span>
+        = 4.71 rad/s
+      </div>
+      <p class="why">Revolutions cancel against revolutions and minutes against minutes, which is
+        what makes the chain safe to write down in one line.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Be careful of mixing units</span>
+    You may use any angular unit you like, but every equation further down this page
+    &mdash; <span class="m">s</span> = <span class="m">r&theta;</span>,
+    <span class="m">v</span><sub>t</sub> = <span class="m">&omega;r</span>,
+    <span class="m">a</span><sub>t</sub> = <span class="m">&alpha;r</span> &mdash; is true
+    <b>only in radians</b>. They are the equations that convert an angle into a length, and the
+    radian is the only angular unit defined as a length ratio. Convert first, then substitute.
+  </div>
+
+  <h2 id="period">Period and frequency</h2>
+
+  <p>The most direct way to measure uniform circular motion is to time one complete rotation. That
+     time is the <b>period</b> <span class="m">T</span>, and its reciprocal is the
+     <b>frequency</b> <span class="m">f</span>.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 240" role="img" aria-label="A disc with a single mark on its rim and a full circular arrow around it, showing one complete rotation. Beside it, period equals two pi over omega and frequency equals one over the period, with the 45 rpm record worked out as a period of 1.33 seconds and a frequency of 0.75 revolutions per second.">
+      <defs>
+        <marker id="f4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green-deep)"/></marker>
+      </defs>
+      <circle cx="140" cy="110" r="66" fill="var(--green-soft)" stroke="var(--ink)" stroke-width="2.5"/>
+      <circle cx="140" cy="44" r="7" fill="var(--red)"/>
+      <path d="M140,22 A88,88 0 1 0 224,84" fill="none" stroke="var(--green-deep)" stroke-width="2.2" marker-end="url(#f4a)"/>
+      <text class="sm" x="140" y="228" text-anchor="middle">one complete rotation = 2&pi; rad</text>
+
+      <text class="lbl" x="330" y="60">T = 2&pi; / &omega;</text>
+      <text class="sm" x="330" y="80">the period &mdash; seconds per revolution</text>
+      <text class="lbl" x="330" y="125">f = 1 / T = &omega; / 2&pi;</text>
+      <text class="sm" x="330" y="145">the frequency &mdash; revolutions per second</text>
+      <text class="sm" x="330" y="185">45 rpm: &omega; = 4.71 rad/s, so f = 0.75 rev/s.</text>
+    </svg>
+    <figcaption>Period and frequency are the same measurement read two ways. Set
+      &Delta;<span class="m">&theta;</span> = 2&pi; in the definition of
+      <span class="m">&omega;</span> and <span class="m">T</span> = 2&pi;/<span class="m">&omega;</span>
+      drops straight out.</figcaption>
+  </figure>
+
+  <h2 id="angular-acceleration">Angular acceleration</h2>
+
+  <p><b>Angular acceleration</b> is the rate of change of angular velocity &mdash; and its presence
+     is exactly what makes the circular motion non-uniform.</p>
+
+  <div class="mathblock">
+    <div class="head">Angular acceleration, and the equation it generates</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">&alpha;</span> =
+        <span class="frac"><span class="top">&Delta;<span class="m">&omega;</span></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+        &nbsp;=&nbsp;
+        <span class="frac"><span class="top"><span class="m">&omega;</span><sub>f</sub> &minus; <span class="m">&omega;</span><sub>i</sub></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="m">&omega;</span><sub>f</sub> = <span class="m">&omega;</span><sub>i</sub> + <span class="m">&alpha;</span>&Delta;<span class="m">t</span>
+      </div>
+      <p class="why">Rearranging the definition gives the first kinematics equation, in rad/s<sup>2</sup>
+        &mdash; and it is the same rearrangement that turned
+        <span class="m">a</span> = &Delta;<span class="m">v</span>/&Delta;<span class="m">t</span> into
+        <span class="m">v</span> = <span class="m">v</span><sub>0</sub> + <span class="m">a</span>&Delta;<span class="m">t</span>
+        in Module 1.</p>
+    </div>
+  </div>
+
+  <p>Once that first one is in hand the other two follow the same way, and the whole set can simply
+     be read off the linear set by substitution:</p>
+
+  <table class="grid">
+    <tr><th style="width:50%">Linear kinematics</th><th>Rotational kinematics</th></tr>
+    <tr>
+      <td><span class="m">v</span> = <span class="m">v</span><sub>0</sub> + <span class="m">a</span>&Delta;<span class="m">t</span></td>
+      <td><span class="m">&omega;</span> = <span class="m">&omega;</span><sub>0</sub> + <span class="m">&alpha;</span>&Delta;<span class="m">t</span></td>
+    </tr>
+    <tr>
+      <td><span class="m">x</span> = <span class="m">x</span><sub>0</sub> + <span class="m">v</span><sub>0</sub>&Delta;<span class="m">t</span> + &frac12;<span class="m">a</span>(&Delta;<span class="m">t</span>)<sup>2</sup></td>
+      <td><span class="m">&theta;</span> = <span class="m">&theta;</span><sub>0</sub> + <span class="m">&omega;</span><sub>0</sub>&Delta;<span class="m">t</span> + &frac12;<span class="m">&alpha;</span>(&Delta;<span class="m">t</span>)<sup>2</sup></td>
+    </tr>
+    <tr>
+      <td><span class="m">v</span><sup>2</sup> = <span class="m">v</span><sub>0</sub><sup>2</sup> + 2<span class="m">a</span>(<span class="m">x</span> &minus; <span class="m">x</span><sub>0</sub>)</td>
+      <td><span class="m">&omega;</span><sup>2</sup> = <span class="m">&omega;</span><sub>0</sub><sup>2</sup> + 2<span class="m">&alpha;</span>(<span class="m">&theta;</span> &minus; <span class="m">&theta;</span><sub>0</sub>)</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="background:#f7f9fd">
+        <span class="m">x</span> &rarr; <span class="m">&theta;</span> &nbsp;&middot;&nbsp;
+        <span class="m">v</span> &rarr; <span class="m">&omega;</span> &nbsp;&middot;&nbsp;
+        <span class="m">a</span> &rarr; <span class="m">&alpha;</span>
+      </td>
+    </tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Trevor's warning, and it is the important sentence on the slide</span>
+    The variables <em>behave</em> similarly, but they are <b>not the same</b>. The substitution is a
+    mapping between two descriptions, not an identity: <span class="m">&theta;</span> is an angle and
+    <span class="m">x</span> is a length, and a problem that mixes them without the conversion
+    equations below will give you a number with no meaning.
+  </div>
+
+  <h2 id="linking">Linking linear and angular variables</h2>
+
+  <p>The angular description is complete on its own, but it cannot tell you how fast the rim is
+     moving &mdash; and the rim is where the belt rides, the tyre grips and the stopper on the end
+     of the string gets released. Two equations do the conversion, and both come from
+     <span class="m">s</span> = <span class="m">r&theta;</span>.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 290" role="img" aria-label="A disc rotating counter-clockwise with a point marked on its rim. The radius r runs from the centre to the point, and an arrow tangent to the rim at that point is labelled v-t, the tangential velocity. Beside the figure, v-t equals the circumference over the period, which equals omega times r.">
+      <defs>
+        <marker id="f5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green-deep)"/></marker>
+        <marker id="f5b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--violet)"/></marker>
+      </defs>
+
+      <circle cx="200" cy="155" r="105" fill="var(--green-soft)" stroke="var(--ink)" stroke-width="2.5"/>
+      <circle cx="200" cy="155" r="5" fill="var(--ink)"/>
+
+      <!-- radius to the rim point at 40 degrees -->
+      <line x1="200" y1="155" x2="280.4" y2="87.5" stroke="var(--blue)" stroke-width="2.4"/>
+      <circle cx="280.4" cy="87.5" r="6" fill="var(--blue)"/>
+      <text class="lbl" x="248" y="132" fill="var(--blue)">r</text>
+
+      <!-- tangential velocity -->
+      <line x1="280.4" y1="87.5" x2="235.4" y2="33.9" stroke="var(--violet)" stroke-width="2.6" marker-end="url(#f5b)"/>
+      <text class="lbl" x="243" y="28" fill="var(--violet)">v<tspan font-size="11">t</tspan></text>
+
+      <!-- omega -->
+      <path d="M150,88 A75,75 0 0 0 125,130" fill="none" stroke="var(--green-deep)" stroke-width="2" marker-start="url(#f5a)"/>
+      <text class="lbl" x="152" y="72" fill="var(--green-deep)">&omega;</text>
+
+      <text class="sm" x="200" y="282" text-anchor="middle">assuming constant angular speed</text>
+
+      <text class="lbl" x="370" y="80">v<tspan font-size="11">t</tspan> = distance / time</text>
+      <text class="lbl" x="370" y="135">v<tspan font-size="11">t</tspan> = 2&pi;r / T = (2&pi;/T) r</text>
+      <text class="lbl" x="370" y="190" font-size="18">v<tspan font-size="12">t</tspan> = &omega; r</text>
+      <text class="sm" x="370" y="212">tangential velocity, or linear speed</text>
+      <rect x="362" y="172" width="150" height="26" fill="none" stroke="var(--ink)" stroke-width="1.4" rx="4"/>
+    </svg>
+    <figcaption>In one period the rim point covers one circumference, so its speed is
+      2&pi;<span class="m">r</span>/<span class="m">T</span> &mdash; and 2&pi;/<span class="m">T</span>
+      is just <span class="m">&omega;</span>. Double the radius at the same
+      <span class="m">&omega;</span> and the rim speed doubles.</figcaption>
+  </figure>
+
+  <p>Differences work the same way, which is where the second conversion comes from: if
+     <span class="m">v</span><sub>t</sub> = <span class="m">&omega;r</span> then
+     &Delta;<span class="m">v</span><sub>t</sub> = (&Delta;<span class="m">&omega;</span>)<span class="m">r</span>,
+     and dividing by &Delta;<span class="m">t</span> gives the <b>tangential acceleration</b>.</p>
+
+  <div class="mathblock">
+    <div class="head">The two conversions, and the acceleration that is not one of them</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">a</span><sub>t</sub> =
+        <span class="frac"><span class="top">&Delta;<span class="m">v</span><sub>t</sub></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+        =
+        <span class="frac"><span class="top">(&Delta;<span class="m">&omega;</span>)<span class="m">r</span></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+        =
+        <span class="frac"><span class="top">&Delta;<span class="m">&omega;</span></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+        <span class="m">r</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="m">a</span><sub>t</sub> = <span class="m">&alpha;r</span>
+      </div>
+      <div class="mathline" style="text-align:center">
+        <span class="m">a</span><sub>c</sub> =
+        <span class="frac"><span class="top"><span class="m">v</span><sub>t</sub><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        =
+        <span class="frac"><span class="top">(<span class="m">&omega;r</span>)<sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="m">a</span><sub>c</sub> = <span class="m">&omega;</span><sup>2</sup><span class="m">r</span>
+      </div>
+      <p class="why">Two accelerations, two different jobs. The tangential one changes how fast the
+        point is going; the centripetal one changes the direction it is going. They are
+        perpendicular, so they never substitute for one another &mdash; and if
+        <span class="m">&omega;</span> is constant then
+        &Delta;<span class="m">&omega;</span> = 0 and there is no tangential acceleration at all,
+        while <span class="m">a</span><sub>c</sub> is still there, still turning the velocity.</p>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="A disc with a dashed circle inside it marking the path of a point. At that point two red arrows are drawn: one tangent to the path, labelled a-t, and one pointing in towards the centre, labelled a-c. The radius from the centre to the point is marked r.">
+      <defs>
+        <marker id="f6a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+      </defs>
+
+      <circle cx="210" cy="160" r="120" fill="#fdf6ec" stroke="var(--ink)" stroke-width="2.5"/>
+      <circle cx="210" cy="160" r="85" fill="none" stroke="var(--muted)" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <circle cx="210" cy="160" r="5" fill="var(--ink)"/>
+
+      <line x1="210" y1="160" x2="258.8" y2="90.4" stroke="var(--muted)" stroke-width="1.4" stroke-dasharray="4 4"/>
+      <text class="lbl" x="228" y="152">r</text>
+      <rect x="252" y="84" width="13" height="13" fill="var(--blue)"/>
+
+      <line x1="258.8" y1="90.4" x2="209.7" y2="56.0" stroke="var(--red)" stroke-width="2.6" marker-end="url(#f6a)"/>
+      <text class="lbl" x="186" y="70" fill="var(--red)">a<tspan font-size="11">t</tspan></text>
+
+      <line x1="258.8" y1="90.4" x2="221.5" y2="143.6" stroke="var(--red)" stroke-width="2.6" marker-end="url(#f6a)"/>
+      <text class="lbl" x="268" y="134" fill="var(--red)">a<tspan font-size="11">c</tspan></text>
+
+      <text class="lbl" x="400" y="105">a<tspan font-size="11">t</tspan> = &alpha; r</text>
+      <text class="sm" x="400" y="125">changes the speed &mdash; along the path</text>
+      <text class="lbl" x="400" y="180">a<tspan font-size="11">c</tspan> = v<tspan font-size="11">t</tspan>&sup2; / r = &omega;&sup2; r</text>
+      <text class="sm" x="400" y="200">changes the direction &mdash; towards the centre</text>
+      <text class="sm" x="400" y="240">Perpendicular, so they add as vectors</text>
+      <text class="sm" x="400" y="256">and neither replaces the other.</text>
+    </svg>
+    <figcaption>Tangential and centripetal acceleration at the same instant, on the same point. Where
+      the centripetal one comes from is the subject of the next page.</figcaption>
+  </figure>
+
+  <h2 id="review">Review &mdash; useful equations</h2>
+
+  <table class="defs">
+    <tr><td class="term">Arc length</td><td class="eq">&mdash;</td>
+        <td><span class="m">s</span> = <span class="m">r&theta;</span>, with
+            <span class="m">&theta;</span> in radians</td></tr>
+    <tr><td class="term">Angular speed</td><td class="eq">&mdash;</td>
+        <td><span class="m">&omega;</span> = &Delta;<span class="m">&theta;</span>/&Delta;<span class="m">t</span>, in rad/s</td></tr>
+    <tr><td class="term">Angular acceleration</td><td class="eq">&mdash;</td>
+        <td><span class="m">&alpha;</span> = &Delta;<span class="m">&omega;</span>/&Delta;<span class="m">t</span>, in rad/s<sup>2</sup></td></tr>
+    <tr><td class="term">Period</td><td class="eq">&mdash;</td>
+        <td><span class="m">T</span> = 2&pi;/<span class="m">&omega;</span>;
+            <span class="m">f</span> = 1/<span class="m">T</span></td></tr>
+    <tr><td class="term">Tangential velocity</td><td class="eq">&mdash;</td>
+        <td><span class="m">v</span><sub>t</sub> = <span class="m">&omega;r</span></td></tr>
+    <tr><td class="term">Tangential acceleration</td><td class="eq">&mdash;</td>
+        <td><span class="m">a</span><sub>t</sub> = <span class="m">&alpha;r</span></td></tr>
+    <tr><td class="term">Centripetal acceleration</td><td class="eq">&mdash;</td>
+        <td><span class="m">a</span><sub>c</sub> = <span class="m">v</span><sub>t</sub><sup>2</sup>/<span class="m">r</span> = <span class="m">&omega;</span><sup>2</sup><span class="m">r</span></td></tr>
+    <tr><td class="term">Rotational kinematics</td><td class="eq">&mdash;</td>
+        <td>the three constant-<span class="m">&alpha;</span> equations in the table above</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/10-1-rotational-variables" target="_blank" rel="noopener">10.1 Rotational Variables</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/10-2-rotation-with-constant-angular-acceleration" target="_blank" rel="noopener">10.2 Rotation with Constant Angular Acceleration</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/10-3-relating-angular-and-translational-quantities" target="_blank" rel="noopener">10.3 Relating Angular and Translational Quantities</a></li>
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/6-1-rotation-angle-and-angular-velocity" target="_blank" rel="noopener">6.1 Rotation Angle and Angular Velocity</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/10-1-angular-acceleration" target="_blank" rel="noopener">10.1 Angular Acceleration</a></li>
+  </ul>
+  <p class="why">Trevor's closing slide links the 2017 CNX editions of both books; the OpenStax
+     links above are the current locations of the same sections. <em>University Physics</em> keeps
+     this whole page in Chapter 10, which is why the page is numbered Ch10a rather than after the
+     deck's own 06a.</p>
+
+  <footer>
+    This page is adapted from the presentation <em>Angular Variables</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
