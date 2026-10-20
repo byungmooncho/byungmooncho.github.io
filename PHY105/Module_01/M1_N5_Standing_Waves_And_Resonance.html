@@ -435,36 +435,17 @@ ol.think > li::before{
 </div>
 
 <script>
-/* Sequential reveals, per the Deferred_Reveal_Convention: a reveal only unlocks
-   once every earlier one on the page has been opened, so students meet the
-   questions in page order instead of scrolling to the end. */
+/* Each reveal is independent: click to show, click to hide. */
 (function(){
-  var btns = Array.prototype.slice.call(document.querySelectorAll('.reveal > button'));
-  function sync(){
-    var firstLocked = -1;
-    btns.forEach(function(b,i){
-      var open = b.getAttribute('aria-expanded') === 'true';
-      if (!open && firstLocked < 0) firstLocked = i;
-    });
-    btns.forEach(function(b,i){
-      var open = b.getAttribute('aria-expanded') === 'true';
-      var allow = open || firstLocked < 0 || i <= firstLocked;
-      b.disabled = !allow;
-      b.title = allow ? '' : 'Work through the earlier questions first.';
-    });
-  }
-  btns.forEach(function(b){
+  document.querySelectorAll('.reveal > button').forEach(function(b){
     b.addEventListener('click', function(){
       var open = b.getAttribute('aria-expanded') === 'true';
       b.setAttribute('aria-expanded', open ? 'false' : 'true');
-      var panel = b.nextElementSibling;
-      panel.hidden = open;
+      b.nextElementSibling.hidden = open;
       b.querySelector('.rv-label').textContent = open ? b.dataset.show : b.dataset.hide;
-      sync();
-      if (window.dispatchEvent) window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event('resize'));
     });
   });
-  sync();
 })();
 </script>
 
