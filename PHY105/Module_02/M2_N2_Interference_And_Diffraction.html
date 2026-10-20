@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Note 2 &mdash; Interference and Diffraction</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 105 module note page.
+     Same design system as the other module note pages. Self-contained;
+     upload via GitHub Pages and embed as an iframe.
+     ================================================================== */
+
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --line:#b7c6bc;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+  h3{ font-size:1.08rem; margin:1.5rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .figure{
+    border:1px solid var(--rule); border-radius:10px; padding:1rem;
+    margin:1.4rem 0; text-align:center;
+  }
+  .figure img, .figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+  .figure figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    color:var(--muted); margin-top:.5rem; text-align:left;
+  }
+  .figure figcaption b{ color:var(--green-deep); }
+  ol.steps{ counter-reset:step; list-style:none; margin:1rem 0; padding:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+    border-left:2px solid var(--rule); margin-left:.9rem;
+  }
+  ol.steps > li:last-child{ border-left-color:transparent; }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+    width:1.8rem; height:1.8rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.85rem; font-weight:600;
+  }
+  ol.steps.questions > li{ padding-bottom:1.4rem; }
+  .fillin{
+    display:inline-block; min-width:9rem; border-bottom:1px solid var(--line);
+    margin:0 .25rem;
+  }
+  .slot{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--green-deep); margin:.45rem 0 0; font-weight:600;
+  }
+  .slot .unit{ font-weight:400; color:var(--muted); }
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+  .probe{
+    border:2px solid var(--green); border-radius:10px;
+    padding:.9rem 1.1rem; margin:1.4rem 0; background:#fff;
+  }
+  .probe .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:700; display:block; margin-bottom:.3rem;
+  }
+  .probe .opts{ margin:.7rem 0 0; }
+  .probe .opt{
+    display:block; padding:.35rem 0 .35rem 1.9rem; position:relative;
+    font-size:1rem;
+  }
+  .probe .opt::before{
+    content:""; position:absolute; left:.2rem; top:.62rem;
+    width:1rem; height:1rem; border:1.5px solid var(--line); border-radius:50%;
+  }
+  .eqn{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px;
+    padding:.85rem 1rem; margin:1.1rem 0; text-align:center;
+  }
+  .eqn .math{
+    font-size:1.25rem; font-weight:700; color:var(--green-deep);
+    font-family:Charter, Georgia, serif; display:block;
+  }
+  .eqn .domain{
+    display:block; margin-top:.45rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem;
+    letter-spacing:.02em; color:var(--muted);
+  }
+  .eqn .domain b{ color:var(--amber); }
+  table.spec{
+    width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:.95rem;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  table.spec th, table.spec td{
+    border:1px solid var(--rule); padding:.5rem .6rem; text-align:left;
+  }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec td.blank{ height:2.1rem; }
+  .drawbox{
+    border:1px solid var(--line); border-radius:8px; height:9rem; margin:.5rem 0;
+    background:
+      repeating-linear-gradient(0deg,#f4f8f5 0 1px,transparent 1px 22px),
+      repeating-linear-gradient(90deg,#f4f8f5 0 1px,transparent 1px 22px);
+  }
+  .grid2{ display:grid; gap:1rem; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .downloads{ display:grid; gap:.8rem; margin:1.2rem 0; }
+  @media (min-width:560px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    display:block; border:1px solid var(--rule); border-radius:10px;
+    padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+    background:#fff; transition:border-color .15s, box-shadow .15s;
+  }
+  .dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+  .dl-card .kind{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--green); font-weight:700;
+  }
+  .dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+  .dl-card .hint{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.83rem; color:var(--muted);
+  }
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+
+@media print{
+  @page{ size: Letter; margin: .55in .5in; }
+  body{ font-size:11pt; }
+  .note-wrap{ max-width:none; padding:0; }
+  .synopsis, .tip, .figure, .probe, .eqn, ol.steps > li, table.spec{
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  h1, h2, h3{ break-after:avoid; page-break-after:avoid; }
+  .downloads{ display:none; }
+  .printfiles{ display:block !important; }
+}
+.printfiles{ display:none; }
+
+
+/* ---- added for Note 5 (2026-10-20). Same tokens, same type scale as above;
+       no new colours introduced. ---- */
+ol.think{ counter-reset:tk; list-style:none; margin:1rem 0; padding:0; }
+ol.think > li{
+  counter-increment:tk; position:relative; padding:0 0 .6rem 2.2rem;
+}
+ol.think > li::before{
+  content:counter(tk,lower-roman) ")"; position:absolute; left:0; top:0;
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+  font-weight:700; color:var(--green);
+}
+.videoslot{
+  border:1px dashed var(--line); border-radius:10px; background:#fafcfb;
+  padding:.8rem 1rem; margin:1.4rem 0;
+}
+.videoslot .label{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+  font-weight:700; display:block; margin-bottom:.2rem;
+}
+.videoslot p{ margin:0; color:var(--muted); font-size:.95rem; }
+.handoutnote{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+  color:var(--muted); margin:.6rem 0 1.1rem;
+}
+.dl-card.vid{ margin:.9rem 0; }
+.dl-card.vid .kind{ color:var(--amber); }
+.reveal{ margin:.5rem 0 .2rem; }
+.reveal > button{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+  letter-spacing:.02em; color:var(--green-deep); background:var(--green-soft);
+  border:1px solid var(--rule); border-radius:999px; padding:.3rem .85rem .3rem .55rem;
+  cursor:pointer; display:inline-flex; align-items:center; gap:.45em;
+}
+.reveal > button:hover:not(:disabled){ border-color:var(--green); }
+.reveal > button:disabled{ opacity:.45; cursor:not-allowed; }
+.reveal > button .rv-mark{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:1.15rem; height:1.15rem; border-radius:50%;
+  background:var(--green); color:#fff; font-size:.72rem; font-weight:700;
+}
+.rv-panel{
+  border-left:3px solid var(--green); background:var(--green-soft);
+  padding:.6rem .85rem; margin:.5rem 0 0; border-radius:0 5px 5px 0;
+  font-size:.98rem;
+}
+.rv-panel ul{ margin:.3rem 0; padding-left:1.1rem; }
+.rv-panel li{ margin:.25rem 0; }
+.rv-panel p:first-child{ margin-top:0; }
+.rv-panel p:last-child{ margin-bottom:0; }
+@media print{
+  .reveal > button{ display:none; }
+  .rv-panel{ display:none !important; }
+  .videoslot{ display:none; }
+}
+
+.noans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem;
+        color:var(--muted); font-style:italic; margin:.35rem 0 0; }
+.reveal{ margin:.5rem 0 .2rem; }
+.reveal > button{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+  color:var(--green-deep); background:var(--green-soft); border:1px solid var(--rule);
+  border-radius:999px; padding:.3rem .85rem .3rem .55rem; cursor:pointer;
+  display:inline-flex; align-items:center; gap:.45em; }
+.reveal > button:hover{ border-color:var(--green); }
+.reveal > button .rv-mark{ display:inline-flex; align-items:center; justify-content:center;
+  width:1.15rem; height:1.15rem; border-radius:50%; background:var(--green); color:#fff;
+  font-size:.72rem; font-weight:700; }
+.rv-panel{ border-left:3px solid var(--green); background:var(--green-soft);
+  padding:.6rem .85rem; margin:.5rem 0 0; border-radius:0 5px 5px 0; font-size:.98rem; }
+.rv-panel p:first-child{ margin-top:0; } .rv-panel p:last-child{ margin-bottom:0; }
+@media print{ .reveal > button{ display:none; } .rv-panel{ display:none !important; } }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2: Basics Of Sound</span><span>Note 2: Interference and Diffraction</span></div><h1>Only Waves Can Interfere, Diffract, And Refract</h1><div class="synopsis"><span class="label">Synopsis</span>One of the waves&rsquo; defining characteristics is that they interfere. Wave
+interference results from the simple addition of waves&rsquo; amplitudes. That is it. When waves
+overlap and add, the resultant wave&rsquo;s amplitude reflects the two waves&rsquo; phase
+relationship: larger when they are in-phase, smaller when they are out-of-phase. Two waves of
+identical amplitude and wavelength give twice the amplitude while completely in-phase, and zero
+&mdash; complete cancellation &mdash; while completely out-of-phase.</div><p>A phase repeats every complete cycle, i.e. the wavelength. So waves are in-phase if they are
+    shifted by exactly one wavelength. If one wave&rsquo;s phase is shifted by half a wavelength with
+    respect to the other, the two are <b>180&deg; out-of-phase</b>: the peaks in one align with the
+    troughs in the other, and interference causes complete cancellation.</p><p>Recalling two waves rippling away from the sources in the previous PhET simulations: when two
+    waves arrive at a position and overlap, the factor that decides constructive or destructive is
+    <b>&Delta;d</b>, the difference in distances from the sources. Integer multiples of a wavelength
+    &rarr; constructive. Multiples of a wavelength plus a half &rarr; destructive.</p><p><b>Diffraction is a result of wave interference</b>, with one added detail: the wave goes
+    through an aperture, and diffraction describes how it propagates after it does. Why do we care?
+    Diffraction lets waves reach behind obstacles &mdash; it is how you hear sound around a corner,
+    pick up radio over a hill, or get a phone signal in a space full of things.</p><figure class="figure"><svg viewBox="0 0 700 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two sources sending out circular waves; the path difference to a point decides whether it is loud or quiet."><style>.l{font:600 12px "Segoe UI",system-ui,sans-serif;fill:#134a29}.m{font:400 11px "Segoe UI",system-ui,sans-serif;fill:#5c6b62}</style><clipPath id="cp"><rect x="60" y="10" width="620" height="310"/></clipPath><g clip-path="url(#cp)"><circle cx="90" cy="95" r="42" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="84" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="126" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="168" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="210" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="252" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="294" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="336" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="378" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="420" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="95" r="462" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="42" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="84" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="126" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="168" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="210" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="252" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="294" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="336" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="378" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="420" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="90" cy="235" r="462" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/></g><circle cx="90" cy="95" r="7" fill="#134a29"/><text class="m" x="80" y="81" text-anchor="middle">source 1</text><circle cx="90" cy="235" r="7" fill="#134a29"/><text class="m" x="80" y="221" text-anchor="middle">source 2</text><circle cx="560" cy="120" r="6" fill="none" stroke="#1e6b3c" stroke-width="2.4"/><text class="l" x="574" y="124" fill="#1e6b3c">loud</text><line x1="90" y1="95" x2="560" y2="120" stroke="#1e6b3c" stroke-width="1.3" stroke-dasharray="5 4" opacity=".9"/><line x1="90" y1="235" x2="560" y2="120" stroke="#1e6b3c" stroke-width="1.3" stroke-dasharray="5 4" opacity=".9"/><circle cx="560" cy="250" r="6" fill="none" stroke="#c77b1f" stroke-width="2.4"/><text class="l" x="574" y="254" fill="#c77b1f">quiet</text><line x1="90" y1="95" x2="560" y2="250" stroke="#c77b1f" stroke-width="1.3" stroke-dasharray="5 4" opacity=".9"/><line x1="90" y1="235" x2="560" y2="250" stroke="#c77b1f" stroke-width="1.3" stroke-dasharray="5 4" opacity=".9"/><text class="l" x="350" y="300" text-anchor="middle">&#916;d = n&#955; &#8594; loud &#160;&#160;&#160; &#916;d = (n + &#189;)&#955; &#8594; quiet</text></svg><figcaption><b>Figure 1.</b> Two sources in step. At any point the only thing that decides loud or quiet is <b>&Delta;d</b>, the difference between the two path lengths &mdash; a whole number of wavelengths and the peaks arrive together, a whole number plus a half and a peak meets a trough. Nothing here mentions water, air or light, which is the point of measuring it in all three.</figcaption></figure><div class="synopsis"><span class="label">Performance Expectations</span>Describe constructive and destructive wave interference using waves&rsquo; phase
+relationships, and connect those phase relationships to the wavelength. Describe diffraction using
+wave interference, recognizing that waves spread out off the surfaces and edges they sweep over, and
+that a large aperture with a short wavelength gives the clearest fringe pattern.</div><h2>Part I &mdash; Interference</h2><ol class="steps questions"><li><p>Open the PhET <i>Wave Interference</i> sim, Interference panel, Water. Leave the defaults (frequency middle, amplitude max, separation 3 cm). Put the grey and black probes where the traces are completely <b>in-phase</b> &mdash; black on the first bright ring, grey on the second. Do the traces confirm it?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden><b>Yes.</b> Both probes are at peaks to start with.</div></div></li><li><p>What is the wavelength?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&lambda; &asymp; <b>2.7 cm</b></div></div></li><li><p>What is the frequency? (Find the period first. How?)</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Period 1.45 s, so f = 1 / 1.45 = <b>0.6250 Hz</b></div></div></li><li><p>What is the amplitude? (One vertical tick mark is 1 cm.)</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>A &asymp; <b>0.4 cm</b></div></div></li><li><p>What is the speed of the wave?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>v = &lambda;f = (2.7 cm)(0.6250 Hz) = <b>1.69 cm/s</b></div></div></li><li><p>Black probe on the first bright ring, grey on the second. What is the difference in distances from the two water drops?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&Delta;d<sub>1</sub> = <b>1.8 cm</b></div></div></li><li><p>Move the grey probe to the third bright ring. What is the difference now?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&Delta;d<sub>2</sub> = <b>4.5 cm</b></div></div></li><li><p>How are &Delta;d<sub>1</sub> and &Delta;d<sub>2</sub> related to the wavelength?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&Delta;d = &lambda; = &Delta;d<sub>2</sub> &minus; &Delta;d<sub>1</sub> = 4.5 &minus; 1.8 = <b>2.7 cm</b> &mdash; exactly one wavelength.</div></div></li><li><p>Now place the probes so the traces are completely <b>out-of-phase</b> &mdash; black on the first bright ring, grey on the first dark ring. Do the traces confirm it?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden><b>Yes.</b> Black on peak, grey on trough.</div></div></li><li><p>Measure that difference, then move the grey probe to the second dark ring and measure again.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&Delta;d<sub>3</sub> = <b>1.8 cm</b> &nbsp;&middot;&nbsp; &Delta;d<sub>4</sub> = <b>5.9 cm</b></div></div></li><li><p>How are &Delta;d<sub>3</sub> and &Delta;d<sub>4</sub> related to the wavelength?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&Delta;d = &Delta;d<sub>4</sub> &minus; &Delta;d<sub>3</sub> = 5.9 &minus; 1.8 = <b>4.1 cm = &lambda; + &frac12;&lambda;</b></div></div></li><li><p>Show from your in-phase answers that &Delta;d = n&lambda;, n = 0, 1, 2&hellip;</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&Delta;d = d<sub>2</sub> &minus; d<sub>1</sub> = <b>1 &times; &lambda;</b></div></div></li><li><p>Show from your out-of-phase answers that &Delta;d = (n + &frac12;)&lambda;.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&Delta;d = d<sub>4</sub> &minus; d<sub>3</sub> = &lambda; + &frac12;&lambda; = <b>(1 + &frac12;)&lambda;</b>, &nbsp;n = 1</div></div></li><li><p>Turn on the second tap. Without pausing, put the black probe anywhere outside the fuzzy area and the grey probe wherever you see fuzziness. How can you say the black probe shows <b>constructive</b> interference? And the grey probe <b>destructive</b>?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Black: <b>amplitude larger.</b> &nbsp;Grey: <b>zero amplitude.</b></div></div></li><li><p><b>Water.</b> Measure top-tap and bottom-tap distances to each probe and take the differences.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Black probe 4.9 and 7.2 &rarr; &Delta;d<sub>constructive</sub> = <b>2.3 cm</b><br>Grey probe 8.8 and 7.4 &rarr; &Delta;d<sub>destructive</sub> = <b>1.4 cm</b></div></div></li><li><p>Show that constructive happens where &Delta;d = n&lambda;, and destructive where &Delta;d = (n + &frac12;)&lambda;. Explain using the phase relationship.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&Delta;d<sub>con</sub> &asymp; |7.2 &minus; 4.9| = 2.3 &asymp; <b>1&lambda;</b>, n = 1<br>&Delta;d<sub>dest</sub> = |7.4 &minus; 8.8| = 1.4 &asymp; <b>&frac12;&lambda;</b>, n = 0</div></div></li><li><p><b>Sound.</b> Switch to the sound wave and find the wavelength, then repeat the measurement.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&lambda; = <b>120 cm</b><br>&Delta;d<sub>constructive</sub> &asymp; <b>100 cm &asymp; 1&lambda;</b><br>Grey probe 378 and 326 &rarr; &Delta;d<sub>destructive</sub> = <b>52 cm &asymp; &frac12;&lambda;</b></div></div></li><li><p><b>Light.</b> Switch to the light wave and do it once more.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>&lambda; &asymp; <b>600 nm</b><br>Black probe 4757 and 5367 &rarr; &Delta;d<sub>constructive</sub> = <b>610 nm &asymp; 1&lambda;</b><br>Grey probe 5043 and 4754 &rarr; &Delta;d<sub>destructive</sub> = <b>293 nm &asymp; &frac12;&lambda;</b></div></div></li><li><p>Three media &mdash; water, air, vacuum. Transverse, longitudinal, electromagnetic. What survived unchanged across all three?</p><p class="noans">Your own answer &mdash; nothing to check against.</p></li></ol><h2>Part II &mdash; Diffraction</h2><figure class="figure"><svg viewBox="0 0 700 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A plane wave meets a slit; the two edges of the slit act as new sources and the waves spread out behind the barrier."><style>.l{font:600 12px "Segoe UI",system-ui,sans-serif;fill:#134a29}.m{font:400 11px "Segoe UI",system-ui,sans-serif;fill:#5c6b62}</style><line x1="60" y1="40" x2="60" y2="290" stroke="#1e6b3c" stroke-width="1.6" opacity=".5"/><line x1="94" y1="40" x2="94" y2="290" stroke="#1e6b3c" stroke-width="1.6" opacity=".5"/><line x1="128" y1="40" x2="128" y2="290" stroke="#1e6b3c" stroke-width="1.6" opacity=".5"/><line x1="162" y1="40" x2="162" y2="290" stroke="#1e6b3c" stroke-width="1.6" opacity=".5"/><line x1="196" y1="40" x2="196" y2="290" stroke="#1e6b3c" stroke-width="1.6" opacity=".5"/><line x1="230" y1="40" x2="230" y2="290" stroke="#1e6b3c" stroke-width="1.6" opacity=".5"/><clipPath id="cd"><rect x="272" y="20" width="330" height="290"/></clipPath><g clip-path="url(#cd)"><circle cx="270" cy="130" r="38" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="130" r="76" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="130" r="114" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="130" r="152" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="130" r="190" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="130" r="228" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="130" r="266" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="130" r="304" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="130" r="342" fill="none" stroke="#1e6b3c" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="38" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="76" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="114" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="152" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="190" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="228" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="266" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="304" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/><circle cx="270" cy="200" r="342" fill="none" stroke="#c77b1f" stroke-width="1.1" opacity=".55"/></g><rect x="264" y="20" width="12" height="110" fill="#1d2b23"/><rect x="264" y="200" width="12" height="110" fill="#1d2b23"/><circle cx="270" cy="130" r="6" fill="#c77b1f"/><circle cx="270" cy="200" r="6" fill="#c77b1f"/><text class="l" x="254" y="118" text-anchor="end">edge</text><text class="l" x="254" y="212" text-anchor="end">edge</text><line x1="610" y1="20" x2="610" y2="310" stroke="#5c6b62" stroke-width="2"/><text class="m" x="616" y="30">screen</text><circle cx="610" cy="90" r="5" fill="none" stroke="#1e6b3c" stroke-width="2.2"/><line x1="270" y1="130" x2="610" y2="90" stroke="#1e6b3c" stroke-width="1.3" stroke-dasharray="5 4"/><line x1="270" y1="200" x2="610" y2="90" stroke="#1e6b3c" stroke-width="1.3" stroke-dasharray="5 4"/><text class="l" x="604" y="78" text-anchor="end">first bright fringe</text><text class="l" x="350" y="322" text-anchor="middle">the two edges behave as new sources &#8212; &#916;d = &#955; bright, &#189;&#955; dark</text></svg><figcaption><b>Figure 2.</b> A flat wave meets a slit. Treat the <b>two edges</b> as new sources and diffraction becomes the same problem as Figure 1: the path difference from the two edges to a point on the screen is &lambda; at a bright fringe and &frac12;&lambda; at a dark one. That is why a wider slit and a shorter wavelength sharpen the pattern.</figcaption></figure><ol class="steps questions alt"><li><p>Run the PhET sim, <b>Slits</b> option, Light Generator. Check Screen and Intensity. Slide the frequency all the way left (reddest, longest wave), aperture about 1000 nm from the generator, One Slit. Set the slit width to maximum (1600 nm), send the planar waves, then set it to minimum (200 nm) and send again. Describe the difference in <b>wavefront shape</b>.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Smaller slit: 200 nm width &rarr; <b>rounder</b> wave front.<br>Larger slit: 1600 nm width &rarr; <b>flatter</b> wave front.</div></div></li><li><p>Describe the difference in the <b>intensity</b> between the largest and smallest apertures.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>200 nm: <b>low intensity.</b> &nbsp;1600 nm: <b>high intensity.</b></div></div></li><li><p>Repeat with the frequency slid all the way right (blue/purple, shortest wave). Wavefront shape?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Red: <b>rounder</b> &mdash; reaches further behind the barrier.<br>Blue: <b>flatter.</b></div></div></li><li><p>And the intensity?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Red: <b>broader but lower peak height.</b><br>Blue: <b>narrower but higher peak height.</b></div></div></li><li><p>From the intensity profile, when do you see the <b>clearest fringes</b>?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden><b>Largest slit width</b> and <b>shortest wavelength.</b></div></div></li><li><p>The peaks in the intensity profile are <b>bright fringes</b>, the valleys <b>dark fringes</b>. Explain those terms using constructive and destructive interference.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Bright fringe: <b>constructive interference.</b><br>Dark fringe: <b>destructive interference.</b></div></div></li><li><p>What are the wavelengths of the reddest and bluest frequencies? You need these below.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Reddest: <b>780 nm</b> &nbsp;&middot;&nbsp; Bluest: <b>450 nm</b></div></div></li><li><p><b>This statement is critically important:</b> diffraction is essentially understood by imagining the <b>two edges of the hole to be new sources of waves</b>. Set Two Slits, slit width minimum (200 nm), separation 1500 nm, and observe. What are the similarities between the one-slit and two-slit <b>bright</b> fringes, and why?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Similarity: <b>fringes</b> &mdash; a <b>diffraction pattern</b> in both.</div></div></li><li><p>What are the differences, and why?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Difference: <b>shape of the intensity profile.</b><br>One slit: <b>most light goes through.</b><br>Two slits: <b>pattern solely due to diffraction.</b></div></div></li><li><p>Now the <b>dark</b> fringes in both profiles. Similarities, and differences?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Similarity: <b>fringes</b>, the same <b>diffraction pattern</b>.<br>Difference: <b>intensity profile</b> &mdash; one slit, most light gets through; two slits, the pattern is purely due to diffraction.</div></div></li><li><p><b>One Slit</b>, width back to maximum (1600 nm). Measure from the bottom edge to the first top <b>bright</b> fringe, and from the top edge to the same fringe. Take the difference and compare it to the wavelength.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Bottom edge <b>6492 nm</b>, top edge <b>5969 nm</b><br>&Delta;d &asymp; <b>500 nm &asymp; 1&lambda;</b></div></div></li><li><p>Repeat for the first top <b>dark</b> fringe.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Bottom edge <b>4580 nm</b>, top edge <b>3952 nm</b><br>&Delta;d &asymp; <b>300 nm &asymp; &frac12;&lambda;</b></div></div></li><li><p><b>Two Slits</b>, width minimum (200 nm), separation 1500 nm. Measure from the top hole and from the bottom hole to the first top <b>bright</b> fringe.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Bottom <b>4880 nm</b>, top <b>4454 nm</b><br>&Delta;d = <b>426 nm &asymp; 1&lambda;</b></div></div></li><li><p>Repeat for the first top <b>dark</b> fringe.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>Bottom <b>4690 nm</b>, top <b>4481 nm</b><br>&Delta;d = <b>209 nm &asymp; &frac12;&lambda;</b></div></div></li><li><p>Returning to the statement &mdash; &ldquo;the diffraction phenomenon is essentially understood by imagining the two edges of the hole to be new sources of waves&rdquo; &mdash; explain why it is accurate, using your results above.</p><p class="noans">Your own answer &mdash; nothing to check against.</p></li><li><p>Research <b>secondary wavelets</b>, coined by the Dutch scientist Huygens. Draw an illustration and describe them in a few sentences.</p><p class="noans">Your own answer &mdash; nothing to check against.</p></li><li><p>Expand on the statements above describing diffraction using the idea of secondary wavelets.</p><p class="noans">Your own answer &mdash; nothing to check against.</p></li></ol><div class="videoslot"><span class="label">Walk-through video</span><p>A recording of me working through this note will be posted here.</p></div><footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 105</footer>
+</div>
+<script>
+/* Each reveal is independent: click to show, click to hide. */
+(function(){
+  document.querySelectorAll('.reveal > button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var open = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', open ? 'false' : 'true');
+      b.nextElementSibling.hidden = open;
+      b.querySelector('.rv-label').textContent = open ? b.dataset.show : b.dataset.hide;
+      window.dispatchEvent(new Event('resize'));
+    });
+  });
+})();
+</script>
+
+<script>
+function reportHeight(){ parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - fixes the first-paint WIDTH race. See the
+   Autosize_Backfill_Runbook; identical to the copy in N4a/N4b. */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){
+    var el = document.querySelector('.note-wrap') || document.body;
+    var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height
+      + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+  }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    var w = document.querySelector('.note-wrap'); if (w) ro.observe(w);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+</body>
+</html>
