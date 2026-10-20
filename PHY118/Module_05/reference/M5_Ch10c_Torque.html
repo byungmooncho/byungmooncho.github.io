@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch10c &mdash; Torque</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 118 - Module 5 - Chapter 9 (College Physics) - Trevor slides 09b
+     "Torque" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     Notation note (conversion, not an erratum): the deck uses theta and phi
+     interchangeably for the angle between r and F - slide 3's right-hand
+     panel writes "r sin phi = r_perp" while labelling the same angle theta,
+     and slides 6 and 7 write "tau = rF sin phi" then substitute theta.
+     Slide 2 explains why it does not matter (the two are supplementary and
+     sin th = sin(180 - th)). This page uses theta throughout and keeps the
+     explanation.
+
+     Numbering follows CONTENT: College Physics puts torque in ch.9 (Statics
+     and Torque), which is where this page's references point. The file name
+     keeps the shared M5_Ch10c slug used across both courses.
+
+     This page belongs BEFORE Ch10d in reading order - Ch10d's "you already
+     know this" block cites it.
+
+     This page is AUTHORED for this course from the deck(s), not generated from
+     any other page (playbook Step 1). Any correction noted above belongs on
+     both courses' pages and is applied on both.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 9 (College Physics) &middot; Slides 09b</span>
+  </div>
+
+  <h1>Torque</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A force makes something accelerate; a <b>torque</b> makes something turn. How much turning
+    effect a force has depends on three things: how hard you push, <em>where</em> you push, and
+    <em>which way</em> you push &mdash; and the one equation
+    <b><span class="m">&tau;</span> = <span class="m">rF</span> sin <span class="m">&theta;</span></b>
+    carries all three. Everything else on this page is a way of reading that equation.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Resolving a force into components from <b>Module&nbsp;2</b> &mdash; that is the whole of
+    sin&nbsp;<span class="m">&theta;</span> here &mdash; and the idea of an axis of rotation from
+    <b>Ch10a</b>. If you have ever pushed on a door near its hinge and felt it barely move, you
+    already have the physics; this page gives it a number.
+  </div>
+
+  <h2 id="three-things">Three things, one equation</h2>
+
+  <p>Trevor states it as a list before he states it as a formula. Torque depends on the force
+     <span class="m">F</span>, on the distance <span class="m">r</span> from the axis to the point
+     where the force is applied, and on the direction <span class="m">&theta;</span> in which the
+     force points.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 200" role="img" aria-label="A door seen from above in three panels. In the first the same force is applied close to the hinge and the turning effect is small. In the second it is applied at the far edge at right angles and the turning effect is largest. In the third it is applied at the far edge but at sixty degrees to the door, giving a smaller turning effect.">
+      <defs>
+        <marker id="tq1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="tq1b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+
+      <!-- panel 1 -->
+      <rect x="30" y="100" width="140" height="15" fill="#f6e5b8" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 24 116 L 36 116 L 30 104 z" fill="var(--violet)"/>
+      <line x1="56" y1="100" x2="56" y2="54" stroke="var(--red)" stroke-width="2.6" marker-end="url(#tq1)"/>
+      <text class="lbl" x="63" y="60" fill="var(--red)">F</text>
+      <line x1="30" y1="132" x2="56" y2="132" stroke="var(--blue)" stroke-width="1.4" marker-start="url(#tq1b)" marker-end="url(#tq1b)"/>
+      <text class="lbl" x="43" y="150" text-anchor="middle" fill="var(--blue)" font-size="13">r</text>
+      <text class="sm" x="100" y="172" text-anchor="middle">1. close to the hinge</text>
+      <text class="sm" x="100" y="188" text-anchor="middle">small r &rarr; small &tau;</text>
+
+      <!-- panel 2 -->
+      <rect x="240" y="100" width="140" height="15" fill="#f6e5b8" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 234 116 L 246 116 L 240 104 z" fill="var(--violet)"/>
+      <line x1="368" y1="100" x2="368" y2="54" stroke="var(--red)" stroke-width="2.6" marker-end="url(#tq1)"/>
+      <text class="lbl" x="375" y="60" fill="var(--red)">F</text>
+      <line x1="240" y1="132" x2="368" y2="132" stroke="var(--blue)" stroke-width="1.4" marker-start="url(#tq1b)" marker-end="url(#tq1b)"/>
+      <text class="lbl" x="304" y="150" text-anchor="middle" fill="var(--blue)" font-size="13">r</text>
+      <text class="sm" x="310" y="172" text-anchor="middle">2. at the far edge, square on</text>
+      <text class="sm" x="310" y="188" text-anchor="middle">&theta; = 90&deg; &rarr; the largest &tau; this F can give</text>
+
+      <!-- panel 3 -->
+      <rect x="450" y="100" width="140" height="15" fill="#f6e5b8" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 444 116 L 456 116 L 450 104 z" fill="var(--violet)"/>
+      <line x1="578" y1="100" x2="601" y2="60" stroke="var(--red)" stroke-width="2.6" marker-end="url(#tq1)"/>
+      <text class="lbl" x="607" y="58" fill="var(--red)">F</text>
+      <line x1="578" y1="100" x2="614" y2="100" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>
+      <path d="M 600 100 A 22 22 0 0 0 589 81" fill="none" stroke="var(--violet)" stroke-width="1.3"/>
+      <text class="lbl" x="601" y="88" fill="var(--violet)" font-size="13">&theta;</text>
+      <line x1="450" y1="132" x2="578" y2="132" stroke="var(--blue)" stroke-width="1.4" marker-start="url(#tq1b)" marker-end="url(#tq1b)"/>
+      <text class="lbl" x="514" y="150" text-anchor="middle" fill="var(--blue)" font-size="13">r</text>
+      <text class="sm" x="520" y="172" text-anchor="middle">3. same place, pushed at an angle</text>
+      <text class="sm" x="520" y="188" text-anchor="middle">&tau; = rF sin 60&deg; &rarr; 13% less</text>
+    </svg>
+    <figcaption>A door seen from above, with the same force in all three panels. Only
+      <span class="m">r</span> and <span class="m">&theta;</span> change, and both change the
+      answer.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Torque</div>
+    <div class="body">
+      <div class="mathline">
+        <b><span class="m">&tau;</span> = <span class="m">rF</span> sin <span class="m">&theta;</span></b>
+        &nbsp;&nbsp;&nbsp;(the vector form is
+        <span class="m">&tau;</span>&#8407; = <span class="m">r</span>&#8407; &times;
+        <span class="m">F</span>&#8407;, a cross product)
+      </div>
+      <table class="defs" style="margin:.6rem 0 0">
+        <tr><td class="term"><span class="m">&tau;</span></td><td class="eq">&mdash;</td>
+            <td>torque. The Greek letter tau; Trevor's mnemonic is that it rhymes with
+                <em>cow</em>, not with <em>saw</em>.</td></tr>
+        <tr><td class="term"><span class="m">r</span></td><td class="eq">&mdash;</td>
+            <td>distance from the axis to the point where the force acts.</td></tr>
+        <tr><td class="term"><span class="m">F</span></td><td class="eq">&mdash;</td>
+            <td>the applied force.</td></tr>
+        <tr><td class="term"><span class="m">&theta;</span></td><td class="eq">&mdash;</td>
+            <td>the angle between <span class="m">r</span>&#8407; and
+                <span class="m">F</span>&#8407;.</td></tr>
+      </table>
+      <p class="why">Trevor's aside about the angle is worth keeping: it does not matter whether
+        you measure the angle between the force and the lever arm or between the force and the
+        lever arm extended, because the two are supplementary and
+        sin&nbsp;<span class="m">&theta;</span> = sin(180&deg; &minus;
+        <span class="m">&theta;</span>). Any angle you can reasonably call &ldquo;the angle&rdquo;
+        here gives the same sine.</p>
+    </div>
+  </div>
+
+  <h2 id="units">Units: newton-metres, and never joules</h2>
+
+  <p>Multiply metres by newtons and the unit is N&middot;m. A newton-metre is also a joule &mdash;
+     but <b>torque is never written in joules</b>. Trevor is emphatic about this, and the reason is
+     that the two quantities are built differently: work is a force times a distance <em>along</em>
+     the force, while torque is a force times a distance <em>perpendicular</em> to it. Writing
+     21.7&nbsp;J for a torque invites exactly the confusion the separate name is there to prevent.</p>
+
+  <div class="tip">
+    <span class="label">In the shop</span>
+    The imperial unit is the <b>foot-pound</b> (ft&middot;lb), and it is the one printed on a torque
+    wrench. If a wheel nut calls for 100&nbsp;ft&middot;lb, that is 136&nbsp;N&middot;m &mdash; the
+    same physical demand, written in the other system.
+  </div>
+
+  <h2 id="two-readings">Two ways to read the same equation</h2>
+
+  <p>Trevor devotes a whole slide to the fact that the same formula is taught two different ways,
+     and that neither is more correct than the other. The brackets go in different places, and the
+     picture you draw changes to match.</p>
+
+  <figure>
+    <svg viewBox="0 0 660 262" role="img" aria-label="Two panels of the same rod on a pivot with the same force applied. In the left panel the force is resolved into a component along the rod and a component perpendicular to it, and the torque is the radius times the perpendicular component. In the right panel the line of action of the force is extended and a perpendicular is dropped from the pivot to it, giving the moment arm, and the torque is that moment arm times the whole force.">
+      <defs>
+        <marker id="tq2r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="tq2v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--violet)"/></marker>
+        <marker id="tq2b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+
+      <!-- ============ left panel: resolve the force ============ -->
+      <text class="sm" x="150" y="22" text-anchor="middle" fill="var(--green-deep)">RESOLVE THE FORCE</text>
+      <!-- rod -->
+      <line x1="40" y1="180" x2="213" y2="80" stroke="#c9b273" stroke-width="12" stroke-linecap="round"/>
+      <path d="M 32 190 L 48 190 L 40 174 z" fill="var(--violet)"/>
+      <circle cx="40" cy="180" r="4" fill="var(--ink)"/>
+      <!-- r -->
+      <line x1="40" y1="180" x2="170" y2="105" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#tq2b)"/>
+      <text class="lbl" x="98" y="158" fill="var(--blue)">r</text>
+      <!-- F -->
+      <line x1="170" y1="105" x2="170" y2="35" stroke="var(--red)" stroke-width="2.8" marker-end="url(#tq2r)"/>
+      <text class="lbl" x="178" y="40" fill="var(--red)">F</text>
+      <!-- components -->
+      <line x1="170" y1="105" x2="140" y2="53" stroke="var(--violet)" stroke-width="2.4" marker-end="url(#tq2v)"/>
+      <text class="lbl" x="110" y="52" fill="var(--violet)">F<tspan font-size="11" dy="3">&perp;</tspan></text>
+      <line x1="170" y1="105" x2="200" y2="88" stroke="var(--muted)" stroke-width="2" marker-end="url(#tq2v)" opacity=".7"/>
+      <text class="sm" x="208" y="98">F<tspan font-size="9" dy="2">&#8741;</tspan><tspan dy="-2"> does nothing</tspan></text>
+      <line x1="140" y1="53" x2="170" y2="35" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="200" y1="88" x2="170" y2="35" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>
+      <!-- angle -->
+      <path d="M 199 88 A 34 34 0 0 0 170 71" fill="none" stroke="var(--ink)" stroke-width="1.3"/>
+      <text class="lbl" x="192" y="68" font-size="13">&theta;</text>
+      <text class="lbl" x="150" y="222" text-anchor="middle" font-size="16">&tau; = r (F sin &theta;) = r F<tspan font-size="11" dy="3">&perp;</tspan></text>
+      <text class="sm" x="150" y="246" text-anchor="middle">only the part of F across the rod turns it</text>
+
+      <!-- ============ right panel: moment arm ============ -->
+      <text class="sm" x="490" y="22" text-anchor="middle" fill="var(--green-deep)">FIND THE MOMENT ARM</text>
+      <line x1="360" y1="180" x2="533" y2="80" stroke="#c9b273" stroke-width="12" stroke-linecap="round"/>
+      <path d="M 352 190 L 368 190 L 360 174 z" fill="var(--violet)"/>
+      <circle cx="360" cy="180" r="4" fill="var(--ink)"/>
+      <line x1="360" y1="180" x2="490" y2="105" stroke="var(--blue)" stroke-width="2.4" marker-end="url(#tq2b)"/>
+      <text class="lbl" x="418" y="158" fill="var(--blue)">r</text>
+      <line x1="490" y1="105" x2="490" y2="35" stroke="var(--red)" stroke-width="2.8" marker-end="url(#tq2r)"/>
+      <text class="lbl" x="498" y="40" fill="var(--red)">F</text>
+      <!-- line of action extended -->
+      <line x1="490" y1="105" x2="490" y2="196" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <text class="sm" x="498" y="190">line of action</text>
+      <!-- moment arm -->
+      <line x1="360" y1="180" x2="490" y2="180" stroke="var(--violet)" stroke-width="2.6" marker-end="url(#tq2v)"/>
+      <text class="lbl" x="420" y="174" fill="var(--violet)">r<tspan font-size="11" dy="3">&perp;</tspan></text>
+      <path d="M 478 180 L 478 168 L 490 168" fill="none" stroke="var(--violet)" stroke-width="1.2"/>
+      <path d="M 509 88 A 34 34 0 0 0 490 71" fill="none" stroke="var(--ink)" stroke-width="1.3"/>
+      <text class="lbl" x="512" y="68" font-size="13">&theta;</text>
+      <text class="lbl" x="490" y="222" text-anchor="middle" font-size="16">&tau; = (r sin &theta;) F = r<tspan font-size="11" dy="3">&perp;</tspan><tspan dy="-3"> F</tspan></text>
+      <text class="sm" x="490" y="246" text-anchor="middle">the perpendicular distance from the axis to that line</text>
+
+      <line x1="320" y1="30" x2="320" y2="250" stroke="var(--rule)" stroke-width="1.4"/>
+    </svg>
+    <figcaption>Same rod, same pivot, same force, same answer. The left reading moves the sine onto
+      the force; the right reading moves it onto the distance. Trevor's verdict: mathematically
+      identical, so use whichever the picture makes easier.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Which to use</span>
+    If the problem hands you a force at an angle to a bar, resolving it (left panel) is usually
+    quicker. If it hands you a line of action and a geometry &mdash; a rope over a pulley, a
+    weight hanging off a beam &mdash; the moment arm (right panel) is usually quicker.
+    <span class="m">r</span><sub>&perp;</sub> is often called the <b>perpendicular moment arm</b>,
+    or just the moment arm.
+  </div>
+
+  <h2 id="signs">Adding torques, with signs</h2>
+
+  <p>Torques about the same axis add, and because a torque can turn an object either way, they add
+     <em>with signs</em>. Trevor's convention is the standard one.</p>
+
+  <figure>
+    <svg viewBox="0 0 600 240" role="img" aria-label="A bar on a pivot at its lower left. A force F one acts far from the pivot and turns the bar counterclockwise, counted positive. A force F two acts nearer the pivot and turns it clockwise, counted negative. A key gives the sign convention.">
+      <defs>
+        <marker id="tq3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="tq3b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+      <line x1="40" y1="190" x2="330" y2="58" stroke="#c9b273" stroke-width="13" stroke-linecap="round"/>
+      <path d="M 31 200 L 49 200 L 40 183 z" fill="var(--violet)"/>
+      <circle cx="40" cy="190" r="4" fill="var(--ink)"/>
+
+      <!-- r1, measured parallel to the bar and offset below it -->
+      <line x1="48" y1="208" x2="288" y2="99" stroke="var(--blue)" stroke-width="1.5" marker-start="url(#tq3b)" marker-end="url(#tq3b)"/>
+      <text class="lbl" x="296" y="114" fill="var(--blue)">r<tspan font-size="11" dy="3">1</tspan></text>
+      <!-- r2, offset above it -->
+      <line x1="32" y1="172" x2="158" y2="115" stroke="var(--blue)" stroke-width="1.5" marker-start="url(#tq3b)" marker-end="url(#tq3b)" opacity=".7"/>
+      <text class="lbl" x="164" y="108" fill="var(--blue)" opacity=".85">r<tspan font-size="11" dy="3">2</tspan></text>
+
+      <!-- F1, far out -->
+      <circle cx="280" cy="81" r="3" fill="var(--ink)"/>
+      <line x1="280" y1="81" x2="280" y2="21" stroke="var(--red)" stroke-width="2.8" marker-end="url(#tq3r)"/>
+      <text class="lbl" x="288" y="28" fill="var(--red)">F<tspan font-size="11" dy="3">1</tspan></text>
+      <text class="sm" x="266" y="46" text-anchor="end" fill="var(--green)">&#8634; turns it this way, so &tau;<tspan font-size="9" dy="2">1</tspan><tspan dy="-2"> is +</tspan></text>
+
+      <!-- F2, nearer in -->
+      <circle cx="166" cy="133" r="3" fill="var(--ink)"/>
+      <line x1="166" y1="133" x2="208" y2="186" stroke="var(--red)" stroke-width="2.8" marker-end="url(#tq3r)"/>
+      <text class="lbl" x="214" y="192" fill="var(--red)">F<tspan font-size="11" dy="3">2</tspan></text>
+      <text class="sm" x="40" y="226" fill="var(--amber)">&#8635; turns it the other way, so &tau;<tspan font-size="9" dy="2">2</tspan><tspan dy="-2"> is &minus;</tspan></text>
+
+      <!-- key -->
+      <rect x="366" y="104" width="216" height="86" rx="8" fill="#f4f8f5" stroke="var(--green)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <text class="sm" x="384" y="128" fill="var(--green-deep)">SIGN CONVENTION</text>
+      <text x="384" y="156" font-size="19" fill="var(--green)">&#8634;</text>
+      <text class="sm" x="410" y="153">+&nbsp;&nbsp;counterclockwise</text>
+      <text x="384" y="181" font-size="19" fill="var(--amber)">&#8635;</text>
+      <text class="sm" x="410" y="178">&minus;&nbsp;&nbsp;clockwise</text>
+    </svg>
+    <figcaption>&Sigma;<span class="m">&tau;</span> = <span class="m">r</span><sub>1</sub><span class="m">F</span><sub>1</sub>
+      sin <span class="m">&theta;</span><sub>1</sub> &minus;
+      <span class="m">r</span><sub>2</sub><span class="m">F</span><sub>2</sub> sin
+      <span class="m">&theta;</span><sub>2</sub>. The minus sign is not part of
+      <span class="m">F</span><sub>2</sub>; it is the bookkeeping for which way that torque
+      turns the bar.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Before you compute, look</span>
+    Trevor's instruction on this slide is to think about which way each torque <em>would</em> make
+    the object spin, one force at a time, before writing anything down. Decide the signs from the
+    picture; then the algebra has nothing left to get wrong.
+  </div>
+
+  <h2 id="worked-1">Worked example: pushing a door at an angle</h2>
+
+  <p><em>A force of 50.0&nbsp;N is applied at 60.0&deg; to a door, 50.0&nbsp;cm from the hinge.
+     What is the torque?</em></p>
+
+  <div class="mathblock">
+    <div class="head">Straight substitution</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">r</span> = 50.0 cm = 0.500 m, &nbsp;<span class="m">F</span> = 50.0 N,
+        &nbsp;<span class="m">&theta;</span> = 60.0&deg;<br>
+        <span class="m">&tau;</span> = <span class="m">rF</span> sin <span class="m">&theta;</span>
+        = (0.500 m)(50.0 N) sin 60.0&deg;
+        = (0.500)(50.0)<span class="frac"><span class="top">&radic;3</span><span class="bot">2</span></span>
+        = <b>21.7 N&middot;m</b>
+      </div>
+      <p class="why">Two habits worth copying from the slide. The centimetres are converted to
+        metres in the given list, before anything is multiplied. And sin&nbsp;60&deg; is carried as
+        &radic;3/2 rather than as a rounded decimal, so only the final answer is rounded &mdash;
+        here to three significant figures, matching the data.</p>
+    </div>
+  </div>
+
+  <h2 id="worked-2">Worked example: the same equation, run backwards</h2>
+
+  <p><em>How far from the hinge must you push, with 50.0&nbsp;N perpendicular to the door, to
+     produce a torque of 25.0&nbsp;N&middot;m?</em></p>
+
+  <div class="mathblock">
+    <div class="head">Solve for <span class="m">r</span> instead</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">&theta;</span> = 90.0&deg; (perpendicular), so sin
+        <span class="m">&theta;</span> = 1<br>
+        <span class="m">r</span> =
+        <span class="frac"><span class="top"><span class="m">&tau;</span></span><span class="bot"><span class="m">F</span> sin <span class="m">&theta;</span></span></span>
+        =
+        <span class="frac"><span class="top">25.0 N&middot;m</span><span class="bot">(50.0 N)(1)</span></span>
+        = <b>0.500 m</b>
+      </div>
+      <p class="why">The word <em>perpendicular</em> in the question is doing real work: it is what
+        sets <span class="m">&theta;</span> = 90&deg; and makes sin <span class="m">&theta;</span>
+        = 1. Read it as data, not as scene-setting.</p>
+    </div>
+  </div>
+
+  <div class="check">
+    <span class="label">Check yourself</span>
+    <p class="q">Push on a door exactly along its surface, straight towards the hinge. What is the
+      torque?</p>
+    <p class="ans"><b>Zero.</b> The angle between <span class="m">r</span>&#8407; and
+      <span class="m">F</span>&#8407; is 0&deg; (or 180&deg;), sin of which is 0. In the left-hand
+      reading there is no perpendicular component to resolve out; in the right-hand reading the
+      line of action passes straight through the axis, so the moment arm is zero. Both readings
+      agree, which is the point of the figure above.</p>
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Torque</td><td class="eq">&mdash;</td>
+        <td><span class="m">&tau;</span> = <span class="m">rF</span> sin
+            <span class="m">&theta;</span>; vector form
+            <span class="m">&tau;</span>&#8407; = <span class="m">r</span>&#8407; &times;
+            <span class="m">F</span>&#8407;.</td></tr>
+    <tr><td class="term">Depends on</td><td class="eq">&mdash;</td>
+        <td>how hard (<span class="m">F</span>), how far out (<span class="m">r</span>), and which
+            way (<span class="m">&theta;</span>).</td></tr>
+    <tr><td class="term">Units</td><td class="eq">&mdash;</td>
+        <td>N&middot;m, or ft&middot;lb in imperial. Never joules.</td></tr>
+    <tr><td class="term">Two readings</td><td class="eq">&mdash;</td>
+        <td><span class="m">rF</span><sub>&perp;</sub> (resolve the force) and
+            <span class="m">r</span><sub>&perp;</sub><span class="m">F</span> (find the moment
+            arm) &mdash; equivalent.</td></tr>
+    <tr><td class="term">Signs</td><td class="eq">&mdash;</td>
+        <td>counterclockwise positive, clockwise negative; then
+            &Sigma;<span class="m">&tau;</span> is an ordinary sum.</td></tr>
+    <tr><td class="term">Zero torque</td><td class="eq">&mdash;</td>
+        <td>when the force points at the axis, or acts at the axis
+            (<span class="m">r</span> = 0).</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/9-2-the-second-condition-for-equilibrium" target="_blank" rel="noopener">9.2 The Second Condition for Equilibrium</a></li>
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/9-1-the-first-condition-for-equilibrium" target="_blank" rel="noopener">9.1 The First Condition for Equilibrium</a></li>
+    <li>Extra resource &mdash; Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/10-6-torque" target="_blank" rel="noopener">10.6 Torque</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Torque</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
