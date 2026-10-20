@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch11b &mdash; Angular Momentum and Its Conservation</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 151 - Module 5 - Chapter 11 (University Physics) - Trevor slides AngMom
+     "Angular Momentum and Its Conservation" - web-page version of the
+     lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     Source deck: "Rotational Momentum Conservation" (5 slides). It is the
+     thinnest deck in Module 5 and two of its five slides are incomplete in
+     the source:
+       - slide 1's learning objectives are blank placeholders ("1. To",
+         "2. To"). Objectives are supplied here from the deck's own content.
+       - slide 2's symbol/units table renders as nested copies of itself in
+         the PDF export. Rebuilt here as a clean definition table.
+       - slide 5 sets up the person-on-a-turntable problem symbolically and
+         stops. Numbers are supplied here (120 kg / 2.0 m table, 60 kg person,
+         1.5 rad/s, rim to 0.50 m) and the two-disk example on this page is
+         likewise given numbers of its own.
+     All four additions are flagged in M5_Deck_Errata_2026-10-19.
+
+     Numbering follows CONTENT: angular momentum is University Physics ch.11,
+     College Physics ch.10.
+
+     PHY 118 has its own page for this deck, written for College Physics from
+     the same deck. It is NOT generated from this file (playbook Step 1).
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 11 (University Physics) &middot; Angular Momentum deck</span>
+  </div>
+
+  <h1>Angular Momentum and Its Conservation</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Linear momentum has a rotational twin too:
+    <b><span class="m">L</span> = <span class="m">I&omega;</span></b>. When no outside torque acts
+    on a system, the total <span class="m">L</span> before equals the total
+    <span class="m">L</span> after &mdash; which is why a skater who pulls her arms in spins
+    faster without pushing on anything. The bookkeeping is exactly the collision bookkeeping of
+    Module&nbsp;4, with <span class="m">I</span> for <span class="m">m</span> and
+    <span class="m">&omega;</span> for <span class="m">v</span>.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Conservation of linear momentum from <b>Module&nbsp;4</b> &mdash;
+    <span class="m">p</span> = <span class="m">mv</span>, conserved when no external force acts,
+    with kinetic energy <em>not</em> conserved in a sticking collision. Everything on this page is
+    that argument run again in rotational variables, using the moment of inertia from
+    <b>Ch10b</b>.
+  </div>
+
+  <h2 id="definition">What angular momentum is</h2>
+
+  <table class="defs">
+    <tr><td class="term"><span class="m">L</span></td><td class="eq">=</td>
+        <td><span class="m">I&omega;</span> &mdash; <b>angular momentum</b>, in
+            kg&middot;m<sup>2</sup>/s</td></tr>
+    <tr><td class="term"><span class="m">I</span></td><td class="eq">&mdash;</td>
+        <td>moment of inertia, in kg&middot;m<sup>2</sup></td></tr>
+    <tr><td class="term"><span class="m">&omega;</span></td><td class="eq">&mdash;</td>
+        <td>angular speed, in rad/s</td></tr>
+  </table>
+
+  <p>The unit is worth writing out once. kg&middot;m<sup>2</sup> &times; rad/s gives
+     kg&middot;m<sup>2</sup>/s, because the radian is dimensionless &mdash; it is a ratio of two
+     lengths and carries no units of its own. That is the same disappearing act radians performed
+     in <span class="m">v</span> = <span class="m">&omega;r</span> back in <b>Ch10a</b>.</p>
+
+  <div class="tip">
+    <span class="label">It has a direction too</span>
+    Like linear momentum, <span class="m">L</span> is a vector. Its direction lies along the
+    rotation axis, given by the right-hand rule: curl the fingers of your right hand the way the
+    object turns and your thumb points along <span class="m">L</span>. For everything on this page
+    the axis is fixed, so the direction reduces to a sign &mdash; one sense of rotation positive,
+    the other negative &mdash; exactly as it did for one-dimensional linear momentum.
+  </div>
+
+  <h2 id="conservation">Angular momentum is conserved</h2>
+
+  <p>With no external torque on the system, the total angular momentum does not change. For two
+     interacting objects that is the same four-term statement you wrote for linear collisions:</p>
+
+  <div class="mathblock">
+    <div class="head">The conservation statement, three ways</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">L</span><sub>i</sub> = <span class="m">L</span><sub>f</sub><br>
+        <span class="m">L</span><sub>1i</sub> + <span class="m">L</span><sub>2i</sub> =
+        <span class="m">L</span><sub>1f</sub> + <span class="m">L</span><sub>2f</sub><br>
+        <span class="m">I</span><sub>1</sub><span class="m">&omega;</span><sub>1i</sub> +
+        <span class="m">I</span><sub>2</sub><span class="m">&omega;</span><sub>2i</sub> =
+        <span class="m">I</span><sub>1</sub><span class="m">&omega;</span><sub>1f</sub> +
+        <span class="m">I</span><sub>2</sub><span class="m">&omega;</span><sub>2f</sub>
+      </div>
+      <p class="why">Trevor's closing line on the slide is the practical one: <em>the details of
+        the motion before and after are either given or can be determined.</em> In other words the
+        equation has one unknown once you have read the problem properly, and the work is in
+        identifying which <span class="m">I</span> goes with which <span class="m">&omega;</span>
+        &mdash; not in the algebra.</p>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 600 190" role="img" aria-label="Two disks spinning separately at angular speeds omega one i and omega two i are dropped onto one another and end up stuck together, turning as one at a single final angular speed omega f.">
+      <defs>
+        <marker id="am1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+      <!-- before -->
+      <ellipse cx="110" cy="48" rx="66" ry="20" fill="#f7d9b0" stroke="var(--ink)" stroke-width="1.5"/>
+      <path d="M 92 38 A 24 10 0 0 1 132 40" fill="none" stroke="var(--green)" stroke-width="2" marker-end="url(#am1)"/>
+      <text class="lbl" x="142" y="44" fill="var(--green)">&omega;<tspan font-size="10" dy="3">1i</tspan></text>
+      <ellipse cx="110" cy="116" rx="78" ry="24" fill="#cfe0f5" stroke="var(--ink)" stroke-width="1.5"/>
+      <path d="M 90 104 A 26 11 0 0 1 134 107" fill="none" stroke="var(--green)" stroke-width="2" marker-end="url(#am1)"/>
+      <text class="lbl" x="146" y="112" fill="var(--green)">&omega;<tspan font-size="10" dy="3">2i</tspan></text>
+      <text class="sm" x="110" y="166" text-anchor="middle">before &mdash; turning independently</text>
+
+      <!-- arrow -->
+      <text x="272" y="92" font-size="22" fill="var(--muted)">&rarr;</text>
+      <text class="sm" x="283" y="116" text-anchor="middle">they stick</text>
+
+      <!-- after -->
+      <ellipse cx="450" cy="104" rx="78" ry="24" fill="#cfe0f5" stroke="var(--ink)" stroke-width="1.5"/>
+      <ellipse cx="450" cy="86" rx="66" ry="20" fill="#f7d9b0" stroke="var(--ink)" stroke-width="1.5"/>
+      <path d="M 432 76 A 24 10 0 0 1 472 78" fill="none" stroke="var(--green)" stroke-width="2" marker-end="url(#am1)"/>
+      <text class="lbl" x="482" y="82" fill="var(--green)">&omega;<tspan font-size="10" dy="3">f</tspan></text>
+      <text class="sm" x="450" y="166" text-anchor="middle">after &mdash; one object, one &omega;</text>
+    </svg>
+    <figcaption>The rotational version of a perfectly inelastic collision. Angular momentum is
+      conserved; kinetic energy is not.</figcaption>
+  </figure>
+
+  <h2 id="types">The four shapes these problems come in</h2>
+
+  <p>Trevor's survey slide is really a catalogue of set-ups, and recognising which one you have in
+     front of you is most of the work.</p>
+
+  <figure>
+    <svg viewBox="0 0 620 256" role="img" aria-label="Four set-ups. One: a small mass moving with speed v strikes the rim of a free disk and sticks. Two: the same mass strikes a hinged rod near the top. Three: it strikes the same rod near the bottom, giving a different final angular speed. Four: a person on a rotating turntable walks from the rim towards the centre.">
+      <defs>
+        <marker id="am2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+
+      <!-- 1: mass onto free disk rim -->
+      <circle cx="78" cy="96" r="42" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <circle cx="78" cy="96" r="4" fill="var(--ink)"/>
+      <line x1="78" y1="96" x2="78" y2="54" stroke="var(--blue)" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <text class="lbl" x="86" y="78" fill="var(--blue)" font-size="12">r</text>
+      <circle cx="78" cy="54" r="11" fill="#f0a861" stroke="var(--ink)" stroke-width="1.2"/>
+      <line x1="16" y1="42" x2="56" y2="42" stroke="var(--green)" stroke-width="2.2" marker-end="url(#am2)"/>
+      <text class="lbl" x="26" y="34" fill="var(--green)" font-size="13">v</text>
+      <path d="M 100 112 A 26 26 0 0 1 86 132" fill="none" stroke="var(--green)" stroke-width="2" marker-end="url(#am2)"/>
+      <text class="lbl" x="110" y="130" fill="var(--green)">&omega;<tspan font-size="10" dy="3">f</tspan></text>
+      <text class="sm" x="78" y="196" text-anchor="middle">1. mass sticks to a</text>
+      <text class="sm" x="78" y="212" text-anchor="middle">free disk's rim</text>
+
+      <!-- 2: mass onto hinged rod, high -->
+      <rect x="226" y="40" width="16" height="130" rx="2" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.4"/>
+      <circle cx="234" cy="112" r="4" fill="var(--ink)"/>
+      <circle cx="234" cy="46" r="11" fill="#f0a861" stroke="var(--ink)" stroke-width="1.2"/>
+      <line x1="172" y1="34" x2="212" y2="34" stroke="var(--green)" stroke-width="2.2" marker-end="url(#am2)"/>
+      <text class="lbl" x="182" y="26" fill="var(--green)" font-size="13">v</text>
+      <path d="M 252 96 A 28 28 0 0 1 258 124" fill="none" stroke="var(--green)" stroke-width="2" marker-end="url(#am2)"/>
+      <text class="lbl" x="266" y="112" fill="var(--green)">&omega;<tspan font-size="10" dy="3">f</tspan></text>
+      <text class="sm" x="234" y="196" text-anchor="middle">2. struck far from</text>
+      <text class="sm" x="234" y="212" text-anchor="middle">the pivot</text>
+
+      <!-- 3: mass onto hinged rod, low -->
+      <rect x="386" y="40" width="16" height="130" rx="2" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.4"/>
+      <circle cx="394" cy="112" r="4" fill="var(--ink)"/>
+      <circle cx="394" cy="162" r="11" fill="#f0a861" stroke="var(--ink)" stroke-width="1.2"/>
+      <line x1="332" y1="150" x2="372" y2="150" stroke="var(--green)" stroke-width="2.2" marker-end="url(#am2)"/>
+      <text class="lbl" x="342" y="142" fill="var(--green)" font-size="13">v</text>
+      <path d="M 412 128 A 20 20 0 0 1 414 148" fill="none" stroke="var(--green)" stroke-width="2" marker-end="url(#am2)"/>
+      <text class="lbl" x="422" y="142" fill="var(--green)">&omega;<tspan font-size="10" dy="3">f</tspan></text>
+      <text class="sm" x="394" y="196" text-anchor="middle">3. same mass, same</text>
+      <text class="sm" x="394" y="212" text-anchor="middle">v, nearer the pivot</text>
+
+      <!-- 4: person walks in -->
+      <circle cx="540" cy="96" r="42" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <circle cx="540" cy="96" r="4" fill="var(--ink)"/>
+      <circle cx="540" cy="62" r="8" fill="#f0a861" stroke="var(--ink)" stroke-width="1.2"/>
+      <circle cx="540" cy="112" r="8" fill="#f0a861" stroke="var(--ink)" stroke-width="1.2" opacity=".45"/>
+      <line x1="540" y1="72" x2="540" y2="100" stroke="var(--amber)" stroke-width="2" marker-end="url(#am2)"/>
+      <path d="M 562 112 A 26 26 0 0 1 548 132" fill="none" stroke="var(--green)" stroke-width="2" marker-end="url(#am2)"/>
+      <text class="lbl" x="572" y="130" fill="var(--green)">&omega;<tspan font-size="10" dy="3">f</tspan></text>
+      <text class="sm" x="540" y="196" text-anchor="middle">4. mass moves inwards</text>
+      <text class="sm" x="540" y="212" text-anchor="middle">on a turning disk</text>
+
+      <text class="sm" x="310" y="244" text-anchor="middle">In every one of them the same equation applies &mdash; only the inventory of <tspan font-style="italic">I</tspan> and <tspan font-style="italic">&omega;</tspan> terms changes.</text>
+    </svg>
+    <figcaption>Cases 2 and 3 are the pair worth staring at: identical mass, identical speed, and
+      yet different outcomes, because the incoming angular momentum
+      <span class="m">mvr</span> depends on <em>where</em> the mass arrives.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">A moving mass has angular momentum too</span>
+    An object that is not spinning at all still carries angular momentum <em>about a chosen
+    axis</em>: <span class="m">L</span> = <span class="m">mvr</span>, where
+    <span class="m">r</span> is the perpendicular distance from the axis to its line of travel.
+    That is what cases 1&ndash;3 above supply on the &ldquo;before&rdquo; side, and it is why the
+    answer changes when the same ball strikes the rod at a different height.
+  </div>
+
+  <h2 id="worked-disks">Worked example: dropping one disk onto another</h2>
+
+  <p><em>A disk with <span class="m">I</span><sub>1</sub> = 0.80&nbsp;kg&middot;m<sup>2</sup> is
+     turning at 12&nbsp;rad/s. A second disk, <span class="m">I</span><sub>2</sub> =
+     0.40&nbsp;kg&middot;m<sup>2</sup> and at rest, is dropped onto it along the same axis and the
+     two stick. Find the final angular speed, and the kinetic energy before and after.</em></p>
+
+  <div class="mathblock">
+    <div class="head">Conserve <span class="m">L</span>, then check <span class="m">K</span></div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">L</span> = <span class="m">I</span><sub>1</sub><span class="m">&omega;</span><sub>1i</sub>
+        + <span class="m">I</span><sub>2</sub>(0) = (0.80)(12) = 9.6 kg&middot;m<sup>2</sup>/s<br>
+        <span class="m">&omega;</span><sub>f</sub> =
+        <span class="frac"><span class="top"><span class="m">L</span></span><span class="bot"><span class="m">I</span><sub>1</sub> + <span class="m">I</span><sub>2</sub></span></span>
+        =
+        <span class="frac"><span class="top">9.6</span><span class="bot">1.20</span></span>
+        = <b>8.0 rad/s</b>
+      </div>
+      <div class="mathline" style="border-top:1px solid var(--rule); padding-top:.4rem">
+        <span class="m">K</span><sub>i</sub> = &frac12;(0.80)(12)<sup>2</sup> = 57.6 J
+        &nbsp;&nbsp;&nbsp;
+        <span class="m">K</span><sub>f</sub> = &frac12;(1.20)(8.0)<sup>2</sup> = 38.4 J
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp; <b>19.2 J lost</b> (33%)
+      </div>
+      <p class="why">Angular momentum came out the same on both sides because that was the
+        assumption. Kinetic energy did not, and nothing is wrong: the two surfaces rubbed against
+        each other until they matched speeds, and that friction warmed them. This is the rotational
+        twin of a perfectly inelastic linear collision, down to the fraction of energy lost.</p>
+    </div>
+  </div>
+
+  <h2 id="worked-turntable">Worked example: walking towards the centre</h2>
+
+  <p><em>A uniform turntable of mass 120&nbsp;kg and radius 2.0&nbsp;m turns freely at
+     1.5&nbsp;rad/s. A 60-kg person stands at the rim and walks in to 0.50&nbsp;m from the axis.
+     What is the new angular speed?</em></p>
+
+  <figure>
+    <svg viewBox="0 0 560 214" role="img" aria-label="Before and after. On the left a person stands at the rim of a turntable of radius two metres turning at one point five radians per second. On the right the same person stands half a metre from the axis and the turntable turns at two point eight radians per second.">
+      <defs>
+        <marker id="am3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+      <!-- before -->
+      <circle cx="104" cy="92" r="60" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.8"/>
+      <circle cx="104" cy="92" r="4" fill="var(--ink)"/>
+      <line x1="104" y1="92" x2="104" y2="32" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <text class="lbl" x="112" y="66" font-size="12">r<tspan font-size="9" dy="2">1</tspan></text>
+      <circle cx="104" cy="32" r="10" fill="#f0a861" stroke="var(--ink)" stroke-width="1.3"/>
+      <path d="M 134 112 A 36 36 0 0 1 112 146" fill="none" stroke="var(--green)" stroke-width="2.2" marker-end="url(#am3)"/>
+      <text class="lbl" x="152" y="138" fill="var(--green)" font-size="13">&omega;<tspan font-size="10" dy="3">i</tspan><tspan dy="-3"> = 1.5</tspan></text>
+      <text class="sm" x="104" y="180" text-anchor="middle">person at r<tspan font-size="9" dy="2">1</tspan><tspan dy="-2"> = 2.0 m</tspan></text>
+      <text class="sm" x="104" y="198" text-anchor="middle">I = 240 + 240 = 480 kg&middot;m&#178;</text>
+
+      <!-- arrow -->
+      <text x="262" y="100" font-size="22" fill="var(--muted)">&rarr;</text>
+      <text class="sm" x="272" y="124" text-anchor="middle">L unchanged</text>
+
+      <!-- after -->
+      <circle cx="420" cy="92" r="60" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.8"/>
+      <circle cx="420" cy="92" r="4" fill="var(--ink)"/>
+      <line x1="420" y1="92" x2="420" y2="77" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <circle cx="420" cy="77" r="10" fill="#f0a861" stroke="var(--ink)" stroke-width="1.3"/>
+      <text class="lbl" x="432" y="80" font-size="12">r<tspan font-size="9" dy="2">2</tspan></text>
+      <path d="M 450 112 A 36 36 0 0 1 428 146" fill="none" stroke="var(--green)" stroke-width="3" marker-end="url(#am3)"/>
+      <text class="lbl" x="468" y="138" fill="var(--green)" font-size="13">&omega;<tspan font-size="10" dy="3">f</tspan><tspan dy="-3"> = 2.8</tspan></text>
+      <text class="sm" x="420" y="180" text-anchor="middle">person at r<tspan font-size="9" dy="2">2</tspan><tspan dy="-2"> = 0.50 m</tspan></text>
+      <text class="sm" x="420" y="198" text-anchor="middle">I = 240 + 15 = 255 kg&middot;m&#178;</text>
+    </svg>
+    <figcaption>The turntable's own moment of inertia never changes. All the change comes from the
+      person, whose contribution falls from 240 to 15&nbsp;kg&middot;m<sup>2</sup> because
+      <span class="m">r</span> is squared.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Inventory first, then one division</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">I</span><sub>table</sub> = &frac12;<span class="m">MR</span><sup>2</sup>
+        = &frac12;(120)(2.0)<sup>2</sup> = 240 kg&middot;m<sup>2</sup> &nbsp;(unchanged)<br>
+        <span class="m">I</span><sub>person,i</sub> = <span class="m">mr</span><sub>1</sub><sup>2</sup>
+        = (60)(2.0)<sup>2</sup> = 240 &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">I</span><sub>i</sub> = 480 kg&middot;m<sup>2</sup><br>
+        <span class="m">I</span><sub>person,f</sub> = (60)(0.50)<sup>2</sup> = 15
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">I</span><sub>f</sub> = 255 kg&middot;m<sup>2</sup>
+      </div>
+      <div class="mathline" style="border-top:1px solid var(--rule); padding-top:.4rem">
+        <span class="m">I</span><sub>i</sub><span class="m">&omega;</span><sub>i</sub> =
+        <span class="m">I</span><sub>f</sub><span class="m">&omega;</span><sub>f</sub>
+        &nbsp;&rArr;&nbsp;
+        <span class="m">&omega;</span><sub>f</sub> =
+        <span class="frac"><span class="top">(480)(1.5)</span><span class="bot">255</span></span>
+        = <b>2.8 rad/s</b>
+      </div>
+      <p class="why">Trevor's slide stops at the symbolic line
+        <span class="m">mr</span><sub>1</sub><sup>2</sup><span class="m">&omega;</span><sub>i</sub>
+        + &frac12;<span class="m">MR</span><sup>2</sup><span class="m">&omega;</span><sub>i</sub> =
+        <span class="m">mr</span><sub>2</sub><sup>2</sup><span class="m">&omega;</span><sub>f</sub>
+        + &frac12;<span class="m">MR</span><sup>2</sup><span class="m">&omega;</span><sub>f</sub>,
+        which is worth reading carefully: the turntable term appears on both sides with the
+        <em>same</em> <span class="m">I</span> but different <span class="m">&omega;</span>, so it
+        does not cancel.</p>
+    </div>
+  </div>
+
+  <h2 id="energy">Where the energy goes &mdash; both ways</h2>
+
+  <p>The two worked examples above both conserve angular momentum, and their kinetic energies move
+     in opposite directions.</p>
+
+  <figure>
+    <svg viewBox="0 0 600 240" role="img" aria-label="Two bar-pair comparisons. On the left, two disks sticking together: kinetic energy falls from 57.6 to 38.4 joules. On the right, a person walking inwards on a turntable: kinetic energy rises from 540 to 1016 joules. In both, angular momentum is unchanged.">
+      <!-- left pair: disks stick, K falls -->
+      <text class="sm" x="140" y="26" text-anchor="middle">TWO DISKS STICK</text>
+      <rect x="72" y="52" width="48" height="128" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.3"/>
+      <rect x="152" y="95" width="48" height="85" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.3"/>
+      <line x1="56" y1="180" x2="218" y2="180" stroke="var(--ink)" stroke-width="1.6"/>
+      <text class="sm" x="96" y="46" text-anchor="middle">57.6 J</text>
+      <text class="sm" x="176" y="89" text-anchor="middle">38.4 J</text>
+      <text class="sm" x="96" y="196" text-anchor="middle">before</text>
+      <text class="sm" x="176" y="196" text-anchor="middle">after</text>
+      <text class="sm" x="140" y="218" text-anchor="middle" fill="var(--red)">K falls 33% &mdash; friction</text>
+
+      <!-- right pair: person walks in, K rises -->
+      <text class="sm" x="430" y="26" text-anchor="middle">PERSON WALKS INWARDS</text>
+      <rect x="362" y="112" width="48" height="68" fill="#f0e2c8" stroke="var(--amber)" stroke-width="1.3"/>
+      <rect x="442" y="52" width="48" height="128" fill="#f0e2c8" stroke="var(--amber)" stroke-width="1.3"/>
+      <line x1="346" y1="180" x2="508" y2="180" stroke="var(--ink)" stroke-width="1.6"/>
+      <text class="sm" x="386" y="106" text-anchor="middle">540 J</text>
+      <text class="sm" x="466" y="46" text-anchor="middle">1016 J</text>
+      <text class="sm" x="386" y="196" text-anchor="middle">before</text>
+      <text class="sm" x="466" y="196" text-anchor="middle">after</text>
+      <text class="sm" x="430" y="218" text-anchor="middle" fill="var(--green-deep)">K rises 88% &mdash; muscles</text>
+
+      <line x1="285" y1="40" x2="285" y2="200" stroke="var(--rule)" stroke-width="1.4"/>
+      <text class="sm" x="285" y="118" text-anchor="middle" fill="var(--muted)">L the</text>
+      <text class="sm" x="285" y="134" text-anchor="middle" fill="var(--muted)">same in</text>
+      <text class="sm" x="285" y="150" text-anchor="middle" fill="var(--muted)">both</text>
+      <text class="sm" x="300" y="228" text-anchor="middle" fill="var(--muted)">each pair is drawn to its own scale &mdash; compare within a pair, not across</text>
+    </svg>
+    <figcaption>Conserving <span class="m">L</span> says nothing about <span class="m">K</span>.
+      Sticking surfaces lose energy to friction; a person pulling mass inwards against the
+      outward push adds energy from their own muscles.</figcaption>
+  </figure>
+
+  <div class="check">
+    <span class="label">Check yourself</span>
+    <p class="q">If angular momentum is conserved, where did the extra 476&nbsp;J in the turntable
+      example come from?</p>
+    <p class="ans">From the <b>person</b>. Walking inwards on a rotating platform means pushing
+      against the surface that keeps trying to carry you outwards, and that push is applied over a
+      distance &mdash; so it is work, done by muscles, converting chemical energy into kinetic
+      energy. Conservation of angular momentum is a statement about torques, not about energy, and
+      the person's feet exert no <em>torque</em> about the axis while they walk straight in.</p>
+  </div>
+
+  <div class="tip">
+    <span class="label">Why the skater speeds up</span>
+    Same physics as the turntable, and it is the demonstration everyone has seen. Arms out, most of
+    the skater's mass sits at large <span class="m">r</span> and
+    <span class="m">I</span> is large. Arms in, <span class="m">I</span> drops; since
+    <span class="m">I&omega;</span> must hold its value, <span class="m">&omega;</span> rises to
+    compensate. She is not pushing against the ice to spin up &mdash; the ice is nearly
+    frictionless, which is exactly why <span class="m">L</span> is conserved in the first place.
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Angular momentum</td><td class="eq">&mdash;</td>
+        <td><span class="m">L</span> = <span class="m">I&omega;</span>, in
+            kg&middot;m<sup>2</sup>/s; a vector along the rotation axis.</td></tr>
+    <tr><td class="term">A moving mass</td><td class="eq">&mdash;</td>
+        <td>carries <span class="m">L</span> = <span class="m">mvr</span> about an axis, with
+            <span class="m">r</span> the perpendicular distance to its line of travel.</td></tr>
+    <tr><td class="term">Conservation</td><td class="eq">&mdash;</td>
+        <td>no net external torque &rArr; <span class="m">L</span><sub>i</sub> =
+            <span class="m">L</span><sub>f</sub>. Add up every contribution on each side.</td></tr>
+    <tr><td class="term">Sticking together</td><td class="eq">&mdash;</td>
+        <td>the rotational perfectly inelastic collision:
+            <span class="m">&omega;</span><sub>f</sub> =
+            <span class="m">L</span>/(<span class="m">I</span><sub>1</sub> +
+            <span class="m">I</span><sub>2</sub>), and energy is lost.</td></tr>
+    <tr><td class="term">Changing shape</td><td class="eq">&mdash;</td>
+        <td>pull mass inwards and <span class="m">I</span> falls, so
+            <span class="m">&omega;</span> rises. Energy is <em>added</em> by whatever pulled it
+            in.</td></tr>
+    <tr><td class="term">The warning</td><td class="eq">&mdash;</td>
+        <td><span class="m">L</span> conserved does not mean <span class="m">K</span> conserved
+            &mdash; check them separately, exactly as for linear collisions.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/11-2-angular-momentum" target="_blank" rel="noopener">11.2 Angular Momentum</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/11-3-conservation-of-angular-momentum" target="_blank" rel="noopener">11.3 Conservation of Angular Momentum</a></li>
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/10-5-angular-momentum-and-its-conservation" target="_blank" rel="noopener">10.5 Angular Momentum and Its Conservation</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Rotational Momentum Conservation</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
