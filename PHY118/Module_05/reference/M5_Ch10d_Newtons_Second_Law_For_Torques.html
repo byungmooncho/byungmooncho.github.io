@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch10d &mdash; Newton's Second Law for Torques</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 118 - Module 5 - Chapter 10 (College Physics) - Trevor slides 10c
+     "Newton's Second Law for Torques" - web-page version of the lecture
+     slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     Slide 2 is the same Newton's-second-law analogy slide that opens 10b and
+     is already on Ch10b; it is summarised in one line here rather than
+     repeated. Slides 3 and 4 are one worked example in two stages and share
+     one figure.
+
+     Slide 5's caption "Ignore the 'massless' rod" collides with the floor
+     line in the source; re-laid out here (playbook Step 1).
+
+     This page is AUTHORED for this course from the deck(s), not generated from
+     any other page (playbook Step 1). Any correction noted above belongs on
+     both courses' pages and is applied on both.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 10 (College Physics) &middot; Slides 10c</span>
+  </div>
+
+  <h1>Newton's Second Law for Torques</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    <span class="m">F</span> = <span class="m">ma</span> has a rotational twin, and it is the
+    equation the whole chapter has been building towards:
+    <b><span class="m">&tau;</span> = <span class="m">I&alpha;</span></b>. Net torque in place of
+    net force, moment of inertia in place of mass, angular acceleration in place of linear. Once
+    you have it, a spinning problem is solved the same way a sliding one is &mdash; and the only
+    new skill is choosing which quantity to find first.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Torque from <b>Ch10c</b> &mdash; <span class="m">&tau;</span> = <span class="m">rF</span> sin
+    <span class="m">&theta;</span>, the turning effect of a force about an axis &mdash; and the
+    moment of inertia from <b>Ch10b</b>, including the table of standard shapes. This page is those
+    two put together.
+  </div>
+
+  <h2 id="the-law">The law itself</h2>
+
+  <p>Trevor opens with the parallel stated plainly: forces make objects accelerate; unbalanced
+     torques make objects spin faster or slower. Mass resists the first; the moment of inertia
+     resists the second.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 250" role="img" aria-label="Two panels side by side. On the left a block on a surface with a force arrow and a resulting linear acceleration. On the right a disk on an axle with a force applied at its rim and a resulting angular acceleration.">
+      <defs>
+        <marker id="n1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="n1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--amber)"/></marker>
+      </defs>
+
+      <line x1="40" y1="150" x2="290" y2="150" stroke="var(--ink)" stroke-width="2.5"/>
+      <rect x="120" y="112" width="58" height="38" rx="3" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.5"/>
+      <line x1="60" y1="131" x2="114" y2="131" stroke="var(--red)" stroke-width="2.8" marker-end="url(#n1r)"/>
+      <text class="lbl" x="78" y="122" fill="var(--red)">F</text>
+      <line x1="200" y1="131" x2="252" y2="131" stroke="var(--amber)" stroke-width="2.4" marker-end="url(#n1a)"/>
+      <text class="lbl" x="222" y="122" fill="var(--amber)">a</text>
+      <text class="lbl" x="165" y="190" text-anchor="middle">F = m a</text>
+      <text class="sm" x="165" y="212" text-anchor="middle">mass resists the change</text>
+
+      <circle cx="470" cy="118" r="60" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.8"/>
+      <circle cx="470" cy="118" r="5" fill="var(--ink)"/>
+      <line x1="470" y1="58" x2="530" y2="58" stroke="var(--red)" stroke-width="2.8" marker-end="url(#n1r)"/>
+      <text class="lbl" x="500" y="48" fill="var(--red)">F</text>
+      <line x1="470" y1="118" x2="470" y2="60" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <text class="lbl" x="458" y="92" text-anchor="end">r</text>
+      <path d="M400,100 A72,72 0 0 1 418,66" fill="none" stroke="var(--amber)" stroke-width="2.4" marker-start="url(#n1a)"/>
+      <text class="lbl" x="388" y="118" fill="var(--amber)">&alpha;</text>
+      <text class="lbl" x="470" y="212" text-anchor="middle">&tau; = I &alpha;</text>
+      <text class="sm" x="470" y="234" text-anchor="middle">the moment of inertia resists it</text>
+    </svg>
+    <figcaption>The same law twice. The right-hand version is harder only because the resistance
+      now depends on where the mass sits, not merely how much of it there is.</figcaption>
+  </figure>
+
+  <h2 id="worked">Worked example: spinning a disk</h2>
+
+  <p><em>How much torque is required to give a disk of mass 2.0&nbsp;kg and radius 25&nbsp;cm,
+     spinning about its centre, an angular acceleration of 35&nbsp;rad/s<sup>2</sup>? And how much
+     force is required?</em></p>
+
+  <figure>
+    <svg class="sq" viewBox="0 0 340 200" role="img" aria-label="A disk on an axle with a force applied at its rim, tangentially, and the radius drawn from the centre to the point where the force acts.">
+      <defs>
+        <marker id="n2r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+      </defs>
+      <circle cx="150" cy="110" r="56" fill="#fdf6ec" stroke="var(--ink)" stroke-width="1.8"/>
+      <circle cx="150" cy="110" r="4" fill="var(--ink)"/>
+      <line x1="150" y1="110" x2="150" y2="56" stroke="var(--blue)" stroke-width="2.2"/>
+      <text class="lbl" x="160" y="86" fill="var(--blue)">r</text>
+      <line x1="150" y1="54" x2="80" y2="54" stroke="var(--red)" stroke-width="2.8" marker-end="url(#n2r)"/>
+      <text class="lbl" x="104" y="44" fill="var(--red)">F</text>
+      <text class="sm" x="240" y="86">applied at the rim,</text>
+      <text class="sm" x="240" y="102">perpendicular to r</text>
+      <text class="sm" x="240" y="124">so &theta; = 90&deg; and</text>
+      <text class="sm" x="240" y="140">sin &theta; = 1</text>
+    </svg>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Torque first, then force</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">I</span> = &frac12;<span class="m">MR</span><sup>2</sup>
+        = &frac12;(2.0 kg)(0.25 m)<sup>2</sup> = 0.0625 kg&middot;m<sup>2</sup><br>
+        <span class="m">&tau;</span> = <span class="m">I&alpha;</span>
+        = (0.0625)(35 rad/s<sup>2</sup>) = <b>2.2 N&middot;m</b>
+      </div>
+      <div class="mathline" style="border-top:1px solid var(--rule); padding-top:.4rem">
+        <span class="m">&tau;</span> = <span class="m">rF</span> sin <span class="m">&theta;</span>
+        = <span class="m">rF</span> sin 90&deg; = <span class="m">rF</span>
+        &nbsp;&rArr;&nbsp;
+        <span class="m">F</span> =
+        <span class="frac"><span class="top"><span class="m">&tau;</span></span><span class="bot"><span class="m">r</span></span></span>
+        =
+        <span class="frac"><span class="top">2.2 N&middot;m</span><span class="bot">0.25 m</span></span>
+        = <b>8.8 N</b>
+      </div>
+      <p class="why">Two equations, used in opposite directions. The first turns a <em>desired
+        motion</em> into the torque it needs; the second turns that torque into a force you could
+        actually apply. Trevor's closing note on the slide is the caution that comes with the
+        second: the <em>angle</em> at which the force is applied changes the torque required. Pull
+        at 30&deg; to the radius instead of 90&deg; and you need twice the force for the same
+        effect.</p>
+    </div>
+  </div>
+
+  <h2 id="effect-of-I">What the moment of inertia does to the answer</h2>
+
+  <p>Trevor's cleanest demonstration of why <span class="m">I</span> deserves its own symbol. Two
+     identical masses on a light rod, the same force applied the same way &mdash; but the masses
+     sit at different distances from the axis.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Two panels. In each, a vertical post carries a light rod with a mass near the top, and a force is applied at the bottom end of the rod. In the left panel the mass is close to the axis; in the right panel it is further out. The right one accelerates less.">
+      <defs>
+        <marker id="n3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+      </defs>
+
+      <!-- left -->
+      <line x1="150" y1="150" x2="150" y2="258" stroke="var(--muted)" stroke-width="4"/>
+      <line x1="112" y1="258" x2="188" y2="258" stroke="var(--ink)" stroke-width="2.5"/>
+      <line x1="80" y1="76" x2="220" y2="216" stroke="var(--muted)" stroke-width="2.4"/>
+      <circle cx="150" cy="146" r="12" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <rect x="109" y="108" width="22" height="16" rx="3" fill="var(--violet)" transform="rotate(45 120 116)"/>
+      <text class="lbl" x="116" y="140" text-anchor="middle">r<tspan font-size="11">1</tspan></text>
+      <line x1="252" y1="184" x2="220" y2="216" stroke="var(--red)" stroke-width="2.6" marker-end="url(#n3r)"/>
+      <text class="lbl" x="258" y="178" fill="var(--red)">F</text>
+      <text class="sm" x="150" y="280" text-anchor="middle">mass close in &mdash; small I, large &alpha;</text>
+
+      <!-- right -->
+      <line x1="450" y1="150" x2="450" y2="258" stroke="var(--muted)" stroke-width="4"/>
+      <line x1="412" y1="258" x2="488" y2="258" stroke="var(--ink)" stroke-width="2.5"/>
+      <line x1="380" y1="76" x2="520" y2="216" stroke="var(--muted)" stroke-width="2.4"/>
+      <circle cx="450" cy="146" r="12" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <rect x="385" y="84" width="22" height="16" rx="3" fill="var(--violet)" transform="rotate(45 396 92)"/>
+      <text class="lbl" x="404" y="132" text-anchor="middle">r<tspan font-size="11">2</tspan></text>
+      <line x1="552" y1="184" x2="520" y2="216" stroke="var(--red)" stroke-width="2.6" marker-end="url(#n3r)"/>
+      <text class="lbl" x="558" y="178" fill="var(--red)">F</text>
+      <text class="sm" x="450" y="280" text-anchor="middle">mass further out &mdash; large I, small &alpha;</text>
+
+      <text class="sm" x="320" y="40" text-anchor="middle">the rod itself is treated as massless</text>
+    </svg>
+    <figcaption>Same force, same arrangement, two placements of the mass. Trevor's conclusion:
+      since <span class="m">r</span><sub>2</sub> &gt; <span class="m">r</span><sub>1</sub>,
+      <span class="m">&alpha;</span><sub>2</sub> &lt; <span class="m">&alpha;</span><sub>1</sub>.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">&tau;</span> = <span class="m">I</span><sub>1</sub><span class="m">&alpha;</span><sub>1</sub>
+        = 2(<span class="m">Mr</span><sub>1</sub><sup>2</sup>)<span class="m">&alpha;</span><sub>1</sub>
+        &nbsp;&nbsp;and&nbsp;&nbsp;
+        <span class="m">&tau;</span> = <span class="m">I</span><sub>2</sub><span class="m">&alpha;</span><sub>2</sub>
+        = 2(<span class="m">Mr</span><sub>2</sub><sup>2</sup>)<span class="m">&alpha;</span><sub>2</sub>
+      </div>
+      <p class="why">The two masses are each <span class="m">Mr</span><sup>2</sup> about the axis,
+        hence the factor of two. For the same torque, moving the masses out by a factor of two
+        makes <span class="m">I</span> four times larger and the angular acceleration four times
+        smaller. It is the same physics as the figure skater pulling her arms in, run in reverse.</p>
+    </div>
+  </div>
+
+  <h2 id="more-involved">When there is more than one route</h2>
+
+  <p>Trevor flags a genuine change of difficulty here. Problems from this point can be given the
+     other way round: you are told the <em>final speed</em> and asked for the torque. There is no
+     single equation for that, so the work is in choosing the order.</p>
+
+  <table class="grid">
+    <tr><th style="width:36%">You are given</th><th>Route</th></tr>
+    <tr><td>the angular acceleration</td>
+        <td>straight to <span class="m">&tau;</span> = <span class="m">I&alpha;</span></td></tr>
+    <tr><td>a final angular speed and a time</td>
+        <td>rotational kinematics first &mdash; <span class="m">&alpha;</span> =
+            &Delta;<span class="m">&omega;</span>/&Delta;<span class="m">t</span> (<b>Ch10a</b>)
+            &mdash; then <span class="m">&tau;</span> = <span class="m">I&alpha;</span></td></tr>
+    <tr><td>a final angular speed and an angle turned</td>
+        <td><span class="m">&omega;</span><sup>2</sup> = <span class="m">&omega;</span><sub>0</sub><sup>2</sup>
+            + 2<span class="m">&alpha;</span>&Delta;<span class="m">&theta;</span> for
+            <span class="m">&alpha;</span>, then <span class="m">&tau;</span> = <span class="m">I&alpha;</span></td></tr>
+    <tr><td>a force and where it acts</td>
+        <td><span class="m">&tau;</span> = <span class="m">rF</span> sin <span class="m">&theta;</span>
+            first, then <span class="m">&alpha;</span> = <span class="m">&tau;</span>/<span class="m">I</span></td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">More than one way is a feature, not a trap</span>
+    Trevor's point is that you have reached the stage where several routes reach the same answer.
+    That is worth using deliberately: solve it one way, then check the result by another. If the
+    two disagree, the error is usually a wrong row of the moment-of-inertia table or an angle left
+    out of the torque.
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">The law</td><td class="eq">&mdash;</td>
+        <td><span class="m">&tau;</span><sub>net</sub> = <span class="m">I&alpha;</span>, the
+            rotational form of Newton's second law.</td></tr>
+    <tr><td class="term">Each piece</td><td class="eq">&mdash;</td>
+        <td>net torque in N&middot;m, moment of inertia in kg&middot;m<sup>2</sup>, angular
+            acceleration in rad/s<sup>2</sup>.</td></tr>
+    <tr><td class="term">Torque from a force</td><td class="eq">&mdash;</td>
+        <td><span class="m">&tau;</span> = <span class="m">rF</span> sin <span class="m">&theta;</span>
+            &mdash; the angle matters, and is 90&deg; only when the force is perpendicular to the
+            radius.</td></tr>
+    <tr><td class="term">Same torque, bigger <span class="m">I</span></td><td class="eq">&mdash;</td>
+        <td>smaller <span class="m">&alpha;</span>. Moving mass outwards by 2 raises
+            <span class="m">I</span> by 4.</td></tr>
+    <tr><td class="term">Choosing a route</td><td class="eq">&mdash;</td>
+        <td>if you are not given <span class="m">&alpha;</span> directly, get it from rotational
+            kinematics first.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/10-3-dynamics-of-rotational-motion-rotational-inertia" target="_blank" rel="noopener">10.3 Dynamics of Rotational Motion: Rotational Inertia</a></li>
+    <li>Extra resource &mdash; Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/10-7-newtons-second-law-for-rotation" target="_blank" rel="noopener">10.7 Newton's Second Law for Rotation</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Newton's Second Law for Torques</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
