@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M6 Ch14b &mdash; Pressure and Pascal's Principle</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 151 - Module 6 - Chapter 14 (University Physics) - Trevor deck "Pressure and Pascal"
+     "Pressure and Pascal's Principle" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     PHY 118 has its own page for this deck, written for College Physics from
+     the same deck. It is NOT generated from this file and a change here does
+     not propagate there (playbook Step 1). If a correction belongs on both,
+     make it on both.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 6 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 6 &middot; Fluids</span>
+    <span>Chapter 14 (University Physics) &middot; Deck: Pressure and Pascal</span>
+  </div>
+
+  <h1>Pressure and Pascal's Principle</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Pressure is what a force becomes once you stop caring where on the surface it lands. Spread the
+    same force over more area and the pressure falls; that one ratio explains snowshoes, drawing
+    pins and hydraulic jacks. Inside a fluid, pressure is not something applied from outside &mdash;
+    it is the weight of everything above you, which is why it grows with depth and why it is the
+    same at every point on a given level.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Density from the previous page; force, weight and the condition for equilibrium
+    (&Sigma;<span class="m">F&#8407;</span> = 0) from Module&nbsp;3; and
+    <span class="m">W</span> = <span class="m">Fd</span>&#8239;cos&#8239;<span class="m">&theta;</span>
+    from Module&nbsp;4, which the hydraulic section leans on directly.
+  </div>
+
+  <h2 id="pressure">Pressure is force per unit area</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="A flat parallelogram seen in perspective, representing a surface patch. A long arrow labelled F points vertically downward through the middle of the patch. A shorter arrow labelled A points vertically downward from the same point, drawn perpendicular to the patch.">
+      <defs>
+        <marker id="pF" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="pA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+      <path d="M150,110 L330,62 L470,62 L290,110 Z" fill="#dce7f7" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="300" y1="86" x2="300" y2="214" stroke="var(--red)" stroke-width="3" marker-end="url(#pF)"/>
+      <text class="lbl" x="282" y="166" text-anchor="end" fill="var(--red)" font-size="19">F</text>
+      <line x1="340" y1="86" x2="340" y2="142" stroke="var(--blue)" stroke-width="2.2" marker-end="url(#pA)"/>
+      <text class="lbl" x="356" y="122" text-anchor="start" fill="var(--blue)" font-size="19">A</text>
+      <text class="sm" x="356" y="142" text-anchor="start" fill="var(--blue)">normal to the surface</text>
+      <text class="sm" x="310" y="40" text-anchor="middle">a patch of surface, area A</text>
+      <text class="sm" x="320" y="240" text-anchor="middle">Pressure itself has no direction. The force and the area carry it.</text>
+    </svg>
+    <figcaption>Trevor's phrasing: <em>the force and the area contain the &ldquo;vectorness&rdquo;.</em>
+      An area is given a direction by the normal to its surface, and the force is a vector, so the
+      quantity relating them &mdash; the pressure &mdash; is a plain number.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Definition and units</div>
+    <div class="body">
+      <div class="mathline">
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">P</span> =
+          <span class="frac"><span class="top"><span class="m">F</span></span><span class="bot"><span class="m">A</span></span></span></span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="m">F&#8407;</span> = <span class="m">P A&#8407;</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        1 pascal = 1
+        <span class="frac"><span class="top">newton</span><span class="bot">metre&#178;</span></span>
+        = 1 <span class="frac"><span class="top">N</span><span class="bot">m&#178;</span></span>
+        <br>
+        101.3 kPa = 1 atm
+      </div>
+      <p class="why">The second form is the one you actually use in this module: a pressure acting on
+        an area <em>is</em> a force, and that is how every free-body diagram in the next three
+        sections gets built.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Don't confuse P and &rho;</span>
+    Trevor flags this on the slide, and it is worth taking seriously because both appear in the same
+    equation three sections from now. <b><span class="m">P</span> is pressure</b>, an upright capital
+    P, in pascals. <b><span class="m">&rho;</span> is density</b>, a Greek rho, in kg/m&#179;. Hand-written
+    they look almost the same; keep the rho's tail short and the P's bowl closed.
+  </div>
+
+  <h3 id="pressure-units">The units people actually use</h3>
+
+  <p>Pressure has more surviving historical units than almost any other quantity, and you will meet
+     most of them. Every row below is the same pressure &mdash; one atmosphere &mdash; written
+     differently.</p>
+
+  <table class="grid">
+    <tr><th>Unit</th><th>Abbr.</th><th>1 atm is&hellip;</th></tr>
+    <tr><td>Pascal</td><td>Pa</td><td>101.3 kPa</td></tr>
+    <tr><td>Atmosphere</td><td>atm</td><td>1 atm</td></tr>
+    <tr><td>millimetres of mercury</td><td>mm of Hg</td><td>760 mm of Hg</td></tr>
+    <tr><td>torr</td><td>torr</td><td>760 torr</td></tr>
+    <tr><td>inches of mercury</td><td>in</td><td>29.92 in</td></tr>
+    <tr><td>pounds per square inch</td><td>psi</td><td>14.7 psi</td></tr>
+    <tr><td>bar</td><td>bar</td><td>100 kPa</td></tr>
+  </table>
+
+  <p class="why">Different types of scientists have different favourite units. Meteorologists use
+     millibars and inches of mercury, physiologists use mm&nbsp;Hg, engineers use psi and bar. Note
+     that the bar is <em>not</em> an atmosphere &mdash; it is 100&nbsp;kPa against 101.3, close enough
+     to be confusing and far enough to matter.</p>
+
+  <h2 id="gauge-absolute">Gauge pressure and absolute pressure</h2>
+
+  <p>We live at the bottom of an ocean of fluid we call the atmosphere. It pushes on us from all
+     sides, and because it is always there we usually ignore it &mdash; which means most instruments
+     are built to ignore it too.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="A small cube near the bottom of a tall open column. Six short arrows point inward at the cube from above, below and all four sides, each labelled P atm. A separate downward arrow below the cube is labelled P g.">
+      <defs>
+        <marker id="gp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--violet)"/></marker>
+      </defs>
+      <path d="M250,30 L250,196 M330,30 L330,196" stroke="var(--muted)" stroke-width="1.2" fill="none" stroke-dasharray="6 5"/>
+      <text class="sm" x="290" y="22" text-anchor="middle">the atmosphere above you</text>
+      <path d="M258,196 L322,196 L322,254 L258,254 Z" fill="#9aa5a0" stroke="var(--ink)" stroke-width="1.3"/>
+      <path d="M258,196 L278,178 L342,178 L322,196 Z" fill="#2457b8" stroke="var(--ink)" stroke-width="1.3"/>
+      <path d="M322,196 L342,178 L342,236 L322,254 Z" fill="#78837e" stroke="var(--ink)" stroke-width="1.3"/>
+      <g stroke="var(--violet)" stroke-width="1.8" marker-end="url(#gp)">
+        <line x1="290" y1="142" x2="290" y2="174"/>
+        <line x1="204" y1="206" x2="252" y2="214"/>
+        <line x1="400" y1="196" x2="348" y2="206"/>
+        <line x1="214" y1="258" x2="256" y2="244"/>
+        <line x1="392" y1="252" x2="346" y2="240"/>
+        <line x1="290" y1="296" x2="290" y2="262"/>
+      </g>
+      <g class="sm" fill="var(--violet)">
+        <text x="300" y="150">P<tspan dy="3" font-size="9">atm</tspan></text>
+        <text x="196" y="202" text-anchor="end">P<tspan dy="3" font-size="9">atm</tspan></text>
+        <text x="408" y="192" text-anchor="start">P<tspan dy="3" font-size="9">atm</tspan></text>
+        <text x="206" y="268" text-anchor="end">P<tspan dy="3" font-size="9">atm</tspan></text>
+        <text x="400" y="262" text-anchor="start">P<tspan dy="3" font-size="9">atm</tspan></text>
+        <text x="300" y="292">P<tspan dy="3" font-size="9">atm</tspan></text>
+      </g>
+      <text class="sm" x="470" y="130" text-anchor="start">Gauge reads only what is</text>
+      <text class="sm" x="470" y="146" text-anchor="start">left over once every one of</text>
+      <text class="sm" x="470" y="162" text-anchor="start">these has cancelled.</text>
+    </svg>
+    <figcaption>Atmospheric pressure arrives from every direction at once, so on a closed object the
+      six contributions very nearly cancel. A gauge is built to feel that cancellation and report
+      zero &mdash; which is why a flat tyre reads 0 psi rather than 14.7.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Two readings of the same pressure</div>
+    <div class="body">
+      <table class="defs">
+        <tr><td class="term">Gauge, <span class="m">P</span><sub>g</sub></td><td class="eq">&mdash;</td>
+            <td>pressure measured <b>relative to atmospheric pressure</b>. What a tyre gauge, a blood-pressure
+                cuff or a dive computer reports.</td></tr>
+        <tr><td class="term">Absolute, <span class="m">P</span><sub>abs</sub></td><td class="eq">&mdash;</td>
+            <td>pressure measured <b>relative to vacuum</b>, i.e. relative to zero pressure.</td></tr>
+      </table>
+      <div class="mathline" style="text-align:center">
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">P</span><sub>abs</sub> = <span class="m">P</span><sub>g</sub> + <span class="m">P</span><sub>atm</sub></span>
+      </div>
+      <p class="why">Be careful which one you are reporting. A sealed container at
+        <span class="m">P</span><sub>g</sub> = 0 is not empty &mdash; it holds an atmosphere. A
+        container at <span class="m">P</span><sub>abs</sub> = 0 is a vacuum, and no gauge can read
+        below it.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Notation warning carried from Trevor's slide</span>
+    <b>The OpenStax textbook writes this gauge pressure as plain <span class="m">P</span>, not
+    <span class="m">P</span><sub>g</sub>.</b> So the book's
+    <span class="m">P</span> = <span class="m">h&rho;g</span> and Trevor's
+    <span class="m">P</span><sub>g</sub> = <span class="m">&rho;hg</span> are the same statement.
+    When a problem gives you &ldquo;the pressure&rdquo; at a depth, read which one it means before
+    adding an atmosphere to it.
+  </div>
+
+  <h2 id="pressure-in-liquids">Pressure in a liquid comes from the weight above</h2>
+
+  <p>This is the derivation the rest of the module rests on, and Trevor does it the honest way
+     &mdash; not by quoting a formula, but by drawing a free body and applying
+     &Sigma;<span class="m">F&#8407;</span> = 0 to a column of the liquid itself.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A wide cylindrical tank of liquid. Inside it a narrower vertical cylinder of the same liquid is picked out from the surface down to a depth h. A red arrow labelled F atm equals P atm A points down onto the top of the inner cylinder, a green arrow labelled F g equals m g points down from its middle, and a red arrow labelled F equals P A points up at its base.">
+      <defs>
+        <marker id="plD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="plG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+      <path d="M60,96 L60,282 a150,30 0 0,0 300,0 L360,96" fill="#dce7f7" stroke="var(--blue)" stroke-width="1.6"/>
+      <ellipse cx="210" cy="96" rx="150" ry="30" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6"/>
+      <path d="M168,100 L168,232 a42,13 0 0,0 84,0 L252,100" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="210" cy="100" rx="42" ry="13" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.5"/>
+      <path d="M168,232 a42,13 0 0,1 84,0" fill="none" stroke="var(--blue)" stroke-width="1.1" stroke-dasharray="5 4"/>
+      <line x1="210" y1="46" x2="210" y2="86" stroke="var(--red)" stroke-width="2.6" marker-end="url(#plD)"/>
+      <text class="lbl" x="222" y="58" text-anchor="start" fill="var(--red)">F<tspan dy="4" font-size="11">atm</tspan><tspan dy="-4"> = P</tspan><tspan dy="4" font-size="11">atm</tspan><tspan dy="-4">A</tspan></text>
+      <line x1="210" y1="140" x2="210" y2="186" stroke="var(--green)" stroke-width="2.6" marker-end="url(#plG)"/>
+      <text class="lbl" x="222" y="170" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">g</tspan><tspan dy="-4"> = m g</tspan></text>
+      <line x1="210" y1="300" x2="210" y2="248" stroke="var(--red)" stroke-width="2.6" marker-end="url(#plD)"/>
+      <text class="lbl" x="222" y="292" text-anchor="start" fill="var(--red)">F = P A</text>
+      <line x1="124" y1="100" x2="124" y2="232" stroke="var(--ink)" stroke-width="1.1"/>
+      <path d="M120,100 L128,100 M120,232 L128,232" stroke="var(--ink)" stroke-width="1.1"/>
+      <text class="lbl" x="112" y="170" text-anchor="end">h</text>
+      <text class="sm" x="320" y="322" text-anchor="middle">The column is liquid, not a container &mdash; nothing holds it up but the liquid beneath.</text>
+    </svg>
+    <figcaption>Pick an imaginary cylinder of the liquid itself, area <span class="m">A</span> and
+      height <span class="m">h</span>. It is not accelerating, so the upward push on its base must
+      carry both the atmosphere pressing on its top and its own weight. The area cancels at the end
+      &mdash; which is why the depth, and not the shape or the width of the tank, is what sets the
+      pressure.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">From &Sigma;F = 0 to P = P<sub>atm</sub> + &rho;hg</div>
+    <div class="body">
+      <div class="mathline">
+        0 = &Sigma;<span class="m">F&#8407;</span> =
+        <span class="m">F&#8407;</span><sub>a</sub> + <span class="m">F&#8407;</span><sub>g</sub> + <span class="m">F&#8407;</span><sub>p</sub><br>
+        0 = &minus;<span class="m">F</span><sub>a</sub> &minus; <span class="m">mg</span> + <span class="m">F</span><sub>p</sub>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">F</span><sub>p</sub> = <span class="m">F</span><sub>a</sub> + <span class="m">mg</span><br>
+        <span class="m">PA</span> = <span class="m">P</span><sub>atm</sub><span class="m">A</span> + <span class="m">mg</span>
+        &nbsp;&nbsp;&nbsp;with&nbsp;
+        <span class="m">&rho;</span> =
+        <span class="frac"><span class="top"><span class="m">m</span></span><span class="bot"><span class="m">V</span></span></span> =
+        <span class="frac"><span class="top"><span class="m">m</span></span><span class="bot"><span class="m">Ah</span></span></span>
+        &nbsp;so&nbsp; <span class="m">m</span> = <span class="m">&rho;Ah</span><br>
+        <span class="m">PA</span> = <span class="m">P</span><sub>atm</sub><span class="m">A</span> + <span class="m">&rho;Ahg</span><br>
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">P</span> = <span class="m">P</span><sub>atm</sub> + <span class="m">&rho;hg</span></span>
+        &nbsp;&nbsp;&nbsp;&nbsp;i.e.&nbsp;
+        <span class="m">P</span><sub>abs</sub> = <span class="m">P</span><sub>atm</sub> + <span class="m">P</span><sub>g</sub>
+      </div>
+      <p class="why">Compare the last two lines. The term <span class="m">&rho;hg</span> <em>is</em> the
+        gauge pressure &mdash; the part a gauge reports, over and above the atmosphere. The
+        derivation does not assume that; it produces it.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Watch the area while you read the diagram</span>
+    Trevor's handwritten note on this slide: <em>the weight changes as we change the area of
+    interest.</em> Draw a fatter column and both <span class="m">F</span><sub>atm</sub> and
+    <span class="m">F</span><sub>g</sub> grow in proportion, which is exactly why
+    <span class="m">A</span> divides out and the result is independent of how you chose to slice the
+    liquid.
+  </div>
+
+  <h3 id="how-deep">Worked example &mdash; how deep before the pressure is 2 atm?</h3>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="The same tank and inner cylinder as the previous figure, with the downward arrow at the top labelled F a equals P nought A, the downward arrow in the middle labelled F g equals m g, the upward arrow at the base labelled F equals P A, and the height of the inner cylinder labelled d equals question mark.">
+      <defs>
+        <marker id="hdD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="hdG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+      <path d="M60,96 L60,282 a150,30 0 0,0 300,0 L360,96" fill="#dce7f7" stroke="var(--blue)" stroke-width="1.6"/>
+      <ellipse cx="210" cy="96" rx="150" ry="30" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6"/>
+      <path d="M168,100 L168,232 a42,13 0 0,0 84,0 L252,100" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="210" cy="100" rx="42" ry="13" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.5"/>
+      <path d="M168,232 a42,13 0 0,1 84,0" fill="none" stroke="var(--blue)" stroke-width="1.1" stroke-dasharray="5 4"/>
+      <line x1="210" y1="46" x2="210" y2="86" stroke="var(--red)" stroke-width="2.6" marker-end="url(#hdD)"/>
+      <text class="lbl" x="222" y="58" text-anchor="start" fill="var(--red)">F<tspan dy="4" font-size="11">a</tspan><tspan dy="-4"> = P</tspan><tspan dy="4" font-size="11">0</tspan><tspan dy="-4">A</tspan></text>
+      <line x1="210" y1="152" x2="210" y2="196" stroke="var(--green)" stroke-width="2.6" marker-end="url(#hdG)"/>
+      <text class="lbl" x="222" y="182" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">g</tspan><tspan dy="-4"> = m g</tspan></text>
+      <line x1="210" y1="300" x2="210" y2="248" stroke="var(--red)" stroke-width="2.6" marker-end="url(#hdD)"/>
+      <text class="lbl" x="222" y="292" text-anchor="start" fill="var(--red)">F = P A</text>
+      <line x1="124" y1="100" x2="124" y2="232" stroke="var(--amber)" stroke-width="1.4"/>
+      <path d="M119,100 L129,100 M119,232 L129,232" stroke="var(--amber)" stroke-width="1.4"/>
+      <text class="lbl" x="112" y="170" text-anchor="end" fill="var(--amber)" font-size="17">d = ?</text>
+      <text class="sm" x="320" y="322" text-anchor="middle">The &ldquo;height&rdquo; of the cylinder is the &ldquo;depth&rdquo; of the water.</text>
+    </svg>
+    <figcaption>Same picture, one relabelling. The height of the imaginary column is the depth you
+      are asking about, so <span class="m">h</span> becomes <span class="m">d</span> and the
+      derivation is already done.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Determine how deep one must go to experience a pressure of two atmospheres</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">PA</span> = <span class="m">P</span><sub>0</sub><span class="m">A</span> + <span class="m">mg</span>
+        = <span class="m">P</span><sub>0</sub><span class="m">A</span> + <span class="m">&rho;Vg</span>
+        &nbsp;&nbsp;&nbsp;(<span class="m">V</span> = <span class="m">Ah</span>)<br>
+        <span class="m">PA</span> = <span class="m">P</span><sub>0</sub><span class="m">A</span> + <span class="m">&rho;Ahg</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">P</span> = <span class="m">P</span><sub>0</sub> + <span class="m">&rho;hg</span>
+        &nbsp;&nbsp;&nbsp;(<span class="m">h</span> = <span class="m">d</span>)<br>
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">P</span> = <span class="m">P</span><sub>0</sub> + <span class="m">&rho;dg</span></span>
+      </div>
+      <p class="why">Trevor's slide stops here, with the relationship rather than a number. Finishing
+        it: two atmospheres means the gauge part must equal one atmosphere, so</p>
+      <div class="mathline">
+        <span class="m">&rho;dg</span> = <span class="m">P</span><sub>atm</sub>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">d</span> =
+        <span class="frac"><span class="top"><span class="m">P</span><sub>atm</sub></span><span class="bot"><span class="m">&rho;g</span></span></span>
+        =
+        <span class="frac"><span class="top">101&#8239;300 Pa</span><span class="bot">(1000 kg/m&#179;)(9.81 m/s&#178;)</span></span>
+        = 10.3 m
+      </div>
+      <p class="why">About ten metres of water doubles the absolute pressure &mdash; and every further
+        ten metres adds another atmosphere. That is the number divers carry in their heads, and it is
+        why a barometer made of water would have to be eleven metres tall while a mercury one, at
+        13.6 times the density, is 760&nbsp;mm.</p>
+    </div>
+  </div>
+
+  <h2 id="same-depth">Every point at the same depth is at the same pressure</h2>
+
+  <p>Nothing in the derivation mentioned the shape of the container, only the height of the column
+     above the point. So two points joined by the same body of fluid, at the same level, are at the
+     same pressure however differently shaped the fluid above them is.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="A container shaped like a step. A tall narrow left chamber of liquid is joined at the bottom to a shallow wide right chamber. A dashed horizontal line marks one level across both. The left chamber's surface is a height h above that line. Vertical bars labelled y one and y two mark the depth of each chamber.">
+      <defs>
+        <marker id="sdR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="sdB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+      <path d="M140,60 L140,240 L470,240 L470,150 L250,150 L250,60" fill="#c9dcf6" stroke="var(--blue)" stroke-width="7" stroke-linejoin="round"/>
+      <line x1="150" y1="150" x2="470" y2="150" stroke="var(--ink)" stroke-width="1.1" stroke-dasharray="6 5"/>
+      <line x1="196" y1="26" x2="196" y2="54" stroke="var(--red)" stroke-width="2.4" marker-end="url(#sdR)"/>
+      <text class="sm" x="206" y="34" text-anchor="start" fill="var(--red)">P<tspan dy="3" font-size="9">0</tspan></text>
+      <line x1="178" y1="76" x2="178" y2="142" stroke="var(--red)" stroke-width="2" marker-end="url(#sdR)"/>
+      <text class="sm" x="170" y="112" text-anchor="end" fill="var(--red)">P<tspan dy="3" font-size="9">0</tspan></text>
+      <line x1="216" y1="96" x2="216" y2="142" stroke="var(--red)" stroke-width="2" marker-end="url(#sdR)"/>
+      <text class="sm" x="226" y="118" text-anchor="start" fill="var(--red)">&rho;gh</text>
+      <line x1="352" y1="196" x2="352" y2="158" stroke="var(--red)" stroke-width="2" marker-end="url(#sdR)"/>
+      <text class="sm" x="344" y="186" text-anchor="end" fill="var(--red)">P<tspan dy="3" font-size="9">0</tspan></text>
+      <line x1="390" y1="196" x2="390" y2="158" stroke="var(--red)" stroke-width="2" marker-end="url(#sdR)"/>
+      <text class="sm" x="400" y="186" text-anchor="start" fill="var(--red)">&rho;gh</text>
+      <line x1="272" y1="62" x2="272" y2="148" stroke="var(--blue)" stroke-width="1.6" marker-start="url(#sdB)" marker-end="url(#sdB)"/>
+      <text class="lbl" x="286" y="110" text-anchor="start" fill="var(--blue)">h</text>
+      <line x1="116" y1="62" x2="116" y2="238" stroke="var(--blue)" stroke-width="1.6" marker-start="url(#sdB)" marker-end="url(#sdB)"/>
+      <text class="lbl" x="104" y="156" text-anchor="end" fill="var(--blue)">y<tspan dy="4" font-size="11">1</tspan></text>
+      <line x1="496" y1="152" x2="496" y2="238" stroke="var(--blue)" stroke-width="1.6" marker-start="url(#sdB)" marker-end="url(#sdB)"/>
+      <text class="lbl" x="508" y="198" text-anchor="start" fill="var(--blue)">y<tspan dy="4" font-size="11">2</tspan></text>
+      <text class="sm" x="320" y="282" text-anchor="middle">Same level, same pressure &mdash; even though one side is far deeper than the other.</text>
+    </svg>
+    <figcaption>At the dashed level, both sides read
+      <span class="m">P</span><sub>0</sub>&nbsp;+&nbsp;<span class="m">&rho;gh</span>. The left
+      chamber holds much more liquid, but extra liquid off to the side does not sit on top of you
+      &mdash; only the height above the point counts.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">P</span><sub>abs</sub> = <span class="m">P</span><sub>atm</sub> + <span class="m">P</span><sub>g</sub>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="m">P</span> = <span class="m">P</span><sub>0</sub> + <span class="m">P</span><sub>g</sub>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="m">P</span> = <span class="m">P</span><sub>0</sub> + <span class="m">&rho;dg</span>
+      </div>
+      <p class="why">Three ways of writing one statement, all of which appear in the homework. The
+        last is the one to use when you are given a depth.</p>
+    </div>
+  </div>
+
+  <h2 id="pascal">Pascal's principle</h2>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span style="border:2px solid var(--blue); padding:.15rem .6rem; border-radius:4px">
+          Pressure applied to an enclosed fluid is transmitted <b>undiminished</b> to all parts of
+          the fluid and its container.</span>
+      </div>
+    </div>
+  </div>
+
+  <p>The word doing the work is <b>undiminished</b>. Push on one part of a sealed fluid and the extra
+     pressure appears everywhere at once, at full strength &mdash; so a pressure raised at a small
+     piston is available at a large one.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 310" role="img" aria-label="Two upright cylinders of different diameters joined at the bottom by a pipe, both partly filled with liquid. A downward arrow labelled F one rests on the narrow cylinder's piston, whose area is labelled A one. An upward arrow labelled F two rises from the wide cylinder's piston, whose area is labelled A two.">
+      <defs>
+        <marker id="pcD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+      </defs>
+      <path d="M150,116 L150,252 a40,13 0 0,0 80,0 L230,116" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.5"/>
+      <path d="M360,96 L360,252 a80,22 0 0,0 160,0 L520,96" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.5"/>
+      <rect x="230" y="212" width="130" height="26" rx="12" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="190" cy="116" rx="40" ry="13" fill="#6f7a92" stroke="var(--ink)" stroke-width="1.3"/>
+      <ellipse cx="440" cy="96" rx="80" ry="22" fill="#6f7a92" stroke="var(--ink)" stroke-width="1.3"/>
+      <path d="M150,70 L150,116 M230,70 L230,116" stroke="var(--blue)" stroke-width="1.2" fill="none"/>
+      <path d="M360,42 L360,96 M520,42 L520,96" stroke="var(--blue)" stroke-width="1.2" fill="none"/>
+      <line x1="190" y1="56" x2="190" y2="106" stroke="var(--red)" stroke-width="3" marker-end="url(#pcD)"/>
+      <text class="lbl" x="178" y="50" text-anchor="end" fill="var(--red)" font-size="18">F<tspan dy="4" font-size="12">1</tspan></text>
+      <line x1="440" y1="92" x2="440" y2="28" stroke="var(--red)" stroke-width="3" marker-end="url(#pcD)"/>
+      <text class="lbl" x="452" y="40" text-anchor="start" fill="var(--red)" font-size="18">F<tspan dy="4" font-size="12">2</tspan></text>
+      <text class="lbl" x="190" y="140" text-anchor="middle">A<tspan dy="4" font-size="11">1</tspan></text>
+      <text class="lbl" x="440" y="126" text-anchor="middle">A<tspan dy="4" font-size="11">2</tspan></text>
+      <text class="sm" x="320" y="296" text-anchor="middle">One enclosed fluid, one pressure &mdash; two very different forces.</text>
+    </svg>
+    <figcaption>The two piston faces are drawn to scale: the wide one has four times the area of
+      the narrow one, so at equal pressure it carries four times the force. (The force arrows are
+      schematic.) Nothing is amplified except the force &mdash; see the next section for what is
+      paid for it.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The hydraulic relation</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">P</span><sub>1</sub> = <span class="m">P</span><sub>2</sub>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="frac"><span class="top"><span class="m">F</span><sub>1</sub></span><span class="bot"><span class="m">A</span><sub>1</sub></span></span>
+          =
+          <span class="frac"><span class="top"><span class="m">F</span><sub>2</sub></span><span class="bot"><span class="m">A</span><sub>2</sub></span></span></span>
+      </div>
+      <p class="why">Trevor's handwritten gloss: <em>Pascal's principle is the origin of modern
+        hydraulic systems.</em> Car brakes, diggers, lifts and presses are all this one equation with
+        a bigger second piston.</p>
+      <p class="why">A caveat he also writes down: there <em>are</em> effects due to depth &mdash; the
+        two pistons are at different heights, so strictly
+        <span class="m">P</span><sub>2</sub> = <span class="m">P</span><sub>1</sub> + <span class="m">&rho;g&Delta;h</span>.
+        As long as the height difference is small compared with the pressures involved, it is
+        ignored.</p>
+    </div>
+  </div>
+
+  <h2 id="hydraulic-work">What a hydraulic system cannot do</h2>
+
+  <p>A jack multiplies force. It does not multiply energy, and conservation of energy says exactly
+     what it costs.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 310" role="img" aria-label="The same pair of joined cylinders. The narrow cylinder's piston has moved down through a long distance marked h one; the wide cylinder's piston has moved up through a much shorter distance marked h two.">
+      <defs>
+        <marker id="hwD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="hwB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+      <path d="M150,188 L150,252 a40,13 0 0,0 80,0 L230,188" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.5"/>
+      <path d="M360,96 L360,252 a80,22 0 0,0 160,0 L520,96" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.5"/>
+      <rect x="230" y="212" width="130" height="26" rx="12" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="190" cy="188" rx="40" ry="13" fill="#6f7a92" stroke="var(--ink)" stroke-width="1.3"/>
+      <ellipse cx="440" cy="96" rx="80" ry="22" fill="#6f7a92" stroke="var(--ink)" stroke-width="1.3"/>
+      <ellipse cx="190" cy="116" rx="40" ry="13" fill="none" stroke="var(--muted)" stroke-width="1.1" stroke-dasharray="5 4"/>
+      <ellipse cx="440" cy="114" rx="80" ry="22" fill="none" stroke="var(--muted)" stroke-width="1.1" stroke-dasharray="5 4"/>
+      <path d="M150,70 L150,188 M230,70 L230,188" stroke="var(--blue)" stroke-width="1.2" fill="none"/>
+      <path d="M360,42 L360,96 M520,42 L520,96" stroke="var(--blue)" stroke-width="1.2" fill="none"/>
+      <line x1="190" y1="58" x2="190" y2="178" stroke="var(--red)" stroke-width="3" marker-end="url(#hwD)"/>
+      <text class="lbl" x="178" y="52" text-anchor="end" fill="var(--red)" font-size="18">F<tspan dy="4" font-size="12">1</tspan></text>
+      <line x1="440" y1="92" x2="440" y2="28" stroke="var(--red)" stroke-width="3" marker-end="url(#hwD)"/>
+      <text class="lbl" x="452" y="40" text-anchor="start" fill="var(--red)" font-size="18">F<tspan dy="4" font-size="12">2</tspan></text>
+      <line x1="112" y1="116" x2="112" y2="188" stroke="var(--blue)" stroke-width="1.6" marker-start="url(#hwB)" marker-end="url(#hwB)"/>
+      <text class="lbl" x="100" y="158" text-anchor="end" fill="var(--blue)">h<tspan dy="4" font-size="11">1</tspan></text>
+      <line x1="556" y1="96" x2="556" y2="114" stroke="var(--blue)" stroke-width="1.6" marker-start="url(#hwB)" marker-end="url(#hwB)"/>
+      <text class="lbl" x="568" y="112" text-anchor="start" fill="var(--blue)">h<tspan dy="4" font-size="11">2</tspan></text>
+      <text class="sm" x="320" y="296" text-anchor="middle">Big travel on the small piston, small travel on the big one. The volume moved is the same.</text>
+    </svg>
+    <figcaption>The dashed outlines are where each piston started. The liquid that leaves the narrow
+      cylinder has to arrive in the wide one, so
+      <span class="m">A</span><sub>1</sub><span class="m">h</span><sub>1</sub> =
+      <span class="m">A</span><sub>2</sub><span class="m">h</span><sub>2</sub> &mdash; the same
+      statement as equal work, arrived at geometrically.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Work in equals work out</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">W</span> = <span class="m">F d</span>&#8239;cos&#8239;<span class="m">&theta;</span>,
+        &nbsp;<span class="m">&theta;</span> = 0&deg;
+        &nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;
+        <span class="m">F</span> = <span class="m">PA</span><br>
+        <span class="m">W</span><sub>in</sub> = <span class="m">W</span><sub>out</sub>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">F</span><sub>1</sub><span class="m">h</span><sub>1</sub> =
+        <span class="m">F</span><sub>2</sub><span class="m">h</span><sub>2</sub><br>
+        <span class="m">P</span><sub>1</sub><span class="m">A</span><sub>1</sub><span class="m">h</span><sub>1</sub> =
+        <span class="m">P</span><sub>2</sub><span class="m">A</span><sub>2</sub><span class="m">h</span><sub>2</sub>
+        &nbsp;&nbsp;&nbsp;but&nbsp;
+        <span class="m">P</span><sub>1</sub> = <span class="m">P</span><sub>2</sub><br>
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">A</span><sub>1</sub><span class="m">h</span><sub>1</sub> =
+          <span class="m">A</span><sub>2</sub><span class="m">h</span><sub>2</sub></span>
+      </div>
+      <p class="why">Read it as a trade. Multiply the force by ten and you divide the distance by ten;
+        the product &mdash; the work &mdash; is untouched. A jack that lifts a car one centimetre may
+        need thirty pumps to do it, and that is not a defect of the jack.</p>
+    </div>
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Pressure</td><td class="eq">&mdash;</td>
+        <td><span class="m">P</span> = <span class="m">F</span>/<span class="m">A</span>, in pascals.
+            A scalar: the force and the area carry the direction.</td></tr>
+    <tr><td class="term">Units</td><td class="eq">&mdash;</td>
+        <td>many of them. 1 atm = 101.3 kPa = 760 mm Hg = 14.7 psi.</td></tr>
+    <tr><td class="term">With depth</td><td class="eq">&mdash;</td>
+        <td><span class="m">P</span> = <span class="m">P</span><sub>0</sub> + <span class="m">&rho;gd</span>.
+            Depth only &mdash; not shape, not width, not how much fluid there is.</td></tr>
+    <tr><td class="term">Gauge vs absolute</td><td class="eq">&mdash;</td>
+        <td><span class="m">P</span><sub>abs</sub> = <span class="m">P</span><sub>g</sub> + <span class="m">P</span><sub>atm</sub>.
+            OpenStax writes the gauge part as plain <span class="m">P</span>.</td></tr>
+    <tr><td class="term">Same depth</td><td class="eq">&mdash;</td>
+        <td>all points at one level in a connected fluid are at one pressure.</td></tr>
+    <tr><td class="term">Pascal</td><td class="eq">&mdash;</td>
+        <td>applied pressure is transmitted undiminished:
+            <span class="m">F</span><sub>1</sub>/<span class="m">A</span><sub>1</sub> =
+            <span class="m">F</span><sub>2</sub>/<span class="m">A</span><sub>2</sub>.</td></tr>
+    <tr><td class="term">The price</td><td class="eq">&mdash;</td>
+        <td><span class="m">A</span><sub>1</sub><span class="m">h</span><sub>1</sub> =
+            <span class="m">A</span><sub>2</sub><span class="m">h</span><sub>2</sub>. Force is
+            multiplied; work is not.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/11-3-pressure" target="_blank" rel="noopener">11.3 Pressure</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/11-4-variation-of-pressure-with-depth-in-a-fluid" target="_blank" rel="noopener">11.4 Variation of Pressure with Depth</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/11-5-pascals-principle" target="_blank" rel="noopener">11.5 Pascal's Principle</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/11-6-gauge-pressure-absolute-pressure-and-pressure-measurement" target="_blank" rel="noopener">11.6 Gauge and Absolute Pressure</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/14-1-fluids-density-and-pressure" target="_blank" rel="noopener">14.1 Fluids, Density, and Pressure</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/14-2-measuring-pressure" target="_blank" rel="noopener">14.2 Measuring Pressure</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/14-3-pascals-principle-and-hydraulics" target="_blank" rel="noopener">14.3 Pascal's Principle and Hydraulics</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Pressure and Pascal's Principle</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+
+</html>

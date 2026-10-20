@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M6 Ch14c &mdash; Buoyancy and Archimedes' Principle</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 151 - Module 6 - Chapter 14 (University Physics) - Trevor deck "Archimedes and Buoyancy"
+     "Buoyancy and Archimedes' Principle" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     PHY 118 has its own page for this deck, written for College Physics from
+     the same deck. It is NOT generated from this file and a change here does
+     not propagate there (playbook Step 1). If a correction belongs on both,
+     make it on both.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 6 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 6 &middot; Fluids</span>
+    <span>Chapter 14 (University Physics) &middot; Deck: Archimedes and Buoyancy</span>
+  </div>
+
+  <h1>Buoyancy and Archimedes' Principle</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Put something in a fluid and it has to push some of that fluid out of the way. The fluid pushes
+    back, and the size of the push is the weight of exactly what was displaced &mdash; no more, no
+    less, and nothing to do with what the object is made of. Everything else on this page is that one
+    sentence applied: whether a thing floats, how deep it sits when it does, and why a rock feels
+    lighter underwater.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    <span class="m">&rho;</span> = <span class="m">M</span>/<span class="m">V</span> and the density
+    table from the first page of this module; &Sigma;<span class="m">F&#8407;</span> = 0 and
+    &Sigma;<span class="m">F&#8407;</span> = <span class="m">ma&#8407;</span> from Module&nbsp;3;
+    and the fact that pressure grows with depth, which is the mechanism underneath everything here.
+  </div>
+
+  <h2 id="archimedes">Archimedes' principle</h2>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span style="border:2px solid var(--blue); padding:.15rem .6rem; border-radius:4px">
+          The buoyant force on an object is equal to the weight of the fluid that it displaces.</span>
+      </div>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A tall tank of liquid. Near the surface a block sits half out of the liquid with an upward arrow and a downward arrow on it, and beside it a dashed outline of the same size and shape with only a downward arrow. Lower in the tank a solid sphere carries an upward and a downward arrow, and beside it a dashed circle of the same size carries only a downward arrow.">
+      <defs>
+        <marker id="abB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--violet)"/></marker>
+        <marker id="abG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+      <path d="M70,96 L70,282 a140,28 0 0,0 280,0 L350,96" fill="#dce7f7" stroke="var(--blue)" stroke-width="1.6"/>
+      <ellipse cx="210" cy="96" rx="140" ry="28" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6"/>
+      <g>
+        <path d="M112,78 L162,78 L162,96 L112,96 Z" fill="#f0b269" stroke="var(--ink)" stroke-width="1.2"/>
+        <path d="M112,96 L162,96 L162,128 L112,128 Z" fill="#4f76b8" stroke="var(--ink)" stroke-width="1.2"/>
+        <line x1="137" y1="126" x2="137" y2="60" stroke="var(--violet)" stroke-width="2.4" marker-end="url(#abB)"/>
+        <text class="lbl" x="137" y="52" text-anchor="middle" fill="var(--violet)">F<tspan dy="4" font-size="11">B</tspan></text>
+        <path d="M212,96 L262,96 L262,128 L212,128 Z" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.2" stroke-dasharray="5 4"/>
+        <line x1="237" y1="132" x2="237" y2="186" stroke="var(--green)" stroke-width="2.4" marker-end="url(#abG)"/>
+        <text class="lbl" x="249" y="170" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">gf</tspan></text>
+        <text class="sm" x="237" y="86" text-anchor="middle">the fluid it pushed aside</text>
+      </g>
+      <g>
+        <circle cx="120" cy="214" r="20" fill="#d94a3d" stroke="var(--ink)" stroke-width="1.2"/>
+        <line x1="120" y1="192" x2="120" y2="152" stroke="var(--violet)" stroke-width="2.4" marker-end="url(#abB)"/>
+        <text class="lbl" x="120" y="144" text-anchor="middle" fill="var(--violet)">F<tspan dy="4" font-size="11">B</tspan></text>
+        <circle cx="200" cy="214" r="20" fill="#8fb4e8" stroke="var(--blue)" stroke-width="1.2" stroke-dasharray="5 4"/>
+        <line x1="200" y1="236" x2="200" y2="276" stroke="var(--green)" stroke-width="2.4" marker-end="url(#abG)"/>
+        <text class="lbl" x="212" y="266" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">gf</tspan></text>
+        <text class="sm" x="200" y="196" text-anchor="middle">same volume of fluid</text>
+      </g>
+      <text class="sm" x="470" y="150" text-anchor="start">Each dashed shape is the fluid</text>
+      <text class="sm" x="470" y="168" text-anchor="start">that used to be there. Its weight</text>
+      <text class="sm" x="470" y="186" text-anchor="start">is the buoyant force on the</text>
+      <text class="sm" x="470" y="204" text-anchor="start">object beside it.</text>
+      <text class="sm" x="320" y="318" text-anchor="middle">Floating or fully submerged, the rule is the same &mdash; only the displaced volume differs.</text>
+    </svg>
+    <figcaption>Pair each object with the fluid it evicted. The upward force on the object equals the
+      downward weight of its dashed twin. The block displaces only the part of itself that is under
+      the surface; the ball, fully submerged, displaces its whole volume.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The buoyant force</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">F</span><sub>B</sub> = <span class="m">m</span><sub>f</sub>&#8239;<span class="m">g</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">F</span><sub>B</sub> = <span class="m">&rho;</span><sub>f</sub><span class="m">V</span><sub>f</sub><span class="m">g</span></span>
+      </div>
+      <p class="why">Read the subscripts carefully: <span class="m">&rho;</span><sub>f</sub> is the
+        density of the <b>fluid</b> and <span class="m">V</span><sub>f</sub> is the volume of
+        <b>fluid displaced</b>. Neither is a property of the object. <b>The buoyant force depends on
+        the fluid, not the object.</b></p>
+    </div>
+  </div>
+
+  <div class="check">
+    <span class="label">Trevor asks</span>
+    <p class="q">Will the buoyant force be larger or smaller in a dense fluid like mercury, compared
+      with water?</p>
+    <div class="ans"><b>Larger &mdash; by a factor of 13.5.</b> Only
+      <span class="m">&rho;</span><sub>f</sub> changed, and mercury is 13&#8239;546&nbsp;kg/m&#179;
+      against water's 1000. Displace the same volume and you displace 13.5 times the weight. This is
+      why a block of lead, which sinks without hesitation in water, floats in mercury.</div>
+  </div>
+
+  <h2 id="how-high">How high something floats</h2>
+
+  <p>A floating object has found the depth at which it displaces exactly its own weight of fluid.
+     That condition fixes how much of it sits below the surface, and the answer turns out to depend
+     on nothing but the two densities.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 230" role="img" aria-label="On the left a block floating at a surface, its total height marked h and the part below the surface marked h sub s. On the right a separate block of the same width whose whole height is h sub s, representing the displaced fluid.">
+      <defs>
+        <marker id="hhB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="var(--ink)"/></marker>
+      </defs>
+      <g>
+        <path d="M150,70 L250,70 L250,100 L150,100 Z" fill="#f0b269" stroke="var(--ink)" stroke-width="1.3"/>
+        <path d="M150,100 L250,100 L250,170 L150,170 Z" fill="#4f76b8" stroke="var(--ink)" stroke-width="1.3"/>
+        <line x1="60" y1="100" x2="300" y2="100" stroke="var(--blue)" stroke-width="1.6" stroke-dasharray="7 5"/>
+        <text class="sm" x="64" y="92" text-anchor="start" fill="var(--blue)">surface</text>
+        <line x1="128" y1="70" x2="128" y2="170" stroke="var(--ink)" stroke-width="1.4" marker-start="url(#hhB)" marker-end="url(#hhB)"/>
+        <text class="lbl" x="116" y="126" text-anchor="end">h</text>
+        <line x1="200" y1="100" x2="200" y2="170" stroke="var(--paper)" stroke-width="1.4" marker-start="url(#hhB)" marker-end="url(#hhB)"/>
+        <text class="lbl" x="200" y="140" text-anchor="middle" fill="var(--paper)">h<tspan dy="4" font-size="11">s</tspan></text>
+        <text class="sm" x="200" y="196" text-anchor="middle">the object</text>
+      </g>
+      <g>
+        <path d="M400,100 L500,100 L500,170 L400,170 Z" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.3" stroke-dasharray="5 4"/>
+        <line x1="450" y1="100" x2="450" y2="170" stroke="var(--paper)" stroke-width="1.4" marker-start="url(#hhB)" marker-end="url(#hhB)"/>
+        <text class="lbl" x="450" y="140" text-anchor="middle" fill="var(--paper)">h<tspan dy="4" font-size="11">s</tspan></text>
+        <text class="sm" x="450" y="196" text-anchor="middle">volume displaced</text>
+      </g>
+      <text class="sm" x="340" y="46" text-anchor="middle">same base area, so the volumes are in the ratio of the heights</text>
+      <text class="sm" x="340" y="220" text-anchor="middle">Only the submerged part displaces anything.</text>
+    </svg>
+    <figcaption>The two shapes have the same footprint, so comparing volumes reduces to comparing
+      heights &mdash; which is what makes the final result a ratio of densities rather than a
+      calculation about shape.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Equilibrium for a floating object</div>
+    <div class="body">
+      <div class="mathline">
+        &Sigma;<span class="m">F&#8407;</span> = 0
+        &nbsp;&rarr;&nbsp;
+        <span class="m">F&#8407;</span><sub>B</sub> + <span class="m">F&#8407;</span><sub>g</sub> = 0<br>
+        <span class="m">&rho;</span><sub>f</sub><span class="m">V</span><sub>f</sub><span class="m">g</span>
+        &minus; <span class="m">m</span><sub>o</sub><span class="m">g</span> = 0
+        &nbsp;&rarr;&nbsp;
+        <span class="m">&rho;</span><sub>f</sub><span class="m">V</span><sub>f</sub><span class="m">g</span>
+        = <span class="m">&rho;</span><sub>o</sub><span class="m">V</span><sub>o</sub><span class="m">g</span><br>
+        <span class="m">&rho;</span><sub>f</sub><span class="m">V</span><sub>f</sub>
+        = <span class="m">&rho;</span><sub>o</sub><span class="m">V</span><sub>o</sub>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">&rho;</span><sub>f</sub>&#8239;&#8467;<span class="m">w h</span><sub>s</sub>
+        = <span class="m">&rho;</span><sub>o</sub>&#8239;&#8467;<span class="m">w h</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">&rho;</span><sub>f</sub><span class="m">h</span><sub>s</sub>
+        = <span class="m">&rho;</span><sub>o</sub><span class="m">h</span><br>
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="frac"><span class="top"><span class="m">h</span><sub>s</sub></span><span class="bot"><span class="m">h</span><sub>obj</sub></span></span>
+          =
+          <span class="frac"><span class="top"><span class="m">&rho;</span><sub>obj</sub></span><span class="bot"><span class="m">&rho;</span><sub>fl</sub></span></span></span>
+      </div>
+      <p class="why">The fraction submerged is the ratio of the densities. Ice at 920&nbsp;kg/m&#179;
+        in seawater at 1030 sits 89&nbsp;% under &mdash; the iceberg figure, derived rather than
+        quoted. Note also what cancelled: <span class="m">g</span>, the base area, and every detail
+        of the shape.</p>
+    </div>
+  </div>
+
+  <h2 id="sink-or-float">Sink, hover, or rise</h2>
+
+  <p>Take the same two forces and drop the assumption that they balance. Whichever is bigger decides
+     which way the object accelerates, and the comparison is again one of densities.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Three identical blocks side by side, each with an upward arrow labelled F B and a downward arrow labelled F g. On the first the downward arrow is longer, on the second the two are equal, on the third the upward arrow is longer.">
+      <defs>
+        <marker id="sfB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--violet)"/></marker>
+        <marker id="sfG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+      <g>
+        <rect x="68" y="106" width="68" height="60" fill="#f0b269" stroke="var(--ink)" stroke-width="1.3"/>
+        <line x1="88" y1="104" x2="88" y2="52" stroke="var(--violet)" stroke-width="2.6" marker-end="url(#sfB)"/>
+        <line x1="116" y1="168" x2="116" y2="238" stroke="var(--green)" stroke-width="2.6" marker-end="url(#sfG)"/>
+        <text class="lbl" x="88" y="44" text-anchor="middle" fill="var(--violet)">F<tspan dy="4" font-size="11">B</tspan></text>
+        <text class="lbl" x="128" y="216" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">g</tspan></text>
+        <text x="102" y="24" text-anchor="middle" font-weight="700">sinks</text>
+        <text class="sm" x="102" y="254" text-anchor="middle">&rho;<tspan dy="2" font-size="9">obj</tspan><tspan dy="-2"> &gt; &rho;</tspan><tspan dy="2" font-size="9">fl</tspan></text>
+      </g>
+      <g>
+        <rect x="286" y="106" width="68" height="60" fill="#f0b269" stroke="var(--ink)" stroke-width="1.3"/>
+        <line x1="306" y1="104" x2="306" y2="52" stroke="var(--violet)" stroke-width="2.6" marker-end="url(#sfB)"/>
+        <line x1="334" y1="168" x2="334" y2="220" stroke="var(--green)" stroke-width="2.6" marker-end="url(#sfG)"/>
+        <text class="lbl" x="306" y="44" text-anchor="middle" fill="var(--violet)">F<tspan dy="4" font-size="11">B</tspan></text>
+        <text class="lbl" x="346" y="206" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">g</tspan></text>
+        <text x="320" y="24" text-anchor="middle" font-weight="700">hovers</text>
+        <text class="sm" x="320" y="254" text-anchor="middle">&rho;<tspan dy="2" font-size="9">obj</tspan><tspan dy="-2"> = &rho;</tspan><tspan dy="2" font-size="9">fl</tspan></text>
+      </g>
+      <g>
+        <rect x="504" y="106" width="68" height="60" fill="#f0b269" stroke="var(--ink)" stroke-width="1.3"/>
+        <line x1="524" y1="104" x2="524" y2="52" stroke="var(--violet)" stroke-width="2.6" marker-end="url(#sfB)"/>
+        <line x1="552" y1="168" x2="552" y2="204" stroke="var(--green)" stroke-width="2.6" marker-end="url(#sfG)"/>
+        <text class="lbl" x="524" y="44" text-anchor="middle" fill="var(--violet)">F<tspan dy="4" font-size="11">B</tspan></text>
+        <text class="lbl" x="564" y="192" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">g</tspan></text>
+        <text x="538" y="24" text-anchor="middle" font-weight="700">rises</text>
+        <text class="sm" x="538" y="254" text-anchor="middle">&rho;<tspan dy="2" font-size="9">obj</tspan><tspan dy="-2"> &lt; &rho;</tspan><tspan dy="2" font-size="9">fl</tspan></text>
+      </g>
+    </svg>
+    <figcaption>The blocks are identical and fully submerged, so
+      <span class="m">F</span><sub>B</sub> is the same in all three &mdash; what differs is what the
+      block is made of. The arrow lengths are drawn in proportion to the forces they stand for.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The general case</div>
+    <div class="body">
+      <div class="mathline">
+        &Sigma;<span class="m">F&#8407;</span> = <span class="m">ma&#8407;</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">F&#8407;</span><sub>B</sub> + <span class="m">F&#8407;</span><sub>g</sub>
+        = <span class="m">ma&#8407;</span><br>
+        <span class="m">&rho;</span><sub>f</sub><span class="m">V</span><sub>f</sub><span class="m">g</span>
+        &minus; <span class="m">m</span><sub>o</sub><span class="m">g</span> = <span class="m">ma</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">&rho;</span><sub>f</sub><span class="m">V</span><sub>f</sub><span class="m">g</span>
+        &minus; <span class="m">&rho;</span><sub>o</sub><span class="m">V</span><sub>o</sub><span class="m">g</span>
+        = <span class="m">ma</span>
+      </div>
+      <p class="why">For a fully submerged object <span class="m">V</span><sub>f</sub> =
+        <span class="m">V</span><sub>o</sub>, so the sign of the acceleration is simply the sign of
+        <span class="m">&rho;</span><sub>f</sub> &minus; <span class="m">&rho;</span><sub>o</sub>.
+        Denser than the fluid, it sinks; less dense, it rises; equal, it stays put. Floating is the
+        special case where rising stops because part of the object has left the fluid and
+        <span class="m">V</span><sub>f</sub> has stopped growing.</p>
+    </div>
+  </div>
+
+  <h2 id="free-body">Free-body diagrams with a string</h2>
+
+  <p>If you are suspending an object, make sure every force gets into the diagram. The one students
+     drop is the buoyant force, and it is the whole reason the object feels lighter.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 320" role="img" aria-label="Left: a cylinder hanging on a string in air, with a long upward arrow labelled F str and a downward arrow of the same length labelled F g. Right: the same cylinder hanging inside a tank of liquid, with a shorter upward arrow labelled F str, a small upward arrow labelled F B, and a downward arrow labelled F g of the same length as before.">
+      <defs>
+        <marker id="fbR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="fbG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="fbB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--violet)"/></marker>
+      </defs>
+      <text x="130" y="30" text-anchor="middle" font-weight="700">In air</text>
+      <text x="440" y="30" text-anchor="middle" font-weight="700">In water</text>
+      <g>
+        <line x1="130" y1="46" x2="130" y2="178" stroke="var(--red)" stroke-width="1.1"/>
+        <rect x="104" y="178" width="52" height="76" rx="3" fill="#7a6a1e" stroke="var(--ink)" stroke-width="1.2"/>
+        <ellipse cx="130" cy="178" rx="26" ry="8" fill="#e8dc86" stroke="var(--ink)" stroke-width="1.2"/>
+        <line x1="212" y1="246" x2="212" y2="110" stroke="var(--red)" stroke-width="2.6" marker-end="url(#fbR)"/>
+        <text class="lbl" x="224" y="128" text-anchor="start" fill="var(--red)">F<tspan dy="4" font-size="11">str</tspan></text>
+        <line x1="258" y1="110" x2="258" y2="246" stroke="var(--green)" stroke-width="2.6" marker-end="url(#fbG)"/>
+        <text class="lbl" x="270" y="232" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">g</tspan></text>
+      </g>
+      <g>
+        <path d="M372,110 L372,262 a62,16 0 0,0 124,0 L496,110" fill="#dce7f7" stroke="var(--blue)" stroke-width="1.5"/>
+        <ellipse cx="434" cy="110" rx="62" ry="16" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.5"/>
+        <line x1="434" y1="46" x2="434" y2="170" stroke="var(--red)" stroke-width="1.1"/>
+        <rect x="408" y="170" width="52" height="76" rx="3" fill="#7a6a1e" stroke="var(--ink)" stroke-width="1.2"/>
+        <ellipse cx="434" cy="170" rx="26" ry="8" fill="#e8dc86" stroke="var(--ink)" stroke-width="1.2"/>
+        <line x1="540" y1="246" x2="540" y2="148" stroke="var(--red)" stroke-width="2.6" marker-end="url(#fbR)"/>
+        <text class="lbl" x="550" y="162" text-anchor="start" fill="var(--red)">F<tspan dy="4" font-size="11">str</tspan></text>
+        <line x1="572" y1="246" x2="572" y2="208" stroke="var(--violet)" stroke-width="2.6" marker-end="url(#fbB)"/>
+        <text class="lbl" x="582" y="222" text-anchor="start" fill="var(--violet)">F<tspan dy="4" font-size="11">B</tspan></text>
+        <line x1="604" y1="110" x2="604" y2="246" stroke="var(--green)" stroke-width="2.6" marker-end="url(#fbG)"/>
+        <text class="lbl" x="614" y="232" text-anchor="start" fill="var(--green)">F<tspan dy="4" font-size="11">g</tspan></text>
+      </g>
+      <text class="sm" x="320" y="300" text-anchor="middle">The weight has not changed. The string simply has less of it left to carry.</text>
+    </svg>
+    <figcaption>Same object, same <span class="m">F</span><sub>g</sub> in both panels &mdash; the
+      green arrows are identical lengths. Immersed, the buoyant force takes over part of the load, so
+      the string tension drops by exactly <span class="m">F</span><sub>B</sub>. That reduced tension
+      is what a scale reports, and it is called the <b>apparent weight</b>.</figcaption>
+  </figure>
+
+  <div class="check">
+    <span class="label">Trevor asks</span>
+    <p class="q">Why do we usually ignore the buoyant force of air?</p>
+    <div class="ans"><b>Because air is about a thousand times less dense than the things we weigh in
+      it.</b> From the density table: air is 1.2&nbsp;kg/m&#179;, water 1000, aluminium about 2700. The
+      buoyant force on a solid object in air is
+      <span class="m">&rho;</span><sub>air</sub>/<span class="m">&rho;</span><sub>obj</sub> of its
+      weight &mdash; well under a tenth of one per cent &mdash; which is smaller than the error in
+      most measurements. It is <em>not</em> zero, and it is exactly why a helium balloon rises.</div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Things to note &mdash; what this analysis left out</span>
+    Trevor closes the deck with three honest caveats, all of them about the difference between the
+    model and a real tank of water.
+    <ul style="margin:.4rem 0 0; padding-left:1.1rem">
+      <li><b>No drag force was considered.</b> Every force diagram here is for an object at rest or
+        just starting to move.</li>
+      <li><b>Most fluids bring a moving object to terminal velocity quickly</b> &mdash; liquids
+        especially. A sinking stone does not keep accelerating.</li>
+      <li><b>Many objects bob at the surface</b>, because as parts of the object move in and out of
+        the fluid the displaced volume changes, and with it the ratio of the two forces.</li>
+    </ul>
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Archimedes</td><td class="eq">&mdash;</td>
+        <td>the buoyant force equals the weight of the displaced fluid.</td></tr>
+    <tr><td class="term">Buoyant force</td><td class="eq">&mdash;</td>
+        <td><span class="m">F</span><sub>B</sub> = <span class="m">&rho;</span><sub>f</sub><span class="m">V</span><sub>f</sub><span class="m">g</span>.
+            Fluid density, displaced volume &mdash; no property of the object appears.</td></tr>
+    <tr><td class="term">Floating</td><td class="eq">&mdash;</td>
+        <td><span class="m">h</span><sub>s</sub>/<span class="m">h</span><sub>obj</sub> =
+            <span class="m">&rho;</span><sub>obj</sub>/<span class="m">&rho;</span><sub>fl</sub>.
+            The fraction submerged is the density ratio.</td></tr>
+    <tr><td class="term">Sink or rise</td><td class="eq">&mdash;</td>
+        <td>fully submerged, compare <span class="m">&rho;</span><sub>obj</sub> with
+            <span class="m">&rho;</span><sub>fl</sub>. That is the whole test.</td></tr>
+    <tr><td class="term">Apparent weight</td><td class="eq">&mdash;</td>
+        <td>the string or scale carries <span class="m">F</span><sub>g</sub> &minus;
+            <span class="m">F</span><sub>B</sub>. The weight itself is unchanged.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/11-7-archimedes-principle" target="_blank" rel="noopener">11.7 Archimedes' Principle</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/14-4-archimedes-principle-and-buoyancy" target="_blank" rel="noopener">14.4 Archimedes' Principle and Buoyancy</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Archimedes and Buoyancy</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+
+</html>

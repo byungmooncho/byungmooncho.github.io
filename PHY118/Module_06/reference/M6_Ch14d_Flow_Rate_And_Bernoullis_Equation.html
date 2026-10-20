@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M6 Ch14d &mdash; Flow Rate and Bernoulli's Equation</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 118 - Module 6 - Chapter 12 (College Physics) - Trevor deck "Bernoulli and Flow Rates"
+     "Flow Rate and Bernoulli's Equation" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     PHY 118 has its own page for this deck, written for College Physics. It is
+     NOT generated from any other course's page and nothing propagates into it.
+     Edit it directly, against the source deck.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 6 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 6 &middot; Fluids</span>
+    <span>Chapter 12 (College Physics) &middot; Deck: Bernoulli and Flow Rates</span>
+  </div>
+
+  <h1>Flow Rate and Bernoulli's Equation</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Your textbook puts this material in a chapter of its own, and for good reason: everything so
+    far has been about fluid standing still. Set it moving and two bookkeeping rules
+    carry the whole chapter. Mass has nowhere to go, so the same volume per second passes every
+    cross-section &mdash; narrow the pipe and the fluid must speed up. Energy has nowhere to go
+    either, so the pressure, the speed and the height trade against each other in a fixed sum. That
+    sum is Bernoulli's equation, and it is conservation of energy with the terms divided by volume.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Density and pressure from the previous pages;
+    <span class="m">W</span> = <span class="m">Fd</span>&#8239;cos&#8239;<span class="m">&theta;</span>,
+    the work&ndash;energy theorem
+    <span class="m">W</span> = &Delta;<span class="m">K</span>, and gravitational potential energy
+    <span class="m">U</span><sub>g</sub> = <span class="m">mgh</span> from Module&nbsp;4. The whole
+    derivation below is those three, applied to a slug of fluid.
+  </div>
+
+  <h2 id="flow-rate">Flow rate</h2>
+
+  <p>The trick Trevor uses throughout this deck is to stop thinking about a fluid and start thinking
+     about <em>a piece</em> of one: pick out a volume, follow it, and treat it like any other object
+     from Modules 3 and 4.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 230" role="img" aria-label="A horizontal cylindrical pipe seen in perspective. A shaded disc-shaped slug inside it is marked V, its thickness along the pipe is marked delta x, its circular face is marked A, and a short arrow pointing along the pipe is marked v.">
+      <defs>
+        <marker id="frV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="frT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="var(--ink)"/></marker>
+      </defs>
+      <path d="M110,92 L470,92 M110,196 L470,196" stroke="var(--blue)" stroke-width="1.6" fill="none"/>
+      <ellipse cx="470" cy="144" rx="26" ry="52" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6"/>
+      <path d="M110,92 L110,196 a26,52 0 0,0 0,0" fill="none"/>
+      <ellipse cx="110" cy="144" rx="26" ry="52" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <path d="M206,92 L266,92 L266,196 L206,196 Z" fill="#6f9fe0" stroke="none"/>
+      <ellipse cx="266" cy="144" rx="26" ry="52" fill="#4f82cf" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="206" cy="144" rx="26" ry="52" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <line x1="206" y1="68" x2="266" y2="68" stroke="var(--ink)" stroke-width="1.3" marker-start="url(#frT)" marker-end="url(#frT)"/>
+      <text class="lbl" x="236" y="58" text-anchor="middle">&Delta;x</text>
+      <text class="lbl" x="186" y="150" text-anchor="middle">V</text>
+      <text class="lbl" x="286" y="206" text-anchor="middle">A</text>
+      <line x1="296" y1="144" x2="358" y2="144" stroke="var(--green)" stroke-width="2.8" marker-end="url(#frV)"/>
+      <text class="lbl" x="328" y="132" text-anchor="middle" fill="var(--green)">v</text>
+      <text class="sm" x="320" y="224" text-anchor="middle">The slug is fluid, picked out and followed &mdash; not a piston.</text>
+    </svg>
+    <figcaption>One volume of fluid, area <span class="m">A</span> across and
+      &Delta;<span class="m">x</span> long, sliding along at speed <span class="m">v</span>. The
+      volume is fixed; the area and the length are free to change together, which is the hinge the
+      next section turns on.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Two forms of the same definition</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">Q</span> =
+        <span class="frac"><span class="top"><span class="m">V</span></span><span class="bot">&Delta;<span class="m">t</span></span></span>
+        &nbsp;&nbsp;&nbsp;&mdash; the volume passing a given spot in a given time<br>
+        with&nbsp; <span class="m">V</span> = <span class="m">A</span>&Delta;<span class="m">x</span>
+        &nbsp;and&nbsp;
+        <span class="m">v</span> = &Delta;<span class="m">x</span>/&Delta;<span class="m">t</span>
+        &nbsp;&rarr;&nbsp; &Delta;<span class="m">t</span> = &Delta;<span class="m">x</span>/<span class="m">v</span><br>
+        <span class="m">Q</span> =
+        <span class="frac"><span class="top"><span class="m">A</span>&Delta;<span class="m">x</span></span><span class="bot">&Delta;<span class="m">x</span>/<span class="m">v</span></span></span>
+        = <span class="m">A</span>&Delta;<span class="m">x</span>
+        <span class="frac"><span class="top"><span class="m">v</span></span><span class="bot">&Delta;<span class="m">x</span></span></span>
+        &nbsp;&rarr;&nbsp;
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">Q</span> = <span class="m">Av</span></span>
+        &nbsp;&nbsp;&nbsp;&nbsp;units: m&#179;/s
+      </div>
+      <p class="why">Two different questions, one quantity. <span class="m">V</span>/&Delta;<span class="m">t</span>
+        is what you measure with a bucket and a stopwatch; <span class="m">Av</span> is what you
+        compute from the pipe. They are the same number, and moving between them is most of the
+        problem-solving in this section.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">A caveat Trevor marks on the slide</span>
+    <b>The flow can change near the walls of the tube.</b> Real fluid is slower at the edge than in
+    the middle, so <span class="m">v</span> in <span class="m">Q</span> = <span class="m">Av</span>
+    is an <em>average</em> over the cross-section. Treating it as uniform is the idealisation this
+    whole chapter runs on; viscosity is where it is repaid.
+  </div>
+
+  <h2 id="continuity">The continuity equation</h2>
+
+  <p>Assume the density does not change &mdash; true for liquids, and a decent approximation for
+     slow-moving gases. Then a fixed mass of fluid keeps a fixed volume, even though it is free to
+     change shape. If the volume cannot change, neither can the flow rate.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 250" role="img" aria-label="A pipe that is wide on the left and narrower on the right, joined by a tapering section. A shaded slug in the wide part is marked V with face area A one, its length marked delta x one, and a short arrow marked v one. A shaded slug in the narrow part is also marked V with face area A two, a length about twice as long marked delta x two, and a correspondingly longer arrow marked v two.">
+      <defs>
+        <marker id="ceV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="ceT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="var(--ink)"/></marker>
+      </defs>
+      <path d="M46,88 L230,88 L290,108 L620,108 M46,208 L230,208 L290,188 L620,188"
+            stroke="var(--blue)" stroke-width="1.6" fill="none"/>
+      <ellipse cx="46" cy="148" rx="26" ry="60" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <ellipse cx="620" cy="148" rx="17" ry="40" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6"/>
+      <path d="M100,88 L148,88 L148,208 L100,208 Z" fill="#6f9fe0" stroke="none"/>
+      <ellipse cx="148" cy="148" rx="26" ry="60" fill="#4f82cf" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="100" cy="148" rx="26" ry="60" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <line x1="100" y1="66" x2="148" y2="66" stroke="var(--ink)" stroke-width="1.3" marker-start="url(#ceT)" marker-end="url(#ceT)"/>
+      <text class="lbl" x="124" y="56" text-anchor="middle">&Delta;x<tspan dy="4" font-size="11">1</tspan></text>
+      <text class="lbl" x="124" y="154" text-anchor="middle">V</text>
+      <text class="lbl" x="166" y="224" text-anchor="middle">A<tspan dy="4" font-size="11">1</tspan></text>
+      <line x1="176" y1="148" x2="204" y2="148" stroke="var(--green)" stroke-width="2.6" marker-end="url(#ceV)"/>
+      <text class="lbl" x="190" y="136" text-anchor="middle" fill="var(--green)">v<tspan dy="4" font-size="11">1</tspan></text>
+      <path d="M310,108 L418,108 L418,188 L310,188 Z" fill="#6f9fe0" stroke="none"/>
+      <ellipse cx="418" cy="148" rx="17" ry="40" fill="#4f82cf" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="310" cy="148" rx="17" ry="40" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <line x1="310" y1="90" x2="418" y2="90" stroke="var(--ink)" stroke-width="1.3" marker-start="url(#ceT)" marker-end="url(#ceT)"/>
+      <text class="lbl" x="364" y="80" text-anchor="middle">&Delta;x<tspan dy="4" font-size="11">2</tspan></text>
+      <text class="lbl" x="364" y="154" text-anchor="middle">V</text>
+      <text class="lbl" x="432" y="206" text-anchor="middle">A<tspan dy="4" font-size="11">2</tspan></text>
+      <line x1="446" y1="148" x2="509" y2="148" stroke="var(--green)" stroke-width="2.6" marker-end="url(#ceV)"/>
+      <text class="lbl" x="478" y="136" text-anchor="middle" fill="var(--green)">v<tspan dy="4" font-size="11">2</tspan></text>
+      <text class="sm" x="320" y="242" text-anchor="middle">Same volume, redrawn: short and fat on the left, long and thin on the right.</text>
+    </svg>
+    <figcaption>The two shaded slugs hold the same volume. In the narrow section that volume has to
+      stretch out along the pipe, and it is swept past in the same time &mdash; which is only
+      possible if it is travelling faster. The arrow is drawn longer for that reason.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Continuity</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">Q</span><sub>1</sub> = <span class="m">Q</span><sub>2</sub>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">v</span><sub>1</sub><span class="m">A</span><sub>1</sub>
+          = <span class="m">v</span><sub>2</sub><span class="m">A</span><sub>2</sub></span>
+      </div>
+      <p class="why"><b>The flow rate is constant; the speed is not.</b> Those two sentences sound
+        contradictory until you notice that one is about volume per second and the other is about
+        metres per second.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Trevor's hose</span>
+    <em>Filling a bucket takes the same amount of time whether you hold your thumb over the end of
+    the hose or not.</em> The thumb raises the speed and lowers the area in exactly compensating
+    measure, so <span class="m">Q</span> is unchanged. What you gain is reach, not water. Worth
+    saying out loud because the jet <em>looks</em> like more water.
+  </div>
+
+  <h2 id="work-energy">Work and energy on a moving slug</h2>
+
+  <p>To move through the pipe, the fluid has to be pushed, and whatever pushes it does work. The
+     pusher is the fluid behind it, through its pressure.</p>
+
+  <div class="mathblock">
+    <div class="head">Work done by pressure</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">W</span> = <span class="m">F d</span>&#8239;cos&#8239;<span class="m">&theta;</span>
+        &nbsp;&nbsp;with&nbsp; <span class="m">&theta;</span> = 0&deg;, &nbsp;<span class="m">F</span> = <span class="m">PA</span>, &nbsp;<span class="m">d</span> = &Delta;<span class="m">x</span><br>
+        <span class="m">W</span> = <span class="m">PA</span>&Delta;<span class="m">x</span>
+        &nbsp;&rarr;&nbsp;
+        <span style="border:2px solid var(--blue); padding:.1rem .5rem; border-radius:4px">
+          <span class="m">W</span> = <span class="m">PV</span></span>
+      </div>
+      <p class="why">This is the quiet step that makes Bernoulli work: <b>pressure times volume is an
+        energy.</b> Check the units &mdash; (N/m&#178;)(m&#179;) = N&middot;m = J. It is why pressure
+        can appear in the same equation as a kinetic energy and a potential energy.</p>
+      <div class="mathline">
+        <span class="m">W</span> = &Delta;<span class="m">K</span> =
+        &#189;<span class="m">mv</span><sub>f</sub>&#178; &minus; &#189;<span class="m">mv</span><sub>i</sub>&#178;
+        &nbsp;&nbsp;&nbsp;with&nbsp; <span class="m">m</span> = <span class="m">&rho;V</span>
+        &nbsp;&rarr;&nbsp;
+        <span class="m">K</span> = &#189;<span class="m">&rho;Vv</span>&#178;
+      </div>
+      <p class="why">Writing the mass as <span class="m">&rho;V</span> is what lets the volume be
+        divided out at the end, leaving an equation purely in pressures.
+        <b>Pressure changes the speed when the fluid moves to a region of different area.</b></p>
+      <p class="why">Trevor notes that &Delta;<span class="m">x</span> does not have to be the length
+        of the volume under investigation &mdash; it is just convenient to use that length.</p>
+    </div>
+  </div>
+
+  <h2 id="bernoulli">Bernoulli's equation</h2>
+
+  <p>Now add height. The slug does not only speed up, it can also climb, so gravitational potential
+     energy joins the ledger. The result is the whole chapter in one line.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 290" role="img" aria-label="A pipe that is wide and low on the left and narrower and high on the right, joined by a rising tapered section. A shaded slug in the low wide part is marked V with area A one, length delta x one and a short arrow v one. A shaded slug in the high narrow part is marked V with area A two, a longer length delta x two and a longer arrow v two. Vertical bars from each section down to a baseline are marked h one and h two.">
+      <defs>
+        <marker id="beV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="beT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+      <line x1="24" y1="258" x2="624" y2="258" stroke="var(--ink)" stroke-width="1.2"/>
+      <text class="sm" x="28" y="274" text-anchor="start">reference level</text>
+      <path d="M40,145 L200,145 L330,55 L600,55 M40,235 L200,235 L330,115 L600,115"
+            stroke="var(--blue)" stroke-width="1.6" fill="none"/>
+      <ellipse cx="40" cy="190" rx="20" ry="45" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <ellipse cx="600" cy="85" rx="13" ry="30" fill="#eaf1fc" stroke="var(--blue)" stroke-width="1.6"/>
+      <path d="M86,145 L130,145 L130,235 L86,235 Z" fill="#6f9fe0" stroke="none"/>
+      <ellipse cx="130" cy="190" rx="20" ry="45" fill="#4f82cf" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="86" cy="190" rx="20" ry="45" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <line x1="86" y1="128" x2="130" y2="128" stroke="var(--blue)" stroke-width="1.3" marker-start="url(#beT)" marker-end="url(#beT)"/>
+      <text class="lbl" x="108" y="120" text-anchor="middle" fill="var(--blue)">&Delta;x<tspan dy="4" font-size="11">1</tspan></text>
+      <text class="lbl" x="108" y="196" text-anchor="middle">V</text>
+      <text class="lbl" x="146" y="250" text-anchor="middle">A<tspan dy="4" font-size="11">1</tspan></text>
+      <line x1="152" y1="190" x2="180" y2="190" stroke="var(--green)" stroke-width="2.6" marker-end="url(#beV)"/>
+      <text class="lbl" x="166" y="178" text-anchor="middle" fill="var(--green)">v<tspan dy="4" font-size="11">1</tspan></text>
+      <path d="M346,55 L445,55 L445,115 L346,115 Z" fill="#6f9fe0" stroke="none"/>
+      <ellipse cx="445" cy="85" rx="13" ry="30" fill="#4f82cf" stroke="var(--blue)" stroke-width="1.5"/>
+      <ellipse cx="346" cy="85" rx="13" ry="30" fill="#6f9fe0" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <line x1="346" y1="38" x2="445" y2="38" stroke="var(--blue)" stroke-width="1.3" marker-start="url(#beT)" marker-end="url(#beT)"/>
+      <text class="lbl" x="396" y="30" text-anchor="middle" fill="var(--blue)">&Delta;x<tspan dy="4" font-size="11">2</tspan></text>
+      <text class="lbl" x="396" y="92" text-anchor="middle">V</text>
+      <text class="lbl" x="461" y="134" text-anchor="middle">A<tspan dy="4" font-size="11">2</tspan></text>
+      <line x1="475" y1="85" x2="538" y2="85" stroke="var(--green)" stroke-width="2.6" marker-end="url(#beV)"/>
+      <text class="lbl" x="506" y="73" text-anchor="middle" fill="var(--green)">v<tspan dy="4" font-size="11">2</tspan></text>
+      <line x1="216" y1="190" x2="216" y2="256" stroke="var(--amber)" stroke-width="1.5" marker-start="url(#beT)" marker-end="url(#beT)"/>
+      <text class="lbl" x="228" y="228" text-anchor="start" fill="var(--amber)">h<tspan dy="4" font-size="11">1</tspan></text>
+      <line x1="616" y1="85" x2="616" y2="256" stroke="var(--amber)" stroke-width="1.5" marker-start="url(#beT)" marker-end="url(#beT)"/>
+      <text class="lbl" x="606" y="176" text-anchor="end" fill="var(--amber)">h<tspan dy="4" font-size="11">2</tspan></text>
+    </svg>
+    <figcaption>One slug of fluid, followed from a wide low section to a narrow high one. It gains
+      speed because the pipe narrows and gains height because the pipe climbs; both have to be paid
+      for out of the pressure.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Energy bookkeeping for the slug</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">U</span><sub>g</sub> = <span class="m">mgh</span> = <span class="m">&rho;Vgh</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="m">K</span> = &#189;<span class="m">mv</span>&#178; = &#189;<span class="m">&rho;Vv</span>&#178;<br>
+        <span class="m">W</span> = <span class="m">W</span><sub>P</sub> + <span class="m">W</span><sub>g</sub>
+        = &Delta;<span class="m">K</span><br>
+        <span class="m">P</span><sub>1</sub><span class="m">V</span> &minus; <span class="m">P</span><sub>2</sub><span class="m">V</span>
+        &minus; (<span class="m">&rho;Vgh</span><sub>2</sub> &minus; <span class="m">&rho;Vgh</span><sub>1</sub>)
+        = &#189;<span class="m">&rho;Vv</span><sub>2</sub>&#178; &minus; &#189;<span class="m">&rho;Vv</span><sub>1</sub>&#178;
+      </div>
+      <p class="why">Every term carries a factor of <span class="m">V</span>. Divide it out, gather
+        the subscript&nbsp;1 terms on the left and the subscript&nbsp;2 terms on the right, and the
+        equation stops being about one slug and becomes a statement about the pipe.</p>
+      <div class="mathline" style="text-align:center">
+        <span class="m">P</span><sub>1</sub> + &#189;<span class="m">&rho;v</span><sub>1</sub>&#178;
+        + <span class="m">&rho;gh</span><sub>1</sub>
+        = <span class="m">P</span><sub>2</sub> + &#189;<span class="m">&rho;v</span><sub>2</sub>&#178;
+        + <span class="m">&rho;gh</span><sub>2</sub>
+      </div>
+      <div class="mathline" style="text-align:center">
+        <span style="border:2px solid var(--blue); padding:.15rem .6rem; border-radius:4px">
+          <span class="m">P</span> + &#189;<span class="m">&rho;v</span>&#178; + <span class="m">&rho;gh</span>
+          = constant</span>
+        &nbsp;&nbsp;&nbsp;<b>Bernoulli's equation</b>
+      </div>
+      <p class="why">Every term is an energy per unit volume, which is why they can be added and why
+        each of them has units of pressure. Bernoulli's equation is not a new law &mdash; it is
+        conservation of energy, divided through by <span class="m">V</span>.</p>
+    </div>
+  </div>
+
+  <h2 id="consequences">Two special cases worth naming</h2>
+
+  <p>Almost every problem you will meet kills one of the three terms, and the two that matter have
+     names of their own.</p>
+
+  <table class="grid">
+    <tr><th></th><th>&ldquo;Static&rdquo; fluids</th><th>Fluids at constant depth</th></tr>
+    <tr><td><b>Condition</b></td><td><span class="m">v</span> = 0 m/s</td><td>&Delta;<span class="m">h</span> = 0 m</td></tr>
+    <tr><td><b>What is left</b></td>
+        <td><span class="m">P</span><sub>1</sub> + <span class="m">&rho;gh</span><sub>1</sub>
+            = <span class="m">P</span><sub>2</sub> + <span class="m">&rho;gh</span><sub>2</sub></td>
+        <td><span class="m">P</span> + &#189;<span class="m">&rho;v</span>&#178; = constant</td></tr>
+    <tr><td><b>Usually written</b></td>
+        <td>&Delta;<span class="m">P</span> = <span class="m">&rho;g</span>&Delta;<span class="m">h</span>,
+            or <span class="m">P</span> = <span class="m">&rho;gd</span> for pressure at a depth</td>
+        <td><span class="m">P</span><sub>1</sub> + &#189;<span class="m">&rho;v</span><sub>1</sub>&#178;
+            = <span class="m">P</span><sub>2</sub> + &#189;<span class="m">&rho;v</span><sub>2</sub>&#178;</td></tr>
+    <tr><td><b>Called</b></td><td>the depth result from the pressure page</td><td><b>Bernoulli's principle</b></td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">The sentence to carry away</span>
+    <b>Where the fluid is faster, the pressure is lower.</b> Trevor writes it the other way round on
+    the slide &mdash; <em>decreasing the pressure increases the speed</em> &mdash; and both readings
+    are correct, because the equation does not say which causes which. It says only that at constant
+    height the two trade off.
+    <span class="why" style="display:block;margin-top:.4rem">Note also that the left column
+      <em>recovers the result from the previous chapter</em>. Setting <span class="m">v</span> = 0 in
+      Bernoulli's equation gives back <span class="m">P</span> = <span class="m">P</span><sub>0</sub>
+      + <span class="m">&rho;gd</span>. The static case was never a separate piece of physics.</span>
+  </div>
+
+  <h2 id="applications">Where the Bernoulli effect shows up</h2>
+
+  <p>Trevor's last content slide collects four devices that all work the same way: run a fluid fast
+     past an opening, drop the pressure there, and a second fluid is drawn in &mdash;
+     <em>entrained</em> &mdash; through that opening.</p>
+
+  <table class="defs">
+    <tr><td class="term">Gas burner</td><td class="eq">&mdash;</td>
+        <td>natural gas jets through a venturi and pulls air in alongside it, so the gas arrives at
+            the flame pre-mixed.</td></tr>
+    <tr><td class="term">Perfume atomiser</td><td class="eq">&mdash;</td>
+        <td>squeezing the bulb drives air across the top of a tube standing in the liquid; the
+            lowered pressure lifts perfume up the tube into the airstream.</td></tr>
+    <tr><td class="term">Aspirator</td><td class="eq">&mdash;</td>
+        <td>water running down a narrow throat entrains air from a side port, giving a cheap vacuum
+            pump with no moving parts.</td></tr>
+    <tr><td class="term">Water-heater chimney</td><td class="eq">&mdash;</td>
+        <td>hot gas rising up the flue draws cool room air in at the base, which keeps the exhaust
+            moving and the burner supplied.</td></tr>
+  </table>
+
+  <p class="why">Trevor's slide shows each of these as a cut-away diagram, together with a
+     streamline plot over an aerofoil. Those are third-party OpenStax illustrations and are not
+     reproduced here.</p>
+
+  <div class="tip">
+    <span class="label">The aeroplane-wing caveat, in Trevor's own words</span>
+    <em>Bernoulli's equation contributes to the lift on an airplane wing, but the majority of the
+    force is due to the deflection of air.</em>
+    <span class="why" style="display:block;margin-top:.4rem">This is worth keeping, because the
+      &ldquo;longer path over the top&rdquo; story is both extremely common and wrong. A wing works
+      mainly by throwing air downwards; by Newton's third law the air throws the wing up. Bernoulli
+      describes the pressure field that accompanies that deflection &mdash; it is a real part of the
+      picture, not the whole of it.</span>
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Flow rate</td><td class="eq">&mdash;</td>
+        <td><span class="m">Q</span> = <span class="m">V</span>/&Delta;<span class="m">t</span> =
+            <span class="m">Av</span>, in m&#179;/s. The volume passing a spot per second.</td></tr>
+    <tr><td class="term">Continuity</td><td class="eq">&mdash;</td>
+        <td><span class="m">v</span><sub>1</sub><span class="m">A</span><sub>1</sub> =
+            <span class="m">v</span><sub>2</sub><span class="m">A</span><sub>2</sub>. The flow rate
+            is constant; the speed is not.</td></tr>
+    <tr><td class="term">W = PV</td><td class="eq">&mdash;</td>
+        <td>pressure times volume is an energy. This is what lets pressure sit in an energy equation.</td></tr>
+    <tr><td class="term">Bernoulli's equation</td><td class="eq">&mdash;</td>
+        <td><span class="m">P</span> + &#189;<span class="m">&rho;v</span>&#178; +
+            <span class="m">&rho;gh</span> = constant. Conservation of energy per unit volume.</td></tr>
+    <tr><td class="term">Bernoulli's principle</td><td class="eq">&mdash;</td>
+        <td>the constant-height case. Faster fluid, lower pressure.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <p class="why" style="margin:.1rem 0 .7rem">Your textbook for this course is <em>College Physics</em>. The second entry below is a different OpenStax book, listed as an optional extra resource if you want to see the same material treated at a higher mathematical level. It is not required reading, and nothing on this page depends on it.</p>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/12-1-flow-rate-and-its-relation-to-velocity" target="_blank" rel="noopener">12.1 Flow Rate and Its Relation to Velocity</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/12-2-bernoullis-equation" target="_blank" rel="noopener">12.2 Bernoulli's Equation</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/12-3-the-most-general-applications-of-bernoullis-equation" target="_blank" rel="noopener">12.3 The Most General Applications</a></li>
+    <li><b>Extra resource.</b> Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/14-5-fluid-dynamics" target="_blank" rel="noopener">14.5 Fluid Dynamics</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/14-6-bernoullis-equation" target="_blank" rel="noopener">14.6 Bernoulli's Equation</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Bernoulli's Equations</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+
+</html>
