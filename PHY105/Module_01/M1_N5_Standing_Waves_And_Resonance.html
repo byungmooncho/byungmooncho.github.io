@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Note 5 &mdash; Standing Wave and Resonance</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 105 module note page.
+     Same design system as the other module note pages. Self-contained;
+     upload via GitHub Pages and embed as an iframe.
+     ================================================================== */
+
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --line:#b7c6bc;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+  h3{ font-size:1.08rem; margin:1.5rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .figure{
+    border:1px solid var(--rule); border-radius:10px; padding:1rem;
+    margin:1.4rem 0; text-align:center;
+  }
+  .figure img, .figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+  .figure figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    color:var(--muted); margin-top:.5rem; text-align:left;
+  }
+  .figure figcaption b{ color:var(--green-deep); }
+  ol.steps{ counter-reset:step; list-style:none; margin:1rem 0; padding:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+    border-left:2px solid var(--rule); margin-left:.9rem;
+  }
+  ol.steps > li:last-child{ border-left-color:transparent; }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+    width:1.8rem; height:1.8rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.85rem; font-weight:600;
+  }
+  ol.steps.questions > li{ padding-bottom:1.4rem; }
+  .fillin{
+    display:inline-block; min-width:9rem; border-bottom:1px solid var(--line);
+    margin:0 .25rem;
+  }
+  .slot{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--green-deep); margin:.45rem 0 0; font-weight:600;
+  }
+  .slot .unit{ font-weight:400; color:var(--muted); }
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+  .probe{
+    border:2px solid var(--green); border-radius:10px;
+    padding:.9rem 1.1rem; margin:1.4rem 0; background:#fff;
+  }
+  .probe .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:700; display:block; margin-bottom:.3rem;
+  }
+  .probe .opts{ margin:.7rem 0 0; }
+  .probe .opt{
+    display:block; padding:.35rem 0 .35rem 1.9rem; position:relative;
+    font-size:1rem;
+  }
+  .probe .opt::before{
+    content:""; position:absolute; left:.2rem; top:.62rem;
+    width:1rem; height:1rem; border:1.5px solid var(--line); border-radius:50%;
+  }
+  .eqn{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px;
+    padding:.85rem 1rem; margin:1.1rem 0; text-align:center;
+  }
+  .eqn .math{
+    font-size:1.25rem; font-weight:700; color:var(--green-deep);
+    font-family:Charter, Georgia, serif; display:block;
+  }
+  .eqn .domain{
+    display:block; margin-top:.45rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem;
+    letter-spacing:.02em; color:var(--muted);
+  }
+  .eqn .domain b{ color:var(--amber); }
+  table.spec{
+    width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:.95rem;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  table.spec th, table.spec td{
+    border:1px solid var(--rule); padding:.5rem .6rem; text-align:left;
+  }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec td.blank{ height:2.1rem; }
+  .drawbox{
+    border:1px solid var(--line); border-radius:8px; height:9rem; margin:.5rem 0;
+    background:
+      repeating-linear-gradient(0deg,#f4f8f5 0 1px,transparent 1px 22px),
+      repeating-linear-gradient(90deg,#f4f8f5 0 1px,transparent 1px 22px);
+  }
+  .grid2{ display:grid; gap:1rem; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .downloads{ display:grid; gap:.8rem; margin:1.2rem 0; }
+  @media (min-width:560px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    display:block; border:1px solid var(--rule); border-radius:10px;
+    padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+    background:#fff; transition:border-color .15s, box-shadow .15s;
+  }
+  .dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+  .dl-card .kind{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--green); font-weight:700;
+  }
+  .dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+  .dl-card .hint{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.83rem; color:var(--muted);
+  }
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+
+@media print{
+  @page{ size: Letter; margin: .55in .5in; }
+  body{ font-size:11pt; }
+  .note-wrap{ max-width:none; padding:0; }
+  .synopsis, .tip, .figure, .probe, .eqn, ol.steps > li, table.spec{
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  h1, h2, h3{ break-after:avoid; page-break-after:avoid; }
+  .downloads{ display:none; }
+  .printfiles{ display:block !important; }
+}
+.printfiles{ display:none; }
+
+
+/* ---- added for Note 5 (2026-10-20). Same tokens, same type scale as above;
+       no new colours introduced. ---- */
+ol.think{ counter-reset:tk; list-style:none; margin:1rem 0; padding:0; }
+ol.think > li{
+  counter-increment:tk; position:relative; padding:0 0 .6rem 2.2rem;
+}
+ol.think > li::before{
+  content:counter(tk,lower-roman) ")"; position:absolute; left:0; top:0;
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+  font-weight:700; color:var(--green);
+}
+.videoslot{
+  border:1px dashed var(--line); border-radius:10px; background:#fafcfb;
+  padding:.8rem 1rem; margin:1.4rem 0;
+}
+.videoslot .label{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+  font-weight:700; display:block; margin-bottom:.2rem;
+}
+.videoslot p{ margin:0; color:var(--muted); font-size:.95rem; }
+.handoutnote{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+  color:var(--muted); margin:.6rem 0 1.1rem;
+}
+.dl-card.vid{ margin:.9rem 0; }
+.dl-card.vid .kind{ color:var(--amber); }
+.reveal{ margin:.5rem 0 .2rem; }
+.reveal > button{
+  font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+  letter-spacing:.02em; color:var(--green-deep); background:var(--green-soft);
+  border:1px solid var(--rule); border-radius:999px; padding:.3rem .85rem .3rem .55rem;
+  cursor:pointer; display:inline-flex; align-items:center; gap:.45em;
+}
+.reveal > button:hover:not(:disabled){ border-color:var(--green); }
+.reveal > button:disabled{ opacity:.45; cursor:not-allowed; }
+.reveal > button .rv-mark{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:1.15rem; height:1.15rem; border-radius:50%;
+  background:var(--green); color:#fff; font-size:.72rem; font-weight:700;
+}
+.rv-panel{
+  border-left:3px solid var(--green); background:var(--green-soft);
+  padding:.6rem .85rem; margin:.5rem 0 0; border-radius:0 5px 5px 0;
+  font-size:.98rem;
+}
+.rv-panel ul{ margin:.3rem 0; padding-left:1.1rem; }
+.rv-panel li{ margin:.25rem 0; }
+.rv-panel p:first-child{ margin-top:0; }
+.rv-panel p:last-child{ margin-bottom:0; }
+@media print{
+  .reveal > button{ display:none; }
+  .rv-panel{ display:none !important; }
+  .videoslot{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1: Introduction To Waves</span>
+    <span>Note 5: Standing Wave and Resonance</span>
+  </div>
+
+  <h1>Standing Wave and Resonance</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    We explore two remaining wave phenomena, <strong>standing wave formation</strong> and
+    <strong>resonance</strong>. These two are related: we say, &ldquo;A standing wave is formed
+    within an object (or confined space) when a frequency of wave generated by an outside source
+    traveling through the object (or into the confined space) <strong>matches</strong> the
+    resonance frequency of the object.&rdquo; See below.
+  </div>
+
+  <figure class="figure">
+    <svg viewBox="0 0 820 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A travelling wave arrives at a cavity, fits inside it as a standing wave, and the amplitude builds — resonance."><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker></defs><style>.lb{font:600 13px "Segoe UI",system-ui,sans-serif;fill:#134a29}.lbm{font:400 12px "Segoe UI",system-ui,sans-serif;fill:#5c6b62}.eqs{font:700 14px Charter,Georgia,serif;fill:#134a29}</style><path d="M20.0,120.0 L22.1,117.0 L24.2,114.1 L26.3,111.3 L28.4,108.5 L30.5,105.9 L32.5,103.5 L34.6,101.4 L36.7,99.4 L38.8,97.7 L40.9,96.3 L43.0,95.3 L45.1,94.5 L47.2,94.1 L49.3,94.0 L51.4,94.3 L53.5,94.9 L55.5,95.8 L57.6,97.0 L59.7,98.5 L61.8,100.4 L63.9,102.4 L66.0,104.7 L68.1,107.2 L70.2,109.9 L72.3,112.7 L74.4,115.6 L76.5,118.5 L78.5,121.5 L80.6,124.4 L82.7,127.3 L84.8,130.1 L86.9,132.8 L89.0,135.3 L91.1,137.6 L93.2,139.6 L95.3,141.5 L97.4,143.0 L99.5,144.2 L101.5,145.1 L103.6,145.7 L105.7,146.0 L107.8,145.9 L109.9,145.5 L112.0,144.7 L114.1,143.7 L116.2,142.3 L118.3,140.6 L120.4,138.6 L122.5,136.5 L124.5,134.1 L126.6,131.5 L128.7,128.7 L130.8,125.9 L132.9,123.0 L135.0,120.0 L137.1,117.0 L139.2,114.1 L141.3,111.3 L143.4,108.5 L145.5,105.9 L147.5,103.5 L149.6,101.4 L151.7,99.4 L153.8,97.7 L155.9,96.3 L158.0,95.3 L160.1,94.5 L162.2,94.1 L164.3,94.0 L166.4,94.3 L168.5,94.9 L170.5,95.8 L172.6,97.0 L174.7,98.5 L176.8,100.4 L178.9,102.4 L181.0,104.7 L183.1,107.2 L185.2,109.9 L187.3,112.7 L189.4,115.6 L191.5,118.5 L193.5,121.5 L195.6,124.4 L197.7,127.3 L199.8,130.1 L201.9,132.8 L204.0,135.3 L206.1,137.6 L208.2,139.6 L210.3,141.5 L212.4,143.0 L214.5,144.2 L216.5,145.1 L218.6,145.7 L220.7,146.0 L222.8,145.9 L224.9,145.5 L227.0,144.7 L229.1,143.7 L231.2,142.3 L233.3,140.6 L235.4,138.6 L237.5,136.5 L239.5,134.1 L241.6,131.5 L243.7,128.7 L245.8,125.9 L247.9,123.0 L250.0,120.0" fill="none" stroke="#1e6b3c" stroke-width="2.2"/><line x1="258" y1="120" x2="300" y2="120" stroke="#1e6b3c" stroke-width="2.2" marker-end="url(#ar)"/><text class="lbm" x="20" y="164">a travelling wave arrives</text><text class="eqs" x="20" y="186">f<tspan font-size="10" dy="4">driving</tspan></text><rect x="310" y="60" width="320" height="120" rx="6" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="2.2"/><path d="M310.0,120.0 L312.9,118.8 L315.8,117.6 L318.7,116.4 L321.6,115.2 L324.5,114.0 L327.5,112.8 L330.4,111.7 L333.3,110.5 L336.2,109.3 L339.1,108.2 L342.0,107.0 L344.9,105.9 L347.8,104.8 L350.7,103.7 L353.6,102.6 L356.5,101.5 L359.5,100.4 L362.4,99.3 L365.3,98.3 L368.2,97.3 L371.1,96.3 L374.0,95.3 L376.9,94.4 L379.8,93.4 L382.7,92.5 L385.6,91.6 L388.5,90.7 L391.5,89.9 L394.4,89.1 L397.3,88.3 L400.2,87.5 L403.1,86.7 L406.0,86.0 L408.9,85.3 L411.8,84.7 L414.7,84.0 L417.6,83.4 L420.5,82.9 L423.5,82.3 L426.4,81.8 L429.3,81.3 L432.2,80.9 L435.1,80.4 L438.0,80.1 L440.9,79.7 L443.8,79.4 L446.7,79.1 L449.6,78.8 L452.5,78.6 L455.5,78.4 L458.4,78.3 L461.3,78.2 L464.2,78.1 L467.1,78.0 L470.0,78.0 L472.9,78.0 L475.8,78.1 L478.7,78.2 L481.6,78.3 L484.5,78.4 L487.5,78.6 L490.4,78.8 L493.3,79.1 L496.2,79.4 L499.1,79.7 L502.0,80.1 L504.9,80.4 L507.8,80.9 L510.7,81.3 L513.6,81.8 L516.5,82.3 L519.5,82.9 L522.4,83.4 L525.3,84.0 L528.2,84.7 L531.1,85.3 L534.0,86.0 L536.9,86.7 L539.8,87.5 L542.7,88.3 L545.6,89.1 L548.5,89.9 L551.5,90.7 L554.4,91.6 L557.3,92.5 L560.2,93.4 L563.1,94.4 L566.0,95.3 L568.9,96.3 L571.8,97.3 L574.7,98.3 L577.6,99.3 L580.5,100.4 L583.5,101.5 L586.4,102.6 L589.3,103.7 L592.2,104.8 L595.1,105.9 L598.0,107.0 L600.9,108.2 L603.8,109.3 L606.7,110.5 L609.6,111.7 L612.5,112.8 L615.5,114.0 L618.4,115.2 L621.3,116.4 L624.2,117.6 L627.1,118.8 L630.0,120.0" fill="none" stroke="#134a29" stroke-width="2.6"/><path d="M310.0,120.0 L312.9,121.2 L315.8,122.4 L318.7,123.6 L321.6,124.8 L324.5,126.0 L327.5,127.2 L330.4,128.3 L333.3,129.5 L336.2,130.7 L339.1,131.8 L342.0,133.0 L344.9,134.1 L347.8,135.2 L350.7,136.3 L353.6,137.4 L356.5,138.5 L359.5,139.6 L362.4,140.7 L365.3,141.7 L368.2,142.7 L371.1,143.7 L374.0,144.7 L376.9,145.6 L379.8,146.6 L382.7,147.5 L385.6,148.4 L388.5,149.3 L391.5,150.1 L394.4,150.9 L397.3,151.7 L400.2,152.5 L403.1,153.3 L406.0,154.0 L408.9,154.7 L411.8,155.3 L414.7,156.0 L417.6,156.6 L420.5,157.1 L423.5,157.7 L426.4,158.2 L429.3,158.7 L432.2,159.1 L435.1,159.6 L438.0,159.9 L440.9,160.3 L443.8,160.6 L446.7,160.9 L449.6,161.2 L452.5,161.4 L455.5,161.6 L458.4,161.7 L461.3,161.8 L464.2,161.9 L467.1,162.0 L470.0,162.0 L472.9,162.0 L475.8,161.9 L478.7,161.8 L481.6,161.7 L484.5,161.6 L487.5,161.4 L490.4,161.2 L493.3,160.9 L496.2,160.6 L499.1,160.3 L502.0,159.9 L504.9,159.6 L507.8,159.1 L510.7,158.7 L513.6,158.2 L516.5,157.7 L519.5,157.1 L522.4,156.6 L525.3,156.0 L528.2,155.3 L531.1,154.7 L534.0,154.0 L536.9,153.3 L539.8,152.5 L542.7,151.7 L545.6,150.9 L548.5,150.1 L551.5,149.3 L554.4,148.4 L557.3,147.5 L560.2,146.6 L563.1,145.6 L566.0,144.7 L568.9,143.7 L571.8,142.7 L574.7,141.7 L577.6,140.7 L580.5,139.6 L583.5,138.5 L586.4,137.4 L589.3,136.3 L592.2,135.2 L595.1,134.1 L598.0,133.0 L600.9,131.8 L603.8,130.7 L606.7,129.5 L609.6,128.3 L612.5,127.2 L615.5,126.0 L618.4,124.8 L621.3,123.6 L624.2,122.4 L627.1,121.2 L630.0,120.0" fill="none" stroke="#134a29" stroke-width="1" stroke-dasharray="4 4" opacity=".55"/><circle cx="310" cy="120" r="4.5" fill="#c77b1f"/><circle cx="630" cy="120" r="4.5" fill="#c77b1f"/><text class="lb" x="470" y="44" text-anchor="middle">trapped inside the cavity</text><text class="lbm" x="470" y="204" text-anchor="middle">it fits, so every arriving cycle adds energy in step</text><text class="lb" x="470" y="226" text-anchor="middle">amplitude builds &#8212; this is resonance</text><text class="eqs" x="646" y="116">f<tspan font-size="10" dy="4">cavity</tspan></text><text class="lbm" x="646" y="140">they match</text></svg>
+    <figcaption><b>Figure 1.</b> A travelling wave arrives at something that encloses a space.
+    If its frequency happens to fit, the wave is trapped as a standing wave and every arriving
+    cycle adds energy in step with the motion already there, so the amplitude builds. That is
+    resonance, and the body of the object then vibrates at the same frequency &mdash; which is how
+    a guitar turns a vibrating string into a sound you can hear across a room.</figcaption>
+  </figure>
+
+  <p>Have you ever experienced feeling the sudden shaking of a car when the car hits a certain
+  speed on a highway, and the vibration comes on only at that specific speed? Here, we say that
+  the car has <strong>a natural frequency that comes into resonance</strong> at a certain speed
+  when one of many vibrations that undoubtedly exist while driving on the road just happens to
+  match this natural frequency. This natural frequency is called the
+  <strong>resonance frequency</strong>.</p>
+
+  <p>All objects or any confined space have a set of <strong>natural frequencies or resonance
+  frequencies</strong>, and any time a traveling wave happens to fit or match any one of these
+  resonance frequencies, a standing wave forms within the object or confined space. When a
+  standing wave forms due to resonance, the object will vibrate with a large amplitude.</p>
+
+  <p>In a confined space, the resonance will generate the standing wave, which will vibrate the
+  object that created the confined space at that frequency. This is how all musical instruments
+  work. For example, when you pluck a guitar string, the string will vibrate, and because the wave
+  on the string is confined, you will have a standing wave matching the resonance frequency of the
+  string tied at both ends. As this standing wave vibrates the string, the guitar&rsquo;s body
+  vibrates at the same frequency, and the hollowed-out interior acts as an amplifying chamber,
+  making the tune audible.</p>
+
+  <p>When you tie a string at both ends, you confine the wave to zero amplitude at these ends.
+  This is quite obvious: the ends are fixed in space. This limitation, the immovable ends, means
+  that whatever standing waves happen to be present, the ends better have zero amplitudes.
+  Subsequently, you can make standing waves with more cycles (thus higher frequencies) by adding
+  half waves at a time. <strong>I emphasize that if you were to remember one thing about a
+  standing wave, this would be it.</strong> See below.</p>
+
+  <figure class="figure">
+    <svg viewBox="0 0 700 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A string fixed at both ends showing the first three standing wave modes: one, two and three half waves, at frequencies f, 2f and 3f."><style>.m{font:700 13px "Segoe UI",system-ui,sans-serif;fill:#134a29}.f{font:700 14px Charter,Georgia,serif;fill:#1e6b3c}.n{font:400 11px "Segoe UI",system-ui,sans-serif;fill:#5c6b62}</style><line x1="150" y1="58" x2="600" y2="58" stroke="#b7c6bc" stroke-width="1" stroke-dasharray="3 3"/><path d="M150.0,58.0 L154.1,57.0 L158.2,56.1 L162.3,55.1 L166.4,54.1 L170.5,53.2 L174.5,52.2 L178.6,51.2 L182.7,50.3 L186.8,49.4 L190.9,48.4 L195.0,47.5 L199.1,46.6 L203.2,45.7 L207.3,44.8 L211.4,43.9 L215.5,43.0 L219.5,42.1 L223.6,41.3 L227.7,40.4 L231.8,39.6 L235.9,38.8 L240.0,38.0 L244.1,37.2 L248.2,36.5 L252.3,35.7 L256.4,35.0 L260.5,34.3 L264.5,33.6 L268.6,33.0 L272.7,32.3 L276.8,31.7 L280.9,31.1 L285.0,30.5 L289.1,29.9 L293.2,29.4 L297.3,28.9 L301.4,28.4 L305.5,27.9 L309.5,27.5 L313.6,27.1 L317.7,26.7 L321.8,26.3 L325.9,26.0 L330.0,25.7 L334.1,25.4 L338.2,25.1 L342.3,24.9 L346.4,24.7 L350.5,24.5 L354.5,24.3 L358.6,24.2 L362.7,24.1 L366.8,24.1 L370.9,24.0 L375.0,24.0 L379.1,24.0 L383.2,24.1 L387.3,24.1 L391.4,24.2 L395.5,24.3 L399.5,24.5 L403.6,24.7 L407.7,24.9 L411.8,25.1 L415.9,25.4 L420.0,25.7 L424.1,26.0 L428.2,26.3 L432.3,26.7 L436.4,27.1 L440.5,27.5 L444.5,27.9 L448.6,28.4 L452.7,28.9 L456.8,29.4 L460.9,29.9 L465.0,30.5 L469.1,31.1 L473.2,31.7 L477.3,32.3 L481.4,33.0 L485.5,33.6 L489.5,34.3 L493.6,35.0 L497.7,35.7 L501.8,36.5 L505.9,37.2 L510.0,38.0 L514.1,38.8 L518.2,39.6 L522.3,40.4 L526.4,41.3 L530.5,42.1 L534.5,43.0 L538.6,43.9 L542.7,44.8 L546.8,45.7 L550.9,46.6 L555.0,47.5 L559.1,48.4 L563.2,49.4 L567.3,50.3 L571.4,51.2 L575.5,52.2 L579.5,53.2 L583.6,54.1 L587.7,55.1 L591.8,56.1 L595.9,57.0 L600.0,58.0" fill="none" stroke="#1e6b3c" stroke-width="2.4"/><path d="M150.0,58.0 L154.1,59.0 L158.2,59.9 L162.3,60.9 L166.4,61.9 L170.5,62.8 L174.5,63.8 L178.6,64.8 L182.7,65.7 L186.8,66.6 L190.9,67.6 L195.0,68.5 L199.1,69.4 L203.2,70.3 L207.3,71.2 L211.4,72.1 L215.5,73.0 L219.5,73.9 L223.6,74.7 L227.7,75.6 L231.8,76.4 L235.9,77.2 L240.0,78.0 L244.1,78.8 L248.2,79.5 L252.3,80.3 L256.4,81.0 L260.5,81.7 L264.5,82.4 L268.6,83.0 L272.7,83.7 L276.8,84.3 L280.9,84.9 L285.0,85.5 L289.1,86.1 L293.2,86.6 L297.3,87.1 L301.4,87.6 L305.5,88.1 L309.5,88.5 L313.6,88.9 L317.7,89.3 L321.8,89.7 L325.9,90.0 L330.0,90.3 L334.1,90.6 L338.2,90.9 L342.3,91.1 L346.4,91.3 L350.5,91.5 L354.5,91.7 L358.6,91.8 L362.7,91.9 L366.8,91.9 L370.9,92.0 L375.0,92.0 L379.1,92.0 L383.2,91.9 L387.3,91.9 L391.4,91.8 L395.5,91.7 L399.5,91.5 L403.6,91.3 L407.7,91.1 L411.8,90.9 L415.9,90.6 L420.0,90.3 L424.1,90.0 L428.2,89.7 L432.3,89.3 L436.4,88.9 L440.5,88.5 L444.5,88.1 L448.6,87.6 L452.7,87.1 L456.8,86.6 L460.9,86.1 L465.0,85.5 L469.1,84.9 L473.2,84.3 L477.3,83.7 L481.4,83.0 L485.5,82.4 L489.5,81.7 L493.6,81.0 L497.7,80.3 L501.8,79.5 L505.9,78.8 L510.0,78.0 L514.1,77.2 L518.2,76.4 L522.3,75.6 L526.4,74.7 L530.5,73.9 L534.5,73.0 L538.6,72.1 L542.7,71.2 L546.8,70.3 L550.9,69.4 L555.0,68.5 L559.1,67.6 L563.2,66.6 L567.3,65.7 L571.4,64.8 L575.5,63.8 L579.5,62.8 L583.6,61.9 L587.7,60.9 L591.8,59.9 L595.9,59.0 L600.0,58.0" fill="none" stroke="#1e6b3c" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/><line x1="150" y1="14" x2="150" y2="102" stroke="#1d2b23" stroke-width="3"/><line x1="600" y1="14" x2="600" y2="102" stroke="#1d2b23" stroke-width="3"/><circle cx="150.0" cy="58" r="4.5" fill="#c77b1f"/><circle cx="600.0" cy="58" r="4.5" fill="#c77b1f"/><text class="m" x="136" y="63" text-anchor="end">one half wave</text><text class="f" x="616" y="59">f</text><text class="n" x="616" y="76">&#955; = 2L</text><line x1="150" y1="163" x2="600" y2="163" stroke="#b7c6bc" stroke-width="1" stroke-dasharray="3 3"/><path d="M150.0,163.0 L154.1,161.1 L158.2,159.1 L162.3,157.2 L166.4,155.3 L170.5,153.4 L174.5,151.6 L178.6,149.8 L182.7,148.0 L186.8,146.3 L190.9,144.6 L195.0,143.0 L199.1,141.5 L203.2,140.0 L207.3,138.6 L211.4,137.3 L215.5,136.1 L219.5,134.9 L223.6,133.9 L227.7,132.9 L231.8,132.1 L235.9,131.3 L240.0,130.7 L244.1,130.1 L248.2,129.7 L252.3,129.3 L256.4,129.1 L260.5,129.0 L264.5,129.0 L268.6,129.1 L272.7,129.3 L276.8,129.7 L280.9,130.1 L285.0,130.7 L289.1,131.3 L293.2,132.1 L297.3,132.9 L301.4,133.9 L305.5,134.9 L309.5,136.1 L313.6,137.3 L317.7,138.6 L321.8,140.0 L325.9,141.5 L330.0,143.0 L334.1,144.6 L338.2,146.3 L342.3,148.0 L346.4,149.8 L350.5,151.6 L354.5,153.4 L358.6,155.3 L362.7,157.2 L366.8,159.1 L370.9,161.1 L375.0,163.0 L379.1,164.9 L383.2,166.9 L387.3,168.8 L391.4,170.7 L395.5,172.6 L399.5,174.4 L403.6,176.2 L407.7,178.0 L411.8,179.7 L415.9,181.4 L420.0,183.0 L424.1,184.5 L428.2,186.0 L432.3,187.4 L436.4,188.7 L440.5,189.9 L444.5,191.1 L448.6,192.1 L452.7,193.1 L456.8,193.9 L460.9,194.7 L465.0,195.3 L469.1,195.9 L473.2,196.3 L477.3,196.7 L481.4,196.9 L485.5,197.0 L489.5,197.0 L493.6,196.9 L497.7,196.7 L501.8,196.3 L505.9,195.9 L510.0,195.3 L514.1,194.7 L518.2,193.9 L522.3,193.1 L526.4,192.1 L530.5,191.1 L534.5,189.9 L538.6,188.7 L542.7,187.4 L546.8,186.0 L550.9,184.5 L555.0,183.0 L559.1,181.4 L563.2,179.7 L567.3,178.0 L571.4,176.2 L575.5,174.4 L579.5,172.6 L583.6,170.7 L587.7,168.8 L591.8,166.9 L595.9,164.9 L600.0,163.0" fill="none" stroke="#1e6b3c" stroke-width="2.4"/><path d="M150.0,163.0 L154.1,164.9 L158.2,166.9 L162.3,168.8 L166.4,170.7 L170.5,172.6 L174.5,174.4 L178.6,176.2 L182.7,178.0 L186.8,179.7 L190.9,181.4 L195.0,183.0 L199.1,184.5 L203.2,186.0 L207.3,187.4 L211.4,188.7 L215.5,189.9 L219.5,191.1 L223.6,192.1 L227.7,193.1 L231.8,193.9 L235.9,194.7 L240.0,195.3 L244.1,195.9 L248.2,196.3 L252.3,196.7 L256.4,196.9 L260.5,197.0 L264.5,197.0 L268.6,196.9 L272.7,196.7 L276.8,196.3 L280.9,195.9 L285.0,195.3 L289.1,194.7 L293.2,193.9 L297.3,193.1 L301.4,192.1 L305.5,191.1 L309.5,189.9 L313.6,188.7 L317.7,187.4 L321.8,186.0 L325.9,184.5 L330.0,183.0 L334.1,181.4 L338.2,179.7 L342.3,178.0 L346.4,176.2 L350.5,174.4 L354.5,172.6 L358.6,170.7 L362.7,168.8 L366.8,166.9 L370.9,164.9 L375.0,163.0 L379.1,161.1 L383.2,159.1 L387.3,157.2 L391.4,155.3 L395.5,153.4 L399.5,151.6 L403.6,149.8 L407.7,148.0 L411.8,146.3 L415.9,144.6 L420.0,143.0 L424.1,141.5 L428.2,140.0 L432.3,138.6 L436.4,137.3 L440.5,136.1 L444.5,134.9 L448.6,133.9 L452.7,132.9 L456.8,132.1 L460.9,131.3 L465.0,130.7 L469.1,130.1 L473.2,129.7 L477.3,129.3 L481.4,129.1 L485.5,129.0 L489.5,129.0 L493.6,129.1 L497.7,129.3 L501.8,129.7 L505.9,130.1 L510.0,130.7 L514.1,131.3 L518.2,132.1 L522.3,132.9 L526.4,133.9 L530.5,134.9 L534.5,136.1 L538.6,137.3 L542.7,138.6 L546.8,140.0 L550.9,141.5 L555.0,143.0 L559.1,144.6 L563.2,146.3 L567.3,148.0 L571.4,149.8 L575.5,151.6 L579.5,153.4 L583.6,155.3 L587.7,157.2 L591.8,159.1 L595.9,161.1 L600.0,163.0" fill="none" stroke="#1e6b3c" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/><line x1="150" y1="119" x2="150" y2="207" stroke="#1d2b23" stroke-width="3"/><line x1="600" y1="119" x2="600" y2="207" stroke="#1d2b23" stroke-width="3"/><circle cx="150.0" cy="163" r="4.5" fill="#c77b1f"/><circle cx="375.0" cy="163" r="4.5" fill="#c77b1f"/><circle cx="600.0" cy="163" r="4.5" fill="#c77b1f"/><text class="m" x="136" y="168" text-anchor="end">two half waves</text><text class="f" x="616" y="164">2f</text><text class="n" x="616" y="181">&#955; = L</text><line x1="150" y1="268" x2="600" y2="268" stroke="#b7c6bc" stroke-width="1" stroke-dasharray="3 3"/><path d="M150.0,268.0 L154.1,265.1 L158.2,262.2 L162.3,259.4 L166.4,256.6 L170.5,253.9 L174.5,251.3 L178.6,248.8 L182.7,246.5 L186.8,244.3 L190.9,242.3 L195.0,240.5 L199.1,238.9 L203.2,237.5 L207.3,236.3 L211.4,235.4 L215.5,234.7 L219.5,234.2 L223.6,234.0 L227.7,234.1 L231.8,234.3 L235.9,234.9 L240.0,235.7 L244.1,236.7 L248.2,237.9 L252.3,239.4 L256.4,241.1 L260.5,243.0 L264.5,245.0 L268.6,247.2 L272.7,249.6 L276.8,252.1 L280.9,254.8 L285.0,257.5 L289.1,260.3 L293.2,263.2 L297.3,266.1 L301.4,269.0 L305.5,271.9 L309.5,274.8 L313.6,277.6 L317.7,280.3 L321.8,283.0 L325.9,285.6 L330.0,288.0 L334.1,290.3 L338.2,292.4 L342.3,294.3 L346.4,296.1 L350.5,297.6 L354.5,298.9 L358.6,300.0 L362.7,300.9 L366.8,301.5 L370.9,301.9 L375.0,302.0 L379.1,301.9 L383.2,301.5 L387.3,300.9 L391.4,300.0 L395.5,298.9 L399.5,297.6 L403.6,296.1 L407.7,294.3 L411.8,292.4 L415.9,290.3 L420.0,288.0 L424.1,285.6 L428.2,283.0 L432.3,280.3 L436.4,277.6 L440.5,274.8 L444.5,271.9 L448.6,269.0 L452.7,266.1 L456.8,263.2 L460.9,260.3 L465.0,257.5 L469.1,254.8 L473.2,252.1 L477.3,249.6 L481.4,247.2 L485.5,245.0 L489.5,243.0 L493.6,241.1 L497.7,239.4 L501.8,237.9 L505.9,236.7 L510.0,235.7 L514.1,234.9 L518.2,234.3 L522.3,234.1 L526.4,234.0 L530.5,234.2 L534.5,234.7 L538.6,235.4 L542.7,236.3 L546.8,237.5 L550.9,238.9 L555.0,240.5 L559.1,242.3 L563.2,244.3 L567.3,246.5 L571.4,248.8 L575.5,251.3 L579.5,253.9 L583.6,256.6 L587.7,259.4 L591.8,262.2 L595.9,265.1 L600.0,268.0" fill="none" stroke="#1e6b3c" stroke-width="2.4"/><path d="M150.0,268.0 L154.1,270.9 L158.2,273.8 L162.3,276.6 L166.4,279.4 L170.5,282.1 L174.5,284.7 L178.6,287.2 L182.7,289.5 L186.8,291.7 L190.9,293.7 L195.0,295.5 L199.1,297.1 L203.2,298.5 L207.3,299.7 L211.4,300.6 L215.5,301.3 L219.5,301.8 L223.6,302.0 L227.7,301.9 L231.8,301.7 L235.9,301.1 L240.0,300.3 L244.1,299.3 L248.2,298.1 L252.3,296.6 L256.4,294.9 L260.5,293.0 L264.5,291.0 L268.6,288.8 L272.7,286.4 L276.8,283.9 L280.9,281.2 L285.0,278.5 L289.1,275.7 L293.2,272.8 L297.3,269.9 L301.4,267.0 L305.5,264.1 L309.5,261.2 L313.6,258.4 L317.7,255.7 L321.8,253.0 L325.9,250.4 L330.0,248.0 L334.1,245.7 L338.2,243.6 L342.3,241.7 L346.4,239.9 L350.5,238.4 L354.5,237.1 L358.6,236.0 L362.7,235.1 L366.8,234.5 L370.9,234.1 L375.0,234.0 L379.1,234.1 L383.2,234.5 L387.3,235.1 L391.4,236.0 L395.5,237.1 L399.5,238.4 L403.6,239.9 L407.7,241.7 L411.8,243.6 L415.9,245.7 L420.0,248.0 L424.1,250.4 L428.2,253.0 L432.3,255.7 L436.4,258.4 L440.5,261.2 L444.5,264.1 L448.6,267.0 L452.7,269.9 L456.8,272.8 L460.9,275.7 L465.0,278.5 L469.1,281.2 L473.2,283.9 L477.3,286.4 L481.4,288.8 L485.5,291.0 L489.5,293.0 L493.6,294.9 L497.7,296.6 L501.8,298.1 L505.9,299.3 L510.0,300.3 L514.1,301.1 L518.2,301.7 L522.3,301.9 L526.4,302.0 L530.5,301.8 L534.5,301.3 L538.6,300.6 L542.7,299.7 L546.8,298.5 L550.9,297.1 L555.0,295.5 L559.1,293.7 L563.2,291.7 L567.3,289.5 L571.4,287.2 L575.5,284.7 L579.5,282.1 L583.6,279.4 L587.7,276.6 L591.8,273.8 L595.9,270.9 L600.0,268.0" fill="none" stroke="#1e6b3c" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/><line x1="150" y1="224" x2="150" y2="312" stroke="#1d2b23" stroke-width="3"/><line x1="600" y1="224" x2="600" y2="312" stroke="#1d2b23" stroke-width="3"/><circle cx="150.0" cy="268" r="4.5" fill="#c77b1f"/><circle cx="300.0" cy="268" r="4.5" fill="#c77b1f"/><circle cx="450.0" cy="268" r="4.5" fill="#c77b1f"/><circle cx="600.0" cy="268" r="4.5" fill="#c77b1f"/><text class="m" x="136" y="273" text-anchor="end">three half waves</text><text class="f" x="616" y="269">3f</text><text class="n" x="616" y="286">&#955; = 2L/3</text><line x1="150" y1="322" x2="600" y2="322" stroke="#5c6b62" stroke-width="1"/><line x1="150" y1="316" x2="150" y2="328" stroke="#5c6b62" stroke-width="1"/><line x1="600" y1="316" x2="600" y2="328" stroke="#5c6b62" stroke-width="1"/><text class="n" x="375.0" y="318" text-anchor="middle">length of the string, L</text><text class="n" x="12" y="346">orange dots: points that never move</text></svg>
+    <figcaption><b>Figure 2.</b> The ends cannot move, so only shapes with zero amplitude at both
+    ends survive. The longest one that fits is half a wave; after that you add half a wave at a
+    time, and the frequency goes up in whole-number steps &mdash; <b>f, 2f, 3f</b>. The dashed
+    curve is the same wave half a cycle later: the orange points never move at all, and everything
+    between them flips back and forth between the two curves.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Try it on an instrument</span>
+    Rest a finger <em>lightly</em> on a guitar string directly over the 12th fret &mdash; do not
+    press it down &mdash; and pluck. You hear the note an octave up. You just forced a point that
+    cannot move at the middle of the string, so the one-half-wave shape is no longer allowed and
+    the two-half-wave shape sounds instead: exactly 2f. Over the 7th fret you force a node a third
+    of the way along and get 3f. Figure 2, audible, on an instrument you already own.
+  </div>
+
+  <h2>What to think about while you watch</h2>
+
+  <p>In this note, you will watch two videos showing what can happen when you generate standing
+  waves in objects. When you watch the videos, I want you to think about:</p>
+
+  <ol class="think">
+    <li>The traveling waves generated from a source are the <b>driving waves</b> that excite the
+    object and whose frequencies are the so-called <b>driving frequencies</b>.</li>
+    <li>The condition for exciting the object&rsquo;s natural frequency creating resonance.</li>
+    <li>When the resonance condition is met, what happens to the wave&rsquo;s amplitude in the
+    object?</li>
+    <li>What happens when the resonance frequency of the object is inadvertently excited? Is the
+    resonance phenomenon a good thing from a structural engineering perspective?</li>
+  </ol>
+
+  <p>Finally, find out why Millenium Bridge in London, UK, was shut down for many months and what
+  the fixes were.</p>
+
+  <div class="synopsis">
+    <span class="label">Performance Expectations</span>
+    Perform the Claim, Evidence, Reason (CER) exercises about standing waves and resonance.
+    Describe conditions for generating standing waves and resonance. Discuss the potential
+    engineering uses and challenges related to standing waves and resonance.
+  </div>
+
+  <div class="videoslot">
+    <span class="label">Walk-through video</span>
+    <p>A recording of me working through this note will be posted here.</p>
+  </div>
+
+  <h2>Instructions and Questions</h2>
+
+  <p class="handoutnote">Write your answers on the printed handout &mdash; the reveals below are
+  for checking your thinking <em>after</em> you have written something, not instead of it.</p>
+
+  <h3>Video 1 &mdash; Tacoma bridge collapse, 1940</h3>
+
+  <a class="dl-card vid" href="https://www.youtube.com/watch?v=FfNBIRdreHg" target="_blank" rel="noopener">
+    <span class="kind">Watch &middot; YouTube</span>
+    <span class="name">Tacoma bridge collapse 1940</span>
+    <span class="hint">youtube.com/watch?v=FfNBIRdreHg</span>
+  </a>
+
+  <ol class="steps questions">
+    <li><p>Briefly describe what happened.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>
+      <p>The deck of the bridge did not simply sway &mdash; it <b>twisted</b>, one side rising as
+      the other fell, in a steady rhythm that kept growing for about an hour in a wind of only
+      around 40 mph, until it tore itself apart. The wind was never strong; the motion was.</p></div></div></li>
+    <li><p><b>Claim</b> (Answer the question, providing hypothesis) &mdash; &ldquo;Why did the
+      bridge collapse?&rdquo;</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>
+      <p>Because the wind fed energy into the bridge at one of the bridge&rsquo;s own natural
+      frequencies &mdash; a twisting mode &mdash; so instead of the motion dying away, each cycle
+      arrived in step with the motion already there and the amplitude grew until the steel
+      failed.</p></div></div></li>
+    <li><p><b>Evidence</b> (Describe your observations or cite any relevant data.)</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>
+      <ul><li>The motion had <b>one steady frequency and one shape</b> &mdash; a twist with the
+      centre line staying put, exactly like a standing wave with a node down the middle.</li>
+      <li>The amplitude <b>grew over time</b> while the wind speed stayed roughly constant, so the
+      energy was accumulating rather than being supplied in a single gust.</li>
+      <li>The motion carried on long after any one gust had passed.</li></ul></div></div></li>
+    <li><p><b>Reasoning</b> (Providing scientific rationale for your claims, backing them up with
+      your observations. Incorporate i)&ndash;iv) in your answer.)</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>
+      <p>The wind flowing past the deck shed a regular train of vortices &mdash; that is the
+      <b>driving wave</b>, and its rate is the <b>driving frequency</b> (i). The bridge, like
+      every object, had its own set of natural frequencies; the <b>resonance condition</b> is the
+      driving frequency arriving at one of them (ii). When that condition is met, energy is added
+      in phase on every cycle while damping removes less than is added, so the <b>amplitude
+      grows</b> rather than settling (iii). Here that was catastrophic &mdash; so from an
+      engineering point of view resonance is a hazard to be designed against (iv), even though it
+      is the very thing that makes a guitar work.</p></div></div></li>
+  </ol>
+
+  <h3>Video 2 &mdash; the opera singer and the glass</h3>
+
+  <a class="dl-card vid" href="https://www.youtube.com/watch?v=uDyri-KPOAc" target="_blank" rel="noopener">
+    <span class="kind">Watch &middot; YouTube</span>
+    <span class="name">Failure is not an option for this Opera Singer</span>
+    <span class="hint">youtube.com/watch?v=uDyri-KPOAc</span>
+  </a>
+
+  <ol class="steps questions alt">
+    <li><p>Briefly describe what happened.</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>
+      <p>She finds the glass&rsquo;s own pitch first, then sings that one note loudly and holds
+      it. In slow motion the rim can be seen flexing &mdash; squashing into an oval one way, then
+      the other &mdash; with the flexing getting bigger the longer she holds the note, until the
+      glass cracks.</p></div></div></li>
+    <li><p><b>Claim</b> &mdash; &ldquo;How did the opera singer break the glass?&rdquo;</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>
+      <p>By driving the glass at its own resonance frequency, loudly enough and for long enough
+      that the amplitude of the rim&rsquo;s vibration grew past what the glass could survive.</p></div></div></li>
+    <li><p><b>Evidence</b></p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>
+      <ul><li>She <b>tapped or listened to the glass first</b> to find the pitch &mdash; the note
+      is not arbitrary.</li>
+      <li>The slow motion shows a <b>standing wave on the rim</b>, with fixed points that do not
+      move and an oval that alternates direction.</li>
+      <li>The glass breaks <b>after</b> the note is held, not the instant it starts: the amplitude
+      had to accumulate.</li></ul></div></div></li>
+    <li><p><b>Reasoning</b> (Incorporate i)&ndash;iv) in your answer.)</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show what to look for" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show what to look for</span></button><div class="rv-panel" hidden>
+      <p>Her voice is the <b>driving wave</b> and the pitch she sings is the <b>driving
+      frequency</b> (i). Matching it to the glass&rsquo;s natural frequency is the
+      <b>resonance condition</b> (ii), and once met the rim&rsquo;s <b>amplitude grows</b> cycle
+      after cycle (iii). Same physics as the bridge, different scale: one broke a glass, one
+      destroyed a bridge (iv). A thin, low-damping glass works best because less energy leaks away
+      between cycles, so more of it accumulates.</p></div></div></li>
+  </ol>
+
+  <h2>To find out</h2>
+
+  <div class="tip">
+    <span class="label">Take-home question</span>
+    Why was the <b>Millennium Bridge</b> in London shut down soon after it opened, and what were
+    the fixes? Look it up. The driver in that case was not wind &mdash; it was the people walking
+    across it, and what they did without meaning to is the whole story.
+  </div>
+
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY105/handouts/M1_N5_Standing_Waves_And_Resonance_Handout.pdf">
+      <span class="kind">Print &middot; PDF</span>
+      <span class="name">Note 5 handout</span>
+      <span class="hint">3 pages &mdash; the sheet we write on in class</span>
+    </a>
+  </div>
+
+  <div class="printfiles"><b>Handout:</b> M1_N5_Standing_Waves_And_Resonance_Handout.pdf</div>
+
+  <footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 105</footer>
+
+</div>
+
+<script>
+/* Sequential reveals, per the Deferred_Reveal_Convention: a reveal only unlocks
+   once every earlier one on the page has been opened, so students meet the
+   questions in page order instead of scrolling to the end. */
+(function(){
+  var btns = Array.prototype.slice.call(document.querySelectorAll('.reveal > button'));
+  function sync(){
+    var firstLocked = -1;
+    btns.forEach(function(b,i){
+      var open = b.getAttribute('aria-expanded') === 'true';
+      if (!open && firstLocked < 0) firstLocked = i;
+    });
+    btns.forEach(function(b,i){
+      var open = b.getAttribute('aria-expanded') === 'true';
+      var allow = open || firstLocked < 0 || i <= firstLocked;
+      b.disabled = !allow;
+      b.title = allow ? '' : 'Work through the earlier questions first.';
+    });
+  }
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var open = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', open ? 'false' : 'true');
+      var panel = b.nextElementSibling;
+      panel.hidden = open;
+      b.querySelector('.rv-label').textContent = open ? b.dataset.show : b.dataset.hide;
+      sync();
+      if (window.dispatchEvent) window.dispatchEvent(new Event('resize'));
+    });
+  });
+  sync();
+})();
+</script>
+
+<script>
+function reportHeight(){ parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - fixes the first-paint WIDTH race. See the
+   Autosize_Backfill_Runbook; identical to the copy in N4a/N4b. */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){
+    var el = document.querySelector('.note-wrap') || document.body;
+    var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height
+      + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+  }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    var w = document.querySelector('.note-wrap'); if (w) ro.observe(w);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>
