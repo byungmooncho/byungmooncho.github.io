@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch06d &mdash; The Conical Pendulum</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 118 - Module 5 - Chapter 6 (College Physics) - Trevor slides 06f
+     "The Conical Pendulum" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     CORRECTION CARRIED. Slide 5 substitutes r/sqrt(L^2-r^2) for cos(theta)
+     when solving F_t = mg/cos(theta), and prints F_t = mg sqrt(L^2-r^2) / r.
+     That expression is tan(theta) in the denominator, not cos(theta); the
+     slide's own stated limits (F_t -> mg as r -> 0, F_t -> infinity as
+     r -> L) contradict it and confirm the corrected form,
+     F_t = mgL / sqrt(L^2 - r^2), which is what this page gives. Flagged for
+     Cho 2026-10-19 alongside the 06a slide-11 sign typo.
+
+     Slides 3, 4 and 5 are one worked solution in three stages and share one
+     figure set; the FBD progression is drawn once (playbook Step 0a).
+
+     This page is AUTHORED for this course from the deck, not generated from
+     any other page (playbook Step 1). The deck carries no unit-vector notation
+     and no calculus, so nothing needed stripping. The slide-5 correction above
+     belongs on both courses' pages and is applied on both.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+  .rad{ border-top:1px solid currentColor; padding:0 .15em; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 6 (College Physics) &middot; Slides 06f</span>
+  </div>
+
+  <h1>The Conical Pendulum</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;118.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Hang a ball on a string and swing it so it sweeps out a horizontal circle instead of a back-and-forth
+    arc. The string now traces a cone, and the problem becomes the cleanest worked example in the
+    module: <b>two directions, two different statements.</b> Vertically nothing is accelerating, so
+    the forces balance. Horizontally everything is accelerating, so the forces do not. One tension
+    does both jobs, and resolving it into components is the entire solution.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Resolving a vector into components from Module&nbsp;2, free-body diagrams from Module&nbsp;3, and
+    from <b>Ch06a</b> the banked-aeroplane pattern &mdash; vertical equilibrium alongside horizontal
+    Newton's second law. The conical pendulum is that same pattern with a string instead of a wing.
+  </div>
+
+  <h2 id="what-it-is">What a conical pendulum is</h2>
+
+  <p>An object on a string that moves in a horizontal circular path rather than back and forth like
+     an ordinary pendulum. The string sweeps the surface of a cone &mdash; hence the name &mdash;
+     and stays at a fixed angle <span class="m">&theta;</span> from the vertical while it does.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A conical pendulum. A string of length L hangs from a fixed pivot and makes an angle theta with the vertical. The bob at the lower end travels round a horizontal circle of radius r, drawn as a dashed ellipse, with the vertical axis from the pivot down to the centre of that circle.">
+      <line x1="196" y1="36" x2="304" y2="36" stroke="var(--ink)" stroke-width="3"/>
+      <line x1="202" y1="36" x2="194" y2="26" stroke="var(--muted)" stroke-width="1.4"/>
+      <line x1="222" y1="36" x2="214" y2="26" stroke="var(--muted)" stroke-width="1.4"/>
+      <line x1="242" y1="36" x2="234" y2="26" stroke="var(--muted)" stroke-width="1.4"/>
+      <line x1="262" y1="36" x2="254" y2="26" stroke="var(--muted)" stroke-width="1.4"/>
+      <line x1="282" y1="36" x2="274" y2="26" stroke="var(--muted)" stroke-width="1.4"/>
+
+      <line x1="250" y1="40" x2="250" y2="230" stroke="var(--amber)" stroke-width="1.6" stroke-dasharray="6 5"/>
+      <ellipse cx="250" cy="230" rx="100" ry="26" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <line x1="250" y1="230" x2="350" y2="230" stroke="var(--amber)" stroke-width="1.6" stroke-dasharray="6 5"/>
+      <text class="lbl" x="296" y="220">r</text>
+
+      <line x1="250" y1="40" x2="150" y2="230" stroke="var(--ink)" stroke-width="2"/>
+      <circle cx="150" cy="230" r="10" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <text class="lbl" x="186" y="124" text-anchor="end">L</text>
+
+      <path d="M250,88 A48,48 0 0 1 227.6,82.5" fill="none" stroke="var(--red)" stroke-width="1.8"/>
+      <text class="lbl" x="258" y="80" fill="var(--red)">&theta;</text>
+
+      <text class="sm" x="430" y="140">the bob sweeps a horizontal</text>
+      <text class="sm" x="430" y="158">circle of radius r;</text>
+      <text class="sm" x="430" y="184">the string sweeps a cone</text>
+      <text class="sm" x="430" y="202">of half-angle &theta;.</text>
+    </svg>
+    <figcaption>The geometry. <span class="m">L</span> is fixed by the string,
+      <span class="m">&theta;</span> by how fast it is going, and
+      <span class="m">r</span> follows from the two.</figcaption>
+  </figure>
+
+  <h2 id="components">Resolve the tension, then apply Newton's second law twice</h2>
+
+  <p>Only two forces act on the bob: the tension along the string and its weight. The tension is the
+     awkward one, because it points neither straight up nor towards the centre &mdash; so split it.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Two free-body diagrams of the bob side by side. On the left, the tension points up along the string at an angle theta from the vertical, and the weight points straight down. On the right, the same tension is replaced by its vertical component pointing up and its horizontal component pointing towards the centre, with the original tension shown faded.">
+      <defs>
+        <marker id="k1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="k1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="k1f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="#f0b9b2"/></marker>
+      </defs>
+
+      <!-- panel A -->
+      <line x1="160" y1="150" x2="160" y2="92" stroke="var(--rule)" stroke-width="1.4" stroke-dasharray="4 4"/>
+      <circle cx="160" cy="150" r="6" fill="var(--blue)"/>
+      <line x1="160" y1="150" x2="204.3" y2="65.9" stroke="var(--red)" stroke-width="2.8" marker-end="url(#k1r)"/>
+      <line x1="160" y1="150" x2="160" y2="238" stroke="var(--green)" stroke-width="2.8" marker-end="url(#k1g)"/>
+      <path d="M160,110 A40,40 0 0 1 178.6,114.6" fill="none" stroke="var(--red)" stroke-width="1.6"/>
+      <text class="lbl" x="188" y="110" fill="var(--red)">&theta;</text>
+      <text class="lbl" x="212" y="64" fill="var(--red)">F<tspan font-size="11">t</tspan></text>
+      <text class="lbl" x="170" y="206" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="160" y="272" text-anchor="middle">the two real forces</text>
+
+      <!-- panel B -->
+      <circle cx="430" cy="150" r="6" fill="var(--blue)"/>
+      <line x1="430" y1="150" x2="474.3" y2="65.9" stroke="#f0b9b2" stroke-width="2.6" marker-end="url(#k1f)"/>
+      <line x1="430" y1="150" x2="430" y2="66" stroke="var(--red)" stroke-width="2.8" marker-end="url(#k1r)"/>
+      <line x1="430" y1="150" x2="476" y2="150" stroke="var(--red)" stroke-width="2.8" marker-end="url(#k1r)"/>
+      <line x1="430" y1="150" x2="430" y2="238" stroke="var(--green)" stroke-width="2.8" marker-end="url(#k1g)"/>
+      <text class="lbl" x="412" y="92" text-anchor="end" fill="var(--red)">F<tspan font-size="11">ty</tspan></text>
+      <text class="lbl" x="486" y="145" fill="var(--red)">F<tspan font-size="11">tx</tspan></text>
+      <text class="lbl" x="440" y="206" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="430" y="272" text-anchor="middle">the tension resolved</text>
+
+      <text class="lbl" x="556" y="112">F<tspan font-size="11">ty</tspan> = F<tspan font-size="11">t</tspan> cos &theta;</text>
+      <text class="lbl" x="556" y="150">F<tspan font-size="11">tx</tspan> = F<tspan font-size="11">t</tspan> sin &theta;</text>
+    </svg>
+    <figcaption>The vertical component holds the bob up; the horizontal component points at the
+      centre of the circle and is the entire centripetal force.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Two directions, two different statements</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th style="width:50%"><span class="m">y</span> direction &mdash; nothing is accelerating</th>
+            <th><span class="m">x</span> direction &mdash; everything is</th></tr>
+        <tr>
+          <td><span class="m">m</span><span class="m">a</span><sub>y</sub> = <span class="m">F</span><sub>ty</sub> &minus; <span class="m">F</span><sub>g</sub>, with <span class="m">a</span><sub>y</sub> = 0</td>
+          <td><span class="m">m</span><span class="m">a</span><sub>c</sub> = <span class="m">F</span><sub>tx</sub></td>
+        </tr>
+        <tr>
+          <td><span class="m">m</span><span class="m">g</span> = <span class="m">F</span><sub>t</sub> cos <span class="m">&theta;</span></td>
+          <td><span class="m">m</span><span class="m">a</span><sub>c</sub> = <span class="m">F</span><sub>t</sub> sin <span class="m">&theta;</span></td>
+        </tr>
+        <tr>
+          <td><b><span class="m">F</span><sub>t</sub> =
+            <span class="frac"><span class="top"><span class="m">m</span><span class="m">g</span></span><span class="bot">cos <span class="m">&theta;</span></span></span></b></td>
+          <td><span class="m">m</span><span class="m">a</span><sub>c</sub> =
+            <span class="frac"><span class="top"><span class="m">m</span><span class="m">g</span></span><span class="bot">cos <span class="m">&theta;</span></span></span>
+            sin <span class="m">&theta;</span>
+            &nbsp;&rArr;&nbsp;
+            <b><span class="m">a</span><sub>c</sub> = <span class="m">g</span> tan <span class="m">&theta;</span></b></td>
+        </tr>
+      </table>
+      <p class="why">The left column is solved first and then substituted into the right &mdash; that
+        is the whole trick. The mass cancels out of the horizontal result, so the angle a conical
+        pendulum settles at depends on its speed and nothing else.</p>
+    </div>
+  </div>
+
+  <h2 id="how-fast">How fast must it move for a given radius?</h2>
+
+  <p>Trevor's framing is worth keeping: <span class="m">a</span><sub>c</sub> = <span class="m">g</span> tan <span class="m">&theta;</span>
+     is <em>one way to express</em> the centripetal acceleration, and
+     <span class="m">a</span><sub>c</sub> = <span class="m">v</span><sup>2</sup>/<span class="m">r</span>
+     is <em>the definition</em> of it. Setting the two equal is what turns a force balance into a speed.</p>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        = <span class="m">g</span> tan <span class="m">&theta;</span>
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">v</span><sup>2</sup> = <span class="m">g&thinsp;r</span>
+        <span class="frac"><span class="top">sin <span class="m">&theta;</span></span><span class="bot">cos <span class="m">&theta;</span></span></span>
+      </div>
+      <p class="why">Which is an answer in terms of the angle. To get it in terms of the lengths you
+        can actually measure &mdash; the string and the radius &mdash; you need the geometry below.</p>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 250" role="img" aria-label="The right triangle formed by the string. The hypotenuse is the string of length L, the horizontal side is the radius r, and the vertical side is the square root of L squared minus r squared. The angle theta sits at the pivot, between the vertical side and the string.">
+      <line x1="200" y1="50" x2="200" y2="190" stroke="var(--blue)" stroke-width="2"/>
+      <line x1="200" y1="190" x2="120" y2="190" stroke="var(--amber)" stroke-width="2"/>
+      <line x1="200" y1="50" x2="120" y2="190" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="200" y="178" width="12" height="12" fill="none" stroke="var(--muted)" stroke-width="1.2" transform="translate(-12,0)"/>
+      <circle cx="120" cy="190" r="8" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.5"/>
+
+      <path d="M200,90 A40,40 0 0 1 177.4,84.3" fill="none" stroke="var(--red)" stroke-width="1.6"/>
+      <text class="lbl" x="208" y="82" fill="var(--red)">&theta;</text>
+      <text class="lbl" x="146" y="112" text-anchor="end">L</text>
+      <text class="lbl" x="212" y="128" fill="var(--blue)">&radic;<tspan class="rad">L&sup2; &minus; r&sup2;</tspan></text>
+      <text class="lbl" x="158" y="212" text-anchor="middle" fill="var(--amber)">r</text>
+
+      <text class="lbl" x="350" y="86">sin &theta; = r / L</text>
+      <text class="lbl" x="350" y="136">cos &theta; = &radic;<tspan class="rad">L&sup2; &minus; r&sup2;</tspan> / L</text>
+      <text class="lbl" x="350" y="186">tan &theta; = r / &radic;<tspan class="rad">L&sup2; &minus; r&sup2;</tspan></text>
+    </svg>
+    <figcaption>The string, the radius and the height form a right triangle, so every trig function
+      of <span class="m">&theta;</span> can be written with <span class="m">L</span> and
+      <span class="m">r</span> alone.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The speed, in measurable quantities</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">v</span><sup>2</sup> = <span class="m">g&thinsp;r</span> tan <span class="m">&theta;</span>
+        = <span class="m">g&thinsp;r</span>
+        <span class="frac"><span class="top"><span class="m">r</span></span><span class="bot">&radic;<span class="rad"><span class="m">L</span><sup>2</sup> &minus; <span class="m">r</span><sup>2</sup></span></span></span>
+      </div>
+      <p class="why">Tie a known length of string, pick the radius you want the bob to sweep, and
+        this is the speed it must have. Note what happens as the circle widens towards the full
+        string length: the denominator collapses and the required speed runs away.</p>
+    </div>
+  </div>
+
+  <h2 id="tension">What is the tension at a given radius?</h2>
+
+  <p>The same geometry answers the other question. Start from the vertical equation and substitute
+     cos <span class="m">&theta;</span>.</p>
+
+  <div class="mathblock">
+    <div class="head">The tension, in measurable quantities</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">F</span><sub>t</sub> =
+        <span class="frac"><span class="top"><span class="m">m</span><span class="m">g</span></span><span class="bot">cos <span class="m">&theta;</span></span></span>
+        =
+        <span class="frac"><span class="top"><span class="m">m</span><span class="m">g</span></span><span class="bot"><span class="frac" style="font-size:.9em"><span class="top">&radic;<span class="rad"><span class="m">L</span><sup>2</sup> &minus; <span class="m">r</span><sup>2</sup></span></span><span class="bot"><span class="m">L</span></span></span></span></span>
+        &nbsp;&nbsp;=&nbsp;&nbsp;
+        <span class="frac"><span class="top"><span class="m">m</span><span class="m">g</span><span class="m">L</span></span><span class="bot">&radic;<span class="rad"><span class="m">L</span><sup>2</sup> &minus; <span class="m">r</span><sup>2</sup></span></span></span>
+      </div>
+      <p class="why"><b>This page's result differs from the slide's.</b> Slide&nbsp;5 substitutes
+        <span class="m">r</span>/&radic;<span class="rad"><span class="m">L</span><sup>2</sup>&minus;<span class="m">r</span><sup>2</sup></span>
+        for cos <span class="m">&theta;</span> and prints
+        <span class="m">F</span><sub>t</sub> = <span class="m">mg</span>&radic;<span class="rad"><span class="m">L</span><sup>2</sup>&minus;<span class="m">r</span><sup>2</sup></span>/<span class="m">r</span>.
+        That substitution is tan <span class="m">&theta;</span>, not cos <span class="m">&theta;</span>
+        &mdash; and the slide's own limits, below, are what give the game away. The form above is
+        the one consistent with both.</p>
+    </div>
+  </div>
+
+  <table class="grid">
+    <tr><th style="width:34%">Limit</th><th>What the geometry says</th><th>Tension</th></tr>
+    <tr>
+      <td><span class="m">r</span> &rarr; 0</td>
+      <td><span class="m">&theta;</span> &rarr; 0&deg; &mdash; the string hangs straight down and the bob barely moves</td>
+      <td><span class="m">F</span><sub>t</sub> &rarr; <span class="m">mgL</span>/<span class="m">L</span> = <b><span class="m">mg</span></b>, just the weight</td>
+    </tr>
+    <tr>
+      <td><span class="m">r</span> &rarr; <span class="m">L</span></td>
+      <td><span class="m">&theta;</span> &rarr; 90&deg; &mdash; the string is swung out towards horizontal</td>
+      <td><span class="m">F</span><sub>t</sub> &rarr; <span class="m">mgL</span>/0 &rarr; <b>&infin;</b></td>
+    </tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Why those two limits are worth the trouble</span>
+    They are a free check on the algebra, and here they catch a real error. At rest the string must
+    carry exactly the weight; swung out flat it would need infinite tension, which is why a conical
+    pendulum can never reach horizontal however hard you spin it. Any expression that fails either
+    test is wrong, whatever it was derived from &mdash; run them every time.
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Conical pendulum</td><td class="eq">&mdash;</td>
+        <td>an object on a string sweeping a horizontal circle, the string tracing a cone at a fixed
+            angle <span class="m">&theta;</span> from the vertical.</td></tr>
+    <tr><td class="term">The method</td><td class="eq">&mdash;</td>
+        <td>resolve the tension; vertical is equilibrium, horizontal is
+            <span class="m">m</span><span class="m">a</span><sub>c</sub>. Solve the vertical first,
+            substitute into the horizontal.</td></tr>
+    <tr><td class="term">Tension</td><td class="eq">&mdash;</td>
+        <td><span class="m">F</span><sub>t</sub> = <span class="m">mg</span>/cos <span class="m">&theta;</span>
+            = <span class="m">mgL</span>/&radic;<span class="rad"><span class="m">L</span><sup>2</sup>&minus;<span class="m">r</span><sup>2</sup></span></td></tr>
+    <tr><td class="term">Acceleration</td><td class="eq">&mdash;</td>
+        <td><span class="m">a</span><sub>c</sub> = <span class="m">g</span> tan <span class="m">&theta;</span>
+            &mdash; independent of mass</td></tr>
+    <tr><td class="term">Speed</td><td class="eq">&mdash;</td>
+        <td><span class="m">v</span><sup>2</sup> = <span class="m">g&thinsp;r</span> tan <span class="m">&theta;</span>
+            = <span class="m">g&thinsp;r</span><sup>2</sup>/&radic;<span class="rad"><span class="m">L</span><sup>2</sup>&minus;<span class="m">r</span><sup>2</sup></span></td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      the textbook for this course &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/6-3-centripetal-force" target="_blank" rel="noopener">6.3 Centripetal Force</a></li>
+    <li><b>Extra resource.</b> Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/6-3-centripetal-force" target="_blank" rel="noopener">6.3 Centripetal Force</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>The Conical Pendulum</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 118 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
