@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch10b &mdash; Moment of Inertia</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 151 - Module 5 - Chapter 10 (University Physics) - Trevor slides 10a + 10b
+     "Angular Variables Revisited" and "Moment of Inertia" - web-page version
+     of the lecture slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     TWO DECKS, ONE PAGE. 10a is a five-slide recap of material already on
+     Ch10a - the same equations, the same two-types-of-acceleration figure.
+     It cannot stand as a page of its own, so it is the short opening section
+     here, cross-referenced rather than re-derived, and its figure is NOT
+     redrawn (playbook Step 0a: score the gap, not the deck).
+
+     ERRATA carried (policy agreed with Cho 2026-10-19):
+       - 10a s3 repeats the 06a s11 typo, "if tangential speed is constant,
+         delta-omega != 0, then no tangential acceleration". Should be
+         delta-omega = 0. Not restated here at all, so nothing to note.
+       - 10a s3's closing line reads "Angular Acceleration makes you move in
+         a circle". It is CENTRIPETAL acceleration that does that; the slide's
+         own boxed results are a_t = alpha*r and a_c = omega^2*r. Corrected
+         silently - the sentence is not quoted.
+       - 10b s8 uses I = (1/2) M L^2 for a rod about its centre. The deck's
+         own table two slides earlier gives (1/12) M L^2. NOTED in place,
+         because the slide prints a final answer a student would copy.
+
+     PHY 118 has its own page for this deck pair, written for College Physics
+     from the same decks. It is NOT generated from this file (playbook Step 1).
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+  table.grid td.num{ text-align:right; font-variant-numeric:tabular-nums; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 10 (University Physics) &middot; Slides 10a, 10b</span>
+  </div>
+
+  <h1>Moment of Inertia</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Forces make things accelerate, and mass is what resists. Torques make things spin faster, and
+    the thing that resists is <em>not</em> mass &mdash; it is mass <b>and where that mass sits</b>.
+    A broomstick is easy to spin about its middle and awkward to spin about its end, and nothing
+    about it changed except the axis. That dependence has a name, a symbol and a short table, and
+    almost everything in the rest of the module needs it.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    The angular variables themselves, from <b>Ch10a</b> &mdash; <span class="m">&theta;</span>,
+    <span class="m">&omega;</span>, <span class="m">&alpha;</span>, the rotational kinematics
+    equations and the conversions <span class="m">v</span><sub>t</sub> = <span class="m">&omega;r</span>,
+    <span class="m">a</span><sub>t</sub> = <span class="m">&alpha;r</span>. Trevor opens this pair of
+    decks by revisiting exactly that set, with one addition worth repeating: those variables were
+    introduced for a point on a record, and they describe an <b>extended rigid object</b> just as
+    well. Every piece of it shares one <span class="m">&theta;</span>, one
+    <span class="m">&omega;</span>, one <span class="m">&alpha;</span>.
+  </div>
+
+  <h2 id="the-analogy">Newton's second law, rewritten for spinning</h2>
+
+  <p>The linear statement is familiar: the acceleration of an object is directly proportional to
+     the applied force and inversely proportional to its mass. The rotational statement runs
+     parallel to it, and the parallel is exact except in one place.</p>
+
+  <table class="grid">
+    <tr><th style="width:50%">Linear</th><th>Rotational</th></tr>
+    <tr><td>forces make objects accelerate</td><td>unbalanced torques make objects spin faster or slower</td></tr>
+    <tr><td><b>mass</b> resists that change &mdash; &ldquo;inertia&rdquo;</td>
+        <td><b>moment of inertia</b> resists it &mdash; sometimes called <em>rotational inertia</em></td></tr>
+    <tr><td>depends on the amount of matter, full stop</td>
+        <td>depends on the amount of matter <em>and how far it is from the axis</em></td></tr>
+  </table>
+
+  <p>That last row is the whole content of this page. The shape of an object &mdash; and the axis
+     you choose &mdash; affects how easy it is to spin.</p>
+
+  <h2 id="point-mass">Start with a single point</h2>
+
+  <p>For a &ldquo;point&rdquo; object, like a small ball whirled on a string, the moment of inertia
+     is as simple as it gets.</p>
+
+  <figure>
+    <svg class="sq" viewBox="0 0 340 200" role="img" aria-label="A small ball on the end of a string of length r, circling an axis marked at the centre. Beside it, the moment of inertia of a point mass is m r squared.">
+      <circle cx="120" cy="100" r="62" fill="none" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <circle cx="120" cy="100" r="4" fill="var(--ink)"/>
+      <line x1="120" y1="100" x2="163.8" y2="56.2" stroke="var(--blue)" stroke-width="1.8"/>
+      <circle cx="163.8" cy="56.2" r="10" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <text class="lbl" x="134" y="70">r</text>
+      <text class="lbl" x="176" y="48">m</text>
+      <text class="lbl" x="226" y="96">I = m r&sup2;</text>
+      <text class="sm" x="226" y="118">one piece of mass,</text>
+      <text class="sm" x="226" y="134">one distance</text>
+    </svg>
+    <figcaption>The whole of rotational inertia in one line. Everything that follows is this,
+      added up.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">And for a real object, add the pieces</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">I</span> = &Sigma; <span class="m">m</span><sub>i</sub> <span class="m">r</span><sub>i</sub><sup>2</sup>
+      </div>
+      <p class="why">Chop the object into pieces, multiply each piece's mass by the <em>square</em>
+        of its own distance from the axis, and add. Trevor's note on method: for simple objects you
+        can just add the pieces; for symmetric ones use calculus; for anything that is neither, use
+        numerical methods. And whatever route you take, all the little
+        <span class="m">m</span>'s have to add up to <span class="m">M</span>.</p>
+    </div>
+  </div>
+
+  <h2 id="where-you-hold-it">Where you hold the stick</h2>
+
+  <p>Trevor's physical demonstration, and the quickest way to feel that the axis matters. Take a
+     metre stick. Spin it about its middle, then spin it about one end. Same stick, same mass,
+     four times the effort.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 230" role="img" aria-label="Two panels. On the left a rod with its rotation axis through the centre, labelled one twelfth M L squared. On the right the same rod with the axis through one end, labelled one third M L squared.">
+      <rect x="70" y="92" width="200" height="20" rx="3" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.5"/>
+      <line x1="170" y1="56" x2="170" y2="148" stroke="var(--amber)" stroke-width="2.2"/>
+      <circle cx="170" cy="102" r="4" fill="var(--amber)"/>
+      <text class="sm" x="170" y="48" text-anchor="middle">axis</text>
+      <line x1="70" y1="130" x2="270" y2="130" stroke="var(--muted)" stroke-width="1"/>
+      <text class="lbl" x="170" y="150" text-anchor="middle">L</text>
+      <text class="lbl" x="170" y="184" text-anchor="middle">I = <tspan font-size="13">1/12</tspan> M L&sup2;</text>
+      <text class="sm" x="170" y="206" text-anchor="middle">about the centre</text>
+
+      <rect x="370" y="92" width="200" height="20" rx="3" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.5"/>
+      <line x1="370" y1="56" x2="370" y2="148" stroke="var(--amber)" stroke-width="2.2"/>
+      <circle cx="370" cy="102" r="4" fill="var(--amber)"/>
+      <text class="sm" x="370" y="48" text-anchor="middle">axis</text>
+      <line x1="370" y1="130" x2="570" y2="130" stroke="var(--muted)" stroke-width="1"/>
+      <text class="lbl" x="470" y="150" text-anchor="middle">L</text>
+      <text class="lbl" x="470" y="184" text-anchor="middle">I = <tspan font-size="13">1/3</tspan> M L&sup2;</text>
+      <text class="sm" x="470" y="206" text-anchor="middle">about one end</text>
+    </svg>
+    <figcaption>Four times harder about the end, because the far half of the stick is now
+      <em>much</em> further from the axis &mdash; and distance enters squared.</figcaption>
+  </figure>
+
+  <h2 id="the-table">The shapes worth memorising</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="Six shapes with their rotation axes drawn through them: a solid disk, a hoop, a solid sphere, a hollow sphere, a rod about its centre and a rod about its end. Each is labelled with its moment of inertia.">
+      <!-- disk -->
+      <circle cx="90" cy="60" r="34" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="54" y1="96" x2="126" y2="24" stroke="var(--amber)" stroke-width="2"/>
+      <text class="sm" x="90" y="112" text-anchor="middle">solid disk or cylinder</text>
+      <text class="lbl" x="90" y="132" text-anchor="middle">I = &frac12; M R&sup2;</text>
+
+      <!-- hoop -->
+      <circle cx="320" cy="60" r="34" fill="none" stroke="var(--blue)" stroke-width="7"/>
+      <line x1="284" y1="96" x2="356" y2="24" stroke="var(--amber)" stroke-width="2"/>
+      <text class="sm" x="320" y="112" text-anchor="middle">hoop or ring</text>
+      <text class="lbl" x="320" y="132" text-anchor="middle">I = M R&sup2;</text>
+
+      <!-- solid sphere -->
+      <circle cx="550" cy="60" r="34" fill="#b9c7d6" stroke="var(--ink)" stroke-width="1.4"/>
+      <line x1="514" y1="96" x2="586" y2="24" stroke="var(--amber)" stroke-width="2"/>
+      <text class="sm" x="550" y="112" text-anchor="middle">solid sphere</text>
+      <text class="lbl" x="550" y="132" text-anchor="middle">I = <tspan font-size="13">2/5</tspan> M R&sup2;</text>
+
+      <!-- hollow sphere -->
+      <circle cx="90" cy="206" r="34" fill="none" stroke="var(--ink)" stroke-width="4"/>
+      <ellipse cx="90" cy="206" rx="34" ry="12" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="54" y1="242" x2="126" y2="170" stroke="var(--amber)" stroke-width="2"/>
+      <text class="sm" x="90" y="258" text-anchor="middle">hollow sphere</text>
+      <text class="lbl" x="90" y="278" text-anchor="middle">I = <tspan font-size="13">2/3</tspan> M R&sup2;</text>
+
+      <!-- rod centre -->
+      <rect x="264" y="198" width="112" height="16" rx="2" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.4"/>
+      <line x1="320" y1="176" x2="320" y2="236" stroke="var(--amber)" stroke-width="2"/>
+      <text class="sm" x="320" y="258" text-anchor="middle">rod, about its centre</text>
+      <text class="lbl" x="320" y="278" text-anchor="middle">I = <tspan font-size="13">1/12</tspan> M L&sup2;</text>
+
+      <!-- rod end -->
+      <rect x="520" y="198" width="112" height="16" rx="2" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.4"/>
+      <line x1="520" y1="176" x2="520" y2="236" stroke="var(--amber)" stroke-width="2"/>
+      <text class="sm" x="576" y="258" text-anchor="middle">rod, about one end</text>
+      <text class="lbl" x="576" y="278" text-anchor="middle">I = <tspan font-size="13">1/3</tspan> M L&sup2;</text>
+
+      <text class="sm" x="320" y="312" text-anchor="middle">the orange line is the rotation axis in every case</text>
+    </svg>
+    <figcaption>Trevor's own observation about this table: they all have the same form,
+      <span class="m">I</span> = (something) <span class="m">MR</span><sup>2</sup>, where the
+      something is a fraction or one.</figcaption>
+  </figure>
+
+  <h2 id="why-the-fraction">Why does the fraction change?</h2>
+
+  <p>Take two round objects of the <em>same mass</em> and the <em>same radius</em> &mdash; a solid
+     disk and a hoop. The disk's fraction is a half and the hoop's is one, so the hoop is twice as
+     hard to spin. Nothing about the amount of matter differs. Only its placement does.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 280" role="img" aria-label="Two circles of the same size. In the first, dots representing pieces of mass are spread evenly throughout the area. In the second, the same number of dots are all crowded onto the rim. Below, the moment of inertia is the sum of each piece's mass times the square of its distance from the axis.">
+      <circle cx="160" cy="118" r="86" fill="#eef3f9" stroke="var(--blue)" stroke-width="1.6"/>
+      <circle cx="160" cy="118" r="4" fill="var(--ink)"/>
+      <g fill="var(--blue)">
+        <circle cx="160" cy="70" r="4"/><circle cx="196" cy="90" r="4"/><circle cx="196" cy="146" r="4"/>
+        <circle cx="160" cy="166" r="4"/><circle cx="124" cy="146" r="4"/><circle cx="124" cy="90" r="4"/>
+        <circle cx="160" cy="118" r="0"/><circle cx="186" cy="118" r="4"/><circle cx="134" cy="118" r="4"/>
+        <circle cx="160" cy="94" r="4"/><circle cx="160" cy="142" r="4"/><circle cx="212" cy="118" r="4"/>
+        <circle cx="108" cy="118" r="4"/><circle cx="160" cy="46" r="4"/><circle cx="160" cy="190" r="4"/>
+      </g>
+      <text class="sm" x="160" y="226" text-anchor="middle">solid disk &mdash; mass spread throughout</text>
+      <text class="lbl" x="160" y="248" text-anchor="middle">I = &frac12; M R&sup2;</text>
+
+      <circle cx="450" cy="118" r="86" fill="none" stroke="var(--blue)" stroke-width="1.6"/>
+      <circle cx="450" cy="118" r="4" fill="var(--ink)"/>
+      <g fill="var(--blue)">
+        <circle cx="450" cy="32" r="4"/><circle cx="493" cy="43.5" r="4"/><circle cx="524.5" cy="75" r="4"/>
+        <circle cx="536" cy="118" r="4"/><circle cx="524.5" cy="161" r="4"/><circle cx="493" cy="192.5" r="4"/>
+        <circle cx="450" cy="204" r="4"/><circle cx="407" cy="192.5" r="4"/><circle cx="375.5" cy="161" r="4"/>
+        <circle cx="364" cy="118" r="4"/><circle cx="375.5" cy="75" r="4"/><circle cx="407" cy="43.5" r="4"/>
+        <circle cx="472" cy="34.8" r="4"/><circle cx="428" cy="34.8" r="4"/><circle cx="533" cy="96" r="4"/>
+      </g>
+      <text class="sm" x="450" y="226" text-anchor="middle">hoop &mdash; mass concentrated at the edge</text>
+      <text class="lbl" x="450" y="248" text-anchor="middle">I = M R&sup2;</text>
+
+      <text class="lbl" x="320" y="276" text-anchor="middle">I = &Sigma; m<tspan font-size="11">i</tspan> r<tspan font-size="11">i</tspan>&sup2;</text>
+    </svg>
+    <figcaption>Fifteen equal pieces in each. On the hoop every one of them sits at the full radius;
+      on the disk most of them sit closer in, and the square makes that difference count twice over.</figcaption>
+  </figure>
+
+  <h2 id="complicated">Objects that aren't on the chart</h2>
+
+  <p>&ldquo;Complicated&rdquo; here means an object built out of ones that <em>are</em> on the
+     chart. Those you can add, as long as every piece is measured about the <b>same axis</b>.
+     Trevor's example: a stick used as the diameter of a hoop, spun about the hoop's centre.</p>
+
+  <figure>
+    <svg class="sq" viewBox="0 0 340 210" role="img" aria-label="A hoop with a straight stick lying across it as a diameter, and the rotation axis through the centre of both.">
+      <circle cx="150" cy="96" r="68" fill="none" stroke="var(--blue)" stroke-width="8"/>
+      <rect x="82" y="88" width="136" height="16" rx="2" fill="var(--red)"/>
+      <line x1="94" y1="152" x2="206" y2="40" stroke="var(--amber)" stroke-width="2"/>
+      <circle cx="150" cy="96" r="4" fill="var(--ink)"/>
+      <text class="lbl" x="252" y="80">L<tspan font-size="11">stick</tspan> = 2R</text>
+      <text class="sm" x="150" y="196" text-anchor="middle">same axis for both pieces</text>
+    </svg>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Adding two pieces about one axis</div>
+    <div class="body">
+      <div class="mathline">
+        <span class="m">I</span> = <span class="m">I</span><sub>ring</sub> + <span class="m">I</span><sub>stick</sub>
+        = <span class="m">M</span><sub>ring</sub><span class="m">R</span><sup>2</sup>
+        + <span style="font-size:.9em">1/12</span> <span class="m">M</span><sub>stick</sub><span class="m">L</span><sup>2</sup><br>
+        = <span class="m">M</span><sub>ring</sub><span class="m">R</span><sup>2</sup>
+        + <span style="font-size:.9em">1/12</span> <span class="m">M</span><sub>stick</sub>(2<span class="m">R</span>)<sup>2</sup>
+        = <b><span class="m">M</span><sub>ring</sub><span class="m">R</span><sup>2</sup>
+        + <span style="font-size:.9em">1/3</span> <span class="m">M</span><sub>stick</sub><span class="m">R</span><sup>2</sup></b>
+      </div>
+      <p class="why"><b>This differs from the slide</b>, which uses
+        <span class="m">I</span><sub>stick</sub> = &frac12;<span class="m">M</span><sub>stick</sub><span class="m">L</span><sup>2</sup>
+        and finishes at
+        <span class="m">M</span><sub>ring</sub><span class="m">R</span><sup>2</sup> + 2<span class="m">M</span><sub>stick</sub><span class="m">R</span><sup>2</sup>.
+        A rod about its centre is <span style="font-size:.9em">1/12</span><span class="m">ML</span><sup>2</sup>,
+        as the deck's own table gives two slides earlier &mdash; so the stick's contribution is a
+        sixth of what the slide prints. Sanity check: the stick is a rod of length 2<span class="m">R</span>,
+        so its mass sits on average much <em>closer</em> to the axis than the hoop's does, and its
+        term must come out smaller than <span class="m">M</span><span class="m">R</span><sup>2</sup>,
+        not twice as large.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">The one rule when adding</span>
+    Every term must be a moment of inertia <b>about the same axis</b>. A rod's
+    <span style="font-size:.9em">1/12</span><span class="m">ML</span><sup>2</sup> is about its
+    centre; if the axis runs through its end instead, the right entry is
+    <span style="font-size:.9em">1/3</span><span class="m">ML</span><sup>2</sup>. Picking the wrong
+    row of the table is the most common way this calculation goes wrong &mdash; and, as above, it
+    is a mistake that survives being written down neatly.
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="defs">
+    <tr><td class="term">Moment of inertia</td><td class="eq">&mdash;</td>
+        <td>how hard it is to change an object's <em>rotation</em>, the rotational counterpart of
+            mass. Symbol <span class="m">I</span>, units kg&middot;m<sup>2</sup>.</td></tr>
+    <tr><td class="term">Definition</td><td class="eq">&mdash;</td>
+        <td><span class="m">I</span> = &Sigma;<span class="m">m</span><sub>i</sub><span class="m">r</span><sub>i</sub><sup>2</sup>
+            &mdash; for a single point, <span class="m">I</span> = <span class="m">mr</span><sup>2</sup>.</td></tr>
+    <tr><td class="term">It depends on the axis</td><td class="eq">&mdash;</td>
+        <td>not just the object. Same stick, centre vs end: <span style="font-size:.9em">1/12</span>
+            vs <span style="font-size:.9em">1/3</span> of <span class="m">ML</span><sup>2</sup>.</td></tr>
+    <tr><td class="term">The common shapes</td><td class="eq">&mdash;</td>
+        <td>disk &frac12;<span class="m">MR</span><sup>2</sup>, hoop <span class="m">MR</span><sup>2</sup>,
+            solid sphere (2/5)<span class="m">MR</span><sup>2</sup>, hollow sphere
+            (2/3)<span class="m">MR</span><sup>2</sup>. All of the form
+            (fraction or one) &times; <span class="m">MR</span><sup>2</sup>.</td></tr>
+    <tr><td class="term">Composites</td><td class="eq">&mdash;</td>
+        <td>add the pieces, all measured about the same axis.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/10-5-calculating-moments-of-inertia" target="_blank" rel="noopener">10.5 Calculating Moments of Inertia</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/10-4-moment-of-inertia-and-rotational-kinetic-energy" target="_blank" rel="noopener">10.4 Moment of Inertia and Rotational Kinetic Energy</a></li>
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/10-3-dynamics-of-rotational-motion-rotational-inertia" target="_blank" rel="noopener">10.3 Dynamics of Rotational Motion: Rotational Inertia</a></li>
+  </ul>
+  <p class="why">Trevor&rsquo;s closing slides cite <em>University Physics Volume&nbsp;2</em>; the
+     mechanics material is in Volume&nbsp;1. Corrected above, as on the Module&nbsp;3 and
+     Module&nbsp;4 pages.</p>
+
+  <footer>
+    This page is adapted from the presentations <em>Angular Variables Revisited</em> and
+    <em>Moment of Inertia</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
