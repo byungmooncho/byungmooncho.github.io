@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M5 Ch06b &mdash; Vertical Circles, Hills and Dips</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 151 - Module 5 - Chapter 6 (University Physics) - Trevor slides 06c + 06d
+     "Vertical Circles" and "Hills and Dips" - web-page version of the lecture
+     slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+     Tier B reference page: faithful transcription, shorter synopsis.
+     No probe, no exit ticket, no PE card.
+
+     TWO DECKS, ONE PAGE. They are one idea - circular motion in a vertical
+     plane, where gravity is sometimes with the centripetal direction and
+     sometimes against it - and 06d is 06c with the circle made partial.
+
+     Trevor draws the hill profile with its circle of curvature on three slides
+     (06d slides 2, 3 and 4). It is drawn ONCE here; the jump condition reuses
+     the crest figure rather than repeating it. Scoring the gap, not the deck
+     (playbook Step 0a).
+
+     PHY 118 has its own page for this deck pair, written for College Physics
+     from the same decks. It is NOT generated from this file and a change here
+     does not propagate there (playbook Step 1). If a correction belongs on
+     both, make it on both.
+
+     Same design system as the module note pages; hosted on GitHub Pages,
+     reached by link from the Module 5 reference index. Never framed, so this
+     page has no wrapper of its own.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+  .check figure{ margin:.6rem 0 .4rem; }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 5 &middot; Circular and Rotational Motion</span>
+    <span>Chapter 6 (University Physics) &middot; Slides 06c, 06d</span>
+  </div>
+
+  <h1>Vertical Circles, Hills and Dips</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;151.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Turn the circle on its side and gravity stops being a bystander. At the top of a loop it helps
+    pull you round; at the bottom it fights the thing that is pulling you round. The physics does
+    not change &mdash; <span class="m">F</span><sub>c</sub> = <span class="m">m</span><span class="m">v</span><sup>2</sup>/<span class="m">r</span>
+    still holds &mdash; but the <em>other</em> force has to make up the difference, and it is the
+    one you feel. That is why you float over a hill crest and are pressed into your seat at the
+    bottom of a dip, and it is why a roller-coaster loop has a minimum speed.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    From <b>Ch06a</b>: the centripetal force is the <em>net</em> force in the centre-seeking
+    direction, never an extra arrow on the diagram. Everything here is that one rule applied four
+    times, with a sign convention doing the bookkeeping.
+  </div>
+
+  <h2 id="check">Start with the question</h2>
+
+  <div class="check">
+    <span class="label">Trevor's question</span>
+    <p class="q">A ball tied to a string is moving in a vertical circle at a constant speed. How do
+      the tensions at the top and the bottom of the path compare?</p>
+    <p style="margin:.2rem 0 .4rem">1. The tension at the top is larger. &nbsp;&middot;&nbsp;
+       2. The tension at the bottom is larger. &nbsp;&middot;&nbsp;
+       3. The tensions are the same.</p>
+
+    <figure>
+      <svg class="sq" viewBox="0 0 340 250" role="img" aria-label="A dashed circle with a tension arrow at the top pointing down towards the centre and a tension arrow at the bottom pointing up towards the centre. Each is marked with a question mark.">
+        <defs>
+          <marker id="q1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        </defs>
+        <circle cx="170" cy="125" r="85" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="6 5"/>
+        <circle cx="170" cy="125" r="4" fill="var(--blue)"/>
+        <line x1="170" y1="40" x2="170" y2="86" stroke="var(--red)" stroke-width="2.6" marker-end="url(#q1)"/>
+        <text class="lbl" x="182" y="62" fill="var(--red)">F<tspan font-size="11">T top</tspan></text>
+        <text class="lbl" x="156" y="56" text-anchor="end">?</text>
+        <line x1="170" y1="210" x2="170" y2="164" stroke="var(--red)" stroke-width="2.6" marker-end="url(#q1)"/>
+        <text class="lbl" x="182" y="196" fill="var(--red)">F<tspan font-size="11">T bot</tspan></text>
+        <text class="lbl" x="156" y="200" text-anchor="end">?</text>
+      </svg>
+    </figure>
+
+    <div class="ans"><b>2 &mdash; the tension at the bottom is larger</b>, and the rest of this page
+      is why. Trevor's own footnote is worth keeping: constant speed in a vertical circle is tough,
+      but not impossible, to produce.</div>
+  </div>
+
+  <h2 id="tension-changes">The tension changes all the way round</h2>
+
+  <p>Assume the speed really is constant. Then <span class="m">a</span><sub>c</sub> =
+     <span class="m">v</span><sup>2</sup>/<span class="m">r</span> is constant too, so the
+     <em>net</em> centre-seeking force is the same at every point on the circle. But gravity always
+     points down, whatever the ball is doing &mdash; so the tension has to change from place to
+     place to keep that net force constant.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 430" role="img" aria-label="Side view of a ball on a string moving round a vertical circle, drawn at four positions: top, bottom, left and right. At every position the tension arrow points in towards the centre, while the weight arrow always points straight down. A radius arrow is drawn from the centre out to the rim.">
+      <defs>
+        <marker id="t1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="t1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="t1b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--blue)"/></marker>
+      </defs>
+
+      <text class="sm" x="96" y="70">side view</text>
+
+      <circle cx="320" cy="210" r="150" fill="none" stroke="var(--blue)" stroke-width="2" stroke-dasharray="7 6"/>
+      <circle cx="320" cy="210" r="4" fill="var(--ink)"/>
+      <line x1="320" y1="210" x2="426" y2="104" stroke="var(--blue)" stroke-width="2" marker-end="url(#t1b)"/>
+      <text class="lbl" x="372" y="150" fill="var(--blue)">r</text>
+
+      <!-- top -->
+      <circle cx="320" cy="60" r="9" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="308" y1="72" x2="308" y2="116" stroke="var(--red)" stroke-width="2.6" marker-end="url(#t1r)"/>
+      <line x1="334" y1="72" x2="334" y2="128" stroke="var(--green)" stroke-width="2.6" marker-end="url(#t1g)"/>
+      <text class="lbl" x="300" y="100" text-anchor="end" fill="var(--red)">F<tspan font-size="11">T</tspan></text>
+      <text class="lbl" x="342" y="108" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+
+      <!-- bottom -->
+      <circle cx="320" cy="360" r="9" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="310" y1="348" x2="310" y2="288" stroke="var(--red)" stroke-width="2.6" marker-end="url(#t1r)"/>
+      <line x1="338" y1="372" x2="338" y2="416" stroke="var(--green)" stroke-width="2.6" marker-end="url(#t1g)"/>
+      <text class="lbl" x="302" y="312" text-anchor="end" fill="var(--red)">F<tspan font-size="11">T</tspan></text>
+      <text class="lbl" x="346" y="402" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+
+      <!-- left -->
+      <circle cx="170" cy="210" r="9" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="182" y1="210" x2="232" y2="210" stroke="var(--red)" stroke-width="2.6" marker-end="url(#t1r)"/>
+      <line x1="170" y1="222" x2="170" y2="272" stroke="var(--green)" stroke-width="2.6" marker-end="url(#t1g)"/>
+      <text class="lbl" x="196" y="200" fill="var(--red)">F<tspan font-size="11">T</tspan></text>
+      <text class="lbl" x="152" y="256" text-anchor="end" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+
+      <!-- right -->
+      <circle cx="470" cy="210" r="9" fill="#cfe0f5" stroke="var(--blue)" stroke-width="1.6"/>
+      <line x1="458" y1="210" x2="408" y2="210" stroke="var(--red)" stroke-width="2.6" marker-end="url(#t1r)"/>
+      <line x1="470" y1="222" x2="470" y2="272" stroke="var(--green)" stroke-width="2.6" marker-end="url(#t1g)"/>
+      <text class="lbl" x="426" y="200" text-anchor="end" fill="var(--red)">F<tspan font-size="11">T</tspan></text>
+      <text class="lbl" x="482" y="256" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+
+      <text class="sm" x="560" y="330" text-anchor="middle">the tension turns</text>
+      <text class="sm" x="560" y="346" text-anchor="middle">with the string;</text>
+      <text class="sm" x="560" y="362" text-anchor="middle">gravity never does.</text>
+    </svg>
+    <figcaption>Four positions on the same circle. The tension always points at the centre; the
+      weight always points down. Only at the top and the bottom are the two along the same line.</figcaption>
+  </figure>
+
+  <p>In a roller coaster the normal force from the track does exactly what the tension does here.
+     Trevor's summary is the one students remember: <b>this is why you feel as though you will fall
+     out at the top, and feel crushed at the bottom.</b></p>
+
+  <h2 id="signs">Let the sign convention do the bookkeeping</h2>
+
+  <p>Pick <b>+ to mean towards the centre</b> and &minus; to mean away from it. The convention
+     changes meaning as the ball goes round &mdash; at the top, &ldquo;towards the centre&rdquo; is
+     downwards; at the bottom it is upwards &mdash; and that single fact produces both results.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Two free-body diagrams. At the top of the circle, the tension and the weight both point downwards. At the bottom of the circle, the tension points upwards and is drawn longer than the weight, which points downwards. Beside them, a small dashed circle with an arrow from the rim towards its centre, marking the positive direction.">
+      <defs>
+        <marker id="s1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="s1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+        <marker id="s1k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--ink)"/></marker>
+      </defs>
+
+      <text x="130" y="48" text-anchor="middle">Top of circle</text>
+      <line x1="76" y1="56" x2="184" y2="56" stroke="var(--rule)" stroke-width="1.4"/>
+      <circle cx="130" cy="100" r="5" fill="var(--ink)"/>
+      <line x1="122" y1="100" x2="122" y2="145" stroke="var(--red)" stroke-width="2.6" marker-end="url(#s1r)"/>
+      <line x1="146" y1="100" x2="146" y2="165" stroke="var(--green)" stroke-width="2.6" marker-end="url(#s1g)"/>
+      <text class="lbl" x="114" y="132" text-anchor="end" fill="var(--red)">F<tspan font-size="11">T</tspan></text>
+      <text class="lbl" x="154" y="140" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="130" y="200" text-anchor="middle">both point the same way</text>
+      <text class="sm" x="130" y="216" text-anchor="middle">&mdash; both are positive</text>
+
+      <text x="380" y="48" text-anchor="middle">Bottom of circle</text>
+      <line x1="320" y1="56" x2="440" y2="56" stroke="var(--rule)" stroke-width="1.4"/>
+      <circle cx="380" cy="140" r="5" fill="var(--ink)"/>
+      <line x1="380" y1="140" x2="380" y2="70" stroke="var(--red)" stroke-width="2.6" marker-end="url(#s1r)"/>
+      <line x1="380" y1="140" x2="380" y2="200" stroke="var(--green)" stroke-width="2.6" marker-end="url(#s1g)"/>
+      <text class="lbl" x="392" y="96" fill="var(--red)">F<tspan font-size="11">T</tspan></text>
+      <text class="lbl" x="392" y="182" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="380" y="232" text-anchor="middle">opposite ways</text>
+      <text class="sm" x="380" y="248" text-anchor="middle">&mdash; opposite signs</text>
+
+      <circle cx="556" cy="120" r="46" fill="none" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <circle cx="556" cy="120" r="3" fill="var(--blue)"/>
+      <line x1="556" y1="74" x2="556" y2="108" stroke="var(--ink)" stroke-width="1.8" marker-end="url(#s1k)"/>
+      <text class="sm" x="556" y="190" text-anchor="middle">+ is towards</text>
+      <text class="sm" x="556" y="206" text-anchor="middle">the centre</text>
+    </svg>
+    <figcaption>The same two forces, the same ball, two places on the circle. Only the
+      <em>relative</em> direction has changed &mdash; and that is enough to change the answer.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The same equation, written twice</div>
+    <div class="body">
+      <table class="grid">
+        <tr><th style="width:50%">Top of the circle</th><th>Bottom of the circle</th></tr>
+        <tr>
+          <td>+<span class="m">F</span><sub>g</sub> + +<span class="m">F</span><sub>T</sub> = <span class="m">m</span><span class="m">a</span><sub>c</sub></td>
+          <td>&minus;<span class="m">F</span><sub>g</sub> + +<span class="m">F</span><sub>T</sub> = <span class="m">m</span><span class="m">a</span><sub>c</sub></td>
+        </tr>
+        <tr>
+          <td><b><span class="m">F</span><sub>T</sub> = <span class="m">m</span><span class="m">a</span><sub>c</sub> &minus; <span class="m">F</span><sub>g</sub></b></td>
+          <td><b><span class="m">F</span><sub>T</sub> = <span class="m">m</span><span class="m">a</span><sub>c</sub> + <span class="m">F</span><sub>g</sub></b></td>
+        </tr>
+      </table>
+      <p class="why">Gravity is <em>helping</em> at the top, so the string has less to do; it is
+        <em>opposing</em> at the bottom, so the string has to supply the centripetal force and hold
+        the weight up as well. Subtracting one line from the other puts a number on the check
+        question: <span class="m">F</span><sub>T,bot</sub> &minus; <span class="m">F</span><sub>T,top</sub>
+        = 2<span class="m">F</span><sub>g</sub> = 2<span class="m">mg</span>, whatever the speed is.</p>
+    </div>
+  </div>
+
+  <h2 id="minimum-speed">The minimum speed at the top</h2>
+
+  <p>Trevor's question: <em>what is the minimum speed for a person not to fall out of a roller
+     coaster car at the top of a loop, with no safety harness?</em> Replace the string with the
+     track, so the tension becomes a normal force &mdash; and a track can only push, never pull.</p>
+
+  <figure>
+    <svg class="sq" viewBox="0 0 340 210" role="img" aria-label="A free-body diagram at the top of a loop. A short normal-force arrow and a longer weight arrow both point downwards from the rider. A note says that at the minimum speed the normal force is zero.">
+      <defs>
+        <marker id="m1v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--violet)"/></marker>
+        <marker id="m1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+      <text class="sm" x="98" y="36" text-anchor="middle">top of the loop</text>
+      <circle cx="98" cy="58" r="8" fill="var(--ink)"/>
+      <line x1="86" y1="68" x2="86" y2="104" stroke="var(--violet)" stroke-width="2.6" marker-end="url(#m1v)"/>
+      <line x1="112" y1="68" x2="112" y2="156" stroke="var(--green)" stroke-width="2.6" marker-end="url(#m1g)"/>
+      <text class="lbl" x="78" y="94" text-anchor="end" fill="var(--violet)">F<tspan font-size="11">N</tspan></text>
+      <text class="lbl" x="128" y="124" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="180" y="84">at the minimum speed</text>
+      <text class="lbl" x="180" y="112" fill="var(--violet)">F<tspan font-size="11">N</tspan> = 0</text>
+      <text class="sm" x="180" y="140">&mdash; the track is doing</text>
+      <text class="sm" x="180" y="156">nothing at all</text>
+    </svg>
+    <figcaption>At the top, both forces point towards the centre. Go slower and slower and the
+      track's contribution shrinks; the limiting case is the one where it vanishes.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Setting the normal force to zero</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        +<span class="m">F</span><sub>g</sub> + +<span class="m">F</span><sub>N</sub> =
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        &nbsp;&nbsp;with&nbsp;<span class="m">F</span><sub>N</sub> = 0&nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">m</span><span class="m">g</span> =
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+      </div>
+      <div class="mathline" style="text-align:center">
+        <span class="m">g</span> =
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">v</span><sub>min</sub> = &radic;<span style="border-top:1px solid currentColor; padding:0 .15em"><span class="m">g&thinsp;r</span></span>
+      </div>
+      <p class="why">The mass cancels, which is the surprise: the minimum speed is the same for
+        everybody in the car. And the condition is not &ldquo;gravity is balanced&rdquo; &mdash; it
+        is <em>gravity alone supplies the whole centripetal force</em>. Below that speed the circle
+        the rider would need is bigger than the track, and they leave it.</p>
+    </div>
+  </div>
+
+  <h2 id="somewhat-circular">&ldquo;Somewhat&rdquo; circular motion</h2>
+
+  <p>Everything so far assumed a full circle at constant speed. Real roads do neither: a car goes
+     over a crest or through a dip along <em>part</em> of a circular path, usually with a changing
+     speed. Trevor's point is that none of that matters for the instant you care about. Fit a
+     circle to the curve at that point &mdash; its radius is the <span class="m">r</span> in
+     <span class="m">v</span><sup>2</sup>/<span class="m">r</span> &mdash; and the same mathematics
+     applies.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A car crossing a hill crest, drawn at three positions along the road: approaching on the flat, at the top of the crest, and descending the far slope. A dashed circle is fitted to the curve of the crest, with its centre below the road. Beside it, the free-body diagram at the crest: a short normal-force arrow up and a longer weight arrow down.">
+      <defs>
+        <marker id="h1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="h1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+
+      <circle cx="250" cy="200" r="80" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <circle cx="250" cy="200" r="3" fill="var(--ink)"/>
+      <path d="M40,232 C140,232 170,120 250,120 C330,120 360,232 460,232" fill="none" stroke="var(--blue)" stroke-width="2.2"/>
+
+      <g>
+        <rect x="80" y="212" width="30" height="13" rx="2" fill="#e8453c" stroke="var(--red)" stroke-width="1"/>
+        <circle cx="88" cy="228" r="4" fill="var(--blue)"/><circle cx="104" cy="228" r="4" fill="var(--blue)"/>
+      </g>
+      <g>
+        <rect x="235" y="101" width="30" height="13" rx="2" fill="#e8453c" stroke="var(--red)" stroke-width="1"/>
+        <circle cx="243" cy="117" r="4" fill="var(--blue)"/><circle cx="259" cy="117" r="4" fill="var(--blue)"/>
+      </g>
+      <g transform="rotate(30 335 155)">
+        <rect x="320" y="146" width="30" height="13" rx="2" fill="#e8453c" stroke="var(--red)" stroke-width="1"/>
+        <circle cx="328" cy="162" r="4" fill="var(--blue)"/><circle cx="344" cy="162" r="4" fill="var(--blue)"/>
+      </g>
+
+      <text class="sm" x="250" y="300" text-anchor="middle">the circle that fits the crest &mdash; its radius is r</text>
+
+      <text class="sm" x="540" y="78" text-anchor="middle">at the crest</text>
+      <circle cx="540" cy="190" r="5" fill="var(--ink)"/>
+      <line x1="540" y1="190" x2="540" y2="120" stroke="var(--red)" stroke-width="2.6" marker-end="url(#h1r)"/>
+      <line x1="540" y1="190" x2="540" y2="275" stroke="var(--green)" stroke-width="2.6" marker-end="url(#h1g)"/>
+      <text class="lbl" x="552" y="148" fill="var(--red)">F<tspan font-size="11">N</tspan></text>
+      <text class="lbl" x="552" y="240" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="540" y="300" text-anchor="middle">+ is down, towards the centre</text>
+    </svg>
+    <figcaption>The crest is the top of a circle you cannot see. Arrows drawn to scale:
+      <span class="m">F</span><sub>N</sub> is shorter than <span class="m">F</span><sub>g</sub>,
+      and the next section says why it has to be.</figcaption>
+  </figure>
+
+  <h2 id="over-a-hill">Going over a hill</h2>
+
+  <p>At the crest the centre of the fitted circle is <em>below</em> the road, so &ldquo;towards the
+     centre&rdquo; means downwards. The weight points that way and the normal force points the other
+     way.</p>
+
+  <div class="mathblock">
+    <div class="head">At the crest</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        = &minus;<span class="m">F</span><sub>N</sub> + <span class="m">F</span><sub>g</sub>
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub> &minus;
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+      </div>
+      <p class="why">Trevor asks it as a question &mdash; <em>why is</em>
+        <span class="m">F</span><sub>N</sub> <em>smaller than</em> <span class="m">F</span><sub>g</sub>? &mdash;
+        and the equation answers it: part of your weight is being spent on turning you downwards
+        along the curve, so less of it is left pressing you into the seat. The seat pushes back with
+        less force, and <b>that</b> is the quantity your body reads as &ldquo;how heavy am I&rdquo;.
+        Hence the lift in your stomach over a slight rise. Faster, or a tighter crest, and the
+        feeling is stronger.</p>
+    </div>
+  </div>
+
+  <h2 id="making-a-jump">Making a jump</h2>
+
+  <p>Push that far enough and <span class="m">F</span><sub>N</sub> reaches zero: the road stops
+     touching the car.</p>
+
+  <div class="mathblock">
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub> &minus;
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        = 0
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">m</span><span class="m">g</span> =
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">v</span> = &radic;<span style="border-top:1px solid currentColor; padding:0 .15em"><span class="m">g&thinsp;r</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">The same equation twice</span>
+    <span class="m">v</span> = &radic;<span style="border-top:1px solid currentColor; padding:0 .15em"><span class="m">g&thinsp;r</span></span>
+    is both the <em>minimum</em> speed to stay on the track at the top of a loop and the
+    <em>maximum</em> speed to stay on the road over a crest. One equation, two readings, because the
+    physical condition is identical: the surface force has gone to zero and gravity alone is bending
+    the path. Which side of it you want to be on is what differs.
+  </div>
+
+  <h2 id="into-a-dip">Going down into a dip</h2>
+
+  <p>In a dip the centre of the fitted circle is <em>above</em> the road, so the sign convention
+     flips and so does the answer.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="A car passing through a dip, drawn at three positions: descending, at the lowest point, and climbing out. A dashed circle is fitted to the curve of the dip, with its centre above the road. Beside it, the free-body diagram at the bottom: a long normal-force arrow up and a shorter weight arrow down.">
+      <defs>
+        <marker id="d1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--red)"/></marker>
+        <marker id="d1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 z" fill="var(--green)"/></marker>
+      </defs>
+
+      <circle cx="250" cy="147" r="95" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <circle cx="250" cy="147" r="3" fill="var(--ink)"/>
+      <path d="M40,130 C140,130 170,242 250,242 C330,242 360,130 460,130" fill="none" stroke="var(--blue)" stroke-width="2.2"/>
+
+      <g>
+        <rect x="80" y="110" width="30" height="13" rx="2" fill="#e8453c" stroke="var(--red)" stroke-width="1"/>
+        <circle cx="88" cy="126" r="4" fill="var(--blue)"/><circle cx="104" cy="126" r="4" fill="var(--blue)"/>
+      </g>
+      <g>
+        <rect x="235" y="223" width="30" height="13" rx="2" fill="#e8453c" stroke="var(--red)" stroke-width="1"/>
+        <circle cx="243" cy="239" r="4" fill="var(--blue)"/><circle cx="259" cy="239" r="4" fill="var(--blue)"/>
+      </g>
+      <g transform="rotate(-30 345 180)">
+        <rect x="330" y="171" width="30" height="13" rx="2" fill="#e8453c" stroke="var(--red)" stroke-width="1"/>
+        <circle cx="338" cy="187" r="4" fill="var(--blue)"/><circle cx="354" cy="187" r="4" fill="var(--blue)"/>
+      </g>
+
+      <text class="sm" x="250" y="300" text-anchor="middle">the circle that fits the dip &mdash; centre above the road</text>
+
+      <text class="sm" x="540" y="78" text-anchor="middle">at the bottom</text>
+      <circle cx="540" cy="190" r="5" fill="var(--ink)"/>
+      <line x1="540" y1="190" x2="540" y2="105" stroke="var(--red)" stroke-width="2.6" marker-end="url(#d1r)"/>
+      <line x1="540" y1="190" x2="540" y2="255" stroke="var(--green)" stroke-width="2.6" marker-end="url(#d1g)"/>
+      <text class="lbl" x="552" y="140" fill="var(--red)">F<tspan font-size="11">N</tspan></text>
+      <text class="lbl" x="552" y="230" fill="var(--green)">F<tspan font-size="11">g</tspan></text>
+      <text class="sm" x="540" y="300" text-anchor="middle">+ is up, towards the centre</text>
+    </svg>
+    <figcaption>Same car, same road, inverted curvature. Here
+      <span class="m">F</span><sub>N</sub> is drawn <em>longer</em> than
+      <span class="m">F</span><sub>g</sub>, and the equation below requires it.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">At the bottom of the dip</div>
+    <div class="body">
+      <div class="mathline" style="text-align:center">
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+        = <span class="m">F</span><sub>N</sub> &minus; <span class="m">F</span><sub>g</sub>
+        &nbsp;&nbsp;&rArr;&nbsp;&nbsp;
+        <span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub> +
+        <span class="m">m</span>
+        <span class="frac"><span class="top"><span class="m">v</span><sup>2</sup></span><span class="bot"><span class="m">r</span></span></span>
+      </div>
+      <p class="why">The road now has two jobs: hold the weight <em>and</em> supply the centripetal
+        force. So it pushes harder than your weight, and you read the extra as being pressed into
+        the seat. There is no upper limit on this one &mdash; nothing goes to zero &mdash; which is
+        why a dip is a structural problem rather than a staying-on-the-road problem.</p>
+    </div>
+  </div>
+
+  <h2 id="review">Review</h2>
+
+  <table class="grid">
+    <tr><th>Situation</th><th>Centre is&hellip;</th><th>Surface or string force</th><th>What you feel</th></tr>
+    <tr><td>Top of a vertical circle</td><td>below you</td>
+        <td><span class="m">F</span> = <span class="m">m</span><span class="m">a</span><sub>c</sub> &minus; <span class="m">F</span><sub>g</sub></td>
+        <td>light; may fall out</td></tr>
+    <tr><td>Bottom of a vertical circle</td><td>above you</td>
+        <td><span class="m">F</span> = <span class="m">m</span><span class="m">a</span><sub>c</sub> + <span class="m">F</span><sub>g</sub></td>
+        <td>crushed</td></tr>
+    <tr><td>Crest of a hill</td><td>below you</td>
+        <td><span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub> &minus; <span class="m">m</span><span class="m">v</span><sup>2</sup>/<span class="m">r</span></td>
+        <td>light; leaves the road at <span class="m">v</span> = &radic;<span style="border-top:1px solid currentColor"><span class="m">gr</span></span></td></tr>
+    <tr><td>Bottom of a dip</td><td>above you</td>
+        <td><span class="m">F</span><sub>N</sub> = <span class="m">F</span><sub>g</sub> + <span class="m">m</span><span class="m">v</span><sup>2</sup>/<span class="m">r</span></td>
+        <td>heavy</td></tr>
+  </table>
+
+  <table class="defs">
+    <tr><td class="term">The one rule</td><td class="eq">&mdash;</td>
+        <td>choose + towards the centre, add the real forces with their signs, and set the sum
+            equal to <span class="m">m</span><span class="m">v</span><sup>2</sup>/<span class="m">r</span>.
+            Everything in the table above is that sentence, four times.</td></tr>
+    <tr><td class="term">Losing contact</td><td class="eq">&mdash;</td>
+        <td><span class="m">F</span><sub>N</sub> = 0 gives
+            <span class="m">v</span> = &radic;<span style="border-top:1px solid currentColor"><span class="m">g&thinsp;r</span></span>
+            &mdash; a minimum at the top of a loop, a maximum over a crest. Independent of mass.</td></tr>
+    <tr><td class="term">Partial circles</td><td class="eq">&mdash;</td>
+        <td>fit a circle to the curve at the point of interest and use its radius. The speed may be
+            changing; the instantaneous analysis is unaffected.</td></tr>
+  </table>
+
+  <h3 id="references">References</h3>
+  <ul class="refs">
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/6-3-centripetal-force" target="_blank" rel="noopener">6.3 Centripetal Force</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/6-4-drag-force-and-terminal-speed" target="_blank" rel="noopener">6.4 Drag Force and Terminal Speed</a></li>
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/6-3-centripetal-force" target="_blank" rel="noopener">6.3 Centripetal Force</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/6-4-fictitious-forces-and-non-inertial-frames-the-coriolis-force" target="_blank" rel="noopener">6.4 Fictitious Forces and Non-inertial Frames</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentations <em>Circular Motion &mdash; Vertical Circles</em> and
+    <em>Circular Motion &mdash; Hills and Dips</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 151 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). Measuring the content element is viewport-independent, so the
+   reported height is the page's real height at whatever width the pane is, and it
+   can come back DOWN as well as up — unlike scrollHeight, whose floor is the
+   iframe's own viewport height and which therefore ratchets upward without bound. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+</body>
+</html>
