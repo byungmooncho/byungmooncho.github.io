@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHY 151 Lab 07 — Moment of Inertia</title>
+<style>
+  /* ==================================================================
+     FLCC Physics lab page — PHY 151 Module 5
+     Matches the LB02/LB03 lab-page template (same tokens, same blocks).
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:2rem 0 .8rem; font-weight:700; }
+  h3{ font-size:1.02rem; margin:1.4rem 0 .4rem; font-weight:700; color:var(--green-deep);
+      font-family:"Segoe UI", system-ui, sans-serif; }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* due-date / logistics strip */
+  .logistics{
+    display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin:1.1rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+  }
+  .logistics .chip{
+    background:#fff; border:1px solid var(--rule); border-radius:20px; padding:.3rem .85rem;
+  }
+  .logistics .chip b{ color:var(--green-deep); }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* boxed callout, gradient head (prior-knowledge / explain / safety) */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior p:last-child{ margin-bottom:0; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+  ol.questions.aq{ list-style:none; padding-left:0; }
+  ol.questions.aq li{ margin:.8rem 0; }
+
+  /* procedure steps */
+  ol.steps{ padding-left:1.3rem; }
+  ol.steps > li{ margin:.65rem 0; }
+  ul.kit{ padding-left:1.3rem; }
+  ul.kit li{ margin:.3rem 0; }
+
+  /* equation block */
+  .eqn{
+    font-family:"Cambria Math","Segoe UI",Georgia,serif; font-size:1.15rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:600; letter-spacing:.02em;
+  }
+  .eqn small{ display:block; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+    font-weight:400; color:var(--muted); margin-top:.4rem; letter-spacing:0; }
+
+  /* data tables the student must produce */
+  table.spec{ width:100%; border-collapse:collapse; margin:.9rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  table.spec th, table.spec td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec caption{ caption-side:top; text-align:left; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.8rem; color:var(--muted); padding-bottom:.35rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* warning / watch-out */
+  .watch{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.3rem 0; background:#fffdf8;
+  }
+  .watch b{ color:#9a5c10; }
+
+  /* interactive tool panel */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .sim canvas{ display:block; width:100%; height:auto; background:#fff; }
+  .grid2{ display:grid; gap:.7rem 1.2rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .ctrl input[type=number], .ctrl input[type=text], .ctrl textarea{
+    font:inherit; font-size:.92rem; width:100%; box-sizing:border-box;
+    padding:.4rem .55rem; border:1px solid var(--rule); border-radius:6px; background:#fff;
+  }
+  .ctrl textarea{ min-height:5.5rem; font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; font-size:.85rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .verdict{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; margin-top:.9rem;
+    padding:.65rem .9rem; border-radius:8px; background:#fff; border:1px solid var(--rule);
+    min-height:1.2em;
+  }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* submission checklist */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .check-group{ margin:0 0 1.1rem; }
+  .check-group > .gh{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--green); font-weight:700; display:block; margin-bottom:.4rem;
+  }
+  .check-group label{ display:flex; gap:.6rem; align-items:flex-start;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; margin-bottom:.4rem; cursor:pointer; background:#fff; }
+  .check-group label:hover{ border-color:var(--green); }
+  .check-group input{ margin-top:.2rem; accent-color:var(--green); flex:none; }
+  .check-group input:checked + span{ color:var(--muted); text-decoration:line-through; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:.6rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule);
+  }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  .refs{ font-size:.95rem; }
+  .refs li{ margin:.4rem 0; }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+  footer .attrib{ display:block; margin-top:.3rem; }
+
+  .eqn .domain{
+    display:block; margin-top:.6rem; padding-top:.55rem; border-top:1px dashed var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:400;
+    line-height:1.55; color:var(--muted); letter-spacing:0; text-align:left;
+  }
+  .eqn .domain b{ color:var(--green-deep); }
+  .filenote{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted);
+    margin:.7rem 0 0; line-height:1.55;
+  }
+
+  /* ---- apparatus diagram (added 2026-09-24) ---- */
+  .apparatus{ margin:1.4rem 0; padding:0; }
+  .apparatus svg{ display:block; width:100%; height:auto; }
+  .apparatus .cap{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted);
+    text-align:center; margin-top:.5rem; line-height:1.5;
+  }
+  .apparatus .frame{ border:1px solid var(--rule); border-radius:8px; background:#fff; padding:.6rem; }
+  .ap-solid{ fill:none; stroke:var(--ink); stroke-width:2; }
+  .ap-thin{ fill:none; stroke:var(--ink); stroke-width:1.2; }
+  .ap-dash{ fill:none; stroke:var(--muted); stroke-width:1.4; stroke-dasharray:5 4; }
+  .ap-traj{ fill:none; stroke:var(--green); stroke-width:2.2; stroke-dasharray:7 5; }
+  .ap-dim{ fill:none; stroke:var(--green-deep); stroke-width:1.6; }
+  .ap-warn{ fill:none; stroke:#c0392b; stroke-width:1.6; }
+  .ap-shelf{ fill:#e8e4f0; stroke:var(--ink); stroke-width:1.5; }
+  .ap-tube{ fill:#cfd8d3; stroke:var(--ink); stroke-width:1.5; }
+  .ap-ball{ fill:var(--ink); }
+  .ap-paper{ fill:#fff; stroke:var(--ink); stroke-width:1; }
+  .ap-carbon{ fill:#4a4a52; stroke:var(--ink); stroke-width:1; }
+  .ap-t{ font-family:"Segoe UI", system-ui, sans-serif; font-size:14px; fill:var(--ink); }
+  .ap-t.lbl{ font-weight:700; fill:var(--green-deep); font-size:16px; }
+  .ap-t.sm{ font-size:12.5px; fill:var(--muted); }
+  .ap-t.bad{ font-size:12.5px; fill:#c0392b; font-weight:600; }
+  @media print{
+    /* ---- compact print pass, 2026-09-24 -------------------------------
+       Screen layout is untouched; this only tightens the photocopy.
+       Body drops from 1.06rem/1.65 to 0.86rem/1.4 (~10.3pt), which is
+       still comfortably above the ~9pt floor for a bench-side handout. */
+    @page{ margin:0.45in; }
+    body{ font-size:.80rem; line-height:1.34; }
+    .note-wrap{ max-width:none; margin:0; padding:0; }
+
+    h1{ font-size:1.5rem; margin:.2rem 0 .15rem; }
+    h2{ font-size:1.02rem; margin:.95rem 0 .4rem; page-break-after:avoid; }
+    h3{ font-size:.92rem; margin:.7rem 0 .3rem;  }
+    p{ margin:.45rem 0; }
+
+    .eyebrow{ margin-bottom:.15rem; }
+    .synopsis{ padding:.6rem .8rem; margin:.7rem 0; }
+    .logistics{ margin:.5rem 0; gap:.4rem; }
+    .pe{ margin:.8rem 0; }
+    .pe ul{ padding:.25rem .35rem; }
+    .pe li{ padding:.28rem .4rem; gap:.5rem; }
+    .pe li .tick{ width:1.25rem; height:1.25rem; font-size:.62rem; }
+
+    .sign-note, .note-link, .watch, .prior, .probe{
+      padding:.6rem .8rem; margin:.7rem 0;
+    }
+    .sign-note, .note-link, .probe{  }
+    .prior .body{ padding:.55rem .8rem .6rem; }
+    .prior .cases{ gap:.45rem; }
+    .case{ padding:.5rem .55rem; }
+
+    .eqn{ padding:.55rem .7rem; margin:.6rem 0; font-size:1rem; page-break-inside:avoid; }
+    .eqn .domain{ margin-top:.4rem; padding-top:.35rem; font-size:.73rem; line-height:1.4; }
+
+    ol.steps, ul.steps{ margin:.5rem 0; padding-left:1.15rem; }
+    ol.steps > li, ul.steps > li{ margin:.3rem 0; }
+    ul{ margin:.45rem 0; }
+    li{ margin:.22rem 0; }
+
+    .apparatus{ margin:.7rem 0; page-break-inside:avoid; }
+    .apparatus .frame{ padding:.35rem; }
+    .apparatus svg{ max-height:2.9in; }
+    .apparatus .cap{ font-size:.74rem; margin-top:.3rem; line-height:1.4; }
+
+    /* the interactive tool is dead on paper — keep the heading and the note,
+       drop the controls and the empty readouts */
+    .sim .buttons, .sim .controls input, .sim .readout{ display:none; }
+    .sim{ padding:.5rem .7rem; margin:.6rem 0; }
+
+    .ticket{ margin:.8rem 0; }
+    .ticket .t-body{ padding:.5rem .7rem; }
+    .check-group{ margin:.5rem 0; }
+    .check-group label{ margin:.18rem 0; }
+    .gh{ margin-top:.45rem; }
+
+    .downloads{ gap:.4rem; margin:.6rem 0; }
+    .dl-card{ padding:.5rem .7rem; }
+    .dl-card .hint{ font-size:.73rem; }
+    .filenote{ font-size:.76rem; margin-top:.5rem; }
+    .refs{ margin:.4rem 0; }
+    footer{ margin-top:.9rem; padding-top:.5rem; font-size:.72rem; }
+  }
+
+  @media print{
+    body{ font-size:10.5pt; }
+    .note-wrap{ max-width:none; padding:0; }
+    .btn, .sim .buttons{ display:none !important; }
+    .sim, .ticket, .pe, .prior{ break-inside:avoid; }
+    h2{ break-after:avoid; }
+    .verdict, .readout, .sim .panel .ctrl textarea{ display:none; }
+    a{ color:inherit; text-decoration:none; }
+    /* probe options stay visible on paper, as a plain lettered list */
+    .probe .opts{ counter-reset:opt; }
+    .probe .opt{ cursor:default; border:none; padding:.12rem 0 .12rem 1.6rem; position:relative; background:none; }
+    .probe .opt::before{
+      counter-increment:opt; content:"(" counter(opt, upper-alpha) ")";
+      position:absolute; left:0; font-weight:600; color:#5c6b62;
+    }
+    .probe .feedback{ display:none; }
+    /* the tick badges need a hair more room at print metrics */
+    .pe li .tick{ width:1.7rem; height:1.7rem; font-size:.66rem; }
+    .check-group label{ break-inside:avoid; }
+  }
+
+.sign-note{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; line-height:1.55; color:var(--ink,#1d2b23); background:#fdf6ea; border-left:3px solid var(--amber,#c77b1f); border-radius:0 6px 6px 0; padding:.6rem .85rem; margin:.9rem 0; }
+  .note-link{
+    background:#fff; border:1px solid var(--rule); border-left:4px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.85rem 1.05rem; margin:1rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .note-link b{ color:var(--green-deep); }
+.sign-note b{ color:#8a5512; }
+
+  /* ---- LB04 additions ---- */
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .ctrl select{ font:inherit; }
+  table.spec tbody td b{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>PHY 151 &middot; Module 5 &mdash; Circular and Rotational Motion</span>
+    <span>Lab 07</span>
+  </div>
+
+  <h1>Moment of Inertia: Verifying &tau; = I&alpha; on a Spinning Disc</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Newton's second law has a rotational twin: &tau; = I&alpha;. A torque applied to a rigid body gives
+    it an angular acceleration, and the constant of proportionality is the body's moment of inertia
+    &mdash; its resistance to being spun up, the rotational counterpart of mass. This lab puts that
+    claim on a graph. A metal disc turns on a low-friction axle with a small pulley on its shaft; a
+    string wound round that pulley runs over to a hanging mass, and the falling mass applies a torque.
+    Change the hanging mass and you change the torque; measure the angular acceleration each time. If
+    &tau; = I&alpha; is right, those two quantities are proportional, and the slope of &alpha; against
+    &tau; is 1/I. Then comes the real test: the disc is a uniform cylinder, so its moment of inertia can
+    also be calculated from nothing but its mass and its radius. Two routes to the same number, one
+    experimental and one geometric, and no reason they should agree unless the physics holds.
+
+    <div class="logistics">
+      <span class="chip"><b>Due</b> see the Module 5 Lab folder on Brightspace</span>
+      <span class="chip"><b>Report</b> Full lab report &mdash; use the Lab Template</span>
+      <span class="chip"><b>Pairs with</b> M5 &mdash; Moment of Inertia Lab Analysis</span>
+      <span class="chip"><b>Data</b> provided &mdash; this is a virtual lab</span>
+    </div>
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>what you should be able to do when this lab is written up</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Draw a free-body diagram for the hanging
+        mass and a torque diagram for the disc</b>, and recognise that they are connected by one string
+        carrying one tension.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Explain why the tension is not equal to the
+        weight of the hanging mass</b>, and derive T = M<sub>H</sub>(g &minus; a) from
+        &Sigma;F = M<sub>H</sub>a.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Use the rolling constraint a = r<sub>p</sub>&alpha;</b>
+        to tie the linear motion of the falling mass to the rotation of the disc, and say why the
+        <em>pulley</em> radius is the one that appears and not the disc radius.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Compute a torque as &tau; = r<sub>p</sub>T</b>
+        for each run, carrying units, and recognise that &tau; is not simply proportional to
+        M<sub>H</sub>.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Obtain a moment of inertia from the slope of
+        &alpha; against &tau;</b>, with its uncertainty, and state why the slope is 1/I rather than
+        I.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Compare an experimental moment of inertia
+        against the geometric value &frac12;MR&sup2;</b> and judge the agreement against a stated
+        criterion.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ NOTE BRIDGE ============ -->
+  <h2>This lab is Note 4, measured</h2>
+
+  <div class="note-link">
+    <b>The analysis for this lab was worked out in class, by hand, before any data were taken.</b> The
+    free-body diagram for the hanging mass, the torque diagram for the disc, the substitution that
+    eliminates the tension, and the decision to plot &alpha; against &tau; rather than the other way up
+    &mdash; all of that is the Moment of Inertia Lab Analysis note. Everything below is that argument
+    written out. You are expected to bring the note into the report and build on it, not re-derive it
+    from scratch as though you had never seen it.
+  </div>
+
+  <table class="spec">
+    <caption>Where each part of the note belongs in this report. The rubric awards points for these.</caption>
+    <thead>
+      <tr><th style="width:30%">Report section</th><th>What the note gives you</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Introduction</b></td>
+        <td>&tau; = I&alpha; stated as the rotational second law, and <b>your own derivation</b> of the
+          working relation &mdash; from the two diagrams, through T = M<sub>H</sub>(g &minus; a) and
+          a = r<sub>p</sub>&alpha;, to a torque written entirely in terms of things you can measure.
+          End with a hypothesis you can confirm or reject.</td></tr>
+      <tr><td><b>Experimental</b></td>
+        <td>The side-on and top-down sketches of the apparatus, redrawn by you, with r<sub>p</sub> and
+          r<sub>D</sub> marked and clearly distinguished. State the sign convention: which way is
+          positive for the falling mass and which way for the rotation.</td></tr>
+      <tr><td><b>Analysis</b></td>
+        <td>The plot of &alpha; against &tau;, with <b>slope = 1/I</b>, and the independent calculation
+          I<sub>D</sub> = &frac12;M<sub>D</sub>r<sub>D</sub>&sup2;.</td></tr>
+      <tr><td><b>Discussion</b></td>
+        <td>Whether the two moments of inertia agree, which one you would trust, and what in the
+          apparatus the model leaves out.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============ THE PHYSICS ============ -->
+  <h2>The physics you are using</h2>
+
+  <p>Three relations, applied in order. The goal of the lab, stated plainly, is <b>to verify
+  &tau; = I&alpha;</b>.</p>
+
+  <h3>One &mdash; the hanging mass</h3>
+
+  <p>The falling mass has two forces on it: its weight down, and the string tension up. Taking down as
+  positive,</p>
+
+  <div class="eqn">
+    &Sigma;F = F<sub>net</sub> = M<sub>H</sub>a = F<sub>g,H</sub> &minus; T
+    &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+    T = M<sub>H</sub>g &minus; M<sub>H</sub>a = M<sub>H</sub>(g &minus; a)
+  </div>
+
+  <p>This is the step people skip. <b>The tension is not the weight.</b> If it were, the mass would hang
+  motionless. It is less than the weight by exactly the amount needed to accelerate the mass downward,
+  and the faster the system accelerates the bigger that shortfall is.</p>
+
+  <h3>Two &mdash; the disc</h3>
+
+  <p>The string leaves the pulley tangentially, so it applies a torque about the axle of magnitude
+  r<sub>p</sub>T, where r<sub>p</sub> is the <em>pulley</em> radius. The rotational second law gives</p>
+
+  <div class="eqn">
+    &tau; = r<sub>p</sub>T = I<sub>D</sub>&alpha;
+  </div>
+
+  <h3>Three &mdash; the constraint that joins them</h3>
+
+  <p>The string does not slip, so the speed of the string equals the speed of the pulley rim, and the
+  linear acceleration of the hanging mass equals the tangential acceleration at the pulley:</p>
+
+  <div class="eqn">
+    a = r<sub>p</sub>&alpha;
+  </div>
+
+  <p>Substituting that into the tension, and the tension into the torque, puts everything in terms of
+  what you can actually measure:</p>
+
+  <div class="eqn">
+    r<sub>p</sub> [ M<sub>H</sub>(g &minus; r<sub>p</sub>&alpha;) ] = I<sub>D</sub>&alpha;
+  </div>
+
+  <p>You <b>vary M<sub>H</sub></b> and you <b>measure &alpha;</b>. Everything else in that line is a
+  constant of the apparatus.</p>
+
+  <div class="sign-note"><b>Two radii, and they are not interchangeable.</b> The string winds on the
+  small pulley on the shaft, radius r<sub>p</sub> = 1.45&nbsp;cm. The spinning body is the disc, radius
+  r<sub>D</sub> = 4.45&nbsp;cm. <b>r<sub>p</sub> is the one in the torque and in the constraint;
+  r<sub>D</sub> is the one in &frac12;M<sub>D</sub>r<sub>D</sub>&sup2;.</b> They differ by a factor of
+  three, so swapping them does not produce a slightly wrong answer &mdash; it produces one wrong by
+  about an order of magnitude. Mark both on your sketch and label every use.</div>
+
+  <!-- ============ PREDICT FIRST ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first. You double the hanging mass from 50&nbsp;g to 100&nbsp;g. What happens to
+    the torque on the disc?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">It exactly doubles &mdash; torque is r<sub>p</sub>M<sub>H</sub>g.</button>
+      <button class="opt" data-correct="true">It roughly doubles, but falls a little short, because the tension is less than the weight.</button>
+      <button class="opt" data-correct="false">It more than doubles, because the system also speeds up.</button>
+      <button class="opt" data-correct="false">It stays the same &mdash; the disc is unchanged.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <div class="watch">
+    <b>Why that question is the whole care of this lab.</b> It is tempting to write
+    &tau; = r<sub>p</sub>M<sub>H</sub>g, treating the hanging weight as the thing applying the torque.
+    That is wrong, and it is wrong by a growing amount: the heavier the hanging mass, the faster the
+    system accelerates, and the further the tension falls below the weight. In this data set the
+    shortfall runs from about 5% at 50&nbsp;g to about 9% at 100&nbsp;g. Because the error grows with
+    the independent variable, <b>it bends the graph rather than shifting it</b> &mdash; which is the
+    kind of mistake a straight-line fit will happily absorb into a wrong slope without ever looking
+    wrong. The correct torque is r<sub>p</sub>M<sub>H</sub>(g &minus; a), and your Analysis must show
+    it.
+  </div>
+
+  <!-- ============ APPARATUS ============ -->
+  <h2>The apparatus</h2>
+
+  <p>A metal disc is mounted on a low-friction axle so it can spin freely in a horizontal plane. A small
+  pulley is fixed to the shaft at the centre of the disc. A string is wound round that pulley, run
+  horizontally to the edge of the bench, over a guide, and down to a hanger. Releasing the hanger lets
+  it fall; the string unwinds and spins the disc. A sensor records the angular acceleration of the disc
+  for each run.</p>
+
+  <figure class="apparatus">
+    <svg viewBox="0 0 640 300" width="100%" role="img"
+         aria-label="Left: side-on view of the disc on its axle with a string from the shaft pulley running over a guide to a hanging mass. Right: top-down view of the disc showing the disc radius and the smaller pulley radius.">
+      <!-- ============ side on ============ -->
+      <text x="22" y="24" font-size="12" fill="#5c6b62" font-family="Segoe UI, sans-serif">Side on</text>
+      <!-- bench -->
+      <line x1="20" y1="208" x2="300" y2="208" stroke="#9db0a4" stroke-width="2"/>
+      <!-- disc edge-on -->
+      <rect x="60" y="92" width="150" height="10" rx="3" fill="#dfe8e2" stroke="#1d2b23" stroke-width="1.4"/>
+      <text x="135" y="86" font-size="11.5" text-anchor="middle" fill="#1d2b23" font-family="Segoe UI, sans-serif">disc, M<tspan baseline-shift="sub" font-size="9">D</tspan></text>
+      <!-- shaft -->
+      <rect x="130" y="102" width="10" height="106" fill="#c9d6cd" stroke="#1d2b23" stroke-width="1.2"/>
+      <!-- pulley on shaft -->
+      <rect x="122" y="118" width="26" height="12" rx="2" fill="#f4b9b9" stroke="#1d2b23" stroke-width="1.3"/>
+      <text x="100" y="114" font-size="11" text-anchor="end" fill="#c77b1f" font-family="Segoe UI, sans-serif">pulley, r<tspan baseline-shift="sub" font-size="8">p</tspan></text>
+      <!-- string to guide -->
+      <line x1="148" y1="124" x2="258" y2="124" stroke="#1d2b23" stroke-width="1.3"/>
+      <circle cx="264" cy="124" r="7" fill="none" stroke="#1d2b23" stroke-width="1.3"/>
+      <line x1="271" y1="124" x2="271" y2="176" stroke="#1d2b23" stroke-width="1.3"/>
+      <!-- hanging mass -->
+      <rect x="258" y="176" width="26" height="20" rx="2" fill="#ffffff" stroke="#1d2b23" stroke-width="1.5"/>
+      <text x="294" y="190" font-size="11.5" fill="#1d2b23" font-family="Segoe UI, sans-serif">M<tspan baseline-shift="sub" font-size="9">H</tspan></text>
+      <!-- tension / weight arrows -->
+      <line x1="244" y1="168" x2="244" y2="140" stroke="#1e6b3c" stroke-width="1.4"/>
+      <path d="M244 140 l-4 9 l8 0 z" fill="#1e6b3c"/>
+      <text x="230" y="158" font-size="11.5" fill="#1e6b3c" font-family="Segoe UI, sans-serif">T</text>
+      <line x1="271" y1="200" x2="271" y2="226" stroke="#1d2b23" stroke-width="1.4"/>
+      <path d="M271 226 l-4 -9 l8 0 z" fill="#1d2b23"/>
+      <text x="278" y="224" font-size="11" fill="#1d2b23" font-family="Segoe UI, sans-serif">M<tspan baseline-shift="sub" font-size="8">H</tspan>g</text>
+      <!-- a arrow -->
+      <line x1="300" y1="178" x2="300" y2="202" stroke="#c77b1f" stroke-width="1.4"/>
+      <path d="M300 202 l-4 -9 l8 0 z" fill="#c77b1f"/>
+      <text x="306" y="194" font-size="11.5" fill="#c77b1f" font-family="Segoe UI, sans-serif">a</text>
+
+      <!-- divider -->
+      <line x1="340" y1="30" x2="340" y2="260" stroke="#d7e2da" stroke-width="1.5"/>
+
+      <!-- ============ top down ============ -->
+      <text x="372" y="24" font-size="12" fill="#5c6b62" font-family="Segoe UI, sans-serif">Top down</text>
+      <circle cx="486" cy="140" r="84" fill="none" stroke="#1d2b23" stroke-width="1.6"/>
+      <circle cx="486" cy="140" r="27" fill="none" stroke="#c77b1f" stroke-width="1.5"/>
+      <circle cx="486" cy="140" r="2.5" fill="#1d2b23"/>
+      <!-- radii -->
+      <line x1="486" y1="140" x2="486" y2="56" stroke="#1d2b23" stroke-width="1.3"/>
+      <text x="492" y="88" font-size="11.5" fill="#1d2b23" font-family="Segoe UI, sans-serif">r<tspan baseline-shift="sub" font-size="9">D</tspan></text>
+      <line x1="486" y1="140" x2="513" y2="140" stroke="#c77b1f" stroke-width="1.6"/>
+      <text x="494" y="156" font-size="11.5" fill="#c77b1f" font-family="Segoe UI, sans-serif">r<tspan baseline-shift="sub" font-size="9">p</tspan></text>
+      <!-- string tangent -->
+      <line x1="513" y1="140" x2="606" y2="140" stroke="#1d2b23" stroke-width="1.3"/>
+      <path d="M606 140 l-9 -4 l0 8 z" fill="#1d2b23"/>
+      <text x="576" y="132" font-size="11.5" fill="#1e6b3c" font-family="Segoe UI, sans-serif">T</text>
+      <!-- alpha arc -->
+      <path d="M414 112 a84 84 0 0 1 32 -38" fill="none" stroke="#1e6b3c" stroke-width="1.5"/>
+      <path d="M446 74 l-10 1 l4 8 z" fill="#1e6b3c"/>
+      <text x="404" y="106" font-size="12" text-anchor="end" fill="#1e6b3c" font-family="Segoe UI, sans-serif">&#945;</text>
+    </svg>
+    <figcaption>Figure 1. The apparatus. Left, side on: the falling mass unwinds the string from the
+    shaft pulley. Right, top down: the string leaves the pulley tangentially, so the torque arm is
+    r<sub>p</sub>, while the body being spun has radius r<sub>D</sub>.</figcaption>
+  </figure>
+
+  <h3>The constants</h3>
+
+  <table class="spec">
+    <thead><tr><th>Quantity</th><th>Measured</th><th style="width:30%">In SI</th></tr></thead>
+    <tbody>
+      <tr><td>Pulley diameter</td><td>2.90 cm</td><td>r<sub>p</sub> = 0.01450 m</td></tr>
+      <tr><td>Disc diameter</td><td>8.90 cm</td><td>r<sub>D</sub> = 0.04450 m</td></tr>
+      <tr><td>Disc mass</td><td>212.8 g</td><td>M<sub>D</sub> = 0.2128 kg</td></tr>
+    </tbody>
+  </table>
+
+  <p>From those three numbers alone, the geometric moment of inertia of a uniform disc about its centre
+  is</p>
+
+  <div class="eqn">
+    I<sub>D</sub> = &frac12; M<sub>D</sub> r<sub>D</sub>&sup2;
+    = &frac12;(0.2128)(0.04450)&sup2;
+    = 2.107 &times; 10<sup>&minus;4</sup> kg&middot;m&sup2;
+  </div>
+
+  <p>That is the number your graph has to reproduce. <b>It was calculated before the experiment, not
+  fitted to it</b>, which is what makes the comparison a test rather than a circular argument.</p>
+
+  <!-- ============ PART I ============ -->
+  <h2>Part I &mdash; The data</h2>
+
+  <p>Six runs. The hanging mass was increased in 10&nbsp;g steps and the angular acceleration of the
+  disc recorded for each.</p>
+
+  <table class="spec">
+    <caption>The six runs as recorded. Everything else in this lab is derived from these two columns.</caption>
+    <thead><tr><th>Run</th><th>Hanging mass M<sub>H</sub> (g)</th><th>Angular acceleration &alpha; (rad/s&sup2;)</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>50</td><td>33</td></tr>
+      <tr><td>2</td><td>60</td><td>40</td></tr>
+      <tr><td>3</td><td>70</td><td>46</td></tr>
+      <tr><td>4</td><td>80</td><td>50</td></tr>
+      <tr><td>5</td><td>90</td><td>57</td></tr>
+      <tr><td>6</td><td>100</td><td>63</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============ PART II ============ -->
+  <h2>Part II &mdash; Turning each run into a torque</h2>
+
+  <p>Four steps per run, in this order. Each is a sample calculation the rubric asks to see worked once.</p>
+
+  <ol class="questions">
+    <li><b>The linear acceleration.</b> a = r<sub>p</sub>&alpha;. Note that this is <em>not</em> a
+      measured quantity &mdash; it is the measured &alpha; converted through the constraint.</li>
+    <li><b>The tension.</b> T = M<sub>H</sub>(g &minus; a), with g = 9.8 m/s&sup2;. Compute
+      M<sub>H</sub>g and M<sub>H</sub>a separately the first time so you can see the size of the
+      correction.</li>
+    <li><b>The torque.</b> &tau; = r<sub>p</sub>T. Units are N&middot;m; they are not joules, and saying
+      so is worth a sentence.</li>
+    <li><b>Tabulate.</b> M<sub>H</sub>, &alpha;, a, M<sub>H</sub>g, M<sub>H</sub>a, T, &tau;, one row per
+      run.</li>
+  </ol>
+
+  <div class="watch"><b>Look at the tension column before you go on.</b> The weight
+  M<sub>H</sub>g rises in even 0.098&nbsp;N steps because the masses do. The tension does not: it rises
+  more slowly, and the gap between them widens run by run. That widening gap is the whole content of
+  step 2, and a reader of your table should be able to see it without being told.</div>
+
+  <!-- ============ PART III ============ -->
+  <h2>Part III &mdash; The graph that measures the moment of inertia</h2>
+
+  <p>From &tau; = I&alpha;, solved for the quantity you measured:</p>
+
+  <div class="eqn">
+    &alpha; = ( 1 / I ) &times; &tau;
+  </div>
+
+  <p>So plot <b>&alpha; up the page against &tau; across it</b>, and the slope is <b>1/I</b> &mdash; not
+  I. Invert it to get the experimental moment of inertia:</p>
+
+  <div class="eqn">
+    I<sub>expt</sub> = 1 / slope
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &delta;I = &delta;(slope) / (slope)&sup2;
+  </div>
+
+  <h3>The comparison</h3>
+
+  <p>Put the two moments of inertia side by side: I<sub>expt</sub> from the slope, and
+  I<sub>D</sub> = &frac12;M<sub>D</sub>r<sub>D</sub>&sup2; = 2.107 &times; 10<sup>&minus;4</sup>
+  kg&middot;m&sup2; from the geometry. Quote a percent difference. A difference of <b>10% or less</b> is
+  a confirmation of &tau; = I&alpha;.</p>
+
+  <p>If you land outside that, check in this order: r<sub>D</sub> used where r<sub>p</sub> belongs;
+  the slope reported as I instead of 1/I; the torque built from M<sub>H</sub>g instead of
+  M<sub>H</sub>(g &minus; a); or diameters used in place of radii.</p>
+
+  <!-- ============ TOOL ============ -->
+  <h2>Check your analysis</h2>
+  <p>Paste your six torque-and-angular-acceleration pairs to check the line you fitted. Your report still
+  has to show the graph and a worked sample calculation of each type, by hand, with units.</p>
+
+  <div class="sim">
+    <div class="sim-head"><span>&#9679;</span> Tool &middot; Fit &alpha; against &tau;, and read off the moment of inertia</div>
+    <div class="panel">
+      <div class="ctrl">
+        <label for="pairs">One run per line: &tau; in N&middot;m, then &alpha; in rad/s&sup2;,
+          separated by a comma, a tab or a space</label>
+        <textarea id="pairs" spellcheck="false" placeholder="0.006758  33&#10;0.008021  40&#10;0.009270  46&#10;0.010527  50&#10;0.011710  57&#10;0.012885  63"></textarea>
+      </div>
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="discM">Disc mass (kg)</label>
+          <input type="number" id="discM" step="any" inputmode="decimal" value="0.2128">
+        </div>
+        <div class="ctrl">
+          <label for="discR">Disc radius (m)</label>
+          <input type="number" id="discR" step="any" inputmode="decimal" value="0.0445">
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="fitBtn">Fit</button>
+        <button class="btn" id="fitClear">Clear</button>
+      </div>
+      <div class="readout">
+        <span class="chip">slope = <b id="oSlope">&mdash;</b></span>
+        <span class="chip">intercept = <b id="oInt">&mdash;</b></span>
+        <span class="chip">R&sup2; = <b id="oR2">&mdash;</b></span>
+        <span class="chip">I from slope = <b id="oI">&mdash;</b></span>
+        <span class="chip">&frac12;MR&sup2; = <b id="oIg">&mdash;</b></span>
+      </div>
+      <div class="verdict" id="oVerdict">Paste at least three runs to begin.</div>
+      <div class="hint-row">The slope is 1/I, so the uncertainty on I is &delta;(slope)/(slope)&sup2;
+      &mdash; the tool applies that for you, but AQ4 asks you to derive it.</div>
+    </div>
+  </div>
+
+  <!-- ============ ADDITIONAL QUESTIONS ============ -->
+  <h2>Additional Questions</h2>
+  <p><b>Choose three of the five below and answer those three fully.</b> Name which three you chose.
+  Answer them in a section of their own headed <b>Additional Questions</b>, in <b>sentences and
+  paragraphs</b> with the working shown, never as a bare numbered list and never by restating the
+  question before answering it. Depth on three beats coverage of five; this section is worth 8 points on
+  the rubric.</p>
+
+  <ol class="questions aq">
+    <li><b>AQ1 &mdash; how wrong is the easy mistake?</b> Redo the whole analysis using the incorrect
+      torque &tau; = r<sub>p</sub>M<sub>H</sub>g, as though the tension equalled the weight. Report the
+      slope, the moment of inertia it gives, and its percent difference from
+      &frac12;M<sub>D</sub>r<sub>D</sub>&sup2;. Then explain the <em>shape</em> of the error: show that
+      the fractional overestimate of the torque is a/g, that a grows with M<sub>H</sub>, and that the
+      consequence is a graph which is still convincingly straight but has the wrong slope. Say what this
+      implies about using R&sup2; as evidence that an analysis is correct.</li>
+
+    <li><b>AQ2 &mdash; where the string's own mass went.</b> The model treats the string as massless and
+      the guide pulley as frictionless and inertia-free. Pick <em>one</em> of those idealisations and
+      work out which way relaxing it would move your experimental moment of inertia &mdash; higher or
+      lower than the true disc value. Justify the direction physically rather than by hand-waving. Then
+      look at the sign of your own discrepancy and say whether it is consistent with the mechanism you
+      chose. If it is not, say so plainly; a result that fails to support your explanation is still a
+      result.</li>
+
+    <li><b>AQ3 &mdash; the disc is not quite a uniform cylinder.</b> &frac12;MR&sup2; assumes all the
+      mass is spread evenly over a flat disc. The real object has a shaft and a pulley attached at its
+      centre. Using the parallel-axis theorem where appropriate and the formula for a solid cylinder,
+      estimate the moment of inertia contributed by the pulley (treat it as a small uniform cylinder of
+      radius r<sub>p</sub> and guess a plausible mass). Express it as a percentage of the disc's own
+      moment of inertia. Does including it move the geometric value toward or away from your
+      experimental one, and is the size of the correction big enough to matter at the precision you
+      achieved?</li>
+
+    <li><b>AQ4 &mdash; propagating an inverted slope.</b> You measured a slope s = 1/I and reported
+      I = 1/s. Derive &delta;I = &delta;s/s&sup2; by differentiating I = s<sup>&minus;1</sup>, and show
+      that the <em>fractional</em> uncertainty is unchanged by the inversion: &delta;I/I = &delta;s/s.
+      Apply it to your own fit and quote I<sub>expt</sub> &plusmn; &delta;I. Then answer the question
+      that matters: is the difference between your experimental and geometric moments of inertia larger
+      or smaller than &delta;I? If it is smaller, what exactly have you demonstrated &mdash; and what
+      have you not?</li>
+
+    <li><b>AQ5 &mdash; predicting a run you were not given.</b> Using your experimental moment of
+      inertia and the working relation
+      r<sub>p</sub>[M<sub>H</sub>(g &minus; r<sub>p</sub>&alpha;)] = I&alpha;, solve algebraically for
+      &alpha; in terms of M<sub>H</sub> and the constants &mdash; note that &alpha; appears on both
+      sides, so this takes a line of rearrangement. Then predict the angular acceleration for a hanging
+      mass of 150&nbsp;g, and for 500&nbsp;g. Comment on what your expression says happens as
+      M<sub>H</sub> becomes very large: does &alpha; grow without limit, and if not, what does it
+      approach and why is that physically sensible?</li>
+  </ol>
+
+  <!-- ============ DISCUSSION ============ -->
+  <h2>Prompts for your Discussion</h2>
+  <p>These are <b>not</b> the Additional Questions. Work them into your <b>Discussion</b> section as part
+  of your argument, in your own order. Do not answer them as a list, and do not limit yourself to them.</p>
+
+  <ol class="questions">
+    <li>You have two moments of inertia for the same disc. Which would you report if you had to pick
+      one, and what would have to be true for the experimental value to be the better of the two?</li>
+    <li>Your fitted line has an intercept. The model says &alpha; should be zero when &tau; is zero. Is
+      your intercept large enough to be meaningful, and if so what would produce it?</li>
+    <li>Moment of inertia is often described as "rotational mass". Using your own numbers, say what is
+      right about that description and what is misleading &mdash; in particular, why the same disc would
+      have a different moment of inertia about a different axis while its mass would not change.</li>
+    <li>The tension correction mattered at the few-percent level here. Describe a version of this
+      experiment in which it would matter hardly at all, and one in which it would dominate.</li>
+    <li>The angular accelerations were recorded to two significant figures. Propagate that precision
+      through to your moment of inertia and say whether it limits the comparison you made.</li>
+    <li>If the string slipped on the pulley during a run, what would you expect to see in the data, and
+      would it be distinguishable from a genuinely smaller moment of inertia?</li>
+  </ol>
+
+  <!-- ============ FILES ============ -->
+  <h2>Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB07_Moment_Of_Inertia.pdf" target="_blank" rel="noopener">
+      <span class="kind">Handout</span>
+      <span class="name">This lab, as a PDF</span>
+      <span class="hint">The whole page, printable. The calculator only works on the web version.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB07_Moment_Of_Inertia_Example_Workbook.xlsx" target="_blank" rel="noopener">
+      <span class="kind">Required</span>
+      <span class="name">Example workbook</span>
+      <span class="hint">The six runs, a blank analysis sheet laid out for you, and the whole set worked.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB07_Rubric.docx" target="_blank" rel="noopener">
+      <span class="kind">Grading</span>
+      <span class="name">Lab 07 rubric</span>
+      <span class="hint">Read it before you write, not after.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB07_Moment_Of_Inertia_Example_Starter.docx" target="_blank" rel="noopener">
+      <span class="kind">Support</span>
+      <span class="name">Report starter</span>
+      <span class="hint">Section guidance only &mdash; the sentence stems have gone. See the note inside.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">Note</span>
+      <span class="name">M5 &mdash; Moment of Inertia Lab Analysis</span>
+      <span class="hint">The in-class derivation this lab is built on. Not yet published as a page; use your printed copy.</span>
+    </div>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/Formatting_Data_Tables_for_Lab_Reports.html" target="_blank" rel="noopener">
+      <span class="kind">Reference</span>
+      <span class="name">Formatting data tables</span>
+      <span class="hint">Table captions, units in headers, significant figures.</span>
+    </a>
+  </div>
+
+  <!-- ============ REFERENCES ============ -->
+  <h2>References to get you started</h2>
+  <p>Your references should include material on rotational dynamics and moment of inertia. Your
+  textbook, this handout and the Module 5 notes all count, and you need at least one source beyond the
+  textbook.</p>
+  <ol class="refs">
+    <li>[Author's names], <i>Journal or Book title</i>, edition, Volume number, page number, (year).</li>
+  </ol>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 151
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function fmt(x,d){ if(!isFinite(x)) return '—';
+    return (Math.round(x*Math.pow(10,d))/Math.pow(10,d)).toFixed(d); }
+  function sci(x,d){ if(!isFinite(x)) return '—';
+    var e=Math.floor(Math.log(Math.abs(x))/Math.LN10);
+    return (x/Math.pow(10,e)).toFixed(d)+'×10^'+e; }
+  function out(id,t){ var e=document.getElementById(id); if(e) e.textContent=t; }
+
+  function compute(){
+    var ta=document.getElementById('pairs');
+    var rows=[];
+    (ta?ta.value:'').split(/\n/).forEach(function(line){
+      var p=line.trim().split(/[\s,\t]+/).filter(function(x){return x.length;});
+      if(p.length>=2){ var a=parseFloat(p[0]), b=parseFloat(p[1]);
+        if(isFinite(a)&&isFinite(b)) rows.push([a,b]); }
+    });
+    var v=document.getElementById('oVerdict');
+    if(rows.length<3){
+      ['oSlope','oInt','oR2','oI','oIg'].forEach(function(i){ out(i,'—'); });
+      if(v) v.textContent='Paste at least three runs to begin.';
+      return;
+    }
+    var n=rows.length, sx=0,sy=0,sxx=0,sxy=0;
+    rows.forEach(function(r){ sx+=r[0]; sy+=r[1]; sxx+=r[0]*r[0]; sxy+=r[0]*r[1]; });
+    var den=n*sxx-sx*sx;
+    var slope=(n*sxy-sx*sy)/den, inter=(sy*sxx-sx*sxy)/den;
+    var ssr=0, sst=0, my=sy/n;
+    rows.forEach(function(r){ var p=slope*r[0]+inter; ssr+=(r[1]-p)*(r[1]-p); sst+=(r[1]-my)*(r[1]-my); });
+    var r2= sst>0 ? 1-ssr/sst : NaN;
+    var se = n>2 ? Math.sqrt((ssr/(n-2))*n/den) : NaN;
+
+    var I = 1/slope, dI = se/(slope*slope);
+    var M=parseFloat((document.getElementById('discM')||{}).value);
+    var R=parseFloat((document.getElementById('discR')||{}).value);
+    var Ig = (isFinite(M)&&isFinite(R)) ? 0.5*M*R*R : NaN;
+
+    out('oSlope', fmt(slope,1)+(isFinite(se)?' ± '+fmt(se,1):'')+' (rad/s²)/(N·m)');
+    out('oInt', fmt(inter,2)+' rad/s²');
+    out('oR2', fmt(r2,4));
+    out('oI', sci(I,3)+(isFinite(dI)?' ± '+sci(dI,1):'')+' kg·m²');
+    out('oIg', isFinite(Ig)? sci(Ig,3)+' kg·m²' : '—');
+
+    if(!v) return;
+    if(!isFinite(Ig)){ v.textContent='Enter the disc mass and radius to get a comparison.'; return; }
+    var pct=100*(I-Ig)/Ig;
+    if(Math.abs(pct)<=10){
+      v.innerHTML='<b>&tau; = I&alpha; is confirmed within the criterion.</b> The slope gives '
+        + 'I = '+sci(I,3)+' kg·m² against a geometric ½MR² of '+sci(Ig,3)
+        + ' kg·m² — a difference of '+fmt(pct,2)+'%. Two independent routes to the same '
+        + 'number is the result; say so in your Conclusion, and use AQ4 to check it against your own '
+        + 'uncertainty before calling it agreement.';
+    } else {
+      v.innerHTML='<b>That is outside the 10% criterion ('+fmt(pct,1)+'%).</b> Before concluding '
+        + 'anything about physics, check in this order: the disc radius used where the pulley radius '
+        + 'belongs (they differ by a factor of three), the slope reported as I instead of 1/I, the '
+        + 'torque built from M<sub>H</sub>g instead of M<sub>H</sub>(g − a), or diameters used in '
+        + 'place of radii.';
+    }
+  }
+
+  var b=document.getElementById('fitBtn'); if(b) b.addEventListener('click',compute);
+  var c=document.getElementById('fitClear');
+  if(c) c.addEventListener('click',function(){ var t=document.getElementById('pairs'); if(t) t.value=''; compute(); });
+
+  var probe=document.getElementById('probe');
+  if(probe){
+    probe.addEventListener('click',function(ev){
+      var t=ev.target;
+      if(t && t.closest) t=t.closest('.opt');
+      if(!t||!t.classList||!t.classList.contains('opt')) return;
+      var right=t.getAttribute('data-correct')==='true';
+      Array.prototype.forEach.call(probe.querySelectorAll('.opt'),function(o){o.classList.remove('chosen');});
+      t.classList.add('chosen');
+      var fb=document.getElementById('probeFb'); if(!fb) return;
+      fb.style.display='block';
+      fb.innerHTML = right
+        ? '<b>Yes.</b> The torque is r<sub>p</sub>T, not r<sub>p</sub>M<sub>H</sub>g, and '
+          + 'T = M<sub>H</sub>(g − a) is less than the weight. Doubling the mass also raises the '
+          + 'acceleration, so the shortfall grows: in this data set it runs from about 5% at 50 g to '
+          + 'about 9% at 100 g. The torque therefore rises by a little under a factor of two.'
+        : '<b>Not quite.</b> The string tension is what applies the torque, and the tension is not the '
+          + 'weight — if it were, the mass would hang still instead of falling. From '
+          + 'ΣF = M<sub>H</sub>a you get T = M<sub>H</sub>(g − a), which is smaller than '
+          + 'M<sub>H</sub>g by an amount that grows as the system accelerates faster. So the torque '
+          + 'rises by slightly less than a factor of two, and AQ1 asks you to measure how much that '
+          + 'distinction is worth.';
+    });
+  }
+})();
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - fixes the first-paint WIDTH race.
+
+   The V4 reporter above fires on load, on window resize, and from a
+   ResizeObserver on document.body. Measured 2026-10-06: none of those fire when
+   only the frame's WIDTH changes. Inside Brightspace the frame is briefly
+   collapsed at first paint, so a page reported its ~60px-wide height (11358px
+   for a page that is really 1967px) and the V5 wrapper kept that number forever.
+   Seen live on the M3 and M4 reference indexes; it is a race, so a reload can
+   hide it.
+
+   This re-measures a few times while layout settles, and posts only when the
+   number actually changes. It does NOT change any page's height, so every
+   declared wrapper baseline stays valid. Remove it only together with a reporter
+   that re-fires on a width-only change. */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){
+    var el = document.querySelector('.note-wrap') || document.body;
+    var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height
+      + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+  }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    var w = document.querySelector('.note-wrap'); if (w) ro.observe(w);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

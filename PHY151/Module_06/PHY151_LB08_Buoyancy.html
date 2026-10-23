@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHY 151 Lab 08 — Buoyancy</title>
+<style>
+  /* ==================================================================
+     FLCC Physics lab page — PHY 151 Module 6
+     Matches the LB02/LB03 lab-page template (same tokens, same blocks).
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:2rem 0 .8rem; font-weight:700; }
+  h3{ font-size:1.02rem; margin:1.4rem 0 .4rem; font-weight:700; color:var(--green-deep);
+      font-family:"Segoe UI", system-ui, sans-serif; }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* due-date / logistics strip */
+  .logistics{
+    display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin:1.1rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+  }
+  .logistics .chip{
+    background:#fff; border:1px solid var(--rule); border-radius:20px; padding:.3rem .85rem;
+  }
+  .logistics .chip b{ color:var(--green-deep); }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* boxed callout, gradient head (prior-knowledge / explain / safety) */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior p:last-child{ margin-bottom:0; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+  ol.questions.aq{ list-style:none; padding-left:0; }
+  ol.questions.aq li{ margin:.8rem 0; }
+
+  /* procedure steps */
+  ol.steps{ padding-left:1.3rem; }
+  ol.steps > li{ margin:.65rem 0; }
+  ul.kit{ padding-left:1.3rem; }
+  ul.kit li{ margin:.3rem 0; }
+
+  /* equation block */
+  .eqn{
+    font-family:"Cambria Math","Segoe UI",Georgia,serif; font-size:1.15rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:600; letter-spacing:.02em;
+  }
+  .eqn small{ display:block; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+    font-weight:400; color:var(--muted); margin-top:.4rem; letter-spacing:0; }
+
+  /* data tables the student must produce */
+  table.spec{ width:100%; border-collapse:collapse; margin:.9rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  table.spec th, table.spec td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec caption{ caption-side:top; text-align:left; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.8rem; color:var(--muted); padding-bottom:.35rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* warning / watch-out */
+  .watch{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.3rem 0; background:#fffdf8;
+  }
+  .watch b{ color:#9a5c10; }
+
+  /* interactive tool panel */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .sim canvas{ display:block; width:100%; height:auto; background:#fff; }
+  .grid2{ display:grid; gap:.7rem 1.2rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .ctrl input[type=number], .ctrl input[type=text], .ctrl textarea{
+    font:inherit; font-size:.92rem; width:100%; box-sizing:border-box;
+    padding:.4rem .55rem; border:1px solid var(--rule); border-radius:6px; background:#fff;
+  }
+  .ctrl textarea{ min-height:5.5rem; font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; font-size:.85rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .verdict{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; margin-top:.9rem;
+    padding:.65rem .9rem; border-radius:8px; background:#fff; border:1px solid var(--rule);
+    min-height:1.2em;
+  }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* submission checklist */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .check-group{ margin:0 0 1.1rem; }
+  .check-group > .gh{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--green); font-weight:700; display:block; margin-bottom:.4rem;
+  }
+  .check-group label{ display:flex; gap:.6rem; align-items:flex-start;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; margin-bottom:.4rem; cursor:pointer; background:#fff; }
+  .check-group label:hover{ border-color:var(--green); }
+  .check-group input{ margin-top:.2rem; accent-color:var(--green); flex:none; }
+  .check-group input:checked + span{ color:var(--muted); text-decoration:line-through; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:.6rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule);
+  }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  .refs{ font-size:.95rem; }
+  .refs li{ margin:.4rem 0; }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+  footer .attrib{ display:block; margin-top:.3rem; }
+
+  .eqn .domain{
+    display:block; margin-top:.6rem; padding-top:.55rem; border-top:1px dashed var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:400;
+    line-height:1.55; color:var(--muted); letter-spacing:0; text-align:left;
+  }
+  .eqn .domain b{ color:var(--green-deep); }
+  .filenote{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted);
+    margin:.7rem 0 0; line-height:1.55;
+  }
+
+  /* ---- apparatus diagram (added 2026-09-24) ---- */
+  .apparatus{ margin:1.4rem 0; padding:0; }
+  .apparatus svg{ display:block; width:100%; height:auto; }
+  .apparatus .cap{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted);
+    text-align:center; margin-top:.5rem; line-height:1.5;
+  }
+  .apparatus .frame{ border:1px solid var(--rule); border-radius:8px; background:#fff; padding:.6rem; }
+  .ap-solid{ fill:none; stroke:var(--ink); stroke-width:2; }
+  .ap-thin{ fill:none; stroke:var(--ink); stroke-width:1.2; }
+  .ap-dash{ fill:none; stroke:var(--muted); stroke-width:1.4; stroke-dasharray:5 4; }
+  .ap-traj{ fill:none; stroke:var(--green); stroke-width:2.2; stroke-dasharray:7 5; }
+  .ap-dim{ fill:none; stroke:var(--green-deep); stroke-width:1.6; }
+  .ap-warn{ fill:none; stroke:#c0392b; stroke-width:1.6; }
+  .ap-shelf{ fill:#e8e4f0; stroke:var(--ink); stroke-width:1.5; }
+  .ap-tube{ fill:#cfd8d3; stroke:var(--ink); stroke-width:1.5; }
+  .ap-ball{ fill:var(--ink); }
+  .ap-paper{ fill:#fff; stroke:var(--ink); stroke-width:1; }
+  .ap-carbon{ fill:#4a4a52; stroke:var(--ink); stroke-width:1; }
+  .ap-t{ font-family:"Segoe UI", system-ui, sans-serif; font-size:14px; fill:var(--ink); }
+  .ap-t.lbl{ font-weight:700; fill:var(--green-deep); font-size:16px; }
+  .ap-t.sm{ font-size:12.5px; fill:var(--muted); }
+  .ap-t.bad{ font-size:12.5px; fill:#c0392b; font-weight:600; }
+  @media print{
+    /* ---- compact print pass, 2026-09-24 -------------------------------
+       Screen layout is untouched; this only tightens the photocopy.
+       Body drops from 1.06rem/1.65 to 0.86rem/1.4 (~10.3pt), which is
+       still comfortably above the ~9pt floor for a bench-side handout. */
+    @page{ margin:0.45in; }
+    body{ font-size:.80rem; line-height:1.34; }
+    .note-wrap{ max-width:none; margin:0; padding:0; }
+
+    h1{ font-size:1.5rem; margin:.2rem 0 .15rem; }
+    h2{ font-size:1.02rem; margin:.95rem 0 .4rem; page-break-after:avoid; }
+    h3{ font-size:.92rem; margin:.7rem 0 .3rem;  }
+    p{ margin:.45rem 0; }
+
+    .eyebrow{ margin-bottom:.15rem; }
+    .synopsis{ padding:.6rem .8rem; margin:.7rem 0; }
+    .logistics{ margin:.5rem 0; gap:.4rem; }
+    .pe{ margin:.8rem 0; }
+    .pe ul{ padding:.25rem .35rem; }
+    .pe li{ padding:.28rem .4rem; gap:.5rem; }
+    .pe li .tick{ width:1.25rem; height:1.25rem; font-size:.62rem; }
+
+    .sign-note, .note-link, .watch, .prior, .probe{
+      padding:.6rem .8rem; margin:.7rem 0;
+    }
+    .sign-note, .note-link, .probe{  }
+    .prior .body{ padding:.55rem .8rem .6rem; }
+    .prior .cases{ gap:.45rem; }
+    .case{ padding:.5rem .55rem; }
+
+    .eqn{ padding:.55rem .7rem; margin:.6rem 0; font-size:1rem; page-break-inside:avoid; }
+    .eqn .domain{ margin-top:.4rem; padding-top:.35rem; font-size:.73rem; line-height:1.4; }
+
+    ol.steps, ul.steps{ margin:.5rem 0; padding-left:1.15rem; }
+    ol.steps > li, ul.steps > li{ margin:.3rem 0; }
+    ul{ margin:.45rem 0; }
+    li{ margin:.22rem 0; }
+
+    .apparatus{ margin:.7rem 0; page-break-inside:avoid; }
+    .apparatus .frame{ padding:.35rem; }
+    .apparatus svg{ max-height:2.9in; }
+    .apparatus .cap{ font-size:.74rem; margin-top:.3rem; line-height:1.4; }
+
+    /* the interactive tool is dead on paper — keep the heading and the note,
+       drop the controls and the empty readouts */
+    .sim .buttons, .sim .controls input, .sim .readout{ display:none; }
+    .sim{ padding:.5rem .7rem; margin:.6rem 0; }
+
+    .ticket{ margin:.8rem 0; }
+    .ticket .t-body{ padding:.5rem .7rem; }
+    .check-group{ margin:.5rem 0; }
+    .check-group label{ margin:.18rem 0; }
+    .gh{ margin-top:.45rem; }
+
+    .downloads{ gap:.4rem; margin:.6rem 0; }
+    .dl-card{ padding:.5rem .7rem; }
+    .dl-card .hint{ font-size:.73rem; }
+    .filenote{ font-size:.76rem; margin-top:.5rem; }
+    .refs{ margin:.4rem 0; }
+    footer{ margin-top:.9rem; padding-top:.5rem; font-size:.72rem; }
+  }
+
+  @media print{
+    body{ font-size:10.5pt; }
+    .note-wrap{ max-width:none; padding:0; }
+    .btn, .sim .buttons{ display:none !important; }
+    .sim, .ticket, .pe, .prior{ break-inside:avoid; }
+    h2{ break-after:avoid; }
+    .verdict, .readout, .sim .panel .ctrl textarea{ display:none; }
+    a{ color:inherit; text-decoration:none; }
+    /* probe options stay visible on paper, as a plain lettered list */
+    .probe .opts{ counter-reset:opt; }
+    .probe .opt{ cursor:default; border:none; padding:.12rem 0 .12rem 1.6rem; position:relative; background:none; }
+    .probe .opt::before{
+      counter-increment:opt; content:"(" counter(opt, upper-alpha) ")";
+      position:absolute; left:0; font-weight:600; color:#5c6b62;
+    }
+    .probe .feedback{ display:none; }
+    /* the tick badges need a hair more room at print metrics */
+    .pe li .tick{ width:1.7rem; height:1.7rem; font-size:.66rem; }
+    .check-group label{ break-inside:avoid; }
+  }
+
+.sign-note{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; line-height:1.55; color:var(--ink,#1d2b23); background:#fdf6ea; border-left:3px solid var(--amber,#c77b1f); border-radius:0 6px 6px 0; padding:.6rem .85rem; margin:.9rem 0; }
+  .note-link{
+    background:#fff; border:1px solid var(--rule); border-left:4px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.85rem 1.05rem; margin:1rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .note-link b{ color:var(--green-deep); }
+.sign-note b{ color:#8a5512; }
+
+  /* ---- LB04 additions ---- */
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .ctrl select{ font:inherit; }
+  table.spec tbody td b{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>PHY 151 &middot; Module 6 &mdash; Fluids</span>
+    <span>Lab 08</span>
+  </div>
+
+  <h1>Buoyancy: Weighing Water With a Piece of Metal</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Hang a metal cylinder from a spring scale and read its weight. Now lower it into water, without
+    letting it touch the bottom, and read the scale again. It reads less. Nothing has been removed from
+    the cylinder, so the missing weight has to be a force &mdash; the buoyant force &mdash; pushing up
+    on it. Archimedes' principle says that force equals the weight of the water the cylinder pushed out
+    of the way, and this lab turns that statement into a measurement. The elegant part is what happens
+    when you put the two halves together algebraically: the volume of displaced water appears on both
+    sides and <b>cancels</b>, leaving the density of water expressed in terms of nothing but the density
+    of the metal and the two scale readings. You never need to measure the water at all.
+
+    <div class="logistics">
+      <span class="chip"><b>Due</b> see the Module 6 Lab folder on Brightspace</span>
+      <span class="chip"><b>Report</b> Full lab report &mdash; use the Lab Template</span>
+      <span class="chip"><b>Pairs with</b> M6 N1</span>
+      <span class="chip"><b>Data</b> provided &mdash; this is a virtual lab</span>
+    </div>
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>what you should be able to do when this lab is written up</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Draw the free-body diagram for a submerged
+        object hanging from a scale</b> &mdash; weight down, tension up, buoyant force up &mdash; and
+        write the equilibrium condition it expresses.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Derive F<sub>B</sub> = T<sub>air</sub> &minus; T<sub>water</sub></b>
+        from that diagram, and explain why the scale reading is a tension rather than a weight.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Obtain a volume by displacement</b> from two
+        graduated-cylinder readings, and state the precision that method actually carries.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Show algebraically that the displaced volume
+        cancels</b>, arriving at &rho;<sub>water</sub> = &rho;<sub>metal</sub>(1 &minus; T<sub>water</sub>/T<sub>air</sub>).</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Compute a density two different ways and
+        compare them</b>, recognising when two routes share a common measurement and are therefore not
+        independent.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Trace a discrepancy to the measurement that
+        caused it</b>, using the identity of the metal as an external check on your own data.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ NOTE BRIDGE ============ -->
+  <h2>Start from Note 1 &mdash; this lab is that note, measured</h2>
+
+  <div class="note-link">
+    <b>M6 N1 is not background reading for this lab. It is the lab.</b> Pressure in a fluid, the origin
+    of the buoyant force in the pressure difference across an object's top and bottom faces, and
+    Archimedes' principle itself are all established there. What the note cannot give you is a set of
+    real scale readings that do not quite produce 1.000&nbsp;g/cm&sup3;. That is what you have here, and
+    the gap between "water has a density of 1" and "my measurement says 0.91" is what this report is
+    about.
+  </div>
+
+  <table class="spec">
+    <caption>Where each part of Note 1 belongs in this report. The rubric awards points for these.</caption>
+    <thead>
+      <tr><th style="width:30%">Report section</th><th>What Note 1 gives you</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Introduction</b></td>
+        <td>Archimedes' principle stated in your own words and F<sub>B</sub> = &rho;<sub>fluid</sub>Vg
+          with every symbol defined, plus <b>your own derivation</b> of the working relation in which
+          the volume cancels. End with a hypothesis you can confirm or reject.</td></tr>
+      <tr><td><b>Experimental</b></td>
+        <td>The labelled sketch of the cylinder on the scale, in air and in water, with the forces
+          marked in both cases. Say how the displaced volume was read and to what precision.</td></tr>
+      <tr><td><b>Analysis</b></td>
+        <td>The buoyant force from the two scale readings, the density of the metal from mass and
+          displaced volume, and the density of water by both routes.</td></tr>
+      <tr><td><b>Discussion</b></td>
+        <td>Why the two routes disagree, which measurement is responsible, and what the identity of the
+          metal tells you that your own numbers cannot.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Read or reprint the note here:
+  <a href="https://byungmooncho.github.io/PHY151/Module_06/M6_N1_Fluids_Pressure_And_Buoyancy.html"
+     target="_blank" rel="noopener">Module&nbsp;6 Note&nbsp;1 &mdash; Fluids, Pressure and Buoyancy</a>.</p>
+
+  <!-- ============ THE PHYSICS ============ -->
+  <h2>The physics you are using</h2>
+
+  <h3>In air, and then in water</h3>
+
+  <p>Hanging in air, the cylinder is in equilibrium under two forces, so the scale reads its weight:</p>
+
+  <div class="eqn">
+    T<sub>air</sub> = F<sub>g</sub> = M<sub>metal</sub> g
+  </div>
+
+  <p>Submerged, a third force appears. The cylinder is still in equilibrium, so now</p>
+
+  <div class="eqn">
+    F<sub>B</sub> + T<sub>water</sub> = F<sub>g</sub>
+    &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+    F<sub>B</sub> = F<sub>g</sub> &minus; T<sub>water</sub> = T<sub>air</sub> &minus; T<sub>water</sub>
+  </div>
+
+  <p><b>The buoyant force is the drop in the scale reading.</b> Nothing else is needed to measure it.</p>
+
+  <h3>The cancellation</h3>
+
+  <p>Archimedes' principle says that same force is the weight of the displaced water:</p>
+
+  <div class="eqn">
+    F<sub>B</sub> = &rho;<sub>water</sub> V<sub>displaced</sub> g
+  </div>
+
+  <p>Set the two expressions for F<sub>B</sub> equal, and write T<sub>air</sub> = M<sub>metal</sub>g:</p>
+
+  <div class="eqn">
+    &rho;<sub>water</sub> V<sub>disp</sub> g
+    = T<sub>air</sub> &minus; T<sub>water</sub>
+    = T<sub>air</sub>( 1 &minus; T<sub>water</sub>/T<sub>air</sub> )
+    = M<sub>metal</sub> g ( 1 &minus; T<sub>water</sub>/T<sub>air</sub> )
+  </div>
+
+  <p>The cylinder is fully submerged, so the water it pushed aside has exactly the cylinder's own
+  volume: V<sub>disp</sub> = V<sub>metal</sub>. And M<sub>metal</sub> = &rho;<sub>metal</sub>V<sub>metal</sub>.
+  Substitute, and <b>both the volume and g cancel from every term</b>:</p>
+
+  <div class="eqn">
+    &rho;<sub>water</sub> = &rho;<sub>metal</sub> ( 1 &minus; T<sub>water</sub> / T<sub>air</sub> )
+  </div>
+
+  <div class="watch"><b>Look at what that equation does not contain.</b> No volume. No g. No unit
+  conversion between newtons and grams. The density of water comes out of the density of the metal and
+  a <em>ratio</em> of two scale readings &mdash; and because it is a ratio, any constant calibration
+  error in the scale cancels out of it too. This is the result the lab is built around, and deriving it
+  yourself is worth more marks than any arithmetic below.</div>
+
+  <!-- ============ PREDICT FIRST ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first. You repeat the whole experiment with a cylinder of the same metal but
+    twice the volume. What happens to the value of &rho;<sub>water</sub> you calculate?</p>
+    <div class="opts">
+      <button class="opt" data-correct="true">Unchanged &mdash; the volume cancels, and the ratio T<sub>water</sub>/T<sub>air</sub> is the same.</button>
+      <button class="opt" data-correct="false">It doubles, because twice the water is displaced.</button>
+      <button class="opt" data-correct="false">It halves.</button>
+      <button class="opt" data-correct="false">It cannot be predicted without knowing the new volume.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <div class="watch">
+    <b>Why that question matters for how you write this up.</b> Both scale readings double, so their
+    ratio is untouched, and &rho;<sub>metal</sub> is a property of the material rather than of the
+    lump. The predicted density of water is therefore identical. That is a strong statement: it says
+    the experiment does not depend on getting the size of the cylinder right, only on the two scale
+    readings and on knowing what the metal is. Keep that in mind when you reach the Discussion, because
+    the number you actually compute will come out about 9% low &mdash; and if the method is insensitive
+    to volume, the volume had better not be where you lay the blame without checking.
+  </div>
+
+  <!-- ============ APPARATUS ============ -->
+  <h2>The apparatus</h2>
+
+  <p>A metal cylinder from the lab kit hangs by a short length of string from a spring scale. Below it
+  sits a graduated cylinder about half filled with water. The scale is read with the cylinder hanging
+  freely in air, and again with it fully submerged and clear of the bottom and sides. The water level is
+  read before and after each dip.</p>
+
+  <figure class="apparatus">
+    <svg viewBox="0 0 640 300" width="100%" role="img"
+         aria-label="Left: the metal cylinder hanging in air from a spring scale, with tension up and weight down. Right: the same cylinder fully submerged in a graduated cylinder, with tension, buoyant force and weight marked, and the water level risen.">
+      <!-- ================= IN AIR ================= -->
+      <text x="78" y="26" font-size="12.5" fill="#5c6b62" font-family="Segoe UI, sans-serif">In air</text>
+      <!-- scale body -->
+      <rect x="62" y="40" width="54" height="40" rx="4" fill="#eef3f0" stroke="#1d2b23" stroke-width="1.4"/>
+      <text x="89" y="65" font-size="12" text-anchor="middle" fill="#1d2b23" font-family="Segoe UI, sans-serif">scale</text>
+      <!-- string -->
+      <line x1="89" y1="80" x2="89" y2="152" stroke="#1d2b23" stroke-width="1.2"/>
+      <!-- cylinder -->
+      <rect x="74" y="152" width="30" height="46" rx="2" fill="#c9d6cd" stroke="#1d2b23" stroke-width="1.5"/>
+      <!-- forces -->
+      <line x1="134" y1="150" x2="134" y2="106" stroke="#1e6b3c" stroke-width="1.5"/>
+      <path d="M134 106 l-4 9 l8 0 z" fill="#1e6b3c"/>
+      <text x="140" y="130" font-size="12" fill="#1e6b3c" font-family="Segoe UI, sans-serif">T<tspan baseline-shift="sub" font-size="9">air</tspan></text>
+      <line x1="134" y1="202" x2="134" y2="246" stroke="#1d2b23" stroke-width="1.5"/>
+      <path d="M134 246 l-4 -9 l8 0 z" fill="#1d2b23"/>
+      <text x="140" y="232" font-size="12" fill="#1d2b23" font-family="Segoe UI, sans-serif">F<tspan baseline-shift="sub" font-size="9">g</tspan></text>
+
+      <!-- divider -->
+      <line x1="300" y1="28" x2="300" y2="282" stroke="#d7e2da" stroke-width="1.5"/>
+
+      <!-- ================= IN WATER ================= -->
+      <text x="392" y="26" font-size="12.5" fill="#5c6b62" font-family="Segoe UI, sans-serif">In water</text>
+      <rect x="376" y="40" width="54" height="40" rx="4" fill="#eef3f0" stroke="#1d2b23" stroke-width="1.4"/>
+      <text x="403" y="65" font-size="12" text-anchor="middle" fill="#1d2b23" font-family="Segoe UI, sans-serif">scale</text>
+      <line x1="403" y1="80" x2="403" y2="186" stroke="#1d2b23" stroke-width="1.2"/>
+      <!-- beaker -->
+      <path d="M356 132 L356 268 L450 268 L450 132" fill="none" stroke="#1d2b23" stroke-width="1.6"/>
+      <!-- water -->
+      <rect x="357" y="156" width="92" height="111" fill="#eaf3ed"/>
+      <line x1="357" y1="156" x2="449" y2="156" stroke="#1e6b3c" stroke-width="1.4"/>
+      <!-- before level (dashed) -->
+      <line x1="357" y1="172" x2="449" y2="172" stroke="#9db0a4" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <text x="462" y="160" font-size="10.5" fill="#1e6b3c" font-family="Segoe UI, sans-serif">after</text>
+      <text x="462" y="176" font-size="10.5" fill="#5c6b62" font-family="Segoe UI, sans-serif">before</text>
+      <!-- rise bracket -->
+      <line x1="344" y1="156" x2="344" y2="172" stroke="#c77b1f" stroke-width="1.4"/>
+      <text x="338" y="168" font-size="11" text-anchor="end" fill="#c77b1f" font-family="Segoe UI, sans-serif">&#916;V</text>
+      <!-- cylinder submerged -->
+      <rect x="388" y="186" width="30" height="46" rx="2" fill="#c9d6cd" stroke="#1d2b23" stroke-width="1.5"/>
+      <!-- forces -->
+      <line x1="500" y1="184" x2="500" y2="140" stroke="#1e6b3c" stroke-width="1.5"/>
+      <path d="M500 140 l-4 9 l8 0 z" fill="#1e6b3c"/>
+      <text x="506" y="164" font-size="12" fill="#1e6b3c" font-family="Segoe UI, sans-serif">T<tspan baseline-shift="sub" font-size="9">water</tspan></text>
+      <line x1="548" y1="206" x2="548" y2="162" stroke="#c77b1f" stroke-width="1.5"/>
+      <path d="M548 162 l-4 9 l8 0 z" fill="#c77b1f"/>
+      <text x="554" y="188" font-size="12" fill="#c77b1f" font-family="Segoe UI, sans-serif">F<tspan baseline-shift="sub" font-size="9">B</tspan></text>
+      <line x1="500" y1="236" x2="500" y2="280" stroke="#1d2b23" stroke-width="1.5"/>
+      <path d="M500 280 l-4 -9 l8 0 z" fill="#1d2b23"/>
+      <text x="506" y="266" font-size="12" fill="#1d2b23" font-family="Segoe UI, sans-serif">F<tspan baseline-shift="sub" font-size="9">g</tspan></text>
+    </svg>
+    <figcaption>Figure 1. The two readings the whole lab rests on. In air the scale reads the full
+    weight; submerged it reads less by exactly the buoyant force, and the water level rises by the
+    cylinder's own volume.</figcaption>
+  </figure>
+
+  <!-- ============ PART I ============ -->
+  <h2>Part I &mdash; The data</h2>
+
+  <p>One cylinder, three dips. The mass was measured on a digital balance; the scale readings are in
+  newtons.</p>
+
+  <table class="spec">
+    <caption>The three trials as recorded, with the averages used in the analysis.</caption>
+    <thead>
+      <tr><th>Trial</th><th>Water before (mL)</th><th>Water after (mL)</th>
+          <th>Weight in air (N)</th><th>Weight in water (N)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>60.0</td><td>67.0</td><td>0.745</td><td>0.68</td></tr>
+      <tr><td>2</td><td>60.0</td><td>66.5</td><td>0.740</td><td>0.66</td></tr>
+      <tr><td>3</td><td>60.0</td><td>67.0</td><td>0.720</td><td>0.67</td></tr>
+      <tr><td><b>Average</b></td><td><b>60.0</b></td><td><b>66.83</b></td><td><b>0.735</b></td><td><b>0.670</b></td></tr>
+    </tbody>
+  </table>
+
+  <p>The mass of the metal cylinder, from the digital balance, is <b>70.5 g</b>.</p>
+
+  <div class="watch"><b>Notice the precision mismatch before you start calculating.</b> The balance gave
+  the mass to a tenth of a gram &mdash; four significant figures. The graduated cylinder was read to the
+  nearest half millilitre on a rise of under seven millilitres, which is two significant figures at
+  best. Those two numbers are about to be divided by one another, and the weaker one governs the
+  result. Carrying 70.5/6.83 to five digits does not make the answer more precise; it only hides which
+  measurement is in charge.</div>
+
+  <!-- ============ PART II ============ -->
+  <h2>Part II &mdash; The buoyant force and the metal</h2>
+
+  <ol class="questions">
+    <li><b>The displaced volume.</b> Subtract the average before-reading from the average after-reading.
+      1 mL = 1 cm&sup3;.</li>
+    <li><b>The density of the metal.</b> &rho;<sub>metal</sub> = M<sub>metal</sub> / V<sub>displaced</sub>,
+      since a fully submerged solid displaces its own volume.</li>
+    <li><b>Identify the metal.</b> Compare your density against a table of common metals and name the
+      best match. <b>This is not decoration</b> &mdash; it is the only external check in the whole
+      experiment, and Part III turns on it.</li>
+    <li><b>The buoyant force.</b> F<sub>B</sub> = T<sub>air</sub> &minus; T<sub>water</sub>, in newtons.</li>
+  </ol>
+
+  <!-- ============ PART III ============ -->
+  <h2>Part III &mdash; The density of water, three ways</h2>
+
+  <p>You now have enough to get &rho;<sub>water</sub> by more than one route, and they will not agree.
+  Working out why is the point of this lab.</p>
+
+  <h3>Route A &mdash; straight from Archimedes</h3>
+
+  <div class="eqn">
+    &rho;<sub>water</sub> = F<sub>B</sub> / ( V<sub>displaced</sub> &middot; g )
+  </div>
+
+  <p>Watch the units: F<sub>B</sub> in newtons and V in cubic metres gives kg/m&sup3;; divide by 1000
+  for g/cm&sup3;.</p>
+
+  <h3>Route B &mdash; the cancellation, using your own metal density</h3>
+
+  <div class="eqn">
+    &rho;<sub>water</sub> = &rho;<sub>metal</sub> ( 1 &minus; T<sub>water</sub>/T<sub>air</sub> )
+  </div>
+
+  <h3>Route C &mdash; the cancellation, using the published density of the metal you identified</h3>
+
+  <p>Same formula as Route B, but with &rho;<sub>metal</sub> taken from a reference table for the metal
+  you named in Part II rather than from your own displacement measurement.</p>
+
+  <div class="watch"><b>Routes A and B are not independent, and that is the trap.</b> Both of them
+  contain your displaced volume &mdash; A uses it directly, B hides it inside &rho;<sub>metal</sub> =
+  M/V. So if the volume reading is off, both answers are off, and their rough agreement with each other
+  proves nothing at all. <b>Route C is the only one that does not touch your volume measurement.</b> If
+  C lands close to 1.000 g/cm&sup3; while A and B do not, you have located the faulty measurement
+  without needing anyone to tell you. Your Discussion must address this explicitly; saying "the two
+  methods agreed" when they share an input is a misreading of your own data.</div>
+
+  <h3>What counts as agreement</h3>
+
+  <p>The accepted density of water is <b>1.000 g/cm&sup3;</b>, or 1000 kg/m&sup3;. Report a percent
+  error for each route. Within <b>5%</b> is a good result for this apparatus; outside <b>10%</b>, name
+  the measurement responsible rather than calling it experimental error.</p>
+
+  <!-- ============ TOOL ============ -->
+  <h2>Check your analysis</h2>
+  <p>Enter your averages to check the arithmetic of all three routes at once. Your report still has to
+  show each calculation worked by hand with units.</p>
+
+  <div class="sim">
+    <div class="sim-head"><span>&#9679;</span> Tool &middot; The density of water, three ways</div>
+    <div class="panel">
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="mMass">Mass of the metal cylinder (g)</label>
+          <input type="number" id="mMass" step="any" inputmode="decimal" value="70.5">
+        </div>
+        <div class="ctrl">
+          <label for="vDisp">Displaced volume (cm&sup3;)</label>
+          <input type="number" id="vDisp" step="any" inputmode="decimal" value="6.83">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="tAir">Weight in air T<sub>air</sub> (N)</label>
+          <input type="number" id="tAir" step="any" inputmode="decimal" value="0.735">
+        </div>
+        <div class="ctrl">
+          <label for="tWat">Weight in water T<sub>water</sub> (N)</label>
+          <input type="number" id="tWat" step="any" inputmode="decimal" value="0.670">
+        </div>
+      </div>
+      <div class="ctrl">
+        <label for="rhoRef">Published density of the metal you identified (g/cm&sup3;) &mdash; lead 11.34, copper 8.96, brass 8.5, steel 7.85, aluminium 2.70</label>
+        <input type="number" id="rhoRef" step="any" inputmode="decimal" value="11.34">
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="goBtn">Compute</button>
+        <button class="btn" id="clrBtn">Clear</button>
+      </div>
+      <div class="readout">
+        <span class="chip">F<sub>B</sub> = <b id="oFB">&mdash;</b></span>
+        <span class="chip">&rho;<sub>metal</sub> measured = <b id="oRhoM">&mdash;</b></span>
+        <span class="chip">A: <b id="oA">&mdash;</b></span>
+        <span class="chip">B: <b id="oB">&mdash;</b></span>
+        <span class="chip">C: <b id="oC">&mdash;</b></span>
+      </div>
+      <div class="verdict" id="oVerdict">Enter the five values to begin.</div>
+      <div class="hint-row">Uses g = 9.8 m/s&sup2; in Route A. Routes A and B both depend on your
+      displaced volume; Route C does not. That difference is the lab.</div>
+    </div>
+  </div>
+
+  <!-- ============ ADDITIONAL QUESTIONS ============ -->
+  <h2>Additional Questions</h2>
+  <p><b>Choose three of the five below and answer those three fully.</b> Name which three you chose.
+  Answer them in a section of their own headed <b>Additional Questions</b>, in <b>sentences and
+  paragraphs</b> with the working shown, never as a bare numbered list and never by restating the
+  question before answering it. Depth on three beats coverage of five; this section is worth 8 points on
+  the rubric.</p>
+
+  <ol class="questions aq">
+    <li><b>AQ1 &mdash; find the broken measurement.</b> Route C uses the published density of the metal
+      and avoids your volume entirely. Compute all three routes and compare. Then work backwards: assume
+      Route C is correct and &rho;<sub>water</sub> is exactly 1.000 g/cm&sup3;, and solve for what the
+      displaced volume <em>should</em> have been. Compare that against the 6.83&nbsp;cm&sup3; you
+      measured, express the difference in millilitres, and say whether it is a plausible reading error
+      on a graduated cylinder. Finish by stating which single measurement you would improve first if you
+      ran this again, and how.</li>
+
+    <li><b>AQ2 &mdash; the derivation, done properly.</b> Derive &rho;<sub>water</sub> =
+      &rho;<sub>metal</sub>(1 &minus; T<sub>water</sub>/T<sub>air</sub>) from first principles, stating
+      every assumption as you use it &mdash; including the one that is easy to miss, that the cylinder is
+      <em>fully</em> submerged so that V<sub>displaced</sub> = V<sub>metal</sub>. Then explore what
+      happens when that assumption fails: derive the corresponding expression for a partially submerged
+      object, and explain why the volume no longer cancels. What would you have to measure in that case
+      that you did not have to measure here?</li>
+
+    <li><b>AQ3 &mdash; propagating the ratio.</b> The scale readings are good to about
+      &plusmn;0.005&nbsp;N. Propagate that uncertainty through the ratio T<sub>water</sub>/T<sub>air</sub>
+      and then into &rho;<sub>water</sub> by Route C. (The fractional uncertainty of a quotient is the
+      sum in quadrature of the fractional uncertainties; be careful, because the quantity you need is
+      1 &minus; the ratio, and its uncertainty is not the same as the ratio's.) Quote Route C's answer
+      with its uncertainty. Then do the same for Route A, propagating &plusmn;0.5&nbsp;mL on the volume.
+      Which route is intrinsically more precise, and by how much?</li>
+
+    <li><b>AQ4 &mdash; a cylinder that floats.</b> Suppose you repeated the experiment with a block of
+      wood of density 0.6&nbsp;g/cm&sup3;, held fully under water by the string. Predict both scale
+      readings qualitatively &mdash; and then notice that one of them cannot be what you expected. Work
+      out what the spring scale would actually read, explain the sign of the result physically, and say
+      what it would mean about the direction of the string's force. Does the formula
+      &rho;<sub>water</sub> = &rho;<sub>metal</sub>(1 &minus; T<sub>water</sub>/T<sub>air</sub>) still
+      hold for this case, and if so what does its output look like?</li>
+
+    <li><b>AQ5 &mdash; why a boat floats and a bar of lead does not.</b> Your cylinder lost about 9% of
+      its apparent weight in water. Using your own measured metal density, compute the fraction of its
+      weight any solid object of that density would lose when fully submerged, and show that this
+      fraction is just &rho;<sub>water</sub>/&rho;<sub>metal</sub>. Use that to state the condition for
+      floating in a single line. Then resolve the apparent paradox: a steel ship and a steel bar are
+      made of the same material, and one floats. Quantify your answer &mdash; estimate the average
+      density a hull must have, and say what fraction of a ship's volume is therefore not steel.</li>
+  </ol>
+
+  <!-- ============ DISCUSSION ============ -->
+  <h2>Prompts for your Discussion</h2>
+  <p>These are <b>not</b> the Additional Questions. Work them into your <b>Discussion</b> section as part
+  of your argument, in your own order. Do not answer them as a list, and do not limit yourself to them.</p>
+
+  <ol class="questions">
+    <li>You computed the density of water by three routes. Which do you report as <em>the</em> result,
+      and why? A report that gives three numbers without choosing has not finished the analysis.</li>
+    <li>Routes A and B share your displaced-volume measurement. What would it have taken for them to be
+      genuinely independent checks on each other?</li>
+    <li>Your measured metal density differs from the published value for the metal you identified. Is
+      that difference large enough to call the identification into question, or does it point at the
+      measurement instead?</li>
+    <li>The three trials disagree with one another, particularly in the air reading. Compute the spread
+      and say whether it is large enough to explain your discrepancy from 1.000 g/cm&sup3;.</li>
+    <li>Some water clings to the cylinder when it is lifted out. Which measurement does that affect,
+      in which direction, and is it big enough to matter here?</li>
+    <li>If the cylinder had touched the bottom of the graduated cylinder during a dip, what would the
+      scale have read and which way would your final answer have moved?</li>
+  </ol>
+
+  <!-- ============ FILES ============ -->
+  <h2>Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB08_Buoyancy.pdf" target="_blank" rel="noopener">
+      <span class="kind">Handout</span>
+      <span class="name">This lab, as a PDF</span>
+      <span class="hint">The whole page, printable. The calculator only works on the web version.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB08_Buoyancy_Example_Workbook.xlsx" target="_blank" rel="noopener">
+      <span class="kind">Required</span>
+      <span class="name">Example workbook</span>
+      <span class="hint">The three trials, a blank analysis sheet laid out for you, and all three routes worked.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB08_Rubric.docx" target="_blank" rel="noopener">
+      <span class="kind">Grading</span>
+      <span class="name">Lab 08 rubric</span>
+      <span class="hint">Read it before you write, not after.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB08_Buoyancy_Example_Starter.docx" target="_blank" rel="noopener">
+      <span class="kind">Support</span>
+      <span class="name">Report starter</span>
+      <span class="hint">Section guidance only &mdash; the sentence stems have gone. See the note inside.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/Module_06/M6_N1_Fluids_Pressure_And_Buoyancy.html" target="_blank" rel="noopener">
+      <span class="kind">Note</span>
+      <span class="name">M6 N1 &mdash; Fluids, Pressure and Buoyancy</span>
+      <span class="hint">Where the buoyant force comes from, and Archimedes' principle.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/Formatting_Data_Tables_for_Lab_Reports.html" target="_blank" rel="noopener">
+      <span class="kind">Reference</span>
+      <span class="name">Formatting data tables</span>
+      <span class="hint">Table captions, units in headers, significant figures.</span>
+    </a>
+  </div>
+
+  <!-- ============ REFERENCES ============ -->
+  <h2>References to get you started</h2>
+  <p>Your references should include material on buoyancy and Archimedes' principle, and a source for the
+  densities of common metals. Your textbook, this handout and the Module 6 note pages all count, and you
+  need at least one source beyond the textbook.</p>
+  <ol class="refs">
+    <li>[Author's names], <i>Journal or Book title</i>, edition, Volume number, page number, (year).</li>
+  </ol>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 151
+    <span class="attrib">Revised from the Buoyancy and Archimedes' Principle lab by H. Trevor Johnson-Steigelman, used under CC BY-NC-SA.</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var G = 9.8;
+  function fmt(x,d){ if(!isFinite(x)) return '—';
+    return (Math.round(x*Math.pow(10,d))/Math.pow(10,d)).toFixed(d); }
+  function out(id,t){ var e=document.getElementById(id); if(e) e.textContent=t; }
+  function val(id){ var e=document.getElementById(id); return e?parseFloat(e.value):NaN; }
+
+  function compute(){
+    var M=val('mMass'), V=val('vDisp'), Ta=val('tAir'), Tw=val('tWat'), rr=val('rhoRef');
+    var v=document.getElementById('oVerdict');
+    if(![M,V,Ta,Tw,rr].every(function(x){return isFinite(x);}) || V<=0 || Ta<=0){
+      ['oFB','oRhoM','oA','oB','oC'].forEach(function(i){ out(i,'—'); });
+      if(v) v.textContent='Enter the five values to begin.';
+      return;
+    }
+    var FB = Ta - Tw;
+    var rhoM = M / V;                                   // g/cm^3
+    var rhoA = FB / (V*1e-6*G) / 1000;                  // g/cm^3
+    var ratio = 1 - Tw/Ta;
+    var rhoB = rhoM * ratio;
+    var rhoC = rr   * ratio;
+    out('oFB', fmt(FB,4)+' N');
+    out('oRhoM', fmt(rhoM,3)+' g/cm³');
+    out('oA', fmt(rhoA,4)+' g/cm³');
+    out('oB', fmt(rhoB,4)+' g/cm³');
+    out('oC', fmt(rhoC,4)+' g/cm³');
+    if(!v) return;
+
+    var eA=100*(rhoA-1), eB=100*(rhoB-1), eC=100*(rhoC-1);
+    var msg='<b>A:</b> '+fmt(rhoA,4)+' ('+fmt(eA,1)+'%) &nbsp; <b>B:</b> '+fmt(rhoB,4)
+          + ' ('+fmt(eB,1)+'%) &nbsp; <b>C:</b> '+fmt(rhoC,4)+' ('+fmt(eC,1)+'%). ';
+    if(Math.abs(eC) < Math.abs(eA) && Math.abs(eC) < Math.abs(eB)){
+      var vNeed = M*ratio/1.0;
+      msg += '<b>Route C is the closest, and it is the one route that never touches your displaced '
+           + 'volume.</b> That is evidence, not luck: A and B both contain V, so they fail together. '
+           + 'For &rho;<sub>water</sub> to come out at exactly 1.000 by Route A, the displaced volume '
+           + 'would have had to be '+fmt(FB/(1000*G)*1e6,2)+' cm³ rather than the '+fmt(V,2)
+           + ' cm³ recorded — a difference of '+fmt(Math.abs(FB/(1000*G)*1e6-V),2)
+           + ' mL. Decide whether that is a plausible reading error, and say so. This is AQ1.';
+    } else if(Math.abs(eC)<=5){
+      msg += 'Route C is inside 5% of 1.000 g/cm³. Since it is the only route independent of your '
+           + 'volume measurement, it is the one to report — and the gap to A and B tells you how '
+           + 'much the graduated cylinder cost you.';
+    } else {
+      msg += 'All three are some way from 1.000 g/cm³. Check the metal you identified against its '
+           + 'published density first, then the two scale readings, then the volume. Note that if '
+           + 'Route C is also off, the fault is unlikely to be the volume — C does not use it.';
+    }
+    v.innerHTML=msg;
+  }
+
+  var b=document.getElementById('goBtn'); if(b) b.addEventListener('click',compute);
+  var c=document.getElementById('clrBtn');
+  if(c) c.addEventListener('click',function(){
+    ['mMass','vDisp','tAir','tWat'].forEach(function(i){ var e=document.getElementById(i); if(e) e.value=''; });
+    compute();
+  });
+  ['mMass','vDisp','tAir','tWat','rhoRef'].forEach(function(i){
+    var e=document.getElementById(i);
+    if(e) e.addEventListener('keydown',function(ev){ if(ev.key==='Enter') compute(); });
+  });
+
+  var probe=document.getElementById('probe');
+  if(probe){
+    probe.addEventListener('click',function(ev){
+      var t=ev.target;
+      if(t && t.closest) t=t.closest('.opt');
+      if(!t||!t.classList||!t.classList.contains('opt')) return;
+      var right=t.getAttribute('data-correct')==='true';
+      Array.prototype.forEach.call(probe.querySelectorAll('.opt'),function(o){o.classList.remove('chosen');});
+      t.classList.add('chosen');
+      var fb=document.getElementById('probeFb'); if(!fb) return;
+      fb.style.display='block';
+      fb.innerHTML = right
+        ? '<b>Yes.</b> Both scale readings double, so the ratio T<sub>water</sub>/T<sub>air</sub> is '
+          + 'unchanged, and &rho;<sub>metal</sub> is a property of the material rather than of the '
+          + 'lump. The predicted density of water is identical. The method does not depend on the size '
+          + 'of the cylinder at all — which is worth remembering when you reach the Discussion.'
+        : '<b>Not quite.</b> Write out &rho;<sub>water</sub> = &rho;<sub>metal</sub>(1 − '
+          + 'T<sub>water</sub>/T<sub>air</sub>) and ask what in it changes. Doubling the volume doubles '
+          + 'BOTH scale readings, so their ratio is untouched; and the density of the metal depends on '
+          + 'what the metal is, not how much of it you have. Nothing on the right-hand side moves. The '
+          + 'volume genuinely cancelled — that is the result this lab is built on.';
+    });
+  }
+})();
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - fixes the first-paint WIDTH race.
+
+   The V4 reporter above fires on load, on window resize, and from a
+   ResizeObserver on document.body. Measured 2026-10-06: none of those fire when
+   only the frame's WIDTH changes. Inside Brightspace the frame is briefly
+   collapsed at first paint, so a page reported its ~60px-wide height (11358px
+   for a page that is really 1967px) and the V5 wrapper kept that number forever.
+   Seen live on the M3 and M4 reference indexes; it is a race, so a reload can
+   hide it.
+
+   This re-measures a few times while layout settles, and posts only when the
+   number actually changes. It does NOT change any page's height, so every
+   declared wrapper baseline stays valid. Remove it only together with a reporter
+   that re-fires on a width-only change. */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){
+    var el = document.querySelector('.note-wrap') || document.body;
+    var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height
+      + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+  }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    var w = document.querySelector('.note-wrap'); if (w) ro.observe(w);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

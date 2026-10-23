@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHY 151 Lab 05 — Momentum Conservation</title>
+<style>
+  /* ==================================================================
+     FLCC Physics lab page — PHY 151 Module 4
+     Matches the LB02/LB03 lab-page template (same tokens, same blocks).
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:2rem 0 .8rem; font-weight:700; }
+  h3{ font-size:1.02rem; margin:1.4rem 0 .4rem; font-weight:700; color:var(--green-deep);
+      font-family:"Segoe UI", system-ui, sans-serif; }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* due-date / logistics strip */
+  .logistics{
+    display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin:1.1rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+  }
+  .logistics .chip{
+    background:#fff; border:1px solid var(--rule); border-radius:20px; padding:.3rem .85rem;
+  }
+  .logistics .chip b{ color:var(--green-deep); }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* boxed callout, gradient head (prior-knowledge / explain / safety) */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior p:last-child{ margin-bottom:0; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+  ol.questions.aq{ list-style:none; padding-left:0; }
+  ol.questions.aq li{ margin:.8rem 0; }
+
+  /* procedure steps */
+  ol.steps{ padding-left:1.3rem; }
+  ol.steps > li{ margin:.65rem 0; }
+  ul.kit{ padding-left:1.3rem; }
+  ul.kit li{ margin:.3rem 0; }
+
+  /* equation block */
+  .eqn{
+    font-family:"Cambria Math","Segoe UI",Georgia,serif; font-size:1.15rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:600; letter-spacing:.02em;
+  }
+  .eqn small{ display:block; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+    font-weight:400; color:var(--muted); margin-top:.4rem; letter-spacing:0; }
+
+  /* data tables the student must produce */
+  table.spec{ width:100%; border-collapse:collapse; margin:.9rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  table.spec th, table.spec td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec caption{ caption-side:top; text-align:left; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.8rem; color:var(--muted); padding-bottom:.35rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* warning / watch-out */
+  .watch{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.3rem 0; background:#fffdf8;
+  }
+  .watch b{ color:#9a5c10; }
+
+  /* interactive tool panel */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .sim canvas{ display:block; width:100%; height:auto; background:#fff; }
+  .grid2{ display:grid; gap:.7rem 1.2rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .ctrl input[type=number], .ctrl input[type=text], .ctrl textarea{
+    font:inherit; font-size:.92rem; width:100%; box-sizing:border-box;
+    padding:.4rem .55rem; border:1px solid var(--rule); border-radius:6px; background:#fff;
+  }
+  .ctrl textarea{ min-height:5.5rem; font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; font-size:.85rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .verdict{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; margin-top:.9rem;
+    padding:.65rem .9rem; border-radius:8px; background:#fff; border:1px solid var(--rule);
+    min-height:1.2em;
+  }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* submission checklist */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .check-group{ margin:0 0 1.1rem; }
+  .check-group > .gh{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--green); font-weight:700; display:block; margin-bottom:.4rem;
+  }
+  .check-group label{ display:flex; gap:.6rem; align-items:flex-start;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; margin-bottom:.4rem; cursor:pointer; background:#fff; }
+  .check-group label:hover{ border-color:var(--green); }
+  .check-group input{ margin-top:.2rem; accent-color:var(--green); flex:none; }
+  .check-group input:checked + span{ color:var(--muted); text-decoration:line-through; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:.6rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule);
+  }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  .refs{ font-size:.95rem; }
+  .refs li{ margin:.4rem 0; }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+  footer .attrib{ display:block; margin-top:.3rem; }
+
+  .eqn .domain{
+    display:block; margin-top:.6rem; padding-top:.55rem; border-top:1px dashed var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:400;
+    line-height:1.55; color:var(--muted); letter-spacing:0; text-align:left;
+  }
+  .eqn .domain b{ color:var(--green-deep); }
+  .filenote{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted);
+    margin:.7rem 0 0; line-height:1.55;
+  }
+
+  /* ---- apparatus diagram (added 2026-09-24) ---- */
+  .apparatus{ margin:1.4rem 0; padding:0; }
+  .apparatus svg{ display:block; width:100%; height:auto; }
+  .apparatus .cap{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted);
+    text-align:center; margin-top:.5rem; line-height:1.5;
+  }
+  .apparatus .frame{ border:1px solid var(--rule); border-radius:8px; background:#fff; padding:.6rem; }
+  .ap-solid{ fill:none; stroke:var(--ink); stroke-width:2; }
+  .ap-thin{ fill:none; stroke:var(--ink); stroke-width:1.2; }
+  .ap-dash{ fill:none; stroke:var(--muted); stroke-width:1.4; stroke-dasharray:5 4; }
+  .ap-traj{ fill:none; stroke:var(--green); stroke-width:2.2; stroke-dasharray:7 5; }
+  .ap-dim{ fill:none; stroke:var(--green-deep); stroke-width:1.6; }
+  .ap-warn{ fill:none; stroke:#c0392b; stroke-width:1.6; }
+  .ap-shelf{ fill:#e8e4f0; stroke:var(--ink); stroke-width:1.5; }
+  .ap-tube{ fill:#cfd8d3; stroke:var(--ink); stroke-width:1.5; }
+  .ap-ball{ fill:var(--ink); }
+  .ap-paper{ fill:#fff; stroke:var(--ink); stroke-width:1; }
+  .ap-carbon{ fill:#4a4a52; stroke:var(--ink); stroke-width:1; }
+  .ap-t{ font-family:"Segoe UI", system-ui, sans-serif; font-size:14px; fill:var(--ink); }
+  .ap-t.lbl{ font-weight:700; fill:var(--green-deep); font-size:16px; }
+  .ap-t.sm{ font-size:12.5px; fill:var(--muted); }
+  .ap-t.bad{ font-size:12.5px; fill:#c0392b; font-weight:600; }
+  @media print{
+    /* ---- compact print pass, 2026-09-24 -------------------------------
+       Screen layout is untouched; this only tightens the photocopy.
+       Body drops from 1.06rem/1.65 to 0.86rem/1.4 (~10.3pt), which is
+       still comfortably above the ~9pt floor for a bench-side handout. */
+    @page{ margin:0.45in; }
+    body{ font-size:.80rem; line-height:1.34; }
+    .note-wrap{ max-width:none; margin:0; padding:0; }
+
+    h1{ font-size:1.5rem; margin:.2rem 0 .15rem; }
+    h2{ font-size:1.02rem; margin:.95rem 0 .4rem; page-break-after:avoid; }
+    h3{ font-size:.92rem; margin:.7rem 0 .3rem;  }
+    p{ margin:.45rem 0; }
+
+    .eyebrow{ margin-bottom:.15rem; }
+    .synopsis{ padding:.6rem .8rem; margin:.7rem 0; }
+    .logistics{ margin:.5rem 0; gap:.4rem; }
+    .pe{ margin:.8rem 0; }
+    .pe ul{ padding:.25rem .35rem; }
+    .pe li{ padding:.28rem .4rem; gap:.5rem; }
+    .pe li .tick{ width:1.25rem; height:1.25rem; font-size:.62rem; }
+
+    .sign-note, .note-link, .watch, .prior, .probe{
+      padding:.6rem .8rem; margin:.7rem 0;
+    }
+    .sign-note, .note-link, .probe{  }
+    .prior .body{ padding:.55rem .8rem .6rem; }
+    .prior .cases{ gap:.45rem; }
+    .case{ padding:.5rem .55rem; }
+
+    .eqn{ padding:.55rem .7rem; margin:.6rem 0; font-size:1rem; page-break-inside:avoid; }
+    .eqn .domain{ margin-top:.4rem; padding-top:.35rem; font-size:.73rem; line-height:1.4; }
+
+    ol.steps, ul.steps{ margin:.5rem 0; padding-left:1.15rem; }
+    ol.steps > li, ul.steps > li{ margin:.3rem 0; }
+    ul{ margin:.45rem 0; }
+    li{ margin:.22rem 0; }
+
+    .apparatus{ margin:.7rem 0; page-break-inside:avoid; }
+    .apparatus .frame{ padding:.35rem; }
+    .apparatus svg{ max-height:2.9in; }
+    .apparatus .cap{ font-size:.74rem; margin-top:.3rem; line-height:1.4; }
+
+    /* the interactive tool is dead on paper — keep the heading and the note,
+       drop the controls and the empty readouts */
+    .sim .buttons, .sim .controls input, .sim .readout{ display:none; }
+    .sim{ padding:.5rem .7rem; margin:.6rem 0; }
+
+    .ticket{ margin:.8rem 0; }
+    .ticket .t-body{ padding:.5rem .7rem; }
+    .check-group{ margin:.5rem 0; }
+    .check-group label{ margin:.18rem 0; }
+    .gh{ margin-top:.45rem; }
+
+    .downloads{ gap:.4rem; margin:.6rem 0; }
+    .dl-card{ padding:.5rem .7rem; }
+    .dl-card .hint{ font-size:.73rem; }
+    .filenote{ font-size:.76rem; margin-top:.5rem; }
+    .refs{ margin:.4rem 0; }
+    footer{ margin-top:.9rem; padding-top:.5rem; font-size:.72rem; }
+  }
+
+  @media print{
+    body{ font-size:10.5pt; }
+    .note-wrap{ max-width:none; padding:0; }
+    .btn, .sim .buttons{ display:none !important; }
+    .sim, .ticket, .pe, .prior{ break-inside:avoid; }
+    h2{ break-after:avoid; }
+    .verdict, .readout, .sim .panel .ctrl textarea{ display:none; }
+    a{ color:inherit; text-decoration:none; }
+    /* probe options stay visible on paper, as a plain lettered list */
+    .probe .opts{ counter-reset:opt; }
+    .probe .opt{ cursor:default; border:none; padding:.12rem 0 .12rem 1.6rem; position:relative; background:none; }
+    .probe .opt::before{
+      counter-increment:opt; content:"(" counter(opt, upper-alpha) ")";
+      position:absolute; left:0; font-weight:600; color:#5c6b62;
+    }
+    .probe .feedback{ display:none; }
+    /* the tick badges need a hair more room at print metrics */
+    .pe li .tick{ width:1.7rem; height:1.7rem; font-size:.66rem; }
+    .check-group label{ break-inside:avoid; }
+  }
+
+.sign-note{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; line-height:1.55; color:var(--ink,#1d2b23); background:#fdf6ea; border-left:3px solid var(--amber,#c77b1f); border-radius:0 6px 6px 0; padding:.6rem .85rem; margin:.9rem 0; }
+  .note-link{
+    background:#fff; border:1px solid var(--rule); border-left:4px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.85rem 1.05rem; margin:1rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .note-link b{ color:var(--green-deep); }
+.sign-note b{ color:#8a5512; }
+
+  /* ---- LB04 additions ---- */
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .ctrl select{ font:inherit; }
+  table.spec tbody td b{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>PHY 151 &middot; Module 4 &mdash; Energy and Momentum</span>
+    <span>Lab 05</span>
+  </div>
+
+  <h1>Momentum Conservation: Adding Up a Quantity That Refuses to Change</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    Note 8 made a claim that sounds too strong to be true: add up the momentum of everything involved
+    before an event, add it up again afterwards, and the two totals are equal &mdash; always, with no
+    exceptions anyone has ever found. This lab is where you stop taking that on trust. Two carts on a
+    level track interact three times, in three different ways: one cart moving into one at rest, two
+    carts approaching each other at similar speeds, and a loaded cart running into an empty one. Each
+    run was recorded by two motion sensors, so you have position against time for both carts through the
+    whole event. You will pull four velocities out of each run &mdash; each cart before, each cart after
+    &mdash; add up the two totals, and see how close they come. The interesting part is not that they
+    agree. It is <em>how</em> they disagree, and whether the disagreement is big enough to mean anything.
+
+    <div class="logistics">
+      <span class="chip"><b>Due</b> see the Module 4 Lab folder on Brightspace</span>
+      <span class="chip"><b>Report</b> Full lab report &mdash; use the Lab Template</span>
+      <span class="chip"><b>Pairs with</b> M4 N8</span>
+      <span class="chip"><b>Data</b> provided &mdash; this is a virtual lab</span>
+    </div>
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>what you should be able to do when this lab is written up</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>State a sign convention for a one-dimensional
+        system and apply it consistently</b> &mdash; including to a sensor that reports position along its
+        own axis rather than yours, so that a velocity's sign means something physical and not merely
+        which instrument recorded it.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Extract a velocity from position-versus-time
+        data</b> by fitting a straight line to a region where the cart is genuinely moving at constant
+        speed, and state the fit window you used.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Identify the interaction in the data without
+        being told where it is</b> &mdash; recognising it as the interval over which both carts' slopes are
+        changing, and excluding it from every fit.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Compute the total momentum of a two-body system
+        before and after an interaction</b>, &Sigma;p = m<sub>A</sub>v<sub>A</sub> + m<sub>B</sub>v<sub>B</sub>,
+        carrying the signs through, and quote the result with its units.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Judge whether momentum was conserved against a
+        stated criterion</b>, and recognise the case in which a percent difference is the wrong tool
+        because its denominator is near zero &mdash; saying so rather than reporting the number it
+        produces.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Account for the direction of a discrepancy</b>,
+        not merely its size &mdash; explaining what in the apparatus could remove momentum from the system
+        and whether the data support that explanation.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ THE N8 BRIDGE ============ -->
+  <h2>Start from Note 8 &mdash; this lab is that note, measured</h2>
+
+  <div class="note-link">
+    <b>Note 8 is not background reading for this lab. It is the lab.</b> The equation you wrote there
+    &mdash; p<sub>total,before</sub> = p<sub>A</sub> + p<sub>B</sub> = m<sub>A</sub>v<sub>A</sub> +
+    m<sub>B</sub>v<sub>B</sub>, and the same sum with primes afterwards &mdash; is the entire analysis of
+    this report. What the note could not give you is a set of real numbers that do not quite agree. That
+    is what you have here, and the gap between "the law says these are equal" and "my two totals differ
+    by this much" is the thing the report is about.
+  </div>
+
+  <table class="spec">
+    <caption>Where each part of Note 8 belongs in this report. The rubric awards points for these.</caption>
+    <thead>
+      <tr><th style="width:30%">Report section</th><th>What Note 8 gives you</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Introduction</b></td>
+        <td>The conservation law stated in your own words, and the equation
+          m<sub>A</sub>v<sub>A</sub> + m<sub>B</sub>v<sub>B</sub> = m<sub>A</sub>v<sub>A</sub>&prime; +
+          m<sub>B</sub>v<sub>B</sub>&prime; with every symbol defined. State what "conserved" would look
+          like in <em>this</em> measurement &mdash; a number you can compare, not a sentiment. End with a
+          hypothesis you can later confirm or reject.</td>
+      </tr>
+      <tr>
+        <td><b>Experimental</b></td>
+        <td>The labelled setup drawing, redrawn by you, with <b>the positive direction marked on it</b>.
+          State the sign convention and say explicitly how you handled the second sensor. Describe how
+          the data were collected and why the carts never touch.</td>
+      </tr>
+      <tr>
+        <td><b>Analysis</b></td>
+        <td>Four velocities per trial from four straight-line fits, then the two totals and their
+          difference. One worked sample calculation, by hand, with units, for each <em>type</em> of
+          calculation you do.</td>
+      </tr>
+      <tr>
+        <td><b>Discussion</b></td>
+        <td>Note 8's argument for <em>why</em> the total cannot change &mdash; equal and opposite forces
+          acting for the same time &mdash; checked against what you actually measured, including the
+          trials where the agreement is worst.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Read or reprint the note here:
+  <a href="https://byungmooncho.github.io/PHY151/Module_04/M4_N8_Momentum_Conservation.html"
+     target="_blank" rel="noopener">Module&nbsp;4 Note&nbsp;8 &mdash; Momentum Conservation</a>.</p>
+
+  <!-- ============ THE PHYSICS ============ -->
+  <h2>The physics you are using</h2>
+
+  <p>One equation, applied three times. For two bodies on a line,</p>
+
+  <div class="eqn">
+    &Sigma;p<sub>before</sub> = m<sub>A</sub>v<sub>A</sub> + m<sub>B</sub>v<sub>B</sub>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    &Sigma;p<sub>after</sub> = m<sub>A</sub>v<sub>A</sub>&prime; + m<sub>B</sub>v<sub>B</sub>&prime;
+  </div>
+
+  <p>and the law says those two are the same number. The symbol <b>&Sigma;p</b> is just shorthand for
+  <em>the sum of every momentum in the system</em> &mdash; the same p<sub>total</sub> you wrote in Note 8.
+  What you actually report is the difference between them,</p>
+
+  <div class="eqn">
+    &Delta;p = &Sigma;p<sub>after</sub> &minus; &Sigma;p<sub>before</sub>
+  </div>
+
+  <p>which the law says is zero and your data will say is merely small. Both halves of that sentence
+  matter.</p>
+
+  <div class="sign-note"><b>Sign convention here, and there is a trap in it.</b>
+  Momentum is a vector, and in one dimension a vector is a number with a sign. The two sensors do face
+  each other from opposite ends of the track &mdash; so it is natural to assume that one cart's
+  velocities must be flipped before they can be added to the other's. <b>In this data set they must
+  not.</b> Cart B's positions are recorded as negative numbers precisely so that both columns already
+  increase for motion in the same physical direction. A positive velocity means the same thing for both
+  carts, and the two columns are ready to be added as they stand.
+  <br><br>
+  Do not take that on my word &mdash; it is checkable, and checking it is part of the lab. Look at
+  Trial&nbsp;1: cart A moves, stops, and then cart B starts moving. If both velocities carry the same
+  sign, the momentum cart A lost is the momentum cart B gained, and the totals agree. If you flip cart
+  B, cart A's forward momentum and cart B's would have to cancel &mdash; meaning the system was nearly at
+  rest afterwards while a cart was visibly rolling down the track. One of those two readings describes
+  what happened and the other does not. <b>Establish the convention this way, from the data, and say in
+  your Experimental section how you established it.</b> A sign error here does not make the totals
+  slightly wrong; it makes them meaningless, and the tell is unmistakable &mdash; a trial that should
+  nearly balance misses by more than the whole momentum you started with.</div>
+
+  <!-- ============ PREDICT FIRST ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first. In Trial 2 the two carts approach each other at nearly the same speed and
+    bounce apart. Their masses are nearly equal too. What do you expect the <em>total</em> momentum of
+    the system to be, before and after?</p>
+    <div class="opts">
+      <button class="opt" data-correct="true">Close to zero both times &mdash; and that is going to make the percent difference useless.</button>
+      <button class="opt" data-correct="false">Close to zero both times, so the percent difference will be excellent.</button>
+      <button class="opt" data-correct="false">Large before and large after, since both carts are moving fast.</button>
+      <button class="opt" data-correct="false">Zero before and nonzero after, because bouncing adds momentum.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <div class="watch">
+    <b>Why that question is in this lab.</b> Two nearly equal masses moving at nearly equal speeds in
+    opposite directions have momenta that nearly cancel, so &Sigma;p is a small number both before and
+    after. The law is satisfied just as strictly as in the other two trials &mdash; but a percent
+    difference divides by that small number, and dividing a small absolute discrepancy by a small total
+    produces an enormous percentage. <b>You will see something in the region of 60% on Trial 2, and it
+    does not mean momentum was violated.</b> It means the tool is wrong for the job. Part III tells you
+    what to report instead. Noticing this yourself, and saying so in the Discussion, is worth more than
+    any of the arithmetic in this lab.
+  </div>
+
+  <!-- ============ APPARATUS ============ -->
+  <h2>The apparatus</h2>
+
+  <p>A level aluminium track with two low-friction carts on it. At each end sits an ultrasonic motion
+  sensor, and the two face inward along the track. Each cart carries a small magnet, so the carts
+  <b>never physically touch</b> &mdash; they repel each other through a short interaction at close range.
+  This is deliberate: a magnetic interaction is <em>nearly</em> elastic and is gentle enough that nothing
+  gets damaged, but every word of the momentum argument applies to it exactly as it would to a
+  collision.</p>
+
+  <figure class="apparatus">
+    <svg viewBox="0 0 680 190" width="100%" role="img"
+         aria-label="A level track with a motion sensor at each end facing inward, cart A on the left and cart B on the right, with the positive direction marked to the right.">
+      <!-- track -->
+      <rect x="70" y="118" width="540" height="7" fill="#c9d6cd"/>
+      <line x1="70" y1="125" x2="610" y2="125" stroke="#9db0a4" stroke-width="1.2"/>
+      <!-- table edge -->
+      <line x1="40" y1="150" x2="640" y2="150" stroke="#d7e2da" stroke-width="2"/>
+      <!-- sensor 1 (left) -->
+      <rect x="34" y="92" width="34" height="28" rx="4" fill="#eef3f0" stroke="#5c6b62" stroke-width="1.4"/>
+      <text x="51" y="84" font-size="11" text-anchor="middle" fill="#5c6b62" font-family="Segoe UI, sans-serif">Sensor 1</text>
+      <path d="M68 100 l12 0 M68 106 l16 0 M68 112 l12 0" stroke="#9db0a4" stroke-width="1.2" fill="none"/>
+      <!-- sensor 2 (right) -->
+      <rect x="612" y="92" width="34" height="28" rx="4" fill="#eef3f0" stroke="#5c6b62" stroke-width="1.4"/>
+      <text x="629" y="84" font-size="11" text-anchor="middle" fill="#5c6b62" font-family="Segoe UI, sans-serif">Sensor 2</text>
+      <path d="M612 100 l-12 0 M612 106 l-16 0 M612 112 l-12 0" stroke="#9db0a4" stroke-width="1.2" fill="none"/>
+      <!-- cart A -->
+      <rect x="170" y="96" width="78" height="22" rx="3" fill="#ffffff" stroke="#1d2b23" stroke-width="1.6"/>
+      <circle cx="188" cy="122" r="6" fill="#ffffff" stroke="#1d2b23" stroke-width="1.5"/>
+      <circle cx="230" cy="122" r="6" fill="#ffffff" stroke="#1d2b23" stroke-width="1.5"/>
+      <text x="209" y="111" font-size="13" text-anchor="middle" fill="#1d2b23" font-family="Segoe UI, sans-serif">m<tspan baseline-shift="sub" font-size="9">A</tspan></text>
+      <rect x="248" y="101" width="5" height="12" fill="#c77b1f"/>
+      <!-- cart B -->
+      <rect x="420" y="96" width="78" height="22" rx="3" fill="#ffffff" stroke="#1d2b23" stroke-width="1.6"/>
+      <circle cx="438" cy="122" r="6" fill="#ffffff" stroke="#1d2b23" stroke-width="1.5"/>
+      <circle cx="480" cy="122" r="6" fill="#ffffff" stroke="#1d2b23" stroke-width="1.5"/>
+      <text x="459" y="111" font-size="13" text-anchor="middle" fill="#1d2b23" font-family="Segoe UI, sans-serif">m<tspan baseline-shift="sub" font-size="9">B</tspan></text>
+      <rect x="415" y="101" width="5" height="12" fill="#c77b1f"/>
+      <!-- magnets note -->
+      <text x="334" y="109" font-size="10.5" text-anchor="middle" fill="#c77b1f" font-family="Segoe UI, sans-serif">magnets &mdash; no contact</text>
+      <!-- positive direction -->
+      <line x1="250" y1="172" x2="430" y2="172" stroke="#1e6b3c" stroke-width="1.6"/>
+      <path d="M430 172 l-9 -4 l0 8 z" fill="#1e6b3c"/>
+      <text x="340" y="166" font-size="11.5" text-anchor="middle" fill="#1e6b3c" font-family="Segoe UI, sans-serif">one choice of positive direction</text>
+    </svg>
+    <figcaption>Figure 1. The track as the data were taken. Both sensors face inward, so they measure
+    position along <em>opposite</em> axes. The positive direction drawn here is one choice &mdash; state
+    yours, and stay with it.</figcaption>
+  </figure>
+
+  <h3>The masses</h3>
+
+  <p>Measured on a triple-beam balance and the same for every trial:</p>
+
+  <table class="spec">
+    <thead>
+      <tr><th>Symbol</th><th>What it is</th><th style="width:28%">Mass</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>m<sub>A</sub></td><td>Cart A, the one sensor 1 watches</td><td>0.5119 kg</td></tr>
+      <tr><td>m<sub>B</sub></td><td>Cart B, the one sensor 2 watches</td><td>0.5139 kg</td></tr>
+      <tr><td>m<sub>e</sub></td><td>The extra bar, added to cart A in Trial 3 only</td><td>0.5319 kg</td></tr>
+    </tbody>
+  </table>
+
+  <div class="watch"><b>Trial 3 is the one where the masses are not what you expect.</b> The extra bar
+  rides on cart A, so the moving mass in Trial 3 is m<sub>A</sub> + m<sub>e</sub> = 1.0438 kg, not
+  0.5119 kg. Using the bare cart mass there is the single most common way to get this lab wrong, and it
+  will show up as a Trial 3 discrepancy of roughly 50%. Your Analysis must state which mass you used for
+  each trial.</div>
+
+  <!-- ============ PART I ============ -->
+  <h2>Part I &mdash; The data</h2>
+
+  <p>Three runs, provided as Vernier Graphical Analysis files in the data bundle. Each contains three
+  columns: time, cart A's position, and cart B's position, sampled every 0.05&nbsp;s for 5&nbsp;s.</p>
+
+  <table class="spec">
+    <caption>The three trials. Each file holds one complete interaction.</caption>
+    <thead>
+      <tr><th style="width:34%">File</th><th>What happens</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Pt1</b> &mdash; Empty Carts, One at Rest</td>
+          <td>Cart A is pushed toward cart B, which sits still. After the interaction A is essentially
+          stopped and B moves off. This is the cleanest of the three.</td></tr>
+      <tr><td><b>Pt2</b> &mdash; Empty Carts, Similar Speed</td>
+          <td>Both carts are launched toward each other at close to the same speed, and both rebound.
+          This is the trial from the prediction above.</td></tr>
+      <tr><td><b>Pt3</b> &mdash; Cart A Heavy, Cart B at Rest</td>
+          <td>The extra bar is on cart A. A keeps moving forward after the interaction, more slowly,
+          while B is pushed off faster than A is now going.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Open each file in Vernier Graphical Analysis. You should see two position traces. Before fitting
+  anything, <b>look at the graph</b> and find the interval where both traces bend &mdash; that is the
+  interaction, and it is the part you must fit <em>around</em>, never <em>through</em>.</p>
+
+  <!-- ============ PART II ============ -->
+  <h2>Part II &mdash; Getting four velocities out of each run</h2>
+
+  <p>On a position-versus-time graph a constant velocity is a straight line, and its slope <em>is</em> the
+  velocity. Each cart has two of them per trial: one before the interaction and one after. Four fits per
+  trial, twelve in all.</p>
+
+  <ol class="questions">
+    <li><b>Find the interaction.</b> Locate the time interval in which the slopes are changing. In these
+      runs the magnets act over roughly a tenth of a second, so the bend is short but not instantaneous.</li>
+    <li><b>Fit before and after, never across.</b> Select a region entirely on one side of the bend and
+      apply a linear fit. Record the slope and the x-range you used &mdash; <b>the fit window is a
+      required disclosure in your report</b>, on the same footing as the number it produced.</li>
+    <li><b>Stay off the ends.</b> A cart that has reached the end of the track, or is still being pushed
+      by hand, is not moving freely. Those regions are not part of the measurement.</li>
+    <li><b>Expect some velocities to be zero.</b> A cart at rest gives a flat line and a slope near zero.
+      That is a real measurement, not a missing one, and it goes into the sum as 0.</li>
+  </ol>
+
+  <div class="watch"><b>Why the fit window is treated so seriously here.</b> It is the one choice in this
+  lab that is yours alone, and two students analysing the same file can get different velocities purely
+  by selecting different ranges. That is not a flaw to be hidden; it is the reason the window has to be
+  reported. A result you cannot reproduce from the information in the report is not a result.</div>
+
+  <!-- ============ PART III ============ -->
+  <h2>Part III &mdash; The two totals, and the gap between them</h2>
+
+  <p>For each trial, with the signs carried through:</p>
+
+  <div class="eqn">
+    &Sigma;p<sub>before</sub> = m<sub>A</sub>v<sub>A</sub> + m<sub>B</sub>v<sub>B</sub>
+    &nbsp;&nbsp;&nbsp;
+    &Sigma;p<sub>after</sub> = m<sub>A</sub>v<sub>A</sub>&prime; + m<sub>B</sub>v<sub>B</sub>&prime;
+    &nbsp;&nbsp;&nbsp;
+    &Delta;p = &Sigma;p<sub>after</sub> &minus; &Sigma;p<sub>before</sub>
+  </div>
+
+  <p>Report &Delta;p in kg&middot;m/s for all three trials. Then, <b>for Trials 1 and 3 only</b>, express
+  it as a percentage:</p>
+
+  <div class="eqn">
+    percent difference = 100 &times; &Delta;p / &frac12;(|&Sigma;p<sub>before</sub>| + |&Sigma;p<sub>after</sub>|)
+  </div>
+
+  <h3>Trial 2, and what to report instead</h3>
+
+  <p>In Trial 2 both totals are close to zero, so the denominator above is close to zero and the
+  percentage it returns is large and meaningless. <b>Do not report a percent difference for Trial 2.</b>
+  Report &Delta;p in kg&middot;m/s, and compare it against something that is <em>not</em> near zero
+  &mdash; the momentum of a single cart, for instance, which is the scale of the quantities that went
+  into the sum. State in the Discussion why you made that substitution. A report that quotes a 60%
+  difference on Trial 2 without comment has misunderstood the measurement; a report that quotes it and
+  explains why it is the wrong number has understood it exactly.</p>
+
+  <h3>What counts as agreement</h3>
+
+  <p>For Trials 1 and 3, a percent difference of <b>10% or less</b> is a confirmation. Larger than that
+  and you have either a sign error, the wrong mass on Trial 3, or a fit window that has strayed into the
+  interaction &mdash; check those three before concluding anything about physics. For Trial 2, judge
+  &Delta;p against the single-cart momentum scale and say plainly whether it is small.</p>
+
+  <!-- ============ TOOL ============ -->
+  <h2>Check your analysis</h2>
+  <p>Enter the masses and your four fitted velocities for one trial to check the arithmetic. Your report
+  still has to show the fits, the windows and a sample calculation worked by hand with units &mdash; this
+  tool checks arithmetic, it does not replace the analysis.</p>
+
+  <div class="sim">
+    <div class="sim-head"><span>&#9679;</span> Tool &middot; Total momentum before and after</div>
+    <div class="panel">
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="mA">Mass of cart A, including any extra bar (kg)</label>
+          <input type="number" id="mA" step="any" inputmode="decimal" value="0.5119">
+        </div>
+        <div class="ctrl">
+          <label for="mB">Mass of cart B (kg)</label>
+          <input type="number" id="mB" step="any" inputmode="decimal" value="0.5139">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="vA">v<sub>A</sub> before (m/s, signed)</label>
+          <input type="number" id="vA" step="any" inputmode="decimal" placeholder="e.g. 0.5491">
+        </div>
+        <div class="ctrl">
+          <label for="vB">v<sub>B</sub> before (m/s, signed)</label>
+          <input type="number" id="vB" step="any" inputmode="decimal" placeholder="e.g. 0">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="vAp">v<sub>A</sub>&prime; after (m/s, signed)</label>
+          <input type="number" id="vAp" step="any" inputmode="decimal" placeholder="e.g. 0.0103">
+        </div>
+        <div class="ctrl">
+          <label for="vBp">v<sub>B</sub>&prime; after (m/s, signed)</label>
+          <input type="number" id="vBp" step="any" inputmode="decimal" placeholder="e.g. 0.5269">
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="pBtn">Compute</button>
+        <button class="btn" id="pClear">Clear</button>
+      </div>
+      <div class="readout">
+        <span class="chip">&Sigma;p before = <b id="oPb">&mdash;</b></span>
+        <span class="chip">&Sigma;p after = <b id="oPa">&mdash;</b></span>
+        <span class="chip">&Delta;p = <b id="oDp">&mdash;</b></span>
+        <span class="chip">% difference = <b id="oPct">&mdash;</b></span>
+        <span class="chip">KE before &rarr; after = <b id="oKE">&mdash;</b></span>
+      </div>
+      <div class="verdict" id="oVerdict">Enter two masses and four velocities to begin.</div>
+      <div class="hint-row">Signs matter: a velocity entered without its sign will give a total that is
+      wrong rather than merely imprecise. The kinetic energies are shown for the Additional Question on
+      energy; they are not part of the required analysis.</div>
+    </div>
+  </div>
+
+  <!-- ============ ADDITIONAL QUESTIONS ============ -->
+  <h2>Additional Questions</h2>
+  <p><b>Choose three of the five below and answer those three fully.</b> Name which three you chose.
+  Answer them in a section of their own headed <b>Additional Questions</b>, in <b>sentences and
+  paragraphs</b> with the working shown, never as a bare numbered list and never by restating the
+  question before answering it. Depth on three beats coverage of five; this section is worth 8 points on
+  the rubric.</p>
+
+  <ol class="questions aq">
+    <li><b>AQ1 &mdash; the energy that went missing.</b> Momentum is conserved in all three trials.
+      Kinetic energy is not: compute &frac12;mv&sup2; summed over both carts, before and after, for each
+      trial, and you will find every one of them ends with less than it started. Report the three losses
+      as percentages. Then answer the physics question: these carts never touch, so there is no crunch of
+      deforming metal to blame &mdash; where did the energy actually go, and why does Note 8's argument
+      for momentum conservation say nothing whatsoever about energy? Rank the three trials by fractional
+      energy loss and say whether the ranking makes sense to you.</li>
+
+    <li><b>AQ2 &mdash; the sign convention, taken seriously.</b> There are two different operations here
+      and they are easy to confuse. <em>First:</em> redo Trial 2's analysis with the opposite choice of
+      positive direction &mdash; every velocity flips, both totals flip, &Delta;p flips, and the physical
+      conclusion is unchanged. <em>Second:</em> flip cart B's velocities while leaving cart A's alone,
+      which is what the opposed sensors tempt you into. Show that this one is <b>not</b> a change of
+      convention at all but a corruption of the data, and compute how badly it fails &mdash; in Trial 2 it
+      turns a &Delta;p of about 0.02&nbsp;kg&middot;m/s into something larger than the total momentum the
+      system ever had. Explain the general principle that separates the two cases, and state the test you
+      would apply to a new data set to find out which situation you are in.</li>
+
+    <li><b>AQ3 &mdash; how much does the fit window matter?</b> Pick one cart in one trial and fit its
+      velocity three times, using three different windows: a generous one running right up to the
+      interaction, a conservative one well clear of it, and one that deliberately includes a few points
+      from inside the bend. Report the three slopes. Propagate each into &Sigma;p and say how much
+      &Delta;p moves. Then answer: is the disagreement between your two momentum totals larger or smaller
+      than the uncertainty your own choice of window introduces? If it is smaller, what have you actually
+      demonstrated about conservation of momentum &mdash; and what have you not?</li>
+
+    <li><b>AQ4 &mdash; the trial that breaks the percentage.</b> Section III told you not to compute a
+      percent difference for Trial 2. Justify that instruction mathematically rather than taking it on
+      authority. Write the percent difference as a function of the denominator, show how it behaves as
+      that denominator approaches zero while the numerator stays fixed, and compute what Trial 2's
+      percentage would be. Then propose a better figure of merit for a system whose total momentum is
+      near zero, defend it, and apply it to your own Trial 2 numbers.</li>
+
+    <li><b>AQ5 &mdash; predicting Trial 3 before measuring it.</b> In Trial 3 cart A carries the extra bar
+      and cart B starts at rest. Using only the masses and cart A's measured initial velocity, and
+      assuming the interaction is perfectly elastic, derive expressions for both final velocities and
+      compute them. Compare with what you actually measured. The agreement will be good but not perfect
+      &mdash; quantify the gap and say what it tells you about how elastic these magnetic interactions
+      really are. (The elastic two-body result is standard; derive it from conservation of momentum
+      together with conservation of kinetic energy, and show your working.)</li>
+  </ol>
+
+  <!-- ============ DISCUSSION ============ -->
+  <h2>Prompts for your Discussion</h2>
+  <p>These are <b>not</b> the Additional Questions. Work them into your <b>Discussion</b> section as part
+  of your argument, in your own order. Do not answer them as a list, and do not limit yourself to them.</p>
+
+  <ol class="questions">
+    <li>Momentum conservation is not approximately true in this experiment &mdash; it is a strict law, and
+      what you measured are three numbers that are not quite zero. Which of your three &Delta;p values is
+      most likely to be a real physical effect rather than measurement scatter, and what in the data
+      makes you say so?</li>
+    <li>The carts never touch. Does that make the interaction more elastic, less elastic, or does it not
+      bear on elasticity at all? Your energy numbers, if you did AQ1, are evidence here.</li>
+    <li>Every &Delta;p you measured has a sign. Are the three signs the same? If a systematic effect such
+      as track friction or a slight slope were at work, what sign would you expect, and is that what you
+      see?</li>
+    <li>The track was levelled by eye. Estimate how much a slope of half a degree over the interaction
+      distance would change your velocities, and say whether that is big enough to account for what you
+      found.</li>
+    <li>Trial 1 is the cleanest of the three and Trial 2 the messiest by percentage. Is Trial 2 really the
+      worst measurement, or only the worst-scaled one? Defend your answer with numbers.</li>
+    <li>In a real two-car collision, would you expect momentum to be conserved to the same precision you
+      measured here? What is different about that situation, and what would you have to include in the
+      system to make the statement true?</li>
+  </ol>
+
+  <!-- ============ FILES ============ -->
+  <h2>Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB05_Momentum_Conservation.pdf" target="_blank" rel="noopener">
+      <span class="kind">Handout</span>
+      <span class="name">This lab, as a PDF</span>
+      <span class="hint">The whole page, printable. The calculator only works on the web version.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB05_Data_Files.zip" target="_blank" rel="noopener">
+      <span class="kind">Required</span>
+      <span class="name">The three data files</span>
+      <span class="hint">Pt1, Pt2 and Pt3 for Vernier Graphical Analysis.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB05_Momentum_Conservation_Example_Workbook.xlsx" target="_blank" rel="noopener">
+      <span class="kind">Example</span>
+      <span class="name">Example workbook</span>
+      <span class="hint">The raw data, a blank analysis sheet laid out for you, and one trial worked through.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB05_Rubric.docx" target="_blank" rel="noopener">
+      <span class="kind">Grading</span>
+      <span class="name">Lab 05 rubric</span>
+      <span class="hint">Read it before you write, not after.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/PHY151_LB05_Momentum_Conservation_Example_Starter.docx" target="_blank" rel="noopener">
+      <span class="kind">Support</span>
+      <span class="name">Report starter</span>
+      <span class="hint">Section guidance only now &mdash; the sentence stems have gone. See the note inside.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/Module_04/M4_N8_Momentum_Conservation.html" target="_blank" rel="noopener">
+      <span class="kind">Note</span>
+      <span class="name">M4 N8 &mdash; Momentum Conservation</span>
+      <span class="hint">The note this lab measures.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/Formatting_Data_Tables_for_Lab_Reports.html" target="_blank" rel="noopener">
+      <span class="kind">Reference</span>
+      <span class="name">Formatting data tables</span>
+      <span class="hint">Table captions, units in headers, significant figures.</span>
+    </a>
+  </div>
+
+  <!-- ============ REFERENCES ============ -->
+  <h2>References to get you started</h2>
+  <p>Your references should include material on the conservation of momentum and on the software used to
+  analyse the motion. Your textbook, this handout and the Module 4 note pages all count, and you need at
+  least one source beyond the textbook. The note this lab measures is
+  <a href="https://byungmooncho.github.io/PHY151/Module_04/M4_N8_Momentum_Conservation.html"
+     target="_blank" rel="noopener">Module&nbsp;4 Note&nbsp;8</a>, and the energy side of the story is in
+  <a href="https://byungmooncho.github.io/PHY151/Module_04/M4_N10_Energy_In_Collisions.html"
+     target="_blank" rel="noopener">Module&nbsp;4 Note&nbsp;10</a>.</p>
+  <ol class="refs">
+    <li>[Author's names], <i>Journal or Book title</i>, edition, Volume number, page number, (year).</li>
+  </ol>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 151
+    <span class="attrib">Revised from the Collisions in 1 Dimension lab by H. Trevor Johnson-Steigelman, used under CC BY-NC-SA.</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function fmt(x, d){
+    if(!isFinite(x)) return '—';
+    return (Math.round(x * Math.pow(10,d)) / Math.pow(10,d)).toFixed(d);
+  }
+  var ids = ['mA','mB','vA','vB','vAp','vBp'];
+  function val(id){ var e = document.getElementById(id); return e ? parseFloat(e.value) : NaN; }
+  function out(id, t){ var e = document.getElementById(id); if(e) e.textContent = t; }
+
+  function compute(){
+    var mA = val('mA'), mB = val('mB');
+    var vA = val('vA'), vB = val('vB'), vAp = val('vAp'), vBp = val('vBp');
+    var v = document.getElementById('oVerdict');
+    if(![mA,mB,vA,vB,vAp,vBp].every(function(x){ return isFinite(x); })){
+      if(v) v.textContent = 'Enter two masses and four velocities to begin.';
+      ['oPb','oPa','oDp','oPct','oKE'].forEach(function(i){ out(i,'—'); });
+      return;
+    }
+    var pb = mA*vA + mB*vB, pa = mA*vAp + mB*vBp, dp = pa - pb;
+    var den = (Math.abs(pb) + Math.abs(pa)) / 2;
+    var keb = 0.5*mA*vA*vA + 0.5*mB*vB*vB, kea = 0.5*mA*vAp*vAp + 0.5*mB*vBp*vBp;
+    out('oPb', fmt(pb,4) + ' kg·m/s');
+    out('oPa', fmt(pa,4) + ' kg·m/s');
+    out('oDp', fmt(dp,4) + ' kg·m/s');
+    out('oKE', fmt(keb,5) + ' → ' + fmt(kea,5) + ' J');
+
+    // the near-zero denominator guard - this is the Trial 2 lesson, enforced by the tool
+    var scale = Math.max(Math.abs(mA*vA), Math.abs(mB*vB), Math.abs(mA*vAp), Math.abs(mB*vBp));
+    if(den < 0.30 * scale){
+      out('oPct', 'not meaningful');
+      if(v) v.innerHTML = '<b>The percent difference is not a usable number here.</b> The two totals are '
+        + 'both close to zero (Σp before = ' + fmt(pb,4) + ', after = ' + fmt(pa,4) + '), so dividing by '
+        + 'their average inflates a small Δp of ' + fmt(dp,4) + ' kg·m/s into a large percentage. '
+        + 'Report Δp itself, and compare it against a single cart’s momentum — the largest here is '
+        + fmt(scale,4) + ' kg·m/s, so Δp is about ' + fmt(100*Math.abs(dp)/scale,1) + '% of that. '
+        + 'Say so explicitly in your Discussion.';
+      return;
+    }
+    var pct = 100 * dp / den;
+    out('oPct', fmt(pct,2) + '%');
+    var keLoss = keb > 0 ? 100*(kea-keb)/keb : NaN;
+    if(v){
+      if(Math.abs(pct) <= 10){
+        v.innerHTML = '<b>Momentum is conserved within the criterion.</b> Δp = ' + fmt(dp,4)
+          + ' kg·m/s, a difference of ' + fmt(pct,2) + '%, which is inside the 10% bar. '
+          + 'The kinetic energy changed by ' + fmt(keLoss,1) + '% over the same interaction — '
+          + 'a reminder that the two quantities answer to different laws.';
+      } else {
+        v.innerHTML = '<b>That is outside the 10% criterion.</b> Δp = ' + fmt(dp,4) + ' kg·m/s, '
+          + fmt(pct,2) + '%. Before concluding anything about physics, check the three usual causes: '
+          + 'cart B’s velocities entered with their signs reversed (the two position columns already '
+          + 'share one positive direction — flipping cart B is the error, not the fix), the wrong mass '
+          + 'on Trial 3 (the extra bar makes cart A 1.0438 kg), or a fit window that has reached into the '
+          + 'interaction.';
+      }
+    }
+  }
+
+  var b = document.getElementById('pBtn'); if(b) b.addEventListener('click', compute);
+  var c = document.getElementById('pClear');
+  if(c) c.addEventListener('click', function(){
+    ['vA','vB','vAp','vBp'].forEach(function(i){ var e=document.getElementById(i); if(e) e.value=''; });
+    compute();
+  });
+  ids.forEach(function(i){
+    var e = document.getElementById(i);
+    if(e) e.addEventListener('keydown', function(ev){ if(ev.key === 'Enter') compute(); });
+  });
+
+  // predict-first probe
+  var probe = document.getElementById('probe');
+  if(probe){
+    probe.addEventListener('click', function(ev){
+      var t = ev.target;
+      if(t && t.closest) t = t.closest('.opt');
+      if(!t || !t.classList || !t.classList.contains('opt')) return;
+      var right = t.getAttribute('data-correct') === 'true';
+      Array.prototype.forEach.call(probe.querySelectorAll('.opt'), function(o){
+        o.classList.remove('chosen');
+      });
+      t.classList.add('chosen');
+      var fb = document.getElementById('probeFb');
+      if(!fb) return;
+      fb.style.display = 'block';
+      fb.innerHTML = right
+        ? '<b>Yes.</b> Nearly equal masses at nearly equal speeds in opposite directions give momenta that '
+          + 'very nearly cancel, so Σp is small both before and after. The law holds just as strictly '
+          + 'as in the other trials — but a percent difference divides by that small total, and turns a '
+          + 'tiny absolute discrepancy into a huge percentage. Part III tells you what to report instead.'
+        : '<b>Not quite.</b> Work out the two momenta separately before adding them. Cart A carries roughly '
+          + '+0.19 kg·m/s and cart B roughly −0.17 kg·m/s, so the <em>total</em> is a small '
+          + 'number — the two nearly cancel. That is true after the interaction too. The consequence is '
+          + 'the one that matters here: a percent difference divides by that small total and becomes '
+          + 'useless, even though momentum is conserved exactly as well as in Trial 1.';
+    });
+  }
+})();
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - fixes the first-paint WIDTH race.
+
+   The V4 reporter above fires on load, on window resize, and from a
+   ResizeObserver on document.body. Measured 2026-10-06: none of those fire when
+   only the frame's WIDTH changes. Inside Brightspace the frame is briefly
+   collapsed at first paint, so a page reported its ~60px-wide height (11358px
+   for a page that is really 1967px) and the V5 wrapper kept that number forever.
+   Seen live on the M3 and M4 reference indexes; it is a race, so a reload can
+   hide it.
+
+   This re-measures a few times while layout settles, and posts only when the
+   number actually changes. It does NOT change any page's height, so every
+   declared wrapper baseline stays valid. Remove it only together with a reporter
+   that re-fires on a width-only change. */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){
+    var el = document.querySelector('.note-wrap') || document.body;
+    var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height
+      + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+  }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    var w = document.querySelector('.note-wrap'); if (w) ro.observe(w);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>
