@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 3 &mdash; Standing Waves on a String</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 105 Module 2, Lab 3.
+     Design system, tokens, type scale and print rules copied unchanged
+     from PHY105_LB02_Interference.html and from the M2 N1 handout
+     (2026-10-20). No new colours, no new components.
+
+     SOURCE: rebuilt from "LB-Standing Waves-Harmonics", © 2017 Trevor
+     Johnson-Steigelman (2024FA PHY105 Module 4; reprinted 25FA Module 2).
+     Inherited material. Changes made deliberately, all flagged in the
+     instructor notes at the foot of this file:
+       - video-lab language removed throughout; this is an in-person lab
+       - Trevor's stated goal "investigate the effect of tension on the
+         speed of a wave" appears in his procedure only as a discussion
+         question. Part 4 carries it out. NEW — Cho has not approved it.
+       - Questions for Discussion are now "choose three, answer fully",
+         per the standing rule.
+       - reference-format block dropped; it duplicates the Writing Lab
+         Reports module.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --line:#b7c6bc;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+  h3{ font-size:1.08rem; margin:1.5rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .figure{
+    border:1px solid var(--rule); border-radius:10px; padding:1rem;
+    margin:1.4rem 0; text-align:center;
+  }
+  .figure img, .figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+  .figure figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    color:var(--muted); margin-top:.5rem; text-align:left;
+  }
+  .figure figcaption b{ color:var(--green-deep); }
+  ol.steps{ counter-reset:step; list-style:none; margin:1rem 0; padding:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+    border-left:2px solid var(--rule); margin-left:.9rem;
+  }
+  ol.steps > li:last-child{ border-left-color:transparent; }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+    width:1.8rem; height:1.8rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.85rem; font-weight:600;
+  }
+  ol.steps.questions > li{ padding-bottom:1.4rem; }
+  .fillin{
+    display:inline-block; min-width:9rem; border-bottom:1px solid var(--line);
+    margin:0 .25rem;
+  }
+  .slot{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--green-deep); margin:.45rem 0 0; font-weight:600;
+  }
+  .slot .unit{ font-weight:400; color:var(--muted); }
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+  .eqn{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px;
+    padding:.85rem 1rem; margin:1.1rem 0; text-align:center;
+  }
+  .eqn .math{
+    font-size:1.25rem; font-weight:700; color:var(--green-deep);
+    font-family:Charter, Georgia, serif; display:block;
+  }
+  .eqn .domain{
+    display:block; margin-top:.45rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem;
+    letter-spacing:.02em; color:var(--muted);
+  }
+  .eqn .domain b{ color:var(--amber); }
+  table.spec{
+    width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:.95rem;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  table.spec th, table.spec td{
+    border:1px solid var(--rule); padding:.5rem .6rem; text-align:left;
+  }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec td.blank{ height:2.1rem; }
+  .drawbox{
+    border:1px solid var(--line); border-radius:8px; height:9rem; margin:.5rem 0 .3rem;
+    background:
+      repeating-linear-gradient(0deg,#f4f8f5 0 1px,transparent 1px 22px),
+      repeating-linear-gradient(90deg,#f4f8f5 0 1px,transparent 1px 22px);
+    position:relative; break-inside:avoid; page-break-inside:avoid;
+  }
+  .drawbox .cue{
+    position:absolute; top:.4rem; left:.6rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.74rem;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700;
+  }
+  .write{ margin:.35rem 0 .2rem; break-inside:avoid; page-break-inside:avoid; }
+  .write span{ display:block; border-bottom:1px solid #c9d6ce; height:1.5rem; }
+  .downloads{ display:grid; gap:.8rem; margin:1.2rem 0; }
+  @media (min-width:560px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    display:block; border:1px solid var(--rule); border-radius:10px;
+    padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+    background:#fff; transition:border-color .15s, box-shadow .15s;
+  }
+  .dl-card.static{ cursor:default; }
+  .dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+  .dl-card .kind{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--green); font-weight:700;
+  }
+  .dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+  .dl-card .hint{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.83rem; color:var(--muted);
+  }
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+@media print{
+  @page{ size: Letter; margin: .5in .5in .45in; }
+  body{ font-size:10.6pt; line-height:1.5; }
+  .note-wrap{ max-width:none; padding:0; }
+  h1{ font-size:1.6rem; margin:.5rem 0 .2rem; }
+  h2{ font-size:1.12rem; margin:1rem 0 .45rem; }
+  h3{ font-size:1rem; margin:.8rem 0 .35rem; }
+  p{ margin:.42rem 0; }
+  .synopsis{ margin:.7rem 0; padding:.6rem .85rem; }
+  .figure{ padding:.55rem .6rem; margin:.6rem 0; }
+  .figure figcaption{ font-size:.82rem; margin-top:.35rem; }
+  ol.steps > li{ padding-bottom:.6rem; }
+  ol.steps.questions > li{ padding-bottom:.55rem; }
+  .synopsis, .tip, .figure, .eqn, ol.steps > li, table.spec{
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  h1, h2, h3{ break-after:avoid; page-break-after:avoid; }
+  .downloads, h2.filesheading{ display:none; }
+  footer{ margin-top:.9rem; padding-top:.5rem; font-size:.72rem; }
+}
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2: Basics Of Sound</span>
+    <span>Lab 3: Standing Waves on a String</span>
+    <span>Name: ______________________</span>
+  </div>
+
+  <h1>Lab 3 &mdash; Standing Waves on a String</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In Note 1 you drew the modes of a string fixed at both ends and wrote down that each one adds
+    half a wave, so that f<sub>2</sub> = 2f<sub>1</sub>, f<sub>3</sub> = 3f<sub>1</sub>, and so on.
+    Those were drawings. In this lab you make them appear on a real string and read their
+    frequencies off a dial. You will find the fundamental, climb the harmonics one at a time, and
+    plot frequency against harmonic number &mdash; and the slope of that plot is a number you have
+    already predicted, which is what makes the plot worth making. Then you use one harmonic to get
+    a wavelength, combine it with its frequency, and obtain the speed of a wave on the string.
+  </div>
+
+  <p><b>Performance Expectations:</b> Set up a driven string under measured tension and locate at
+  least the first five resonances by adjusting the driving frequency. Record harmonic number and
+  frequency as a data table, plot frequency against harmonic number, fit a trendline, and interpret
+  its slope. Determine a wavelength from the geometry of a named harmonic and compute the wave
+  speed from v = &lambda;f. Predict and then test how the tension changes the wave speed and the
+  resonant frequencies. Distinguish what you measured from what you inferred, and cite your own
+  data when you do.</p>
+
+  <p><b>Equipment:</b> Pasco economy wave driver &middot; Pasco sine wave generator &middot; about
+  1.75 m of Mason&rsquo;s twine &middot; pulley and bracket &middot; small lab stand &middot; mass
+  set (20 g, 50 g, 100 g, 200 g) &middot; metre stick or tape measure &middot; a laptop with
+  Excel for the plot.</p>
+
+  <h2>Setting up the apparatus</h2>
+
+  <figure class="figure">
+    <svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Driven string apparatus: lab stand, wave driver, horizontal string, pulley at the table edge, hanging mass.">
+      <style>.lbl{font:400 12px "Segoe UI",system-ui,sans-serif;fill:#5c6b62}.dim{font:600 12px "Segoe UI",system-ui,sans-serif;fill:#134a29}</style>
+      <!-- table top -->
+      <line x1="20" y1="170" x2="640" y2="170" stroke="#1d2b23" stroke-width="2"/>
+      <line x1="640" y1="170" x2="640" y2="232" stroke="#1d2b23" stroke-width="2"/>
+      <!-- lab stand (string tie-off) -->
+      <line x1="70" y1="170" x2="70" y2="96" stroke="#1d2b23" stroke-width="3"/>
+      <line x1="48" y1="170" x2="92" y2="170" stroke="#1d2b23" stroke-width="4"/>
+      <!-- wave driver block -->
+      <rect x="150" y="128" width="62" height="42" fill="none" stroke="#1d2b23" stroke-width="2"/>
+      <line x1="181" y1="128" x2="181" y2="112" stroke="#1d2b23" stroke-width="2"/>
+      <!-- the string: stand -> driver post -> across -> over pulley -> down -->
+      <line x1="70" y1="112" x2="181" y2="112" stroke="#1d2b23" stroke-width="1.5"/>
+      <line x1="181" y1="112" x2="610" y2="112" stroke="#1d2b23" stroke-width="1.5"/>
+      <!-- pulley -->
+      <circle cx="610" cy="124" r="13" fill="none" stroke="#1d2b23" stroke-width="2"/>
+      <line x1="610" y1="137" x2="610" y2="170" stroke="#1d2b23" stroke-width="2"/>
+      <path d="M610 112 A13 13 0 0 1 623 124" fill="none" stroke="#1d2b23" stroke-width="1.5"/>
+      <line x1="623" y1="124" x2="623" y2="196" stroke="#1d2b23" stroke-width="1.5"/>
+      <!-- hanging mass -->
+      <rect x="606" y="196" width="34" height="26" fill="none" stroke="#1d2b23" stroke-width="2"/>
+      <!-- span dimension, driver post to pulley centre -->
+      <line x1="181" y1="64" x2="610" y2="64" stroke="#134a29" stroke-width="1"/>
+      <line x1="181" y1="56" x2="181" y2="72" stroke="#134a29" stroke-width="1"/>
+      <line x1="610" y1="56" x2="610" y2="72" stroke="#134a29" stroke-width="1"/>
+      <text class="dim" x="395" y="54" text-anchor="middle">L = 1.50 m</text>
+      <!-- leaders -->
+      <text class="lbl" x="70" y="88" text-anchor="middle">lab stand</text>
+      <text class="lbl" x="181" y="198" text-anchor="middle">wave driver</text>
+      <text class="lbl" x="700" y="128" text-anchor="middle">pulley</text>
+      <text class="lbl" x="700" y="214" text-anchor="middle">hanging mass</text>
+      <line x1="636" y1="124" x2="668" y2="124" stroke="#c9d6ce" stroke-width="1"/>
+      <line x1="644" y1="209" x2="668" y2="209" stroke="#c9d6ce" stroke-width="1"/>
+    </svg>
+    <figcaption><b>Figure 1.</b> The apparatus. The vibrating length L is measured from the driver
+    post to the centre of the pulley, <b>not</b> from the lab stand &mdash; the segment behind the
+    driver is not part of the standing wave.</figcaption>
+  </figure>
+
+  <ol class="steps">
+    <li><p>Clamp the pulley and bracket firmly to the edge of the table. Place the wave driver about
+    1.5 m back from it along the table.</p></li>
+    <li><p>Loop the string through the economy wave driver and tie the far end off to the small lab
+    stand. Run the other end over the pulley and hang <b>200 g</b> from it, making sure the mass
+    hangs freely and is not resting on anything.</p></li>
+    <li><p>Slide the wave driver so that the driver post and the centre of the pulley are
+    <b>1.50 m</b> apart. Adjust the pulley height until the string is horizontal.</p></li>
+    <li><p>Measure and record L and the hanging mass. Then make your own sketch of the apparatus
+    below, labelling the equipment and marking every distance and force you can identify. You will
+    need this sketch in your report.</p>
+    <div class="drawbox"><span class="cue">Your sketch of the apparatus</span></div></li>
+  </ol>
+
+  <table class="spec">
+    <tr><th>Vibrating length L (m)</th><th>Hanging mass (g)</th><th>Tension = mg (N)</th><th>String</th></tr>
+    <tr><td class="blank"></td><td></td><td></td><td>Mason&rsquo;s twine</td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Before you turn anything on</span>
+    Turn the amplitude down to about <b>&frac14;</b> of maximum and leave it there. A large
+    amplitude makes the fundamental easy to see and every harmonic above it hard to find, because
+    the string whips instead of settling. If the mass is swinging, stop it with your hand before
+    taking a reading.
+  </div>
+
+  <h2>Part 1 &mdash; Find the fundamental</h2>
+
+  <ol class="steps">
+    <li><p>Set the frequency to about 10 Hz. Raise it slowly, watching the string.</p></li>
+    <li><p>At some point the string swings up and down as <b>one single loop</b>, with the largest
+    motion at the centre and no motion at the ends. Fine-tune with the 1.0 Hz and 0.1 Hz knobs until
+    the amplitude is as large as you can make it. That frequency is the fundamental,
+    f<sub>1</sub>.</p>
+    <p class="slot">f<sub>1</sub> = <span class="fillin"></span> <span class="unit">Hz</span></p></li>
+    <li><p><b>Before you go on</b>, write down what you expect f<sub>2</sub> and f<sub>3</sub> to
+    be, from Note 1. You are about to measure them.</p>
+    <p class="slot">predicted f<sub>2</sub> = <span class="fillin"></span> <span class="unit">Hz</span> &nbsp;&nbsp; predicted f<sub>3</sub> = <span class="fillin"></span> <span class="unit">Hz</span></p></li>
+  </ol>
+
+  <div class="tip">
+    <span class="label">If you cannot find it</span>
+    It is often easier to find the <b>two-loop</b> pattern first, because it is unmistakable, and
+    then halve the frequency to land on the fundamental. If the whole string is just shaking
+    without a clean shape anywhere, your amplitude is too high or the mass is swinging.
+  </div>
+
+  <h2>Part 2 &mdash; Climb the harmonics</h2>
+
+  <p>Keep raising the frequency. Each time the string settles into a pattern with one more loop
+  than before, fine-tune for maximum amplitude and record it. You should reach at least the fifth
+  harmonic without difficulty; after that the pattern gets harder to see, but take as many as you
+  can.</p>
+
+  <table class="spec">
+    <tr><th>Harmonic number n</th><th>Number of loops</th><th>Measured frequency f (Hz)</th><th>f / n (Hz)</th></tr>
+    <tr><td>1</td><td class="blank"></td><td></td><td></td></tr>
+    <tr><td>2</td><td class="blank"></td><td></td><td></td></tr>
+    <tr><td>3</td><td class="blank"></td><td></td><td></td></tr>
+    <tr><td>4</td><td class="blank"></td><td></td><td></td></tr>
+    <tr><td>5</td><td class="blank"></td><td></td><td></td></tr>
+    <tr><td>6</td><td class="blank"></td><td></td><td></td></tr>
+    <tr><td>7</td><td class="blank"></td><td></td><td></td></tr>
+  </table>
+
+  <p>That last column is a check you can run while you are still at the bench. If the values down
+  it are not all about the same, one of your rows is mislabelled &mdash; most likely you skipped a
+  harmonic without noticing.</p>
+
+  <h2>Part 3 &mdash; Analysis</h2>
+
+  <h3>A. Frequency against harmonic number</h3>
+  <ol class="steps">
+    <li><p>Enter your table into Excel and plot <b>frequency on the vertical axis against harmonic
+    number on the horizontal axis</b>. Label both axes with quantity and unit, and give the plot a
+    title.</p></li>
+    <li><p>Add a linear trendline and display its equation. Record the slope.</p>
+    <p class="slot">slope = <span class="fillin"></span> <span class="unit">Hz per harmonic</span></p></li>
+    <li><p>Compare the slope with one of the numbers already in your data table. Which one is it,
+    and why should it be that one?</p>
+    <div class="write"><span></span><span></span><span></span></div></li>
+  </ol>
+
+  <h3>B. Wavelength and wave speed</h3>
+  <p>Use the <b>second</b> harmonic, where the string carries two loops across the length L.</p>
+
+  <ol class="steps">
+    <li><p>Each loop is half a wavelength. Write down the wavelength of the second harmonic in
+    terms of L, then put your measured L in.</p>
+    <p class="slot">&lambda;<sub>2</sub> = <span class="fillin"></span> <span class="unit">m</span></p></li>
+    <li><p>Combine it with the frequency you measured for that harmonic to get the speed of the
+    wave on the string.</p>
+    <p class="slot">v = <span class="fillin"></span> <span class="unit">m/s</span></p></li>
+    <li><p>Repeat for one other harmonic of your choice. Do you get the same v? Should you?</p>
+    <p class="slot">n = <span class="fillin"></span> &nbsp;&nbsp; &lambda;<sub>n</sub> = <span class="fillin"></span> <span class="unit">m</span> &nbsp;&nbsp; v = <span class="fillin"></span> <span class="unit">m/s</span></p></li>
+  </ol>
+
+  <div class="eqn">
+    <span class="math">v = &lambda;f</span>
+    <span class="domain">The same relation you used in Lab 2 to turn a measured wavelength into a
+    frequency &mdash; run the other way here. <b>Include a sample calculation</b> for every type of
+    calculation in your report: starting equation, algebra, result, units at every step.</span>
+  </div>
+
+  <h2>Part 4 &mdash; Change the tension</h2>
+
+  <p>Everything above was taken at one tension. Now change it.</p>
+
+  <ol class="steps">
+    <li><p><b>Predict first, in writing.</b> You are going to halve the hanging mass. State what
+    you expect to happen to the speed of the wave on the string, and what you expect to happen to
+    the fundamental frequency.</p>
+    <p class="slot">v will: <span class="fillin"></span></p>
+    <p class="slot">f<sub>1</sub> will: <span class="fillin"></span></p></li>
+    <li><p>Replace the 200 g with 100 g. Find the fundamental again, and the second harmonic.</p></li>
+    <li><p>Compute the new wave speed from the second harmonic, exactly as in Part 3B. The length
+    has not changed, so &lambda;<sub>2</sub> has not changed either.</p></li>
+    <li><p>Fill in the comparison. Was your prediction right, in direction and in rough size?</p></li>
+  </ol>
+
+  <table class="spec">
+    <tr><th>Hanging mass</th><th>Tension (N)</th><th>f<sub>1</sub> (Hz)</th><th>f<sub>2</sub> (Hz)</th><th>&lambda;<sub>2</sub> (m)</th><th>v (m/s)</th></tr>
+    <tr><td>200 g</td><td class="blank"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>100 g</td><td class="blank"></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2>Questions for Discussion</h2>
+
+  <p><b>Choose three of the following and answer those three fully</b>, working them into your
+  discussion section. Say which three you chose. Do not simply copy the question and answer it in a
+  line &mdash; and do not limit yourself to these topics if you have other insights.</p>
+
+  <ol class="steps questions">
+    <li><p>What happened to the wavelength as the frequency increased? Express the relationship
+    between the two as a proportionality, and name what was held constant to make it true.</p></li>
+
+    <li><p>Why is the slope of your Part 3A graph the number it is? Answer in terms of the shapes
+    on the string, not in terms of the trendline.</p></li>
+
+    <li><p>The ends of the string are the one place where nothing moves. Explain why that single
+    constraint is what forces the frequencies to come in a whole-number sequence instead of
+    arbitrary values.</p></li>
+
+    <li><p>From your Part 4 data: which of v, &lambda; and f changed when you changed the tension,
+    and which did not? Use that to say what physical property of the system the tension actually
+    sets.</p></li>
+
+    <li><p>The frequencies you found were the ones where the string responded with a large
+    amplitude; at every other setting it barely moved. Connect that to the resonance argument you
+    made about the Tacoma Narrows bridge in Note 1.</p></li>
+
+    <li><p>A guitar string is tuned by turning a peg, and fretted by shortening it. Using your own
+    two experiments, say which of those two changes v and which changes &lambda;, and explain how
+    each ends up changing the pitch.</p></li>
+  </ol>
+
+  <div class="tip">
+    <span class="label">Lab report</span>
+    Follow the standard format in the <b>Writing Lab Reports</b> module. The report template for
+    this lab gives fewer opening sentences than Lab 2 did &mdash; that is deliberate, and the
+    template says so on its first page. Your abstract must state your measured wave speed and the
+    tension it was measured at.
+  </div>
+
+  <h2 class="filesheading">Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/PHY105_LB03_Standing_Waves_On_A_String.pdf">
+      <span class="kind">Print</span>
+      <span class="name">Lab handout (PDF)</span>
+      <span class="hint">Print this and bring it to lab &mdash; the tables are on it.</span>
+    </a>
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/PHY105_LB03_Report_Template.docx">
+      <span class="kind">Template</span>
+      <span class="name">Lab 3 report template</span>
+      <span class="hint">Openers only from this lab on. Read its first page.</span>
+    </a>
+  </div>
+
+<!-- =====================================================================
+     INSTRUCTOR NOTES — PHY105 Lab 3 (not shown to students)
+
+     SOURCE AND PROVENANCE
+     Rebuilt from "LB-Standing Waves-Harmonics", (c) 2017 Trevor
+     Johnson-Steigelman. Copies: 2024FA Module 4 Production of Sound, and
+     reprinted into 25FA Module 2 Labs. Inherited material.
+
+     WHAT CHANGED FROM TREVOR'S VERSION, AND WHY
+     1. Video-lab language removed. His text carries "in the video-based
+        labs, the instructor will do the following steps" and "the string
+        has a different length in the video version". This section runs
+        in person, so both are gone.
+     2. PART 4 IS NEW AND IS NOT YET APPROVED. Trevor's stated goal is
+        "to investigate the effect of tension on the speed of a wave on a
+        string", but his procedure never varies the tension — it survives
+        only as a discussion question. Part 4 carries the goal out with
+        the 100 g mass already in the kit. If you would rather keep the
+        lab to one tension, delete Part 4 and question 4; nothing else
+        depends on them.
+     3. Questions for Discussion are now "choose three, answer fully",
+        per the standing rule (2026-09-28). Trevor's three bullets are
+        kept as questions 1, 2 and 4; questions 3, 5 and 6 are new and
+        are written to point back at Note 1.
+     4. Trevor's reference-format block ([1] Authors' names, Journal...)
+        is dropped — it duplicates the Writing Lab Reports module.
+
+     NUMBERING — NEEDS YOUR CALL
+     Named Lab 3 here, matching the tentative calendar ("Lab 03 Due",
+     Sun 10/25) and your actual run order: LB01 Oscillator, LB02
+     Interference (taught Thu 10/15), this one third. The D2L dropbox
+     that fits it is named "LB02-Standing Waves on a String" (5373768),
+     an inherited 537xxxx id. Your own dropboxes this term are 54xxxxx
+     (LB01 Oscillator is 5477643). So the dropbox name and number are
+     Trevor's, not yours, and disagree with the handout. Also still open
+     from the 10-20 sweep: LB-Frequencies (5373772) is visible with a
+     deadline that passed 10/4 and carried LB02 Interference's traffic.
+
+     GEOMETRY
+     L = 1.50 m between driver post and pulley centre, 200 g hanging.
+     The nth harmonic has n loops, lambda_n = 2L/n, so lambda_2 = L.
+     f_n = n * f_1, so the Part 3A slope IS f_1 — that is the point of
+     the plot and of question 2. Mason's twine mu is roughly 1e-4 to
+     3e-4 kg/m depending on the spool, giving v of order 80-140 m/s and
+     f_1 of order 25-45 Hz; measure it rather than predicting it, the
+     spool varies. Halving the mass drops v and every f_n by sqrt(2),
+     about 29% — a comfortable, clearly visible change, which is why
+     100 g rather than a smaller step.
+
+     FIGURE
+     Figure 1 is all givens (apparatus as issued), so it is drawn in
+     full and keeps a descriptive caption — per the 2026-10-21 rule that
+     an all-givens figure is already its own skeleton. The skeleton
+     element in this lab is the empty drawbox at step 4, which is where
+     Trevor's "make a sketch and label it" instruction lives.
+
+     Rung 2 (Sharpen) and any D2L quiz items for this lab live in the
+     Quiz project.
+     ===================================================================== -->
+
+  <footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 105</footer>
+
+</div>
+</body>
+</html>
