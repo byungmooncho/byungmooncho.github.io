@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHY 118 Lab 06 — Centripetal Force</title>
+<style>
+  /* ==================================================================
+     FLCC Physics lab page — PHY 118 Module 5
+     Matches the LB02/LB03 lab-page template (same tokens, same blocks).
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:2rem 0 .8rem; font-weight:700; }
+  h3{ font-size:1.02rem; margin:1.4rem 0 .4rem; font-weight:700; color:var(--green-deep);
+      font-family:"Segoe UI", system-ui, sans-serif; }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* due-date / logistics strip */
+  .logistics{
+    display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin:1.1rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+  }
+  .logistics .chip{
+    background:#fff; border:1px solid var(--rule); border-radius:20px; padding:.3rem .85rem;
+  }
+  .logistics .chip b{ color:var(--green-deep); }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* boxed callout, gradient head (prior-knowledge / explain / safety) */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior p:last-child{ margin-bottom:0; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+  ol.questions.aq{ list-style:none; padding-left:0; }
+  ol.questions.aq li{ margin:.8rem 0; }
+
+  /* procedure steps */
+  ol.steps{ padding-left:1.3rem; }
+  ol.steps > li{ margin:.65rem 0; }
+  ul.kit{ padding-left:1.3rem; }
+  ul.kit li{ margin:.3rem 0; }
+
+  /* equation block */
+  .eqn{
+    font-family:"Cambria Math","Segoe UI",Georgia,serif; font-size:1.15rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:600; letter-spacing:.02em;
+  }
+  .eqn small{ display:block; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+    font-weight:400; color:var(--muted); margin-top:.4rem; letter-spacing:0; }
+
+  /* data tables the student must produce */
+  table.spec{ width:100%; border-collapse:collapse; margin:.9rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; }
+  table.spec th, table.spec td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec caption{ caption-side:top; text-align:left; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.8rem; color:var(--muted); padding-bottom:.35rem; }
+
+  /* predict-first probe */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* warning / watch-out */
+  .watch{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.3rem 0; background:#fffdf8;
+  }
+  .watch b{ color:#9a5c10; }
+
+  /* interactive tool panel */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .sim canvas{ display:block; width:100%; height:auto; background:#fff; }
+  .grid2{ display:grid; gap:.7rem 1.2rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:block; margin-bottom:.25rem;
+  }
+  .ctrl input[type=number], .ctrl input[type=text], .ctrl textarea{
+    font:inherit; font-size:.92rem; width:100%; box-sizing:border-box;
+    padding:.4rem .55rem; border:1px solid var(--rule); border-radius:6px; background:#fff;
+  }
+  .ctrl textarea{ min-height:5.5rem; font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; font-size:.85rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .verdict{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; margin-top:.9rem;
+    padding:.65rem .9rem; border-radius:8px; background:#fff; border:1px solid var(--rule);
+    min-height:1.2em;
+  }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* submission checklist */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .check-group{ margin:0 0 1.1rem; }
+  .check-group > .gh{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--green); font-weight:700; display:block; margin-bottom:.4rem;
+  }
+  .check-group label{ display:flex; gap:.6rem; align-items:flex-start;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem;
+    border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; margin-bottom:.4rem; cursor:pointer; background:#fff; }
+  .check-group label:hover{ border-color:var(--green); }
+  .check-group input{ margin-top:.2rem; accent-color:var(--green); flex:none; }
+  .check-group input:checked + span{ color:var(--muted); text-decoration:line-through; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:.6rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule);
+  }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  .refs{ font-size:.95rem; }
+  .refs li{ margin:.4rem 0; }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+  footer .attrib{ display:block; margin-top:.3rem; }
+
+  .eqn .domain{
+    display:block; margin-top:.6rem; padding-top:.55rem; border-top:1px dashed var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:400;
+    line-height:1.55; color:var(--muted); letter-spacing:0; text-align:left;
+  }
+  .eqn .domain b{ color:var(--green-deep); }
+  .filenote{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted);
+    margin:.7rem 0 0; line-height:1.55;
+  }
+
+  /* ---- apparatus diagram (added 2026-09-24) ---- */
+  .apparatus{ margin:1.4rem 0; padding:0; }
+  .apparatus svg{ display:block; width:100%; height:auto; }
+  .apparatus .cap{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted);
+    text-align:center; margin-top:.5rem; line-height:1.5;
+  }
+  .apparatus .frame{ border:1px solid var(--rule); border-radius:8px; background:#fff; padding:.6rem; }
+  .ap-solid{ fill:none; stroke:var(--ink); stroke-width:2; }
+  .ap-thin{ fill:none; stroke:var(--ink); stroke-width:1.2; }
+  .ap-dash{ fill:none; stroke:var(--muted); stroke-width:1.4; stroke-dasharray:5 4; }
+  .ap-traj{ fill:none; stroke:var(--green); stroke-width:2.2; stroke-dasharray:7 5; }
+  .ap-dim{ fill:none; stroke:var(--green-deep); stroke-width:1.6; }
+  .ap-warn{ fill:none; stroke:#c0392b; stroke-width:1.6; }
+  .ap-shelf{ fill:#e8e4f0; stroke:var(--ink); stroke-width:1.5; }
+  .ap-tube{ fill:#cfd8d3; stroke:var(--ink); stroke-width:1.5; }
+  .ap-ball{ fill:var(--ink); }
+  .ap-paper{ fill:#fff; stroke:var(--ink); stroke-width:1; }
+  .ap-carbon{ fill:#4a4a52; stroke:var(--ink); stroke-width:1; }
+  .ap-t{ font-family:"Segoe UI", system-ui, sans-serif; font-size:14px; fill:var(--ink); }
+  .ap-t.lbl{ font-weight:700; fill:var(--green-deep); font-size:16px; }
+  .ap-t.sm{ font-size:12.5px; fill:var(--muted); }
+  .ap-t.bad{ font-size:12.5px; fill:#c0392b; font-weight:600; }
+  @media print{
+    /* ---- compact print pass, 2026-09-24 -------------------------------
+       Screen layout is untouched; this only tightens the photocopy.
+       Body drops from 1.06rem/1.65 to 0.86rem/1.4 (~10.3pt), which is
+       still comfortably above the ~9pt floor for a bench-side handout. */
+    @page{ margin:0.45in; }
+    body{ font-size:.80rem; line-height:1.34; }
+    .note-wrap{ max-width:none; margin:0; padding:0; }
+
+    h1{ font-size:1.5rem; margin:.2rem 0 .15rem; }
+    h2{ font-size:1.02rem; margin:.95rem 0 .4rem; page-break-after:avoid; }
+    h3{ font-size:.92rem; margin:.7rem 0 .3rem;  }
+    p{ margin:.45rem 0; }
+
+    .eyebrow{ margin-bottom:.15rem; }
+    .synopsis{ padding:.6rem .8rem; margin:.7rem 0; }
+    .logistics{ margin:.5rem 0; gap:.4rem; }
+    .pe{ margin:.8rem 0; }
+    .pe ul{ padding:.25rem .35rem; }
+    .pe li{ padding:.28rem .4rem; gap:.5rem; }
+    .pe li .tick{ width:1.25rem; height:1.25rem; font-size:.62rem; }
+
+    .sign-note, .note-link, .watch, .prior, .probe{
+      padding:.6rem .8rem; margin:.7rem 0;
+    }
+    .sign-note, .note-link, .probe{  }
+    .prior .body{ padding:.55rem .8rem .6rem; }
+    .prior .cases{ gap:.45rem; }
+    .case{ padding:.5rem .55rem; }
+
+    .eqn{ padding:.55rem .7rem; margin:.6rem 0; font-size:1rem; page-break-inside:avoid; }
+    .eqn .domain{ margin-top:.4rem; padding-top:.35rem; font-size:.73rem; line-height:1.4; }
+
+    ol.steps, ul.steps{ margin:.5rem 0; padding-left:1.15rem; }
+    ol.steps > li, ul.steps > li{ margin:.3rem 0; }
+    ul{ margin:.45rem 0; }
+    li{ margin:.22rem 0; }
+
+    .apparatus{ margin:.7rem 0; page-break-inside:avoid; }
+    .apparatus .frame{ padding:.35rem; }
+    .apparatus svg{ max-height:2.9in; }
+    .apparatus .cap{ font-size:.74rem; margin-top:.3rem; line-height:1.4; }
+
+    /* the interactive tool is dead on paper — keep the heading and the note,
+       drop the controls and the empty readouts */
+    .sim .buttons, .sim .controls input, .sim .readout{ display:none; }
+    .sim{ padding:.5rem .7rem; margin:.6rem 0; }
+
+    .ticket{ margin:.8rem 0; }
+    .ticket .t-body{ padding:.5rem .7rem; }
+    .check-group{ margin:.5rem 0; }
+    .check-group label{ margin:.18rem 0; }
+    .gh{ margin-top:.45rem; }
+
+    .downloads{ gap:.4rem; margin:.6rem 0; }
+    .dl-card{ padding:.5rem .7rem; }
+    .dl-card .hint{ font-size:.73rem; }
+    .filenote{ font-size:.76rem; margin-top:.5rem; }
+    .refs{ margin:.4rem 0; }
+    footer{ margin-top:.9rem; padding-top:.5rem; font-size:.72rem; }
+  }
+
+  @media print{
+    body{ font-size:10.5pt; }
+    .note-wrap{ max-width:none; padding:0; }
+    .btn, .sim .buttons{ display:none !important; }
+    .sim, .ticket, .pe, .prior{ break-inside:avoid; }
+    h2{ break-after:avoid; }
+    .verdict, .readout, .sim .panel .ctrl textarea{ display:none; }
+    a{ color:inherit; text-decoration:none; }
+    /* probe options stay visible on paper, as a plain lettered list */
+    .probe .opts{ counter-reset:opt; }
+    .probe .opt{ cursor:default; border:none; padding:.12rem 0 .12rem 1.6rem; position:relative; background:none; }
+    .probe .opt::before{
+      counter-increment:opt; content:"(" counter(opt, upper-alpha) ")";
+      position:absolute; left:0; font-weight:600; color:#5c6b62;
+    }
+    .probe .feedback{ display:none; }
+    /* the tick badges need a hair more room at print metrics */
+    .pe li .tick{ width:1.7rem; height:1.7rem; font-size:.66rem; }
+    .check-group label{ break-inside:avoid; }
+  }
+
+.sign-note{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; line-height:1.55; color:var(--ink,#1d2b23); background:#fdf6ea; border-left:3px solid var(--amber,#c77b1f); border-radius:0 6px 6px 0; padding:.6rem .85rem; margin:.9rem 0; }
+  .note-link{
+    background:#fff; border:1px solid var(--rule); border-left:4px solid var(--green);
+    border-radius:0 8px 8px 0; padding:.85rem 1.05rem; margin:1rem 0 1.2rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .note-link b{ color:var(--green-deep); }
+.sign-note b{ color:#8a5512; }
+
+  /* ---- LB04 additions ---- */
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .ctrl select{ font:inherit; }
+  table.spec tbody td b{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>PHY 118 &middot; Module 5 &mdash; Circular and Rotational Motion</span>
+    <span>Lab 06</span>
+  </div>
+
+  <h1>Centripetal Force: Weighing a Stopper With a Stopwatch</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    A rubber stopper on a string is whirled in a horizontal circle above your head. The string runs
+    down through a plastic tube, and hanging from its lower end is a stack of metal washers. Those
+    washers are not decoration: their weight <em>is</em> the force holding the stopper in its circle.
+    So you have a system where the centripetal force is something you can set by hand &mdash; add four
+    more washers and you have added a known number of newtons &mdash; and the speed is something you
+    can measure with a stopwatch. Spin faster and the required force rises. The question is whether it
+    rises the way F = mv&sup2;/r says it should, and the honest way to answer that is not to check one
+    run but to take five, plot them, and look at the slope of the line they fall on.
+
+    <div class="logistics">
+      <span class="chip"><b>Due</b> see the Module 5 Lab folder on Brightspace</span>
+      <span class="chip"><b>Report</b> Full lab report &mdash; use the Lab Template</span>
+      <span class="chip"><b>Pairs with</b> M5 N1</span>
+      <span class="chip"><b>Data</b> provided &mdash; this is a virtual lab</span>
+    </div>
+  </div>
+
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>what you should be able to do when this lab is written up</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>Explain why the weight of the hanging
+        washers equals the centripetal force on the stopper</b>, by treating the string as one object
+        and the hanging stack as another, and saying what makes the tension the same at both ends.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Convert a count of revolutions and a total
+        time into a speed</b>, through the period and the circumference, and carry the units at every
+        step.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Rearrange F<sub>c</sub> = mv&sup2;/r into the
+        equation of a straight line</b> &mdash; F<sub>c</sub> = (m/r)&nbsp;v&sup2; &mdash; and say what
+        the slope must physically be if the model is right.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Obtain a mass from the slope of a graph</b>,
+        with its uncertainty, and compare it against the mass read off a balance.</span></li>
+      <li><span class="tick">PE5</span><span class="txt"><b>Distinguish a slope result from a
+        single-point result</b>, and explain why a non-zero intercept wrecks the second while leaving
+        the first intact.</span></li>
+      <li><span class="tick">PE6</span><span class="txt"><b>Identify the direction of a systematic
+        offset from the sign of the intercept</b>, and propose a mechanism in the apparatus that would
+        produce it.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ NOTE BRIDGE ============ -->
+  <h2>Where this sits against the Module 5 notes</h2>
+
+  <div class="note-link">
+    <b>M5 N1 gives you the kinematics; this lab supplies the dynamics.</b> Period, frequency, angular
+    velocity and the relation v = &omega;r are all from that note, and you will use every one of them in
+    Part II. What the note does not yet do is connect that motion to a <em>force</em> &mdash; that is
+    what this lab is for, and the argument you build here is the one the centripetal-force note will
+    later formalise.
+  </div>
+
+  <table class="spec">
+    <caption>Where each part of the note belongs in this report. The rubric awards points for these.</caption>
+    <thead>
+      <tr><th style="width:30%">Report section</th><th>What you bring from M5 N1</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Introduction</b></td>
+        <td>The definition of centripetal force and the statement F<sub>c</sub> = mv&sup2;/r, with every
+          symbol defined, plus <b>your own rearrangement</b> into the straight-line form. End with a
+          hypothesis you can later confirm or reject.</td></tr>
+      <tr><td><b>Experimental</b></td>
+        <td>The labelled setup drawing, redrawn by you, showing the stopper, the tube, the string, the
+          paper-clip marker and the washers. State what you are holding constant and what you are
+          varying.</td></tr>
+      <tr><td><b>Analysis</b></td>
+        <td>The chain from a stopwatch reading to a speed: 30 revolutions &rarr; period &rarr;
+          circumference &rarr; v &rarr; v&sup2;. Then the graph and its slope.</td></tr>
+      <tr><td><b>Discussion</b></td>
+        <td>Whether the slope recovers the stopper's mass, what the intercept says, and why the two
+          methods of getting m disagree by as much as they do.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Read or reprint the note here:
+  <a href="https://byungmooncho.github.io/PHY118/Module_05/M5_N1_Circular_Motion_Kinematics.html"
+     target="_blank" rel="noopener">Module&nbsp;5 Note&nbsp;1 &mdash; Circular Motion Kinematics</a>.</p>
+
+  <!-- ============ THE PHYSICS ============ -->
+  <h2>The physics you are using</h2>
+
+  <p>Two statements, and the whole lab is the place where they meet.</p>
+
+  <p><b>One.</b> An object moving in a circle of radius r at speed v is accelerating toward the centre,
+  and the net force producing that acceleration is</p>
+
+  <div class="eqn">
+    F<sub>c</sub> = m<sub>stopper</sub> v&sup2; / r
+  </div>
+
+  <p><b>Two.</b> The string runs over the lip of the tube and down to the washers. If the washers hang
+  without moving up or down, the net force on them is zero, so the tension in the string equals their
+  weight:</p>
+
+  <div class="eqn">
+    T = M<sub>hanging</sub> g
+  </div>
+
+  <p>That tension is transmitted along the string, and at the top it is what pulls the stopper inward.
+  So <b>T = F<sub>c</sub></b>, and the force on the stopper is a quantity you set by counting washers
+  rather than one you have to measure. Putting the two together and rearranging into the form of a
+  straight line:</p>
+
+  <div class="eqn">
+    F<sub>c</sub> = ( m<sub>stopper</sub> / r ) &times; v&sup2;
+  </div>
+
+  <p>Plot F<sub>c</sub> up the page against v&sup2; across it and, if the model holds, you get a line
+  through the origin whose <b>slope is m<sub>stopper</sub>/r</b>. Both of those you know independently
+  &mdash; the stopper went on a balance and the radius was set with a paper clip &mdash; so the graph
+  makes a prediction you can check.</p>
+
+  <div class="sign-note"><b>What is held constant, and what is not.</b> The radius is fixed at
+  50.0&nbsp;cm by a paper clip taped below the tube, and the stopper is the same stopper all the way
+  through. The only thing that changes between runs is the number of washers, and therefore the force.
+  Your Experimental section must say this explicitly &mdash; if the radius drifted while you spun
+  faster, the slope would be measuring a moving target and would mean nothing.</div>
+
+  <!-- ============ PREDICT FIRST ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first. You double the number of hanging washers, which doubles the centripetal
+    force. What happens to the speed of the stopper?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">It doubles.</button>
+      <button class="opt" data-correct="true">It rises by a factor of &radic;2, about 1.41.</button>
+      <button class="opt" data-correct="false">It rises by a factor of 4.</button>
+      <button class="opt" data-correct="false">It stays the same &mdash; the stopper's mass has not changed.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <div class="watch">
+    <b>Why that question is worth asking before you start.</b> The force depends on the <em>square</em>
+    of the speed, so the speed depends on the square root of the force. Doubling the washers buys you
+    only about a 41% increase in speed, which is exactly why the runs in this data set are bunched
+    together at the fast end: going from 4 washers to 20 &mdash; five times the force &mdash; raises the
+    speed by a factor of only &radic;5 &asymp; 2.24. It also tells you something about the graph: a plot
+    of F<sub>c</sub> against <em>v</em> would be a curve and hard to judge by eye, while a plot against
+    <b>v&sup2;</b> is a straight line. Choosing what to put on the horizontal axis is part of the
+    analysis, not a formatting decision.
+  </div>
+
+  <!-- ============ APPARATUS ============ -->
+  <h2>The apparatus</h2>
+
+  <p>A size-4 rubber stopper is tied to one end of 1.5&nbsp;m of nylon string. The string is threaded
+  down through a plastic tube 10&ndash;20&nbsp;cm long, and a bent paper clip on the free end carries the
+  metal washers. A second paper clip is taped to the string just below the tube to mark the radius: the
+  stopper is whirled at whatever speed keeps that marker hovering just below the tube without touching
+  it, which is what holds the radius fixed at 50.0&nbsp;cm.</p>
+
+  <figure class="apparatus">
+    <svg viewBox="0 0 620 300" width="100%" role="img"
+         aria-label="A rubber stopper on a string being whirled in a horizontal circle above a vertical tube, with the string passing down through the tube to a paper clip and a stack of washers hanging below.">
+      <!-- circular path, in perspective -->
+      <ellipse cx="300" cy="62" rx="150" ry="34" fill="none" stroke="#9db0a4" stroke-width="1.4" stroke-dasharray="6 5"/>
+      <!-- stopper -->
+      <path d="M444 52 l26 -8 l-6 20 z" fill="#1d2b23"/>
+      <text x="486" y="48" font-size="12" fill="#1d2b23" font-family="Segoe UI, sans-serif">stopper, m</text>
+      <!-- radius -->
+      <line x1="300" y1="62" x2="444" y2="58" stroke="#1e6b3c" stroke-width="1.5"/>
+      <text x="366" y="52" font-size="11.5" text-anchor="middle" fill="#1e6b3c" font-family="Segoe UI, sans-serif">r = 50.0 cm</text>
+      <!-- tube -->
+      <rect x="291" y="62" width="18" height="118" rx="3" fill="#f4b9b9" stroke="#1d2b23" stroke-width="1.4"/>
+      <text x="322" y="128" font-size="12" fill="#1d2b23" font-family="Segoe UI, sans-serif">tube</text>
+      <!-- string below tube -->
+      <line x1="300" y1="180" x2="300" y2="236" stroke="#1d2b23" stroke-width="1.3"/>
+      <text x="312" y="202" font-size="12" fill="#1d2b23" font-family="Segoe UI, sans-serif">string</text>
+      <!-- marker clip -->
+      <rect x="294" y="186" width="12" height="7" rx="2" fill="#c77b1f"/>
+      <text x="200" y="192" font-size="11" fill="#c77b1f" font-family="Segoe UI, sans-serif">marker clip &mdash; keep it just below the tube</text>
+      <!-- washers -->
+      <ellipse cx="300" cy="246" rx="21" ry="7" fill="#ffffff" stroke="#1d2b23" stroke-width="1.4"/>
+      <ellipse cx="300" cy="256" rx="21" ry="7" fill="#ffffff" stroke="#1d2b23" stroke-width="1.4"/>
+      <ellipse cx="300" cy="266" rx="21" ry="7" fill="#ffffff" stroke="#1d2b23" stroke-width="1.4"/>
+      <text x="334" y="262" font-size="12" fill="#1d2b23" font-family="Segoe UI, sans-serif">washers, M<tspan baseline-shift="sub" font-size="9">hanging</tspan></text>
+      <!-- tension arrow -->
+      <line x1="266" y1="236" x2="266" y2="150" stroke="#1e6b3c" stroke-width="1.5"/>
+      <path d="M266 150 l-4 9 l8 0 z" fill="#1e6b3c"/>
+      <text x="238" y="196" font-size="12" fill="#1e6b3c" font-family="Segoe UI, sans-serif">T</text>
+      <!-- weight arrow -->
+      <line x1="300" y1="274" x2="300" y2="292" stroke="#1d2b23" stroke-width="1.4"/>
+      <path d="M300 292 l-4 -9 l8 0 z" fill="#1d2b23"/>
+      <text x="310" y="292" font-size="11.5" fill="#1d2b23" font-family="Segoe UI, sans-serif">M<tspan baseline-shift="sub" font-size="9">h</tspan>g</text>
+    </svg>
+    <figcaption>Figure 1. The apparatus as the data were taken. The radius is fixed by the marker clip;
+    the hanging washers set the tension, and that tension is the centripetal force on the stopper.</figcaption>
+  </figure>
+
+  <h3>The constants</h3>
+
+  <table class="spec">
+    <thead><tr><th>Quantity</th><th>Measured value</th><th style="width:30%">In SI</th></tr></thead>
+    <tbody>
+      <tr><td>10 washers</td><td>70.07 g</td><td>7.007 g each</td></tr>
+      <tr><td>Rubber stopper, m</td><td>10.09 g</td><td>0.01009 kg</td></tr>
+      <tr><td>Paper clip (on the hanger)</td><td>1.60 g</td><td>0.00160 kg</td></tr>
+      <tr><td>Radius, r</td><td>50.0 cm</td><td>0.500 m</td></tr>
+    </tbody>
+  </table>
+
+  <div class="watch"><b>The paper clip counts.</b> It hangs from the string along with the washers, so
+  it is part of M<sub>hanging</sub> in every run. Leaving it out shifts every force by 0.0157&nbsp;N
+  &mdash; small, but it is a <em>systematic</em> shift in one direction, which is exactly the kind of
+  thing that moves an intercept. Include it and say that you did.</div>
+
+  <!-- ============ PART I ============ -->
+  <h2>Part I &mdash; The data</h2>
+
+  <p>Five runs, provided in the workbook. In each, the stopper was whirled at the speed that kept the
+  marker clip just below the tube, and a partner timed <b>30 complete revolutions</b>.</p>
+
+  <table class="spec">
+    <caption>The five runs as recorded. Everything else in this lab is derived from these two columns.</caption>
+    <thead><tr><th>Washers</th><th>M<sub>hanging</sub> incl. clip (kg)</th><th>Time for 30 rev (s)</th></tr></thead>
+    <tbody>
+      <tr><td>4</td><td>0.02963</td><td>20.86</td></tr>
+      <tr><td>8</td><td>0.05766</td><td>17.42</td></tr>
+      <tr><td>12</td><td>0.08568</td><td>14.72</td></tr>
+      <tr><td>16</td><td>0.11370</td><td>12.34</td></tr>
+      <tr><td>20</td><td>0.14170</td><td>11.29</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============ PART II ============ -->
+  <h2>Part II &mdash; From a stopwatch reading to a speed</h2>
+
+  <p>Four steps per run, and each one is a sample calculation the rubric asks to see worked once.</p>
+
+  <ol class="questions">
+    <li><b>The centripetal force.</b> F<sub>c</sub> = T = M<sub>hanging</sub> g, with g = 9.8 m/s&sup2;.
+      This is the only place g enters the lab.</li>
+    <li><b>The period.</b> Divide the total time by 30 revolutions to get the time for one.</li>
+    <li><b>The speed.</b> The stopper covers one circumference 2&pi;r in one period, so
+      v = 2&pi;r / P. Equivalently &omega; = 2&pi;/P and v = &omega;r &mdash; use whichever route you
+      prefer, but say which.</li>
+    <li><b>Square it.</b> v&sup2; is what goes on the horizontal axis.</li>
+  </ol>
+
+  <div class="watch"><b>Why 30 revolutions and not one.</b> A human thumb on a stopwatch is good to
+  something like a tenth of a second. One revolution here takes about half a second, so timing a single
+  one would carry a 20% error. Timing thirty and dividing spreads that same tenth of a second across
+  thirty periods and brings the error down to well under a percent. This is a general technique and the
+  Discussion is a good place to say so.</div>
+
+  <!-- ============ PART III ============ -->
+  <h2>Part III &mdash; The graph that weighs the stopper</h2>
+
+  <p>Plot <b>F<sub>c</sub> on the vertical axis against v&sup2; on the horizontal</b>, one point per run,
+  and fit a straight line. From the model,</p>
+
+  <div class="eqn">
+    slope = m<sub>stopper</sub> / r &nbsp;&nbsp;&rarr;&nbsp;&nbsp; m<sub>stopper</sub> = slope &times; r
+  </div>
+
+  <p>so the line hands you a mass you never put on a balance. Compare it against the 10.09&nbsp;g the
+  balance gave, and quote a percent difference.</p>
+
+  <h3>Fit it twice, and report both</h3>
+
+  <p>Fit the line <b>once with an intercept and once forced through the origin</b>, and report the mass
+  each gives. The model says the intercept should be zero &mdash; no speed, no force &mdash; so the two
+  fits ought to agree. Whether they do is a result in its own right, and the gap between them is the
+  most informative number in this lab.</p>
+
+  <h3>What counts as agreement</h3>
+
+  <p>A percent difference of <b>10% or less</b> between the mass from the slope and the mass from the
+  balance is a confirmation. If you are outside that, check in this order: the paper clip left out of
+  M<sub>hanging</sub>; r entered in centimetres; the period taken as the raw 30-revolution time; or
+  v&sup2; and F<sub>c</sub> swapped between the axes.</p>
+
+  <!-- ============ TOOL ============ -->
+  <h2>Check your analysis</h2>
+  <p>Paste your five force-and-speed-squared pairs to check the line you fitted. Your report still has
+  to show the graph and a worked sample calculation of each type, by hand, with units &mdash; this tool
+  checks arithmetic, it does not replace the analysis.</p>
+
+  <div class="sim">
+    <div class="sim-head"><span>&#9679;</span> Tool &middot; Fit F<sub>c</sub> against v&sup2;, and read off the mass</div>
+    <div class="panel">
+      <div class="ctrl">
+        <label for="pairs">One run per line: v&sup2; in m&sup2;/s&sup2;, then F<sub>c</sub> in N,
+          separated by a comma, a tab or a space</label>
+        <textarea id="pairs" spellcheck="false" placeholder="20.41  0.2904&#10;29.27  0.5651&#10;41.00  0.8397&#10;58.33  1.1143&#10;69.69  1.3887"></textarea>
+      </div>
+      <div class="grid2">
+        <div class="ctrl">
+          <label for="accMass">Stopper mass from the balance (g)</label>
+          <input type="number" id="accMass" step="any" inputmode="decimal" value="10.09">
+        </div>
+        <div class="ctrl">
+          <label for="radius">Radius r (m)</label>
+          <input type="number" id="radius" step="any" inputmode="decimal" value="0.500">
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" id="fitBtn">Fit</button>
+        <button class="btn" id="fitClear">Clear</button>
+      </div>
+      <div class="readout">
+        <span class="chip">slope = <b id="oSlope">&mdash;</b></span>
+        <span class="chip">intercept = <b id="oInt">&mdash;</b></span>
+        <span class="chip">R&sup2; = <b id="oR2">&mdash;</b></span>
+        <span class="chip">m from slope = <b id="oM">&mdash;</b></span>
+        <span class="chip">m, origin-forced = <b id="oM0">&mdash;</b></span>
+      </div>
+      <div class="verdict" id="oVerdict">Paste at least three runs to begin.</div>
+      <div class="hint-row">Uncertainties are the standard least-squares errors on the fitted
+      parameters. Both fits are computed every time, because the comparison between them is the point.</div>
+    </div>
+  </div>
+
+  <!-- ============ ADDITIONAL QUESTIONS ============ -->
+  <h2>Additional Questions</h2>
+  <p><b>Choose three of the five below and answer those three fully.</b> Name which three you chose.
+  Answer them in a section of their own headed <b>Additional Questions</b>, in <b>sentences and
+  paragraphs</b> with the working shown, never as a bare numbered list and never by restating the
+  question before answering it. Depth on three beats coverage of five; this section is worth 8 points on
+  the rubric.</p>
+
+  <ol class="questions aq">
+    <li><b>AQ1 &mdash; the intercept, and what it is telling you.</b> Your fitted line does not pass
+      through the origin, and the model says it should. Report the intercept with its sign and its
+      units. Then work out what it would take to produce one: a force that acts on the stopper
+      regardless of how fast it is going, or a force in the tension that never reaches the stopper.
+      Propose one concrete mechanism in this apparatus, estimate its size from the intercept you
+      measured, and say whether that estimate is physically reasonable. Finish by stating which of your
+      two mass values &mdash; free fit or origin-forced &mdash; you would report as <em>the</em> result,
+      and defend the choice.</li>
+
+    <li><b>AQ2 &mdash; why one run is not enough.</b> Take your fastest run alone and compute the
+      stopper's mass directly from m = F<sub>c</sub>r/v&sup2;. Do the same for your slowest run. The two
+      answers will differ substantially, and both will differ from the slope result. Explain, in terms
+      of the intercept, why a single point is so much worse than a line through five &mdash; and why the
+      <em>slowest</em> run is the worst of all. Generalise it: state the condition under which taking a
+      single measurement and dividing is a legitimate way to get a constant, and the condition under
+      which it is not.</li>
+
+    <li><b>AQ3 &mdash; the string is not horizontal.</b> The treatment above assumes the stopper moves
+      in a horizontal circle with the string lying flat. It cannot: the string must tilt downward from
+      the stopper to the tube or there would be nothing holding the stopper up against gravity. Draw the
+      free-body diagram for the stopper with the string at angle &theta; below horizontal, resolve the
+      tension into components, and show that the horizontal component supplies the centripetal force
+      while the vertical component supports the weight. Then derive the true relation between T and
+      v&sup2;, and estimate &theta; for your fastest and slowest runs. Does the tilt get better or worse
+      as the stopper speeds up, and does that account for the direction of your intercept?</li>
+
+    <li><b>AQ4 &mdash; propagating the stopwatch.</b> Suppose the timing of 30 revolutions is good to
+      &plusmn;0.2&nbsp;s. Propagate that into the period, into v, and into v&sup2;, and give the
+      resulting uncertainty on v&sup2; for your fastest and slowest runs. (Note that the fractional
+      uncertainty in v&sup2; is twice that in v, and show why.) Compare the size of those horizontal
+      error bars against the scatter of your points about the fitted line. Is the stopwatch the limiting
+      source of error in this experiment, or is something else?</li>
+
+    <li><b>AQ5 &mdash; designing the experiment you were not given.</b> This lab varies the force and
+      holds the radius fixed. Design the complementary experiment: hold the force fixed and vary the
+      radius instead, which is what Trevor's handout gestures at when it asks what you would change to
+      find the relationship between v and r. State what you would plot against what to get a straight
+      line, what its slope would physically be, and what practical difficulty the apparatus puts in your
+      way that the force-varying version does not have. Predict, from the five runs you do have, roughly
+      what speed a 0.25&nbsp;m radius would require at 12 washers.</li>
+  </ol>
+
+  <!-- ============ DISCUSSION ============ -->
+  <h2>Prompts for your Discussion</h2>
+  <p>These are <b>not</b> the Additional Questions. Work them into your <b>Discussion</b> section as part
+  of your argument, in your own order. Do not answer them as a list, and do not limit yourself to them.</p>
+
+  <ol class="questions">
+    <li>You have two masses for the same stopper &mdash; one from the balance, one from the graph. Which
+      do you trust more, and what would have to be true for the graph to be the better of the two?</li>
+    <li>The model predicts a line through the origin. Yours is not. Is that a failure of the model, a
+      failure of the apparatus, or a failure of the analysis? Argue for one.</li>
+    <li>Your five points span a factor of five in force but only a factor of about 2.2 in speed. Does
+      that spread help or hurt the slope determination, and would you have chosen different washer
+      counts?</li>
+    <li>What would happen to the graph if the marker clip drifted downward during the fast runs, so the
+      radius quietly grew? Which way would the points move, and would you be able to tell?</li>
+    <li>The lab asks you to keep the radius constant by watching a paper clip. Estimate how well a person
+      can really do that, and fold your estimate into your error discussion.</li>
+    <li>Trevor's original version of this lab also asks for a plot of v against F<sub>c</sub>. Why is
+      that graph harder to judge than the one you made, even though it contains exactly the same
+      information?</li>
+  </ol>
+
+  <!-- ============ FILES ============ -->
+  <h2>Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB06_Centripetal_Force.pdf" target="_blank" rel="noopener">
+      <span class="kind">Handout</span>
+      <span class="name">This lab, as a PDF</span>
+      <span class="hint">The whole page, printable. The calculator only works on the web version.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB06_Centripetal_Force_Example_Workbook.xlsx" target="_blank" rel="noopener">
+      <span class="kind">Required</span>
+      <span class="name">Example workbook</span>
+      <span class="hint">The five runs, a blank analysis sheet laid out for you, and one worked column.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB06_Rubric.docx" target="_blank" rel="noopener">
+      <span class="kind">Grading</span>
+      <span class="name">Lab 06 rubric</span>
+      <span class="hint">Read it before you write, not after.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/PHY118_LB06_Centripetal_Force_Example_Starter.docx" target="_blank" rel="noopener">
+      <span class="kind">Support</span>
+      <span class="name">Report starter</span>
+      <span class="hint">Section guidance only &mdash; the sentence stems have gone. See the note inside.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/Module_05/M5_N1_Circular_Motion_Kinematics.html" target="_blank" rel="noopener">
+      <span class="kind">Note</span>
+      <span class="name">M5 N1 &mdash; Circular Motion Kinematics</span>
+      <span class="hint">Period, angular velocity and v = &omega;r, which Part II runs on.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY118/handouts/Formatting_Data_Tables_for_Lab_Reports.html" target="_blank" rel="noopener">
+      <span class="kind">Reference</span>
+      <span class="name">Formatting data tables</span>
+      <span class="hint">Table captions, units in headers, significant figures.</span>
+    </a>
+  </div>
+
+  <!-- ============ REFERENCES ============ -->
+  <h2>References to get you started</h2>
+  <p>Your references should include material on centripetal force and circular motion. Your textbook,
+  this handout and the Module 5 note pages all count, and you need at least one source beyond the
+  textbook.</p>
+  <ol class="refs">
+    <li>[Author's names], <i>Journal or Book title</i>, edition, Volume number, page number, (year).</li>
+  </ol>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 118
+    <span class="attrib">Revised from the Centripetal Force lab by H. Trevor Johnson-Steigelman, used under CC BY-NC-SA.</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function fmt(x,d){ if(!isFinite(x)) return '—';
+    return (Math.round(x*Math.pow(10,d))/Math.pow(10,d)).toFixed(d); }
+  function out(id,t){ var e=document.getElementById(id); if(e) e.textContent=t; }
+
+  function parsePairs(s){
+    var rows=[];
+    s.split(/\n/).forEach(function(line){
+      var p=line.trim().split(/[\s,\t]+/).filter(function(x){return x.length;});
+      if(p.length>=2){ var a=parseFloat(p[0]), b=parseFloat(p[1]);
+        if(isFinite(a)&&isFinite(b)) rows.push([a,b]); }
+    });
+    return rows;
+  }
+
+  function compute(){
+    var ta=document.getElementById('pairs');
+    var rows=parsePairs(ta?ta.value:'');
+    var v=document.getElementById('oVerdict');
+    if(rows.length<3){
+      ['oSlope','oInt','oR2','oM','oM0'].forEach(function(i){ out(i,'—'); });
+      if(v) v.textContent='Paste at least three runs to begin.';
+      return;
+    }
+    var n=rows.length, sx=0,sy=0,sxx=0,sxy=0,syy=0;
+    rows.forEach(function(r){ sx+=r[0]; sy+=r[1]; sxx+=r[0]*r[0]; sxy+=r[0]*r[1]; syy+=r[1]*r[1]; });
+    var den=n*sxx-sx*sx;
+    var slope=(n*sxy-sx*sy)/den, inter=(sy*sxx-sx*sxy)/den;
+    var ssr=0, sst=0, my=sy/n;
+    rows.forEach(function(r){ var p=slope*r[0]+inter; ssr+=(r[1]-p)*(r[1]-p); sst+=(r[1]-my)*(r[1]-my); });
+    var r2= sst>0 ? 1-ssr/sst : NaN;
+    var se = n>2 ? Math.sqrt((ssr/(n-2))*n/den) : NaN;
+    var slope0 = sxy/sxx;
+
+    var rad=parseFloat((document.getElementById('radius')||{}).value);
+    var acc=parseFloat((document.getElementById('accMass')||{}).value);
+    if(!isFinite(rad)) rad=0.5;
+    var m  = slope*rad*1000, dm = se*rad*1000;
+    var m0 = slope0*rad*1000;
+
+    out('oSlope', fmt(slope,5)+(isFinite(se)?' ± '+fmt(se,5):'')+' kg/m');
+    out('oInt', fmt(inter,4)+' N');
+    out('oR2', fmt(r2,4));
+    out('oM', fmt(m,2)+(isFinite(dm)?' ± '+fmt(dm,2):'')+' g');
+    out('oM0', fmt(m0,2)+' g');
+
+    if(!v) return;
+    if(!isFinite(acc)){ v.textContent='Enter the balance mass to get a comparison.'; return; }
+    var e1=100*(m-acc)/acc, e0=100*(m0-acc)/acc;
+    var msg='<b>Free fit:</b> m = '+fmt(m,2)+' g, '+fmt(e1,1)+'% from the balance. '
+          + '<b>Forced through the origin:</b> m = '+fmt(m0,2)+' g, '+fmt(e0,1)+'%. ';
+    if(Math.abs(e1)<=10 && Math.abs(e0)<=10){
+      msg += 'Both are inside the 10% bar, so the model is confirmed either way — but note that '
+           + 'they disagree with each other by '+fmt(Math.abs(m-m0)/acc*100,1)+'% of the balance mass, '
+           + 'and the reason is the intercept of '+fmt(inter,4)+' N. The model says that should be zero. '
+           + 'AQ1 is about what it is.';
+    } else if(Math.abs(e1)<=10){
+      msg += 'The free fit confirms the model; the origin-forced fit does not. That gap IS the '
+           + 'intercept of '+fmt(inter,4)+' N doing its work — see AQ1.';
+    } else {
+      msg += 'That is outside the 10% bar. Check in this order: the paper clip left out of the hanging '
+           + 'mass, r entered in centimetres rather than metres, the raw 30-revolution time used as the '
+           + 'period, or v² and F_c swapped between the axes.';
+    }
+    v.innerHTML=msg;
+  }
+
+  var b=document.getElementById('fitBtn'); if(b) b.addEventListener('click',compute);
+  var c=document.getElementById('fitClear');
+  if(c) c.addEventListener('click',function(){ var t=document.getElementById('pairs'); if(t) t.value=''; compute(); });
+
+  var probe=document.getElementById('probe');
+  if(probe){
+    probe.addEventListener('click',function(ev){
+      var t=ev.target;
+      if(t && t.closest) t=t.closest('.opt');
+      if(!t||!t.classList||!t.classList.contains('opt')) return;
+      var right=t.getAttribute('data-correct')==='true';
+      Array.prototype.forEach.call(probe.querySelectorAll('.opt'),function(o){o.classList.remove('chosen');});
+      t.classList.add('chosen');
+      var fb=document.getElementById('probeFb'); if(!fb) return;
+      fb.style.display='block';
+      fb.innerHTML = right
+        ? '<b>Yes.</b> F<sub>c</sub> goes as v², so v goes as √F<sub>c</sub>. Doubling the '
+          + 'force buys about 41% more speed. This is why the five runs in the data set are bunched '
+          + 'at the fast end — five times the force gives only √5 ≈ 2.24 times the speed.'
+        : '<b>Not quite.</b> Start from F<sub>c</sub> = mv²/r and solve for v: '
+          + 'v = √(F<sub>c</sub> r / m). The force is under a square root, so doubling it '
+          + 'multiplies the speed by √2 ≈ 1.41, not by 2. Check this against the data: '
+          + '4 washers gives 4.52 m/s and 8 washers gives 5.41 m/s, and 5.41/4.52 = 1.20 — close to '
+          + '√2 but not exact, which is itself worth a sentence in your Discussion.';
+    });
+  }
+})();
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - fixes the first-paint WIDTH race.
+
+   The V4 reporter above fires on load, on window resize, and from a
+   ResizeObserver on document.body. Measured 2026-10-06: none of those fire when
+   only the frame's WIDTH changes. Inside Brightspace the frame is briefly
+   collapsed at first paint, so a page reported its ~60px-wide height (11358px
+   for a page that is really 1967px) and the V5 wrapper kept that number forever.
+   Seen live on the M3 and M4 reference indexes; it is a race, so a reload can
+   hide it.
+
+   This re-measures a few times while layout settles, and posts only when the
+   number actually changes. It does NOT change any page's height, so every
+   declared wrapper baseline stays valid. Remove it only together with a reporter
+   that re-fires on a width-only change. */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){
+    var el = document.querySelector('.note-wrap') || document.body;
+    var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height
+      + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+  }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    var w = document.querySelector('.note-wrap'); if (w) ro.observe(w);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>
