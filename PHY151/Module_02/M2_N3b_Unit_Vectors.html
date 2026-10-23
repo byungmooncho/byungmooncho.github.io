@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 N3b — Unit Vectors</title>
+<style>
+
+  /* ==================================================================
+     FLCC Physics note page — Module 2, Note 3 (matches M2 N1/N2 template)
+     Self-contained; no external dependencies. Upload via Manage Files
+     and insert as a full page so the inline <script> survives.
+     ================================================================== */
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* device photos */
+  .devicefigs{ display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin:1.1rem 0 .3rem; }
+  .devicefigs img{ width:160px; max-width:42%; border-radius:8px; border:1px solid var(--rule); display:block; }
+  .diagram-cap{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+
+  /* performance expectations */
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .pe .head span{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.5rem; height:1.5rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  /* "you already know this" / evidence */
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:block; }
+  .case small{ color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.45rem 0; }
+
+  /* interactive simulator */
+  .sim{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.2rem 0 .6rem; background:#fbfdfc; }
+  .sim .sim-head{
+    background:var(--green); color:#fff; padding:.6rem 1rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .sim .stage{ background:#0f1f16; }
+  .sim canvas{ display:block; width:100%; height:auto; }
+  .sim .panel{ padding:1rem 1.1rem 1.15rem; }
+  .controls{ display:grid; gap:.9rem 1.4rem; grid-template-columns:1fr; }
+  @media (min-width:560px){ .controls{ grid-template-columns:1fr 1fr; } }
+  .ctrl label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:600;
+    color:var(--green-deep); display:flex; justify-content:space-between; gap:1rem;
+  }
+  .ctrl label .val{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+  .buttons{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 .3rem; align-items:center; }
+  .btn{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    border:1px solid var(--green); background:#fff; color:var(--green);
+    padding:.45rem .95rem; border-radius:6px; cursor:pointer;
+  }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .btn.toggle{ border-radius:6px; }
+  .btn.toggle[aria-pressed="true"]{ background:var(--green); color:#fff; }
+  .btn:hover{ filter:brightness(.96); }
+  .btn:active{ transform:translateY(1px); }
+  .readout{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin-top:1rem; }
+  .readout .chip{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:20px;
+    padding:.3rem .8rem; font-variant-numeric:tabular-nums;
+  }
+  .readout .chip b{ color:var(--green-deep); }
+  .sim .hint-row{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.8rem; }
+
+  /* predict-first probe / claim */
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; text-align:left;
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  /* explain / worked-example equation */
+  .eqn{
+    font-family:"Cambria Math","Segoe UI",Georgia,serif; font-size:1.15rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:600; letter-spacing:.02em;
+  }
+  /* domain-of-validity line carried by the equation itself */
+  .eqn .domain{
+    display:block; margin-top:.6rem; padding-top:.55rem; border-top:1px dashed var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; font-weight:400;
+    line-height:1.55; color:var(--muted); letter-spacing:0; text-align:left;
+  }
+  .eqn .domain b{ color:var(--green-deep); }
+  /* forward reference to the next note */
+  .preview-note{
+    background:#fffdf8; border-left:4px solid var(--amber); border-radius:0 6px 6px 0;
+    padding:.75rem 1rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .preview-note strong{ color:var(--amber); }
+  /* forward reference to the lab that measures this note */
+  .lab-note{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55;
+  }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note .askbox{
+    display:block; margin-top:.6rem; padding:.55rem .8rem; background:#fff;
+    border:1px dashed var(--green); border-radius:6px; font-size:.88rem;
+  }
+
+  /* exit ticket */
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; }
+  .ticket .t-head strong{ font-size:.98rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.8rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .q-card{ margin:0 0 1.1rem; padding-left:.75rem; border-left:3px solid transparent; }
+  .q-card.right{ border-left-color:var(--green); }
+  .q-card.wrong{ border-left-color:#c0392b; }
+  .q-card .qtext{ font-weight:700; margin:0 0 .55rem; }
+  .q-card .qtext .num{ color:var(--green); }
+  .q-opts{ display:grid; gap:.45rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+  .q-opts label{ display:flex; gap:.55rem; align-items:flex-start; border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; cursor:pointer; }
+  .q-opts label:hover{ border-color:var(--green); }
+  .q-opts input{ margin-top:.15rem; accent-color:var(--green); flex:none; }
+  .q-num{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; display:flex; align-items:center; }
+  .q-num input[type=number]{ font:inherit; width:6.5rem; padding:.4rem .5rem; border:1px solid var(--rule); border-radius:6px; }
+  .q-num .unit{ color:var(--muted); margin-left:.45rem; }
+  .q-card .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.84rem; margin-top:.5rem; min-height:1em; }
+  .q-card.right .qfb{ color:var(--green-deep); }
+  .q-card.wrong .qfb{ color:#c0392b; }
+  .ticket .actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
+  .ticket .score{
+    font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.92rem;
+    margin-top:1rem; padding:.7rem .95rem; border-radius:8px; background:var(--green-soft);
+    border:1px solid var(--rule); display:none;
+  }
+  .ticket .score.show{ display:block; }
+
+  /* downloads */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+
+  /* ---- N3b figure + notation table ---- */
+  .figbox{ margin:1.4rem 0; }
+  .figbox .frame{ border:1px solid var(--rule); border-radius:8px; background:#fff; padding:.6rem; }
+  .figbox svg{ display:block; width:100%; height:auto; }
+  .figbox .cap{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; color:var(--muted);
+    text-align:center; margin-top:.5rem; line-height:1.5; }
+  .uv-ax{ fill:none; stroke:var(--muted); stroke-width:1.4; }
+  .uv-grid{ fill:none; stroke:var(--rule); stroke-width:1; }
+  .uv-i{ fill:none; stroke:#c0392b; stroke-width:3.4; }
+  .uv-j{ fill:none; stroke:#2b6cb0; stroke-width:3.4; }
+  .uv-v{ fill:none; stroke:var(--green-deep); stroke-width:3.4; }
+  .uv-comp{ fill:none; stroke:var(--green); stroke-width:2; stroke-dasharray:6 4; }
+  .uv-t{ font-family:"Segoe UI",system-ui,sans-serif; font-size:15px; fill:var(--ink); }
+  .uv-t.sm{ font-size:12.5px; fill:var(--muted); }
+  .uv-t.i{ fill:#c0392b; font-weight:700; }
+  .uv-t.j{ fill:#2b6cb0; font-weight:700; }
+  .uv-t.v{ fill:var(--green-deep); font-weight:700; }
+  .notation{ border:1px solid var(--rule); border-radius:8px; overflow:hidden; margin:1.1rem 0; }
+  .notation table{ width:100%; border-collapse:collapse;
+    font-family:"Segoe UI",system-ui,sans-serif; font-size:.9rem; }
+  .notation th,.notation td{ text-align:left; padding:.55rem .8rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  .notation th{ background:var(--green-soft); color:var(--green-deep); font-size:.78rem;
+    letter-spacing:.05em; text-transform:uppercase; }
+  .notation tr:last-child td{ border-bottom:0; }
+  .hat{ font-family:"Cambria Math",Georgia,serif; font-size:1.05rem; }
+  @media print{
+    @page{ margin:.5in; }
+    body{ font-size:.9rem; line-height:1.45; }
+    .note-wrap{ max-width:none; padding:0; }
+    .figbox, .eqn, .probe, .notation{ page-break-inside:avoid; }
+    h2{ page-break-after:avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 &middot; Motion In Two Dimensions</span>
+    <span>Note 3b</span>
+  </div>
+
+  <h1>Unit Vectors</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    You have already written one. In Note&nbsp;3 the launched ball's velocity came out as
+    v&#8407;(t) = v<sub>0x</sub> &icirc; + (&minus;9.8t) &jcirc;, and those two hatted symbols did real
+    work in an equation that carried the whole argument &mdash; without ever being defined. This note
+    names them. A unit vector is <b>pure direction</b>: magnitude exactly 1, and no units at all.
+    Everything with a size and a unit sits in front of it. Once you have &icirc; and &jcirc;, every
+    vector in the plane is two ordinary numbers, and adding vectors becomes collecting like terms.
+  </div>
+
+  <!-- ============ PERFORMANCE EXPECTATIONS ============ -->
+  <div class="pe">
+    <div class="head">
+      <strong>Performance Expectations</strong>
+      <span>By the end of this note, you will be able to&hellip;</span>
+    </div>
+    <ul>
+      <li><span class="tick">PE1</span><span class="txt"><b>State what makes a vector a unit vector</b> &mdash; magnitude exactly 1, no units &mdash; and explain why the hat contributes nothing to the units of the quantity it describes.</span></li>
+      <li><span class="tick">PE2</span><span class="txt"><b>Write a vector in unit-vector form</b> from its components, and read a unit-vector expression back as a magnitude and a direction.</span></li>
+      <li><span class="tick">PE3</span><span class="txt"><b>Multiply a vector by a scalar</b> and say what changes, what cannot change, and why a negative scalar is a statement about direction rather than a negative magnitude.</span></li>
+      <li><span class="tick">PE4</span><span class="txt"><b>Add two vectors given in unit-vector form</b> by collecting the &icirc; and &jcirc; terms separately, then recover the magnitude and direction of the result.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ RUNG 0 — PREDICT FIRST ============ -->
+  <div class="probe" id="probe">
+    <p class="q">Predict first. In the velocity you wrote in Note&nbsp;3,
+    v&#8407;(t) = v<sub>0x</sub> &icirc; + (&minus;9.8t) &jcirc;, what does &jcirc; contribute to the
+    <i>units</i> of v&#8407;?</p>
+    <div class="opts">
+      <button class="opt" data-correct="false">Metres per second.</button>
+      <button class="opt" data-correct="false">Metres.</button>
+      <button class="opt" data-correct="false">Seconds.</button>
+      <button class="opt" data-correct="true">Nothing at all &mdash; &jcirc; has no units.</button>
+    </div>
+    <div class="feedback" id="probeFb" role="status"></div>
+  </div>
+
+  <!-- ============ YOU ALREADY USED THIS ============ -->
+  <h2>You already used this</h2>
+  <p>Look again at the equation from Note&nbsp;3 and read it in pieces rather than as one lump:</p>
+
+  <div class="eqn">v&#8407;(t) &nbsp;=&nbsp; v<sub>0x</sub> &icirc; &nbsp;+&nbsp; (&minus;9.8&thinsp;t) &jcirc;
+    <span class="domain"><b>What each piece is doing:</b> v<sub>0x</sub> is a number with units
+    (m/s) and it is the whole <i>size</i> of the horizontal part. &icirc; says <i>which way</i> that
+    part points, and contributes no size and no units. Likewise &minus;9.8t is a number with units
+    (m/s), and &jcirc; says it points along the vertical axis &mdash; with the minus sign meaning
+    downward, because up was chosen as positive.</span>
+  </div>
+
+  <p>So the equation is not one complicated object. It is <b>two ordinary numbers</b>, each with a
+  label saying which axis it belongs to. That is the whole idea, and the rest of this note just makes
+  it official.</p>
+
+  <!-- ============ WHAT A UNIT VECTOR IS ============ -->
+  <h2>What makes a vector a <i>unit</i> vector</h2>
+
+  <div class="prior">
+    <div class="head"><span class="spark">&#x1F4D0;</span><strong>Three things, and that is the whole definition</strong></div>
+    <div class="body">
+      <div class="cases">
+        <div class="case">
+          <span class="emoji">1&#65039;&#8419;</span>
+          <b>Magnitude exactly 1</b>
+          <small>Not approximately, not "about one unit long." Exactly 1, always, in every unit system.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">&#129517;</span>
+          <b>Along a coordinate axis</b>
+          <small>&icirc; points along +x, &jcirc; along +y. They are locked to your axes and do not rotate with the object.</small>
+        </div>
+        <div class="case">
+          <span class="emoji">&#128683;</span>
+          <b>No units of its own</b>
+          <small>It is dimensionless. All the physics, and every unit, lives in the number in front.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eqn">|&icirc;| &nbsp;=&nbsp; |&jcirc;| &nbsp;=&nbsp; 1
+    <span class="domain"><b>Where this holds:</b> always &mdash; it is the definition, not a result, and
+    it does not depend on the units of the grid you drew. A consequence worth keeping: a
+    <b>magnitude is never negative</b>. When you write &minus;4&nbsp;&icirc;, the minus sign is a
+    statement about <i>direction</i> &mdash; magnitude 4, pointing along &minus;x. "The magnitude is
+    &minus;4" is always wrong.</span>
+  </div>
+
+  <!-- ============ FIGURE ============ -->
+  <figure class="figbox">
+    <div class="frame">
+    <svg viewBox="0 0 620 380" role="img"
+         aria-label="A grid with the origin at lower left. A short red arrow one square long points right along the x axis, labelled i-hat. A short blue arrow one square long points up along the y axis, labelled j-hat. A longer green arrow runs from the origin four squares right and three squares up, labelled V. Dashed green lines show its four-square horizontal component and three-square vertical component.">
+      <defs>
+        <marker id="uvRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+        <marker id="uvBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker>
+        <marker id="uvGrn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f6b4a"/></marker>
+      </defs>
+        <line class="uv-grid" x1="70" y1="320" x2="70" y2="67"/>
+        <line class="uv-grid" x1="125" y1="320" x2="125" y2="67"/>
+        <line class="uv-grid" x1="180" y1="320" x2="180" y2="67"/>
+        <line class="uv-grid" x1="235" y1="320" x2="235" y2="67"/>
+        <line class="uv-grid" x1="290" y1="320" x2="290" y2="67"/>
+        <line class="uv-grid" x1="345" y1="320" x2="345" y2="67"/>
+        <line class="uv-grid" x1="400" y1="320" x2="400" y2="67"/>
+        <line class="uv-grid" x1="455" y1="320" x2="455" y2="67"/>
+        <line class="uv-grid" x1="510" y1="320" x2="510" y2="67"/>
+        <line class="uv-grid" x1="70" y1="320" x2="532" y2="320"/>
+        <line class="uv-grid" x1="70" y1="265" x2="532" y2="265"/>
+        <line class="uv-grid" x1="70" y1="210" x2="532" y2="210"/>
+        <line class="uv-grid" x1="70" y1="155" x2="532" y2="155"/>
+        <line class="uv-grid" x1="70" y1="100" x2="532" y2="100"/>
+      <line class="uv-ax" x1="70" y1="320" x2="543" y2="320"/>
+      <line class="uv-ax" x1="70" y1="320" x2="70" y2="56"/>
+      <text class="uv-t sm" x="543" y="342" text-anchor="end">x</text>
+      <text class="uv-t sm" x="60" y="56" text-anchor="end">y</text>
+      <text class="uv-t sm" x="58" y="338" text-anchor="end">0</text>
+
+      <!-- components of V -->
+      <line class="uv-comp" x1="70" y1="320" x2="290" y2="320"/>
+      <line class="uv-comp" x1="290" y1="320" x2="290" y2="155"/>
+      <text class="uv-t sm" x="180" y="342" text-anchor="middle">4 m &icirc;</text>
+      <text class="uv-t sm" x="300" y="238">3 m &jcirc;</text>
+
+      <!-- V -->
+      <line class="uv-v" x1="70" y1="320" x2="290" y2="155" marker-end="url(#uvGrn)"/>
+      <text class="uv-t v" x="164" y="232">V&#8407;</text>
+
+      <!-- unit vectors, drawn thick over the axes -->
+      <line class="uv-i" x1="70" y1="320" x2="125" y2="320" marker-end="url(#uvRed)"/>
+      <line class="uv-j" x1="70" y1="320" x2="70" y2="265" marker-end="url(#uvBlue)"/>
+      <text class="uv-t i" x="105" y="300" text-anchor="middle">&icirc;</text>
+      <text class="uv-t j" x="54" y="290" text-anchor="end">&jcirc;</text>
+
+      <text class="uv-t sm" x="345.0" y="122">one grid square = one unit</text>
+      <text class="uv-t" x="345.0" y="155">V&#8407; = 4 m &icirc; + 3 m &jcirc;</text>
+      <text class="uv-t sm" x="345.0" y="180">|V&#8407;| = 5.0 m &nbsp;&nbsp; &theta; = 36.9&deg;</text>
+    </svg>
+    </div>
+    <figcaption class="cap"><b>Figure 1.</b> The red and blue arrows are each exactly one square long and
+    locked to an axis &mdash; those are &icirc; and &jcirc;. The green arrow is free to be any length in
+    any direction, and it is built out of the other two: four metres' worth of &icirc;, then three
+    metres' worth of &jcirc;. The 3&ndash;4&ndash;5 triangle you already know does the rest.</figcaption>
+  </figure>
+
+  <!-- ============ SCALAR MULTIPLICATION ============ -->
+  <h2>What a number in front can &mdash; and cannot &mdash; do</h2>
+  <p>Multiplying a vector by a scalar does exactly two things: it changes the <b>length</b>, and if the
+  scalar is negative it <b>reverses</b> the direction end for end. That is the complete list.
+  <b>No scalar can rotate a vector</b> to a new angle. If you need a direction that is not along an
+  axis, you build it by adding &icirc; and &jcirc; pieces &mdash; which is the next section, and is
+  exactly what Note&nbsp;2 had you doing with a ruler.</p>
+
+  <!-- ============ ADDING ============ -->
+  <h2>Adding vectors becomes collecting like terms</h2>
+  <p>This is the payoff, and it is the reason the notation exists. In Note&nbsp;2 you discovered that
+  components add independently: C<sub>x</sub> = A<sub>x</sub> + B<sub>x</sub> and
+  C<sub>y</sub> = A<sub>y</sub> + B<sub>y</sub>. Written with hats, that discovery becomes ordinary
+  algebra &mdash; gather the &icirc; terms, gather the &jcirc; terms, and do not let them mix:</p>
+
+  <div class="eqn">A&#8407; = (3.0 m) &icirc; + (5.0 m) &jcirc; &nbsp;&nbsp;&nbsp;
+    B&#8407; = (&minus;1.0 m) &icirc; + (2.0 m) &jcirc;<br>
+    A&#8407; + B&#8407; &nbsp;=&nbsp; (3.0 &minus; 1.0) m &icirc; + (5.0 + 2.0) m &jcirc;
+    &nbsp;=&nbsp; (2.0 m) &icirc; + (7.0 m) &jcirc;
+    <span class="domain"><b>Where this holds:</b> both vectors must be the same kind of quantity, in
+    the same units, on the same set of axes. You may add a displacement to a displacement; you may not
+    add a displacement to a velocity, however tidy the algebra looks. <b>The &icirc; and &jcirc; terms
+    never mix</b> &mdash; that is the independence of the axes, the same fact Note&nbsp;3 used to argue
+    that horizontal motion cannot change the fall time.</span>
+  </div>
+
+  <p>And the magnitude and direction come back the way they always have, from Note&nbsp;2a:</p>
+
+  <div class="eqn">|A&#8407; + B&#8407;| = &radic;<span style="text-decoration:overline">(2.0)&sup2; + (7.0)&sup2;</span> m = 7.3 m
+    &nbsp;&nbsp;&nbsp; &theta; = tan<sup>&minus;1</sup>(7.0 &frasl; 2.0) = 74.1&deg;
+    <span class="domain"><b>Watch the quadrant.</b> The inverse tangent alone cannot tell +x, +y from
+    &minus;x, &minus;y &mdash; it returns the same angle for both. Sketch the vector first and read the
+    quadrant off the <i>signs</i> of the two components, exactly as you did in Note&nbsp;2a.</span>
+  </div>
+
+  <!-- ============ NOTATION ============ -->
+  <h2>Two notations, same three arrows</h2>
+  <div class="notation">
+    <table>
+      <tr><th>You will see</th><th>Read as</th><th>Where</th></tr>
+      <tr><td class="hat">&icirc;, &jcirc;, k&#770;</td><td>"i hat, j hat, k hat"</td>
+          <td><b>This course.</b> It is what your textbook and WebAssign use, and it is what is written on every note from here on.</td></tr>
+      <tr><td class="hat">x&#770;, y&#770;, z&#770;</td><td>"x hat, y hat, z hat"</td>
+          <td>The same three vectors, named after the axes instead. You will meet it in the Chapter&nbsp;3 reference pages and in plenty of other books. <span class="hat">&icirc;</span> = <span class="hat">x&#770;</span>, <span class="hat">&jcirc;</span> = <span class="hat">y&#770;</span>, <span class="hat">k&#770;</span> = <span class="hat">z&#770;</span>.</td></tr>
+    </table>
+  </div>
+  <p>Neither is more correct. Pick one and stay with it inside a single problem &mdash; mixing them
+  halfway through a solution is how sign errors get in.</p>
+
+  <div class="preview-note"><strong>Looking ahead &mdash;</strong> in <b>Note&nbsp;4</b> the launcher
+  tilts, and the velocity picks up a vertical piece at the start:
+  v&#8407;(t) = v<sub>0</sub>cos&theta; &icirc; + (v<sub>0</sub>sin&theta; &minus; 9.8t) &jcirc;.
+  Every term in it is something you can now read. The notation is not decoration &mdash; it is what
+  keeps the two motions visibly separate while they share one clock.</div>
+
+  <!-- ============ EXIT TICKET ============ -->
+  <div class="ticket" id="ticket">
+    <div class="t-head">
+      <strong>&#127903;&#65039; Exit ticket</strong>
+      <span class="sub">Four quick questions &mdash; check yourself before you close this note.</span>
+    </div>
+    <div class="t-body">
+
+      <div class="q-card" id="card-q1">
+        <p class="qtext"><span class="num">Q1.</span> The magnitude of &icirc; is&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q1" value="a"> 1 metre.</label>
+          <label><input type="radio" name="q1" value="b"> Exactly 1, with no units.</label>
+          <label><input type="radio" name="q1" value="c"> Whatever one grid square represents.</label>
+          <label><input type="radio" name="q1" value="d"> Undefined until you choose axes.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q2">
+        <p class="qtext"><span class="num">Q2.</span> A student writes "the magnitude of &minus;4&nbsp;&icirc; is &minus;4." What is wrong?</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q2" value="a"> Nothing &mdash; that is correct.</label>
+          <label><input type="radio" name="q2" value="b"> The magnitude is 4; the minus sign gives the direction, along &minus;x.</label>
+          <label><input type="radio" name="q2" value="c"> The magnitude is 4 and the vector points along +x.</label>
+          <label><input type="radio" name="q2" value="d"> You cannot multiply a unit vector by a negative number.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q3">
+        <p class="qtext"><span class="num">Q3.</span> A&#8407; = (6.0 m) &icirc; + (2.0 m) &jcirc; and
+        B&#8407; = (&minus;2.0 m) &icirc; + (5.0 m) &jcirc;. What is the <b>&jcirc; component</b> of
+        A&#8407; + B&#8407;, in metres?</p>
+        <div class="q-num">
+          <input type="number" id="q3input" step="any" inputmode="decimal" aria-label="j component in metres">
+          <span class="unit">m</span>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="q-card" id="card-q4">
+        <p class="qtext"><span class="num">Q4.</span> Multiplying a vector by the scalar 3 will&hellip;</p>
+        <div class="q-opts">
+          <label><input type="radio" name="q4" value="a"> Rotate it by 3 degrees.</label>
+          <label><input type="radio" name="q4" value="b"> Make it three times as long, same direction.</label>
+          <label><input type="radio" name="q4" value="c"> Make it three times as long and reverse it.</label>
+          <label><input type="radio" name="q4" value="d"> Change its units.</label>
+        </div>
+        <div class="qfb"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="ticketCheck">Check my answers</button>
+        <button class="btn" id="ticketReset">Clear</button>
+      </div>
+      <div class="score" id="ticketScore" role="status"></div>
+    </div>
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/M2_N3b_Unit_Vectors_Handout.pdf">
+      <span class="kind">Before class</span>
+      <span class="name">Guided notes &mdash; blank (PDF)</span>
+      <span class="hint">Print it and build the vectors on the grid as you follow along.</span>
+    </a>
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/Module_02/reference/M2_Ch03b_Unit_Vectors.html">
+      <span class="kind">Go deeper</span>
+      <span class="name">Chapter 3 reference &mdash; Unit Vectors</span>
+      <span class="hint">The full slide treatment, with more worked examples and the three-dimensional case.</span>
+    </a>
+  </div>
+
+  <footer>
+    Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 151
+  </footer>
+
+</div>
+
+<script>
+/* ---------- predict-first probe ---------- */
+(function(){
+  var probe = document.getElementById('probe');
+  if(!probe) return;
+  var fb = document.getElementById('probeFb');
+  probe.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var right = this.getAttribute('data-correct') === 'true';
+      probe.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('correct','wrong'); });
+      if(right){
+        this.classList.add('correct'); fb.style.color = '#134a29';
+        fb.textContent = '\u2713 Right. \u0135 is dimensionless \u2014 its whole job is to say "along the vertical axis." The units of v(t) come entirely from the numbers in front: v0x is in m/s, and \u22129.8t is (m/s\u00b2)(s) = m/s. Both terms are m/s, which is what lets you add them.';
+      } else {
+        this.classList.add('wrong');
+        probe.querySelectorAll('.opt').forEach(function(b){ if(b.getAttribute('data-correct')==='true') b.classList.add('correct'); });
+        fb.style.color = '#c0392b';
+        fb.textContent = '\u2717 Not quite. A unit vector carries no units at all \u2014 if it did, every equation would have units twice over. Check it: \u22129.8t is (m/s\u00b2)(s) = m/s, which is already a velocity. \u0135 only supplies the direction.';
+      }
+    });
+  });
+})();
+
+/* ---------- exit ticket scoring ---------- */
+(function(){
+  var ticket = document.getElementById('ticket');
+  if(!ticket) return;
+  var mc = { q1:'b', q2:'b', q4:'b' };
+  var expl = {
+    q1:'a unit vector has magnitude exactly 1 and is dimensionless. The metre belongs to the number in front, not to the hat.',
+    q2:'a magnitude is never negative. \u22124 \u00ee has magnitude 4 and points along \u2212x \u2014 the sign is a direction, not a size.',
+    q4:'a scalar can stretch, shrink or reverse a vector. It cannot rotate it, and it does not touch its units.'
+  };
+  var scoreEl = document.getElementById('ticketScore');
+  function markCard(id, ok, msg){
+    var card = document.getElementById(id);
+    card.classList.remove('right','wrong'); card.classList.add(ok ? 'right' : 'wrong');
+    card.querySelector('.qfb').textContent = msg;
+  }
+  function grade(){
+    var correct = 0, total = 4;
+    ['q1','q2','q4'].forEach(function(q){
+      var sel = ticket.querySelector('input[name="'+q+'"]:checked');
+      if(sel && sel.value === mc[q]){ correct++; markCard('card-'+q, true, '\u2713 Correct.'); }
+      else if(sel){ markCard('card-'+q, false, '\u2717 Not quite \u2014 ' + expl[q]); }
+      else { markCard('card-'+q, false, 'Pick an answer above.'); }
+    });
+    var v = parseFloat(document.getElementById('q3input').value);
+    if(Math.abs(v - 7.0) < 0.05){ correct++; markCard('card-q3', true, '\u2713 Correct: collect the \u0135 terms only \u2014 2.0 + 5.0 = 7.0 m. The \u00ee terms (6.0 and \u22122.0) never enter.'); }
+    else if(isNaN(v)){ markCard('card-q3', false, 'Enter a number (m).'); }
+    else { markCard('card-q3', false, '\u2717 Collect the \u0135 terms and only those: 2.0 + 5.0 = 7.0 m. If you got 4.0 you added the \u00ee terms; if you got 11.0 you added all four numbers.'); }
+    var tail = correct === total ? "Nice \u2014 you're ready for Note 4."
+             : correct >= 2 ? 'Good start \u2014 revisit the ones you missed.'
+             : 'Reread the note above, then try again.';
+    scoreEl.textContent = 'You got ' + correct + ' of ' + total + '. ' + tail;
+    scoreEl.classList.add('show');
+  }
+  function clear(){
+    ticket.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = false; });
+    document.getElementById('q3input').value = '';
+    ticket.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('right','wrong'); c.querySelector('.qfb').textContent = ''; });
+    scoreEl.classList.remove('show'); scoreEl.textContent = '';
+  }
+  document.getElementById('ticketCheck').addEventListener('click', grade);
+  document.getElementById('ticketReset').addEventListener('click', clear);
+})();
+</script>
+
+<script>
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST - LP-PHY151-M02-N3b
+     The contract rungs 2 and 3 are written against. An item needing something
+     not on this list goes back to the note, or gets cut.
+
+     F1. A unit vector has magnitude exactly 1 and is dimensionless. All units
+         and all size live in the scalar in front of it.
+     F2. i-hat points along +x and j-hat along +y. They are fixed to the chosen
+         axes and do not rotate with the object.
+     F3. Any planar vector is (number with units) i-hat + (number with units)
+         j-hat. The two numbers are the components from N2 / N2a.
+     F4. A scalar can lengthen, shorten or reverse a vector. It can NEVER rotate
+         one, and it never changes its units.
+     F5. A magnitude is never negative. A minus sign in front of a unit vector
+         is a statement about direction.
+     F6. Adding vectors = collecting like terms; i-hat and j-hat terms never mix.
+         Magnitude and direction come back by Pythagoras and inverse tangent,
+         with the quadrant read off the component SIGNS (N2a).
+     F7. i,j,k and x-hat,y-hat,z-hat are the same three vectors. This course
+         writes i,j,k, matching the textbook and WebAssign.
+
+     NOT laid down here, so no item may assume it: the dot or cross product;
+     three-dimensional problems beyond naming k-hat; unit vectors in non-Cartesian
+     (polar) coordinates; turning a magnitude and angle into components, which is
+     N2a's job and is only used here, not taught.
+     ========================================================================== -->
+
+</body>
+</html>
