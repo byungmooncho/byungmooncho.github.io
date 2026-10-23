@@ -257,7 +257,7 @@ function renderTabs(){
 function itemHTML(it, crumb){
   const code = it.c ? `<span class="code${it.c.length > 5 ? " wide" : ""}">${esc(it.c)}</span>` : `<span class="code blank">·</span>`;
   const badge = it.k ? `<span class="badge">KEY</span>` : "";
-  const meta = it.type === "link" ? "College Board ↗" : it.type === "html" ? "page" : [it.pages ? it.pages + " pp" : "", fmtSize(it.size)].filter(Boolean).join(" · ");
+  const meta = it.type === "link" ? "College Board ↗" : it.type === "page" ? "interactive" : it.type === "html" ? "page" : [it.pages ? it.pages + " pp" : "", fmtSize(it.size)].filter(Boolean).join(" · ");
   const inner = `${code}<span class="t">${esc(it.t)}${crumb ? `<span class="crumb">${esc(it._crumb)}</span>` : ""}</span>${badge}<span class="meta">${meta}</span>`;
   if (it.type === "link") return `<li><a class="item" href="${esc(it.url)}" target="_blank" rel="noopener noreferrer">${inner}</a></li>`;
   return `<li><button class="item" type="button" data-id="${it.id}">${inner}</button></li>`;
@@ -318,8 +318,15 @@ async function openViewer(it){
   $("vtitle").textContent = it.t; document.title = it.t + " · Physics Tutoring";
   const isPdf = it.type === "pdf";
   $("zoomCtl").classList.toggle("hidden", !isPdf); $("vopen").classList.toggle("hidden", !isPdf);
-  $("vdl").textContent = isPdf ? "Download" : "Print";
+  $("vdl").textContent = isPdf ? "Download" : it.type === "page" ? "Open in new tab" : "Print";
   $("vbody").scrollTop = 0;
+  if (it.type === "page") {           // a live interactive course page on this site
+    $("progress").classList.add("hidden");
+    const p = $("pages"); p.style.maxWidth = "none"; p.style.padding = "0"; p.style.height = "100%";
+    p.innerHTML = `<iframe id="hframe" title="${esc(it.t)}" allow="fullscreen" allowfullscreen></iframe>`;
+    $("hframe").src = it.url;
+    return;
+  }
   setProgress("Downloading… " + fmtSize(it.size), 0);
   try {
     const enc = await fetchBin("d/" + it.id + ".bin", f => token === viewToken && setProgress("Downloading… " + Math.round(f*100) + "% of " + fmtSize(it.size), f));
@@ -346,6 +353,7 @@ async function openViewer(it){
 }
 $("vdl").addEventListener("click", () => {
   if (!current) return;
+  if (current.type === "page") { window.open(current.url, "_blank", "noopener"); return; }
   if (current.type !== "pdf") { const f = $("hframe"); if (f) f.contentWindow.print(); return; }
   if (!blobUrl) return;
   const a = document.createElement("a"); a.href = blobUrl; a.download = (current.t.replace(/[\\/:*?"<>|]+/g, " ").trim() || "document") + ".pdf";
