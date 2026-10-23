@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N3 &mdash; Moving Wave and Wave Equation</title>
+<style>
+  /* FLCC Physics note page — Module 1, Oscillations, Waves and Sound, Note 3
+     "Moving Wave and Wave Equation".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-10-21f_M1_N3_Built.md.
+
+     *** NO CALC FENCE, AND IT IS THE SAME DEFERRED DECISION AS NOTE 2a. ***
+     This note is calculus throughout and ends in a partial differential equation.  The
+     mirror has NO per-note exclusion — it takes every M*_N*.html in the directory that
+     is not a wrapper, handout or key — so until the partner course is settled, RUN THE
+     MIRROR ON NAMED FILES, NOT ON THIS DIRECTORY, or it will generate an algebra-course
+     page full of partial derivatives.  Cho's call 2026-10-21.
+
+     SOURCE.  Dr. Cho's own guided note, 2025 Spring.  FOUR pages: page 1 is three
+     printed paragraphs at 962 chars, pages 2, 3 and 4 are CANVASES at 110 chars each —
+     the running header and nothing else.  1,555 live strokes.  Both section headings,
+     "1. Moving wave" and "2. Wave equation", are his, written in ink.
+
+     HIS MASTER CARRIES NO "Synopsis:" LABEL on this note, unlike Notes 1, 1a, 2 and 2a.
+     The paragraph in the synopsis block is his opening paragraph, word for word; the
+     LABEL is the house shape.  Flagged in the key.
+
+     BOTH FIGURES EXIST ONLY IN THE INK.  See figs_m1n3.py.  ONE LABEL IS CORRECTED
+     there and flagged in the key: under his axis the two positions read "x+dx" to the
+     LEFT of "x", which contradicts his own force labels — T(x) is on the left-hand end
+     of the element and T(x+dx) on the right.  Drawn here as the derivation uses them.
+
+     NO HTML TAGS INSIDE <text>: bold inside a figure is <tspan font-weight="700">.
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.95rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  .disp{ display:block; margin:.6rem 0 .8rem; text-align:center; font-size:1.08rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 &middot; Oscillations, Waves and Sound</span><span>Note 3</span></div>
+<h1>Moving Wave and Wave Equation</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>A spring-mass system can undergo oscillatory motion, and Hooke&rsquo;s Law
+combined with Newton&rsquo;s Second Law enables us to write an equation of motion whose solution is described by the simple harmonic motion,
+SHM (see below).</div>
+
+<div class="hook"><span class="label">Before you read on &mdash; predict</span><p>A pulse runs along a stretched string at some
+speed.&nbsp; Three things you could change: <b>pull the string tighter</b>, <b>swap it for a heavier string of the same length</b>,
+<b>shake it faster</b>.&nbsp; Which of those change the speed of the pulse?&nbsp; Write down your three answers.&nbsp; The last section
+derives the speed from scratch and settles all three at once.</p></div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N3 — Dr. Cho works through the note"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link at the bottom of this page) and fill in both derivations as they go.
+</div>
+
+<p>Notes 2 and 2a got that equation of motion and solved it:</p>
+<span class="disp">d&sup2;<i>x</i>/d<i>t</i>&sup2; = &minus;(<i>k</i>/<i>m</i>)<i>x</i>&nbsp;&nbsp;&nbsp;with solution&nbsp;&nbsp;&nbsp;
+<i>x</i>(<i>t</i>) = <i>A</i> cos(&omega;<i>t</i> + &phi;)</span>
+<p>where &omega; is the angular frequency in rad/s and &phi; is the phase angle.</p>
+
+<p>The SHM describes the amplitude of the back-and-forth oscillation as a function of time only.&nbsp; Since the oscillations occur at a
+fixed position, say, <i>x</i> = 0 on an x-axis (so the amplitude variation is in the y-axis), the amplitude does not vary along the
+x-axis.&nbsp; The oscillations or the &ldquo;wave motion&rdquo; does not &ldquo;move&rdquo;.</p>
+
+<h2>1.&nbsp; Moving wave</h2>
+<p>Now, let&rsquo;s consider ocean waves or waves on a string.&nbsp; Here, the &ldquo;disturbances&rdquo; do move in space or along the
+string.&nbsp; To see this, imagine taking a snapshot of the string at one time and taking another snapshot at another time.&nbsp; When you
+compare the two, you will find that the wave is simply shifted in space and the amount of shift in space will depend on the speed at which
+the wave moved.&nbsp; Mathematically, we can denote this shift as follows:</p>
+
+<div class="fig">
+<svg viewBox="0 0 700 400" role="img" aria-label="The same pulse drawn at two times on a slanted time axis, shifted along x.">
+<defs><marker id="n3a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n3a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n3a-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker><marker id="n3a-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d2601a"/></marker><marker id="n3a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker></defs>
+<line x1="150" y1="300" x2="150" y2="40" stroke="#1636c8" stroke-width="2" marker-end="url(#n3a-blue)"/>
+<line x1="90" y1="300" x2="670" y2="300" stroke="#1636c8" stroke-width="2" marker-end="url(#n3a-blue)"/>
+<line x1="150" y1="300" x2="450" y2="150" stroke="#1636c8" stroke-width="2" marker-end="url(#n3a-blue)"/>
+<text x="138" y="48" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8" font-style="italic">A</text>
+<text x="674" y="320" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8" font-style="italic">x</text>
+<text x="456" y="146" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8" font-style="italic">t</text>
+<text x="140" y="320" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">0</text>
+<polyline points="180.0,300.0 181.4,300.0 182.9,300.0 184.3,300.0 185.8,299.9 187.2,299.9 188.7,299.9 190.1,299.8 191.6,299.8 193.0,299.7 194.4,299.6 195.9,299.4 197.3,299.2 198.8,299.0 200.2,298.7 201.7,298.4 203.1,297.9 204.6,297.4 206.0,296.7 207.4,296.0 208.9,295.0 210.3,294.0 211.8,292.7 213.2,291.2 214.7,289.6 216.1,287.7 217.6,285.6 219.0,283.3 220.4,280.7 221.9,278.0 223.3,275.0 224.8,271.9 226.2,268.7 227.7,265.3 229.1,262.0 230.6,258.6 232.0,255.3 233.4,252.1 234.9,249.1 236.3,246.4 237.8,244.0 239.2,241.9 240.7,240.2 242.1,239.0 243.6,238.2 245.0,238.0 246.4,238.2 247.9,239.0 249.3,240.2 250.8,241.9 252.2,244.0 253.7,246.4 255.1,249.1 256.6,252.1 258.0,255.3 259.4,258.6 260.9,262.0 262.3,265.3 263.8,268.7 265.2,271.9 266.7,275.0 268.1,278.0 269.6,280.7 271.0,283.3 272.4,285.6 273.9,287.7 275.3,289.6 276.8,291.2 278.2,292.7 279.7,294.0 281.1,295.0 282.6,296.0 284.0,296.7 285.4,297.4 286.9,297.9 288.3,298.4 289.8,298.7 291.2,299.0 292.7,299.2 294.1,299.4 295.6,299.6 297.0,299.7 298.4,299.8 299.9,299.8 301.3,299.9 302.8,299.9 304.2,299.9 305.7,300.0 307.1,300.0 308.6,300.0 310.0,300.0" fill="none" stroke="#b3261e" stroke-width="2.3"/>
+<circle cx="245" cy="238.0" r="5" fill="#0f8ea8"/>
+<line x1="276.0" y1="207.0" x2="650" y2="207.0" stroke="#1636c8" stroke-width="1.3"/>
+<polyline points="461.0,207.0 462.4,207.0 463.9,207.0 465.3,207.0 466.8,206.9 468.2,206.9 469.7,206.9 471.1,206.8 472.6,206.8 474.0,206.7 475.4,206.6 476.9,206.4 478.3,206.2 479.8,206.0 481.2,205.7 482.7,205.4 484.1,204.9 485.6,204.4 487.0,203.7 488.4,203.0 489.9,202.0 491.3,201.0 492.8,199.7 494.2,198.2 495.7,196.6 497.1,194.7 498.6,192.6 500.0,190.3 501.4,187.7 502.9,185.0 504.3,182.0 505.8,178.9 507.2,175.7 508.7,172.3 510.1,169.0 511.6,165.6 513.0,162.3 514.4,159.1 515.9,156.1 517.3,153.4 518.8,151.0 520.2,148.9 521.7,147.2 523.1,146.0 524.6,145.2 526.0,145.0 527.4,145.2 528.9,146.0 530.3,147.2 531.8,148.9 533.2,151.0 534.7,153.4 536.1,156.1 537.6,159.1 539.0,162.3 540.4,165.6 541.9,169.0 543.3,172.3 544.8,175.7 546.2,178.9 547.7,182.0 549.1,185.0 550.6,187.7 552.0,190.3 553.4,192.6 554.9,194.7 556.3,196.6 557.8,198.2 559.2,199.7 560.7,201.0 562.1,202.0 563.6,203.0 565.0,203.7 566.4,204.4 567.9,204.9 569.3,205.4 570.8,205.7 572.2,206.0 573.7,206.2 575.1,206.4 576.6,206.6 578.0,206.7 579.4,206.8 580.9,206.8 582.3,206.9 583.8,206.9 585.2,206.9 586.7,207.0 588.1,207.0 589.6,207.0 591.0,207.0" fill="none" stroke="#b3261e" stroke-width="2.3"/>
+<circle cx="526.0" cy="145.0" r="5" fill="#0f8ea8"/>
+<line x1="245" y1="238.0" x2="526.0" y2="145.0" stroke="#0f8ea8" stroke-width="2.2"/>
+<line x1="245" y1="238.0" x2="245" y2="300.0" stroke="#d2601a" stroke-width="1.3" stroke-dasharray="4 4"/>
+<line x1="526.0" y1="145.0" x2="526.0" y2="300.0" stroke="#d2601a" stroke-width="1.3" stroke-dasharray="4 4"/>
+<line x1="245" y1="326" x2="526.0" y2="326" stroke="#d2601a" stroke-width="2.4" marker-start="url(#n3a-orange)" marker-end="url(#n3a-orange)"/>
+<text x="385.5" y="345" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#d2601a" font-style="italic">the shift = v t</text>
+<text x="237" y="320" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-style="italic">x</text>
+<text x="532.0" y="320" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-style="italic">x</text>
+<text x="541.0" y="324" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="10" fill="#5c6b62">1</text>
+<text x="169" y="226" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f8ea8">A(x, t = 0)</text>
+<text x="540.0" y="137.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f8ea8">A&prime;(x, t)</text>
+<text x="270.0" y="199.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8">a later <tspan font-style='italic'>t</tspan></text>
+</svg>
+  <div class="fig-note">The same disturbance, photographed twice.&nbsp; Nothing about its <i>shape</i> has changed &mdash; it has only
+  moved along <i>x</i>, and how far it moved is the speed times the time.</div>
+</div>
+
+<ol class="items tasks">
+  <li>Call the shape at <i>t</i> = 0 simply <i>A</i>(<i>x</i>).&nbsp; If the whole shape travels a distance <i>vt</i> to the right, what is
+  the height at position <i>x</i> at time <i>t</i>, written in terms of the original function?</li>
+  <li>What general form must <b>any</b> rightward-moving wave therefore have?</li>
+  <li>Check it against a familiar one: show that <i>A</i>(<i>x</i>, <i>t</i>) = <i>A</i><sub>0</sub> cos(<i>kx</i> &minus;
+  &omega;<i>t</i>) has that form, and read off its speed.</li>
+  <li>Rewrite that wave using the wavelength and the frequency instead of <i>k</i> and &omega;.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">1)&nbsp; The height now at <i>x</i> is whatever the height used to be at <i>x</i> &minus; <i>vt</i>, because that is
+  the bit of the shape that has arrived:</span>
+  <span class="step" style="text-align:center;font-size:1.1rem"><i>A</i>(<i>x</i>) &rarr; <i>A</i>(<i>x</i> &minus; <i>vt</i>)</span>
+  <span class="step">This is akin to <b>function translation</b> &mdash; the same trick that moves <i>y</i> = <i>f</i>(<i>x</i>) to the
+  right by replacing <i>x</i> with <i>x</i> &minus; (shift).</span>
+  <span class="step">2)&nbsp; So formally, a moving wave has the form</span>
+  <span class="step" style="text-align:center;font-size:1.14rem"><b><i>A</i> = <i>f</i>(<i>x</i> &minus; <i>vt</i>)</b></span>
+  <span class="step"><span class="why">&mdash; any function at all, as long as x and t appear only in that combination. That is a
+  strong statement: it says the shape is irrelevant and the <i>pairing</i> of x with t is everything.</span></span>
+  <span class="step">3)&nbsp; <i>A</i>(<i>x</i>,<i>t</i>) = <i>A</i><sub>0</sub> cos(<i>kx</i> &minus; &omega;<i>t</i>) =
+  <i>A</i><sub>0</sub> cos[<i>k</i>(<i>x</i> &minus; (&omega;/<i>k</i>)<i>t</i>)] &equiv; <i>f</i>(<i>x</i> &minus; <i>vt</i>)
+  <b>if <i>v</i> = &omega;/<i>k</i></b>.&nbsp; A <b>forward-going wave</b>: as <i>t</i> increases, <i>x</i> must increase to keep the
+  bracket the same.</span>
+  <span class="step">4)&nbsp; With &omega; = 2&pi;<i>f</i> and <i>k</i> = 2&pi;/&lambda;:</span>
+  <span class="step" style="text-align:center;font-size:1.1rem"><i>A</i>(<i>x</i>,<i>t</i>) = <i>A</i><sub>0</sub>
+  cos[(2&pi;/&lambda;)(<i>x</i> &minus; <i>vt</i>)]</span>
+  <span class="step"><span class="why">&mdash; and v = &omega;/k = (2&pi;f)/(2&pi;/&lambda;) = &lambda;f, which is Note 1 item 18 arriving
+  a second time by a completely different route</span></span>
+</div></div></div>
+
+<h2>2.&nbsp; Wave equation</h2>
+<p>Section 1 says what a moving wave <i>looks like</i>.&nbsp; It does not say why a string should carry one, or how fast.&nbsp; For that,
+do to a piece of string exactly what Note 2 did to a block: write down Newton&rsquo;s second law for it.&nbsp; We are deriving an equation
+of motion for a mechanical wave.</p>
+
+<div class="fig">
+<svg viewBox="0 0 700 400" role="img" aria-label="A short element of a stretched string with the tension at each end resolved into horizontal and vertical parts.">
+<defs><marker id="n3b-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n3b-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n3b-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker><marker id="n3b-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d2601a"/></marker><marker id="n3b-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker></defs>
+<path d="M 190.0 255.0 Q 323.3 215.0 410.0 150.0 L 410.0 163.0 Q 323.3 228.0 190.0 268.0 Z" fill="#f4f6f5" stroke="#1d2b23" stroke-width="2"/>
+<line x1="70" y1="330" x2="660" y2="330" stroke="#1636c8" stroke-width="2" marker-end="url(#n3b-blue)"/>
+<line x1="190.0" y1="268.0" x2="190.0" y2="330" stroke="#1636c8" stroke-width="1.3" stroke-dasharray="4 4"/>
+<line x1="410.0" y1="163.0" x2="410.0" y2="330" stroke="#1636c8" stroke-width="1.3" stroke-dasharray="4 4"/>
+<text x="190.0" y="356" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-style="italic">x</text>
+<text x="410.0" y="356" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62">x + &Delta;x</text>
+<text x="300.0" y="300" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">m = &mu;&Delta;x</text>
+<line x1="410.0" y1="150.0" x2="510.0" y2="75.0" stroke="#b3261e" stroke-width="2.6" marker-end="url(#n3b-red)"/>
+<text x="518.0" y="71.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">T(x + &Delta;x)</text>
+<line x1="410.0" y1="150.0" x2="510.0" y2="150.0" stroke="#c77b1f" stroke-width="2.2" marker-end="url(#n3b-amber)"/>
+<text x="460.0" y="170.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f"><tspan font-style='italic'>T</tspan><tspan font-size='10' baseline-shift='-4'>h</tspan></text>
+<line x1="510.0" y1="150.0" x2="510.0" y2="75.0" stroke="#c77b1f" stroke-width="2.2" marker-end="url(#n3b-amber)"/>
+<text x="518.0" y="117.5" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f"><tspan font-style='italic'>T</tspan><tspan font-size='10' baseline-shift='-4'>y</tspan>(x + &Delta;x)</text>
+<line x1="190.0" y1="255.0" x2="90.0" y2="285.0" stroke="#b3261e" stroke-width="2.6" marker-end="url(#n3b-red)"/>
+<text x="72.0" y="296.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">T(x)</text>
+<line x1="190.0" y1="255.0" x2="90.0" y2="255.0" stroke="#c77b1f" stroke-width="2.2" marker-end="url(#n3b-amber)"/>
+<text x="140.0" y="245.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f"><tspan font-style='italic'>T</tspan><tspan font-size='10' baseline-shift='-4'>h</tspan></text>
+<line x1="90.0" y1="255.0" x2="90.0" y2="285.0" stroke="#c77b1f" stroke-width="2.2" marker-end="url(#n3b-amber)"/>
+<text x="101.0" y="309.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f"><tspan font-style='italic'>T</tspan><tspan font-size='10' baseline-shift='-4'>y</tspan>(x)</text>
+<text x="30" y="40" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">&mu; = linear density</text>
+<text x="30" y="62" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f">both horizontals are the same length</text>
+</svg>
+  <div class="fig-note">A short element of the string, of mass <i>m</i> = &mu;&Delta;<i>x</i>, with &mu; the mass per unit length.&nbsp;
+  The tension pulls along the string at each end &mdash; and because the ends have different slopes, the two pulls do not cancel.</div>
+</div>
+
+<ol class="items tasks" start="5">
+  <li>Write the mass of the element and its vertical acceleration, using <i>D</i> for the displacement of the string.&nbsp; Then write
+  <i>ma</i> for the element.</li>
+  <li>Write the net vertical force as the sum of the vertical parts of the two tensions.&nbsp; What happens to the horizontal parts, and
+  why does that matter?</li>
+  <li>Express each vertical part using the <b>slope</b> of the string at that end.&nbsp; Mind the sign at the left-hand end.</li>
+  <li>Put the two sides together, divide by &mu;&Delta;<i>x</i>, and let &Delta;<i>x</i> &rarr; 0.&nbsp; What is the bracket in the limit?</li>
+  <li>Check the units of <i>T</i><sub>h</sub>/&mu;.&nbsp; What must that combination be?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <span class="step">5)&nbsp; <i>m</i> = <b>&mu;&Delta;<i>x</i></b>, and the string moves only up and down, so
+  <i>v<sub>y</sub></i> = &part;<i>D</i>/&part;<i>t</i> and <i>a<sub>y</sub></i> = &part;&sup2;<i>D</i>/&part;<i>t</i>&sup2;.&nbsp; So</span>
+  <span class="step"><i>ma<sub>y</sub></i> = <b>&mu;&Delta;<i>x</i> &part;&sup2;<i>D</i>/&part;<i>t</i>&sup2;</b> =
+  <i>F</i><sub>net</sub></span>
+  <span class="step">6)&nbsp; <i>F</i><sub>net</sub> = <i>T<sub>y</sub></i>(<i>x</i>+&Delta;<i>x</i>) +
+  <i>T<sub>y</sub></i>(<i>x</i>).&nbsp; <b>The horizontals cancel</b> &mdash; the element is not going anywhere sideways, so the two
+  horizontal pulls are equal and opposite and share one value, <i>T</i><sub>h</sub>.&nbsp; <span class="why">&mdash; which is what makes
+  this tractable: one tension, two slopes</span></span>
+  <span class="step">7)&nbsp; The slope of the string is <b>&part;<i>D</i>/&part;<i>x</i></b>, and vertical = slope &times; horizontal:</span>
+  <span class="step"><i>T<sub>y</sub></i>(<i>x</i>+&Delta;<i>x</i>) = (slope at <i>x</i>+&Delta;<i>x</i>) &times; <i>T</i><sub>h</sub>
+  = (&part;<i>D</i>/&part;<i>x</i>)<i>T</i><sub>h</sub></span>
+  <span class="step"><i>T<sub>y</sub></i>(<i>x</i>) = &minus;(slope at <i>x</i>) &times; <i>T</i><sub>h</sub> =
+  &minus;(&part;<i>D</i>/&part;<i>x</i>)<i>T</i><sub>h</sub> <span class="why">&mdash; minus, because that end pulls back down the
+  string</span></span>
+  <span class="step">so <i>F</i><sub>net</sub> = <i>T</i><sub>h</sub>[ &part;<i>D</i>/&part;<i>x</i>|<sub><i>x</i>+&Delta;<i>x</i></sub>
+  &minus; &part;<i>D</i>/&part;<i>x</i>|<sub><i>x</i></sub> ]</span>
+  <span class="step">8)&nbsp; Setting the two expressions equal and dividing both sides by &mu;&Delta;<i>x</i>:</span>
+  <span class="step">&part;&sup2;<i>D</i>/&part;<i>t</i>&sup2; = (<i>T</i><sub>h</sub>/&mu;) &times;
+  [ &part;<i>D</i>/&part;<i>x</i>|<sub><i>x</i>+&Delta;<i>x</i></sub> &minus;
+  &part;<i>D</i>/&part;<i>x</i>|<sub><i>x</i></sub> ] / &Delta;<i>x</i></span>
+  <span class="step">and that bracket <i>is</i> a derivative &mdash; d<i>f</i>/d<i>x</i> = lim<sub>&Delta;x&rarr;0</sub>
+  [<i>f</i>(<i>x</i>+&Delta;<i>x</i>) &minus; <i>f</i>(<i>x</i>)]/&Delta;<i>x</i> &mdash; of the slope.&nbsp; The derivative of the slope
+  is the second derivative:</span>
+  <span class="step" style="text-align:center;font-size:1.14rem"><b>&part;&sup2;<i>D</i>/&part;<i>t</i>&sup2; =
+  (<i>T</i><sub>h</sub>/&mu;) &part;&sup2;<i>D</i>/&part;<i>x</i>&sup2;</b></span>
+  <span class="step">9)&nbsp; <i>F</i> is in N = kg&thinsp;m/s&sup2; and &mu; is in kg/m, so</span>
+  <span class="step"><i>F</i>/&mu; = (kg&thinsp;m/s&sup2;)/(kg/m) = <b>m&sup2;/s&sup2;</b> &mdash; which is a
+  <b>velocity squared</b>.&nbsp; <span class="why">&mdash; the units do not merely allow it, they force it: there is nothing else that
+  combination could be</span></span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">&part;&sup2;&psi;/&part;<i>t</i>&sup2; = <i>v</i>&sup2; &part;&sup2;&psi;/&part;<i>x</i>&sup2;</span>
+<p>The <b>wave equation</b>, with <i>v</i>&sup2; = <i>T</i><sub>h</sub>/&mu; for a string.&nbsp; Two things are worth seeing at once.
+<b>The speed came out of the string</b> &mdash; its tension and its mass per length &mdash; and nothing about the shaking appears in
+it.&nbsp; And <b>&psi; is deliberately not called <i>D</i></b>: the same equation turns up for sound, for light, for a rope and for a
+column of air, and every time it does, whatever is waving travels at the <i>v</i> that equation contains.</p></div>
+
+<h2>Looking ahead</h2>
+<p>You now have both halves: what a travelling wave must look like, <i>f</i>(<i>x</i> &minus; <i>vt</i>), and why a medium carries one at
+a speed of its own choosing.&nbsp; <b>Note 4</b> sends two of them at each other.&nbsp; A wave travelling right meets its own reflection
+travelling left, and the sum of the two does something neither one does alone: it stops moving, and only certain wavelengths survive.</p>
+
+<div class="ahead"><b>Where this sits.</b> Section 2 is Note 2's derivation done to a piece of string instead of a block &mdash; the same
+Newton's second law, the same "write the net force and see what it is proportional to". The difference is that a string has neighbours, so
+the restoring force comes from the <i>curvature</i> rather than from a spring, and the result is an equation in two variables instead of
+one.</div>
+
+<div class="callback"><span class="label">Back to your prediction</span><p><b>Tighter: faster.</b>&nbsp; <i>T</i><sub>h</sub> is on top of
+<i>v</i>&sup2; = <i>T</i><sub>h</sub>/&mu;.&nbsp; <b>Heavier string: slower.</b>&nbsp; &mu; is underneath.&nbsp; <b>Shaking faster: no
+change at all.</b>&nbsp; Neither the frequency nor the amplitude appears anywhere in the derivation &mdash; shake it faster and the
+wavelength shortens to keep &lambda;<i>f</i> equal to the speed the string already had.&nbsp; That is the same answer Note 1 got from a
+simulation and a ruler, and it is now a theorem rather than an observation.</p></div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M1_N3_Moving_Wave_And_Wave_Equation_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; both figures are there as frames and both derivations are blank, to fill in as we work them.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 1 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

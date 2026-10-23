@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N5 &mdash; The Doppler Effect</title>
+<style>
+  /* FLCC Physics note page — Module 1, Oscillations, Waves and Sound, Note 5
+     "The Doppler Effect".  LAST NOTE OF MODULE 1.
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-10-21j_M1_N5_Built_Module_1_Closed.md.
+
+     *** READ THIS BEFORE EDITING: MORE OF THIS NOTE IS CLAUDE'S THAN ANY OTHER IN THE
+     MODULE, AND THAT WAS ASKED FOR. ***
+
+     HIS INK IS FOUR LINES, on page 6 of the six-page "Complete" master:
+
+        f_o = f_s ( (v +/- v_o) / (v -/+ v_s) )
+        v = speed of sound
+        + : O moving towards
+        - : S moving towards
+
+     and nothing else.  No title, no synopsis, no figure, no derivation.  Cho's call of
+     2026-10-21 was that this should be its OWN note rather than a formula tacked onto a
+     note about standing waves, "so it can be taught rather than quoted" - moving source
+     and moving observer, worked both ways.  That decision is the authority for
+     everything here beyond those four lines, and the key says so in those words.
+
+     CLAUDE'S, AND FLAGGED IN THE KEY: the title, the synopsis, the hook and callback,
+     both section headings, both derivations and BOTH FIGURES.  HIS: the formula, the
+     sign convention, and the fact that v is the speed of sound rather than of anything
+     else.  The derivations are standard and they land exactly on his formula - they were
+     written to make the +/- and -/+ derivable rather than memorised, not to replace it.
+
+     THE SECTION HEADINGS ARE DELIBERATELY UNNUMBERED.  His sections 1, 2 and 3 are
+     Standing Waves, Energy and Power (Notes 4, 4a, 4b).  Giving this note a "4." would
+     be inventing a number he did not write.
+
+     FIGURE 2 IS DRAWN WITH v_s = v/2, which no ambulance does.  At a realistic v_s = v/10
+     the bunching is invisible on a page.  Said in the caption rather than left to be
+     discovered.
+
+     NO CALC FENCE, AND NOT A DEFERRAL: counting crests and one division.  Mirrors to the
+     partner course unchanged.  Directory-level trap stands - RUN THE MIRROR ON NAMED
+     FILES, because Notes 2a and 3 are in this folder.
+
+     NO HTML TAGS INSIDE <text>: bold inside a figure is <tspan font-weight="700">.
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.95rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  .disp{ display:block; margin:.6rem 0 .8rem; text-align:center; font-size:1.08rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 &middot; Oscillations, Waves and Sound</span><span>Note 5</span></div>
+<h1>The Doppler Effect</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>When a source or a listener is moving, the frequency that arrives is
+not the frequency that left.&nbsp; We work out the two cases separately and then write them as one formula.</div>
+
+<div class="hook"><span class="label">Before you read on &mdash; predict</span><p>An ambulance is coming towards you with its
+siren at a steady pitch.&nbsp; <b>(1)</b> Is the pitch you hear higher, lower, or the same as the pitch the <i>driver</i>
+hears?&nbsp; <b>(2)</b> As it gets closer and closer, does the pitch you hear keep climbing?&nbsp; <b>(3)</b> After it has
+passed, does the pitch keep falling?&nbsp; Write down your three answers.&nbsp; Two of these catch almost everybody.</p></div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N5 — Dr. Cho works through the note"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link at the bottom of this page) and fill in both figures and both
+  derivations as we work them.
+</div>
+
+<p>Every note in this module so far has had the source and the listener sitting still in the medium.&nbsp; Note 4b let the
+<i>intensity</i> fall off with distance, but the frequency that arrived was always the frequency that left.&nbsp; Now let one
+of them move.</p>
+
+<h2>A moving observer</h2>
+
+<p>Start with the easier half: the source stays put and <i>you</i> move.&nbsp; Nothing about the wave in space changes &mdash;
+the source is still sitting where it was, sending out a crest every <i>T</i> seconds.</p>
+
+<div class="fig">
+<svg viewBox="0 0 780 330" role="img" aria-label="A source at rest with evenly spaced wavefronts, and an observer running towards it.">
+<defs><marker id="n5a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n5a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n5a-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker><marker id="n5a-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d2601a"/></marker><marker id="n5a-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8ea8"/></marker><marker id="n5a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="n5a-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker></defs>
+<circle cx="230" cy="170" r="58" fill="none" stroke="#1636c8" stroke-width="1.8" opacity="0.85"/>
+<circle cx="230" cy="170" r="116" fill="none" stroke="#1636c8" stroke-width="1.8" opacity="0.85"/>
+<circle cx="230" cy="170" r="174" fill="none" stroke="#1636c8" stroke-width="1.8" opacity="0.85"/>
+<circle cx="230" cy="170" r="232" fill="none" stroke="#1636c8" stroke-width="1.8" opacity="0.85"/>
+<circle cx="230" cy="170" r="6" fill="#b3261e"/><line x1="241.0" y1="170.0" x2="249.0" y2="170.0" stroke="#b3261e" stroke-width="1.6"/><line x1="237.8" y1="162.2" x2="243.4" y2="156.6" stroke="#b3261e" stroke-width="1.6"/><line x1="230.0" y1="159.0" x2="230.0" y2="151.0" stroke="#b3261e" stroke-width="1.6"/><line x1="222.2" y1="162.2" x2="216.6" y2="156.6" stroke="#b3261e" stroke-width="1.6"/><line x1="219.0" y1="170.0" x2="211.0" y2="170.0" stroke="#b3261e" stroke-width="1.6"/><line x1="222.2" y1="177.8" x2="216.6" y2="183.4" stroke="#b3261e" stroke-width="1.6"/><line x1="230.0" y1="181.0" x2="230.0" y2="189.0" stroke="#b3261e" stroke-width="1.6"/><line x1="237.8" y1="177.8" x2="243.4" y2="183.4" stroke="#b3261e" stroke-width="1.6"/>
+<text x="230" y="216" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e">source at rest</text>
+<g stroke="#1d2b23" stroke-width="2" fill="none"><circle cx="640" cy="150" r="8" fill="#fff"/><line x1="640" y1="158" x2="640" y2="180"/><line x1="640" y1="164" x2="630" y2="172"/><line x1="640" y1="180" x2="633" y2="196"/><line x1="640" y1="180" x2="647" y2="196"/></g>
+<line x1="616" y1="166" x2="556" y2="166" stroke="#1e6b3c" stroke-width="2.6" marker-end="url(#n5a-green)"/>
+<text x="586" y="156" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1e6b3c"><tspan font-style='italic'>v</tspan><tspan font-size='10' baseline-shift='-4'>o</tspan></text>
+<text x="656" y="200" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">observer</text>
+<line x1="346" y1="170" x2="346" y2="242" stroke="#1636c8" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="404" y1="170" x2="404" y2="242" stroke="#1636c8" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="346.0" y1="242" x2="404.0" y2="242" stroke="#1636c8" stroke-width="1.8" marker-start="url(#n5a-blue)" marker-end="url(#n5a-blue)"/><text x="375.0" y="234" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1636c8">&lambda; = <tspan font-style='italic'>vT</tspan></text>
+<text x="760" y="40" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">the spacing in space is UNCHANGED</text>
+<text x="760" y="60" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">&mdash; the source has not moved</text>
+<text x="760" y="262" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1e6b3c">crests come past at <tspan font-style='italic'>v</tspan> + <tspan font-style='italic'>v</tspan><tspan font-size='10' baseline-shift='-4'>o</tspan></text>
+</svg>
+  <div class="fig-note">The source is at rest, so the crests sit in space exactly as they always did.&nbsp; The only thing that
+  has changed is how quickly the observer runs into them.</div>
+</div>
+
+<ol class="items tasks">
+  <li>A source at rest sends out a crest every <i>T</i> seconds.&nbsp; How far apart are the crests in space?</li>
+  <li>Now you run <i>towards</i> the source at <i>v</i><sub>o</sub>.&nbsp; How fast do the crests go past you, and so how many
+  do you meet each second?</li>
+  <li>Write <i>f</i><sub>o</sub>.&nbsp; What changes if you run <i>away</i> instead?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">1)&nbsp; In one period a crest travels <i>vT</i>, so the crests are</span>
+  <span class="step" style="text-align:center;font-size:1.1rem">&lambda; = <i>vT</i> =
+  <i>v</i>/<i>f</i><sub>s</sub></span>
+  <span class="step">apart &mdash; and the source is not moving, so <b>this does not change at all</b> in what follows.</span>
+  <span class="step">2)&nbsp; Relative to you the crests now approach at <i>v</i> + <i>v</i><sub>o</sub>.&nbsp; The number you
+  meet per second is that speed divided by the distance between them:</span>
+  <span class="step" style="text-align:center;font-size:1.1rem"><i>f</i><sub>o</sub> = (<i>v</i> +
+  <i>v</i><sub>o</sub>)/&lambda;</span>
+  <span class="step">3)&nbsp; Substituting &lambda; = <i>v</i>/<i>f</i><sub>s</sub>:</span>
+  <span class="step" style="text-align:center;font-size:1.14rem"><b><i>f</i><sub>o</sub> = <i>f</i><sub>s</sub> (<i>v</i> +
+  <i>v</i><sub>o</sub>)/<i>v</i></b></span>
+  <span class="step">Running away reverses the sign: <i>f</i><sub>o</sub> = <i>f</i><sub>s</sub>(<i>v</i> &minus;
+  <i>v</i><sub>o</sub>)/<i>v</i>.&nbsp; <span class="why">&mdash; towards raises it, away lowers it. Hold on to that sentence;
+  it is the whole sign convention in the end</span></span>
+</div></div></div>
+
+<h2>A moving source</h2>
+
+<p>Now the other half, and it is <b>physically a different thing</b> even though the formula will come out looking
+symmetric.&nbsp; This time you stand still and the source moves while it is sounding &mdash; so each crest leaves from a
+different place.</p>
+
+<div class="fig">
+<svg viewBox="0 0 780 380" role="img" aria-label="A source moving to the right, with the wavefronts it emitted one period apart bunched ahead of it and spread out behind.">
+<defs><marker id="n5b-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n5b-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n5b-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker><marker id="n5b-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d2601a"/></marker><marker id="n5b-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8ea8"/></marker><marker id="n5b-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="n5b-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker></defs>
+<line x1="70" y1="175" x2="402" y2="175" stroke="#5c6b62" stroke-width="1.1" stroke-dasharray="5 5"/>
+<circle cx="230" cy="175" r="144" fill="none" stroke="#1636c8" stroke-width="1.8" opacity="0.9"/>
+<circle cx="254" cy="175" r="96" fill="none" stroke="#1636c8" stroke-width="1.8" opacity="0.9"/>
+<circle cx="278" cy="175" r="48" fill="none" stroke="#1636c8" stroke-width="1.8" opacity="0.9"/>
+<circle cx="230" cy="175" r="3.6" fill="#5c6b62"/>
+<circle cx="254" cy="175" r="3.6" fill="#5c6b62"/>
+<circle cx="278" cy="175" r="3.6" fill="#5c6b62"/>
+<circle cx="302.0" cy="175" r="6" fill="#b3261e"/><line x1="313.0" y1="175.0" x2="321.0" y2="175.0" stroke="#b3261e" stroke-width="1.6"/><line x1="309.8" y1="167.2" x2="315.4" y2="161.6" stroke="#b3261e" stroke-width="1.6"/><line x1="302.0" y1="164.0" x2="302.0" y2="156.0" stroke="#b3261e" stroke-width="1.6"/><line x1="294.2" y1="167.2" x2="288.6" y2="161.6" stroke="#b3261e" stroke-width="1.6"/><line x1="291.0" y1="175.0" x2="283.0" y2="175.0" stroke="#b3261e" stroke-width="1.6"/><line x1="294.2" y1="182.8" x2="288.6" y2="188.4" stroke="#b3261e" stroke-width="1.6"/><line x1="302.0" y1="186.0" x2="302.0" y2="194.0" stroke="#b3261e" stroke-width="1.6"/><line x1="309.8" y1="182.8" x2="315.4" y2="188.4" stroke="#b3261e" stroke-width="1.6"/>
+<line x1="324" y1="175" x2="378" y2="175" stroke="#b3261e" stroke-width="2.6" marker-end="url(#n5b-red)"/>
+<text x="354.0" y="162" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e"><tspan font-style='italic'>v</tspan><tspan font-size='10' baseline-shift='-4'>s</tspan></text>
+<line x1="350" y1="175" x2="350" y2="313" stroke="#d2601a" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="374" y1="175" x2="374" y2="313" stroke="#d2601a" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="86" y1="175" x2="86" y2="313" stroke="#0f8ea8" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="158" y1="175" x2="158" y2="313" stroke="#0f8ea8" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="350.0" y1="335" x2="374.0" y2="335" stroke="#d2601a" stroke-width="1.8" marker-start="url(#n5b-orange)" marker-end="url(#n5b-orange)"/><text x="362.0" y="327" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#d2601a">&lambda;<tspan font-size='10' baseline-shift='-4'>ahead</tspan> = (<tspan font-style='italic'>v</tspan> &minus; <tspan font-style='italic'>v</tspan><tspan font-size='10' baseline-shift='-4'>s</tspan>)<tspan font-style='italic'>T</tspan></text>
+<line x1="86.0" y1="335" x2="158.0" y2="335" stroke="#0f8ea8" stroke-width="1.8" marker-start="url(#n5b-cyan)" marker-end="url(#n5b-cyan)"/><text x="122.0" y="327" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#0f8ea8">&lambda;<tspan font-size='10' baseline-shift='-4'>behind</tspan> = (<tspan font-style='italic'>v</tspan> + <tspan font-style='italic'>v</tspan><tspan font-size='10' baseline-shift='-4'>s</tspan>)<tspan font-style='italic'>T</tspan></text>
+<text x="470" y="86" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#d2601a">ahead: the crests pile up</text>
+<text x="470" y="106" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#d2601a">&mdash; a HIGHER frequency</text>
+<text x="470" y="236" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f8ea8">behind: they spread out</text>
+<text x="470" y="256" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f8ea8">&mdash; a LOWER frequency</text>
+<text x="470" y="160" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">the crests still travel at</text>
+<text x="470" y="178" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62"><tspan font-style='italic'>v</tspan> either way &mdash; the</text>
+<text x="470" y="196" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">medium sets that, not the source</text>
+<circle cx="476" cy="296" r="3.6" fill="#5c6b62"/>
+<text x="490" y="301" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">where it was, one period apart</text>
+</svg>
+  <div class="fig-note">Each circle is a crest, drawn from the point the source was at when it left, and every one has been
+  spreading at <i>v</i> ever since.&nbsp; Ahead of the source they are squeezed together; behind, stretched apart.&nbsp; Drawn
+  with <i>v</i><sub>s</sub> = <i>v</i>/2 so you can see it &mdash; a real ambulance is nearer <i>v</i>/10, and the effect is
+  correspondingly smaller.</div>
+</div>
+
+<ol class="items tasks" start="4">
+  <li>In one period the wave travels <i>vT</i>, and the source itself travels <i>v</i><sub>s</sub><i>T</i>.&nbsp; So how far
+  apart are the crests <i>ahead</i> of the source?</li>
+  <li>How fast do those crests travel towards you?&nbsp; Turn the new wavelength into the frequency you hear.</li>
+  <li>And behind the source?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <span class="step">4)&nbsp; The source chases its own crest and eats into the gap:</span>
+  <span class="step" style="text-align:center;font-size:1.1rem">&lambda;&prime; = <i>vT</i> &minus;
+  <i>v</i><sub>s</sub><i>T</i> = (<i>v</i> &minus; <i>v</i><sub>s</sub>)/<i>f</i><sub>s</sub></span>
+  <span class="step"><b>The wavelength itself has changed.</b>&nbsp; <span class="why">&mdash; that is what makes this case
+  different from the first one, where the wave in space was untouched and only your crossing rate changed</span></span>
+  <span class="step">5)&nbsp; They still travel at <i>v</i>: the medium sets the speed of a sound wave, not whatever is making
+  it.&nbsp; So</span>
+  <span class="step" style="text-align:center;font-size:1.14rem"><b><i>f</i><sub>o</sub> = <i>v</i>/&lambda;&prime; =
+  <i>f</i><sub>s</sub> <i>v</i>/(<i>v</i> &minus; <i>v</i><sub>s</sub>)</b></span>
+  <span class="step">6)&nbsp; Behind it the gap is stretched instead, &lambda;&prime; = (<i>v</i> +
+  <i>v</i><sub>s</sub>)/<i>f</i><sub>s</sub>, giving <i>f</i><sub>o</sub> = <i>f</i><sub>s</sub><i>v</i>/(<i>v</i> +
+  <i>v</i><sub>s</sub>).&nbsp; <span class="why">&mdash; towards raises it, away lowers it: the same sentence again</span></span>
+</div></div></div>
+
+<h2>Both at once</h2>
+
+<ol class="items tasks" start="7">
+  <li>Put the two results into a single formula, and say what decides each sign.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev3" data-label="Show the working">Show the working</button><div class="rbody" id="rev3" hidden><div class="eq">
+  <span class="step">7)&nbsp; The observer&rsquo;s motion acts on the <b>numerator</b> and the source&rsquo;s on the
+  <b>denominator</b>, so both at once gives</span>
+  <span class="step" style="text-align:center;font-size:1.16rem"><b><i>f</i><sub>o</sub> = <i>f</i><sub>s</sub>
+  [ (<i>v</i> &plusmn; <i>v</i><sub>o</sub>) / (<i>v</i> &#8723; <i>v</i><sub>s</sub>) ]</b></span>
+  <span class="step">with <i>v</i> the <b>speed of sound</b>, and</span>
+  <span class="step"><b>+</b> : O moving towards&nbsp;&nbsp;&nbsp;&nbsp; <b>&minus;</b> : S moving towards</span>
+  <span class="step">If you ever cannot remember which way round the signs go, you do not have to: <b>whichever one is moving
+  towards the other, the frequency goes up.</b>&nbsp; Pick the sign that makes <i>f</i><sub>o</sub> bigger.&nbsp;
+  <span class="why">&mdash; the top sign and the bottom sign are opposite for exactly this reason: a plus on top and a minus
+  underneath both make the fraction larger</span></span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big"><i>f</i><sub>o</sub> = <i>f</i><sub>s</sub> [ (<i>v</i> &plusmn; <i>v</i><sub>o</sub>) / (<i>v</i>
+&#8723; <i>v</i><sub>s</sub>) ]</span>
+<p><i>v</i> = speed of sound.&nbsp; <b>+ : O moving towards.&nbsp;&nbsp; &minus; : S moving towards.</b><br>
+Notice what is <i>not</i> in it: distance.&nbsp; How far away the ambulance is makes no difference to the pitch at all &mdash;
+only how fast it is closing on you.&nbsp; That is the single most useful thing on this page, and it is also the thing almost
+everyone gets wrong the first time.</p></div>
+
+<h2>Looking ahead</h2>
+<p>That closes Module 1.&nbsp; You started with a wave on a string in a simulation and a ruler, and you finish holding the
+equation of motion for a mechanical wave, the condition that picks out a guitar&rsquo;s notes, the energy an oscillation
+carries, the way that energy thins with distance, and what happens to all of it when things start moving.</p>
+
+<div class="ahead"><b>Where this sits.</b> Notes 1 to 3 built the wave, Note 4 trapped it, Notes 4a and 4b followed its
+energy out into the room, and this note moves the furniture. One thread runs through every one of them: <b>the medium sets the
+speed.</b> It set v = &radic;(T/&mu;) in Note 3, it decided which wavelengths fit in Note 4, it carried the intensity outward
+in Note 4b, and here it is again &mdash; the crests travel at v whatever the source is doing, which is exactly why a moving
+source has to change the wavelength instead.</div>
+
+<div class="callback"><span class="label">Back to your prediction</span><p><b>(1) Higher than the driver hears.</b>&nbsp; The
+driver is moving with the siren, so for her nothing is approaching anything.&nbsp; <b>(2) No &mdash; it stays
+constant.</b>&nbsp; Look at the formula: there is no <i>r</i> in it.&nbsp; At a steady speed towards you the pitch is steady
+and high, however close it gets.&nbsp; <b>(3) No &mdash; also constant, and low.</b>&nbsp; The entire change happens
+<i>during</i> the pass, not before or after it.&nbsp; <span style="color:#5c6b62">(Strictly, what counts is the part of
+<i>v</i><sub>s</sub> pointing along the line to you, which sweeps from +<i>v</i><sub>s</sub> to &minus;<i>v</i><sub>s</sub> as
+it goes by &mdash; so the drop is a fast slide rather than a step, and at the instant it is level with you, you hear its true
+pitch.)</span></p></div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M1_N5_The_Doppler_Effect_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; both figures are there as frames and all three derivations are blank, to fill in as we work them.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 1 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

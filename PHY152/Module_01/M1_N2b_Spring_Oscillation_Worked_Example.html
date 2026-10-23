@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N2b &mdash; Spring Oscillation: A Worked Example</title>
+<style>
+  /* FLCC Physics note page — Module 1, Oscillations, Waves and Sound, Note 2b
+     "Spring Oscillation: A Worked Example".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-10-21e_M1_N2b_Built.md.
+
+     THIS NOTE IS A SPLIT, AND IT WAS NEARLY INVISIBLE.  Its source is the .docx of the
+     Note 2a master — the SAME printed sheet — which carries 726 Word pen strokes that
+     are NOT 2a's derivation.  They are this worked problem, inked the same evening in
+     red only.  A session that reads the PDF of that note and stops sees the theory and
+     never knows the example exists; a session that scans only PDFs sees neither, since
+     Word ink is invisible to every PDF tool.  Cho's call 2026-10-21 was to split them.
+
+     THE TITLE AND THE SYNOPSIS ARE CLAUDE'S.  The printed sheet gives this material no
+     heading of its own — it carries 2a's title and the label "Spring Oscillation:".
+     The problem statement, every step of the working and both figures are his.
+
+     THE SIGN OF phi.  His board work writes phi = cos-1(15/25) = +0.927 rad, then solves
+     and gets omega = -0.927/0.3 = -3.09 rad/s and carries 3.09 forward.  Every number
+     after that is right.  This page writes phi = -0.927 instead, because the block is
+     moving in +x at t = 0, which forces sin(phi) < 0 — and then omega comes out +3.09
+     with no sign to discard.  SAME ANSWERS, consistent signs.  Flagged in the key's
+     .watch box rather than changed quietly, because which version he wants on the board
+     is his call.
+
+     NO CALC FENCE: there is no calculus in this note.  It is the algebra of
+     x = A cos(wt + phi) and a_max = A w^2, which survives the mirror unchanged.
+
+     FIGURES ARE TRANSCRIPTIONS of his sketch and his graph — see figs_m1n2b.py.  The
+     handout's graph is BARE AXES, because drawing the curve is question 1.
+
+     NO HTML TAGS INSIDE <text>: bold inside a figure is <tspan font-weight="700">.
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 &middot; Oscillations, Waves and Sound</span><span>Note 2b</span></div>
+<h1>Spring Oscillation: A Worked Example</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>One problem, worked all the way through.&nbsp; Notes 2 and 2a built the theory
+of simple harmonic motion; this is what it looks like when you are handed two measurements and asked for a graph and a force.&nbsp; Nothing
+new is introduced &mdash; every tool used here is already in those two notes.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>The block in the problem below is oscillating.&nbsp; At
+which moment is the <b>force on it largest</b>: when it is whipping through the middle at top speed, or when it has stopped dead at the far
+end of its travel?&nbsp; Write down your answer and one sentence of reason.&nbsp; Part 2 settles it.</p></div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N2b — Dr. Cho works through the example"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link at the bottom of this page) and work the problem as it goes.
+</div>
+
+<div class="problem"><span class="label">The problem</span>
+<p>At <i>t</i> = 0, a 500 g block oscillating on a spring is observed moving to the right at <i>x</i> = 15 cm.&nbsp; It reaches a maximum
+displacement of 25 cm at <i>t</i> = 0.3 s.</p>
+<ol>
+  <li>Draw a position&ndash;time graph for one cycle.</li>
+  <li>What is the maximum force on the block, and when does this occur?</li>
+</ol></div>
+
+<div class="fig">
+<svg viewBox="0 0 700 250" role="img" aria-label="A block on a spring attached to a wall, moving to the right.">
+<defs><marker id="n2b-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n2b-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n2b-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker></defs>
+<line x1="60" y1="38" x2="60" y2="140" stroke="#1d2b23" stroke-width="3"/>
+<line x1="60" y1="42" x2="49" y2="34" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="54" x2="49" y2="46" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="66" x2="49" y2="58" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="78" x2="49" y2="70" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="90" x2="49" y2="82" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="102" x2="49" y2="94" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="114" x2="49" y2="106" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="126" x2="49" y2="118" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="138" x2="49" y2="130" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="60" y1="140" x2="650" y2="140" stroke="#1d2b23" stroke-width="3"/>
+<polyline points="60.0,110.0 62.8,117.5 65.6,123.0 68.4,125.0 71.2,123.0 74.1,117.5 76.9,110.0 79.7,102.5 82.5,97.0 85.3,95.0 88.1,97.0 90.9,102.5 93.8,110.0 96.6,117.5 99.4,123.0 102.2,125.0 105.0,123.0 107.8,117.5 110.6,110.0 113.4,102.5 116.2,97.0 119.1,95.0 121.9,97.0 124.7,102.5 127.5,110.0 130.3,117.5 133.1,123.0 135.9,125.0 138.8,123.0 141.6,117.5 144.4,110.0 147.2,102.5 150.0,97.0 152.8,95.0 155.6,97.0 158.4,102.5 161.2,110.0 164.1,117.5 166.9,123.0 169.7,125.0 172.5,123.0 175.3,117.5 178.1,110.0 180.9,102.5 183.8,97.0 186.6,95.0 189.4,97.0 192.2,102.5 195.0,110.0 197.8,117.5 200.6,123.0 203.4,125.0 206.2,123.0 209.1,117.5 211.9,110.0 214.7,102.5 217.5,97.0 220.3,95.0 223.1,97.0 225.9,102.5 228.8,110.0 231.6,117.5 234.4,123.0 237.2,125.0 240.0,123.0 242.8,117.5 245.6,110.0 248.4,102.5 251.2,97.0 254.1,95.0 256.9,97.0 259.7,102.5 262.5,110.0 265.3,117.5 268.1,123.0 270.9,125.0 273.8,123.0 276.6,117.5 279.4,110.0 282.2,102.5 285.0,97.0 287.8,95.0 290.6,97.0 293.4,102.5 296.2,110.0 299.1,117.5 301.9,123.0 304.7,125.0 307.5,123.0 310.3,117.5 313.1,110.0 315.9,102.5 318.8,97.0 321.6,95.0 324.4,97.0 327.2,102.5 330.0,110.0" fill="none" stroke="#1636c8" stroke-width="2" stroke-linejoin="round"/>
+<rect x="330" y="84" width="86" height="56" fill="#fff" stroke="#1636c8" stroke-width="2.4"/>
+<text x="373.0" y="117.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">500 g</text>
+<line x1="432" y1="112.0" x2="508" y2="112.0" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n2b-red)"/>
+<text x="470" y="100.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e">moving</text>
+<line x1="60" y1="174" x2="650" y2="174" stroke="#1d2b23" stroke-width="1.6" marker-end="url(#n2b-ink)"/>
+<text x="654" y="179" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23" font-style="italic">x</text>
+<line x1="373.0" y1="140" x2="373.0" y2="174" stroke="#5c6b62" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="253.0" y1="174" x2="253.0" y2="165" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="253.0" y="193" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">0</text>
+<line x1="253.0" y1="200" x2="373.0" y2="200" stroke="#1636c8" stroke-width="1.8" marker-start="url(#n2b-blue)" marker-end="url(#n2b-blue)"/>
+<text x="313.0" y="218" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1636c8">x = 15 cm at t = 0</text>
+</svg>
+  <div class="fig-note">The two things you are given: where it is at <i>t</i> = 0, and which way it is going.&nbsp; <b>The direction is not
+  decoration</b> &mdash; it is what fixes the phase, and it is the only thing in the problem that does.</div>
+</div>
+
+<h2>Part 1 &mdash; the graph</h2>
+<ol class="items tasks">
+  <li>Write the general form of the position of a simple harmonic oscillator.&nbsp; Which of its three constants does the problem hand you
+  straight away?</li>
+  <li>Use the position at <i>t</i> = 0 to find the phase constant &phi;.&nbsp; There are two angles with the right cosine &mdash; what in the
+  problem tells you which one?</li>
+  <li>Use the fact that the maximum displacement happens at <i>t</i> = 0.3 s to find &omega;.</li>
+  <li>Turn &omega; into <i>f</i> and <i>T</i>, and sketch one full cycle starting from <i>t</i> = 0.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">1)&nbsp; <b><i>x</i>(<i>t</i>) = <i>A</i> cos(&omega;<i>t</i> + &phi;)</b>.&nbsp; The <b>amplitude</b> is given:
+  <i>A</i> = <b>25 cm</b>, because that is what "maximum displacement" means.&nbsp; &omega; and &phi; are what you have to find.</span>
+  <span class="step">2)&nbsp; At <i>t</i> = 0: <i>x</i>(0) = <i>A</i> cos&thinsp;&phi;, so 15 = 25 cos&thinsp;&phi; and
+  cos&thinsp;&phi; = 0.6, giving &phi; = &plusmn;0.927 rad.</span>
+  <span class="step">&nbsp; &nbsp; <b>It is moving to the right</b>, so <i>v</i>(0) &gt; 0.&nbsp; And <i>v</i> = &minus;<i>A</i>&omega;
+  sin(&omega;<i>t</i>+&phi;), so <i>v</i>(0) = &minus;<i>A</i>&omega; sin&thinsp;&phi; &gt; 0 needs sin&thinsp;&phi; &lt; 0.&nbsp; So</span>
+  <span class="step" style="text-align:center;font-size:1.1rem"><b>&phi; = &minus;0.927 rad</b></span>
+  <span class="step">3)&nbsp; The maximum displacement is where the cosine equals 1, i.e. where its argument is zero:</span>
+  <span class="step">&omega;(0.3) + (&minus;0.927) = 0&nbsp; &rarr;&nbsp; <b>&omega; = 0.927/0.3 = 3.09 rad/s</b></span>
+  <span class="step">4)&nbsp; <i>f</i> = &omega;/2&pi; = <b>0.492 Hz</b> and <i>T</i> = 1/<i>f</i> = 2&pi;/&omega; = <b>2.0 s</b>.&nbsp;
+  So the graph starts at 15 cm climbing, peaks at 25 cm at 0.3 s, and repeats 2.0 s later at 2.33 s.</span>
+</div></div></div>
+
+<div class="fig">
+<svg viewBox="0 0 700 360" role="img" aria-label="Position against time for one cycle of the oscillation.">
+<defs><marker id="n2b-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n2b-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n2b-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker></defs>
+<line x1="64" y1="280.8" x2="670" y2="280.8" stroke="#d7e2da" stroke-width="1"/>
+<line x1="64" y1="234.5" x2="670" y2="234.5" stroke="#d7e2da" stroke-width="1"/>
+<line x1="64" y1="165.0" x2="670" y2="165.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="64" y1="95.5" x2="670" y2="95.5" stroke="#d7e2da" stroke-width="1"/>
+<line x1="64" y1="49.2" x2="670" y2="49.2" stroke="#d7e2da" stroke-width="1"/>
+<line x1="64" y1="165.0" x2="670" y2="165.0" stroke="#1d2b23" stroke-width="1.8" marker-end="url(#n2b-ink)"/>
+<line x1="72" y1="26" x2="72" y2="314" stroke="#1d2b23" stroke-width="1.8"/>
+<text x="674" y="170.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1d2b23">t (s)</text>
+<text x="60" y="28" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1d2b23">x (cm)</text>
+<line x1="66" y1="49.2" x2="78" y2="49.2" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="60" y="54.166666666666664" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">25</text>
+<line x1="66" y1="95.5" x2="78" y2="95.5" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="60" y="100.5" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">15</text>
+<line x1="66" y1="280.8" x2="78" y2="280.8" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="60" y="285.8333333333333" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">&minus;25</text>
+<polyline points="72.0,95.5 73.0,94.3 74.0,93.2 75.0,92.0 76.0,90.9 77.0,89.8 78.0,88.7 79.0,87.6 80.0,86.5 81.0,85.4 82.0,84.4 83.0,83.3 84.0,82.3 85.0,81.3 86.0,80.3 87.0,79.3 87.9,78.3 88.9,77.4 89.9,76.4 90.9,75.5 91.9,74.6 92.9,73.7 93.9,72.8 94.9,71.9 95.9,71.0 96.9,70.2 97.9,69.3 98.9,68.5 99.9,67.7 100.9,66.9 101.9,66.2 102.9,65.4 103.9,64.7 104.9,64.0 105.9,63.2 106.9,62.6 107.9,61.9 108.9,61.2 109.9,60.6 110.9,60.0 111.9,59.3 112.9,58.8 113.9,58.2 114.9,57.6 115.9,57.1 116.8,56.6 117.8,56.1 118.8,55.6 119.8,55.1 120.8,54.6 121.8,54.2 122.8,53.8 123.8,53.4 124.8,53.0 125.8,52.6 126.8,52.3 127.8,52.0 128.8,51.7 129.8,51.4 130.8,51.1 131.8,50.8 132.8,50.6 133.8,50.4 134.8,50.2 135.8,50.0 136.8,49.8 137.8,49.7 138.8,49.6 139.8,49.4 140.8,49.4 141.8,49.3 142.8,49.2 143.8,49.2 144.8,49.2 145.8,49.2 146.7,49.2 147.7,49.2 148.7,49.3 149.7,49.4 150.7,49.4 151.7,49.6 152.7,49.7 153.7,49.8 154.7,50.0 155.7,50.2 156.7,50.4 157.7,50.6 158.7,50.9 159.7,51.1 160.7,51.4 161.7,51.7 162.7,52.0 163.7,52.3 164.7,52.7 165.7,53.0 166.7,53.4 167.7,53.8 168.7,54.2 169.7,54.7 170.7,55.1 171.7,55.6 172.7,56.1 173.7,56.6 174.7,57.1 175.7,57.7 176.6,58.2 177.6,58.8 178.6,59.4 179.6,60.0 180.6,60.6 181.6,61.3 182.6,61.9 183.6,62.6 184.6,63.3 185.6,64.0 186.6,64.7 187.6,65.5 188.6,66.2 189.6,67.0 190.6,67.8 191.6,68.6 192.6,69.4 193.6,70.2 194.6,71.1 195.6,71.9 196.6,72.8 197.6,73.7 198.6,74.6 199.6,75.5 200.6,76.5 201.6,77.4 202.6,78.4 203.6,79.4 204.6,80.4 205.6,81.4 206.5,82.4 207.5,83.4 208.5,84.5 209.5,85.5 210.5,86.6 211.5,87.7 212.5,88.8 213.5,89.9 214.5,91.0 215.5,92.1 216.5,93.3 217.5,94.4 218.5,95.6 219.5,96.7 220.5,97.9 221.5,99.1 222.5,100.3 223.5,101.6 224.5,102.8 225.5,104.0 226.5,105.3 227.5,106.5 228.5,107.8 229.5,109.1 230.5,110.4 231.5,111.6 232.5,113.0 233.5,114.3 234.5,115.6 235.5,116.9 236.4,118.2 237.4,119.6 238.4,120.9 239.4,122.3 240.4,123.6 241.4,125.0 242.4,126.4 243.4,127.8 244.4,129.2 245.4,130.6 246.4,132.0 247.4,133.4 248.4,134.8 249.4,136.2 250.4,137.6 251.4,139.0 252.4,140.4 253.4,141.9 254.4,143.3 255.4,144.7 256.4,146.2 257.4,147.6 258.4,149.1 259.4,150.5 260.4,152.0 261.4,153.4 262.4,154.9 263.4,156.3 264.4,157.8 265.4,159.3 266.3,160.7 267.3,162.2 268.3,163.7 269.3,165.1 270.3,166.6 271.3,168.0 272.3,169.5 273.3,171.0 274.3,172.4 275.3,173.9 276.3,175.3 277.3,176.8 278.3,178.2 279.3,179.7 280.3,181.1 281.3,182.6 282.3,184.0 283.3,185.5 284.3,186.9 285.3,188.3 286.3,189.8 287.3,191.2 288.3,192.6 289.3,194.0 290.3,195.5 291.3,196.9 292.3,198.3 293.3,199.7 294.3,201.1 295.3,202.4 296.2,203.8 297.2,205.2 298.2,206.6 299.2,207.9 300.2,209.3 301.2,210.6 302.2,212.0 303.2,213.3 304.2,214.6 305.2,215.9 306.2,217.2 307.2,218.5 308.2,219.8 309.2,221.1 310.2,222.4 311.2,223.7 312.2,224.9 313.2,226.2 314.2,227.4 315.2,228.6 316.2,229.8 317.2,231.1 318.2,232.2 319.2,233.4 320.2,234.6 321.2,235.8 322.2,236.9 323.2,238.1 324.2,239.2 325.2,240.3 326.1,241.4 327.1,242.5 328.1,243.6 329.1,244.7 330.1,245.7 331.1,246.8 332.1,247.8 333.1,248.8 334.1,249.8 335.1,250.8 336.1,251.8 337.1,252.7 338.1,253.7 339.1,254.6 340.1,255.5 341.1,256.4 342.1,257.3 343.1,258.2 344.1,259.1 345.1,259.9 346.1,260.7 347.1,261.5 348.1,262.3 349.1,263.1 350.1,263.9 351.1,264.7 352.1,265.4 353.1,266.1 354.1,266.8 355.1,267.5 356.1,268.2 357.0,268.8 358.0,269.5 359.0,270.1 360.0,270.7 361.0,271.3 362.0,271.9 363.0,272.4 364.0,273.0 365.0,273.5 366.0,274.0 367.0,274.5 368.0,274.9 369.0,275.4 370.0,275.8 371.0,276.2 372.0,276.6 373.0,277.0 374.0,277.4 375.0,277.7 376.0,278.1 377.0,278.4 378.0,278.7 379.0,278.9 380.0,279.2 381.0,279.4 382.0,279.6 383.0,279.8 384.0,280.0 385.0,280.2 386.0,280.3 386.9,280.5 387.9,280.6 388.9,280.7 389.9,280.7 390.9,280.8 391.9,280.8 392.9,280.8 393.9,280.8 394.9,280.8 395.9,280.8 396.9,280.7 397.9,280.6 398.9,280.5 399.9,280.4 400.9,280.3 401.9,280.1 402.9,280.0 403.9,279.8 404.9,279.6 405.9,279.4 406.9,279.1 407.9,278.9 408.9,278.6 409.9,278.3 410.9,278.0 411.9,277.6 412.9,277.3 413.9,276.9 414.9,276.5 415.9,276.1 416.8,275.7 417.8,275.3 418.8,274.8 419.8,274.4 420.8,273.9 421.8,273.4 422.8,272.8 423.8,272.3 424.8,271.7 425.8,271.2 426.8,270.6 427.8,269.9 428.8,269.3 429.8,268.7 430.8,268.0 431.8,267.3 432.8,266.6 433.8,265.9 434.8,265.2 435.8,264.5 436.8,263.7 437.8,262.9 438.8,262.2 439.8,261.4 440.8,260.5 441.8,259.7 442.8,258.8 443.8,258.0 444.8,257.1 445.8,256.2 446.7,255.3 447.7,254.4 448.7,253.4 449.7,252.5 450.7,251.5 451.7,250.5 452.7,249.6 453.7,248.5 454.7,247.5 455.7,246.5 456.7,245.5 457.7,244.4 458.7,243.3 459.7,242.2 460.7,241.1 461.7,240.0 462.7,238.9 463.7,237.8 464.7,236.6 465.7,235.5 466.7,234.3 467.7,233.1 468.7,232.0 469.7,230.8 470.7,229.5 471.7,228.3 472.7,227.1 473.7,225.9 474.7,224.6 475.7,223.4 476.6,222.1 477.6,220.8 478.6,219.5 479.6,218.2 480.6,216.9 481.6,215.6 482.6,214.3 483.6,213.0 484.6,211.6 485.6,210.3 486.6,208.9 487.6,207.6 488.6,206.2 489.6,204.9 490.6,203.5 491.6,202.1 492.6,200.7 493.6,199.3 494.6,197.9 495.6,196.5 496.6,195.1 497.6,193.7 498.6,192.3 499.6,190.8 500.6,189.4 501.6,188.0 502.6,186.6 503.6,185.1 504.6,183.7 505.6,182.2 506.5,180.8 507.5,179.3 508.5,177.9 509.5,176.4 510.5,175.0 511.5,173.5 512.5,172.1 513.5,170.6 514.5,169.1 515.5,167.7 516.5,166.2 517.5,164.8 518.5,163.3 519.5,161.8 520.5,160.4 521.5,158.9 522.5,157.4 523.5,156.0 524.5,154.5 525.5,153.1 526.5,151.6 527.5,150.2 528.5,148.7 529.5,147.3 530.5,145.8 531.5,144.4 532.5,143.0 533.5,141.5 534.5,140.1 535.5,138.7 536.4,137.2 537.4,135.8 538.4,134.4 539.4,133.0 540.4,131.6 541.4,130.2 542.4,128.8 543.4,127.4 544.4,126.1 545.4,124.7 546.4,123.3 547.4,122.0 548.4,120.6 549.4,119.3 550.4,117.9 551.4,116.6 552.4,115.3 553.4,113.9 554.4,112.6 555.4,111.3 556.4,110.0 557.4,108.8 558.4,107.5 559.4,106.2 560.4,105.0 561.4,103.7 562.4,102.5 563.4,101.3 564.4,100.0 565.4,98.8 566.3,97.6 567.3,96.5 568.3,95.3 569.3,94.1 570.3,93.0 571.3,91.8 572.3,90.7 573.3,89.6 574.3,88.5 575.3,87.4 576.3,86.3 577.3,85.2 578.3,84.2 579.3,83.2 580.3,82.1 581.3,81.1 582.3,80.1 583.3,79.1 584.3,78.1 585.3,77.2 586.3,76.2 587.3,75.3 588.3,74.4 589.3,73.5 590.3,72.6 591.3,71.7 592.3,70.9 593.3,70.0 594.3,69.2 595.3,68.4 596.2,67.6 597.2,66.8 598.2,66.0 599.2,65.3 600.2,64.5 601.2,63.8 602.2,63.1 603.2,62.4 604.2,61.8 605.2,61.1 606.2,60.5 607.2,59.8 608.2,59.2 609.2,58.7 610.2,58.1 611.2,57.5 612.2,57.0 613.2,56.5 614.2,56.0 615.2,55.5 616.2,55.0 617.2,54.6 618.2,54.1 619.2,53.7 620.2,53.3 621.2,52.9 622.2,52.6 623.2,52.2 624.2,51.9 625.2,51.6 626.1,51.3 627.1,51.0 628.1,50.8 629.1,50.6 630.1,50.3 631.1,50.1 632.1,50.0 633.1,49.8 634.1,49.7 635.1,49.5 636.1,49.4 637.1,49.3 638.1,49.3 639.1,49.2 640.1,49.2 641.1,49.2 642.1,49.2 643.1,49.2 644.1,49.2 645.1,49.3 646.1,49.4 647.1,49.5 648.1,49.6 649.1,49.7 650.1,49.9 651.1,50.0 652.1,50.2 653.1,50.4 654.1,50.7 655.1,50.9 656.0,51.2 657.0,51.4 658.0,51.7 659.0,52.1 660.0,52.4 661.0,52.7 662.0,53.1 663.0,53.5 664.0,53.9 665.0,54.3 666.0,54.8 667.0,55.2 668.0,55.7 669.0,56.2" fill="none" stroke="#b3261e" stroke-width="2.4"/>
+<circle cx="72.0" cy="95.5" r="4.5" fill="#1636c8"/>
+<line x1="145.2" y1="49.2" x2="145.2" y2="165.0" stroke="#1636c8" stroke-width="1.3" stroke-dasharray="4 4"/>
+<text x="145.22448979591837" y="185.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8">0.3</text>
+<text x="153.22448979591837" y="41.166666666666664" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8">max displacement</text>
+<line x1="641.4" y1="49.2" x2="641.4" y2="165.0" stroke="#1636c8" stroke-width="1.3" stroke-dasharray="4 4"/>
+<text x="641.3804382790213" y="185.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8">2.33</text>
+<line x1="145.2" y1="294.7" x2="641.4" y2="294.7" stroke="#b3261e" stroke-width="1.8" marker-start="url(#n2b-red)" marker-end="url(#n2b-red)"/>
+<text x="393.3024640374698" y="281.73333333333335" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e">T = 2.0 s</text>
+</svg>
+  <div class="fig-note">One cycle.&nbsp; It starts at 15 cm <b>on the way up</b>, not at the peak and not at zero &mdash; that is the phase
+  constant doing its job.</div>
+</div>
+
+<h2>Part 2 &mdash; the maximum force</h2>
+<ol class="items tasks" start="5">
+  <li>You have <i>A</i> and &omega;.&nbsp; Write the acceleration of a simple harmonic oscillator and read off its largest value.&nbsp; Mind
+  the units.</li>
+  <li>Turn that into a force, and say <b>when</b> it happens &mdash; both the first time and every time after.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <span class="step">5)&nbsp; From Note 2a, <i>a</i> = &minus;<i>A</i>&omega;&sup2; cos(&omega;<i>t</i>+&phi;), so the acceleration is
+  largest in size when the cosine is &plusmn;1:</span>
+  <span class="step"><b><i>a</i><sub>max</sub> = <i>A</i>&omega;&sup2;</b> = (0.25 m)(3.09 rad/s)&sup2; = <b>2.39 m/s&sup2;</b>
+  <span class="why">&mdash; 0.25 m, not 25. The amplitude has to go into SI before it is squared against anything.</span></span>
+  <span class="step">6)&nbsp; <i>F</i><sub>max</sub> = <i>ma</i><sub>max</sub> = (0.5 kg)(2.39 m/s&sup2;) =</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><b><i>F</i><sub>max</sub> = 1.2 N</b></span>
+  <span class="step">The cosine is &plusmn;1 <b>at maximum displacement</b> &mdash; at either end of the travel.&nbsp; The first time is
+  <b><i>t</i> = 0.3 s</b>, and then <b>every half period after that</b>: 1.32 s, 2.33 s, 3.35 s, &hellip;&nbsp; <span class="why">&mdash;
+  every half period, not every period, because both ends count: the force is the same size at the far end, pointing the other way.</span></span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big"><i>F</i><sub>max</sub> = <i>mA</i>&omega;&sup2; at maximum displacement</span>
+<p>The force is largest exactly where the block is <b>slowest</b>, and zero exactly where it is <b>fastest</b>.&nbsp; That is not a quirk of
+this problem &mdash; it is <i>F</i> = &minus;<i>kx</i> read out loud.&nbsp; The spring pushes hardest when it is stretched furthest, and at
+that instant the block has stopped and is about to come back.</p></div>
+
+<h2>Looking ahead</h2>
+<p>That is the whole of the single-oscillator story: a restoring force proportional to displacement, a sine or cosine in time, and a
+frequency set by the system rather than by how hard you started it.&nbsp; <b>Note 3</b> lets the disturbance leave home &mdash; instead of
+one object going up and down forever in one place, the oscillation is handed from each bit of a medium to the next, and travels.</p>
+
+<div class="ahead"><b>Where this sits.</b> Everything used here came from Notes 2 and 2a: the form of <i>x</i>(<i>t</i>), the fact that
+&omega; belongs to the spring and the mass, and <i>a</i> = &minus;<i>A</i>&omega;&sup2; cos(&omega;<i>t</i>+&phi;). The only new skill is
+reading a phase constant out of a single measurement and a direction.</div>
+
+<div class="callback"><span class="label">Back to your prediction</span><p>Largest at the far end, where it has stopped.&nbsp; If you said
+"at top speed in the middle", you were thinking of kinetic energy, or of momentum &mdash; both of which really are largest there.&nbsp; Force
+is not either of those.&nbsp; Force follows displacement, and in the middle the displacement, and so the force, is zero.</p></div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M1_N2b_Spring_Oscillation_Worked_Example_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the graph axes are there for you to draw question 1 on.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 1 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch15g &mdash; Finding Information in a Graph</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 1 (Oscillations, Waves and Sound)
+     Chapter 15 (University Physics Volume 1)
+     Trevor deck(s): Deck: Finding Information from a Graph
+     "Finding Information in a Graph" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+
+     Tier B reference page: faithful transcription, shorter synopsis, lead
+     paragraphs and captions added because a page has no voice.  No probe, no
+     exit ticket, no PE card.  References are LEAVES - no link from this page to
+     any note page (playbook Step 5a).
+
+     THIS DECK IS MOSTLY THIRD-PARTY IMAGERY.  Slides 2, 3 and 4 carry screenshots of
+     the PhET "Masses and Springs" simulation.  Per the playbook, third-party imagery
+     is NOT reproduced - the page says what they showed and links to the simulation
+     itself, which is where a student should be anyway.  PhET is credited in the
+     references as he credits it, CC BY 4.0.
+
+     THE ONE FIGURE IS HIS OWN T-SQUARED PLOT (slide 4).  Its eleven points are read
+     off his chart image; the fitted line y = 1.182x - 0.0112 and R-squared = 0.997
+     are HIS, printed on the slide, and are reproduced rather than refitted.
+
+     THE NEGATIVE INTERCEPT IS DISCUSSED, not quietly dropped.  His model equation
+     predicts a POSITIVE intercept - the spring's own effective mass - and his fit
+     returns a small negative one.  Saying so is the honest reading and is a better
+     lesson than the tidy version.
+
+     HIS SLIDE 5 REFERENCE SLIDE cites "University Physics Volume 2" and links to
+     that book's front matter.  Oscillations is Volume 1 chapter 15; this page cites
+     15.1.  Same paste error as decks a, c, d, e, f and g.
+
+     THE oPHYSICS LINK beside the deck in his folder (ophysics.com/w1.html) is
+     carried here, as the triage asked.
+
+
+     PHY 119 will have its own page for these decks when that course starts,
+     written for College Physics from the same source.  It is NOT generated from
+     this file, and the notes mirror is never run over a reference\ directory.
+
+     Triage: Planning\M1_aOscillations_Deck_Triage_PHY152_2026-10-21.md
+     Hosted on GitHub Pages, reached by link from the Module 1 reference index.
+     Never framed, so this page has no wrapper of its own.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 &middot; Oscillations, Waves and Sound</span>
+    <span>Chapter 15 (University Physics) &middot; Deck: Finding Information from a Graph</span>
+  </div>
+
+  <h1>Finding Information in a Graph</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A graph of measured data will not usually hand you the quantity you want. What it hands you is a
+    slope. The method is always the same three steps: write the equation the physics predicts,
+    rearrange it until it has the shape of a straight line, and then match it term by term against
+    the trendline the spreadsheet fitted. The quantity you are after is hiding in the slope &mdash;
+    but it is almost never equal to the slope.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    <span class="m">y</span> = <span class="m">mx</span> + <span class="m">b</span>, and from the
+    earlier pages <span class="m">T</span> = 2&pi;&radic;(<span class="m">m</span>/<span class="m">k</span>).
+  </div>
+
+  <h2>The experiment</h2>
+
+  <p>Trevor demonstrates this with the PhET <em>Masses and Springs</em> simulation: hang a mass from
+  a spring, set it oscillating, and time the period. Change the mass and do it again. Eleven
+  different masses give eleven periods, and the question is how to get the spring constant out of
+  them.</p>
+
+  <div class="tip">
+    <span class="label">Run it yourself</span>
+    The simulation is free and runs in a browser:
+    <a href="https://phet.colorado.edu/sims/html/masses-and-springs/latest/masses-and-springs_en.html" target="_blank" rel="noopener">PhET &mdash; Masses and Springs</a>.
+    Trevor also keeps a link beside this deck to a second mass-on-a-spring demonstration at
+    <a href="http://ophysics.com/w1.html" target="_blank" rel="noopener">oPhysics</a>, with the
+    warning that it shows more than this course goes into. Both are worth ten minutes before the
+    graph below makes sense.
+  </div>
+
+  <h2>Building a model equation</h2>
+
+  <div class="mathblock">
+    <div class="head">From the period equation to the equation of a line</div>
+    <div class="body">
+      <div class="mathline"><span class="m">T</span> = 2&pi;&radic;
+        ((<span class="m">m</span> + <span class="m">m</span>&prime;) / <span class="m">k</span>)</div>
+      <div class="mathline"><span class="m">T</span><span class="up">2</span>
+        = <span class="frac"><span class="top">4&pi;<span class="up">2</span></span><span class="bot"><span class="m">k</span></span></span><span class="m">m</span>
+        + <span class="frac"><span class="top">4&pi;<span class="up">2</span></span><span class="bot"><span class="m">k</span></span></span><span class="m">m</span>&prime;</div>
+      <div class="mathline"><span class="m">y</span> = (slope)<span class="m">x</span> + <span class="m">b</span></div>
+      <p class="why">Squaring is what does the work. <span class="m">T</span> against
+        <span class="m">m</span> is a curve and a curve is hard to read; <span class="m">T</span><span class="up">2</span>
+        against <span class="m">m</span> is a straight line, and a straight line has exactly two
+        numbers in it. This is <strong>linearising</strong> the data, and it is the standard move
+        whenever a model has a square root in it.</p>
+    </div>
+  </div>
+
+  <p>The <span class="m">m</span>&prime; is the spring&rsquo;s own effective mass. The spring is not
+  weightless, and part of it moves with the block, so it contributes to the inertia of the system.
+  It is a constant for a given spring, which is why it lands in the intercept rather than the
+  slope.</p>
+
+  <h2>Reading the graph</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 376" role="img" aria-label="Period squared plotted against hanging mass. Eleven points lie close to a straight line of slope 1.182 seconds squared per kilogram, which is four pi squared divided by the spring constant.">
+<defs><marker id="igblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="igred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="iggreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="igamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="igviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="igcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="igink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="igmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="igcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="174.3" y1="48.0" x2="174.3" y2="282.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="244.6" y1="48.0" x2="244.6" y2="282.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="314.9" y1="48.0" x2="314.9" y2="282.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="385.1" y1="48.0" x2="385.1" y2="282.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="455.4" y1="48.0" x2="455.4" y2="282.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="525.7" y1="48.0" x2="525.7" y2="282.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="596.0" y1="48.0" x2="596.0" y2="282.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="252.8" x2="596.0" y2="252.8" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="223.5" x2="596.0" y2="223.5" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="194.2" x2="596.0" y2="194.2" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="165.0" x2="596.0" y2="165.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="135.8" x2="596.0" y2="135.8" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="106.5" x2="596.0" y2="106.5" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="77.2" x2="596.0" y2="77.2" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="48.0" x2="596.0" y2="48.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="104.0" y1="282.0" x2="596.0" y2="282.0" stroke="#1d2b23" stroke-width="1.6"/>
+<line x1="104.0" y1="282.0" x2="104.0" y2="48.0" stroke="#1d2b23" stroke-width="1.6"/>
+<line x1="104.0" y1="282.0" x2="104.0" y2="287.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="104.0" y="302.0" text-anchor="middle" font-size="10.5" fill="#5c6b62">0.000</text>
+<line x1="174.3" y1="282.0" x2="174.3" y2="287.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="174.3" y="302.0" text-anchor="middle" font-size="10.5" fill="#5c6b62">0.100</text>
+<line x1="244.6" y1="282.0" x2="244.6" y2="287.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="244.6" y="302.0" text-anchor="middle" font-size="10.5" fill="#5c6b62">0.200</text>
+<line x1="314.9" y1="282.0" x2="314.9" y2="287.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="314.9" y="302.0" text-anchor="middle" font-size="10.5" fill="#5c6b62">0.300</text>
+<line x1="385.1" y1="282.0" x2="385.1" y2="287.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="385.1" y="302.0" text-anchor="middle" font-size="10.5" fill="#5c6b62">0.400</text>
+<line x1="455.4" y1="282.0" x2="455.4" y2="287.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="455.4" y="302.0" text-anchor="middle" font-size="10.5" fill="#5c6b62">0.500</text>
+<line x1="525.7" y1="282.0" x2="525.7" y2="287.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="525.7" y="302.0" text-anchor="middle" font-size="10.5" fill="#5c6b62">0.600</text>
+<line x1="596.0" y1="282.0" x2="596.0" y2="287.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="596.0" y="302.0" text-anchor="middle" font-size="10.5" fill="#5c6b62">0.700</text>
+<line x1="99.0" y1="282.0" x2="104.0" y2="282.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="286.0" text-anchor="end" font-size="10.5" fill="#5c6b62">0.000</text>
+<line x1="99.0" y1="252.8" x2="104.0" y2="252.8" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="256.8" text-anchor="end" font-size="10.5" fill="#5c6b62">0.100</text>
+<line x1="99.0" y1="223.5" x2="104.0" y2="223.5" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="227.5" text-anchor="end" font-size="10.5" fill="#5c6b62">0.200</text>
+<line x1="99.0" y1="194.2" x2="104.0" y2="194.2" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="198.2" text-anchor="end" font-size="10.5" fill="#5c6b62">0.300</text>
+<line x1="99.0" y1="165.0" x2="104.0" y2="165.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="169.0" text-anchor="end" font-size="10.5" fill="#5c6b62">0.400</text>
+<line x1="99.0" y1="135.8" x2="104.0" y2="135.8" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="139.8" text-anchor="end" font-size="10.5" fill="#5c6b62">0.500</text>
+<line x1="99.0" y1="106.5" x2="104.0" y2="106.5" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="110.5" text-anchor="end" font-size="10.5" fill="#5c6b62">0.600</text>
+<line x1="99.0" y1="77.2" x2="104.0" y2="77.2" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="81.2" text-anchor="end" font-size="10.5" fill="#5c6b62">0.700</text>
+<line x1="99.0" y1="48.0" x2="104.0" y2="48.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="95.0" y="52.0" text-anchor="end" font-size="10.5" fill="#5c6b62">0.800</text>
+<line x1="139.1" y1="268.0" x2="560.9" y2="60.5" stroke="#2457b8" stroke-width="2" stroke-dasharray="3 5"/>
+<circle cx="174.3" cy="246.9" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="209.4" cy="234.0" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="244.6" cy="216.8" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="279.7" cy="201.3" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="314.9" cy="181.4" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="350.0" cy="167.0" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="385.1" cy="153.3" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="420.3" cy="125.5" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="455.4" cy="115.0" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="490.6" cy="94.2" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<circle cx="525.7" cy="75.5" r="5.5" fill="#15607a" stroke="#0d3d4e" stroke-width="1.2"/>
+<rect x="136" y="70" width="188" height="42" fill="#ffffff" fill-opacity="0.92" stroke="#5c6b62" stroke-width="1"/>
+<text x="230.0" y="88.0" text-anchor="middle" font-size="13" fill="#1d2b23">y = 1.182x &minus; 0.0112</text>
+<text x="230.0" y="105.0" text-anchor="middle" font-size="13" fill="#1d2b23">R&sup2; = 0.997</text>
+<text x="350.0" y="322.0" text-anchor="middle" font-size="13" fill="#5c6b62">oscillating mass m (kg)</text>
+<text x="38" y="165.0" text-anchor="middle" font-size="13" fill="#5c6b62" transform="rotate(-90 38 165.0)">period squared T&sup2; (s&sup2;)</text>
+<text x="320.0" y="350.0" text-anchor="middle" font-size="12" fill="#5c6b62">slope = 4&pi;&sup2;/k, so the spring constant is 4&pi;&sup2; divided by the slope</text>
+<text x="320.0" y="368.0" text-anchor="middle" font-size="12" fill="#c77b1f">&mdash; the answer is NOT the slope</text>
+</svg>
+    <figcaption>Period squared against oscillating mass, with the trendline and
+      <span class="m">R</span><span class="up">2</span> as the spreadsheet reported them. Eleven
+      points, and a very good straight line.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Matching the trendline to the model, term by term</div>
+    <div class="body">
+      <div class="mathline">model:&nbsp;&nbsp; slope = 4&pi;<span class="up">2</span>/<span class="m">k</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="m">k</span> = <span class="frac"><span class="top">4&pi;<span class="up">2</span></span><span class="bot">slope</span></span></div>
+      <div class="mathline">fit:&nbsp;&nbsp; slope = 1.182 s<span class="up">2</span>/kg</div>
+      <div class="mathline"><span class="m">k</span> =
+        <span class="frac"><span class="top">4&pi;<span class="up">2</span></span><span class="bot">1.182 s<span class="up">2</span>/kg</span></span>
+        = 33.4 kg/s<span class="up">2</span> = <strong>33.4 N/m</strong></div>
+      <p class="why">Check the unit conversion on the last line, because it is the step students
+        skip. A newton is kg&middot;m/s<span class="up">2</span>, so N/m is
+        kg/s<span class="up">2</span> &mdash; the same unit written two ways, not a conversion
+        factor. If the algebra gives you kg/s<span class="up">2</span> you already have a spring
+        constant.</p>
+    </div>
+  </div>
+
+  <div class="check">
+    <span class="label">The point of the whole lesson</span>
+    <p class="q">The slope is 1.182. Is the spring constant 1.182 N/m?</p>
+    <p class="ans">No. <b>The answer is not the slope &mdash; but it is found using the slope.</b>
+      The slope is 4&pi;<span class="up">2</span>/<span class="m">k</span>, so
+      <span class="m">k</span> is 4&pi;<span class="up">2</span> <em>divided by</em> the slope: 33.4
+      N/m, nearly thirty times larger. Reaching for the slope itself is the single most common way
+      to get this kind of problem wrong.</p>
+  </div>
+
+  <h2>What the intercept is telling us</h2>
+
+  <p>The fitted intercept is &minus;0.0112 s<span class="up">2</span>. The model says the intercept
+  should be 4&pi;<span class="up">2</span><span class="m">m</span>&prime;/<span class="m">k</span>,
+  which is <em>positive</em> &mdash; a mass cannot be negative. So either the model is wrong or the
+  intercept is not really different from zero.</p>
+
+  <p>It is the second. With <span class="m">R</span><span class="up">2</span> = 0.997 there is still
+  scatter in the points, and &minus;0.0112 is about the size of that scatter: the line is being
+  fitted over masses from 0.100 to 0.600 kg and then extrapolated back to zero, where there are no
+  measurements at all. The honest reading is that <strong>the spring&rsquo;s effective mass is too
+  small to measure in this data</strong>, not that it is negative. A sign that comes out impossible
+  is worth stopping on rather than reporting.</p>
+
+  <h2>The method, in general</h2>
+
+  <table class="grid">
+    <tr><th>Step</th><th>What you do</th></tr>
+    <tr><td>1</td><td>Write the equation the physics predicts, with the unknown in it.</td></tr>
+    <tr><td>2</td><td>Rearrange it into the shape <span class="m">y</span> = (slope)<span class="m">x</span> + <span class="m">b</span>,
+        choosing what to plot so that the relationship is straight.</td></tr>
+    <tr><td>3</td><td>Plot it, fit a trendline, and read off the slope and intercept.</td></tr>
+    <tr><td>4</td><td>Match the two equations term by term, and solve for the unknown.</td></tr>
+    <tr><td>5</td><td>Check the units of the answer, and check the intercept means something.</td></tr>
+  </table>
+
+  <h2>In short</h2>
+  <ul>
+    <li>Information is often <strong>hidden</strong> in the trendline of a graph rather than printed
+      on it.</li>
+    <li>Compare the model equation to the parameters of the trendline equation, one term at a
+      time.</li>
+    <li><strong>The answer is not the slope, but it is found using the slope.</strong></li>
+    <li>Squaring the period is what makes this data linear &mdash; linearise first, fit second.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/16-3-simple-harmonic-motion-a-special-periodic-motion" target="_blank" rel="noopener">16.3 Simple Harmonic Motion</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Sep 19, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/15-1-simple-harmonic-motion" target="_blank" rel="noopener">15.1 Simple Harmonic Motion</a></li>
+    <li>Amy Rouinfar et al., <em>Masses and Springs</em>, PhET Interactive Simulations, University of Colorado Boulder, 2024, licensed CC BY 4.0 &mdash;
+      <a href="https://phet.colorado.edu/sims/html/masses-and-springs/latest/masses-and-springs_en.html" target="_blank" rel="noopener">run the simulation</a></li>
+    <li><em>Mass on a Spring</em>, oPhysics &mdash;
+      <a href="http://ophysics.com/w1.html" target="_blank" rel="noopener">ophysics.com/w1.html</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Finding Information from a Graph</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   Reached by link, not framed, so this is inert here - kept so the page behaves if embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

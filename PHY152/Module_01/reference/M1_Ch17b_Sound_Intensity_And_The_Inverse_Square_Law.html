@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch17b &mdash; Sound Intensity and the Inverse Square Law</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 1 (Oscillations, Waves and Sound)
+     Chapter 17 (University Physics Volume 1)
+     Trevor deck(s): Deck: Sound Intensity
+     "Sound Intensity and the Inverse Square Law" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+
+     Tier B reference page: faithful transcription, shorter synopsis, lead
+     paragraphs and captions added because a page has no voice.  No probe, no
+     exit ticket, no PE card.  References are LEAVES - no link from this page to
+     any note page (playbook Step 5a).
+
+     KEPT SEPARATE FROM "Sound Intensity Level" (Ch17c) DELIBERATELY.  Watts per
+     square metre and decibels are two different quantities, deck c is 16 slides on
+     its own, and merged they would make a 24-slide page that has to teach the
+     inverse square law AND logarithms before reaching any sound.  Keeping them apart
+     also leaves one page that answers an intensity-and-distance question on its own.
+     See the triage, section 2.
+
+     HIS REFERENCE SLIDE IS THE TELL FOR THE WHOLE SUB-FOLDER: it names "University
+     Physics Volume 2" and its own link resolves to volume-1/17-3.  That is what makes
+     the wrong volume a paste error rather than a belief.  This page cites Volume 1.
+
+     THE BREAD-AND-BUTTER FIGURE (his slide 6) IS THE BEST EXPLANATION OF THE INVERSE
+     SQUARE LAW IN THE WHOLE ARCHIVE and is carried across in full, redrawn to scale:
+     1, 4, 9 and 16 slices at 1, 2, 3 and 4 m.
+
+     NOT REPRODUCED: a Best Buy product-page screenshot (his slide 3) and a Falstad
+     ripple-tank screenshot (slide 4).  The first is a third-party commercial page and
+     its point - that a speaker's "power" rating is not acoustic power - is made in
+     words instead; the second is linked.
+
+
+     PHY 119 will have its own page for these decks when that course starts,
+     written for College Physics from the same source.  It is NOT generated from
+     this file, and the notes mirror is never run over a reference\ directory.
+
+     Triage: Planning\M1_cSound_Deck_Triage_PHY152_2026-10-21.md
+     Hosted on GitHub Pages, reached by link from the Module 1 reference index.
+     Never framed, so this page has no wrapper of its own.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 &middot; Oscillations, Waves and Sound</span>
+    <span>Chapter 17 (University Physics) &middot; Deck: Sound Intensity</span>
+  </div>
+
+  <h1>Sound Intensity and the Inverse Square Law</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A source puts out a fixed number of watts. As the sound travels outward, those watts are spread
+    over a larger and larger sphere, so the amount arriving on any given patch falls away &mdash;
+    not because the source is weakening, but because the sound is getting thinner. The sphere grows
+    as the square of the distance, so the intensity falls as one over the square of the distance.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Energy, work and power from the first semester, and from <strong>Ch16c</strong> that a wave
+    carries power through the medium it travels in.
+  </div>
+
+  <h2>Three quantities, each the one before divided by something</h2>
+
+  <table class="defs">
+    <tr><td class="term">Energy</td><td class="eq">the ability to do work; measured in <strong>joules</strong>. <span class="m">W</span> = Force &times; distance, so 1 J = 1 N&middot;m.</td></tr>
+    <tr><td class="term">Power</td><td class="eq">energy used in a given time; measured in <strong>watts</strong>. <span class="m">P</span> = Energy / time, so 1 W = 1 J/s.</td></tr>
+    <tr><td class="term">Intensity</td><td class="eq">energy through an area in a given time; measured in <strong>watts per square metre</strong>. <span class="m">I</span> = Power / area.</td></tr>
+  </table>
+
+  <p>The ladder is worth reading twice. Each step divides by one more thing &mdash; first by time,
+  then by area &mdash; and each step makes the quantity more local. Energy belongs to the whole
+  event, power to the source, and intensity to the particular place you are standing.</p>
+
+  <div class="tip">
+    <span class="label">A speaker&rsquo;s &ldquo;power&rdquo; is not this power</span>
+    Shop for speakers and you will find them rated in watts. That number is the <em>electrical</em>
+    power the speaker can handle without damage, not the <em>acoustic</em> power it radiates. The
+    two differ by a lot: loudspeakers are only a few per cent efficient, so a 100 W speaker may put
+    a watt or two of actual sound into the room. The <span class="m">P</span> in the formulas below
+    is the acoustic one.
+  </div>
+
+  <h2>Spreading out over a sphere</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 316" role="img" aria-label="A point source at the centre of a sphere, with a small patch of area A on the surface at radius r. All of the source power passes through the whole sphere.">
+<defs><marker id="ssblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="ssred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="ssgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="ssamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="ssviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="sscrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="ssink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="ssmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="sscyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<circle cx="250" cy="156" r="124" fill="#eaf1fb" fill-opacity="0.45" stroke="#2457b8" stroke-width="1.8" stroke-opacity="0.9"/>
+<ellipse cx="250" cy="156" rx="124" ry="35" fill="none" stroke="#2457b8" stroke-width="1" stroke-opacity="0.5"/>
+<circle cx="250" cy="156" r="62" fill="#eaf1fb" fill-opacity="0.45" stroke="#0f8ea8" stroke-width="1.8" stroke-opacity="0.9"/>
+<ellipse cx="250" cy="156" rx="62" ry="17" fill="none" stroke="#0f8ea8" stroke-width="1" stroke-opacity="0.5"/>
+<circle cx="250" cy="156" r="7" fill="#c77b1f" stroke="#1d2b23" stroke-width="1.4"/>
+<text x="250.0" y="178.0" text-anchor="middle" font-size="14" fill="#1d2b23" font-style="italic">P</text>
+<line x1="250.0" y1="156.0" x2="302.6" y2="123.1" stroke="#0f8ea8" stroke-width="1.6"/>
+<line x1="250.0" y1="156.0" x2="355.2" y2="90.3" stroke="#2457b8" stroke-width="1.6"/>
+<path d="M 337.15796392339684 76.29001123508259 l 34 -8 l 10 26 l -34 8 z" fill="#b0145a" fill-opacity="0.55" stroke="#b0145a" stroke-width="1.4"/>
+<text x="391.2" y="94.3" text-anchor="start" font-size="15" fill="#b0145a" font-style="italic">A</text>
+<text x="294.0" y="146.0" text-anchor="start" font-size="14" fill="#0f8ea8"><tspan font-style="italic">r</tspan><tspan font-size="10" baseline-shift="-4">1</tspan></text>
+<text x="346.0" y="106.0" text-anchor="start" font-size="14" fill="#2457b8"><tspan font-style="italic">r</tspan><tspan font-size="10" baseline-shift="-4">2</tspan></text>
+<text x="406.0" y="84.0" text-anchor="start" font-size="15" fill="#1d2b23">I = P / Area = P / 4&pi;r&sup2;</text>
+<text x="406.0" y="142.0" text-anchor="start" font-size="12" fill="#5c6b62">The SAME power crosses</text>
+<text x="406.0" y="160.0" text-anchor="start" font-size="12" fill="#5c6b62">every sphere. Only the area</text>
+<text x="406.0" y="178.0" text-anchor="start" font-size="12" fill="#5c6b62">it is spread over changes.</text>
+<text x="406.0" y="214.0" text-anchor="start" font-size="15" fill="#6b4ea8">I&#8321;r&#8321;&sup2; = I&#8322;r&#8322;&sup2;</text>
+<text x="406.0" y="240.0" text-anchor="start" font-size="15" fill="#6b4ea8">I&#8321;/I&#8322; = r&#8322;&sup2;/r&#8321;&sup2;</text>
+<text x="60.0" y="308.0" text-anchor="start" font-size="12" fill="#5c6b62">the sphere is the bookkeeping device: 4&pi;r&sup2; is the only thing in the problem that changes with distance</text>
+</svg>
+    <figcaption>A point source radiating in every direction. All of its power crosses every sphere
+      drawn around it; the bigger the sphere, the more area that power has to cover.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Intensity at a distance <span class="m">r</span></div>
+    <div class="body">
+      <div class="mathline"><span class="m">I</span> =
+        <span class="frac"><span class="top">Power</span><span class="bot">Area</span></span>
+        = <span class="frac"><span class="top"><span class="m">P</span></span><span class="bot">4&pi;<span class="m">r</span><span class="up">2</span></span></span></div>
+      <p class="why">4&pi;<span class="m">r</span><span class="up">2</span> is the surface area of a
+        sphere, and it is the <em>only</em> thing in the expression that changes with distance. The
+        source is isotropic &mdash; it radiates equally in all directions &mdash; so the power is
+        shared out evenly over the whole sphere.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Comparing two distances without knowing the power</div>
+    <div class="body">
+      <div class="mathline"><span class="m">I</span> 4&pi;<span class="m">r</span><span class="up">2</span>
+        = <span class="m">P</span></div>
+      <div class="mathline"><span class="m">I</span><sub>1</sub> 4&pi;<span class="m">r</span><sub>1</sub><span class="up">2</span>
+        = <span class="m">P</span> =
+        <span class="m">I</span><sub>2</sub> 4&pi;<span class="m">r</span><sub>2</sub><span class="up">2</span></div>
+      <div class="mathline"><span class="m">I</span><sub>1</sub><span class="m">r</span><sub>1</sub><span class="up">2</span>
+        = <span class="m">I</span><sub>2</sub><span class="m">r</span><sub>2</sub><span class="up">2</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="frac"><span class="top"><span class="m">I</span><sub>1</sub></span><span class="bot"><span class="m">I</span><sub>2</sub></span></span>
+        = <span class="frac"><span class="top"><span class="m">r</span><sub>2</sub><span class="up">2</span></span><span class="bot"><span class="m">r</span><sub>1</sub><span class="up">2</span></span></span></div>
+      <p class="why"><strong>The power of the source is fixed</strong>, so it is the same
+        <span class="m">P</span> on both sides and it cancels &mdash; along with the 4&pi;. What is
+        left relates two intensities to two distances with nothing else in it, which is why you can
+        answer &ldquo;how much quieter is it twice as far away?&rdquo; without knowing anything
+        about the source. Note the <strong>flip</strong>: the ratio of intensities is the
+        <em>inverse</em> ratio of the squared distances.</p>
+    </div>
+  </div>
+
+  <h2>Why the square &mdash; bread and butter</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 330" role="img" aria-label="One pat of butter spread over one, four, nine and sixteen slices of bread at one, two, three and four metres. The butter per slice falls as one over the distance squared.">
+<defs><marker id="bbblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="bbred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="bbgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="bbamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="bbviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="bbcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="bbink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="bbmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="bbcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<circle cx="54" cy="150" r="7" fill="#c77b1f" stroke="#1d2b23" stroke-width="1.4"/>
+<text x="54.0" y="174.0" text-anchor="middle" font-size="11" fill="#5c6b62">source</text>
+<rect x="96" y="142.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<text x="103.5" y="236.0" text-anchor="middle" font-size="12.5" fill="#1d2b23" font-weight="600">1 m</text>
+<text x="103.5" y="254.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">1 slice</text>
+<text x="103.5" y="274.0" text-anchor="middle" font-size="13" fill="#b0145a">1</text>
+<line x1="54.0" y1="150.0" x2="92.0" y2="140.5" stroke="#d7e2da" stroke-width="1"/>
+<line x1="54.0" y1="150.0" x2="92.0" y2="159.5" stroke="#d7e2da" stroke-width="1"/>
+<rect x="182" y="135.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="182" y="150.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="197" y="135.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="197" y="150.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<text x="197.0" y="236.0" text-anchor="middle" font-size="12.5" fill="#1d2b23" font-weight="600">2 m</text>
+<text x="197.0" y="254.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">4 slices</text>
+<text x="197.0" y="274.0" text-anchor="middle" font-size="13" fill="#b0145a">1/4</text>
+<line x1="54.0" y1="150.0" x2="178.0" y2="133.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="54.0" y1="150.0" x2="178.0" y2="167.0" stroke="#d7e2da" stroke-width="1"/>
+<rect x="304" y="127.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="304" y="142.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="304" y="157.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="319" y="127.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="319" y="142.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="319" y="157.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="334" y="127.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="334" y="142.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="334" y="157.5" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<text x="326.5" y="236.0" text-anchor="middle" font-size="12.5" fill="#1d2b23" font-weight="600">3 m</text>
+<text x="326.5" y="254.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">9 slices</text>
+<text x="326.5" y="274.0" text-anchor="middle" font-size="13" fill="#b0145a">1/9</text>
+<line x1="54.0" y1="150.0" x2="300.0" y2="125.5" stroke="#d7e2da" stroke-width="1"/>
+<line x1="54.0" y1="150.0" x2="300.0" y2="174.5" stroke="#d7e2da" stroke-width="1"/>
+<rect x="462" y="120.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="462" y="135.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="462" y="150.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="462" y="165.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="477" y="120.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="477" y="135.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="477" y="150.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="477" y="165.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="492" y="120.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="492" y="135.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="492" y="150.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="492" y="165.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="507" y="120.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="507" y="135.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="507" y="150.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<rect x="507" y="165.0" width="14" height="14" fill="#f2d79a" stroke="#c77b1f" stroke-width="1"/>
+<text x="492.0" y="236.0" text-anchor="middle" font-size="12.5" fill="#1d2b23" font-weight="600">4 m</text>
+<text x="492.0" y="254.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">16 slices</text>
+<text x="492.0" y="274.0" text-anchor="middle" font-size="13" fill="#b0145a">1/16</text>
+<line x1="54.0" y1="150.0" x2="458.0" y2="118.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="54.0" y1="150.0" x2="458.0" y2="182.0" stroke="#d7e2da" stroke-width="1"/>
+<text x="28.0" y="274.0" text-anchor="start" font-size="11.5" fill="#b0145a">butter</text>
+<text x="28.0" y="288.0" text-anchor="start" font-size="11.5" fill="#b0145a">per slice</text>
+<text x="28.0" y="236.0" text-anchor="start" font-size="11.5" fill="#1d2b23">distance</text>
+<text x="28.0" y="254.0" text-anchor="start" font-size="11.5" fill="#5c6b62">slices</text>
+<text x="28.0" y="306.0" text-anchor="start" font-size="12.5" fill="#1d2b23">The number of slices covered goes up as the SQUARE of the distance. The amount of butter never changes.</text>
+<text x="28.0" y="324.0" text-anchor="start" font-size="12" fill="#5c6b62">So the butter per slice &mdash; the intensity &mdash; falls as 1/r&sup2;. The source is not getting quieter; the sound is getting thinner.</text>
+</svg>
+    <figcaption>Trevor&rsquo;s analogy, drawn to scale. One pat of butter, spread over more and more
+      slices as you move away.</figcaption>
+  </figure>
+
+  <ul>
+    <li><strong>The number of slices covered increases</strong> &mdash; and it increases as the
+      square of the distance, because the patch grows in both directions at once.</li>
+    <li><strong>The amount of butter remains the same.</strong> Nothing is lost.</li>
+    <li><strong>The amount of butter per slice is reduced</strong> &mdash; by 1/4 at twice the
+      distance, 1/9 at three times, 1/16 at four times.</li>
+  </ul>
+
+  <p>That third line is the inverse square law, and the second line is why it is not a law about
+  energy disappearing. The sound is just as loud in total; it is spread thinner.</p>
+
+  <div class="tip">
+    <span class="label">See it happen</span>
+    Falstad&rsquo;s ripple tank shows the same thing in two dimensions, where the circumference
+    grows as <span class="m">r</span> rather than the area as
+    <span class="m">r</span><span class="up">2</span>, so the falling-off is gentler:
+    <a href="https://www.falstad.com/ripple/" target="_blank" rel="noopener">ripple tank
+    simulation</a>. Comparing the two is a good way to see that the exponent comes from the
+    geometry and nothing else.
+  </div>
+
+  <h2>Worked example &mdash; intensity from power</h2>
+
+  <div class="mathblock">
+    <div class="head">A source radiates 3.25 &times; 10<span class="up">&minus;7</span> W. What is the intensity 1.5 m away?</div>
+    <div class="body">
+      <div class="mathline"><span class="sm">given:</span>&nbsp;
+        <span class="m">P</span> = 3.25 &times; 10<span class="up">&minus;7</span> W,&nbsp;
+        <span class="m">r</span> = 1.5 m</div>
+      <div class="mathline"><span class="m">I</span> =
+        <span class="frac"><span class="top"><span class="m">P</span></span><span class="bot">4&pi;<span class="m">r</span><span class="up">2</span></span></span>
+        = <span class="frac"><span class="top">3.25 &times; 10<span class="up">&minus;7</span> W</span><span class="bot">4&pi;(1.5 m)<span class="up">2</span></span></span>
+        = <span class="frac"><span class="top">3.25 &times; 10<span class="up">&minus;7</span> W</span><span class="bot">28.274 m<span class="up">2</span></span></span></div>
+      <div class="mathline"><span class="m">I</span> = 1.149 &times; 10<span class="up">&minus;8</span> W/m<span class="up">2</span>
+        = <strong>1.15 &times; 10<span class="up">&minus;8</span> W/m<span class="up">2</span></strong></div>
+      <p class="why">Square the radius <em>before</em> multiplying by 4&pi; &mdash; the commonest
+        slip here is (4&pi;<span class="m">r</span>)<span class="up">2</span>. Keep the unrounded
+        1.149 &times; 10<span class="up">&minus;8</span>: <strong>Ch17c</strong> takes this exact
+        number and turns it into decibels.</p>
+    </div>
+  </div>
+
+  <div class="check">
+    <span class="label">Check the scale</span>
+    <p class="q">10<span class="up">&minus;8</span> W/m<span class="up">2</span> sounds like
+      nothing at all. Is this a sound anyone could hear?</p>
+    <p class="ans">Easily. The threshold of human hearing is
+      <b>10<span class="up">&minus;12</span> W/m<span class="up">2</span></b>, so this is ten
+      thousand times above it &mdash; a quiet but perfectly audible sound, around 40 dB. The ear
+      works over an extraordinary range of intensities, which is the problem
+      <strong>Ch17c</strong> exists to solve.</p>
+  </div>
+
+  <h2>In short</h2>
+  <ul>
+    <li>Waves move energy from one place to another; <strong>power</strong> is energy per unit time
+      and <strong>intensity</strong> is power per unit area.</li>
+    <li>The intensity depends on how much area the wave has spread out into.</li>
+    <li>For a point source,
+      <span class="m">I</span> = <span class="m">P</span>/4&pi;<span class="m">r</span><span class="up">2</span>
+      &mdash; the <strong>inverse square law</strong>.</li>
+    <li><span class="m">I</span><sub>1</sub><span class="m">r</span><sub>1</sub><span class="up">2</span>
+      = <span class="m">I</span><sub>2</sub><span class="m">r</span><sub>2</sub><span class="up">2</span>
+      lets you compare two places without knowing the source at all.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/17-3-sound-intensity-and-sound-level" target="_blank" rel="noopener">17.3 Sound Intensity and Sound Level</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Sep 19, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/17-3-sound-intensity" target="_blank" rel="noopener">17.3 Sound Intensity</a></li>
+    <li>Paul Falstad, <em>Ripple Tank Simulation</em> &mdash;
+      <a href="https://www.falstad.com/ripple/" target="_blank" rel="noopener">falstad.com/ripple</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Sound Intensity</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   Reached by link, not framed, so this is inert here - kept so the page behaves if embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

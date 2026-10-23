@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N2a &mdash; Springs, Simple Pendulums, and Damped Oscillations</title>
+<style>
+  /* FLCC Physics note page — Module 1, Oscillations, Waves and Sound, Note 2a
+     "Springs, Simple Pendulums, and Damped Oscillations – Examples of Oscillatory Motion".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-10-21d_M1_N2a_Built.md.
+
+     *** NO CALC FENCE ON THIS PAGE, AND THAT IS A DEFERRED DECISION, NOT AN OVERSIGHT. ***
+     This note is calculus end to end: three second-order differential equations, each
+     solved rather than asserted.  Deleting the calculus would leave the three results
+     and none of the arguments, which is the case the standing rule says to write a
+     separate single-course note for — except that the mirror has NO per-note exclusion:
+     it takes every M*_N*.html in the directory that is not a wrapper, handout or key.
+     Cho's call 2026-10-21 was to build unfenced and settle the partner course when it
+     is actually started.
+
+     SO THERE IS A LIVE TRAP HERE.  Running the mirror over this module before that is
+     settled produces a partner-course page full of calculus.  Until the decision is
+     made, run the mirror on named files, not on the directory.  This is recorded in the
+     log entry and in project memory.
+
+     SOURCE.  Dr. Cho's own guided note, 2025 Spring.  THREE pages, Mode B: the printed
+     master carries the header, the title, a one-line synopsis and three section labels
+     ("Spring Oscillation:", "Simple Pendulum", "Damped Oscillation") and NOTHING else.
+     332/175/178 printed chars per page against 1133 live strokes.  Every equation,
+     every figure and every annotation on this page is a transcription of that ink.
+
+     THE .docx IS A DIFFERENT LESSON.  The Word master of this same note carries 726
+     pen strokes which are NOT this derivation — they are a worked 500 g block example,
+     inked the same evening on the same printed sheet.  That is Note 2b, split off
+     2026-10-21.  Do not merge them.
+
+     THE THREE FIGURES EXIST ONLY IN THE INK — the master prints none.  See figs_m1n2a.py
+     for what was read off the drawing and what the skeleton variants keep.
+
+     HIS SYNOPSIS SAYS "Springs, and simple pendulums" AND DOES NOT MENTION DAMPING,
+     although the note covers it.  Left as he wrote it.
+
+     NO HTML TAGS INSIDE <text>: bold inside a figure is <tspan font-weight="700">.
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.75rem; line-height:1.22; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.05rem; margin:1.4rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  .disp{ display:block; margin:.6rem 0 .8rem; text-align:center; font-size:1.08rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 &middot; Oscillations, Waves and Sound</span><span>Note 2a</span></div>
+<h1>Springs, Simple Pendulums, and Damped Oscillations &mdash; Examples of Oscillatory Motion</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>We explore a few examples of oscillatory motions: Springs, and simple
+pendulums.</div>
+
+<div class="hook"><span class="label">Before you read on &mdash; predict</span><p>A pendulum clock keeps time by swinging a bob on a
+string.&nbsp; Three things you could change: <b>use a heavier bob</b>, <b>use a longer string</b>, <b>take it up a mountain</b>.&nbsp; Which
+of those change how long a swing takes?&nbsp; Write down your three answers before you read on.&nbsp; One of them catches almost
+everybody.</p></div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N2a — Dr. Cho works through the note"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link at the bottom of this page) and fill in the three derivations as they go.
+</div>
+
+<h2>Spring Oscillation</h2>
+<p>Note 2 got as far as <i>ma</i> = &minus;<i>kx</i>: the force is proportional to the displacement.&nbsp; That is a statement about the
+system, and it is not yet a statement about <i>time</i> &mdash; nothing in it says how long a swing takes.&nbsp; Getting the period out
+means treating the acceleration as what it is, the second derivative of position, and then <b>solving</b> the result rather than
+describing it.</p>
+
+<ol class="items tasks">
+  <li>Write the acceleration as a derivative of position, in two steps, and so turn <i>a</i> = &minus;(<i>k</i>/<i>m</i>)<i>x</i> into an
+  equation of motion.&nbsp; What kind of equation is it?</li>
+  <li>Guess a solution of the form <i>x</i>(<i>t</i>) = <i>A</i> cos(&omega;<i>t</i> + &phi;<sub>0</sub>), where <i>A</i>, &omega; and
+  &phi;<sub>0</sub> are constants.&nbsp; Differentiate it once to get <i>v</i>, and again to get <i>a</i>.</li>
+  <li>Put your expression for <i>a</i> back into the equation of motion and cancel what you can.&nbsp; What does &omega; have to be?</li>
+  <li>Turn &omega; into a frequency.&nbsp; What happens to <i>f</i> if the spring is stiffer?&nbsp; If the mass is larger?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">1)&nbsp; <i>v</i> = d<i>x</i>/d<i>t</i>, so <i>a</i> = d<i>v</i>/d<i>t</i> = (d/d<i>t</i>)(d<i>x</i>/d<i>t</i>) =
+  <b>d&sup2;<i>x</i>/d<i>t</i>&sup2;</b>.&nbsp; So</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><b>d&sup2;<i>x</i>/d<i>t</i>&sup2; =
+  &minus;(<i>k</i>/<i>m</i>)<i>x</i></b></span>
+  <span class="step">which is the <b>equation of motion</b> &mdash; a <b>second-order differential equation</b>: it relates a function to
+  its own second derivative.</span>
+  <span class="step">2)&nbsp; <b>Guess a solution!</b>&nbsp; With <i>x</i>(<i>t</i>) = <i>A</i> cos(&omega;<i>t</i> + &phi;<sub>0</sub>):</span>
+  <span class="step">d<i>x</i>/d<i>t</i> = <i>v</i> = &minus;<i>A</i>&omega; sin(&omega;<i>t</i> + &phi;<sub>0</sub>)</span>
+  <span class="step">d&sup2;<i>x</i>/d<i>t</i>&sup2; = d<i>v</i>/d<i>t</i> = <i>a</i> = <b>&minus;<i>A</i>&omega;&sup2;
+  cos(&omega;<i>t</i> + &phi;<sub>0</sub>)</b> <span class="why">&mdash; which is &minus;&omega;&sup2; times the <i>x</i> you started with.
+  That is the whole reason the guess works.</span></span>
+  <span class="step">3)&nbsp; Since <i>a</i> = &minus;(<i>k</i>/<i>m</i>)<i>x</i>:</span>
+  <span class="step">&minus;<i>A</i>&omega;&sup2; cos(&omega;<i>t</i>+&phi;<sub>0</sub>) =
+  &minus;(<i>k</i>/<i>m</i>)&thinsp;<i>A</i> cos(&omega;<i>t</i>+&phi;<sub>0</sub>)</span>
+  <span class="step">The amplitude and the cosine are the same on both sides and cancel, leaving &omega;&sup2; = <i>k</i>/<i>m</i>:</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><b>&omega; = &radic;(<i>k</i>/<i>m</i>)</b></span>
+  <span class="step">4)&nbsp; &omega; = 2&pi;<i>f</i>, so <b><i>f</i> = (1/2&pi;)&radic;(<i>k</i>/<i>m</i>)</b>.&nbsp; <b>Stiffer spring,
+  <i>f</i> high.&nbsp; Larger mass, <i>f</i> low.</b>&nbsp; <span class="why">&mdash; and notice what is missing: no amplitude. How far
+  you pull it does not change how often it oscillates.</span></span>
+</div></div></div>
+
+<h2>Simple Pendulum</h2>
+<p>The same question for a different restoring force.&nbsp; A bob on a string of length <i>L</i>, pulled aside through an angle &theta;:
+there is no spring here, so what pulls it back?&nbsp; Gravity does &mdash; but only the part of it that lies <i>along the arc</i>.&nbsp; The
+string takes care of the rest.</p>
+
+<div class="fig">
+<svg viewBox="0 0 700 400" role="img" aria-label="A simple pendulum: a bob on a string of length L hanging from a ceiling, displaced through an angle theta from the vertical.">
+<defs><marker id="n2a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n2a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n2a-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8ea8"/></marker><marker id="n2a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker></defs>
+<line x1="150" y1="40" x2="450" y2="40" stroke="#1d2b23" stroke-width="3"/>
+<line x1="150" y1="40" x2="142" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="170" y1="40" x2="162" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="190" y1="40" x2="182" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="210" y1="40" x2="202" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="230" y1="40" x2="222" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="250" y1="40" x2="242" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="270" y1="40" x2="262" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="290" y1="40" x2="282" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="310" y1="40" x2="302" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="330" y1="40" x2="322" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="350" y1="40" x2="342" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="370" y1="40" x2="362" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="390" y1="40" x2="382" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="410" y1="40" x2="402" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="430" y1="40" x2="422" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="450" y1="40" x2="442" y2="31" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="300" y1="40" x2="300" y2="296" stroke="#1636c8" stroke-width="1.4" stroke-dasharray="7 5"/>
+<line x1="300" y1="40" x2="428.6" y2="230.7" stroke="#1636c8" stroke-width="2.2"/>
+<circle cx="428.6" cy="230.7" r="17" fill="#fff" stroke="#1636c8" stroke-width="2.4"/>
+<path d="M 300 270 A 230 230 0 0 0 428.6 230.7" fill="none" stroke="#0f8ea8" stroke-width="2"/>
+<path d="M 300 102 A 62 62 0 0 0 334.7 91.4" fill="none" stroke="#1636c8" stroke-width="2"/>
+<text x="314" y="118" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8" font-style="italic">&theta;</text>
+<text x="380.3071838991359" y="129.3393208438298" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8" font-style="italic">L</text>
+<text x="150" y="150" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8"><tspan font-style='italic'>s</tspan> = &theta;<tspan font-style='italic'>L</tspan></text>
+<text x="150" y="192" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8">&theta; = <tspan font-style='italic'>s</tspan>/<tspan font-style='italic'>L</tspan></text>
+<text x="214" y="278" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#0f8ea8">d<tspan font-style='italic'>s</tspan></text>
+<text x="280" y="314" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0f8ea8"><tspan font-style='italic'>s</tspan></text>
+<line x1="428.6" y1="230.7" x2="389.5" y2="172.6" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n2a-red)"/>
+<text x="397.4708645553195" y="176.64601160880665" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-style="italic">T</text>
+<line x1="428.6" y1="230.7" x2="428.6" y2="304.7" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n2a-red)"/>
+<text x="440.6143677982718" y="282.6786416876596" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-style="italic">F<tspan font-size='11' baseline-shift='-4'>g</tspan></text>
+<line x1="428.6" y1="230.7" x2="463.3" y2="282.1" stroke="#b3261e" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#n2a-red)"/>
+<text x="473.2843278134581" y="284.0789711860721" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">(F<tspan font-size='11' baseline-shift='-4'>g</tspan>)<tspan font-size='11' baseline-shift='-4'>r</tspan></text>
+<marker id="n2a-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker>
+<line x1="428.6" y1="230.7" x2="363.9" y2="274.3" stroke="#c77b1f" stroke-width="2.6" marker-end="url(#n2a-amber)"/>
+<ellipse cx="333.9" cy="318.3" rx="106" ry="27" fill="#fffbe9" stroke="#c77b1f" stroke-width="2"/>
+<text x="333.94943713897857" y="324.2956881583778" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23">(F<tspan font-size='11' baseline-shift='-4'>g</tspan>)<tspan font-size='11' baseline-shift='-4'>t</tspan> = &minus;F<tspan font-size='11' baseline-shift='-4'>g</tspan> sin&thinsp;&theta;</text>
+<text x="690" y="30" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">Tangential motion only!</text>
+</svg>
+  <div class="fig-note">The bob moves along the arc, so only the tangential component of the weight does anything &mdash;
+  <b>tangential motion only</b>.&nbsp; The radial component is balanced by the tension.&nbsp; The arc length is
+  <i>s</i> = &theta;<i>L</i>, so &theta; = <i>s</i>/<i>L</i>.</div>
+</div>
+
+<ol class="items tasks" start="5">
+  <li>Write Newton&rsquo;s second law for the tangential direction only.&nbsp; Which forces appear, and which do not?</li>
+  <li>Resolve the weight and put it in.&nbsp; Then cancel the mass.&nbsp; What is <i>a</i><sub>t</sub>?</li>
+  <li>For a small swing, replace sin&thinsp;&theta; with &theta;, and then replace &theta; using the arc length.&nbsp; What equation of
+  motion do you get?</li>
+  <li>Compare it with the spring&rsquo;s equation of motion.&nbsp; Write down &omega; without doing any more work.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <span class="step">5)&nbsp; <b>(<i>F</i><sub>net</sub>)<sub>t</sub> = &Sigma;<i>F</i><sub>t</sub> =
+  (<i>F</i><sub>g</sub>)<sub>t</sub> = <i>ma</i><sub>t</sub></b>.&nbsp; The tension is entirely radial, so it does not appear at all; nor
+  does the radial part of the weight.&nbsp; <span class="why">&mdash; that is what "tangential motion only" buys you: a one-dimensional
+  problem along a curved line</span></span>
+  <span class="step">6)&nbsp; (<i>F</i><sub>g</sub>)<sub>t</sub> = &minus;<i>F</i><sub>g</sub> sin&thinsp;&theta; =
+  &minus;<i>mg</i> sin&thinsp;&theta;, so <i>ma</i><sub>t</sub> = &minus;<i>mg</i> sin&thinsp;&theta; and
+  <b><i>a</i><sub>t</sub> = &minus;<i>g</i> sin&thinsp;&theta;</b>.&nbsp; <span class="why">&mdash; the mass cancels, and that is the
+  answer to one third of the prediction above</span></span>
+  <span class="step">7)&nbsp; For small &theta;, <b>sin&thinsp;&theta; &asymp; &theta;</b>, so <i>a</i><sub>t</sub> =
+  &minus;<i>g</i>&theta;.&nbsp; And &theta; = <i>s</i>/<i>L</i>, while <i>a</i><sub>t</sub> is the second derivative of the arc length, so</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><b>d&sup2;<i>s</i>/d<i>t</i>&sup2; = &minus;<i>g</i>(<i>s</i>/<i>L</i>)
+  = &minus;(<i>g</i>/<i>L</i>)<i>s</i></b></span>
+  <span class="step">8)&nbsp; That is the spring equation with <i>s</i> for <i>x</i> and <i>g</i>/<i>L</i> for <i>k</i>/<i>m</i>.&nbsp; So
+  the solution is <i>s</i>(<i>t</i>) = <i>A</i> cos(&omega;<i>t</i> + &phi;<sub>0</sub>) with</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><b>&omega; = &radic;(<i>g</i>/<i>L</i>)</b></span>
+  <span class="step"><span class="why">&mdash; no second derivation needed. Once two systems have the same equation of motion they have
+  the same behaviour, whatever they are made of. That is most of what "simple harmonic motion" is for.</span></span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">&omega; = &radic;(<i>k</i>/<i>m</i>)&nbsp;&nbsp;&nbsp;&nbsp;&omega; = &radic;(<i>g</i>/<i>L</i>)</span>
+<p>Two completely different systems, one equation of motion, one solution.&nbsp; <b>Neither frequency contains the amplitude</b>, and the
+pendulum&rsquo;s does not contain the <b>mass</b>.&nbsp; A heavy bob and a light bob on the same string keep the same time, which is exactly
+why a pendulum makes a usable clock.</p></div>
+
+<h2>Damped Oscillation</h2>
+<p>Real oscillations stop.&nbsp; Add one more force &mdash; a drag that opposes the motion and grows with speed &mdash; and the same method
+still works, with one more term to carry.</p>
+
+<div class="fig">
+<svg viewBox="0 0 700 230" role="img" aria-label="A block on a surface, attached to a wall by a spring, moving to the right.">
+<defs><marker id="n2a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n2a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n2a-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8ea8"/></marker><marker id="n2a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker></defs>
+<line x1="70" y1="40" x2="70" y2="150" stroke="#1d2b23" stroke-width="3"/>
+<line x1="70" y1="44" x2="59" y2="36" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="57" x2="59" y2="49" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="70" x2="59" y2="62" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="83" x2="59" y2="75" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="96" x2="59" y2="88" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="109" x2="59" y2="101" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="122" x2="59" y2="114" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="135" x2="59" y2="127" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="148" x2="59" y2="140" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="70" y1="150" x2="660" y2="150" stroke="#1d2b23" stroke-width="3"/>
+<line x1="76" y1="150" x2="65" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="98" y1="150" x2="87" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="120" y1="150" x2="109" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="142" y1="150" x2="131" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="164" y1="150" x2="153" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="186" y1="150" x2="175" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="208" y1="150" x2="197" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="230" y1="150" x2="219" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="252" y1="150" x2="241" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="274" y1="150" x2="263" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="296" y1="150" x2="285" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="318" y1="150" x2="307" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="340" y1="150" x2="329" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="362" y1="150" x2="351" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="384" y1="150" x2="373" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="406" y1="150" x2="395" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="428" y1="150" x2="417" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="450" y1="150" x2="439" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="472" y1="150" x2="461" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="494" y1="150" x2="483" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="516" y1="150" x2="505" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="538" y1="150" x2="527" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="560" y1="150" x2="549" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="582" y1="150" x2="571" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="604" y1="150" x2="593" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="626" y1="150" x2="615" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="648" y1="150" x2="637" y2="161" stroke="#1d2b23" stroke-width="1.2"/>
+<polyline points="70.0,117.0 73.1,125.5 76.1,131.7 79.2,134.0 82.2,131.7 85.3,125.5 88.3,117.0 91.4,108.5 94.4,102.3 97.5,100.0 100.6,102.3 103.6,108.5 106.7,117.0 109.7,125.5 112.8,131.7 115.8,134.0 118.9,131.7 121.9,125.5 125.0,117.0 128.1,108.5 131.1,102.3 134.2,100.0 137.2,102.3 140.3,108.5 143.3,117.0 146.4,125.5 149.4,131.7 152.5,134.0 155.6,131.7 158.6,125.5 161.7,117.0 164.7,108.5 167.8,102.3 170.8,100.0 173.9,102.3 176.9,108.5 180.0,117.0 183.1,125.5 186.1,131.7 189.2,134.0 192.2,131.7 195.3,125.5 198.3,117.0 201.4,108.5 204.4,102.3 207.5,100.0 210.6,102.3 213.6,108.5 216.7,117.0 219.7,125.5 222.8,131.7 225.8,134.0 228.9,131.7 231.9,125.5 235.0,117.0 238.1,108.5 241.1,102.3 244.2,100.0 247.2,102.3 250.3,108.5 253.3,117.0 256.4,125.5 259.4,131.7 262.5,134.0 265.6,131.7 268.6,125.5 271.7,117.0 274.7,108.5 277.8,102.3 280.8,100.0 283.9,102.3 286.9,108.5 290.0,117.0 293.1,125.5 296.1,131.7 299.2,134.0 302.2,131.7 305.3,125.5 308.3,117.0 311.4,108.5 314.4,102.3 317.5,100.0 320.6,102.3 323.6,108.5 326.7,117.0 329.7,125.5 332.8,131.7 335.8,134.0 338.9,131.7 341.9,125.5 345.0,117.0 348.1,108.5 351.1,102.3 354.2,100.0 357.2,102.3 360.3,108.5 363.3,117.0 366.4,125.5 369.4,131.7 372.5,134.0 375.6,131.7 378.6,125.5 381.7,117.0 384.7,108.5 387.8,102.3 390.8,100.0 393.9,102.3 396.9,108.5 400.0,117.0" fill="none" stroke="#1636c8" stroke-width="2" stroke-linejoin="round"/>
+<rect x="400" y="88" width="96" height="62" fill="#fff" stroke="#1636c8" stroke-width="2.4"/>
+<line x1="514" y1="119.0" x2="582" y2="119.0" stroke="#1636c8" stroke-width="2.4" marker-end="url(#n2a-blue)"/>
+<text x="546" y="107.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-style="italic">v</text>
+<line x1="430" y1="64" x2="320" y2="64" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n2a-red)"/>
+<text x="316" y="58" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e">F<tspan font-size='11' baseline-shift='-4'>sp</tspan></text>
+<line x1="402" y1="132" x2="342" y2="132" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n2a-red)"/>
+<text x="338" y="148" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e">F<tspan font-size='11' baseline-shift='-4'>drag</tspan></text>
+<text x="690" y="32" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e">F<tspan font-size='11' baseline-shift='-4'>drag</tspan> = &minus;b<tspan font-style='italic'>v</tspan></text>
+</svg>
+  <div class="fig-note">A block sliding on a surface, with the spring pulling it back and drag opposing the velocity.&nbsp; Drag depends
+  on <b>how fast</b> it is going, not on where it is: <i>F</i><sub>drag</sub> = &minus;<i>bv</i>.</div>
+</div>
+
+<ol class="items tasks" start="9">
+  <li>Write the net force with both the spring and the drag in it, and set it equal to <i>ma</i>.</li>
+  <li>Turn it into an equation of motion by writing both <i>a</i> and <i>v</i> as derivatives of <i>x</i>, and gather everything on one
+  side.</li>
+  <li>The solution is <i>x</i>(<i>t</i>) = <i>A</i>e<sup>&minus;(<i>b</i>/2<i>m</i>)<i>t</i></sup> cos(&omega;<i>t</i> +
+  &phi;<sub>0</sub>).&nbsp; Which part of that is the oscillation and which part is the dying away?</li>
+  <li>What does a large <i>b</i>/2<i>m</i> do?&nbsp; A small one?&nbsp; And what stays the same as the amplitude falls?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev3" data-label="Show the working">Show the working</button><div class="rbody" id="rev3" hidden><div class="eq">
+  <span class="step">9)&nbsp; <b><i>F</i><sub>net</sub> = <i>F</i><sub>sp</sub> + <i>F</i><sub>drag</sub> = &minus;<i>kx</i> &minus;
+  <i>bv</i> = <i>ma</i></b>.</span>
+  <span class="step">10)&nbsp; d&sup2;<i>x</i>/d<i>t</i>&sup2; = &minus;(<i>k</i>/<i>m</i>)<i>x</i> &minus; (<i>b</i>/<i>m</i>)<i>v</i>
+  = &minus;(<i>k</i>/<i>m</i>)<i>x</i> &minus; (<i>b</i>/<i>m</i>)(d<i>x</i>/d<i>t</i>), so</span>
+  <span class="step" style="text-align:center;font-size:1.1rem"><b>d&sup2;<i>x</i>/d<i>t</i>&sup2; +
+  (<i>b</i>/<i>m</i>)(d<i>x</i>/d<i>t</i>) + (<i>k</i>/<i>m</i>)<i>x</i> = 0</b></span>
+  <span class="step">11)&nbsp; The <b>cosine</b> is the oscillation, unchanged in shape.&nbsp; The
+  <b>e<sup>&minus;(<i>b</i>/2<i>m</i>)<i>t</i></sup></b> is the dying away: it is an <b>envelope</b> that the oscillation is squeezed
+  inside, and it never crosses zero, it just gets smaller.</span>
+  <span class="step">12)&nbsp; <b>Large <i>b</i>/2<i>m</i>, decay fast.&nbsp; Small <i>b</i>/2<i>m</i>, decay slow.</b>&nbsp; What stays
+  the same is the <b>period</b>, <i>T</i> = 2&pi;/&omega; &mdash; the swings get smaller but they keep coming at the same rate.&nbsp; And
+  the <b>half-life</b> <i>t</i><sub>&frac12;</sub>, the time for the amplitude to halve, is <b>constant</b>: it takes as long to go from
+  <i>A</i> to <i>A</i>/2 as from <i>A</i>/2 to <i>A</i>/4.&nbsp; <span class="why">&mdash; which is what "exponential" means, and the
+  reason the envelope is drawn as a curve rather than a straight line down to zero</span></span>
+</div></div></div>
+
+<div class="fig">
+<svg viewBox="0 0 700 300" role="img" aria-label="A decaying oscillation with an exponential envelope.">
+<defs><marker id="n2a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n2a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n2a-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8ea8"/></marker><marker id="n2a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker></defs>
+<line x1="50" y1="139.0" x2="674" y2="139.0" stroke="#b3261e" stroke-width="2"/>
+<line x1="66" y1="24" x2="66" y2="262" stroke="#1636c8" stroke-width="2"/>
+<text x="54" y="36" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-style="italic">A</text>
+<polyline points="66.0,47.0 66.9,47.6 67.7,48.6 68.6,49.9 69.5,51.6 70.3,53.6 71.2,56.0 72.1,58.6 72.9,61.6 73.8,64.9 74.7,68.4 75.6,72.2 76.4,76.2 77.3,80.4 78.2,84.8 79.0,89.5 79.9,94.2 80.8,99.1 81.6,104.2 82.5,109.3 83.4,114.5 84.2,119.7 85.1,125.0 86.0,130.3 86.8,135.5 87.7,140.8 88.6,146.0 89.5,151.1 90.3,156.1 91.2,161.0 92.1,165.7 92.9,170.3 93.8,174.8 94.7,179.0 95.5,183.1 96.4,186.9 97.3,190.5 98.1,193.9 99.0,197.0 99.9,199.8 100.7,202.4 101.6,204.7 102.5,206.7 103.3,208.4 104.2,209.8 105.1,210.9 106.0,211.7 106.8,212.2 107.7,212.4 108.6,212.3 109.4,211.9 110.3,211.3 111.2,210.3 112.0,209.0 112.9,207.5 113.8,205.7 114.6,203.7 115.5,201.4 116.4,198.9 117.2,196.1 118.1,193.2 119.0,190.1 119.9,186.7 120.7,183.3 121.6,179.6 122.5,175.9 123.3,172.0 124.2,168.0 125.1,164.0 125.9,159.9 126.8,155.7 127.7,151.5 128.5,147.3 129.4,143.1 130.3,138.9 131.1,134.8 132.0,130.7 132.9,126.7 133.7,122.7 134.6,118.9 135.5,115.2 136.4,111.6 137.2,108.2 138.1,104.9 139.0,101.8 139.8,98.9 140.7,96.1 141.6,93.6 142.4,91.3 143.3,89.2 144.2,87.3 145.0,85.6 145.9,84.2 146.8,83.0 147.6,82.0 148.5,81.3 149.4,80.8 150.3,80.6 151.1,80.6 152.0,80.8 152.9,81.3 153.7,82.0 154.6,82.9 155.5,84.0 156.3,85.4 157.2,87.0 158.1,88.7 158.9,90.7 159.8,92.8 160.7,95.1 161.5,97.5 162.4,100.1 163.3,102.9 164.1,105.7 165.0,108.7 165.9,111.7 166.8,114.9 167.6,118.1 168.5,121.4 169.4,124.7 170.2,128.0 171.1,131.3 172.0,134.7 172.8,138.0 173.7,141.3 174.6,144.6 175.4,147.8 176.3,151.0 177.2,154.0 178.0,157.0 178.9,159.9 179.8,162.7 180.7,165.3 181.5,167.8 182.4,170.2 183.3,172.4 184.1,174.5 185.0,176.4 185.9,178.2 186.7,179.7 187.6,181.1 188.5,182.3 189.3,183.3 190.2,184.2 191.1,184.8 191.9,185.2 192.8,185.5 193.7,185.6 194.5,185.4 195.4,185.1 196.3,184.6 197.2,183.9 198.0,183.1 198.9,182.0 199.8,180.8 200.6,179.5 201.5,178.0 202.4,176.3 203.2,174.6 204.1,172.6 205.0,170.6 205.8,168.5 206.7,166.2 207.6,163.9 208.4,161.5 209.3,159.0 210.2,156.5 211.1,153.9 211.9,151.3 212.8,148.6 213.7,145.9 214.5,143.3 215.4,140.6 216.3,138.0 217.1,135.4 218.0,132.8 218.9,130.3 219.7,127.8 220.6,125.4 221.5,123.1 222.3,120.8 223.2,118.7 224.1,116.7 224.9,114.7 225.8,112.9 226.7,111.2 227.6,109.7 228.4,108.2 229.3,107.0 230.2,105.8 231.0,104.8 231.9,103.9 232.8,103.2 233.6,102.7 234.5,102.3 235.4,102.0 236.2,101.9 237.1,102.0 238.0,102.2 238.8,102.5 239.7,103.0 240.6,103.7 241.5,104.5 242.3,105.4 243.2,106.4 244.1,107.6 244.9,108.8 245.8,110.2 246.7,111.7 247.5,113.3 248.4,115.0 249.3,116.7 250.1,118.6 251.0,120.5 251.9,122.4 252.7,124.4 253.6,126.5 254.5,128.6 255.3,130.7 256.2,132.8 257.1,134.9 258.0,137.0 258.8,139.1 259.7,141.2 260.6,143.3 261.4,145.3 262.3,147.3 263.2,149.2 264.0,151.1 264.9,152.9 265.8,154.6 266.6,156.3 267.5,157.8 268.4,159.3 269.2,160.7 270.1,162.0 271.0,163.1 271.9,164.2 272.7,165.2 273.6,166.0 274.5,166.7 275.3,167.3 276.2,167.8 277.1,168.1 277.9,168.4 278.8,168.5 279.7,168.5 280.5,168.4 281.4,168.1 282.3,167.8 283.1,167.3 284.0,166.7 284.9,166.0 285.7,165.2 286.6,164.3 287.5,163.3 288.4,162.3 289.2,161.1 290.1,159.9 291.0,158.6 291.8,157.2 292.7,155.7 293.6,154.2 294.4,152.7 295.3,151.1 296.2,149.5 297.0,147.8 297.9,146.2 298.8,144.5 299.6,142.8 300.5,141.1 301.4,139.4 302.3,137.8 303.1,136.1 304.0,134.5 304.9,132.9 305.7,131.3 306.6,129.8 307.5,128.4 308.3,127.0 309.2,125.7 310.1,124.4 310.9,123.2 311.8,122.1 312.7,121.0 313.5,120.1 314.4,119.2 315.3,118.4 316.1,117.7 317.0,117.1 317.9,116.6 318.8,116.2 319.6,115.9 320.5,115.7 321.4,115.5 322.2,115.5 323.1,115.6 324.0,115.7 324.8,116.0 325.7,116.3 326.6,116.8 327.4,117.3 328.3,117.9 329.2,118.6 330.0,119.4 330.9,120.2 331.8,121.1 332.7,122.1 333.5,123.1 334.4,124.2 335.3,125.3 336.1,126.5 337.0,127.7 337.9,129.0 338.7,130.2 339.6,131.5 340.5,132.9 341.3,134.2 342.2,135.6 343.1,136.9 343.9,138.2 344.8,139.6 345.7,140.9 346.5,142.2 347.4,143.5 348.3,144.7 349.2,145.9 350.0,147.1 350.9,148.2 351.8,149.3 352.6,150.3 353.5,151.3 354.4,152.2 355.2,153.0 356.1,153.8 357.0,154.6 357.8,155.2 358.7,155.8 359.6,156.3 360.4,156.7 361.3,157.1 362.2,157.3 363.1,157.5 363.9,157.7 364.8,157.7 365.7,157.7 366.5,157.6 367.4,157.4 368.3,157.1 369.1,156.8 370.0,156.4 370.9,156.0 371.7,155.4 372.6,154.8 373.5,154.2 374.3,153.5 375.2,152.7 376.1,151.9 376.9,151.1 377.8,150.2 378.7,149.3 379.6,148.3 380.4,147.3 381.3,146.3 382.2,145.3 383.0,144.2 383.9,143.2 384.8,142.1 385.6,141.0 386.5,139.9 387.4,138.9 388.2,137.8 389.1,136.8 390.0,135.8 390.8,134.8 391.7,133.8 392.6,132.9 393.5,131.9 394.3,131.1 395.2,130.2 396.1,129.5 396.9,128.7 397.8,128.0 398.7,127.4 399.5,126.8 400.4,126.3 401.3,125.8 402.1,125.4 403.0,125.0 403.9,124.7 404.7,124.5 405.6,124.3 406.5,124.2 407.3,124.1 408.2,124.1 409.1,124.2 410.0,124.3 410.8,124.5 411.7,124.7 412.6,125.0 413.4,125.4 414.3,125.8 415.2,126.2 416.0,126.7 416.9,127.3 417.8,127.9 418.6,128.5 419.5,129.2 420.4,129.9 421.2,130.6 422.1,131.3 423.0,132.1 423.9,132.9 424.7,133.7 425.6,134.6 426.5,135.4 427.3,136.3 428.2,137.1 429.1,138.0 429.9,138.8 430.8,139.7 431.7,140.5 432.5,141.3 433.4,142.1 434.3,142.9 435.1,143.7 436.0,144.4 436.9,145.1 437.7,145.8 438.6,146.4 439.5,147.0 440.4,147.6 441.2,148.1 442.1,148.6 443.0,149.0 443.8,149.4 444.7,149.8 445.6,150.1 446.4,150.3 447.3,150.5 448.2,150.7 449.0,150.8 449.9,150.8 450.8,150.9 451.6,150.8 452.5,150.7 453.4,150.6 454.3,150.4 455.1,150.2 456.0,149.9 456.9,149.6 457.7,149.3 458.6,148.9 459.5,148.5 460.3,148.0 461.2,147.5 462.1,147.0 462.9,146.5 463.8,145.9 464.7,145.3 465.5,144.7 466.4,144.0 467.3,143.4 468.1,142.7 469.0,142.1 469.9,141.4 470.8,140.7 471.6,140.0 472.5,139.4 473.4,138.7 474.2,138.0 475.1,137.4 476.0,136.7 476.8,136.1 477.7,135.5 478.6,134.9 479.4,134.3 480.3,133.8 481.2,133.3 482.0,132.8 482.9,132.3 483.8,131.9 484.7,131.5 485.5,131.1 486.4,130.8 487.3,130.5 488.1,130.3 489.0,130.1 489.9,129.9 490.7,129.7 491.6,129.6 492.5,129.6 493.3,129.6 494.2,129.6 495.1,129.6 495.9,129.7 496.8,129.9 497.7,130.0 498.5,130.2 499.4,130.5 500.3,130.7 501.2,131.0 502.0,131.3 502.9,131.7 503.8,132.1 504.6,132.5 505.5,132.9 506.4,133.4 507.2,133.8 508.1,134.3 509.0,134.8 509.8,135.3 510.7,135.9 511.6,136.4 512.4,136.9 513.3,137.5 514.2,138.0 515.1,138.5 515.9,139.1 516.8,139.6 517.7,140.1 518.5,140.7 519.4,141.2 520.3,141.6 521.1,142.1 522.0,142.6 522.9,143.0 523.7,143.4 524.6,143.8 525.5,144.2 526.3,144.6 527.2,144.9 528.1,145.2 528.9,145.4 529.8,145.7 530.7,145.9 531.6,146.1 532.4,146.2 533.3,146.3 534.2,146.4 535.0,146.5 535.9,146.5 536.8,146.5 537.6,146.5 538.5,146.4 539.4,146.3 540.2,146.2 541.1,146.0 542.0,145.9 542.8,145.7 543.7,145.4 544.6,145.2 545.5,144.9 546.3,144.6 547.2,144.3 548.1,143.9 548.9,143.6 549.8,143.2 550.7,142.8 551.5,142.4 552.4,142.0 553.3,141.6 554.1,141.2 555.0,140.8 555.9,140.4 556.7,139.9 557.6,139.5 558.5,139.1 559.3,138.6 560.2,138.2 561.1,137.8 562.0,137.4 562.8,137.0 563.7,136.6 564.6,136.3 565.4,135.9 566.3,135.6 567.2,135.3 568.0,134.9 568.9,134.7 569.8,134.4 570.6,134.2 571.5,133.9 572.4,133.7 573.2,133.6 574.1,133.4 575.0,133.3 575.9,133.2 576.7,133.1 577.6,133.1 578.5,133.0 579.3,133.0 580.2,133.0 581.1,133.1 581.9,133.1 582.8,133.2 583.7,133.4 584.5,133.5 585.4,133.6 586.3,133.8 587.1,134.0 588.0,134.2 588.9,134.5 589.7,134.7 590.6,135.0 591.5,135.3 592.4,135.5 593.2,135.8 594.1,136.2 595.0,136.5 595.8,136.8 596.7,137.1 597.6,137.5 598.4,137.8 599.3,138.2 600.2,138.5 601.0,138.8 601.9,139.2 602.8,139.5 603.6,139.8 604.5,140.2 605.4,140.5 606.3,140.8 607.1,141.1 608.0,141.4 608.9,141.6 609.7,141.9 610.6,142.2 611.5,142.4 612.3,142.6 613.2,142.8 614.1,143.0 614.9,143.1 615.8,143.3 616.7,143.4 617.5,143.5 618.4,143.6 619.3,143.7 620.1,143.7 621.0,143.8 621.9,143.8 622.8,143.8 623.6,143.7 624.5,143.7 625.4,143.6 626.2,143.5 627.1,143.4 628.0,143.3 628.8,143.2 629.7,143.0 630.6,142.9 631.4,142.7 632.3,142.5 633.2,142.3 634.0,142.1 634.9,141.8 635.8,141.6 636.7,141.3 637.5,141.1 638.4,140.8 639.3,140.6 640.1,140.3 641.0,140.0 641.9,139.8 642.7,139.5 643.6,139.2 644.5,138.9 645.3,138.7 646.2,138.4 647.1,138.2 647.9,137.9 648.8,137.7 649.7,137.4 650.5,137.2 651.4,137.0 652.3,136.8 653.2,136.6 654.0,136.4 654.9,136.2 655.8,136.0 656.6,135.9 657.5,135.7 658.4,135.6 659.2,135.5 660.1,135.4 661.0,135.4 661.8,135.3 662.7,135.2 663.6,135.2 664.4,135.2 665.3,135.2 666.2,135.2 667.1,135.3 667.9,135.3 668.8,135.4 669.7,135.4 670.5,135.5 671.4,135.6 672.3,135.8 673.1,135.9 674.0,136.0" fill="none" stroke="#b3261e" stroke-width="2.2"/>
+<polyline points="66.0,47.0 69.8,48.8 73.6,50.6 77.4,52.4 81.2,54.1 85.0,55.8 88.8,57.5 92.6,59.1 96.4,60.7 100.2,62.3 104.0,63.8 107.8,65.3 111.6,66.8 115.4,68.3 119.2,69.7 123.0,71.1 126.8,72.4 130.6,73.8 134.4,75.1 138.2,76.3 142.0,77.6 145.8,78.8 149.6,80.0 153.4,81.2 157.2,82.4 161.0,83.5 164.8,84.6 168.6,85.7 172.4,86.8 176.2,87.8 180.0,88.8 183.8,89.8 187.6,90.8 191.4,91.8 195.2,92.7 199.0,93.7 202.8,94.6 206.6,95.5 210.4,96.3 214.2,97.2 218.0,98.0 221.8,98.8 225.6,99.6 229.4,100.4 233.2,101.2 237.0,102.0 240.8,102.7 244.6,103.4 248.4,104.1 252.2,104.8 256.0,105.5 259.8,106.2 263.6,106.9 267.4,107.5 271.2,108.1 275.0,108.7 278.8,109.4 282.6,109.9 286.4,110.5 290.2,111.1 294.0,111.7 297.8,112.2 301.6,112.7 305.4,113.3 309.2,113.8 313.0,114.3 316.8,114.8 320.6,115.3 324.4,115.7 328.2,116.2 332.0,116.7 335.8,117.1 339.6,117.5 343.4,118.0 347.2,118.4 351.0,118.8 354.8,119.2 358.6,119.6 362.4,120.0 366.2,120.4 370.0,120.8 373.8,121.1 377.6,121.5 381.4,121.8 385.2,122.2 389.0,122.5 392.8,122.8 396.6,123.2 400.4,123.5 404.2,123.8 408.0,124.1 411.8,124.4 415.6,124.7 419.4,125.0 423.2,125.2 427.0,125.5 430.8,125.8 434.6,126.1 438.4,126.3 442.2,126.6 446.0,126.8 449.8,127.1 453.6,127.3 457.4,127.5 461.2,127.8 465.0,128.0 468.8,128.2 472.6,128.4 476.4,128.6 480.2,128.8 484.0,129.1 487.8,129.2 491.6,129.4 495.4,129.6 499.2,129.8 503.0,130.0 506.8,130.2 510.6,130.4 514.4,130.5 518.2,130.7 522.0,130.9 525.8,131.0 529.6,131.2 533.4,131.4 537.2,131.5 541.0,131.7 544.8,131.8 548.6,131.9 552.4,132.1 556.2,132.2 560.0,132.4 563.8,132.5 567.6,132.6 571.4,132.8 575.2,132.9 579.0,133.0 582.8,133.1 586.6,133.2 590.4,133.4 594.2,133.5 598.0,133.6 601.8,133.7 605.6,133.8 609.4,133.9 613.2,134.0 617.0,134.1 620.8,134.2 624.6,134.3 628.4,134.4 632.2,134.5 636.0,134.6 639.8,134.7 643.6,134.7 647.4,134.8 651.2,134.9 655.0,135.0 658.8,135.1 662.6,135.2 666.4,135.2 670.2,135.3 674.0,135.4" fill="none" stroke="#1636c8" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round"/>
+<line x1="171.0" y1="82.0" x2="90.9" y2="58.0" stroke="#1636c8" stroke-width="1.6" marker-end="url(#n2a-blue)"/>
+<text x="176.54545454545456" y="86.96000000000001" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">A e<tspan font-size='11' baseline-shift='5'>&minus;(b/2m)t</tspan></text>
+<line x1="108.8" y1="223.6" x2="194.5" y2="223.6" stroke="#b3261e" stroke-width="1.8" marker-start="url(#n2a-red)" marker-end="url(#n2a-red)"/>
+<text x="151.6727272727273" y="245.64" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">T = 2&pi;/&omega;</text>
+<text x="674" y="292" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23"><tspan font-style='italic'>t</tspan></text>
+</svg>
+  <div class="fig-note">The damped oscillation and its envelope.&nbsp; The period is measured trough to trough, and it does not change as
+  the amplitude falls.</div>
+</div>
+
+<h2>Looking ahead</h2>
+<p>Three systems, one method: write the net force, turn it into an equation of motion, solve it.&nbsp; You now have a frequency for a
+spring and for a pendulum, and a description of what happens when friction is let in.&nbsp; <b>Note 2b</b> turns all of this on an actual
+problem &mdash; a block on a spring with real numbers, where you have to work backwards from a graph to find &omega; and then to a
+force.&nbsp; After that, <b>Note 3</b> leaves the single oscillating object behind and lets the disturbance travel.</p>
+
+<div class="ahead"><b>Where this sits.</b> Every one of these three is Newton's second law with a different force law put into it.
+Nothing about oscillation came from anywhere else &mdash; it is all in the minus sign, which is what sends the system back toward where it
+started.</div>
+
+<div class="callback"><span class="label">Back to your prediction</span><p><b>A heavier bob: no change.</b>&nbsp; The mass cancels in step
+6, so it is not in &omega; = &radic;(<i>g</i>/<i>L</i>) at all.&nbsp; <b>A longer string: slower.</b>&nbsp; <i>L</i> is in the
+denominator.&nbsp; <b>Up a mountain: slower.</b>&nbsp; <i>g</i> is a little smaller up there and
+<i>g</i> is on top, so &omega; falls, the swings take longer, and a pendulum clock carried up a mountain loses time.&nbsp; The heavy-bob
+one is what catches people &mdash; the same instinct that says heavy things fall faster.</p></div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M1_N2a_Springs_Pendulums_Damped_Oscillations_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the three figures are there as frames and the derivations are blank, to fill in as we work them.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 1 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

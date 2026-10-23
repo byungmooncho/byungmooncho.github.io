@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch15e &mdash; The Simple Pendulum, with worked examples</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 1 (Oscillations, Waves and Sound)
+     Chapter 15 (University Physics Volume 1)
+     Trevor deck(s): Decks: Simple Pendulum &middot; Oscillator Problems
+     "The Simple Pendulum, with worked examples" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+
+     Tier B reference page: faithful transcription, shorter synopsis, lead
+     paragraphs and captions added because a page has no voice.  No probe, no
+     exit ticket, no PE card.  References are LEAVES - no link from this page to
+     any note page (playbook Step 5a).
+
+     TWO DECKS ON ONE PAGE.  "Oscillator Problems" has no theory of its own - two of
+     its three worked examples are pendulum problems and the third is a spring-mass
+     problem - so it belongs beside the derivation it exercises, not on a page of
+     its own.  See the triage, section 3.
+
+     HIS LENGTH SYMBOL ALTERNATES between L and the script ell on the SAME slide
+     (f s4 writes F_net ~ -mg s / ell and then k ~ mg / L for the same quantity).
+     They are one quantity.  This page writes L throughout and says so here rather
+     than silently normalising something the reader might take for two lengths.
+
+     DECK f's REFERENCE SLIDE says "University Physics Volume 2" while its own link
+     resolves to volume-1/15-4; deck h's reference slide cites Volume 1 correctly.
+     Same paste error as decks a, c, d and e.  This page cites Volume 1.
+
+     HIS SLIDE 6 IS TITLED "Look at Energy" but its content is forces and periods,
+     not energy.  The heading here describes what is on it.
+
+
+     PHY 119 will have its own page for these decks when that course starts,
+     written for College Physics from the same source.  It is NOT generated from
+     this file, and the notes mirror is never run over a reference\ directory.
+
+     Triage: Planning\M1_aOscillations_Deck_Triage_PHY152_2026-10-21.md
+     Hosted on GitHub Pages, reached by link from the Module 1 reference index.
+     Never framed, so this page has no wrapper of its own.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 &middot; Oscillations, Waves and Sound</span>
+    <span>Chapter 15 (University Physics) &middot; Decks: Simple Pendulum &middot; Oscillator Problems</span>
+  </div>
+
+  <h1>The Simple Pendulum, with worked examples</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A pendulum is not obviously a harmonic oscillator: the restoring force goes as
+    sin&nbsp;&theta;, not as the displacement itself. For small swings, though,
+    sin&nbsp;&theta; and &theta; are the same number to within a per cent, and once that
+    substitution is made the pendulum turns into a spring with an effective stiffness of
+    <span class="m">mg</span>/<span class="m">L</span>. Everything already proved about springs then
+    applies &mdash; including the period, which depends on the length and on
+    <span class="m">g</span>, and not on the mass.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Free-body diagrams and resolving a force into components, arc length
+    <span class="m">s</span> = <span class="m">r</span>&theta; in radians, and from the earlier
+    pages <span class="m">F</span> = &minus;<span class="m">kx</span>,
+    &omega; = &radic;(<span class="m">k</span>/<span class="m">m</span>) and
+    <span class="m">T</span> = 1/<span class="m">f</span>.
+  </div>
+
+  <h2>Analysing a simple pendulum</h2>
+
+  <p>Two forces act on the bob: the <strong>tension</strong> in the string and the
+  <strong>force of gravity</strong>. The tension points along the string, so it can do nothing to
+  move the bob along its arc. Resolving gravity into a component along the string and a component
+  along the path, the piece along the string is cancelled by the tension and
+  <strong>the net force is just the component of <span class="m">F</span><sub>g</sub> along the
+  path</strong>.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 342" role="img" aria-label="A pendulum bob displaced from the vertical by theta. The string tension points back along the string; the weight is resolved into a component along the string, balanced by the tension, and a component along the arc, which is the whole of the net force.">
+<defs><marker id="efblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="efred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="efgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="efamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="efviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="efcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="efink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="efmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="efcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="228.0" y1="34.0" x2="372.0" y2="34.0" stroke="#1d2b23" stroke-width="3"/>
+<line x1="230.0" y1="34.0" x2="221.0" y2="25.0" stroke="#1d2b23" stroke-width="1.1"/>
+<line x1="250.0" y1="34.0" x2="241.0" y2="25.0" stroke="#1d2b23" stroke-width="1.1"/>
+<line x1="270.0" y1="34.0" x2="261.0" y2="25.0" stroke="#1d2b23" stroke-width="1.1"/>
+<line x1="290.0" y1="34.0" x2="281.0" y2="25.0" stroke="#1d2b23" stroke-width="1.1"/>
+<line x1="310.0" y1="34.0" x2="301.0" y2="25.0" stroke="#1d2b23" stroke-width="1.1"/>
+<line x1="330.0" y1="34.0" x2="321.0" y2="25.0" stroke="#1d2b23" stroke-width="1.1"/>
+<line x1="350.0" y1="34.0" x2="341.0" y2="25.0" stroke="#1d2b23" stroke-width="1.1"/>
+<line x1="370.0" y1="34.0" x2="361.0" y2="25.0" stroke="#1d2b23" stroke-width="1.1"/>
+<path d="M 210.8 201.8 A 190 190 0 0 1 389.2 201.8" fill="none" stroke="#c77b1f" stroke-width="1.4" stroke-dasharray="7 5"/>
+<line x1="300.0" y1="34.0" x2="300.0" y2="240.0" stroke="#5c6b62" stroke-width="1.1" stroke-dasharray="5 5"/>
+<text x="290.0" y="270.0" text-anchor="end" font-size="12" fill="#5c6b62">&theta; = 0</text>
+<line x1="300.0" y1="34.0" x2="389.2" y2="201.8" stroke="#1d2b23" stroke-width="2"/>
+<path d="M 300 92 A 58 58 0 0 0 327.2 85.2" fill="none" stroke="#6b4ea8" stroke-width="1.8"/>
+<text x="313.0" y="110.0" text-anchor="start" font-size="16" fill="#6b4ea8">&theta;</text>
+<text x="353.2" y="154.8" text-anchor="end" font-size="16" fill="#1d2b23" font-style="italic">L</text>
+<circle cx="389.2" cy="201.8" r="14" fill="#c77b1f" stroke="#1d2b23" stroke-width="1.6"/>
+<line x1="389.2" y1="201.8" x2="353.5" y2="134.7" stroke="#2457b8" stroke-width="2.6" marker-end="url(#efblue)"/>
+<text x="345.5" y="121.7" text-anchor="end" font-size="14" fill="#2457b8"><tspan font-style="italic">F</tspan><tspan font-size="10" baseline-shift="-4">T</tspan></text>
+<line x1="389.2" y1="201.8" x2="389.2" y2="293.8" stroke="#1e6b3c" stroke-width="2.6" marker-end="url(#efgreen)"/>
+<text x="396.2" y="293.8" text-anchor="start" font-size="14" fill="#1e6b3c"><tspan font-style="italic">F</tspan><tspan font-size="10" baseline-shift="-4">g</tspan></text>
+<line x1="389.2" y1="293.8" x2="427.3" y2="273.5" stroke="#1e6b3c" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="389.2" y1="293.8" x2="351.1" y2="239.9" stroke="#1e6b3c" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="389.2" y1="201.8" x2="351.1" y2="239.9" stroke="#c0392b" stroke-width="2.6" marker-end="url(#efred)"/>
+<text x="343.1" y="255.9" text-anchor="end" font-size="14" fill="#c0392b"><tspan font-style="italic">F</tspan><tspan font-size="10" baseline-shift="-4">g</tspan> sin&nbsp;&theta;</text>
+<line x1="389.2" y1="201.8" x2="427.3" y2="273.5" stroke="#5c6b62" stroke-width="2.2" marker-end="url(#efmuted)"/>
+<text x="436.3" y="277.5" text-anchor="start" font-size="13" fill="#5c6b62"><tspan font-style="italic">F</tspan><tspan font-size="10" baseline-shift="-4">g</tspan> cos&nbsp;&theta;</text>
+<text x="40.0" y="66.0" text-anchor="start" font-size="13" fill="#5c6b62">the tension and</text>
+<text x="40.0" y="84.0" text-anchor="start" font-size="13" fill="#5c6b62"><tspan font-style="italic">F</tspan><tspan font-size="10" baseline-shift="-4">g</tspan> cos&nbsp;&theta; cancel;</text>
+<text x="40.0" y="102.0" text-anchor="start" font-size="13" fill="#c0392b">only <tspan font-style="italic">F</tspan><tspan font-size="10" baseline-shift="-4">g</tspan> sin&nbsp;&theta;</text>
+<text x="40.0" y="120.0" text-anchor="start" font-size="13" fill="#c0392b">moves the bob</text>
+</svg>
+    <figcaption>The bob displaced by &theta;. Gravity is resolved into
+      <span class="m">F</span><sub>g</sub>&nbsp;cos&nbsp;&theta; along the string, balanced by the
+      tension, and <span class="m">F</span><sub>g</sub>&nbsp;sin&nbsp;&theta; along the arc, which
+      is the whole of the net force.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The restoring force</div>
+    <div class="body">
+      <div class="mathline"><span class="m">F</span><sub>net</sub> = &minus;<span class="m">F</span><sub>g</sub> sin &theta;
+        = &minus;<span class="m">mg</span> sin &theta;</div>
+      <p class="why">The minus sign says the force points back towards &theta; = 0. This is a
+        restoring force &mdash; but it is <em>not</em> proportional to the displacement, because
+        sin&nbsp;&theta; is not &theta;. As written, this is not a simple harmonic oscillator at
+        all.</p>
+    </div>
+  </div>
+
+  <h2>The small-angle approximation</h2>
+
+  <div class="mathblock">
+    <div class="head">Where the approximation comes from</div>
+    <div class="body">
+      <div class="mathline">sin &theta; = &theta; &minus;
+        <span class="frac"><span class="top">&theta;<span class="up">3</span></span><span class="bot">3!</span></span>
+        + <span class="frac"><span class="top">&theta;<span class="up">5</span></span><span class="bot">5!</span></span>
+        &minus; <span class="frac"><span class="top">&theta;<span class="up">7</span></span><span class="bot">7!</span></span>
+        + &middot;&middot;&middot;</div>
+      <div class="mathline">for small &theta;:&nbsp;&nbsp; sin &theta; &asymp; tan &theta; &asymp; &theta;
+        &nbsp;&nbsp;<span class="sm">(radians only)</span></div>
+      <p class="why">Every term after the first carries &theta; cubed or higher. Make &theta; small
+        and those terms fall away far faster than the first one does, so the series is just &theta;
+        to a good approximation. <strong>Radians only</strong> &mdash; the series is written for
+        radians and is simply false in degrees.</p>
+    </div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Sine of theta and theta itself plotted against theta in radians; the two curves lie on top of each other for small angles and separate past about a quarter radian.">
+<defs><marker id="sablue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="sared" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="sagreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="saamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="saviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="sacrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="saink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="samuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="sacyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="90.0" y1="250.0" x2="580.0" y2="250.0" stroke="#1d2b23" stroke-width="1.5"/>
+<line x1="90.0" y1="262.0" x2="90.0" y2="50.0" stroke="#1d2b23" stroke-width="1.5"/>
+<polyline points="90.0,250.0 91.8,249.2 93.6,248.5 95.4,247.7 97.2,246.9 99.0,246.2 100.8,245.4 102.7,244.6 104.5,243.8 106.3,243.1 108.1,242.3 109.9,241.5 111.7,240.8 113.5,240.0 115.3,239.2 117.1,238.5 118.9,237.7 120.7,236.9 122.5,236.2 124.3,235.4 126.2,234.6 128.0,233.9 129.8,233.1 131.6,232.3 133.4,231.6 135.2,230.8 137.0,230.0 138.8,229.3 140.6,228.5 142.4,227.8 144.2,227.0 146.0,226.2 147.8,225.5 149.7,224.7 151.5,224.0 153.3,223.2 155.1,222.4 156.9,221.7 158.7,220.9 160.5,220.2 162.3,219.4 164.1,218.6 165.9,217.9 167.7,217.1 169.5,216.4 171.3,215.6 173.2,214.9 175.0,214.1 176.8,213.4 178.6,212.6 180.4,211.9 182.2,211.1 184.0,210.4 185.8,209.6 187.6,208.9 189.4,208.1 191.2,207.4 193.0,206.7 194.8,205.9 196.7,205.2 198.5,204.4 200.3,203.7 202.1,203.0 203.9,202.2 205.7,201.5 207.5,200.7 209.3,200.0 211.1,199.3 212.9,198.5 214.7,197.8 216.5,197.1 218.3,196.4 220.2,195.6 222.0,194.9 223.8,194.2 225.6,193.5 227.4,192.7 229.2,192.0 231.0,191.3 232.8,190.6 234.6,189.9 236.4,189.1 238.2,188.4 240.0,187.7 241.8,187.0 243.7,186.3 245.5,185.6 247.3,184.9 249.1,184.2 250.9,183.4 252.7,182.7 254.5,182.0 256.3,181.3 258.1,180.6 259.9,179.9 261.7,179.2 263.5,178.5 265.3,177.9 267.2,177.2 269.0,176.5 270.8,175.8 272.6,175.1 274.4,174.4 276.2,173.7 278.0,173.0 279.8,172.4 281.6,171.7 283.4,171.0 285.2,170.3 287.0,169.6 288.8,169.0 290.7,168.3 292.5,167.6 294.3,167.0 296.1,166.3 297.9,165.6 299.7,165.0 301.5,164.3 303.3,163.7 305.1,163.0 306.9,162.3 308.7,161.7 310.5,161.0 312.3,160.4 314.2,159.7 316.0,159.1 317.8,158.4 319.6,157.8 321.4,157.2 323.2,156.5 325.0,155.9 326.8,155.3 328.6,154.6 330.4,154.0 332.2,153.4 334.0,152.7 335.8,152.1 337.7,151.5 339.5,150.9 341.3,150.3 343.1,149.6 344.9,149.0 346.7,148.4 348.5,147.8 350.3,147.2 352.1,146.6 353.9,146.0 355.7,145.4 357.5,144.8 359.3,144.2 361.2,143.6 363.0,143.0 364.8,142.4 366.6,141.8 368.4,141.3 370.2,140.7 372.0,140.1 373.8,139.5 375.6,139.0 377.4,138.4 379.2,137.8 381.0,137.2 382.8,136.7 384.7,136.1 386.5,135.6 388.3,135.0 390.1,134.4 391.9,133.9 393.7,133.3 395.5,132.8 397.3,132.2 399.1,131.7 400.9,131.2 402.7,130.6 404.5,130.1 406.3,129.6 408.2,129.0 410.0,128.5 411.8,128.0 413.6,127.4 415.4,126.9 417.2,126.4 419.0,125.9 420.8,125.4 422.6,124.9 424.4,124.4 426.2,123.9 428.0,123.4 429.8,122.9 431.7,122.4 433.5,121.9 435.3,121.4 437.1,120.9 438.9,120.4 440.7,119.9 442.5,119.4 444.3,119.0 446.1,118.5 447.9,118.0 449.7,117.6 451.5,117.1 453.3,116.6 455.2,116.2 457.0,115.7 458.8,115.3 460.6,114.8 462.4,114.4 464.2,113.9 466.0,113.5 467.8,113.0 469.6,112.6 471.4,112.2 473.2,111.7 475.0,111.3 476.8,110.9 478.7,110.5 480.5,110.0 482.3,109.6 484.1,109.2 485.9,108.8 487.7,108.4 489.5,108.0 491.3,107.6 493.1,107.2 494.9,106.8 496.7,106.4 498.5,106.0 500.3,105.6 502.2,105.2 504.0,104.9 505.8,104.5 507.6,104.1 509.4,103.7 511.2,103.4 513.0,103.0 514.8,102.6 516.6,102.3 518.4,101.9 520.2,101.6 522.0,101.2 523.8,100.9 525.7,100.5 527.5,100.2 529.3,99.9 531.1,99.5 532.9,99.2 534.7,98.9 536.5,98.6 538.3,98.2 540.1,97.9 541.9,97.6 543.7,97.3 545.5,97.0 547.3,96.7 549.2,96.4 551.0,96.1 552.8,95.8 554.6,95.5 556.4,95.2 558.2,94.9 560.0,94.7" fill="none" stroke="#2457b8" stroke-width="2.4"/>
+<polyline points="90.0,250.0 91.8,249.2 93.6,248.5 95.4,247.7 97.2,246.9 99.0,246.2 100.8,245.4 102.7,244.6 104.5,243.8 106.3,243.1 108.1,242.3 109.9,241.5 111.7,240.8 113.5,240.0 115.3,239.2 117.1,238.5 118.9,237.7 120.7,236.9 122.5,236.2 124.3,235.4 126.2,234.6 128.0,233.8 129.8,233.1 131.6,232.3 133.4,231.5 135.2,230.8 137.0,230.0 138.8,229.2 140.6,228.5 142.4,227.7 144.2,226.9 146.0,226.2 147.8,225.4 149.7,224.6 151.5,223.8 153.3,223.1 155.1,222.3 156.9,221.5 158.7,220.8 160.5,220.0 162.3,219.2 164.1,218.5 165.9,217.7 167.7,216.9 169.5,216.2 171.3,215.4 173.2,214.6 175.0,213.8 176.8,213.1 178.6,212.3 180.4,211.5 182.2,210.8 184.0,210.0 185.8,209.2 187.6,208.5 189.4,207.7 191.2,206.9 193.0,206.2 194.8,205.4 196.7,204.6 198.5,203.8 200.3,203.1 202.1,202.3 203.9,201.5 205.7,200.8 207.5,200.0 209.3,199.2 211.1,198.5 212.9,197.7 214.7,196.9 216.5,196.2 218.3,195.4 220.2,194.6 222.0,193.8 223.8,193.1 225.6,192.3 227.4,191.5 229.2,190.8 231.0,190.0 232.8,189.2 234.6,188.5 236.4,187.7 238.2,186.9 240.0,186.2 241.8,185.4 243.7,184.6 245.5,183.8 247.3,183.1 249.1,182.3 250.9,181.5 252.7,180.8 254.5,180.0 256.3,179.2 258.1,178.5 259.9,177.7 261.7,176.9 263.5,176.2 265.3,175.4 267.2,174.6 269.0,173.8 270.8,173.1 272.6,172.3 274.4,171.5 276.2,170.8 278.0,170.0 279.8,169.2 281.6,168.5 283.4,167.7 285.2,166.9 287.0,166.2 288.8,165.4 290.7,164.6 292.5,163.8 294.3,163.1 296.1,162.3 297.9,161.5 299.7,160.8 301.5,160.0 303.3,159.2 305.1,158.5 306.9,157.7 308.7,156.9 310.5,156.2 312.3,155.4 314.2,154.6 316.0,153.8 317.8,153.1 319.6,152.3 321.4,151.5 323.2,150.8 325.0,150.0 326.8,149.2 328.6,148.5 330.4,147.7 332.2,146.9 334.0,146.2 335.8,145.4 337.7,144.6 339.5,143.8 341.3,143.1 343.1,142.3 344.9,141.5 346.7,140.8 348.5,140.0 350.3,139.2 352.1,138.5 353.9,137.7 355.7,136.9 357.5,136.2 359.3,135.4 361.2,134.6 363.0,133.8 364.8,133.1 366.6,132.3 368.4,131.5 370.2,130.8 372.0,130.0 373.8,129.2 375.6,128.5 377.4,127.7 379.2,126.9 381.0,126.2 382.8,125.4 384.7,124.6 386.5,123.8 388.3,123.1 390.1,122.3 391.9,121.5 393.7,120.8 395.5,120.0 397.3,119.2 399.1,118.5 400.9,117.7 402.7,116.9 404.5,116.2 406.3,115.4 408.2,114.6 410.0,113.8 411.8,113.1 413.6,112.3 415.4,111.5 417.2,110.8 419.0,110.0 420.8,109.2 422.6,108.5 424.4,107.7 426.2,106.9 428.0,106.2 429.8,105.4 431.7,104.6 433.5,103.8 435.3,103.1 437.1,102.3 438.9,101.5 440.7,100.8 442.5,100.0 444.3,99.2 446.1,98.5 447.9,97.7 449.7,96.9 451.5,96.2 453.3,95.4 455.2,94.6 457.0,93.8 458.8,93.1 460.6,92.3 462.4,91.5 464.2,90.8 466.0,90.0 467.8,89.2 469.6,88.5 471.4,87.7 473.2,86.9 475.0,86.2 476.8,85.4 478.7,84.6 480.5,83.8 482.3,83.1 484.1,82.3 485.9,81.5 487.7,80.8 489.5,80.0 491.3,79.2 493.1,78.5 494.9,77.7 496.7,76.9 498.5,76.2 500.3,75.4 502.2,74.6 504.0,73.8 505.8,73.1 507.6,72.3 509.4,71.5 511.2,70.8 513.0,70.0 514.8,69.2 516.6,68.5 518.4,67.7 520.2,66.9 522.0,66.2 523.8,65.4 525.7,64.6 527.5,63.8 529.3,63.1 531.1,62.3 532.9,61.5 534.7,60.8 536.5,60.0 538.3,59.2 540.1,58.5 541.9,57.7 543.7,56.9 545.5,56.2 547.3,55.4 549.2,54.6 551.0,53.8 552.8,53.1 554.6,52.3 556.4,51.5 558.2,50.8 560.0,50.0" fill="none" stroke="#c0392b" stroke-width="2.2" stroke-dasharray="7 5"/>
+<line x1="192.5" y1="246.0" x2="192.5" y2="255.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="192.5" y="270.0" text-anchor="middle" font-size="11" fill="#5c6b62">15&deg;</text>
+<line x1="295.1" y1="246.0" x2="295.1" y2="255.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="295.1" y="270.0" text-anchor="middle" font-size="11" fill="#5c6b62">30&deg;</text>
+<line x1="500.2" y1="246.0" x2="500.2" y2="255.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="500.2" y="270.0" text-anchor="middle" font-size="11" fill="#5c6b62">60&deg;</text>
+<text x="564.0" y="270.0" text-anchor="end" font-size="12" fill="#5c6b62">&theta; (rad)</text>
+<text x="390.0" y="94.0" text-anchor="start" font-size="15" fill="#c0392b">&theta;</text>
+<text x="408.0" y="154.0" text-anchor="start" font-size="15" fill="#2457b8">sin &theta;</text>
+<text x="90.0" y="288.0" text-anchor="start" font-size="12" fill="#5c6b62">sin 0.2618 = 0.2588 &mdash; a 1% error at 15&deg;, 5% at 30&deg;</text>
+</svg>
+    <figcaption>sin&nbsp;&theta; against &theta;, both in radians. The two lie on top of each other
+      for small angles and only visibly part company beyond about half a radian.</figcaption>
+  </figure>
+
+  <div class="check">
+    <span class="label">How good is it?</span>
+    <p class="q">15&deg; is 0.2618 rad. How far off is the approximation there?</p>
+    <p class="ans">sin&nbsp;0.2618&nbsp;rad = <b>0.2588</b>, against &theta; = 0.2618 &mdash; about
+      <b>1% high</b>. At 30&deg; the error is near 5%, which is usually where it stops being
+      acceptable.</p>
+  </div>
+
+  <h2>From the arc to a spring constant</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 260" role="img" aria-label="The arc swept by a pendulum bob, with the arc length s equal to L times theta.">
+<defs><marker id="eablue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="eared" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="eagreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="eaamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="eaviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="eacrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="eaink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="eamuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="eacyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="260.0" y1="30.0" x2="380.0" y2="30.0" stroke="#1d2b23" stroke-width="3"/>
+<line x1="320.0" y1="30.0" x2="320.0" y2="200.0" stroke="#5c6b62" stroke-width="1.1" stroke-dasharray="5 5"/>
+<line x1="320.0" y1="30.0" x2="415.1" y2="170.9" stroke="#1d2b23" stroke-width="2"/>
+<circle cx="415.1" cy="170.9" r="13" fill="#c77b1f" stroke="#1d2b23" stroke-width="1.6"/>
+<path d="M 320 200 A 170 170 0 0 1 415.1 170.9" fill="none" stroke="#c0392b" stroke-width="3"/>
+<text x="377.3" y="223.4" text-anchor="start" font-size="16" fill="#c0392b">s = L&theta;</text>
+<text x="306.0" y="115.0" text-anchor="end" font-size="16" fill="#1d2b23" font-style="italic">L</text>
+<text x="334.0" y="84.0" text-anchor="start" font-size="16" fill="#6b4ea8">&theta;</text>
+<text x="60.0" y="70.0" text-anchor="start" font-size="13" fill="#5c6b62">for small &theta;, the arc and the</text>
+<text x="60.0" y="88.0" text-anchor="start" font-size="13" fill="#5c6b62">straight-line displacement are</text>
+<text x="60.0" y="106.0" text-anchor="start" font-size="13" fill="#5c6b62">the same thing</text>
+</svg>
+    <figcaption>The bob travels along an arc of length
+      <span class="m">s</span> = <span class="m">L</span>&theta;, which for small angles is
+      indistinguishable from a straight-line displacement.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">Rewriting the restoring force as <span class="m">F</span> = &minus;<span class="m">kx</span></div>
+    <div class="body">
+      <div class="mathline"><span class="m">s</span> = <span class="m">r</span>&theta;
+        = <span class="m">L</span>&theta;
+        &nbsp;&rarr;&nbsp; &theta; = <span class="frac"><span class="top"><span class="m">s</span></span><span class="bot"><span class="m">L</span></span></span>
+        &asymp; sin &theta;</div>
+      <div class="mathline"><span class="m">F</span><sub>net</sub> &asymp;
+        &minus;<span class="m">mg</span> <span class="frac"><span class="top"><span class="m">s</span></span><span class="bot"><span class="m">L</span></span></span>
+        = &minus;<span class="frac"><span class="top"><span class="m">mg</span></span><span class="bot"><span class="m">L</span></span></span><span class="m">s</span></div>
+      <div class="mathline">compare&nbsp;&nbsp; <span class="m">F</span> = &minus;<span class="m">kx</span>
+        &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+        <span class="m">k</span> &asymp; <span class="frac"><span class="top"><span class="m">mg</span></span><span class="bot"><span class="m">L</span></span></span></div>
+      <p class="why">Two substitutions did all the work: the arc length turned the angle into a
+        <em>displacement</em>, and the small-angle approximation turned sin&nbsp;&theta; into that
+        same displacement divided by <span class="m">L</span>. What is left has exactly the shape of
+        Hooke&rsquo;s law, with everything that is not <span class="m">s</span> playing the part of
+        <span class="m">k</span>.</p>
+    </div>
+  </div>
+
+  <h2>Comparing the two potential energies</h2>
+
+  <div class="mathblock">
+    <div class="head">Elastic against gravitational</div>
+    <div class="body">
+      <div class="mathline"><span class="m">U</span><sub>spr</sub> = &frac12;<span class="m">k</span><span class="m">x</span><span class="up">2</span></div>
+      <div class="mathline"><span class="m">U</span><sub>pen</sub> = &frac12;
+        <span class="frac"><span class="top"><span class="m">mg</span></span><span class="bot"><span class="m">L</span></span></span>
+        (<span class="m">L</span> sin &theta;)<span class="up">2</span></div>
+      <div class="mathline"><span class="m">U</span><sub>g</sub> = <span class="m">mgh</span>
+        = <span class="m">mg</span>(<span class="m">L</span> &minus; <span class="m">L</span> cos &theta;)</div>
+      <p class="why">The middle line is the spring expression with the pendulum&rsquo;s effective
+        <span class="m">k</span> and its horizontal displacement; the last is the honest
+        gravitational potential, found from how far the bob has risen. They are not the same
+        function &mdash; but plot them and they sit on top of each other near &theta; = 0 and only
+        separate well outside the small-angle range. Trevor&rsquo;s chart makes the point at
+        20&deg; = 0.349 rad, where they still agree.</p>
+    </div>
+  </div>
+
+  <h2>The period of a simple pendulum</h2>
+
+  <table class="grid">
+    <tr><th></th><th>Pendulum</th><th>Spring</th></tr>
+    <tr><td>Restoring force</td>
+        <td><span class="m">F</span><sub>net</sub> &asymp; &minus;(<span class="m">mg</span>/<span class="m">L</span>)<span class="m">s</span></td>
+        <td><span class="m">F</span><sub>net</sub> = &minus;<span class="m">ks</span></td></tr>
+    <tr><td>Effective stiffness</td>
+        <td><span class="m">k</span> = <span class="m">mg</span>/<span class="m">L</span></td>
+        <td><span class="m">k</span></td></tr>
+    <tr><td>Angular frequency</td>
+        <td>&omega; = &radic;(<span class="m">mg</span>/<span class="m">mL</span>) = &radic;(<span class="m">g</span>/<span class="m">L</span>)</td>
+        <td>&omega; = &radic;(<span class="m">k</span>/<span class="m">m</span>)</td></tr>
+    <tr><td>Period</td>
+        <td><span class="m">T</span> = 2&pi;&radic;(<span class="m">L</span>/<span class="m">g</span>)</td>
+        <td><span class="m">T</span> = 2&pi;&radic;(<span class="m">m</span>/<span class="m">k</span>)</td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">The mass cancels</span>
+    It goes into &omega; = &radic;(<span class="m">mg</span>/<span class="m">mL</span>) and comes
+    straight back out. <strong>The period of a pendulum does not depend on the mass of the
+    bob</strong> &mdash; it depends on the length and on the local
+    <span class="m">g</span>. That is the opposite of the spring, whose period depends on the mass
+    and not at all on <span class="m">g</span>. Any pendulum mass quoted in a problem is there to be
+    left unused.
+  </div>
+
+  <h2>Worked example 1 &mdash; finding the length</h2>
+
+  <div class="mathblock">
+    <div class="head">A simple pendulum has a mass of 2.00 kg and a period of 2.50 s. What is its length?</div>
+    <div class="body">
+      <div class="mathline"><span class="sm">given:</span>&nbsp;
+        <span class="m">T</span> = 2.50 s,&nbsp; <span class="m">m</span> = 2.00 kg,&nbsp;
+        <span class="m">g</span> = 9.80 m/s<span class="up">2</span>
+        &nbsp;&nbsp;<span class="sm">find <span class="m">L</span></span></div>
+      <div class="mathline"><span class="m">T</span> = 2&pi;&radic;(<span class="m">L</span>/<span class="m">g</span>)
+        &nbsp;&rarr;&nbsp; <span class="m">T</span><span class="up">2</span>
+        = 4&pi;<span class="up">2</span><span class="m">L</span>/<span class="m">g</span>
+        &nbsp;&rarr;&nbsp; <span class="m">L</span>
+        = <span class="frac"><span class="top"><span class="m">T</span><span class="up">2</span></span><span class="bot">4&pi;<span class="up">2</span></span></span><span class="m">g</span></div>
+      <div class="mathline"><span class="m">L</span> =
+        <span class="frac"><span class="top">(2.50 s)<span class="up">2</span></span><span class="bot">4&pi;<span class="up">2</span></span></span>
+        &times; 9.80 m/s<span class="up">2</span> = 1.55148 m</div>
+      <div class="mathline"><span class="m">L</span> = <strong>1.55 m</strong></div>
+      <p class="why">The 2.00 kg is never used. Rearranging before substituting is worth the extra
+        line: squaring both sides first is what gets <span class="m">L</span> out from under the
+        root.</p>
+    </div>
+  </div>
+
+  <h2>Worked example 2 &mdash; the same pendulum on the moon</h2>
+
+  <div class="mathblock">
+    <div class="head">A pendulum of mass 0.75 kg has a period of 1.25 s on the earth. What is its period on the moon?</div>
+    <div class="body">
+      <div class="mathline"><span class="sm">given:</span>&nbsp;
+        <span class="m">T</span> = 1.25 s,&nbsp;
+        <span class="m">g</span><sub>e</sub> = 9.80 m/s<span class="up">2</span>,&nbsp;
+        <span class="m">g</span><sub>m</sub> = 1.622 m/s<span class="up">2</span></div>
+      <div class="mathline"><span class="sm">on earth:</span>&nbsp; <span class="m">L</span> =
+        <span class="frac"><span class="top">(1.25 s)<span class="up">2</span></span><span class="bot">4&pi;<span class="up">2</span></span></span>
+        &times; 9.80 m/s<span class="up">2</span> = 0.38787 m &asymp; 0.39 m</div>
+      <div class="mathline"><span class="sm">on the moon:</span>&nbsp; <span class="m">T</span>
+        = 2&pi;&radic;(0.38787 m / 1.622 m/s<span class="up">2</span>) = 3.0725 s</div>
+      <div class="mathline"><span class="m">T</span> = <strong>3.07 s</strong></div>
+      <p class="why">The length is the bridge. It is the one thing that travels unchanged, so the
+        route is always earth &rarr; length &rarr; moon. Carry the unrounded 0.38787 m into the
+        second step and round once, at the end. Weaker gravity, slower swing &mdash; about two and a
+        half times the period, which is &radic;(9.80/1.622).</p>
+    </div>
+  </div>
+
+  <h2>Worked example 3 &mdash; a spring-mass system in two places</h2>
+
+  <div class="mathblock">
+    <div class="head">A 0.500 kg mass on a spring oscillates at 12.2 Hz. Find (a) the period, (b) the spring constant, (c) the period on the moon.</div>
+    <div class="body">
+      <div class="mathline"><span class="sm">(a)</span>&nbsp; <span class="m">T</span>
+        = 1/<span class="m">f</span> = 1 / (12.2 s<span class="up">&minus;1</span>) = 0.08197 s
+        = <strong>0.0820 s</strong></div>
+      <div class="mathline"><span class="sm">(b)</span>&nbsp;
+        &radic;(<span class="m">k</span>/<span class="m">m</span>) = 2&pi;<span class="m">f</span>
+        &nbsp;&rarr;&nbsp; <span class="m">k</span>/<span class="m">m</span>
+        = 4&pi;<span class="up">2</span><span class="m">f</span><span class="up">2</span>
+        &nbsp;&rarr;&nbsp; <span class="m">k</span>
+        = 4&pi;<span class="up">2</span><span class="m">f</span><span class="up">2</span><span class="m">m</span></div>
+      <div class="mathline"><span class="m">k</span> = 4&pi;<span class="up">2</span>(12.2 Hz)<span class="up">2</span>(0.500 kg)
+        = 2937.98 kg/s<span class="up">2</span> = <strong>2940 N/m</strong></div>
+      <div class="mathline"><span class="sm">(c)</span>&nbsp; <span class="m">T</span>
+        = 2&pi;&radic;(<span class="m">m</span>/<span class="m">k</span>)
+        &mdash; <strong>no <span class="m">g</span> appears</strong>, so
+        <span class="m">T</span> = <strong>0.0820 s</strong> on the moon as well.</div>
+      <p class="why">kg/s<span class="up">2</span> and N/m are the same unit: N = kg&middot;m/s<span class="up">2</span>,
+        so N/m = kg/s<span class="up">2</span>. Part (c) is the whole point of the problem. A
+        spring-mass system keeps its period anywhere; a pendulum does not, because its restoring
+        force <em>is</em> gravity.</p>
+    </div>
+  </div>
+
+  <h2>In short</h2>
+  <ul>
+    <li>The net force on a pendulum bob is the component of gravity along the arc; the tension and
+      the other component cancel.</li>
+    <li>The small-angle approximation, in <strong>radians</strong>, turns sin&nbsp;&theta; into
+      &theta; and makes the pendulum a simple harmonic oscillator with
+      <span class="m">k</span> = <span class="m">mg</span>/<span class="m">L</span>.</li>
+    <li><span class="m">T</span> = 2&pi;&radic;(<span class="m">L</span>/<span class="m">g</span>)
+      &mdash; length and local gravity, never the mass.</li>
+    <li>Pendulums need a gravitational field; a properly designed spring-mass system has the same
+      period anywhere.</li>
+    <li>Several equations give a period. Do not mix them up: check whether the one in your hand has
+      a <span class="m">g</span> in it.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/16-4-the-simple-pendulum" target="_blank" rel="noopener">16.4 The Simple Pendulum</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Sep 19, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/15-4-pendulums" target="_blank" rel="noopener">15.4 Pendulums</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentations <em>Simple Pendulum</em> and <em>Oscillator Problems</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   Reached by link, not framed, so this is inert here - kept so the page behaves if embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch16c &mdash; Energy and Power in Waves</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 1 (Oscillations, Waves and Sound)
+     Chapter 16 (University Physics Volume 1)
+     Trevor deck(s): Deck: Energy and Power in Waves
+     "Energy and Power in Waves" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+
+     Tier B reference page: faithful transcription, shorter synopsis, lead
+     paragraphs and captions added because a page has no voice.  No probe, no
+     exit ticket, no PE card.  References are LEAVES - no link from this page to
+     any note page (playbook Step 5a).
+
+     THE LONGEST AND DENSEST DECK IN THE b-Waves SET, and the only one that is
+     calculus throughout: both energies are reached by integrating along one
+     wavelength.  That is correct for PHY 152, whose textbook is University Physics.
+     IT IS NOT FENCED, because a reference page is never mirrored - PHY 119's version
+     of this page is authored separately from the same deck, for College Physics,
+     when that course starts.  mirror_152_to_119.py is never run over a reference\
+     directory.
+
+     ONE TYPO IN THE SOURCE IS CORRECTED AND RECORDED.  His slide 5 line 3 reads
+     dU = 1/2 k_s^2 A^2 sin^2(kx - wt).  The line above it has k_s to the first power
+     and the line below it has (mu dx) omega^2, which is k_s to the first power.  The
+     square is a slip; the page writes k_s.  No change is proposed to his deck.
+
+     HIS STRING-VIBRATOR FIGURE appears unchanged on slides 3, 4, 5 and 6.  Drawn
+     ONCE here, per the playbook.
+
+     THE POWER CHART IS GENERATED FROM HIS NUMBERS - peak 100.0 W, average 50.0 W,
+     wave period 2.0 s - so the three peaks in a 2.0 s window and the average sitting
+     at exactly half the peak are the curve's own properties, not annotations.
+
+
+     PHY 119 will have its own page for these decks when that course starts,
+     written for College Physics from the same source.  It is NOT generated from
+     this file, and the notes mirror is never run over a reference\ directory.
+
+     Triage: Planning\M1_bWaves_Deck_Triage_PHY152_2026-10-21.md
+     Hosted on GitHub Pages, reached by link from the Module 1 reference index.
+     Never framed, so this page has no wrapper of its own.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 &middot; Oscillations, Waves and Sound</span>
+    <span>Chapter 16 (University Physics) &middot; Deck: Energy and Power in Waves</span>
+  </div>
+
+  <h1>Energy and Power in Waves</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A wave moves energy, and this page works out how much. Take one small piece of the string, find
+    its kinetic and potential energy as an oscillator, and add up every piece along one wavelength.
+    Both halves come out the same, the total depends on the <em>square</em> of the amplitude and the
+    <em>square</em> of the frequency, and dividing it by the period gives the power. The one trap is
+    that a power graph repeats twice as fast as the wave does.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    <span class="m">y</span> = <span class="m">A</span> sin(<span class="m">kx</span> &minus;
+    &omega;<span class="m">t</span>) and &mu; = <span class="m">m</span>/<span class="m">L</span>
+    from the previous pages, &frac12;<span class="m">mv</span><span class="up">2</span> and
+    &frac12;<span class="m">k</span><sub>s</sub><span class="m">y</span><span class="up">2</span>
+    from the oscillations pages, and enough calculus to integrate a
+    sin<span class="up">2</span>.
+  </div>
+
+  <div class="tip">
+    <span class="label">Two different k&rsquo;s</span>
+    <strong>Do not confuse the wave number <span class="m">k</span> = 2&pi;/&lambda; with the spring
+    constant <span class="m">k</span><sub>s</sub>.</strong> They appear in the same lines on this
+    page and they are unrelated: one is radians per metre, the other newtons per metre. The
+    subscript is doing real work here, and dropping it is the commonest way to lose this derivation.
+  </div>
+
+  <h2>Setting up: one wave, one small piece of it</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 256" role="img" aria-label="A string vibrator driving a wave along a string. One small piece of the string, of mass delta m, is picked out; it moves straight up and down with velocity v-y while the wave travels along the string with velocity v-w.">
+<defs><marker id="cvblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="cvred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="cvgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="cvamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="cvviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="cvcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="cvink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="cvmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="cvcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<rect x="94" y="100" width="86" height="56" rx="7" fill="#dfe6e2" stroke="#1d2b23" stroke-width="1.8"/>
+<text x="137.0" y="126.0" text-anchor="middle" font-size="11.5" fill="#1d2b23">string</text>
+<text x="137.0" y="140.0" text-anchor="middle" font-size="11.5" fill="#1d2b23">vibrator</text>
+<line x1="180.0" y1="112.0" x2="190.0" y2="112.0" stroke="#1d2b23" stroke-width="1.4"/>
+<line x1="180.0" y1="144.0" x2="190.0" y2="144.0" stroke="#1d2b23" stroke-width="1.4"/>
+<polyline points="190.0,128.0 191.6,126.0 193.2,123.9 194.7,121.9 196.3,119.9 197.9,117.9 199.5,116.0 201.0,114.1 202.6,112.2 204.2,110.3 205.8,108.5 207.3,106.7 208.9,105.0 210.5,103.3 212.1,101.7 213.7,100.1 215.2,98.7 216.8,97.2 218.4,95.9 220.0,94.6 221.5,93.4 223.1,92.3 224.7,91.3 226.3,90.4 227.8,89.5 229.4,88.7 231.0,88.1 232.6,87.5 234.2,87.0 235.7,86.6 237.3,86.3 238.9,86.1 240.5,86.0 242.0,86.0 243.6,86.1 245.2,86.3 246.8,86.6 248.3,87.0 249.9,87.5 251.5,88.1 253.1,88.7 254.7,89.5 256.2,90.4 257.8,91.3 259.4,92.3 261.0,93.4 262.5,94.6 264.1,95.9 265.7,97.2 267.3,98.7 268.8,100.1 270.4,101.7 272.0,103.3 273.6,105.0 275.2,106.7 276.7,108.5 278.3,110.3 279.9,112.2 281.5,114.1 283.0,116.0 284.6,117.9 286.2,119.9 287.8,121.9 289.3,123.9 290.9,126.0 292.5,128.0 294.1,130.0 295.7,132.1 297.2,134.1 298.8,136.1 300.4,138.1 302.0,140.0 303.5,141.9 305.1,143.8 306.7,145.7 308.3,147.5 309.8,149.3 311.4,151.0 313.0,152.7 314.6,154.3 316.2,155.9 317.7,157.3 319.3,158.8 320.9,160.1 322.5,161.4 324.0,162.6 325.6,163.7 327.2,164.7 328.8,165.6 330.3,166.5 331.9,167.3 333.5,167.9 335.1,168.5 336.7,169.0 338.2,169.4 339.8,169.7 341.4,169.9 343.0,170.0 344.5,170.0 346.1,169.9 347.7,169.7 349.3,169.4 350.8,169.0 352.4,168.5 354.0,167.9 355.6,167.3 357.2,166.5 358.7,165.6 360.3,164.7 361.9,163.7 363.5,162.6 365.0,161.4 366.6,160.1 368.2,158.8 369.8,157.3 371.3,155.9 372.9,154.3 374.5,152.7 376.1,151.0 377.7,149.3 379.2,147.5 380.8,145.7 382.4,143.8 384.0,141.9 385.5,140.0 387.1,138.1 388.7,136.1 390.3,134.1 391.8,132.1 393.4,130.0 395.0,128.0 396.6,126.0 398.2,123.9 399.7,121.9 401.3,119.9 402.9,117.9 404.5,116.0 406.0,114.1 407.6,112.2 409.2,110.3 410.8,108.5 412.3,106.7 413.9,105.0 415.5,103.3 417.1,101.7 418.7,100.1 420.2,98.7 421.8,97.2 423.4,95.9 425.0,94.6 426.5,93.4 428.1,92.3 429.7,91.3 431.3,90.4 432.8,89.5 434.4,88.7 436.0,88.1 437.6,87.5 439.2,87.0 440.7,86.6 442.3,86.3 443.9,86.1 445.5,86.0 447.0,86.0 448.6,86.1 450.2,86.3 451.8,86.6 453.3,87.0 454.9,87.5 456.5,88.1 458.1,88.7 459.7,89.5 461.2,90.4 462.8,91.3 464.4,92.3 466.0,93.4 467.5,94.6 469.1,95.9 470.7,97.2 472.3,98.7 473.8,100.1 475.4,101.7 477.0,103.3 478.6,105.0 480.2,106.7 481.7,108.5 483.3,110.3 484.9,112.2 486.5,114.1 488.0,116.0 489.6,117.9 491.2,119.9 492.8,121.9 494.3,123.9 495.9,126.0 497.5,128.0 499.1,130.0 500.7,132.1 502.2,134.1 503.8,136.1 505.4,138.1 507.0,140.0 508.5,141.9 510.1,143.8 511.7,145.7 513.3,147.5 514.8,149.3 516.4,151.0 518.0,152.7 519.6,154.3 521.2,155.9 522.7,157.3 524.3,158.8 525.9,160.1 527.5,161.4 529.0,162.6 530.6,163.7 532.2,164.7 533.8,165.6 535.3,166.5 536.9,167.3 538.5,167.9 540.1,168.5 541.7,169.0 543.2,169.4 544.8,169.7 546.4,169.9 548.0,170.0 549.5,170.0 551.1,169.9 552.7,169.7 554.3,169.4 555.8,169.0 557.4,168.5 559.0,167.9 560.6,167.3 562.2,166.5 563.7,165.6 565.3,164.7 566.9,163.7 568.5,162.6 570.0,161.4 571.6,160.1 573.2,158.8 574.8,157.3 576.3,155.9 577.9,154.3 579.5,152.7 581.1,151.0 582.7,149.3 584.2,147.5 585.8,145.7 587.4,143.8 589.0,141.9 590.5,140.0 592.1,138.1 593.7,136.1 595.3,134.1 596.8,132.1 598.4,130.0 600.0,128.0" fill="none" stroke="#c77b1f" stroke-width="4"/>
+<line x1="190.0" y1="128.0" x2="600.0" y2="128.0" stroke="#d7e2da" stroke-width="1.2"/>
+<rect x="234.2" y="77.0" width="14" height="18" fill="#b0145a" fill-opacity="0.85"/>
+<line x1="225.2" y1="64.0" x2="257.2" y2="64.0" stroke="#6b4ea8" stroke-width="1.2"/>
+<line x1="225.2" y1="68.0" x2="225.2" y2="60.0" stroke="#6b4ea8" stroke-width="1.2"/>
+<line x1="257.2" y1="68.0" x2="257.2" y2="60.0" stroke="#6b4ea8" stroke-width="1.2"/>
+<text x="263.2" y="68.0" text-anchor="start" font-size="13" fill="#6b4ea8">&Delta;m</text>
+<line x1="241.2" y1="100.0" x2="241.2" y2="148.0" stroke="#1e6b3c" stroke-width="2.4" marker-end="url(#cvgreen)"/>
+<text x="233.2" y="130.0" text-anchor="end" font-size="14" fill="#1e6b3c"><tspan font-style="italic">v</tspan><tspan font-size="10" baseline-shift="-4">y</tspan></text>
+<line x1="419.6" y1="178.0" x2="505.6" y2="178.0" stroke="#2457b8" stroke-width="2.4" marker-end="url(#cvblue)"/>
+<text x="513.6" y="182.0" text-anchor="start" font-size="14" fill="#2457b8"><tspan font-style="italic">v</tspan><tspan font-size="10" baseline-shift="-4">w</tspan></text>
+<text x="461.6" y="198.0" text-anchor="middle" font-size="11.5" fill="#2457b8">the WAVE</text>
+<text x="241.2" y="166.0" text-anchor="middle" font-size="11.5" fill="#1e6b3c">the STRING</text>
+<line x1="190.0" y1="28.0" x2="190.0" y2="42.0" stroke="#6b4ea8" stroke-width="1.1" stroke-dasharray="4 4"/>
+<line x1="395.0" y1="28.0" x2="395.0" y2="42.0" stroke="#6b4ea8" stroke-width="1.1" stroke-dasharray="4 4"/>
+<line x1="192.0" y1="34.0" x2="393.0" y2="34.0" stroke="#6b4ea8" stroke-width="1.8" marker-end="url(#cvviolet)"/>
+<line x1="393.0" y1="34.0" x2="192.0" y2="34.0" stroke="#6b4ea8" stroke-width="1.8" marker-end="url(#cvviolet)"/>
+<text x="292.5" y="26.0" text-anchor="middle" font-size="15" fill="#6b4ea8">&lambda;</text>
+<text x="94.0" y="228.0" text-anchor="start" font-size="12" fill="#5c6b62">&mu; = m/L = &Delta;m/&Delta;x, so &Delta;m = &mu;&Delta;x &mdash; which is how a mass gets into an integral along the string</text>
+<text x="94.0" y="248.0" text-anchor="start" font-size="12" fill="#1d2b23"><tspan font-style="italic">v</tspan><tspan font-size="10" baseline-shift="-4">w</tspan> is the speed of the WAVE; <tspan font-style="italic">v</tspan><tspan font-size="10" baseline-shift="-4">y</tspan> is the speed of the STRING. The power equation uses the first one.</text>
+</svg>
+    <figcaption>A string vibrator drives a wave along the string. A short piece of it, of mass
+      &Delta;<span class="m">m</span>, moves straight up and down with speed
+      <span class="m">v</span><sub>y</sub> while the wave travels along the string at
+      <span class="m">v</span><sub>w</sub>.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The position and the velocity of that piece</div>
+    <div class="body">
+      <div class="mathline"><span class="m">y</span>(<span class="m">x</span>,<span class="m">t</span>)
+        = <span class="m">A</span> sin(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)
+        &nbsp;&nbsp;<span class="sm"><span class="m">k</span> = 2&pi;/&lambda;,&nbsp;
+        &omega; = 2&pi;<span class="m">f</span></span></div>
+      <div class="mathline"><span class="m">v</span><sub>y</sub> =
+        <span class="frac"><span class="top">d<span class="m">y</span></span><span class="bot">d<span class="m">t</span></span></span>
+        = <span class="m">A</span> cos(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)(&minus;&omega;)
+        = &minus;&omega;<span class="m">A</span> cos(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)</div>
+      <p class="why">The derivative is with respect to <span class="m">t</span> at a
+        <em>fixed</em> <span class="m">x</span>, which is what makes it the speed of the string and
+        not the speed of the wave. The &minus;&omega; falls out of the chain rule, and the maximum
+        transverse speed is &omega;<span class="m">A</span> &mdash; the same
+        <span class="m">A</span>&omega; the oscillator pages produced, because each piece of string
+        <em>is</em> an oscillator.</p>
+    </div>
+  </div>
+
+  <h2>Kinetic energy, piece by piece</h2>
+
+  <div class="mathblock">
+    <div class="head">From &frac12;<span class="m">mv</span><span class="up">2</span> to a differential</div>
+    <div class="body">
+      <div class="mathline"><span class="m">K</span> = &frac12;&Delta;<span class="m">m</span>
+        <span class="m">v</span><sub>y</sub><span class="up">2</span>
+        &nbsp;&nbsp;&nbsp;&mu; =
+        <span class="frac"><span class="top"><span class="m">m</span></span><span class="bot"><span class="m">L</span></span></span>
+        = <span class="frac"><span class="top">&Delta;<span class="m">m</span></span><span class="bot">&Delta;<span class="m">x</span></span></span>
+        &nbsp;&rarr;&nbsp; &Delta;<span class="m">m</span> = &mu;&Delta;<span class="m">x</span></div>
+      <div class="mathline">&Delta;<span class="m">K</span> = &frac12;(&mu;&Delta;<span class="m">x</span>)
+        <span class="m">v</span><sub>y</sub><span class="up">2</span></div>
+      <div class="mathline">d<span class="m">K</span> = &frac12;(&mu; d<span class="m">x</span>)
+        {&minus;&omega;<span class="m">A</span> cos(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)}<span class="up">2</span></div>
+      <div class="mathline">d<span class="m">K</span> = &frac12;(&mu; d<span class="m">x</span>)
+        &omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>
+        cos<span class="up">2</span>(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)</div>
+      <p class="why">&mu; is what turns a length into a mass. That one substitution,
+        &Delta;<span class="m">m</span> = &mu;&Delta;<span class="m">x</span>, is what lets an
+        energy be integrated <em>along the string</em> &mdash; without it there is nothing to
+        integrate over. Squaring kills the minus sign, which is why the energy does not care which
+        way the piece happens to be moving.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Adding up one wavelength <span class="sm">&mdash; a little bit of calculus</span></div>
+    <div class="body">
+      <div class="mathline"><span class="m">K</span><sub>&lambda;</sub> =
+        &int;<sub>0</sub><sup>&lambda;</sup> d<span class="m">K</span> =
+        &int;<sub>0</sub><sup>&lambda;</sup> &frac12;(&mu; d<span class="m">x</span>)
+        &omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>
+        cos<span class="up">2</span>(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)</div>
+      <div class="mathline"><span class="m">K</span><sub>&lambda;</sub> =
+        &frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>
+        &int;<sub>0</sub><sup>&lambda;</sup>
+        cos<span class="up">2</span>(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>) d<span class="m">x</span></div>
+      <div class="mathline"><span class="m">K</span><sub>&lambda;</sub> =
+        &frac14;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;</div>
+      <p class="why">Everything except the cos<span class="up">2</span> is constant along the string
+        at a fixed instant, so it comes outside. The integral of
+        cos<span class="up">2</span> over exactly one cycle is half the interval &mdash; that is
+        where the &frac12; becomes a &frac14;, and it is the only piece of calculus in the whole
+        derivation.</p>
+    </div>
+  </div>
+
+  <h2>Potential energy, the same way</h2>
+
+  <div class="mathblock">
+    <div class="head">Each piece of string is a little spring</div>
+    <div class="body">
+      <div class="mathline"><span class="m">U</span> = &frac12;<span class="m">k</span><sub>s</sub><span class="m">y</span><span class="up">2</span>
+        &nbsp;&nbsp;&nbsp;with&nbsp;&nbsp;
+        <span class="m">k</span><sub>s</sub> = <span class="m">m</span>&omega;<span class="up">2</span>
+        &nbsp;<span class="sm">(from the oscillations chapter)</span></div>
+      <div class="mathline">d<span class="m">U</span> = &frac12;<span class="m">k</span><sub>s</sub>
+        {<span class="m">A</span> sin(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)}<span class="up">2</span></div>
+      <div class="mathline">d<span class="m">U</span> = &frac12;<span class="m">k</span><sub>s</sub>
+        <span class="m">A</span><span class="up">2</span>
+        sin<span class="up">2</span>(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)</div>
+      <div class="mathline">d<span class="m">U</span> = &frac12;(&mu; d<span class="m">x</span>)
+        &omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>
+        sin<span class="up">2</span>(<span class="m">kx</span> &minus; &omega;<span class="m">t</span>)</div>
+      <div class="mathline"><span class="m">U</span><sub>&lambda;</sub> =
+        &int;<sub>0</sub><sup>&lambda;</sup> d<span class="m">U</span> =
+        &frac14;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;</div>
+      <p class="why">The last substitution is the one to watch:
+        <span class="m">k</span><sub>s</sub> = <span class="m">m</span>&omega;<span class="up">2</span>
+        with <span class="m">m</span> = &mu; d<span class="m">x</span> for this piece, so
+        <span class="m">k</span><sub>s</sub> = (&mu; d<span class="m">x</span>)&omega;<span class="up">2</span>.
+        After that the potential integral is the kinetic one with a sin<span class="up">2</span> in
+        place of a cos<span class="up">2</span> &mdash; and over one full cycle those integrate to
+        the same thing. <strong>The two energies come out equal.</strong></p>
+    </div>
+  </div>
+
+  <h2>The total, and the power</h2>
+
+  <div class="mathblock">
+    <div class="head">Energy in one wavelength, and the rate it goes past</div>
+    <div class="body">
+      <div class="mathline"><span class="m">E</span><sub>&lambda;</sub> =
+        <span class="m">U</span><sub>&lambda;</sub> + <span class="m">K</span><sub>&lambda;</sub>
+        = &frac14;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;
+        + &frac14;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;</div>
+      <div class="mathline"><span class="m">E</span><sub>&lambda;</sub> =
+        &frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;</div>
+      <div class="mathline"><span class="m">P</span><sub>&lambda;(ave)</sub> =
+        <span class="frac"><span class="top"><span class="m">E</span><sub>&lambda;</sub></span><span class="bot"><span class="m">T</span></span></span>
+        = &frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>
+        <span class="frac"><span class="top">&lambda;</span><span class="bot"><span class="m">T</span></span></span>
+        = &frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span><span class="m">v</span><sub>w</sub></div>
+      <p class="why">&lambda;/<span class="m">T</span> is the wave speed, which is the only reason
+        <span class="m">v</span><sub>w</sub> appears in a power equation. One wavelength of energy
+        goes past any point in one period, so energy per wavelength divided by period is energy per
+        second.</p>
+    </div>
+  </div>
+
+  <table class="grid">
+    <tr><th>Quantity</th><th>Result</th><th>Depends on</th></tr>
+    <tr><td>Kinetic in one &lambda;</td><td>&frac14;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;</td><td rowspan="3">&mu;, &omega;<span class="up">2</span>, <span class="m">A</span><span class="up">2</span></td></tr>
+    <tr><td>Potential in one &lambda;</td><td>&frac14;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;</td></tr>
+    <tr><td>Total in one &lambda;</td><td>&frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;</td></tr>
+    <tr><td>Average power</td><td>&frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span><span class="m">v</span><sub>w</sub></td><td>the same, times the <strong>wave</strong> speed</td></tr>
+  </table>
+
+  <div class="tip">
+    <span class="label">Both squares matter</span>
+    Double the amplitude and the power goes up <strong>four</strong> times. Double the frequency and
+    it also goes up <strong>four</strong> times, because &omega; is squared too. This is the same
+    amplitude-squared rule the oscillator pages reached for
+    <span class="m">E</span> = &frac12;<span class="m">kA</span><span class="up">2</span>, and it is
+    why a loud sound costs so much more energy than a slightly quieter one.
+  </div>
+
+  <h2>Reading a power graph</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 432" role="img" aria-label="Two charts on one time axis. Above, the position of a piece of string, one full cycle in two seconds. Below, the power flowing past it, which peaks twice as often, reaches one hundred watts and averages fifty.">
+<defs><marker id="cpblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="cpred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="cpgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="cpamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="cpviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="cpcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="cpink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="cpmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="cpcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="232.5" y1="48.0" x2="232.5" y2="150.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="353.0" y1="48.0" x2="353.0" y2="150.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="473.5" y1="48.0" x2="473.5" y2="150.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="594.0" y1="48.0" x2="594.0" y2="150.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="112.0" y1="99.0" x2="594.0" y2="99.0" stroke="#1d2b23" stroke-width="1.5"/>
+<line x1="112.0" y1="150.0" x2="112.0" y2="48.0" stroke="#1d2b23" stroke-width="1.5"/>
+<polyline points="112.0,99.0 113.9,97.9 115.7,96.9 117.6,95.8 119.4,94.8 121.3,93.7 123.1,92.6 125.0,91.6 126.8,90.5 128.7,89.5 130.5,88.5 132.4,87.4 134.2,86.4 136.1,85.4 138.0,84.4 139.8,83.4 141.7,82.4 143.5,81.4 145.4,80.5 147.2,79.5 149.1,78.6 150.9,77.6 152.8,76.7 154.6,75.8 156.5,74.9 158.3,74.0 160.2,73.1 162.1,72.3 163.9,71.4 165.8,70.6 167.6,69.8 169.5,69.0 171.3,68.3 173.2,67.5 175.0,66.8 176.9,66.1 178.7,65.4 180.6,64.7 182.4,64.0 184.3,63.4 186.2,62.8 188.0,62.2 189.9,61.6 191.7,61.1 193.6,60.5 195.4,60.0 197.3,59.6 199.1,59.1 201.0,58.7 202.8,58.2 204.7,57.9 206.5,57.5 208.4,57.2 210.3,56.8 212.1,56.5 214.0,56.3 215.8,56.0 217.7,55.8 219.5,55.6 221.4,55.5 223.2,55.3 225.1,55.2 226.9,55.1 228.8,55.1 230.6,55.0 232.5,55.0 234.4,55.0 236.2,55.1 238.1,55.1 239.9,55.2 241.8,55.3 243.6,55.5 245.5,55.6 247.3,55.8 249.2,56.0 251.0,56.3 252.9,56.5 254.7,56.8 256.6,57.2 258.5,57.5 260.3,57.9 262.2,58.2 264.0,58.7 265.9,59.1 267.7,59.6 269.6,60.0 271.4,60.5 273.3,61.1 275.1,61.6 277.0,62.2 278.8,62.8 280.7,63.4 282.6,64.0 284.4,64.7 286.3,65.4 288.1,66.1 290.0,66.8 291.8,67.5 293.7,68.3 295.5,69.0 297.4,69.8 299.2,70.6 301.1,71.4 302.9,72.3 304.8,73.1 306.7,74.0 308.5,74.9 310.4,75.8 312.2,76.7 314.1,77.6 315.9,78.6 317.8,79.5 319.6,80.5 321.5,81.4 323.3,82.4 325.2,83.4 327.0,84.4 328.9,85.4 330.8,86.4 332.6,87.4 334.5,88.5 336.3,89.5 338.2,90.5 340.0,91.6 341.9,92.6 343.7,93.7 345.6,94.8 347.4,95.8 349.3,96.9 351.1,97.9 353.0,99.0 354.9,100.1 356.7,101.1 358.6,102.2 360.4,103.2 362.3,104.3 364.1,105.4 366.0,106.4 367.8,107.5 369.7,108.5 371.5,109.5 373.4,110.6 375.2,111.6 377.1,112.6 379.0,113.6 380.8,114.6 382.7,115.6 384.5,116.6 386.4,117.5 388.2,118.5 390.1,119.4 391.9,120.4 393.8,121.3 395.6,122.2 397.5,123.1 399.3,124.0 401.2,124.9 403.1,125.7 404.9,126.6 406.8,127.4 408.6,128.2 410.5,129.0 412.3,129.7 414.2,130.5 416.0,131.2 417.9,131.9 419.7,132.6 421.6,133.3 423.4,134.0 425.3,134.6 427.2,135.2 429.0,135.8 430.9,136.4 432.7,136.9 434.6,137.5 436.4,138.0 438.3,138.4 440.1,138.9 442.0,139.3 443.8,139.8 445.7,140.1 447.5,140.5 449.4,140.8 451.3,141.2 453.1,141.5 455.0,141.7 456.8,142.0 458.7,142.2 460.5,142.4 462.4,142.5 464.2,142.7 466.1,142.8 467.9,142.9 469.8,142.9 471.6,143.0 473.5,143.0 475.4,143.0 477.2,142.9 479.1,142.9 480.9,142.8 482.8,142.7 484.6,142.5 486.5,142.4 488.3,142.2 490.2,142.0 492.0,141.7 493.9,141.5 495.7,141.2 497.6,140.8 499.5,140.5 501.3,140.1 503.2,139.8 505.0,139.3 506.9,138.9 508.7,138.4 510.6,138.0 512.4,137.5 514.3,136.9 516.1,136.4 518.0,135.8 519.8,135.2 521.7,134.6 523.6,134.0 525.4,133.3 527.3,132.6 529.1,131.9 531.0,131.2 532.8,130.5 534.7,129.7 536.5,129.0 538.4,128.2 540.2,127.4 542.1,126.6 543.9,125.7 545.8,124.9 547.7,124.0 549.5,123.1 551.4,122.2 553.2,121.3 555.1,120.4 556.9,119.4 558.8,118.5 560.6,117.5 562.5,116.6 564.3,115.6 566.2,114.6 568.0,113.6 569.9,112.6 571.8,111.6 573.6,110.6 575.5,109.5 577.3,108.5 579.2,107.5 581.0,106.4 582.9,105.4 584.7,104.3 586.6,103.2 588.4,102.2 590.3,101.1 592.1,100.1 594.0,99.0" fill="none" stroke="#2457b8" stroke-width="2.3"/>
+<text x="102.0" y="103.0" text-anchor="end" font-size="11" fill="#5c6b62">0</text>
+<text x="594.0" y="40.0" text-anchor="end" font-size="12.5" fill="#2457b8" font-weight="600">position of one piece of string</text>
+<line x1="112.0" y1="166.0" x2="353.0" y2="166.0" stroke="#6b4ea8" stroke-width="1.1" stroke-dasharray="4 4"/>
+<line x1="114.0" y1="166.0" x2="351.0" y2="166.0" stroke="#6b4ea8" stroke-width="1.8" marker-end="url(#cpviolet)"/>
+<line x1="351.0" y1="166.0" x2="114.0" y2="166.0" stroke="#6b4ea8" stroke-width="1.8" marker-end="url(#cpviolet)"/>
+<text x="232.5" y="182.0" text-anchor="middle" font-size="12" fill="#6b4ea8">one period, T = 2.0 s</text>
+<line x1="232.5" y1="228.0" x2="232.5" y2="348.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="353.0" y1="228.0" x2="353.0" y2="348.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="473.5" y1="228.0" x2="473.5" y2="348.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="594.0" y1="228.0" x2="594.0" y2="348.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="112.0" y1="348.0" x2="594.0" y2="348.0" stroke="#1d2b23" stroke-width="1.5"/>
+<line x1="112.0" y1="348.0" x2="112.0" y2="228.0" stroke="#1d2b23" stroke-width="1.5"/>
+<line x1="112.0" y1="248.0" x2="594.0" y2="248.0" stroke="#b0145a" stroke-width="1.3" stroke-dasharray="6 4"/>
+<text x="232.5" y="240.0" text-anchor="middle" font-size="12" fill="#b0145a">peak 100.0 W</text>
+<line x1="112.0" y1="298.0" x2="594.0" y2="298.0" stroke="#1e6b3c" stroke-width="1.3" stroke-dasharray="6 4"/>
+<text x="473.5" y="290.0" text-anchor="middle" font-size="12" fill="#1e6b3c">average 50.0 W</text>
+<polyline points="112.0,248.0 113.9,248.1 115.7,248.2 117.6,248.5 119.4,248.9 121.3,249.5 123.1,250.1 125.0,250.8 126.8,251.7 128.7,252.7 130.5,253.7 132.4,254.9 134.2,256.2 136.1,257.5 138.0,259.0 139.8,260.6 141.7,262.2 143.5,263.9 145.4,265.8 147.2,267.6 149.1,269.6 150.9,271.6 152.8,273.7 154.6,275.8 156.5,278.0 158.3,280.3 160.2,282.5 162.1,284.9 163.9,287.2 165.8,289.6 167.6,292.0 169.5,294.4 171.3,296.8 173.2,299.2 175.0,301.6 176.9,304.0 178.7,306.4 180.6,308.8 182.4,311.1 184.3,313.5 186.2,315.7 188.0,318.0 189.9,320.2 191.7,322.3 193.6,324.4 195.4,326.4 197.3,328.4 199.1,330.2 201.0,332.1 202.8,333.8 204.7,335.4 206.5,337.0 208.4,338.5 210.3,339.8 212.1,341.1 214.0,342.3 215.8,343.3 217.7,344.3 219.5,345.2 221.4,345.9 223.2,346.5 225.1,347.1 226.9,347.5 228.8,347.8 230.6,347.9 232.5,348.0 234.4,347.9 236.2,347.8 238.1,347.5 239.9,347.1 241.8,346.5 243.6,345.9 245.5,345.2 247.3,344.3 249.2,343.3 251.0,342.3 252.9,341.1 254.7,339.8 256.6,338.5 258.5,337.0 260.3,335.4 262.2,333.8 264.0,332.1 265.9,330.2 267.7,328.4 269.6,326.4 271.4,324.4 273.3,322.3 275.1,320.2 277.0,318.0 278.8,315.7 280.7,313.5 282.6,311.1 284.4,308.8 286.3,306.4 288.1,304.0 290.0,301.6 291.8,299.2 293.7,296.8 295.5,294.4 297.4,292.0 299.2,289.6 301.1,287.2 302.9,284.9 304.8,282.5 306.7,280.3 308.5,278.0 310.4,275.8 312.2,273.7 314.1,271.6 315.9,269.6 317.8,267.6 319.6,265.8 321.5,263.9 323.3,262.2 325.2,260.6 327.0,259.0 328.9,257.5 330.8,256.2 332.6,254.9 334.5,253.7 336.3,252.7 338.2,251.7 340.0,250.8 341.9,250.1 343.7,249.5 345.6,248.9 347.4,248.5 349.3,248.2 351.1,248.1 353.0,248.0 354.9,248.1 356.7,248.2 358.6,248.5 360.4,248.9 362.3,249.5 364.1,250.1 366.0,250.8 367.8,251.7 369.7,252.7 371.5,253.7 373.4,254.9 375.2,256.2 377.1,257.5 379.0,259.0 380.8,260.6 382.7,262.2 384.5,263.9 386.4,265.8 388.2,267.6 390.1,269.6 391.9,271.6 393.8,273.7 395.6,275.8 397.5,278.0 399.3,280.3 401.2,282.5 403.1,284.9 404.9,287.2 406.8,289.6 408.6,292.0 410.5,294.4 412.3,296.8 414.2,299.2 416.0,301.6 417.9,304.0 419.7,306.4 421.6,308.8 423.4,311.1 425.3,313.5 427.2,315.7 429.0,318.0 430.9,320.2 432.7,322.3 434.6,324.4 436.4,326.4 438.3,328.4 440.1,330.2 442.0,332.1 443.8,333.8 445.7,335.4 447.5,337.0 449.4,338.5 451.3,339.8 453.1,341.1 455.0,342.3 456.8,343.3 458.7,344.3 460.5,345.2 462.4,345.9 464.2,346.5 466.1,347.1 467.9,347.5 469.8,347.8 471.6,347.9 473.5,348.0 475.4,347.9 477.2,347.8 479.1,347.5 480.9,347.1 482.8,346.5 484.6,345.9 486.5,345.2 488.3,344.3 490.2,343.3 492.0,342.3 493.9,341.1 495.7,339.8 497.6,338.5 499.5,337.0 501.3,335.4 503.2,333.8 505.0,332.1 506.9,330.2 508.7,328.4 510.6,326.4 512.4,324.4 514.3,322.3 516.1,320.2 518.0,318.0 519.8,315.7 521.7,313.5 523.6,311.1 525.4,308.8 527.3,306.4 529.1,304.0 531.0,301.6 532.8,299.2 534.7,296.8 536.5,294.4 538.4,292.0 540.2,289.6 542.1,287.2 543.9,284.9 545.8,282.5 547.7,280.3 549.5,278.0 551.4,275.8 553.2,273.7 555.1,271.6 556.9,269.6 558.8,267.6 560.6,265.8 562.5,263.9 564.3,262.2 566.2,260.6 568.0,259.0 569.9,257.5 571.8,256.2 573.6,254.9 575.5,253.7 577.3,252.7 579.2,251.7 581.0,250.8 582.9,250.1 584.7,249.5 586.6,248.9 588.4,248.5 590.3,248.2 592.1,248.1 594.0,248.0" fill="none" stroke="#c77b1f" stroke-width="2.3"/>
+<circle cx="112.0" cy="248.0" r="5" fill="#c77b1f"/>
+<circle cx="353.0" cy="248.0" r="5" fill="#c77b1f"/>
+<circle cx="594.0" cy="248.0" r="5" fill="#c77b1f"/>
+<text x="594.0" y="220.0" text-anchor="end" font-size="12.5" fill="#c77b1f" font-weight="600">power flowing past it</text>
+<line x1="112.0" y1="348.0" x2="112.0" y2="353.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="112.0" y="368.0" text-anchor="middle" font-size="11" fill="#5c6b62">0.0</text>
+<line x1="232.5" y1="348.0" x2="232.5" y2="353.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="232.5" y="368.0" text-anchor="middle" font-size="11" fill="#5c6b62">0.5</text>
+<line x1="353.0" y1="348.0" x2="353.0" y2="353.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="353.0" y="368.0" text-anchor="middle" font-size="11" fill="#5c6b62">1.0</text>
+<line x1="473.5" y1="348.0" x2="473.5" y2="353.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="473.5" y="368.0" text-anchor="middle" font-size="11" fill="#5c6b62">1.5</text>
+<line x1="594.0" y1="348.0" x2="594.0" y2="353.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="594.0" y="368.0" text-anchor="middle" font-size="11" fill="#5c6b62">2.0</text>
+<text x="353.0" y="388.0" text-anchor="middle" font-size="12" fill="#5c6b62">time t (s)</text>
+<text x="112.0" y="408.0" text-anchor="start" font-size="12.5" fill="#1d2b23">THREE peaks in one period, not two &mdash; the power goes as the SQUARE of the string's velocity,</text>
+<text x="112.0" y="426.0" text-anchor="start" font-size="12" fill="#5c6b62">so it repeats twice as often as the wave. The period is 2.0 s, not 1.0 s.</text>
+</svg>
+    <figcaption>One piece of string, and the power flowing past it, on the same time axis. The
+      power never goes negative and never sits still &mdash; and it repeats twice as often as the
+      wave.</figcaption>
+  </figure>
+
+  <p>The power carries a <strong>square</strong> of the transverse velocity, and squaring a
+  sinusoid halves its period. So in a window of one wave period you see the power pattern twice.
+  Trevor states it bluntly, and it is worth repeating:</p>
+
+  <div class="check">
+    <span class="label">Be careful how you count</span>
+    <p class="q">The power graph above shows <strong>three peaks</strong> across the window. Is the
+      period 2.0 s, 1.0 s, or 0.67 s?</p>
+    <p class="ans"><b>The wave&rsquo;s period is 2.0 s.</b> The power pattern repeats every 1.0 s,
+      which is half of it, and 0.67 s is what you get by dividing the window by the number of peaks
+      &mdash; the mistake the figure is drawn to prevent. Count <em>periods</em>, not peaks, and
+      read the period off the <em>position</em> graph whenever you have one.</p>
+  </div>
+
+  <p>Two more warnings go with it. <strong>The power equation uses the speed of the wave, not the
+  speed of a segment</strong> &mdash; <span class="m">v</span><sub>w</sub>, never
+  <span class="m">v</span><sub>y</sub>. And <strong>the power equation is an average</strong>: on
+  the graph above the peak power is 100.0 W but the average is 50.0 W, and it is the 50.0 W that
+  &frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span><span class="m">v</span><sub>w</sub>
+  predicts. Reading the peak off the graph overstates the answer by a factor of two, every time.</p>
+
+  <h2>In short</h2>
+  <ul>
+    <li>The energy within one wavelength is <strong>equally divided</strong> between kinetic and
+      potential.</li>
+    <li><span class="m">E</span><sub>&lambda;</sub> =
+      &frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span>&lambda;,
+      and the power through one wavelength is
+      <span class="m">P</span><sub>&lambda;</sub> =
+      &frac12;&mu;&omega;<span class="up">2</span><span class="m">A</span><span class="up">2</span><span class="m">v</span><sub>w</sub>.</li>
+    <li>Power goes as the <strong>square</strong> of both the amplitude and the frequency.</li>
+    <li>A power graph repeats twice as often as the wave, and the formula gives the
+      <strong>average</strong>, not the peak.</li>
+    <li>Be careful with variables that have more than one meaning &mdash; especially
+      <span class="m">k</span>.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/16-introduction-to-oscillatory-motion-and-waves" target="_blank" rel="noopener">Ch 16, Oscillatory Motion and Waves</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Sep 19, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/16-4-energy-and-power-of-a-wave" target="_blank" rel="noopener">16.4 Energy and Power of a Wave</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentations <em>Energy and Power in Waves</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   Reached by link, not framed, so this is inert here - kept so the page behaves if embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N1a &mdash; Wave Basics</title>
+<style>
+  /* FLCC Physics note page — Module 1, Oscillations, Waves and Sound, Note 1a
+     "Wave Basics".  Same house dress as Note 1.
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE — this comment travels
+     into the generated partner-course page, which must not name the course it came from.
+     Build record: Logs\LOG_ENTRY_2026-10-21b_M1_N1a_Built.md.
+
+     NO CALC FENCE, BY DECISION.  N1a is definitions, a graph reading and a conceptual
+     set; there is no calculus in it and every line survives the mirror unchanged.
+
+     SOURCE.  Dr. Cho's own guided note, "M1 N1a Wave Basics", 2025 Spring — six pages.
+     Printed-text density per page: 3321 / 2353 / 545 / 450 / 94 / 94.  Pages 5 and 6
+     score 94 NOT because they are blank but because they are full-page SCANS: a
+     17-item conceptual set that pdftotext cannot see at all.  Live /Ink: 41 strokes,
+     all on pp5-6, which are his answer marks on that set.
+
+     FIGURE 1 WAS MEASURED OFF HIS MASTER.  FIGURE 2 WAS MEASURED AND THEN REDRAWN:
+       Fig 1  zero crossings 2.02 m and 6.00 m -> lambda = 4.0 m;  crest 0.98 -> A = 1 m
+       Fig 2  zero crossings 0.10, 3.05, 6.37, 9.33, 12.65 s      -> T = 6.28 s
+     T = 6.28 s is 2*pi — the curve was plotted as sin(x) in radians and the axis then
+     labelled in seconds.  CHO'S CALL 2026-10-21: redraw at T = 8 s, which with
+     lambda = 4 m gives f = 0.125 Hz and v = 0.5 m/s exactly.  What his master drew is
+     recorded in figs_m1n1a.py and in the key's .watch box, so the change can never be
+     mistaken for what his 25SP students saw.
+
+     THE THREE FIGURE VARIANTS ARE THE POINT.  Items 2, 4, 5 and 6 ask the student to
+     label the axes and mark A, lambda and T ON the figures.  Those marks are
+     CONSEQUENCES, so this page draws the axes, the grid and the curve and stops there;
+     the handout blanks the axis titles as his master does; the key adds the amplitude
+     arrow and the wavelength / period bracket.
+
+     THE 17 CONCEPTUAL ITEMS THAT WERE ON PAGES 5 AND 6 OF HIS MASTER ARE NOT HERE.
+     They are Note 1b, split off 2026-10-21 on the measurement that the combined page
+     ran 9140 px closed and 11376 px with every answer open, against a 10000 ceiling,
+     and printed to 11 handout pages against his 6-page master.
+
+     NO CHECK-YOURSELF TICKET ON THIS NOTE, by decision: Note 1b is seventeen
+     conceptual questions and does that job for both halves.
+
+     NO HTML TAGS INSIDE <text>: bold inside a figure is <tspan font-weight="700">.
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.8rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.05rem; margin:1.6rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .synopsis p{ margin:.2rem 0 .8rem; } .synopsis p:last-child{ margin-bottom:.1rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.doc{ font-family:Charter, "Bitstream Charter", Georgia, serif; font-size:1rem; padding:.8rem 1rem; }
+  .pe.doc .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.35rem; }
+  .pe.doc p{ margin:.2rem 0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig img{ display:block; width:100%; height:auto; border-radius:4px; }
+  .fig img.half{ max-width:460px; margin:0 auto; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.5rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+  ol.concept{ padding-left:1.7rem; } ol.concept > li{ margin:.9rem 0; }
+  ol.concept .opts{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.93rem; margin-top:.25rem; }
+  ol.concept .opts div{ margin:.1rem 0; }
+  .sub{ margin:.35rem 0 .35rem 1rem; }
+
+  table.doc{ border-collapse:collapse; width:100%; margin:.6rem 0 .8rem; font-size:.95rem; }
+  table.doc th, table.doc td{ border:1px solid var(--rule); padding:.32rem .55rem; text-align:left; vertical-align:top; font-weight:400; }
+  table.doc th{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600; color:var(--green-deep); background:var(--green-soft); }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.75; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+  .measured{ border-left:3px solid var(--amber); background:#fffdf8; padding:.45rem .8rem; margin:.5rem 0 .2rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.87rem; }
+  .measured b{ color:var(--amber); }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><marker id="m1n1a-up" viewBox="0 0 10 10" refX="5" refY="1" markerWidth="6" markerHeight="6" orient="auto"><path d="M 5 0 L 10 10 L 0 10 z" fill="#1e6b3c"/></marker></defs></svg>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 &middot; Oscillations, Waves and Sound</span><span>Note 1a</span></div>
+<h1>Wave Basics</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>
+<p>A wave in physics is an umbrella term encompassing all things repetitive.&nbsp; When physicists hear the word &ldquo;wave,&rdquo; they think
+of oscillations, repeating patterns, cyclical behaviors, etc., that extend or spread over space and time.&nbsp; They also think of sinusoidal
+math functions (sines and cosines) that can describe all such repetitions.&nbsp; The sinusoidal functions require only three parameters to
+define them: Amplitude, wavelength, and frequency.&nbsp; You have learned about these parameters in waves and how they change specific wave
+features.&nbsp; In this note, we will review/go over these terms and summarize them.</p>
+<p>Next, I want you to think about the energy in waves: If you see massive ocean waves crashing into shores, toppling over buildings, trees,
+and other structures, clearly, there is an enormous amount of energy in these waves!&nbsp; This energy originated from somewhere; perhaps
+there was an underground earthquake that generated tsunamis, so the energy in these ocean waves comes from the potential energy in rocked-up
+tectonic plates, which were under tremendous tension but abruptly released.&nbsp; This earthquake could have happened thousands of miles from
+the shores, but it could still inflict massive damage because the waves carry the energy!&nbsp; So, the water that does the waving is the
+medium that allows energy transmission.&nbsp; An ocean wave is an example of a mechanical wave that can carry energy as long as there is an
+expanse of water that can wave.&nbsp; Many wave phenomena are mechanical waves that require a medium that can wave.&nbsp; Waves in a string
+need the string as the medium to carry the energy of the shaker, as you have seen from the PhET simulation.</p>
+<p>Now that you see that waves carry energy, what does the mechanical motion of the medium look like?&nbsp; In other words, what motion
+carries the energy?&nbsp; Let&rsquo;s consider ocean waves again, with water as the medium that propagates the waves.&nbsp; If you can
+&ldquo;chunk&rdquo; sections of the ocean, the wave is nothing more than these chunks of ocean waters simply moving up and down individually,
+but there isn&rsquo;t a &ldquo;flow&rdquo; of the ocean water from the earthquake to the shores.&nbsp; A perfect analogy is the &ldquo;Mexican
+wave&rdquo; you sometimes see in a sports stadium when spectators are perhaps bored.&nbsp; The key feature of the Mexican wave is that the
+waves sweep through and go around the whole stadium without halting.&nbsp; Note that crucially, the spectators are only standing up and sitting
+back down and do not shift from their seats!&nbsp; They only need to stand up and sit back down at the right moment, which dictates the
+wavelength and frequency of the Mexican wave.&nbsp; So, the waves in the medium transport the energy but not the material supporting the
+waves.</p>
+<p>Ocean waves, sound waves, and waves in a string are all examples of mechanical waves where mechanical motions of the medium transmit the
+energy of the wave generator.&nbsp; Still, the materials the medium consists of are not transported.&nbsp; The ocean waves and waves in a
+string are just like the Mexican wave: The wave moves, let&rsquo;s say, from left to right, but the spectators themselves move up and
+down.&nbsp; Here, the direction of the wave movement (&ldquo;left to right&rdquo;) is, thus, perpendicular to the medium&rsquo;s mechanical
+motion (&ldquo;up and down&rdquo;).&nbsp; This type of wave is called <b>transverse wave</b> (trans = opposite).</p>
+<p>The sound wave, in contrast, is a repeating pattern of high and low air pressure that moves through space.&nbsp; The pattern of high and low
+air pressure is the bunching up of air molecules (high pressure) and spacing out of air molecules (low pressure), which are caused by a chunk
+of air repeatedly moving &ldquo;left &ndash; right, left &ndash; right&rdquo; while the pressure wave (the repeating pattern of high and low
+pressure) goes from &ldquo;left to right.&rdquo;&nbsp; In other words, the direction of the wave movement (&ldquo;left to right&rdquo;) is
+parallel to the mechanical motion (left &ndash; right, left &ndash; right) of the medium (the chunk of air).&nbsp; This type of wave is called
+a <b>longitudinal wave</b> (longitudinal = along).</p>
+<p>The last thing I want to discuss is the phase of the wave.&nbsp; When you hear the word &ldquo;phase&rdquo; in physics, envision &ldquo;moon
+phase.&rdquo;&nbsp; A phase of the moon is a specific part/place in the cycle of moon shapes.&nbsp; For example, the full moon phase is the spot
+in the cycle when the moon is a complete circular disc.&nbsp; A phase of a wave is a specific place in the wave, and that is it.&nbsp; You can
+say peak phase or trough phase, for instance.&nbsp; You can describe wavelength using phase: The distance between phases identical in an
+adjacent cycle.&nbsp; For period: The duration of phases identical in an adjacent cycle.&nbsp; For example, the wavelength is the distance
+between peak phases in an adjacent cycle.</p>
+<p>Phase is useful when you are comparing two waves.&nbsp; Imagine two waves with the same wavelength (therefore the same frequency, why?), and
+you place one wave on top of the other.&nbsp; You find that all phases align; that is, the peak phase of one lies on top of the peak phase of
+the other.&nbsp; This is called <b>in-phase</b>.&nbsp; In contrast, you find, instead, the peak phase lines up with the trough phase.&nbsp; In
+other words, one wave is &ldquo;shifted in phase&rdquo; with respect to the other.&nbsp; When the peak overlays with the trough, this is
+<b>180-degree out-of-phase</b> or completely out of phase.&nbsp; When phases between two waves don&rsquo;t align, we say waves are out of
+phase.</p>
+<p>In this note, summarize important physics terms in waves using diagrams and equations.&nbsp; Answer the questions that follow.</p></div>
+
+<div class="hook"><span class="label">Before you read on &mdash; predict</span><p>A cork floats a hundred metres off the beach and a swell is
+rolling in.&nbsp; By the time ten waves have gone past, <b>where is the cork?</b>&nbsp; Closer to shore, further out, or in the same place?
+Commit to an answer in your guided notes before the synopsis talks you into one.&nbsp; <b>Note 1b</b> asks you the same question with the answer choices
+written out.</p></div>
+
+<div class="pe doc"><span class="label">Performance expectations</span><p>Explain amplitude, wavelength, and frequency in waves.&nbsp; Describe
+the velocity of a wave using equations in terms of wavelength and frequency.&nbsp; Describe mechanical waves and how mechanical waves carry
+energy (but not materials).&nbsp; Describe, compare, and contrast transverse and longitudinal waves and give examples of each.&nbsp; Use the
+phase of a wave to describe wavelength and frequency (period).</p></div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N1a — Dr. Cho works through the note"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link at the bottom of this page) and fill them in as you go.
+</div>
+
+<h2>Instructions and Questions</h2>
+
+<ol class="items tasks">
+  <li>Figs 1 and 2 represent a moving wave (the same wave; one is for spatial variation at a fixed time and one for temporal variation at a
+  fixed position).&nbsp; Fig. 1 shows how the amplitude of the wave varies in space.&nbsp; Fig. 2 shows how the same wave&rsquo;s amplitude
+  varies with time.</li>
+</ol>
+
+<div class="fig">
+<svg viewBox="0 0 700 300" role="img" aria-label="Distance (m) on the horizontal axis, Amplitude (m) on the vertical axis, with a sinusoidal curve of amplitude 1 metres.">
+<line x1="109.7" y1="26.0" x2="109.7" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="144.8" y1="26.0" x2="144.8" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="180.0" y1="26.0" x2="180.0" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="215.2" y1="26.0" x2="215.2" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="250.4" y1="26.0" x2="250.4" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="285.5" y1="26.0" x2="285.5" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="320.7" y1="26.0" x2="320.7" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="355.9" y1="26.0" x2="355.9" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="391.1" y1="26.0" x2="391.1" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="426.2" y1="26.0" x2="426.2" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="461.4" y1="26.0" x2="461.4" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="496.6" y1="26.0" x2="496.6" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="531.8" y1="26.0" x2="531.8" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="567.0" y1="26.0" x2="567.0" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="602.1" y1="26.0" x2="602.1" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="637.3" y1="26.0" x2="637.3" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="109.7" y1="26.0" x2="109.7" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="250.4" y1="26.0" x2="250.4" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="391.1" y1="26.0" x2="391.1" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="531.8" y1="26.0" x2="531.8" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="216.7" x2="676.0" y2="216.7" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="195.0" x2="676.0" y2="195.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="78.0" y1="173.3" x2="676.0" y2="173.3" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="151.7" x2="676.0" y2="151.7" stroke="#e8efea" stroke-width="1"/>
+<line x1="78.0" y1="130.0" x2="676.0" y2="130.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="108.3" x2="676.0" y2="108.3" stroke="#e8efea" stroke-width="1"/>
+<line x1="78.0" y1="86.7" x2="676.0" y2="86.7" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="65.0" x2="676.0" y2="65.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="78.0" y1="43.3" x2="676.0" y2="43.3" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="130.0" x2="676.0" y2="130.0" stroke="#1d2b23" stroke-width="1.8"/>
+<line x1="109.7" y1="26.0" x2="109.7" y2="234.0" stroke="#1d2b23" stroke-width="1.8"/>
+<text x="109.7" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">0</text>
+<text x="250.4" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">2</text>
+<text x="391.1" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">4</text>
+<text x="531.8" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">6</text>
+<text x="102.7" y="90.7" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">1</text>
+<text x="102.7" y="47.3" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">2</text>
+<polyline points="78.0,158.1 79.3,157.1 80.7,156.1 82.0,155.1 83.3,154.0 84.7,152.9 86.0,151.8 87.4,150.7 88.7,149.6 90.0,148.4 91.4,147.2 92.7,146.0 94.0,144.8 95.4,143.6 96.7,142.4 98.1,141.1 99.4,139.9 100.7,138.6 102.1,137.3 103.4,136.0 104.7,134.8 106.1,133.5 107.4,132.2 108.7,130.9 110.1,129.6 111.4,128.3 112.8,127.0 114.1,125.7 115.4,124.4 116.8,123.2 118.1,121.9 119.4,120.6 120.8,119.4 122.1,118.1 123.4,116.9 124.8,115.6 126.1,114.4 127.5,113.2 128.8,112.0 130.1,110.9 131.5,109.7 132.8,108.6 134.1,107.5 135.5,106.4 136.8,105.3 138.2,104.3 139.5,103.2 140.8,102.2 142.2,101.2 143.5,100.3 144.8,99.4 146.2,98.5 147.5,97.6 148.8,96.7 150.2,95.9 151.5,95.1 152.9,94.4 154.2,93.7 155.5,93.0 156.9,92.3 158.2,91.7 159.5,91.1 160.9,90.6 162.2,90.0 163.5,89.6 164.9,89.1 166.2,88.7 167.6,88.3 168.9,88.0 170.2,87.7 171.6,87.4 172.9,87.2 174.2,87.0 175.6,86.9 176.9,86.8 178.3,86.7 179.6,86.7 180.9,86.7 182.3,86.7 183.6,86.8 184.9,86.9 186.3,87.1 187.6,87.3 188.9,87.5 190.3,87.8 191.6,88.1 193.0,88.5 194.3,88.9 195.6,89.3 197.0,89.7 198.3,90.2 199.6,90.8 201.0,91.3 202.3,91.9 203.7,92.6 205.0,93.2 206.3,93.9 207.7,94.7 209.0,95.4 210.3,96.2 211.7,97.0 213.0,97.9 214.3,98.8 215.7,99.7 217.0,100.6 218.4,101.6 219.7,102.6 221.0,103.6 222.4,104.6 223.7,105.7 225.0,106.8 226.4,107.9 227.7,109.0 229.0,110.1 230.4,111.3 231.7,112.5 233.1,113.7 234.4,114.9 235.7,116.1 237.1,117.3 238.4,118.6 239.7,119.8 241.1,121.1 242.4,122.3 243.8,123.6 245.1,124.9 246.4,126.2 247.8,127.5 249.1,128.8 250.4,130.1 251.8,131.4 253.1,132.7 254.4,133.9 255.8,135.2 257.1,136.5 258.5,137.8 259.8,139.1 261.1,140.3 262.5,141.6 263.8,142.8 265.1,144.0 266.5,145.3 267.8,146.5 269.1,147.6 270.5,148.8 271.8,150.0 273.2,151.1 274.5,152.2 275.8,153.3 277.2,154.4 278.5,155.5 279.8,156.5 281.2,157.5 282.5,158.5 283.9,159.5 285.2,160.4 286.5,161.3 287.9,162.2 289.2,163.0 290.5,163.9 291.9,164.7 293.2,165.4 294.5,166.1 295.9,166.8 297.2,167.5 298.6,168.1 299.9,168.7 301.2,169.3 302.6,169.8 303.9,170.3 305.2,170.8 306.6,171.2 307.9,171.6 309.3,171.9 310.6,172.2 311.9,172.5 313.3,172.7 314.6,172.9 315.9,173.1 317.3,173.2 318.6,173.3 319.9,173.3 321.3,173.3 322.6,173.3 324.0,173.2 325.3,173.1 326.6,173.0 328.0,172.8 329.3,172.5 330.6,172.3 332.0,172.0 333.3,171.6 334.6,171.3 336.0,170.8 337.3,170.4 338.7,169.9 340.0,169.4 341.3,168.8 342.7,168.2 344.0,167.6 345.3,166.9 346.7,166.3 348.0,165.5 349.4,164.8 350.7,164.0 352.0,163.2 353.4,162.3 354.7,161.4 356.0,160.5 357.4,159.6 358.7,158.7 360.0,157.7 361.4,156.7 362.7,155.6 364.1,154.6 365.4,153.5 366.7,152.4 368.1,151.3 369.4,150.2 370.7,149.0 372.1,147.8 373.4,146.6 374.7,145.4 376.1,144.2 377.4,143.0 378.8,141.8 380.1,140.5 381.4,139.3 382.8,138.0 384.1,136.7 385.4,135.4 386.8,134.1 388.1,132.9 389.5,131.6 390.8,130.3 392.1,129.0 393.5,127.7 394.8,126.4 396.1,125.1 397.5,123.8 398.8,122.5 400.1,121.3 401.5,120.0 402.8,118.8 404.2,117.5 405.5,116.3 406.8,115.1 408.2,113.9 409.5,112.7 410.8,111.5 412.2,110.3 413.5,109.2 414.8,108.1 416.2,107.0 417.5,105.9 418.9,104.8 420.2,103.8 421.5,102.7 422.9,101.8 424.2,100.8 425.5,99.8 426.9,98.9 428.2,98.0 429.6,97.2 430.9,96.4 432.2,95.6 433.6,94.8 434.9,94.0 436.2,93.3 437.6,92.7 438.9,92.0 440.2,91.4 441.6,90.8 442.9,90.3 444.3,89.8 445.6,89.3 446.9,88.9 448.3,88.5 449.6,88.2 450.9,87.8 452.3,87.6 453.6,87.3 455.0,87.1 456.3,87.0 457.6,86.8 459.0,86.7 460.3,86.7 461.6,86.7 463.0,86.7 464.3,86.8 465.6,86.9 467.0,87.0 468.3,87.2 469.7,87.4 471.0,87.7 472.3,87.9 473.7,88.3 475.0,88.6 476.3,89.0 477.7,89.5 479.0,90.0 480.3,90.5 481.7,91.0 483.0,91.6 484.4,92.2 485.7,92.9 487.0,93.6 488.4,94.3 489.7,95.0 491.0,95.8 492.4,96.6 493.7,97.5 495.1,98.3 496.4,99.2 497.7,100.1 499.1,101.1 500.4,102.1 501.7,103.1 503.1,104.1 504.4,105.1 505.7,106.2 507.1,107.3 508.4,108.4 509.8,109.5 511.1,110.7 512.4,111.9 513.8,113.0 515.1,114.2 516.4,115.4 517.8,116.7 519.1,117.9 520.4,119.2 521.8,120.4 523.1,121.7 524.5,123.0 525.8,124.2 527.1,125.5 528.5,126.8 529.8,128.1 531.1,129.4 532.5,130.7 533.8,132.0 535.2,133.3 536.5,134.6 537.8,135.8 539.2,137.1 540.5,138.4 541.8,139.7 543.2,140.9 544.5,142.2 545.8,143.4 547.2,144.6 548.5,145.8 549.9,147.0 551.2,148.2 552.5,149.4 553.9,150.5 555.2,151.6 556.5,152.8 557.9,153.8 559.2,154.9 560.6,156.0 561.9,157.0 563.2,158.0 564.6,159.0 565.9,159.9 567.2,160.8 568.6,161.7 569.9,162.6 571.2,163.4 572.6,164.2 573.9,165.0 575.3,165.8 576.6,166.5 577.9,167.2 579.3,167.8 580.6,168.4 581.9,169.0 583.3,169.5 584.6,170.1 585.9,170.5 587.3,171.0 588.6,171.4 590.0,171.7 591.3,172.1 592.6,172.4 594.0,172.6 595.3,172.8 596.6,173.0 598.0,173.1 599.3,173.2 600.7,173.3 602.0,173.3 603.3,173.3 604.7,173.3 606.0,173.2 607.3,173.0 608.7,172.9 610.0,172.7 611.3,172.4 612.7,172.1 614.0,171.8 615.4,171.5 616.7,171.1 618.0,170.6 619.4,170.2 620.7,169.7 622.0,169.1 623.4,168.5 624.7,167.9 626.0,167.3 627.4,166.6 628.7,165.9 630.1,165.2 631.4,164.4 632.7,163.6 634.1,162.8 635.4,161.9 636.7,161.0 638.1,160.1 639.4,159.2 640.8,158.2 642.1,157.2 643.4,156.2 644.8,155.1 646.1,154.1 647.4,153.0 648.8,151.9 650.1,150.8 651.4,149.6 652.8,148.5 654.1,147.3 655.5,146.1 656.8,144.9 658.1,143.6 659.5,142.4 660.8,141.2 662.1,139.9 663.5,138.7 664.8,137.4 666.2,136.1 667.5,134.8 668.8,133.5 670.2,132.2 671.5,131.0 672.8,129.7 674.2,128.4 675.5,127.1" fill="none" stroke="#b3261e" stroke-width="2.2" stroke-linejoin="round"/>
+<text x="676.0" y="288.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">Distance (m)</text>
+<text transform="translate(22,130.0) rotate(-90)" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">Amplitude (m)</text>
+</svg>
+  <div class="fig-note"><b>Fig 1.&nbsp; Amplitude vs. distance.</b>&nbsp; A snapshot: the whole string at one instant.</div>
+</div>
+<div class="fig">
+<svg viewBox="0 0 700 300" role="img" aria-label="Time (s) on the horizontal axis, Amplitude (m) on the vertical axis, with a sinusoidal curve of amplitude 1 metres.">
+<line x1="94.7" y1="26.0" x2="94.7" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="113.3" y1="26.0" x2="113.3" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="131.9" y1="26.0" x2="131.9" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="150.4" y1="26.0" x2="150.4" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="169.0" y1="26.0" x2="169.0" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="187.6" y1="26.0" x2="187.6" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="206.1" y1="26.0" x2="206.1" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="224.7" y1="26.0" x2="224.7" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="243.3" y1="26.0" x2="243.3" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="261.9" y1="26.0" x2="261.9" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="280.4" y1="26.0" x2="280.4" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="299.0" y1="26.0" x2="299.0" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="317.6" y1="26.0" x2="317.6" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="336.1" y1="26.0" x2="336.1" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="354.7" y1="26.0" x2="354.7" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="373.3" y1="26.0" x2="373.3" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="391.9" y1="26.0" x2="391.9" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="410.4" y1="26.0" x2="410.4" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="429.0" y1="26.0" x2="429.0" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="447.6" y1="26.0" x2="447.6" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="466.1" y1="26.0" x2="466.1" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="484.7" y1="26.0" x2="484.7" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="503.3" y1="26.0" x2="503.3" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="521.9" y1="26.0" x2="521.9" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="540.4" y1="26.0" x2="540.4" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="559.0" y1="26.0" x2="559.0" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="577.6" y1="26.0" x2="577.6" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="596.1" y1="26.0" x2="596.1" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="614.7" y1="26.0" x2="614.7" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="633.3" y1="26.0" x2="633.3" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="651.9" y1="26.0" x2="651.9" y2="234.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="94.7" y1="26.0" x2="94.7" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="169.0" y1="26.0" x2="169.0" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="243.3" y1="26.0" x2="243.3" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="317.6" y1="26.0" x2="317.6" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="391.9" y1="26.0" x2="391.9" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="466.1" y1="26.0" x2="466.1" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="540.4" y1="26.0" x2="540.4" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="614.7" y1="26.0" x2="614.7" y2="234.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="216.7" x2="676.0" y2="216.7" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="195.0" x2="676.0" y2="195.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="78.0" y1="173.3" x2="676.0" y2="173.3" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="151.7" x2="676.0" y2="151.7" stroke="#e8efea" stroke-width="1"/>
+<line x1="78.0" y1="130.0" x2="676.0" y2="130.0" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="108.3" x2="676.0" y2="108.3" stroke="#e8efea" stroke-width="1"/>
+<line x1="78.0" y1="86.7" x2="676.0" y2="86.7" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="65.0" x2="676.0" y2="65.0" stroke="#e8efea" stroke-width="1"/>
+<line x1="78.0" y1="43.3" x2="676.0" y2="43.3" stroke="#cdd9d1" stroke-width="1"/>
+<line x1="78.0" y1="130.0" x2="676.0" y2="130.0" stroke="#1d2b23" stroke-width="1.8"/>
+<line x1="94.7" y1="26.0" x2="94.7" y2="234.0" stroke="#1d2b23" stroke-width="1.8"/>
+<text x="94.7" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">0</text>
+<text x="169.0" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">2</text>
+<text x="243.3" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">4</text>
+<text x="317.6" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">6</text>
+<text x="391.9" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">8</text>
+<text x="466.1" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">10</text>
+<text x="540.4" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">12</text>
+<text x="614.7" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">14</text>
+<text x="87.7" y="90.7" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">1</text>
+<text x="87.7" y="47.3" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5c6b62">2</text>
+<polyline points="78.0,145.0 79.4,143.8 80.8,142.5 82.2,141.3 83.6,140.0 85.1,138.8 86.5,137.5 87.9,136.2 89.3,135.0 90.7,133.7 92.1,132.4 93.5,131.1 94.9,129.8 96.3,128.5 97.8,127.2 99.2,125.9 100.6,124.6 102.0,123.4 103.4,122.1 104.8,120.8 106.2,119.6 107.6,118.3 109.1,117.1 110.5,115.8 111.9,114.6 113.3,113.4 114.7,112.2 116.1,111.1 117.5,109.9 118.9,108.8 120.3,107.6 121.8,106.6 123.2,105.5 124.6,104.4 126.0,103.4 127.4,102.4 128.8,101.4 130.2,100.4 131.6,99.5 133.0,98.6 134.5,97.7 135.9,96.9 137.3,96.1 138.7,95.3 140.1,94.5 141.5,93.8 142.9,93.1 144.3,92.4 145.7,91.8 147.2,91.2 148.6,90.6 150.0,90.1 151.4,89.6 152.8,89.2 154.2,88.8 155.6,88.4 157.0,88.0 158.5,87.7 159.9,87.5 161.3,87.2 162.7,87.1 164.1,86.9 165.5,86.8 166.9,86.7 168.3,86.7 169.7,86.7 171.2,86.7 172.6,86.8 174.0,86.9 175.4,87.1 176.8,87.3 178.2,87.5 179.6,87.8 181.0,88.1 182.4,88.4 183.9,88.8 185.3,89.2 186.7,89.7 188.1,90.1 189.5,90.7 190.9,91.2 192.3,91.8 193.7,92.5 195.1,93.1 196.6,93.8 198.0,94.5 199.4,95.3 200.8,96.1 202.2,96.9 203.6,97.8 205.0,98.6 206.4,99.6 207.9,100.5 209.3,101.4 210.7,102.4 212.1,103.4 213.5,104.5 214.9,105.5 216.3,106.6 217.7,107.7 219.1,108.8 220.6,110.0 222.0,111.1 223.4,112.3 224.8,113.5 226.2,114.7 227.6,115.9 229.0,117.1 230.4,118.4 231.8,119.6 233.3,120.9 234.7,122.1 236.1,123.4 237.5,124.7 238.9,126.0 240.3,127.3 241.7,128.6 243.1,129.9 244.5,131.2 246.0,132.4 247.4,133.7 248.8,135.0 250.2,136.3 251.6,137.6 253.0,138.9 254.4,140.1 255.8,141.4 257.3,142.6 258.7,143.8 260.1,145.1 261.5,146.3 262.9,147.5 264.3,148.6 265.7,149.8 267.1,150.9 268.5,152.1 270.0,153.2 271.4,154.2 272.8,155.3 274.2,156.3 275.6,157.4 277.0,158.3 278.4,159.3 279.8,160.3 281.2,161.2 282.7,162.1 284.1,162.9 285.5,163.7 286.9,164.5 288.3,165.3 289.7,166.0 291.1,166.7 292.5,167.4 293.9,168.0 295.4,168.6 296.8,169.2 298.2,169.7 299.6,170.2 301.0,170.7 302.4,171.1 303.8,171.5 305.2,171.9 306.7,172.2 308.1,172.5 309.5,172.7 310.9,172.9 312.3,173.1 313.7,173.2 315.1,173.3 316.5,173.3 317.9,173.3 319.4,173.3 320.8,173.2 322.2,173.1 323.6,173.0 325.0,172.8 326.4,172.6 327.8,172.3 329.2,172.0 330.6,171.7 332.1,171.3 333.5,170.9 334.9,170.5 336.3,170.0 337.7,169.5 339.1,168.9 340.5,168.3 341.9,167.7 343.3,167.1 344.8,166.4 346.2,165.6 347.6,164.9 349.0,164.1 350.4,163.3 351.8,162.5 353.2,161.6 354.6,160.7 356.1,159.8 357.5,158.8 358.9,157.8 360.3,156.8 361.7,155.8 363.1,154.7 364.5,153.7 365.9,152.6 367.3,151.5 368.8,150.3 370.2,149.2 371.6,148.0 373.0,146.8 374.4,145.6 375.8,144.4 377.2,143.2 378.6,142.0 380.0,140.7 381.5,139.5 382.9,138.2 384.3,136.9 385.7,135.6 387.1,134.3 388.5,133.1 389.9,131.8 391.3,130.5 392.7,129.2 394.2,127.9 395.6,126.6 397.0,125.3 398.4,124.0 399.8,122.8 401.2,121.5 402.6,120.2 404.0,119.0 405.5,117.7 406.9,116.5 408.3,115.3 409.7,114.0 411.1,112.9 412.5,111.7 413.9,110.5 415.3,109.4 416.7,108.2 418.2,107.1 419.6,106.0 421.0,105.0 422.4,103.9 423.8,102.9 425.2,101.9 426.6,100.9 428.0,100.0 429.4,99.1 430.9,98.2 432.3,97.3 433.7,96.5 435.1,95.7 436.5,94.9 437.9,94.2 439.3,93.4 440.7,92.8 442.1,92.1 443.6,91.5 445.0,90.9 446.4,90.4 447.8,89.9 449.2,89.4 450.6,89.0 452.0,88.6 453.4,88.2 454.9,87.9 456.3,87.6 457.7,87.4 459.1,87.1 460.5,87.0 461.9,86.8 463.3,86.7 464.7,86.7 466.1,86.7 467.6,86.7 469.0,86.7 470.4,86.8 471.8,87.0 473.2,87.1 474.6,87.4 476.0,87.6 477.4,87.9 478.8,88.2 480.3,88.6 481.7,89.0 483.1,89.4 484.5,89.9 485.9,90.4 487.3,90.9 488.7,91.5 490.1,92.1 491.5,92.8 493.0,93.4 494.4,94.2 495.8,94.9 497.2,95.7 498.6,96.5 500.0,97.3 501.4,98.2 502.8,99.1 504.3,100.0 505.7,100.9 507.1,101.9 508.5,102.9 509.9,103.9 511.3,105.0 512.7,106.0 514.1,107.1 515.5,108.2 517.0,109.4 518.4,110.5 519.8,111.7 521.2,112.9 522.6,114.0 524.0,115.3 525.4,116.5 526.8,117.7 528.2,119.0 529.7,120.2 531.1,121.5 532.5,122.8 533.9,124.0 535.3,125.3 536.7,126.6 538.1,127.9 539.5,129.2 540.9,130.5 542.4,131.8 543.8,133.1 545.2,134.3 546.6,135.6 548.0,136.9 549.4,138.2 550.8,139.5 552.2,140.7 553.7,142.0 555.1,143.2 556.5,144.4 557.9,145.6 559.3,146.8 560.7,148.0 562.1,149.2 563.5,150.3 564.9,151.5 566.4,152.6 567.8,153.7 569.2,154.7 570.6,155.8 572.0,156.8 573.4,157.8 574.8,158.8 576.2,159.8 577.6,160.7 579.1,161.6 580.5,162.5 581.9,163.3 583.3,164.1 584.7,164.9 586.1,165.6 587.5,166.4 588.9,167.1 590.3,167.7 591.8,168.3 593.2,168.9 594.6,169.5 596.0,170.0 597.4,170.5 598.8,170.9 600.2,171.3 601.6,171.7 603.1,172.0 604.5,172.3 605.9,172.6 607.3,172.8 608.7,173.0 610.1,173.1 611.5,173.2 612.9,173.3 614.3,173.3 615.8,173.3 617.2,173.3 618.6,173.2 620.0,173.1 621.4,172.9 622.8,172.7 624.2,172.5 625.6,172.2 627.0,171.9 628.5,171.5 629.9,171.1 631.3,170.7 632.7,170.2 634.1,169.7 635.5,169.2 636.9,168.6 638.3,168.0 639.7,167.4 641.2,166.7 642.6,166.0 644.0,165.3 645.4,164.5 646.8,163.7 648.2,162.9 649.6,162.1 651.0,161.2 652.5,160.3 653.9,159.3 655.3,158.3 656.7,157.4 658.1,156.3 659.5,155.3 660.9,154.2 662.3,153.2 663.7,152.1 665.2,150.9 666.6,149.8 668.0,148.6 669.4,147.5 670.8,146.3 672.2,145.1 673.6,143.8 675.0,142.6" fill="none" stroke="#b3261e" stroke-width="2.2" stroke-linejoin="round"/>
+<text x="676.0" y="288.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">Time (s)</text>
+<text transform="translate(22,130.0) rotate(-90)" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#1d2b23">Amplitude (m)</text>
+</svg>
+  <div class="fig-note"><b>Fig 2.&nbsp; Amplitude vs. time.</b>&nbsp; One point of the string, watched as time passes.</div>
+</div>
+
+<ol class="items tasks" start="2">
+  <li>Label the axes in Fig. 1 and 2.</li>
+  <li>Read the amplitude from the figure.</li>
+  <li>Indicate the amplitude (do it for both) on the figures.</li>
+  <li>Determine the wavelength (Fig. 1) and indicate in the figure.</li>
+  <li>Determine the period (Fig. 2) and indicate in the figure.</li>
+  <li>What is the frequency of this wave?&nbsp; Also, show the unit.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  2) Fig 1: <b>distance (m)</b> across, <b>amplitude (m)</b> up.&nbsp; Fig 2: <b>time (s)</b> across, <b>amplitude (m)</b> up.&nbsp; The two
+  figures look almost identical and they are not the same picture at all &mdash; one is a photograph of the whole string at one instant, the
+  other is a diary of one point on the string.&nbsp; <span class="why">&mdash; the axis is the only thing that tells you which</span><br>
+  3) <b>A = 1 m.</b>&nbsp; Read from the rest line up to a crest, not from a crest down to a trough.<br>
+  4) The amplitude arrow runs from the horizontal axis up to a crest, in both figures.&nbsp; Same height in both &mdash; it is the same wave.<br>
+  5) <b>&lambda; = 4 m.</b>&nbsp; Crest to crest: crests at 1 m and 5 m.&nbsp; Check it a second way &mdash; the curve crosses zero going
+  downward at 2 m and again at 6 m, which is also 4 m.<br>
+  6) <b><i>T</i> = 8 s.</b>&nbsp; Crest to crest in Fig 2: crests at 2 s and 10 s.&nbsp; Check it a second way &mdash; zero going downward at
+  4 s and again at 12 s, which is also 8 s.<br>
+  7) <b><i>f</i> = 1/<i>T</i> = 1/8 = 0.125 Hz</b>, which is 0.125 s<sup>&minus;1</sup>.&nbsp; <span class="why">&mdash; a slow ocean swell:
+  one crest every eight seconds</span>
+</div></div></div>
+
+<ol class="items tasks" start="8">
+  <li>Imagine standing still (i.e., in a fixed position) on a beach and watching the waves coming at you, as the ocean waves lapping at your
+  feet.&nbsp; How would you determine the speed at which these waves are arriving at you?&nbsp; Describe the method.
+  <div class="sub">Determine the velocity of a wave represented in Figs 1 and 2.&nbsp; State the equation first.</div></li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <b>The method.</b>&nbsp; Standing still, you cannot see the whole wave at once &mdash; so get the two pieces separately.&nbsp; <b>Time</b>
+  how long it takes for ten crests to pass your feet and divide by ten: that is the period <i>T</i>.&nbsp; <b>Measure</b> the distance from one
+  crest to the next out on the water: that is the wavelength &lambda;.&nbsp; One wavelength goes past you in one period, so the speed is one
+  divided by the other.&nbsp; <span class="why">&mdash; counting ten and dividing is the same trick as N1 item 12: one slow measurement beats
+  ten fast ones</span><br>
+  <b>The equation.</b>&nbsp; <i>v</i> = &lambda;/<i>T</i>, and since <i>f</i> = 1/<i>T</i>, equivalently <b><i>v</i> = &lambda;<i>f</i></b>.<br>
+  <b>The number.</b>&nbsp; <i>v</i> = 4 m &divide; 8 s = <b>0.5 m/s</b>.&nbsp; Check it the other way: &lambda;<i>f</i> = (4)(0.125) = 0.5
+  m/s. &nbsp;<span class="why">&mdash; walking pace is about 1.4 m/s, so this swell is slower than you can walk</span>
+</div></div></div>
+
+<ol class="items tasks" start="9">
+  <li>What is a transverse wave?&nbsp; Draw and give examples.</li>
+  <li>What is a longitudinal wave?&nbsp; Draw and give examples.</li>
+  <li>What are the similarities and differences between transverse and longitudinal waves?</li>
+  <li>What is a phase in waves?</li>
+  <li>Use the phase to describe the velocity of a wave.&nbsp; Complete the sentence.&nbsp; Or come up with your own phrase containing or using
+  &ldquo;phase.&rdquo;
+  <div class="sub">&ldquo;The speed of a wave is the speed of a c______________ (8-letter word) phase.&rdquo;</div></li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev3" data-label="Show the working">Show the working</button><div class="rbody" id="rev3" hidden><div class="eq">
+  9) <b>A wave whose medium moves perpendicular to the direction the wave travels.</b>&nbsp; Draw the wave going left to right and the arrows
+  on the medium pointing up and down.&nbsp; Examples: a wave on a string, the Mexican wave, ocean surface waves, light.<br>
+  10) <b>A wave whose medium moves parallel to the direction the wave travels.</b>&nbsp; Draw bunched-up and spaced-out regions travelling left
+  to right, with the arrows on the medium also pointing left and right.&nbsp; Examples: sound in air, a compression sent along a slinky.<br>
+  11) <table class="doc"><tr><th style="width:50%">Similarities</th><th>Differences</th></tr>
+  <tr><td>Both carry energy from one place to another</td><td>Medium moves <b>perpendicular</b> to travel (transverse) vs <b>parallel</b> to it (longitudinal)</td></tr>
+  <tr><td>Neither carries the material of the medium along with it</td><td>Crests and troughs vs compressions and rarefactions</td></tr>
+  <tr><td>Both are described by the same three parameters &mdash; amplitude, wavelength, frequency</td><td>A transverse mechanical wave needs a medium that resists shearing, so a solid or a surface; a longitudinal one travels through gases and liquids too</td></tr>
+  <tr><td>Both obey <i>v</i> = &lambda;<i>f</i>, and in both the speed belongs to the medium</td><td>Sound in air is longitudinal; light is transverse (and needs no medium at all)</td></tr></table>
+  12) <b>A specific place in the wave &mdash; and that is it.</b>&nbsp; Peak phase, trough phase, the point halfway up on the way down.&nbsp;
+  Think moon phase: a named spot in a cycle that repeats.<br>
+  13) <b>Constant.</b>&nbsp; &ldquo;The speed of a wave is the speed of a <b>constant</b> phase.&rdquo;&nbsp; Pick a crest and keep your eye on
+  it: how fast that crest moves is how fast the wave moves.&nbsp; <span class="why">&mdash; which is also why the bead goes nowhere: the bead
+  is not a phase, it is a piece of the medium</span>
+</div></div></div>
+
+<h2>Looking ahead</h2>
+<p>You now have the vocabulary the rest of the module runs on: amplitude, wavelength, period, frequency, the difference between a snapshot and
+a diary, transverse against longitudinal, and phase.&nbsp; Two of those carry a long way.&nbsp; <b>Note 1b</b> is seventeen conceptual questions on
+everything these two notes have defined, and it is the right place to find out whether the vocabulary has actually stuck.&nbsp;
+After that, <b>phase</b> comes back in Note 4, where whether two waves reinforce or cancel is entirely a question of their
+phases; and <b>the medium sets the speed</b> becomes, in Note 3, an equation built from the tension and the mass of the string.</p>
+
+<div class="ahead"><b>Where this sits.</b> Notes 1 and 1a are the measuring and naming half of the module, and they are done.&nbsp; From Note 2
+on, the same quantities are derived rather than read off a ruler: Note 2 asks what force makes one bead oscillate at all, and the sines and
+cosines of the synopsis come out of the answer.</div>
+
+<div class="callback"><span class="label">Back to your prediction</span><p>The cork is in the same place.&nbsp; It has gone up and down ten
+times and travelled nowhere &mdash; the swell carried energy past it, not water.&nbsp; If you said &ldquo;closer to shore,&rdquo; you are in
+good company and you are thinking of a different effect: real ocean waves do nudge things shoreward a little, and that drift is not the wave.
+Question 10 of <b>Note 1b</b> is this question with the answer choices written out, and it asks only about the up-and-down.</p></div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M1_N1a_Wave_Basics_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before you start</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it or open it on a tablet; the two figures are there with the axes blank for you to label.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 1 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch16b &mdash; Wave Speed on a String</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 1 (Oscillations, Waves and Sound)
+     Chapter 16 (University Physics Volume 1)
+     Trevor deck(s): Decks: Wave Speed and Tension Dimensional Analysis &middot; Wave Speed and Tension
+     "Wave Speed on a String" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+
+     Tier B reference page: faithful transcription, shorter synopsis, lead
+     paragraphs and captions added because a page has no voice.  No probe, no
+     exit ticket, no PE card.  References are LEAVES - no link from this page to
+     any note page (playbook Step 5a).
+
+     TWO DECKS ON ONE PAGE.  "Dimensional Analysis" is five slides and derives
+     v = sqrt(F_T/mu) from units alone; "Wave Speed and Tension" then uses that result
+     for its whole run.  Separated, the derivation would have nothing to apply itself
+     to and the application would open with an unexplained formula.  See the triage,
+     section 3.
+
+     HIS SLIDE 7 IS HIDDEN IN THE SOURCE DECK (show="0"), so it never appears in a
+     PDF export or in presentation mode - the deck has 10 slides and exports 9 pages.
+     It carries a quoted D'Addario footnote from donaldsauter.com and HIS OWN WARNING
+     that tension is a force.  The warning is carried here; the verbatim third-party
+     quote is not, only its link and its one useful number, the 0.648 m scale length,
+     which is what makes his "is this reasonable?" check answerable.
+
+     HE USES g = 10 m/s^2 TO CONVERT HIS kg TENSIONS TO NEWTONS, not 9.8.  That is
+     his choice and the whole worked example depends on it, so it is kept and stated
+     rather than silently improved: with 9.81 the answer would be 140.9 m/s and
+     0.641 m instead of 142 m/s and 0.65 m.  Both are "reasonable".
+
+     THE v-AGAINST-TENSION PLOT IS GENERATED FROM HIS OWN NUMBERS - mu = 4.466e-3
+     kg/m and F_T = 90.3 N - so the three marked speeds 142, 201 and 284 m/s are what
+     the square root actually gives, and the factors sqrt(2) and 2 are the curve's
+     rather than an annotation laid over a sketch.
+
+     THE TWO GUITAR TABLES ARE THIRD-PARTY DATA (noyceguitars.com).  They are rebuilt
+     as HTML tables with the source named, not reproduced as images.
+
+
+     PHY 119 will have its own page for these decks when that course starts,
+     written for College Physics from the same source.  It is NOT generated from
+     this file, and the notes mirror is never run over a reference\ directory.
+
+     Triage: Planning\M1_bWaves_Deck_Triage_PHY152_2026-10-21.md
+     Hosted on GitHub Pages, reached by link from the Module 1 reference index.
+     Never framed, so this page has no wrapper of its own.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 &middot; Oscillations, Waves and Sound</span>
+    <span>Chapter 16 (University Physics) &middot; Decks: Wave Speed and Tension Dimensional Analysis &middot; Wave Speed and Tension</span>
+  </div>
+
+  <h1>Wave Speed on a String</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    How fast a wave runs along a string is fixed by the string, not by whoever plucks it. Two
+    properties decide it: how hard the string is pulled, and how heavy a metre of it is. You can
+    find the combination without doing any physics at all &mdash; just by insisting the units come
+    out as metres per second. That is the whole of the first deck, and the result it reaches,
+    <span class="m">v</span> = &radic;(<span class="m">F</span><sub>T</sub>/&mu;), is the whole of
+    the second.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    <span class="m">v</span> = <span class="m">f</span>&lambda; from the previous page, and that a
+    newton is kg&middot;m/s<span class="up">2</span>.
+  </div>
+
+  <h2>Two things a guitar makes obvious</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 300" role="img" aria-label="Six guitar strings of increasing thickness, with their note names and frequencies. The thin strings sound high and the thick ones low.">
+<defs><marker id="bsblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="bsred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="bsgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="bsamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="bsviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="bscrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="bsink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="bsmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="bscyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<rect x="106" y="34" width="12" height="212" fill="#e7ece9" stroke="#1d2b23" stroke-width="1.6"/>
+<rect x="490" y="34" width="12" height="212" fill="#e7ece9" stroke="#1d2b23" stroke-width="1.6"/>
+<line x1="118.0" y1="52.0" x2="502.0" y2="52.0" stroke="#1d2b23" stroke-width="1.3"/>
+<text x="98.0" y="56.0" text-anchor="end" font-size="12" fill="#1d2b23">E 1st</text>
+<text x="514.0" y="56.0" text-anchor="start" font-size="12" fill="#5c6b62">329.63 Hz</text>
+<text x="576.0" y="56.0" text-anchor="start" font-size="11" fill="#5c6b62">0.254 mm</text>
+<line x1="118.0" y1="86.0" x2="502.0" y2="86.0" stroke="#1d2b23" stroke-width="1.7"/>
+<text x="98.0" y="90.0" text-anchor="end" font-size="12" fill="#1d2b23">B 2nd</text>
+<text x="514.0" y="90.0" text-anchor="start" font-size="12" fill="#5c6b62">246.94 Hz</text>
+<text x="576.0" y="90.0" text-anchor="start" font-size="11" fill="#5c6b62">0.330 mm</text>
+<line x1="118.0" y1="120.0" x2="502.0" y2="120.0" stroke="#1d2b23" stroke-width="2.2"/>
+<text x="98.0" y="124.0" text-anchor="end" font-size="12" fill="#1d2b23">G 3rd</text>
+<text x="514.0" y="124.0" text-anchor="start" font-size="12" fill="#5c6b62">196 Hz</text>
+<text x="576.0" y="124.0" text-anchor="start" font-size="11" fill="#5c6b62">0.432 mm</text>
+<line x1="118.0" y1="154.0" x2="502.0" y2="154.0" stroke="#1d2b23" stroke-width="3.0"/>
+<text x="98.0" y="158.0" text-anchor="end" font-size="12" fill="#1d2b23">D 4th</text>
+<text x="514.0" y="158.0" text-anchor="start" font-size="12" fill="#5c6b62">146.82 Hz</text>
+<text x="576.0" y="158.0" text-anchor="start" font-size="11" fill="#5c6b62">0.660 mm</text>
+<line x1="118.0" y1="188.0" x2="502.0" y2="188.0" stroke="#1d2b23" stroke-width="3.8"/>
+<text x="98.0" y="192.0" text-anchor="end" font-size="12" fill="#1d2b23">A 5th</text>
+<text x="514.0" y="192.0" text-anchor="start" font-size="12" fill="#5c6b62">110 Hz</text>
+<text x="576.0" y="192.0" text-anchor="start" font-size="11" fill="#5c6b62">0.914 mm</text>
+<line x1="118.0" y1="222.0" x2="502.0" y2="222.0" stroke="#1d2b23" stroke-width="4.6"/>
+<text x="98.0" y="226.0" text-anchor="end" font-size="12" fill="#1d2b23">E 6th</text>
+<text x="514.0" y="226.0" text-anchor="start" font-size="12" fill="#5c6b62">82.407 Hz</text>
+<text x="576.0" y="226.0" text-anchor="start" font-size="11" fill="#5c6b62">1.168 mm</text>
+<text x="98.0" y="34.0" text-anchor="end" font-size="11" fill="#5c6b62">string</text>
+<text x="514.0" y="34.0" text-anchor="start" font-size="11" fill="#5c6b62">frequency</text>
+<text x="576.0" y="34.0" text-anchor="start" font-size="11" fill="#5c6b62">diameter</text>
+<text x="118.0" y="272.0" text-anchor="start" font-size="12.5" fill="#1d2b23">Thicker string &rarr; more mass per metre &rarr; LOWER note. Tighten a string &rarr; HIGHER note.</text>
+<text x="118.0" y="290.0" text-anchor="start" font-size="12" fill="#5c6b62">Both are the same equation seen from two sides.</text>
+</svg>
+    <figcaption>Six strings of the same length, tuned to six different notes. The gauges and
+      frequencies are from the string table Trevor cites
+      (<a href="http://www.noyceguitars.com/technotes/articles/t3.html" target="_blank" rel="noopener">noyceguitars.com</a>).</figcaption>
+  </figure>
+
+  <ul>
+    <li>A <strong>tighter</strong> string gives a <strong>higher</strong> frequency, for the same
+      length.</li>
+    <li>A <strong>thicker</strong> string gives a <strong>lower</strong> frequency.</li>
+  </ul>
+
+  <p>So the speed of a pulse on a string depends on the <strong>tension</strong>
+  <span class="m">F</span><sub>T</sub> and on the <strong>mass per unit length</strong>. That second
+  quantity gets its own name and symbol, because it is about to appear everywhere:</p>
+
+  <div class="mathblock">
+    <div class="head">Linear density</div>
+    <div class="body">
+      <div class="mathline">&mu; &equiv;
+        <span class="frac"><span class="top">mass</span><span class="bot">length</span></span>
+        = <span class="frac"><span class="top"><span class="m">m</span></span><span class="bot"><span class="m">L</span></span></span>
+        &nbsp;&nbsp;<span class="sm">kilograms per metre</span></div>
+      <div class="mathline"><span class="sm">his example:</span>&nbsp;
+        &mu; = 1.140 &times; 10<span class="up">&minus;3</span> kg/m
+        &times; (1000 g / 1 kg) = 1.140 g/m</div>
+      <p class="why">It is not the mass of the string and not its thickness &mdash; it is mass per
+        metre, which is what lets the same number describe a guitar string and a bridge cable. The
+        conversion line is there because g/m is the friendlier unit to picture and kg/m is the one
+        the formula needs.</p>
+    </div>
+  </div>
+
+  <h2>Finding the formula from the units alone</h2>
+
+  <p>Guess that the speed is some constant times a power of the tension and a power of the linear
+  density, and then let the units decide the powers.</p>
+
+  <div class="mathblock">
+    <div class="head">Dimensional analysis</div>
+    <div class="body">
+      <div class="mathline"><span class="sm">first guess:</span>&nbsp;
+        <span class="m">v</span> = (constant) <span class="m">F</span>&mu;</div>
+      <div class="mathline">
+        <span class="frac"><span class="top">kg&middot;m</span><span class="bot">s<span class="up">2</span></span></span>
+        &middot;
+        <span class="frac"><span class="top">kg</span><span class="bot">m</span></span>
+        = <span class="frac"><span class="top">kg<span class="up">2</span></span><span class="bot">s<span class="up">2</span></span></span>
+        &nbsp;&nbsp;<span class="sm">&mdash; not m/s. Try again.</span></div>
+      <div class="mathline"><span class="sm">second guess:</span>&nbsp;
+        <span class="m">v</span> = (constant) <span class="m">F</span><span class="up">a</span>&mu;<span class="up">b</span></div>
+      <div class="mathline">
+        <span class="frac"><span class="top">m</span><span class="bot">s</span></span>
+        = <span class="sq">(</span>
+        <span class="frac"><span class="top">kg&middot;m</span><span class="bot">s<span class="up">2</span></span></span>
+        <span class="sq">)</span><span class="up">a</span>
+        <span class="sq">(</span>
+        <span class="frac"><span class="top">kg</span><span class="bot">m</span></span>
+        <span class="sq">)</span><span class="up">b</span>
+        = kg<span class="up">a+b</span> m<span class="up">a&minus;b</span> s<span class="up">&minus;2a</span></div>
+      <div class="mathline"><span class="sm">no kg on the left:</span>&nbsp;
+        <span class="m">a</span> + <span class="m">b</span> = 0 &nbsp;&rarr;&nbsp;
+        <span class="m">b</span> = &minus;<span class="m">a</span></div>
+      <div class="mathline"><span class="sm">one over s on the left:</span>&nbsp;
+        &minus;2<span class="m">a</span> = &minus;1 &nbsp;&rarr;&nbsp;
+        <span class="m">a</span> = &frac12;,&nbsp; <span class="m">b</span> = &minus;&frac12;</div>
+      <div class="mathline"><span class="m">v</span> =
+        <span class="m">F</span><span class="up">1/2</span>&mu;<span class="up">&minus;1/2</span>
+        = <span class="sq">&radic;</span>(<span class="m">F</span><sub>T</sub>/&mu;)</div>
+      <p class="why">Three unknowns, three equations, and the exponents fall straight out: match the
+        kilograms, match the seconds, and the metres then match on their own. Testing shows
+        <strong>no constant factor is needed</strong> &mdash; the plain square root is the whole
+        answer, which is unusual and worth noticing.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">What dimensional analysis can and cannot do</span>
+    It found the <em>shape</em> of the relationship without a single force diagram, which is
+    remarkable. What it cannot find is the dimensionless constant out front &mdash; here that turns
+    out to be 1, but nothing in the units said so; that had to be measured. Any constant that does
+    appear in a result like this is usually a unit conversion rather than physics.
+  </div>
+
+  <h2>Mersenne&rsquo;s rules, and what they are really saying</h2>
+
+  <p>Long before anyone wrote <span class="m">v</span> = &radic;(<span class="m">F</span><sub>T</sub>/&mu;),
+  Mersenne had the behaviour of a vibrating string from experiment. The frequency is:</p>
+
+  <table class="grid">
+    <tr><th>Mersenne&rsquo;s rule</th><th>In symbols</th></tr>
+    <tr><td>Inversely proportional to its length</td><td><span class="m">f</span> &prop; 1/<span class="m">L</span></td></tr>
+    <tr><td>Proportional to the square root of the applied tension</td><td><span class="m">f</span> &prop; &radic;<span class="m">F</span><sub>T</sub></td></tr>
+    <tr><td>Inversely proportional to its diameter</td><td><span class="m">f</span> &prop; 1/<span class="m">d</span></td></tr>
+    <tr><td>Inversely proportional to the square root of its density</td><td><span class="m">f</span> &prop; 1/&radic;&mu;</td></tr>
+  </table>
+
+  <div class="mathblock">
+    <div class="head">The four rules are one equation</div>
+    <div class="body">
+      <div class="mathline"><span class="m">f</span> = &frac12;
+        <span class="frac"><span class="top">1</span><span class="bot"><span class="m">L</span></span></span>
+        <span class="sq">&radic;</span>(<span class="m">F</span><sub>T</sub>/&mu;)</div>
+      <p class="why">The &frac12; is the proportionality constant, found by experiment. Rules two and
+        four are just the square root split into its numerator and denominator; rule three is rule
+        four in disguise, since a thicker string of the same material has more mass per metre. Four
+        separate observations, one formula.</p>
+    </div>
+  </div>
+
+  <h2>Putting the two together</h2>
+
+  <div class="mathblock">
+    <div class="head">Why the fundamental frequency is v/2L</div>
+    <div class="body">
+      <div class="mathline"><span class="m">f</span><sub>n</sub> = <span class="m">n</span>
+        <span class="frac"><span class="top"><span class="m">v</span></span><span class="bot">2<span class="m">L</span></span></span>
+        &nbsp;&rarr;&nbsp; <span class="m">f</span><sub>1</sub> =
+        <span class="frac"><span class="top"><span class="m">v</span></span><span class="bot">2<span class="m">L</span></span></span>
+        &nbsp;&rarr;&nbsp; <span class="m">v</span> = <span class="m">f</span><sub>1</sub> 2<span class="m">L</span></div>
+      <div class="mathline"><span class="m">f</span><sub>1</sub> =
+        <span class="frac"><span class="top"><span class="m">v</span></span><span class="bot">2<span class="m">L</span></span></span>
+        = &frac12;<span class="frac"><span class="top">1</span><span class="bot"><span class="m">L</span></span></span>
+        <span class="sq">&radic;</span>(<span class="m">F</span><sub>T</sub>/&mu;)</div>
+      <p class="why">Mersenne&rsquo;s formula and the dimensional-analysis result are the same
+        statement, with <span class="m">v</span> = <span class="m">f</span>&lambda; and
+        &lambda; = 2<span class="m">L</span> standing between them. <strong>Ch16e</strong> builds the
+        &lambda; = 2<span class="m">L</span> step properly; here it is enough that the two agree.</p>
+    </div>
+  </div>
+
+  <h2>What happens if you change the tension</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 352" role="img" aria-label="Wave speed plotted against string tension. The curve is a square root, so doubling the tension multiplies the speed by root two and quadrupling it doubles the speed.">
+<defs><marker id="bvblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="bvred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="bvgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="bvamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="bvviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="bvcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="bvink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="bvmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="bvcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="229.0" y1="44.0" x2="229.0" y2="266.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="348.0" y1="44.0" x2="348.0" y2="266.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="467.0" y1="44.0" x2="467.0" y2="266.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="586.0" y1="44.0" x2="586.0" y2="266.0" stroke="#d7e2da" stroke-width="1"/>
+<line x1="110.0" y1="196.6" x2="586.0" y2="196.6" stroke="#d7e2da" stroke-width="1"/>
+<line x1="110.0" y1="127.2" x2="586.0" y2="127.2" stroke="#d7e2da" stroke-width="1"/>
+<line x1="110.0" y1="57.9" x2="586.0" y2="57.9" stroke="#d7e2da" stroke-width="1"/>
+<line x1="110.0" y1="266.0" x2="586.0" y2="266.0" stroke="#1d2b23" stroke-width="1.6"/>
+<line x1="110.0" y1="266.0" x2="110.0" y2="44.0" stroke="#1d2b23" stroke-width="1.6"/>
+<polyline points="110.0,266.0 111.8,253.1 113.7,247.8 115.5,243.7 117.3,240.2 119.2,237.2 121.0,234.5 122.8,231.9 124.6,229.6 126.5,227.4 128.3,225.3 130.1,223.3 132.0,221.4 133.8,219.6 135.6,217.8 137.5,216.1 139.3,214.5 141.1,212.9 143.0,211.4 144.8,209.9 146.6,208.4 148.4,207.0 150.3,205.6 152.1,204.2 153.9,202.9 155.8,201.6 157.6,200.3 159.4,199.1 161.3,197.9 163.1,196.7 164.9,195.5 166.8,194.3 168.6,193.2 170.4,192.0 172.2,190.9 174.1,189.8 175.9,188.7 177.7,187.7 179.6,186.6 181.4,185.6 183.2,184.6 185.1,183.6 186.9,182.6 188.7,181.6 190.6,180.6 192.4,179.6 194.2,178.7 196.0,177.7 197.9,176.8 199.7,175.9 201.5,175.0 203.4,174.0 205.2,173.1 207.0,172.3 208.9,171.4 210.7,170.5 212.5,169.6 214.4,168.8 216.2,167.9 218.0,167.1 219.8,166.3 221.7,165.4 223.5,164.6 225.3,163.8 227.2,163.0 229.0,162.2 230.8,161.4 232.7,160.6 234.5,159.8 236.3,159.0 238.2,158.3 240.0,157.5 241.8,156.7 243.6,156.0 245.5,155.2 247.3,154.5 249.1,153.7 251.0,153.0 252.8,152.3 254.6,151.6 256.5,150.8 258.3,150.1 260.1,149.4 262.0,148.7 263.8,148.0 265.6,147.3 267.4,146.6 269.3,145.9 271.1,145.2 272.9,144.5 274.8,143.8 276.6,143.2 278.4,142.5 280.3,141.8 282.1,141.2 283.9,140.5 285.8,139.8 287.6,139.2 289.4,138.5 291.2,137.9 293.1,137.2 294.9,136.6 296.7,136.0 298.6,135.3 300.4,134.7 302.2,134.1 304.1,133.4 305.9,132.8 307.7,132.2 309.6,131.6 311.4,131.0 313.2,130.3 315.0,129.7 316.9,129.1 318.7,128.5 320.5,127.9 322.4,127.3 324.2,126.7 326.0,126.1 327.9,125.5 329.7,124.9 331.5,124.4 333.4,123.8 335.2,123.2 337.0,122.6 338.8,122.0 340.7,121.5 342.5,120.9 344.3,120.3 346.2,119.8 348.0,119.2 349.8,118.6 351.7,118.1 353.5,117.5 355.3,116.9 357.2,116.4 359.0,115.8 360.8,115.3 362.6,114.7 364.5,114.2 366.3,113.6 368.1,113.1 370.0,112.6 371.8,112.0 373.6,111.5 375.5,111.0 377.3,110.4 379.1,109.9 381.0,109.4 382.8,108.8 384.6,108.3 386.4,107.8 388.3,107.3 390.1,106.7 391.9,106.2 393.8,105.7 395.6,105.2 397.4,104.7 399.3,104.1 401.1,103.6 402.9,103.1 404.8,102.6 406.6,102.1 408.4,101.6 410.2,101.1 412.1,100.6 413.9,100.1 415.7,99.6 417.6,99.1 419.4,98.6 421.2,98.1 423.1,97.6 424.9,97.1 426.7,96.6 428.6,96.2 430.4,95.7 432.2,95.2 434.0,94.7 435.9,94.2 437.7,93.7 439.5,93.2 441.4,92.8 443.2,92.3 445.0,91.8 446.9,91.3 448.7,90.9 450.5,90.4 452.4,89.9 454.2,89.5 456.0,89.0 457.8,88.5 459.7,88.0 461.5,87.6 463.3,87.1 465.2,86.7 467.0,86.2 468.8,85.7 470.7,85.3 472.5,84.8 474.3,84.4 476.2,83.9 478.0,83.4 479.8,83.0 481.6,82.5 483.5,82.1 485.3,81.6 487.1,81.2 489.0,80.7 490.8,80.3 492.6,79.9 494.5,79.4 496.3,79.0 498.1,78.5 500.0,78.1 501.8,77.6 503.6,77.2 505.4,76.8 507.3,76.3 509.1,75.9 510.9,75.4 512.8,75.0 514.6,74.6 516.4,74.1 518.3,73.7 520.1,73.3 521.9,72.9 523.8,72.4 525.6,72.0 527.4,71.6 529.2,71.1 531.1,70.7 532.9,70.3 534.7,69.9 536.6,69.5 538.4,69.0 540.2,68.6 542.1,68.2 543.9,67.8 545.7,67.4 547.6,66.9 549.4,66.5 551.2,66.1 553.0,65.7 554.9,65.3 556.7,64.9 558.5,64.5 560.4,64.0 562.2,63.6 564.0,63.2 565.9,62.8 567.7,62.4 569.5,62.0 571.4,61.6 573.2,61.2 575.0,60.8 576.8,60.4 578.7,60.0 580.5,59.6 582.3,59.2 584.2,58.8 586.0,58.4" fill="none" stroke="#2457b8" stroke-width="2.4"/>
+<text x="110.0" y="284.0" text-anchor="middle" font-size="11" fill="#5c6b62">0</text>
+<text x="229.0" y="284.0" text-anchor="middle" font-size="11" fill="#5c6b62">100</text>
+<text x="348.0" y="284.0" text-anchor="middle" font-size="11" fill="#5c6b62">200</text>
+<text x="467.0" y="284.0" text-anchor="middle" font-size="11" fill="#5c6b62">300</text>
+<text x="586.0" y="284.0" text-anchor="middle" font-size="11" fill="#5c6b62">400</text>
+<text x="102.0" y="270.0" text-anchor="end" font-size="11" fill="#5c6b62">0</text>
+<text x="102.0" y="200.6" text-anchor="end" font-size="11" fill="#5c6b62">100</text>
+<text x="102.0" y="131.2" text-anchor="end" font-size="11" fill="#5c6b62">200</text>
+<text x="102.0" y="61.9" text-anchor="end" font-size="11" fill="#5c6b62">300</text>
+<text x="348.0" y="304.0" text-anchor="middle" font-size="12" fill="#5c6b62">tension F<tspan font-size="9" baseline-shift="-4">T</tspan> (N)</text>
+<text x="42" y="155.0" text-anchor="middle" font-size="12" fill="#5c6b62" transform="rotate(-90 42 155.0)">wave speed v (m/s)</text>
+<line x1="217.5" y1="266.0" x2="217.5" y2="167.4" stroke="#1e6b3c" stroke-width="1.1" stroke-dasharray="4 4"/>
+<line x1="110.0" y1="167.4" x2="217.5" y2="167.4" stroke="#1e6b3c" stroke-width="1.1" stroke-dasharray="4 4"/>
+<circle cx="217.5" cy="167.4" r="5.5" fill="#1e6b3c"/>
+<text x="226.5" y="158.4" text-anchor="start" font-size="12" fill="#1e6b3c">F &rarr; 142 m/s</text>
+<line x1="324.9" y1="266.0" x2="324.9" y2="126.5" stroke="#c77b1f" stroke-width="1.1" stroke-dasharray="4 4"/>
+<line x1="110.0" y1="126.5" x2="324.9" y2="126.5" stroke="#c77b1f" stroke-width="1.1" stroke-dasharray="4 4"/>
+<circle cx="324.9" cy="126.5" r="5.5" fill="#c77b1f"/>
+<text x="333.9" y="117.5" text-anchor="start" font-size="12" fill="#c77b1f">2F &rarr; 201 m/s</text>
+<line x1="539.8" y1="266.0" x2="539.8" y2="68.7" stroke="#b0145a" stroke-width="1.1" stroke-dasharray="4 4"/>
+<line x1="110.0" y1="68.7" x2="539.8" y2="68.7" stroke="#b0145a" stroke-width="1.1" stroke-dasharray="4 4"/>
+<circle cx="539.8" cy="68.7" r="5.5" fill="#b0145a"/>
+<text x="530.8" y="59.7" text-anchor="end" font-size="12" fill="#b0145a">4F &rarr; 284 m/s</text>
+<text x="120.0" y="60.0" text-anchor="start" font-size="14" fill="#2457b8">v = &radic;(F<tspan font-size="10" baseline-shift="-4">T</tspan>/&mu;)</text>
+<text x="110.0" y="328.0" text-anchor="start" font-size="12.5" fill="#1d2b23">F &rarr; 2F multiplies v by &radic;2 = 1.41 &nbsp;&middot;&nbsp; F &rarr; 4F multiplies v by 2</text>
+<text x="110.0" y="346.0" text-anchor="start" font-size="12" fill="#5c6b62">and since f = v/2L for a fixed string, the frequency follows the speed exactly</text>
+</svg>
+    <figcaption>Wave speed against tension for his A string, &mu; = 4.466 &times;
+      10<span class="up">&minus;3</span> kg/m. The curve is a true square root, so the three marked
+      speeds are what the formula gives rather than a sketch of the idea.</figcaption>
+  </figure>
+
+  <table class="grid">
+    <tr><th>Do this</th><th>Speed becomes</th><th>Frequency becomes</th></tr>
+    <tr><td>Double the tension, <span class="m">F</span> &rarr; 2<span class="m">F</span></td>
+        <td>&radic;2 <span class="m">v</span><sub>1</sub> &asymp; 1.41 <span class="m">v</span><sub>1</sub></td>
+        <td>&radic;2 <span class="m">f</span><sub>orig</sub></td></tr>
+    <tr><td>Quadruple the tension, <span class="m">F</span> &rarr; 4<span class="m">F</span></td>
+        <td>2 <span class="m">v</span><sub>1</sub></td>
+        <td>2 <span class="m">f</span><sub>orig</sub></td></tr>
+  </table>
+
+  <p><strong>It takes four times the tension to get twice the frequency</strong> &mdash; an octave.
+  That is why tuning is delicate near the top of a string&rsquo;s range: the same turn of the peg
+  buys less and less pitch as the tension rises, because the square root is flattening out. The
+  figure shows that flattening directly.</p>
+
+  <h2>Guitar string data</h2>
+
+  <p>Trevor works from a published table of string gauges, frequencies, linear densities and
+  tensions. It is reproduced here with his added tension columns, from
+  <a href="http://www.noyceguitars.com/technotes/articles/t3.html" target="_blank" rel="noopener">noyceguitars.com</a>:</p>
+
+  <table class="grid">
+    <tr><th>String</th><th>Gauge (in/mm)</th><th><span class="m">f</span> (Hz)</th>
+        <th>Mass per metre &mu; (kg/m)</th><th>&ldquo;Tension&rdquo; (kg)</th><th><span class="m">F</span><sub>T</sub> (N)</th></tr>
+    <tr><td>E 1st</td><td>.010 / .254</td><td>329.63</td><td>0.401 &times; 10<span class="up">&minus;3</span></td><td>7.28</td><td>72.8</td></tr>
+    <tr><td>B 2nd</td><td>.013 / .330</td><td>246.94</td><td>0.708 &times; 10<span class="up">&minus;3</span></td><td>7.22</td><td>72.2</td></tr>
+    <tr><td>G 3rd</td><td>.017 / .432</td><td>196.00</td><td>1.140 &times; 10<span class="up">&minus;3</span></td><td>7.32</td><td>73.2</td></tr>
+    <tr><td>D 4th</td><td>.026 / .660</td><td>146.82</td><td>2.333 &times; 10<span class="up">&minus;3</span></td><td>8.41</td><td>84.1</td></tr>
+    <tr><td>A 5th</td><td>.036 / .914</td><td>110.00</td><td>4.466 &times; 10<span class="up">&minus;3</span></td><td>9.03</td><td>90.3</td></tr>
+    <tr><td>E 6th</td><td>.046 / 1.168</td><td>82.407</td><td>6.790 &times; 10<span class="up">&minus;3</span></td><td>7.71</td><td>77.1</td></tr>
+  </table>
+
+  <div class="check">
+    <span class="label">A warning worth keeping</span>
+    <p class="q">The table lists &ldquo;tension&rdquo; in kilograms. Why can a tension not be 9.03
+      kg?</p>
+    <p class="ans">Because <b>tension is a force</b>, and a kilogram is a mass. String makers quote
+      the mass whose weight would pull that hard, which is a real convention but not a force.
+      Convert before using it:
+      <span class="m">F</span><sub>T</sub> = <span class="m">mg</span>. <b>Trevor multiplies by
+      10 m/s<span class="up">2</span></b>, not 9.8, so his 9.03 kg becomes 90.3 N &mdash; and that
+      choice is carried through the worked example below so the numbers match his.</p>
+  </div>
+
+  <h2>Worked example &mdash; checking the length of a guitar string</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 276" role="img" aria-label="A string fixed at both ends vibrating in its fundamental mode: one loop, so the string length is half a wavelength.">
+<defs><marker id="bfblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="bfred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="bfgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="bfamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="bfviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="bfcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="bfink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="bfmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="bfcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="150.0" y1="28.0" x2="150.0" y2="180.0" stroke="#1d2b23" stroke-width="3"/>
+<line x1="530.0" y1="28.0" x2="530.0" y2="180.0" stroke="#1d2b23" stroke-width="3"/>
+<line x1="150.0" y1="104.0" x2="530.0" y2="104.0" stroke="#d7e2da" stroke-width="1.4"/>
+<polyline points="150.0,104.0 151.5,103.3 152.9,102.7 154.4,102.0 155.8,101.4 157.3,100.7 158.8,100.1 160.2,99.4 161.7,98.8 163.2,98.1 164.6,97.5 166.1,96.8 167.5,96.2 169.0,95.6 170.5,94.9 171.9,94.3 173.4,93.6 174.8,93.0 176.3,92.3 177.8,91.7 179.2,91.1 180.7,90.4 182.2,89.8 183.6,89.2 185.1,88.6 186.5,87.9 188.0,87.3 189.5,86.7 190.9,86.1 192.4,85.5 193.8,84.9 195.3,84.2 196.8,83.6 198.2,83.0 199.7,82.4 201.2,81.8 202.6,81.2 204.1,80.7 205.5,80.1 207.0,79.5 208.5,78.9 209.9,78.3 211.4,77.8 212.8,77.2 214.3,76.6 215.8,76.1 217.2,75.5 218.7,75.0 220.2,74.4 221.6,73.9 223.1,73.3 224.5,72.8 226.0,72.3 227.5,71.7 228.9,71.2 230.4,70.7 231.8,70.2 233.3,69.7 234.8,69.2 236.2,68.7 237.7,68.2 239.2,67.7 240.6,67.2 242.1,66.8 243.5,66.3 245.0,65.8 246.5,65.4 247.9,64.9 249.4,64.5 250.8,64.0 252.3,63.6 253.8,63.2 255.2,62.7 256.7,62.3 258.2,61.9 259.6,61.5 261.1,61.1 262.5,60.7 264.0,60.3 265.5,59.9 266.9,59.6 268.4,59.2 269.8,58.8 271.3,58.5 272.8,58.1 274.2,57.8 275.7,57.5 277.2,57.1 278.6,56.8 280.1,56.5 281.5,56.2 283.0,55.9 284.5,55.6 285.9,55.3 287.4,55.0 288.8,54.8 290.3,54.5 291.8,54.2 293.2,54.0 294.7,53.7 296.2,53.5 297.6,53.3 299.1,53.1 300.5,52.8 302.0,52.6 303.5,52.4 304.9,52.3 306.4,52.1 307.8,51.9 309.3,51.7 310.8,51.6 312.2,51.4 313.7,51.3 315.2,51.1 316.6,51.0 318.1,50.9 319.5,50.8 321.0,50.7 322.5,50.6 323.9,50.5 325.4,50.4 326.8,50.3 328.3,50.3 329.8,50.2 331.2,50.1 332.7,50.1 334.2,50.1 335.6,50.0 337.1,50.0 338.5,50.0 340.0,50.0 341.5,50.0 342.9,50.0 344.4,50.0 345.8,50.1 347.3,50.1 348.8,50.1 350.2,50.2 351.7,50.3 353.2,50.3 354.6,50.4 356.1,50.5 357.5,50.6 359.0,50.7 360.5,50.8 361.9,50.9 363.4,51.0 364.8,51.1 366.3,51.3 367.8,51.4 369.2,51.6 370.7,51.7 372.2,51.9 373.6,52.1 375.1,52.3 376.5,52.4 378.0,52.6 379.5,52.8 380.9,53.1 382.4,53.3 383.8,53.5 385.3,53.7 386.8,54.0 388.2,54.2 389.7,54.5 391.2,54.8 392.6,55.0 394.1,55.3 395.5,55.6 397.0,55.9 398.5,56.2 399.9,56.5 401.4,56.8 402.8,57.1 404.3,57.5 405.8,57.8 407.2,58.1 408.7,58.5 410.2,58.8 411.6,59.2 413.1,59.6 414.5,59.9 416.0,60.3 417.5,60.7 418.9,61.1 420.4,61.5 421.8,61.9 423.3,62.3 424.8,62.7 426.2,63.2 427.7,63.6 429.2,64.0 430.6,64.5 432.1,64.9 433.5,65.4 435.0,65.8 436.5,66.3 437.9,66.8 439.4,67.2 440.8,67.7 442.3,68.2 443.8,68.7 445.2,69.2 446.7,69.7 448.2,70.2 449.6,70.7 451.1,71.2 452.5,71.7 454.0,72.3 455.5,72.8 456.9,73.3 458.4,73.9 459.8,74.4 461.3,75.0 462.8,75.5 464.2,76.1 465.7,76.6 467.2,77.2 468.6,77.8 470.1,78.3 471.5,78.9 473.0,79.5 474.5,80.1 475.9,80.7 477.4,81.2 478.8,81.8 480.3,82.4 481.8,83.0 483.2,83.6 484.7,84.2 486.2,84.9 487.6,85.5 489.1,86.1 490.5,86.7 492.0,87.3 493.5,87.9 494.9,88.6 496.4,89.2 497.8,89.8 499.3,90.4 500.8,91.1 502.2,91.7 503.7,92.3 505.2,93.0 506.6,93.6 508.1,94.3 509.5,94.9 511.0,95.6 512.5,96.2 513.9,96.8 515.4,97.5 516.8,98.1 518.3,98.8 519.8,99.4 521.2,100.1 522.7,100.7 524.2,101.4 525.6,102.0 527.1,102.7 528.5,103.3 530.0,104.0" fill="none" stroke="#2457b8" stroke-width="2.4"/>
+<polyline points="150.0,104.0 151.5,104.7 152.9,105.3 154.4,106.0 155.8,106.6 157.3,107.3 158.8,107.9 160.2,108.6 161.7,109.2 163.2,109.9 164.6,110.5 166.1,111.2 167.5,111.8 169.0,112.4 170.5,113.1 171.9,113.7 173.4,114.4 174.8,115.0 176.3,115.7 177.8,116.3 179.2,116.9 180.7,117.6 182.2,118.2 183.6,118.8 185.1,119.4 186.5,120.1 188.0,120.7 189.5,121.3 190.9,121.9 192.4,122.5 193.8,123.1 195.3,123.8 196.8,124.4 198.2,125.0 199.7,125.6 201.2,126.2 202.6,126.8 204.1,127.3 205.5,127.9 207.0,128.5 208.5,129.1 209.9,129.7 211.4,130.2 212.8,130.8 214.3,131.4 215.8,131.9 217.2,132.5 218.7,133.0 220.2,133.6 221.6,134.1 223.1,134.7 224.5,135.2 226.0,135.7 227.5,136.3 228.9,136.8 230.4,137.3 231.8,137.8 233.3,138.3 234.8,138.8 236.2,139.3 237.7,139.8 239.2,140.3 240.6,140.8 242.1,141.2 243.5,141.7 245.0,142.2 246.5,142.6 247.9,143.1 249.4,143.5 250.8,144.0 252.3,144.4 253.8,144.8 255.2,145.3 256.7,145.7 258.2,146.1 259.6,146.5 261.1,146.9 262.5,147.3 264.0,147.7 265.5,148.1 266.9,148.4 268.4,148.8 269.8,149.2 271.3,149.5 272.8,149.9 274.2,150.2 275.7,150.5 277.2,150.9 278.6,151.2 280.1,151.5 281.5,151.8 283.0,152.1 284.5,152.4 285.9,152.7 287.4,153.0 288.8,153.2 290.3,153.5 291.8,153.8 293.2,154.0 294.7,154.3 296.2,154.5 297.6,154.7 299.1,154.9 300.5,155.2 302.0,155.4 303.5,155.6 304.9,155.7 306.4,155.9 307.8,156.1 309.3,156.3 310.8,156.4 312.2,156.6 313.7,156.7 315.2,156.9 316.6,157.0 318.1,157.1 319.5,157.2 321.0,157.3 322.5,157.4 323.9,157.5 325.4,157.6 326.8,157.7 328.3,157.7 329.8,157.8 331.2,157.9 332.7,157.9 334.2,157.9 335.6,158.0 337.1,158.0 338.5,158.0 340.0,158.0 341.5,158.0 342.9,158.0 344.4,158.0 345.8,157.9 347.3,157.9 348.8,157.9 350.2,157.8 351.7,157.7 353.2,157.7 354.6,157.6 356.1,157.5 357.5,157.4 359.0,157.3 360.5,157.2 361.9,157.1 363.4,157.0 364.8,156.9 366.3,156.7 367.8,156.6 369.2,156.4 370.7,156.3 372.2,156.1 373.6,155.9 375.1,155.7 376.5,155.6 378.0,155.4 379.5,155.2 380.9,154.9 382.4,154.7 383.8,154.5 385.3,154.3 386.8,154.0 388.2,153.8 389.7,153.5 391.2,153.2 392.6,153.0 394.1,152.7 395.5,152.4 397.0,152.1 398.5,151.8 399.9,151.5 401.4,151.2 402.8,150.9 404.3,150.5 405.8,150.2 407.2,149.9 408.7,149.5 410.2,149.2 411.6,148.8 413.1,148.4 414.5,148.1 416.0,147.7 417.5,147.3 418.9,146.9 420.4,146.5 421.8,146.1 423.3,145.7 424.8,145.3 426.2,144.8 427.7,144.4 429.2,144.0 430.6,143.5 432.1,143.1 433.5,142.6 435.0,142.2 436.5,141.7 437.9,141.2 439.4,140.8 440.8,140.3 442.3,139.8 443.8,139.3 445.2,138.8 446.7,138.3 448.2,137.8 449.6,137.3 451.1,136.8 452.5,136.3 454.0,135.7 455.5,135.2 456.9,134.7 458.4,134.1 459.8,133.6 461.3,133.0 462.8,132.5 464.2,131.9 465.7,131.4 467.2,130.8 468.6,130.2 470.1,129.7 471.5,129.1 473.0,128.5 474.5,127.9 475.9,127.3 477.4,126.8 478.8,126.2 480.3,125.6 481.8,125.0 483.2,124.4 484.7,123.8 486.2,123.1 487.6,122.5 489.1,121.9 490.5,121.3 492.0,120.7 493.5,120.1 494.9,119.4 496.4,118.8 497.8,118.2 499.3,117.6 500.8,116.9 502.2,116.3 503.7,115.7 505.2,115.0 506.6,114.4 508.1,113.7 509.5,113.1 511.0,112.4 512.5,111.8 513.9,111.2 515.4,110.5 516.8,109.9 518.3,109.2 519.8,108.6 521.2,107.9 522.7,107.3 524.2,106.6 525.6,106.0 527.1,105.3 528.5,104.7 530.0,104.0" fill="none" stroke="#0f8ea8" stroke-width="2.4"/>
+<circle cx="150" cy="104" r="5" fill="#1d2b23"/>
+<circle cx="530" cy="104" r="5" fill="#1d2b23"/>
+<text x="150.0" y="204.0" text-anchor="middle" font-size="12" fill="#5c6b62">node</text>
+<text x="530.0" y="204.0" text-anchor="middle" font-size="12" fill="#5c6b62">node</text>
+<text x="340.0" y="38.0" text-anchor="middle" font-size="12" fill="#5c6b62">antinode</text>
+<line x1="336.0" y1="234.0" x2="150.0" y2="234.0" stroke="#6b4ea8" stroke-width="1.8" marker-end="url(#bfviolet)"/>
+<line x1="344.0" y1="234.0" x2="530.0" y2="234.0" stroke="#6b4ea8" stroke-width="1.8" marker-end="url(#bfviolet)"/>
+<text x="340.0" y="228.0" text-anchor="middle" font-size="15" fill="#6b4ea8" font-style="italic">L</text>
+<text x="136.0" y="108.0" text-anchor="end" font-size="14" fill="#1d2b23">L = &frac12;&lambda;</text>
+<text x="544.0" y="108.0" text-anchor="start" font-size="14" fill="#1d2b23">&lambda; = 2L</text>
+<text x="320.0" y="268.0" text-anchor="middle" font-size="12" fill="#5c6b62">one loop is half a wavelength &mdash; so a 0.65 m string carries a 1.3 m wave</text>
+</svg>
+    <figcaption>A string fixed at both ends, vibrating in its lowest mode. One loop spans the
+      string, and one loop is half a wavelength.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The A string is tightened to &ldquo;9.03 kg&rdquo;, has &mu; = 4.466 &times; 10<span class="up">&minus;3</span> kg/m, and sounds at 110 Hz. How fast does the wave travel, and how long is the string?</div>
+    <div class="body">
+      <div class="mathline"><span class="sm">(a)</span>&nbsp; <span class="m">F</span><sub>T</sub>
+        = (9.03 kg)(10 m/s<span class="up">2</span>) = 90.3 N</div>
+      <div class="mathline"><span class="m">v</span> =
+        <span class="sq">&radic;</span>(<span class="m">F</span><sub>T</sub>/&mu;) =
+        <span class="sq">&radic;</span>(90.3 kg&middot;m/s<span class="up">2</span> &divide;
+        4.466 &times; 10<span class="up">&minus;3</span> kg/m)</div>
+      <div class="mathline"><span class="m">v</span> =
+        <span class="sq">&radic;</span>(20219.4 m<span class="up">2</span>/s<span class="up">2</span>)
+        = 142.19 m/s = <strong>142 m/s</strong></div>
+      <div class="mathline"><span class="sm">(b)</span>&nbsp; &lambda; =
+        <span class="frac"><span class="top"><span class="m">v</span></span><span class="bot"><span class="m">f</span></span></span>
+        = <span class="frac"><span class="top">142.19 m/s</span><span class="bot">110 1/s</span></span>
+        = 1.293 m</div>
+      <div class="mathline">fundamental:&nbsp; <span class="m">L</span> = &frac12;&lambda;
+        = &frac12;(1.293 m) = <strong>0.65 m</strong></div>
+      <p class="why">Watch the kilograms cancel in the square root: kg&middot;m/s<span class="up">2</span>
+        divided by kg/m is m<span class="up">2</span>/s<span class="up">2</span>, whose root is m/s.
+        If the kilograms do not cancel, the tension was left in kg.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="label">Is 0.65 m reasonable?</span>
+    Yes &mdash; and that is the point of the question. The D&rsquo;Addario string data Trevor quotes
+    was measured on a <strong>0.648 m scale length</strong>, which is the standard for a classical
+    guitar. Getting 0.65 m from a frequency, a tension and a linear density, with no ruler anywhere
+    in the calculation, is the strongest possible check that
+    <span class="m">v</span> = &radic;(<span class="m">F</span><sub>T</sub>/&mu;) is right.
+    <span class="sm">(Source for the string data:
+    <a href="http://www.donaldsauter.com/string-calculation.htm" target="_blank" rel="noopener">donaldsauter.com</a>.)</span>
+  </div>
+
+  <h2>In short</h2>
+  <ul>
+    <li>The speed of a wave on a string is set by the string:
+      <span class="m">v</span> = &radic;(<span class="m">F</span><sub>T</sub>/&mu;).</li>
+    <li>&mu; = <span class="m">m</span>/<span class="m">L</span> is the <strong>linear
+      density</strong>, in kg/m.</li>
+    <li>Unit analysis alone finds the relationship between the variables in a system &mdash; it
+      cannot find the dimensionless constant, which here happens to be 1.</li>
+    <li>Because the speed goes as the square root of the tension, <strong>four times the tension
+      gives twice the frequency</strong>.</li>
+    <li>&ldquo;Tension&rdquo; quoted in kilograms is a mass; multiply by
+      <span class="m">g</span> before using it.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/16-9-waves" target="_blank" rel="noopener">16.9 Waves</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Sep 19, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/16-2-mathematics-of-waves" target="_blank" rel="noopener">16.2 Mathematics of Waves</a>,
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/16-4-wave-speed-on-a-stretched-string" target="_blank" rel="noopener">16.4 Wave Speed on a Stretched String</a></li>
+    <li>Guitar string gauges, frequencies and linear densities &mdash;
+      <a href="http://www.noyceguitars.com/technotes/articles/t3.html" target="_blank" rel="noopener">Noyce Guitars technical notes</a></li>
+    <li>D&rsquo;Addario Pro Arte J45 string tensions and the 0.648 m scale length &mdash;
+      <a href="http://www.donaldsauter.com/string-calculation.htm" target="_blank" rel="noopener">donaldsauter.com</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentations <em>Waves and Tension Dimensional Analysis</em> and <em>Wave Speed and Tension</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   Reached by link, not framed, so this is inert here - kept so the page behaves if embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

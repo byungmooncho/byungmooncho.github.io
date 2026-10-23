@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 Ch17c &mdash; Sound Intensity Level: the Decibel</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 1 (Oscillations, Waves and Sound)
+     Chapter 17 (University Physics Volume 1)
+     Trevor deck(s): Deck: Sound Intensity Level
+     "Sound Intensity Level: the Decibel" - web-page version of the lecture slides by
+     Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+
+     Tier B reference page: faithful transcription, shorter synopsis, lead
+     paragraphs and captions added because a page has no voice.  No probe, no
+     exit ticket, no PE card.  References are LEAVES - no link from this page to
+     any note page (playbook Step 5a).
+
+     THE LONGEST DECK ANYWHERE IN MODULE 1 at 16 slides, and about half of it is a
+     mathematics lesson on logarithms rather than a physics lesson on sound.  That
+     half is kept, because it is the half that makes the decibel make sense, but it
+     is gathered into one section instead of spread across six slides.
+
+     THIS DECK IS THE ONE PLACE IN THE SUB-FOLDER WHERE HE GIVES A REAL PAGE NUMBER
+     for White and White - p. 103, for the musicians' scale of loudness.  Carried.
+     Everywhere else in this sub-folder he writes "pp. XXX" and no page number is
+     invented.
+
+     HIS REFERENCE SLIDE CITES University Physics Volume 2; sound is Volume 1 ch 17.
+     This page cites Volume 1.
+
+     NOT REPRODUCED: two app-store screenshots (his slide 14) and the quoted
+     Washington Post article excerpt (slide 12).  The first are third-party commercial
+     listings and their point - that a phone can measure sound level - is made in
+     words; the second is cited rather than reproduced.
+
+     THE dB LADDER IS REDRAWN from the values he quotes, which are OpenStax's.  His
+     own table is an image; this is an SVG with the same numbers.
+
+
+     PHY 119 will have its own page for these decks when that course starts,
+     written for College Physics from the same source.  It is NOT generated from
+     this file, and the notes mirror is never run over a reference\ directory.
+
+     Triage: Planning\M1_cSound_Deck_Triage_PHY152_2026-10-21.md
+     Hosted on GitHub Pages, reached by link from the Module 1 reference index.
+     Never framed, so this page has no wrapper of its own.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 &middot; Oscillations, Waves and Sound</span>
+    <span>Chapter 17 (University Physics) &middot; Deck: Sound Intensity Level</span>
+  </div>
+
+  <h1>Sound Intensity Level: the Decibel</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    The quietest sound a person can hear and the loudest one they can survive differ by a factor of
+    about ten thousand billion. No ordinary scale copes with that, so sound is measured on a
+    logarithmic one, in decibels. The price is that decibels do not add the way intensities do
+    &mdash; doubling the intensity adds three to the level, not a hundred per cent &mdash; and
+    getting comfortable with that is most of the work on this page.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    Intensity in W/m<span class="up">2</span> from <strong>Ch17b</strong>, and logarithms from
+    algebra: log(<span class="m">AB</span>) = log <span class="m">A</span> + log <span class="m">B</span>,
+    and 10<span class="up">log x</span> = <span class="m">x</span>.
+  </div>
+
+  <h2>The problem: an enormous range</h2>
+
+  <table class="grid">
+    <tr><th></th><th>Intensity</th></tr>
+    <tr><td>Threshold of hearing &mdash; the limit of sensitivity</td><td><span class="m">I</span><sub>o</sub> = 1 &times; 10<span class="up">&minus;12</span> W/m<span class="up">2</span></td></tr>
+    <tr><td>Eardrum rupture</td><td>10<span class="up">4</span> W/m<span class="up">2</span></td></tr>
+  </table>
+
+  <p>Sixteen orders of magnitude. Plot that on an ordinary axis and everything except the very
+  loudest sits flat on the floor:</p>
+
+  <figure>
+    <svg viewBox="0 0 640 316" role="img" aria-label="The same eleven powers of ten plotted on a linear vertical axis, where all but the largest are flat against zero, and on a logarithmic axis, where they lie on a straight line.">
+<defs><marker id="lablue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="lared" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="lagreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="laamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="laviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="lacrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="laink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="lamuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="lacyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="60.0" y1="248.0" x2="300.0" y2="248.0" stroke="#1d2b23" stroke-width="1.5"/>
+<line x1="60.0" y1="248.0" x2="60.0" y2="54.0" stroke="#1d2b23" stroke-width="1.5"/>
+<text x="180.0" y="38.0" text-anchor="middle" font-size="13" fill="#1d2b23" font-weight="600">linear scale</text>
+<circle cx="70.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="90.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="110.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="130.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="150.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="170.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="190.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="210.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="230.0" cy="247.8" r="3.6" fill="#2457b8"/>
+<circle cx="250.0" cy="246.1" r="3.6" fill="#2457b8"/>
+<circle cx="270.0" cy="228.6" r="3.6" fill="#2457b8"/>
+<circle cx="290.0" cy="54.0" r="3.6" fill="#2457b8"/>
+<text x="180.0" y="268.0" text-anchor="middle" font-size="12" fill="#5c6b62" font-style="italic">x</text>
+<text x="51.0" y="58.0" text-anchor="end" font-size="10.5" fill="#5c6b62">10<tspan font-size="9" baseline-shift="4">6</tspan></text>
+<text x="51.0" y="252.0" text-anchor="end" font-size="10.5" fill="#5c6b62">0</text>
+<line x1="370.0" y1="248.0" x2="610.0" y2="248.0" stroke="#1d2b23" stroke-width="1.5"/>
+<line x1="370.0" y1="248.0" x2="370.0" y2="54.0" stroke="#1d2b23" stroke-width="1.5"/>
+<text x="490.0" y="38.0" text-anchor="middle" font-size="13" fill="#1d2b23" font-weight="600">log scale</text>
+<circle cx="380.0" cy="248.0" r="3.6" fill="#2457b8"/>
+<circle cx="400.0" cy="230.4" r="3.6" fill="#2457b8"/>
+<circle cx="420.0" cy="212.7" r="3.6" fill="#2457b8"/>
+<circle cx="440.0" cy="195.1" r="3.6" fill="#2457b8"/>
+<circle cx="460.0" cy="177.5" r="3.6" fill="#2457b8"/>
+<circle cx="480.0" cy="159.8" r="3.6" fill="#2457b8"/>
+<circle cx="500.0" cy="142.2" r="3.6" fill="#2457b8"/>
+<circle cx="520.0" cy="124.5" r="3.6" fill="#2457b8"/>
+<circle cx="540.0" cy="106.9" r="3.6" fill="#2457b8"/>
+<circle cx="560.0" cy="89.3" r="3.6" fill="#2457b8"/>
+<circle cx="580.0" cy="71.6" r="3.6" fill="#2457b8"/>
+<circle cx="600.0" cy="54.0" r="3.6" fill="#2457b8"/>
+<text x="490.0" y="268.0" text-anchor="middle" font-size="12" fill="#5c6b62" font-style="italic">x</text>
+<line x1="365.0" y1="248.0" x2="370.0" y2="248.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="361.0" y="252.0" text-anchor="end" font-size="10.5" fill="#5c6b62">10&minus;<tspan font-size="9" baseline-shift="4">5</tspan></text>
+<line x1="365.0" y1="159.8" x2="370.0" y2="159.8" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="361.0" y="163.8" text-anchor="end" font-size="10.5" fill="#5c6b62">10<tspan font-size="9" baseline-shift="4">0</tspan></text>
+<line x1="365.0" y1="71.6" x2="370.0" y2="71.6" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="361.0" y="75.6" text-anchor="end" font-size="10.5" fill="#5c6b62">10<tspan font-size="9" baseline-shift="4">5</tspan></text>
+<text x="60.0" y="284.0" text-anchor="start" font-size="12.5" fill="#1d2b23">On a linear axis, eleven of the twelve points are flat against the floor and indistinguishable.</text>
+<text x="60.0" y="302.0" text-anchor="start" font-size="12" fill="#5c6b62">On a log axis each factor of ten is one equal step &mdash; which is the whole reason for the decibel.</text>
+</svg>
+    <figcaption>The same twelve powers of ten, plotted linearly and logarithmically.</figcaption>
+  </figure>
+
+  <div class="mathblock">
+    <div class="head">The log function compresses powers of ten</div>
+    <div class="body">
+      <div class="mathline"><span class="m">y</span> = log <span class="m">x</span></div>
+      <p class="why">What the log does is turn <em>multiplying</em> into <em>adding</em>. Every time
+        <span class="m">x</span> is multiplied by ten, log <span class="m">x</span> goes up by
+        exactly one. Sixteen orders of magnitude become sixteen equal steps, and a range nothing
+        could display becomes a range that fits on a ruler.</p>
+    </div>
+  </div>
+
+  <table class="grid">
+    <tr><th>x</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+    <tr><th>log x</th><td>0.000</td><td>0.301</td><td>0.477</td><td>0.602</td><td>0.699</td><td>0.778</td><td>0.845</td><td>0.903</td><td>0.954</td><td>1.000</td></tr>
+  </table>
+
+  <p>Two values in that row are worth memorising, because they turn up constantly in this topic:
+  <strong>log 2 = 0.301</strong> and <strong>log 10 = 1</strong>.</p>
+
+  <h2>The decibel</h2>
+
+  <div class="mathblock">
+    <div class="head">Sound intensity level</div>
+    <div class="body">
+      <div class="mathline">&beta; = 10 dB &middot; log
+        <span class="sq">(</span>
+        <span class="frac"><span class="top"><span class="m">I</span></span><span class="bot"><span class="m">I</span><sub>o</sub></span></span>
+        <span class="sq">)</span>
+        &nbsp;&nbsp;<span class="sm">with <span class="m">I</span><sub>o</sub> = 1 &times; 10<span class="up">&minus;12</span> W/m<span class="up">2</span></span></div>
+      <p class="why">&beta; is a <strong>ratio of two intensities</strong>, so it is
+        dimensionless &mdash; the W/m<span class="up">2</span> cancel inside the log. It is
+        nonetheless labelled in decibels, to say which reference and which factor of ten were used.
+        <span class="m">I</span><sub>o</sub> is the threshold of hearing, which is why 0 dB means
+        &ldquo;only just audible&rdquo; rather than &ldquo;no sound&rdquo;.</p>
+    </div>
+  </div>
+
+  <table class="grid">
+    <tr><th>n</th><th>Intensity (W/m<span class="up">2</span>)</th><th>Level (dB)</th>
+        <th>n</th><th>Intensity (W/m<span class="up">2</span>)</th><th>Level (dB)</th></tr>
+    <tr><td>4</td><td>10 000</td><td>160</td><td>&minus;4</td><td>0.0001</td><td>80</td></tr>
+    <tr><td>3</td><td>1 000</td><td>150</td><td>&minus;5</td><td>0.00001</td><td>70</td></tr>
+    <tr><td>2</td><td>100</td><td>140</td><td>&minus;6</td><td>0.000001</td><td>60</td></tr>
+    <tr><td>1</td><td>10</td><td>130</td><td>&minus;7</td><td>0.0000001</td><td>50</td></tr>
+    <tr><td>0</td><td>1</td><td>120</td><td>&minus;8</td><td>0.00000001</td><td>40</td></tr>
+    <tr><td>&minus;1</td><td>0.1</td><td>110</td><td>&minus;9</td><td>0.000000001</td><td>30</td></tr>
+    <tr><td>&minus;2</td><td>0.01</td><td>100</td><td>&minus;10</td><td>0.0000000001</td><td>20</td></tr>
+    <tr><td>&minus;3</td><td>0.001</td><td>90</td><td>&minus;11</td><td>0.00000000001</td><td>10</td></tr>
+    <tr><td></td><td></td><td></td><td>&minus;12</td><td>0.000000000001</td><td>0</td></tr>
+  </table>
+
+  <p>Read down either pair of columns: <strong>each factor of ten in intensity is exactly ten
+  decibels.</strong> Every row of that table is one step on the ladder below.</p>
+
+  <h2>What the numbers sound like</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 452" role="img" aria-label="A vertical decibel scale from zero at the threshold of hearing to one hundred and sixty where an eardrum breaks, with a familiar sound marked at each step of ten.">
+<defs><marker id="dbblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="dbred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="dbgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="dbamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="dbviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="dbcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="dbink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="dbmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="dbcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="150.0" y1="400.0" x2="150.0" y2="40.0" stroke="#1d2b23" stroke-width="2"/>
+<line x1="144.0" y1="40.0" x2="156.0" y2="40.0" stroke="#b0145a" stroke-width="1.6"/>
+<text x="138.0" y="44.0" text-anchor="end" font-size="12" fill="#b0145a" font-weight="600">160</text>
+<text x="164.0" y="44.0" text-anchor="start" font-size="12" fill="#b0145a">Eardrum breaks</text>
+<line x1="144.0" y1="85.0" x2="156.0" y2="85.0" stroke="#b0145a" stroke-width="1.6"/>
+<text x="138.0" y="89.0" text-anchor="end" font-size="12" fill="#b0145a" font-weight="600">140</text>
+<text x="164.0" y="89.0" text-anchor="start" font-size="12" fill="#b0145a">Jet airplane &mdash; damage in seconds</text>
+<line x1="144.0" y1="130.0" x2="156.0" y2="130.0" stroke="#b0145a" stroke-width="1.6"/>
+<text x="138.0" y="134.0" text-anchor="end" font-size="12" fill="#b0145a" font-weight="600">120</text>
+<text x="164.0" y="134.0" text-anchor="start" font-size="12" fill="#b0145a">Threshold of pain</text>
+<line x1="144.0" y1="152.5" x2="156.0" y2="152.5" stroke="#c77b1f" stroke-width="1.6"/>
+<text x="138.0" y="156.5" text-anchor="end" font-size="12" fill="#c77b1f" font-weight="600">110</text>
+<text x="164.0" y="156.5" text-anchor="start" font-size="12" fill="#c77b1f">Loud rock band, live</text>
+<line x1="144.0" y1="175.0" x2="156.0" y2="175.0" stroke="#c77b1f" stroke-width="1.6"/>
+<text x="138.0" y="179.0" text-anchor="end" font-size="12" fill="#c77b1f" font-weight="600">100</text>
+<text x="164.0" y="179.0" text-anchor="start" font-size="12" fill="#c77b1f">Subway</text>
+<line x1="144.0" y1="197.5" x2="156.0" y2="197.5" stroke="#c77b1f" stroke-width="1.6"/>
+<text x="138.0" y="201.5" text-anchor="end" font-size="12" fill="#c77b1f" font-weight="600">90</text>
+<text x="164.0" y="201.5" text-anchor="start" font-size="12" fill="#c77b1f">Factory &mdash; damage from prolonged exposure</text>
+<line x1="144.0" y1="220.0" x2="156.0" y2="220.0" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="138.0" y="224.0" text-anchor="end" font-size="12" fill="#1d2b23" font-weight="600">80</text>
+<text x="164.0" y="224.0" text-anchor="start" font-size="12" fill="#1d2b23">Loud radio, or a professor</text>
+<line x1="144.0" y1="242.5" x2="156.0" y2="242.5" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="138.0" y="246.5" text-anchor="end" font-size="12" fill="#1d2b23" font-weight="600">70</text>
+<text x="164.0" y="246.5" text-anchor="start" font-size="12" fill="#1d2b23">Traffic congestion</text>
+<line x1="144.0" y1="265.0" x2="156.0" y2="265.0" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="138.0" y="269.0" text-anchor="end" font-size="12" fill="#1d2b23" font-weight="600">60</text>
+<text x="164.0" y="269.0" text-anchor="start" font-size="12" fill="#1d2b23">Conversation</text>
+<line x1="144.0" y1="287.5" x2="156.0" y2="287.5" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="138.0" y="291.5" text-anchor="end" font-size="12" fill="#1d2b23" font-weight="600">50</text>
+<text x="164.0" y="291.5" text-anchor="start" font-size="12" fill="#1d2b23">Typical classroom</text>
+<line x1="144.0" y1="310.0" x2="156.0" y2="310.0" stroke="#5c6b62" stroke-width="1.6"/>
+<text x="138.0" y="314.0" text-anchor="end" font-size="12" fill="#5c6b62" font-weight="600">40</text>
+<text x="164.0" y="314.0" text-anchor="start" font-size="12" fill="#5c6b62">Average home</text>
+<line x1="144.0" y1="332.5" x2="156.0" y2="332.5" stroke="#5c6b62" stroke-width="1.6"/>
+<text x="138.0" y="336.5" text-anchor="end" font-size="12" fill="#5c6b62" font-weight="600">30</text>
+<text x="164.0" y="336.5" text-anchor="start" font-size="12" fill="#5c6b62">Quiet home</text>
+<line x1="144.0" y1="355.0" x2="156.0" y2="355.0" stroke="#5c6b62" stroke-width="1.6"/>
+<text x="138.0" y="359.0" text-anchor="end" font-size="12" fill="#5c6b62" font-weight="600">20</text>
+<text x="164.0" y="359.0" text-anchor="start" font-size="12" fill="#5c6b62">A whisper</text>
+<line x1="144.0" y1="377.5" x2="156.0" y2="377.5" stroke="#5c6b62" stroke-width="1.6"/>
+<text x="138.0" y="381.5" text-anchor="end" font-size="12" fill="#5c6b62" font-weight="600">10</text>
+<text x="164.0" y="381.5" text-anchor="start" font-size="12" fill="#5c6b62">Leaves</text>
+<line x1="144.0" y1="400.0" x2="156.0" y2="400.0" stroke="#5c6b62" stroke-width="1.6"/>
+<text x="138.0" y="404.0" text-anchor="end" font-size="12" fill="#5c6b62" font-weight="600">0</text>
+<text x="164.0" y="404.0" text-anchor="start" font-size="12" fill="#5c6b62">Threshold of hearing</text>
+<text x="138.0" y="26.0" text-anchor="end" font-size="12" fill="#5c6b62">dB</text>
+<text x="30.0" y="426.0" text-anchor="start" font-size="12.5" fill="#1d2b23">Every 10 dB is TEN times the intensity &mdash; and about TWICE as loud to a human ear. The two are not the same thing.</text>
+<text x="30.0" y="446.0" text-anchor="start" font-size="11.5" fill="#5c6b62">Values after OpenStax, University Physics Volume 1 ch 17.3, and the figures Trevor quotes on his slide.</text>
+</svg>
+    <figcaption>The decibel scale with familiar sounds placed on it, from the values Trevor
+      quotes.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Ten decibels: ten times the intensity, twice the loudness</span>
+    These are two different statements and both are true. <strong>Intensity</strong> is physics:
+    +10 dB is ten times the watts per square metre, every time. <strong>Loudness</strong> is
+    perception: the same +10 dB sounds about twice as loud to a person.
+    <strong>The human ear is not a linear device</strong>, and the gap between those two sentences
+    is exactly why the decibel exists.
+  </div>
+
+  <h2>Working in both directions</h2>
+
+  <div class="mathblock">
+    <div class="head">Intensity &rarr; level: the source from <strong>Ch17b</strong>, at 1.5 m</div>
+    <div class="body">
+      <div class="mathline"><span class="sm">given:</span>&nbsp;
+        <span class="m">I</span> = 1.149 &times; 10<span class="up">&minus;8</span> W/m<span class="up">2</span>,&nbsp;
+        <span class="m">I</span><sub>o</sub> = 1.0 &times; 10<span class="up">&minus;12</span> W/m<span class="up">2</span></div>
+      <div class="mathline">&beta; = 10 dB &middot; log
+        <span class="sq">(</span>
+        <span class="frac"><span class="top">1.149 &times; 10<span class="up">&minus;8</span> W/m<span class="up">2</span></span><span class="bot">1.0 &times; 10<span class="up">&minus;12</span> W/m<span class="up">2</span></span></span>
+        <span class="sq">)</span>
+        = 10 dB &middot; log(1.149 &times; 10<span class="up">4</span>)</div>
+      <div class="mathline">&beta; = 10 dB &middot; 4.06 = <strong>40.6 dB</strong></div>
+      <p class="why">The units cancel inside the log, which is the check that you divided by
+        <span class="m">I</span><sub>o</sub> and not by something else. A ratio of about
+        10<span class="up">4</span> gives a log of about 4, so the answer had to be near 40 dB
+        before any button was pressed &mdash; a quiet room.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">Level &rarr; intensity: a siren at 130 dB</div>
+    <div class="body">
+      <div class="mathline">130 dB = 10 dB &middot; log(<span class="m">I</span>/<span class="m">I</span><sub>o</sub>)
+        &nbsp;&rarr;&nbsp;
+        <span class="frac"><span class="top">130 dB</span><span class="bot">10 dB</span></span>
+        = log(<span class="m">I</span>/<span class="m">I</span><sub>o</sub>)
+        &nbsp;&rarr;&nbsp; 13 = log(<span class="m">I</span>/<span class="m">I</span><sub>o</sub>)</div>
+      <div class="mathline">10<span class="up">13</span> = 10<span class="up">log(I/Io)</span>
+        = <span class="m">I</span>/<span class="m">I</span><sub>o</sub>
+        &nbsp;&rarr;&nbsp; <span class="m">I</span> = 10<span class="up">13</span><span class="m">I</span><sub>o</sub></div>
+      <div class="mathline"><span class="m">I</span> = 10<span class="up">13</span> &middot;
+        10<span class="up">&minus;12</span> W/m<span class="up">2</span>
+        = 10<span class="up">1</span> W/m<span class="up">2</span>
+        = <strong>10 W/m<span class="up">2</span></strong></div>
+      <p class="why">Undo the log by raising ten to both sides &mdash; that is the only move in the
+        whole calculation, and it is what 10<span class="up">log x</span> = <span class="m">x</span>
+        is for. Divide by the 10 dB <em>first</em>; raising ten to the power of 130 is the classic
+        error and gives an answer with no physical meaning at all.</p>
+    </div>
+  </div>
+
+  <div class="mathblock">
+    <div class="head">A conversation at 60 dB</div>
+    <div class="body">
+      <div class="mathline">6 = log(<span class="m">I</span>/<span class="m">I</span><sub>o</sub>)
+        &nbsp;&rarr;&nbsp; 10<span class="up">6</span> = <span class="m">I</span>/<span class="m">I</span><sub>o</sub>
+        &nbsp;&rarr;&nbsp; <span class="m">I</span> = 10<span class="up">6</span> &middot;
+        10<span class="up">&minus;12</span> W/m<span class="up">2</span>
+        = <strong>10<span class="up">&minus;6</span> W/m<span class="up">2</span></strong></div>
+      <p class="why">A millionth of a watt per square metre, for ordinary speech. The ear is an
+        astonishing instrument.</p>
+    </div>
+  </div>
+
+  <h2>Two trumpets</h2>
+
+  <div class="mathblock">
+    <div class="head">Two instruments play together, nearly in phase. How much louder?</div>
+    <div class="body">
+      <div class="mathline"><span class="sm">one instrument:</span>&nbsp;
+        &beta;<sub>1</sub> = 10 dB &middot; log(<span class="m">I</span><sub>1</sub>/<span class="m">I</span><sub>o</sub>)
+        &nbsp;&nbsp;<span class="sm">two instruments:</span>&nbsp;
+        <span class="m">I</span><sub>2</sub> = 2<span class="m">I</span><sub>1</sub></div>
+      <div class="mathline">&beta;<sub>2</sub> = 10 dB &middot; log
+        <span class="sq">(</span>2<span class="m">I</span><sub>1</sub>/<span class="m">I</span><sub>o</sub><span class="sq">)</span>
+        = 10 dB &middot; { log 2 + log(<span class="m">I</span><sub>1</sub>/<span class="m">I</span><sub>o</sub>) }</div>
+      <div class="mathline">&beta;<sub>2</sub> = 10 dB &middot; log 2 + &beta;<sub>1</sub>
+        = 10 dB(0.301) + &beta;<sub>1</sub>
+        = <strong>3.01 dB + &beta;<sub>1</sub></strong></div>
+      <p class="why">log(<span class="m">AB</span>) = log <span class="m">A</span> + log <span class="m">B</span>
+        splits the 2 off from the ratio, and what is left is the original level untouched.
+        <strong>Doubling the intensity adds about three decibels</strong> &mdash; which is barely
+        noticeable. Two trumpets are not twice as loud as one; ten of them are.</p>
+    </div>
+  </div>
+
+  <table class="grid">
+    <tr><th>Change in intensity</th><th>Change in level</th><th>How it sounds</th></tr>
+    <tr><td>&times;2</td><td>+3 dB</td><td>only just noticeable</td></tr>
+    <tr><td>&times;10</td><td>+10 dB</td><td>about twice as loud</td></tr>
+    <tr><td>&times;100</td><td>+20 dB</td><td>about four times as loud</td></tr>
+  </table>
+
+  <h2>Frequency, and why that axis is logarithmic too</h2>
+
+  <figure>
+    <svg viewBox="0 0 640 240" role="img" aria-label="A logarithmic frequency axis from ten hertz to twenty thousand hertz, with the human hearing range marked from twenty hertz to twenty thousand.">
+<defs><marker id="slblue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2457b8"/></marker><marker id="slred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker><marker id="slgreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1e6b3c"/></marker><marker id="slamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c77b1f"/></marker><marker id="slviolet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6b4ea8"/></marker><marker id="slcrim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b0145a"/></marker><marker id="slink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2b23"/></marker><marker id="slmuted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5c6b62"/></marker><marker id="slcyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f8ea8"/></marker></defs>
+<line x1="96.0" y1="108.0" x2="590.0" y2="108.0" stroke="#1d2b23" stroke-width="1.8"/>
+<line x1="96.0" y1="108.0" x2="96.0" y2="96.0" stroke="#1d2b23" stroke-width="1.4"/>
+<line x1="138.8" y1="108.0" x2="138.8" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="163.8" y1="108.0" x2="163.8" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="181.5" y1="108.0" x2="181.5" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="195.3" y1="108.0" x2="195.3" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="206.6" y1="108.0" x2="206.6" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="216.1" y1="108.0" x2="216.1" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="224.3" y1="108.0" x2="224.3" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="231.6" y1="108.0" x2="231.6" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<text x="96.0" y="128.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">10</text>
+<line x1="238.1" y1="108.0" x2="238.1" y2="96.0" stroke="#1d2b23" stroke-width="1.4"/>
+<line x1="280.8" y1="108.0" x2="280.8" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="305.9" y1="108.0" x2="305.9" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="323.6" y1="108.0" x2="323.6" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="337.4" y1="108.0" x2="337.4" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="348.6" y1="108.0" x2="348.6" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="358.1" y1="108.0" x2="358.1" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="366.4" y1="108.0" x2="366.4" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="373.6" y1="108.0" x2="373.6" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<text x="238.1" y="128.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">100</text>
+<line x1="380.1" y1="108.0" x2="380.1" y2="96.0" stroke="#1d2b23" stroke-width="1.4"/>
+<line x1="422.9" y1="108.0" x2="422.9" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="447.9" y1="108.0" x2="447.9" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="465.7" y1="108.0" x2="465.7" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="479.4" y1="108.0" x2="479.4" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="490.7" y1="108.0" x2="490.7" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="500.2" y1="108.0" x2="500.2" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="508.4" y1="108.0" x2="508.4" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="515.7" y1="108.0" x2="515.7" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<text x="380.1" y="128.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">1000</text>
+<line x1="522.2" y1="108.0" x2="522.2" y2="96.0" stroke="#1d2b23" stroke-width="1.4"/>
+<line x1="565.0" y1="108.0" x2="565.0" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<line x1="590.0" y1="108.0" x2="590.0" y2="102.0" stroke="#1d2b23" stroke-width="1"/>
+<text x="522.2" y="128.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">10,000</text>
+<line x1="565.0" y1="108.0" x2="565.0" y2="96.0" stroke="#1d2b23" stroke-width="1.4"/>
+<text x="565.0" y="128.0" text-anchor="middle" font-size="11.5" fill="#5c6b62">20,000</text>
+<rect x="138.8" y="64" width="426.2" height="22" fill="#1e6b3c" fill-opacity="0.18" stroke="#1e6b3c" stroke-width="1.2"/>
+<text x="351.9" y="79.0" text-anchor="middle" font-size="12" fill="#1e6b3c">the average human hears from about 20 Hz to 20,000 Hz</text>
+<text x="590.0" y="152.0" text-anchor="end" font-size="12" fill="#5c6b62">frequency (Hz)</text>
+<text x="56.0" y="214.0" text-anchor="start" font-size="12.5" fill="#1d2b23">The ticks between 10 and 100 are 20, 30, &hellip; 90, and they crowd together: equal DISTANCES are equal RATIOS.</text>
+<text x="56.0" y="234.0" text-anchor="start" font-size="12" fill="#5c6b62">The audible range is three decades. On a linear axis almost all of it would be squeezed into one corner.</text>
+</svg>
+    <figcaption>The audible range on a logarithmic frequency axis. Each decade occupies the same
+      width.</figcaption>
+  </figure>
+
+  <p>Sensitivity curves are drawn on <strong>semi-log</strong> axes &mdash; logarithmic in
+  frequency, linear in level &mdash; for the same reason the level itself is logarithmic: the ear
+  responds to ratios. A step from 100 Hz to 200 Hz is the same musical interval, an octave, as a
+  step from 1000 Hz to 2000 Hz, and a log axis gives them the same width.</p>
+
+  <h2>Two tables worth keeping</h2>
+
+  <table class="grid">
+    <tr><th>Description</th><th>Terminology</th><th>Mark</th><th>Intensity (W/m<span class="up">2</span>)</th><th>Level (dB)</th></tr>
+    <tr><td>Very very loud</td><td>Fortississimo</td><td>fff</td><td>10<span class="up">&minus;3</span></td><td>90</td></tr>
+    <tr><td>Very loud</td><td>Fortissimo</td><td>ff</td><td>10<span class="up">&minus;4</span></td><td>80</td></tr>
+    <tr><td>Loud</td><td>Forte</td><td>f</td><td>10<span class="up">&minus;5</span></td><td>70</td></tr>
+    <tr><td>Moderately loud</td><td>Mezzoforte</td><td>mf</td><td>10<span class="up">&minus;6</span></td><td>60</td></tr>
+    <tr><td>Soft</td><td>Piano</td><td>p</td><td>10<span class="up">&minus;7</span></td><td>50</td></tr>
+    <tr><td>Very soft</td><td>Pianissimo</td><td>pp</td><td>10<span class="up">&minus;8</span></td><td>40</td></tr>
+    <tr><td>Very very soft</td><td>Pianississimo</td><td>ppp</td><td>10<span class="up">&minus;9</span></td><td>30</td></tr>
+  </table>
+
+  <p class="byline">The musicians&rsquo; scale of loudness, after H. E. White and D. H. White,
+  <em>Physics and Music</em>, p. 103. Note that each dynamic marking is one step of 10 dB &mdash;
+  composers worked out the same ladder by ear.</p>
+
+  <div class="tip">
+    <span class="label">Hearing damage is a dose, not a level</span>
+    Trevor cites research on personal music players finding doses as high as <strong>120 dB</strong>
+    &mdash; comparable to a loud rock concert or to sandblasting, and enough to risk damage after
+    about <strong>7.5 minutes</strong> of exposure. The number that matters is level
+    <em>multiplied by</em> time: 85 dB for a working day does the same harm as something much
+    louder for a few minutes. A phone with a sound-level app will tell you which side of that line
+    you are on.
+    <span class="sm">(Gregory Mott, &ldquo;The iPod and the Fury&rdquo;, Washington Post,
+    17 January 2006.)</span>
+  </div>
+
+  <h2>In short</h2>
+  <ul>
+    <li>&beta; = 10 dB &middot; log(<span class="m">I</span>/<span class="m">I</span><sub>o</sub>),
+      with <span class="m">I</span><sub>o</sub> = 10<span class="up">&minus;12</span> W/m<span class="up">2</span>.</li>
+    <li>&beta; is <strong>dimensionless</strong> but labelled in decibels; 0 dB is the threshold of
+      hearing, not silence.</li>
+    <li><strong>+10 dB is ten times the intensity</strong> and about <strong>twice the
+      loudness</strong>. They are not the same claim.</li>
+    <li>Doubling the intensity adds only <strong>3 dB</strong>.</li>
+    <li>To go from dB to intensity: divide by 10 dB <em>first</em>, then raise ten to that
+      power.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/17-3-sound-intensity-and-sound-level" target="_blank" rel="noopener">17.3 Sound Intensity and Sound Level</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 1</em>, OpenStax, Houston, TX, Sep 19, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-1/pages/17-3-sound-intensity" target="_blank" rel="noopener">17.3 Sound Intensity</a></li>
+    <li>H. E. White and D. H. White, <em>Physics and Music: The Science of Musical Sound</em>, Dover Publications, Mineola, NY, 2014 (original work published 1980), p. 103.</li>
+    <li>Gregory Mott, &ldquo;The iPod and the Fury: A Reality Check of the Recent Reports on Mobile Music and Hearing Loss&rdquo;, <em>Washington Post</em>, 17 January 2006 &mdash;
+      <a href="https://www.washingtonpost.com/archive/lifestyle/wellness/2006/01/17/the-ipod-and-the-fury-span-classbankheada-reality-check-of-the-recent-reports-on-mobile-music-and-hearing-lossspan/6a2bbc3a-c9c1-4a09-bd62-0e2a4a0b1ab7/" target="_blank" rel="noopener">washingtonpost.com</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentation <em>Sound Intensity Level</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   Reached by link, not framed, so this is inert here - kept so the page behaves if embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

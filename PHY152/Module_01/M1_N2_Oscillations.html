@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N2 &mdash; Oscillations</title>
+<style>
+  /* FLCC Physics note page — Module 1, Oscillations, Waves and Sound, Note 2
+     "Oscillations".  Same house dress as Notes 1, 1a and 1b.
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE — this comment travels
+     into the generated partner-course page, which must not name the course it came from.
+     Build record: Logs\LOG_ENTRY_2026-10-21c_M1_N2_Built.md.
+
+     *** THE FIRST CALC FENCE IN THIS COURSE. ***  Everything down to ma = -kx is
+     Hooke's law and Newton's second and survives into the partner course unchanged.
+     What is fenced is the step that writes the acceleration as a second derivative and
+     turns the result into an equation of motion.  That earns a fence by the standing
+     test — it changes what can be CLAIMED (that the result is a differential equation
+     whose solution is the sine of Eq. 2, rather than an assertion) — and deleting it
+     leaves a complete note that still reaches "force is proportional to displacement".
+
+     SOURCE.  Dr. Cho's own guided note, "M1 N2 Oscillations", 2025 Spring.  TWO pages:
+     page 1 is dense printed prose at 2441 chars, page 2 is a CANVAS at 275 chars
+     carrying 441 of the note's 460 live /Ink strokes.  The note-level average is 1358
+     chars/page, which reads as a scaffolded Mode A note and hides the fact that the
+     entire derivation is ink.  This is the per-page measurement rule, earning its keep.
+
+     THE FIGURE IS NOT IN HIS MASTER.  Page 1's prose says "(see below figures)" and the
+     master prints no figure at all — pdfimages reports zero embedded images on either
+     page.  The three-state spring figure exists ONLY in his class ink, and the SVG here
+     is a transcription of that drawing: three states, his dimension marks, his two force
+     colours, his "down is positive" arrow and his x' = (x0 + x) brace.  See figs_m1n2.py.
+
+     THE DERIVATION IS BEHIND ORDINARY REVEALS, Cho's call 2026-10-21, asked because
+     this note is the first where the hidden thing is what he teaches at the board rather
+     than an answer to a question, and because most of this course is the same shape.
+     The deferred-working-page convention (2026-10-08) was the alternative and was not
+     taken.
+
+     NO CHECK-YOURSELF TICKET: three short items at the end instead, which is this
+     note's version of one.
+
+     NO HTML TAGS INSIDE <text>: bold inside a figure is <tspan font-weight="700">.
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.8rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.05rem; margin:1.6rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .synopsis p{ margin:.2rem 0 .8rem; } .synopsis p:last-child{ margin-bottom:.1rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  .disp{ display:block; margin:.7rem 0 .9rem; text-align:center; font-size:1.08rem; }
+  .disp .num{ float:right; color:var(--muted); font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.8; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.4rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.25rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+/* CALC-152:start */
+  .calc152{ border:1px solid #1636c8; border-left:4px solid #1636c8; border-radius:0 10px 10px 0;
+    background:#f7f9ff; padding:1rem 1.1rem 1.15rem; margin:1.8rem 0; }
+  .calc152 .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.74rem; letter-spacing:.09em;
+    text-transform:uppercase; color:#1636c8; font-weight:700; display:block; margin-bottom:.4rem; }
+  .calc152 h3{ color:#1636c8; margin-top:.2rem; }
+/* CALC-152:end */
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 &middot; Oscillations, Waves and Sound</span><span>Note 2</span></div>
+<h1>Oscillations</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>
+<p>Repetitive/cyclical disturbances propagating through space and time are waves.&nbsp; Some waves are familiar: Ocean waves, waves on a
+string, and sound waves are disturbances that travel from a place and time of creation to an observer.&nbsp; Mathematically, cosinusoidal
+functions encapsulate such disturbances, i.e., some combinations of sines and cosines.&nbsp; For example, we can write the amplitude of ocean
+waves as a function of space and time:</p>
+<span class="disp"><span class="num">(1)</span><i>A</i>(<i>x</i>, <i>t</i>) = <i>A</i><sub>0</sub> sin(<i>kx</i> &minus; &omega;<i>t</i>)</span>
+<p>where <i>A</i> is the amplitude, <i>A</i><sub>0</sub> is the maximum amplitude, <i>k</i> is the wave number (1/m), and &omega; is the
+angular frequency (rad/s).&nbsp; This is a moving wave traveling along the x-axis.&nbsp; The wave number, <i>k</i>, and angular frequency,
+&omega;, are parameters fixed by the wavelength and period (thus frequency) of the moving wave, respectively.&nbsp; This is a general
+expression for a moving wave, and we will delve into this equation further shortly.</p></div>
+
+<div class="hook"><span class="label">Before you read on &mdash; predict</span><p>Hang a mass on a spring, let it settle, then pull it down a
+little further and release it.&nbsp; Gravity is pulling on that mass the whole time.&nbsp; So when you write down the equation that governs
+the oscillation, <b>does <i>g</i> appear in it?</b>&nbsp; Commit to yes or no in your guided notes.&nbsp; The answer is the whole point of the
+derivation below, and most people get it wrong the first time.</p></div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N2 — Dr. Cho works through the note"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link at the bottom of this page) and fill in the derivation as it goes.
+</div>
+
+<h2>Instructions and Questions</h2>
+
+<p>For now, we examine a simpler system: Spring-mass oscillation.&nbsp; When you hang a mass on a spring, stretch, and let go, the spring-mass
+system oscillates back and forth.&nbsp; If you measured the amplitude of this disturbance as a function of time, i.e., stretching and
+compression of the spring as a function of time, you see that the following function can describe such disturbance:</p>
+<span class="disp"><span class="num">(2)</span><i>A</i>(<i>t</i>) = <i>A</i><sub>0</sub> sin(&omega;<i>t</i>)</span>
+<p>Here, you see that the sine is only a function of time, and the <i>kx</i> term is not in the sine function argument.&nbsp; This is simply
+because the spring-mass system is not moving, i.e., the setup is fixed in space.&nbsp; So, you can see that this is a simpler system.</p>
+
+<p>The spring-mass oscillation is known as <b>simple harmonic motion (SHM)</b>.&nbsp; SHMs are ubiquitous.&nbsp; Let&rsquo;s look at the
+physics that underpins SHM.&nbsp; The idea is simple: When a spring is stretched or compressed, a &ldquo;restoring&rdquo; force tries to pull
+it back to its natural length.&nbsp; The further the spring is stretched/compressed, the larger the restoring force.&nbsp; In other words, the
+larger the displacement, the larger the restoring force.&nbsp; Both the displacement and force are vector quantities.&nbsp; Notice that this
+restoring force, therefore, always points in the opposite direction to the displacement.&nbsp; <b>Hooke&rsquo;s law</b> describes the
+relationship between the displacement and the restoring force:</p>
+<span class="disp"><span class="num">(3)</span><i>F</i><sub>k</sub> = &minus;<i>k</i><sub>s</sub><i>x</i>&prime;</span>
+<p>Where <i>F</i><sub>k</sub> is the restoring force (N, the subscript k represents that the force has to do with a spring),
+<i>k</i><sub>s</sub> is the spring constant, and <i>x</i>&prime; is the displacement (see the figure below).&nbsp; Don&rsquo;t confuse this
+<i>k</i><sub>s</sub>, the spring constant, with <i>k</i>, the wavenumber.</p>
+
+<p>Imagine a mass hanging at one end of a spring.&nbsp; The spring will elongate and settle at a length.&nbsp; Here,
+<i>F</i><sub>k</sub> = <i>F</i><sub>g</sub>, where <i>F</i><sub>g</sub> is the weight of the mass.&nbsp; Let this elongation be
+<i>x</i><sub>0</sub>, so <i>x</i><sub>0</sub> = <i>L</i> &minus; <i>L</i><sub>0</sub>, where <i>L</i><sub>0</sub> is the natural length, and
+<i>L</i> is the length when mass is hung.&nbsp; At this point, the mass is not oscillating.</p>
+
+<p>Now, if we pull the mass further down (or push it up) and let go, the mass oscillates.&nbsp; This oscillation is a simple harmonic
+motion.&nbsp; We will analyze the forces below and derive Eq. (2) by solving the equation of motion.</p>
+
+<div class="fig">
+<svg viewBox="0 0 700 470" role="img" aria-label="Three states of a hanging spring side by side: at its natural length, hanging at equilibrium with the mass attached, and pulled further down.">
+<defs>
+<marker id="m1n2-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker>
+<marker id="m1n2-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker>
+</defs>
+<line x1="110" y1="176" x2="430" y2="176" stroke="#1636c8" stroke-width="1.4" stroke-dasharray="7 5"/>
+<line x1="330" y1="254" x2="645" y2="254" stroke="#1636c8" stroke-width="1.4" stroke-dasharray="7 5"/>
+<line x1="82" y1="28" x2="198" y2="28" stroke="#1d2b23" stroke-width="3"/><line x1="82" y1="28" x2="74" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="95" y1="28" x2="87" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="108" y1="28" x2="100" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="121" y1="28" x2="113" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="134" y1="28" x2="126" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="147" y1="28" x2="139" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="160" y1="28" x2="152" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="173" y1="28" x2="165" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="186" y1="28" x2="178" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="199" y1="28" x2="191" y2="19" stroke="#1d2b23" stroke-width="1.2"/>
+<polyline points="140.0,28.0 149.5,29.8 156.5,31.5 159.0,33.3 156.5,35.0 149.5,36.8 140.0,38.6 130.5,40.3 123.5,42.1 121.0,43.9 123.5,45.6 130.5,47.4 140.0,49.1 149.5,50.9 156.5,52.7 159.0,54.4 156.5,56.2 149.5,58.0 140.0,59.7 130.5,61.5 123.5,63.2 121.0,65.0 123.5,66.8 130.5,68.5 140.0,70.3 149.5,72.0 156.5,73.8 159.0,75.6 156.5,77.3 149.5,79.1 140.0,80.9 130.5,82.6 123.5,84.4 121.0,86.1 123.5,87.9 130.5,89.7 140.0,91.4 149.5,93.2 156.5,95.0 159.0,96.7 156.5,98.5 149.5,100.2 140.0,102.0 130.5,103.8 123.5,105.5 121.0,107.3 123.5,109.0 130.5,110.8 140.0,112.6 149.5,114.3 156.5,116.1 159.0,117.9 156.5,119.6 149.5,121.4 140.0,123.1 130.5,124.9 123.5,126.7 121.0,128.4 123.5,130.2 130.5,132.0 140.0,133.7 149.5,135.5 156.5,137.2 159.0,139.0 156.5,140.8 149.5,142.5 140.0,144.3 130.5,146.0 123.5,147.8 121.0,149.6 123.5,151.3 130.5,153.1 140.0,154.9 149.5,156.6 156.5,158.4 159.0,160.1 156.5,161.9 149.5,163.7 140.0,165.4 130.5,167.2 123.5,169.0 121.0,170.7 123.5,172.5 130.5,174.2 140.0,176.0" fill="none" stroke="#1636c8" stroke-width="2" stroke-linejoin="round"/>
+<line x1="66" y1="28" x2="66" y2="176" stroke="#1636c8" stroke-width="1.8" marker-start="url(#m1n2-blue)" marker-end="url(#m1n2-blue)"/>
+<text x="58" y="107" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" font-style="italic" fill="#1636c8">L<tspan font-size="11" dy="4">0</tspan></text>
+<line x1="302" y1="28" x2="418" y2="28" stroke="#1d2b23" stroke-width="3"/><line x1="302" y1="28" x2="294" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="315" y1="28" x2="307" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="328" y1="28" x2="320" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="341" y1="28" x2="333" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="354" y1="28" x2="346" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="367" y1="28" x2="359" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="380" y1="28" x2="372" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="393" y1="28" x2="385" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="406" y1="28" x2="398" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="419" y1="28" x2="411" y2="19" stroke="#1d2b23" stroke-width="1.2"/>
+<polyline points="360.0,28.0 369.5,30.4 376.5,32.9 379.0,35.3 376.5,37.7 369.5,40.1 360.0,42.6 350.5,45.0 343.5,47.4 341.0,49.9 343.5,52.3 350.5,54.7 360.0,57.1 369.5,59.6 376.5,62.0 379.0,64.4 376.5,66.9 369.5,69.3 360.0,71.7 350.5,74.1 343.5,76.6 341.0,79.0 343.5,81.4 350.5,83.9 360.0,86.3 369.5,88.7 376.5,91.1 379.0,93.6 376.5,96.0 369.5,98.4 360.0,100.9 350.5,103.3 343.5,105.7 341.0,108.1 343.5,110.6 350.5,113.0 360.0,115.4 369.5,117.9 376.5,120.3 379.0,122.7 376.5,125.1 369.5,127.6 360.0,130.0 350.5,132.4 343.5,134.9 341.0,137.3 343.5,139.7 350.5,142.1 360.0,144.6 369.5,147.0 376.5,149.4 379.0,151.9 376.5,154.3 369.5,156.7 360.0,159.1 350.5,161.6 343.5,164.0 341.0,166.4 343.5,168.9 350.5,171.3 360.0,173.7 369.5,176.1 376.5,178.6 379.0,181.0 376.5,183.4 369.5,185.9 360.0,188.3 350.5,190.7 343.5,193.1 341.0,195.6 343.5,198.0 350.5,200.4 360.0,202.9 369.5,205.3 376.5,207.7 379.0,210.1 376.5,212.6 369.5,215.0 360.0,217.4 350.5,219.9 343.5,222.3 341.0,224.7 343.5,227.1 350.5,229.6 360.0,232.0" fill="none" stroke="#1636c8" stroke-width="2" stroke-linejoin="round"/>
+<rect x="333" y="232" width="54" height="44" fill="#fff" stroke="#1636c8" stroke-width="2"/>
+<path d="M 334 176 Q 326 176 326 184 L 326 196.0 Q 326 204.0 319 204.0 Q 326 204.0 326 212.0 L 326 224 Q 326 232 334 232" fill="none" stroke="#1636c8" stroke-width="1.8"/><text x="313" y="209.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" font-style="italic" fill="#1636c8">x<tspan font-size='11' dy='4'>0</tspan></text>
+<line x1="394" y1="236" x2="394" y2="184" stroke="#b3261e" stroke-width="2.4" marker-end="url(#m1n2-red)"/><text x="403" y="215" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">F<tspan font-size='11' dy='4'>k</tspan></text>
+<line x1="358" y1="274" x2="358" y2="324" stroke="#b3261e" stroke-width="2.4" marker-end="url(#m1n2-red)"/><text x="318" y="304" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">F<tspan font-size='11' dy='4'>g</tspan></text>
+<line x1="517" y1="28" x2="633" y2="28" stroke="#1d2b23" stroke-width="3"/><line x1="517" y1="28" x2="509" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="530" y1="28" x2="522" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="543" y1="28" x2="535" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="556" y1="28" x2="548" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="569" y1="28" x2="561" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="582" y1="28" x2="574" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="595" y1="28" x2="587" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="608" y1="28" x2="600" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="621" y1="28" x2="613" y2="19" stroke="#1d2b23" stroke-width="1.2"/><line x1="634" y1="28" x2="626" y2="19" stroke="#1d2b23" stroke-width="1.2"/>
+<polyline points="575.0,28.0 584.5,31.6 591.5,35.2 594.0,38.8 591.5,42.4 584.5,46.0 575.0,49.6 565.5,53.2 558.5,56.8 556.0,60.4 558.5,64.0 565.5,67.5 575.0,71.1 584.5,74.7 591.5,78.3 594.0,81.9 591.5,85.5 584.5,89.1 575.0,92.7 565.5,96.3 558.5,99.9 556.0,103.5 558.5,107.1 565.5,110.7 575.0,114.3 584.5,117.9 591.5,121.5 594.0,125.1 591.5,128.7 584.5,132.3 575.0,135.9 565.5,139.5 558.5,143.0 556.0,146.6 558.5,150.2 565.5,153.8 575.0,157.4 584.5,161.0 591.5,164.6 594.0,168.2 591.5,171.8 584.5,175.4 575.0,179.0 565.5,182.6 558.5,186.2 556.0,189.8 558.5,193.4 565.5,197.0 575.0,200.6 584.5,204.2 591.5,207.8 594.0,211.4 591.5,215.0 584.5,218.5 575.0,222.1 565.5,225.7 558.5,229.3 556.0,232.9 558.5,236.5 565.5,240.1 575.0,243.7 584.5,247.3 591.5,250.9 594.0,254.5 591.5,258.1 584.5,261.7 575.0,265.3 565.5,268.9 558.5,272.5 556.0,276.1 558.5,279.7 565.5,283.3 575.0,286.9 584.5,290.5 591.5,294.0 594.0,297.6 591.5,301.2 584.5,304.8 575.0,308.4 565.5,312.0 558.5,315.6 556.0,319.2 558.5,322.8 565.5,326.4 575.0,330.0" fill="none" stroke="#1636c8" stroke-width="2" stroke-linejoin="round"/>
+<rect x="548" y="330" width="54" height="44" fill="#fff" stroke="#1636c8" stroke-width="2"/>
+<path d="M 549 254 Q 541 254 541 262 L 541 284.0 Q 541 292.0 534 292.0 Q 541 292.0 541 300.0 L 541 322 Q 541 330 549 330" fill="none" stroke="#1636c8" stroke-width="1.8"/><text x="528" y="297.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" font-style="italic" fill="#1636c8">x</text>
+<line x1="609" y1="334" x2="609" y2="282" stroke="#b3261e" stroke-width="2.4" marker-end="url(#m1n2-red)"/><text x="618" y="313" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">F&prime;<tspan font-size='11' dy='4'>k</tspan></text>
+<line x1="573" y1="372" x2="573" y2="420" stroke="#b3261e" stroke-width="2.4" marker-end="url(#m1n2-red)"/><text x="533" y="401" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">F<tspan font-size='11' dy='4'>g</tspan></text>
+<line x1="653" y1="56" x2="653" y2="110" stroke="#1636c8" stroke-width="2.4" marker-end="url(#m1n2-blue)"/>
+<text x="663" y="92" font-family="Segoe UI, system-ui, sans-serif" font-size="20" font-weight="700" fill="#1636c8">+</text>
+<path d="M 84 176 Q 76 176 76 184 L 76 245.0 Q 76 253.0 69 253.0 Q 76 253.0 76 261.0 L 76 322 Q 76 330 84 330" fill="none" stroke="#6a1b9a" stroke-width="1.8"/><text x="63" y="258.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" font-style="italic" fill="#6a1b9a"></text>
+<text x="6" y="249" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#6a1b9a"><tspan font-style="italic">x</tspan>&prime; =</text>
+<text x="6" y="271" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#6a1b9a">(<tspan font-style="italic">x</tspan><tspan font-size="11" baseline-shift="-4">0</tspan> + <tspan font-style="italic">x</tspan>)</text>
+<text x="140" y="458" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62">natural length</text>
+<text x="360" y="458" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62">mass hung, at rest</text>
+<text x="575" y="458" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62">pulled down, oscillating</text>
+</svg>
+  <div class="fig-note">The three states the derivation needs.&nbsp; <b>Down is positive.</b>&nbsp; <i>x</i><sub>0</sub> is how far the mass
+  stretches the spring just by hanging there; <i>x</i> is how much further you pull it; and the spring itself only ever knows the total,
+  <i>x</i>&prime; = <i>x</i><sub>0</sub> + <i>x</i>.</div>
+</div>
+
+<h3>First, the mass hanging at rest</h3>
+<ol class="items tasks">
+  <li>Write Newton&rsquo;s second law for the middle picture, where the mass hangs without oscillating.&nbsp; What is
+  <i>F</i><sub>net</sub>, and what does that tell you about <i>F</i><sub>k</sub> and <i>F</i><sub>g</sub>?</li>
+  <li>Put Hooke&rsquo;s law and the weight into that statement and solve for the stretch <i>x</i><sub>0</sub>.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">1)&nbsp; It is not accelerating, so <b><i>F</i><sub>net</sub> = 0 = &Sigma;<i>F</i> = <i>F</i><sub>k</sub> +
+  <i>F</i><sub>g</sub></b>, and therefore <i>F</i><sub>k</sub> = <i>F</i><sub>g</sub> &mdash; the spring is holding up exactly the
+  weight.</span>
+  <span class="step">2)&nbsp; <i>k</i><sub>s</sub><i>x</i><sub>0</sub> = <i>mg</i>, so <b>0 = <i>mg</i> &minus;
+  <i>k</i><sub>s</sub><i>x</i><sub>0</sub></b>. <span class="why">&mdash; keep it in this form. It is the line that does the work in step 4,
+  and it is easy to miss that you already have it.</span></span>
+</div></div></div>
+
+<h3>Now pull it down and let go</h3>
+<ol class="items tasks" start="3">
+  <li>Write Newton&rsquo;s second law for the right-hand picture.&nbsp; The spring is now stretched by the <i>total</i>
+  <i>x</i>&prime; = <i>x</i><sub>0</sub> + <i>x</i>, so what is the new spring force <i>F</i>&prime;<sub>k</sub>?&nbsp; What is
+  <i>F</i><sub>g</sub>?</li>
+  <li>Substitute both into <i>ma</i> = &Sigma;<i>F</i> and expand the bracket.&nbsp; Two of the three terms cancel.&nbsp; Which two, and
+  what lets you cancel them?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <span class="step">3)&nbsp; <b><i>F</i><sub>net</sub> = <i>ma</i> = &Sigma;<i>F</i> = <i>F</i>&prime;<sub>k</sub> + <i>F</i><sub>g</sub></b>,
+  with <i>F</i>&prime;<sub>k</sub> = &minus;<i>k</i>(<i>x</i><sub>0</sub> + <i>x</i>) and <i>F</i><sub>g</sub> = <i>mg</i>.&nbsp;
+  <span class="why">&mdash; down is positive, so the weight is + and the spring force is &minus;</span></span>
+  <span class="step">4)&nbsp; <i>ma</i> = &minus;<i>k</i>(<i>x</i><sub>0</sub> + <i>x</i>) + <i>mg</i>
+  = &minus;<i>k</i><i>x</i><sub>0</sub> &minus; <i>kx</i> + <i>mg</i>.</span>
+  <span class="step">&nbsp; &nbsp; The <b>&minus;<i>kx</i><sub>0</sub></b> and the <b>+<i>mg</i></b> cancel, because step 2 says exactly that:
+  <i>mg</i> &minus; <i>k</i><sub>s</sub><i>x</i><sub>0</sub> = 0.&nbsp; What is left is</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><b><i>ma</i> = &minus;<i>kx</i></b></span>
+  <span class="step"><span class="why">&mdash; and that is the answer to the prediction at the top: <i>g</i> is gone. Hanging the mass
+  moved the rest position down by <i>x</i><sub>0</sub> and did nothing else. Measure <i>x</i> from the new rest position and gravity never
+  appears again.</span></span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big"><i>ma</i> = &minus;<i>kx</i></span>
+<p><b>The acceleration &mdash; and so the force &mdash; is proportional to the displacement, and points the opposite way.</b>&nbsp; That one
+sentence is the definition of simple harmonic motion.&nbsp; Any system you can get into this form will oscillate, and it will oscillate as a
+sine.&nbsp; That is why Eq. (2) looks the way it does, and it is why Note 2a can run the same argument on a pendulum and get the same
+answer.</p></div>
+
+<!-- CALC-152:start -->
+<div class="calc152">
+  <div class="label">With calculus</div>
+  <h3>Writing it as an equation of motion</h3>
+  <p><i>ma</i> = &minus;<i>kx</i> says the force is proportional to the displacement.&nbsp; To get from there to the sine of Eq. (2) rather
+  than merely asserting it, write the acceleration as what it actually is &mdash; the second derivative of position.&nbsp; One subtlety:
+  the position of the mass is <i>x</i>&prime;, not <i>x</i>.</p>
+  <ol class="items tasks" start="5">
+    <li>Start from <i>a</i> = d&sup2;<i>x</i>&prime;/d<i>t</i>&sup2; with <i>x</i>&prime; = <i>x</i><sub>0</sub> + <i>x</i>, and show that it
+    equals d&sup2;<i>x</i>/d<i>t</i>&sup2;.&nbsp; Say which property of <i>x</i><sub>0</sub> you used.</li>
+    <li>Write the result of step 4 as a differential equation, and say what kind of function could satisfy it.</li>
+  </ol>
+  <div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev3" data-label="Show the working">Show the working</button><div class="rbody" id="rev3" hidden><div class="eq">
+    <span class="step">5)&nbsp; <i>a</i> = d&sup2;<i>x</i>&prime;/d<i>t</i>&sup2; = d&sup2;(<i>x</i><sub>0</sub> +
+    <i>x</i>)/d<i>t</i>&sup2; = d&sup2;<i>x</i><sub>0</sub>/d<i>t</i>&sup2; + d&sup2;<i>x</i>/d<i>t</i>&sup2;, and the first term is
+    <b>zero</b> because <i>x</i><sub>0</sub> is a <b>constant</b> &mdash; the rest position does not move.&nbsp; So
+    <b><i>a</i> = d&sup2;<i>x</i>/d<i>t</i>&sup2;</b>.&nbsp; <span class="why">&mdash; the same cancellation as step 4, in a different
+    costume: the constant offset drops out of both</span></span>
+    <span class="step">6)&nbsp; Substituting into step 4:</span>
+    <span class="step" style="text-align:center;font-size:1.14rem"><b><i>m</i>&thinsp;d&sup2;<i>x</i>/d<i>t</i>&sup2; =
+    &minus;<i>kx</i></b></span>
+    <span class="step">A function whose second derivative is a negative constant times itself.&nbsp; Sine and cosine are exactly
+    that &mdash; differentiate sin&thinsp;&omega;<i>t</i> twice and you get &minus;&omega;&sup2;&thinsp;sin&thinsp;&omega;<i>t</i>.&nbsp; So
+    Eq. (2) is not a guess, it is the solution, and matching the two expressions will hand you &omega; in terms of <i>k</i> and
+    <i>m</i>.&nbsp; <b>Note 2a</b> does that matching.</span>
+  </div></div></div>
+</div>
+<!-- CALC-152:end -->
+
+<h2>Check yourself</h2>
+<ol class="items tasks" start="7">
+  <li>A mass hangs at rest on a spring, stretching it by 4.0 cm.&nbsp; You pull it down a further 3.0 cm.&nbsp; By how much is the
+  <i>spring</i> stretched at that moment, and what is the displacement that appears in <i>ma</i> = &minus;<i>kx</i>?</li>
+  <li>Two students derive the equation of motion.&nbsp; One measures displacement from the spring&rsquo;s natural length, the other from the
+  hanging rest position.&nbsp; One of them ends up with a <i>g</i> in the answer.&nbsp; Which one, and is that student wrong?</li>
+  <li>In one sentence: why does a stiffer spring make the oscillation faster?&nbsp; Argue it from
+  <i>ma</i> = &minus;<i>kx</i> alone.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev4" data-label="Show the working">Show the working</button><div class="rbody" id="rev4" hidden><div class="eq">
+  <span class="step">7)&nbsp; The spring is stretched <b>7.0 cm</b> &mdash; that is <i>x</i>&prime;.&nbsp; The displacement in
+  <i>ma</i> = &minus;<i>kx</i> is <b>3.0 cm</b>, measured from the hanging rest position.&nbsp; Confusing the two is the single most common
+  error in this derivation.</span>
+  <span class="step">8)&nbsp; The one measuring from the <b>natural length</b> keeps a <i>g</i>.&nbsp; <b>No, that student is not
+  wrong</b> &mdash; the physics is identical and the equation is harder to read, because the rest position of the oscillation is no longer at
+  zero. Choosing the origin at the hanging rest position is what makes the <i>g</i> disappear, and that is a choice, not a law.</span>
+  <span class="step">9)&nbsp; A larger <i>k</i> means a larger restoring force for the same displacement, so a larger acceleration back
+  toward the middle, so less time to get there and back.&nbsp; <span class="why">&mdash; and the same sentence run the other way says a heavier
+  mass oscillates more slowly</span></span>
+</div></div></div>
+
+<h2>Looking ahead</h2>
+<p>You have the shape of simple harmonic motion and the one sentence that defines it.&nbsp; What you do not yet have is <b>how fast</b> it
+oscillates &mdash; nothing above gives a period or a frequency.&nbsp; <b>Note 2a</b> gets it, by solving the equation of motion rather than
+describing it, and then runs the same argument twice more: on a pendulum, where the restoring force comes from gravity rather than a spring,
+and on a damped oscillator, where the amplitude dies away.</p>
+
+<div class="ahead"><b>Where this sits.</b> This is Module 3's <i>F</i> = <i>ma</i> applied to one particular force law, and nothing more.
+Everything characteristic of oscillation comes from the minus sign in Hooke's law &mdash; that the force points back toward where you came
+from.</div>
+
+<div class="callback"><span class="label">Back to your prediction</span><p>No, <i>g</i> does not appear.&nbsp; It is in the derivation right up
+until the second-to-last line and then cancels, against the stretch it caused in the first place.&nbsp; Hanging the mass moved the rest
+position down by <i>x</i><sub>0</sub>; it did not change how the system oscillates about that position.&nbsp; A spring-mass oscillator on the
+Moon, hung from the same spring, has the same period.</p></div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M1_N2_Oscillations_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the figure is there as a frame and the derivation is blank, to fill in as we work it.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 1 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>
