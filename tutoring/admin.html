@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Change Password</title>
+<style>
+:root{--bg:#f6f5f1;--surface:#fff;--text:#1d1d1b;--muted:#66645e;--line:#dedbd2;--accent:#1f5f8b;--accent-ink:#fff;--ok:#1d6b3a;--danger:#a12a2a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#151614;--surface:#1e1f1d;--text:#ecebe6;--muted:#a3a19a;--line:#34362f;--accent:#7fb7de;--accent-ink:#0f1a22;--ok:#86d29f;--danger:#ef8a8a}}
+:root[data-theme="dark"]{--bg:#151614;--surface:#1e1f1d;--text:#ecebe6;--muted:#a3a19a;--line:#34362f;--accent:#7fb7de;--accent-ink:#0f1a22;--ok:#86d29f;--danger:#ef8a8a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:560px;margin:0 auto;padding:32px 16px 48px}
+h1{font-size:1.35rem;margin:0 0 6px}
+p,li{color:var(--muted);font-size:.95rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;margin:18px 0}
+label{display:block;font-size:.85rem;color:var(--muted);margin:12px 0 6px}
+input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}
+.row{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:8px;padding:9px 12px;cursor:pointer;font:inherit;white-space:nowrap}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600;width:100%;margin-top:18px}
+.msg{min-height:1.4em;margin-top:12px;font-size:.92rem}
+.msg.ok{color:var(--ok)} .msg.bad{color:var(--danger)}
+code{background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:.88em;color:var(--text)}
+ol{padding-left:20px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Change the tutoring password</h1>
+  <p>For Byungmoon only. This page makes a new <code>key.json</code>. Nothing changes on the site until that file is pushed to GitHub, and the PDFs themselves are not re-encrypted.</p>
+  <form class="card" id="f">
+    <label for="old">Current password</label>
+    <input id="old" type="password" autocomplete="current-password" required>
+    <label for="n1">New password</label>
+    <div class="row"><input id="n1" type="text" autocomplete="new-password" spellcheck="false" required><button class="btn" type="button" id="gen">Suggest</button></div>
+    <label for="n2">New password again</label>
+    <input id="n2" type="text" autocomplete="new-password" spellcheck="false" required>
+    <button class="btn primary" id="go" type="submit">Make new key.json</button>
+    <div class="msg" id="msg" role="status"></div>
+  </form>
+  <div class="card">
+    <strong>Then:</strong>
+    <ol>
+      <li>Move the downloaded <code>key.json</code> into <code>C:\Users\byung\repos\byungmooncho.github.io\tutoring\</code>, replacing the old one.</li>
+      <li>In PowerShell:<br><code>cd C:\Users\byung\repos\byungmooncho.github.io</code><br><code>git add tutoring/key.json</code><br><code>git commit -m "Tutoring: change password"</code><br><code>git push origin main</code></li>
+      <li>Within a few minutes, the old password stops working, including on devices that stayed signed in.</li>
+    </ol>
+    <p>Use at least 12 characters. The encrypted files are in a public repo, so a short password can be guessed offline.</p>
+  </div>
+</main>
+<script>
+(() => {
+"use strict";
+const $ = (id) => document.getElementById(id);
+const te = new TextEncoder();
+const b64d = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const b64e = (u) => btoa(String.fromCharCode(...new Uint8Array(u)));
+const WORDS = "amber anchor apple arrow atlas autumn badge bamboo barley beacon birch bison bloom boulder breeze bridge brook cable cactus canyon carbon cedar cello chalk cherry cinder clover cobalt comet copper coral crane crystal dawn delta denim desert dolphin dune eagle echo ember falcon fern fiddle flint forest fossil galaxy garnet glacier granite harbor hazel heron horizon island ivory jasper juniper kayak kettle lagoon lantern lemon lilac linen lotus magnet maple marble meadow meteor mint monsoon mosaic nebula nickel nova oak oasis ocean olive onyx orbit orchid otter paddle pebble pepper pine planet plume pollen prism quartz quill radar raven reef ridge river rocket saffron sapphire scarlet sequoia shadow silver sparrow spruce summit tango thistle thunder tide timber topaz tulip tundra velvet violet walnut willow winter zenith".split(" ");
+$("gen").onclick = () => {
+  const r = crypto.getRandomValues(new Uint32Array(5));
+  const p = [0,1,2,3].map(i => WORDS[r[i] % WORDS.length]).join("-") + "-" + (10 + r[4] % 90);
+  $("n1").value = p; $("n2").value = p;
+};
+async function kek(pw, saltB64, iter){
+  const base = await crypto.subtle.importKey("raw", te.encode(pw.normalize("NFC")), "PBKDF2", false, ["deriveBits"]);
+  return new Uint8Array(await crypto.subtle.deriveBits({ name:"PBKDF2", hash:"SHA-256", salt:b64d(saltB64), iterations:iter }, base, 256));
+}
+$("f").addEventListener("submit", async (e) => {
+  e.preventDefault(); const msg = $("msg"); msg.className = "msg"; msg.textContent = "Working\u2026";
+  const n1 = $("n1").value, n2 = $("n2").value;
+  if (n1 !== n2) { msg.className = "msg bad"; msg.textContent = "The two new passwords don't match."; return; }
+  if (n1.length < 12) { msg.className = "msg bad"; msg.textContent = "Use at least 12 characters."; return; }
+  try {
+    const info = await (await fetch("key.json", { cache:"no-cache" })).json();
+    const oldK = await crypto.subtle.importKey("raw", await kek($("old").value, info.salt, info.iter), "AES-GCM", false, ["decrypt"]);
+    let cek;
+    try { cek = await crypto.subtle.decrypt({ name:"AES-GCM", iv:b64d(info.iv) }, oldK, b64d(info.wk)); }
+    catch(_) { msg.className = "msg bad"; msg.textContent = "The current password isn't right."; return; }
+    const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+    const iter = Math.max(info.iter, 600000);
+    const saltB64 = b64e(salt);
+    const newK = await crypto.subtle.importKey("raw", await kek(n1, saltB64, iter), "AES-GCM", false, ["encrypt"]);
+    const wk = await crypto.subtle.encrypt({ name:"AES-GCM", iv }, newK, cek);
+    const out = { v:1, kdf:"PBKDF2", hash:"SHA-256", iter, salt:saltB64, iv:b64e(iv), wk:b64e(wk) };
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 1) + "\n"], { type:"application/json" }));
+    a.download = "key.json"; document.body.appendChild(a); a.click(); a.remove();
+    msg.className = "msg ok"; msg.textContent = "Downloaded key.json. Follow the steps below to put it live.";
+  } catch(err) { msg.className = "msg bad"; msg.textContent = "Something went wrong: " + err.message; }
+});
+})();
+</script>
+</body>
+</html>

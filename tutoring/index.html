@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Physics Tutoring</title>
+<style>
+:root{
+  --bg:#f6f5f1; --surface:#ffffff; --surface-2:#efede7; --text:#1d1d1b; --muted:#66645e; --line:#dedbd2;
+  --accent:#1f5f8b; --accent-ink:#ffffff; --accent-soft:#e3eef6; --key:#8a4b0f; --key-soft:#f8ecdd; --danger:#a12a2a;
+  --radius:10px; --shadow:0 1px 2px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151614; --surface:#1e1f1d; --surface-2:#262825; --text:#ecebe6; --muted:#a3a19a; --line:#34362f;
+    --accent:#7fb7de; --accent-ink:#0f1a22; --accent-soft:#1f3140; --key:#f0b46e; --key-soft:#3a2a17; --danger:#ef8a8a;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151614; --surface:#1e1f1d; --surface-2:#262825; --text:#ecebe6; --muted:#a3a19a; --line:#34362f;
+  --accent:#7fb7de; --accent-ink:#0f1a22; --accent-soft:#1f3140; --key:#f0b46e; --key-soft:#3a2a17; --danger:#ef8a8a;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+button,input{font:inherit;color:inherit}
+a{color:var(--accent)}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+.hidden{display:none !important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* login */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:28px;width:100%;max-width:380px}
+.card h1{font-size:1.35rem;margin:0 0 4px}
+.card p{margin:0 0 18px;color:var(--muted);font-size:.95rem}
+label.field{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+input[type=password],input[type=text],input[type=search]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);outline:none}
+input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;align-items:center;gap:8px}
+.check{margin:12px 0 18px;font-size:.9rem;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 12px;cursor:pointer;text-decoration:none;color:var(--text);white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);width:100%;padding:11px 12px;font-weight:600}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn[disabled]{opacity:.6;cursor:default}
+.err{color:var(--danger);font-size:.9rem;min-height:1.4em;margin-top:10px}
+
+/* library */
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:12px;min-height:56px}
+.brand{font-weight:700;letter-spacing:.01em}
+.brand small{display:block;font-weight:400;color:var(--muted);font-size:.8rem;margin-top:-2px}
+.spacer{flex:1}
+.tabs{display:flex;gap:6px;margin:18px 0 12px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;cursor:pointer}
+.tab[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.search{margin:4px 0 16px}
+details.group{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin:10px 0;box-shadow:var(--shadow)}
+details.group>summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:650;display:flex;align-items:center;gap:10px}
+details.group>summary::-webkit-details-marker{display:none}
+details.group>summary::before{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);flex:none;margin-right:2px}
+details.group[open]>summary::before{transform:rotate(45deg)}
+.count{margin-left:auto;font-weight:400;color:var(--muted);font-size:.85rem}
+.sub{padding:0 8px 10px}
+.sub h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 8px 4px;font-weight:650}
+ul.items{list-style:none;margin:0;padding:0}
+ul.items li{margin:0}
+.item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:9px 8px;cursor:pointer;text-decoration:none;color:var(--text)}
+.item:hover{background:var(--surface-2)}
+.code{flex:none;min-width:3.1em;text-align:center;font-size:.75rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 6px}
+.code.blank{visibility:hidden}
+.code.wide{min-width:5.4em}
+.t{flex:1;min-width:0}
+.t .crumb{display:block;font-size:.78rem;color:var(--muted)}
+.meta{flex:none;font-size:.78rem;color:var(--muted)}
+.badge{flex:none;font-size:.68rem;font-weight:700;letter-spacing:.05em;color:var(--key);background:var(--key-soft);border-radius:5px;padding:2px 6px}
+.note{color:var(--muted);font-size:.88rem;margin:2px 8px 8px}
+.empty{color:var(--muted);padding:18px 4px}
+footer{color:var(--muted);font-size:.82rem;padding:28px 0 40px}
+
+/* viewer */
+#viewer{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column}
+#viewer .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface)}
+#vtitle{flex:1;min-width:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#vbody{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+#pages{margin:0 auto;padding:12px 8px 40px}
+.page{background:#fff;margin:0 auto 12px;box-shadow:0 1px 3px rgba(0,0,0,.18);position:relative}
+.page canvas{display:block;width:100%;height:100%}
+.pnum{position:absolute;right:6px;bottom:4px;font-size:.7rem;color:#888}
+#progress{max-width:420px;margin:18vh auto 0;padding:0 16px;text-align:center;color:var(--muted)}
+.meter{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:10px}
+.meter>div{height:100%;width:0;background:var(--accent);transition:width .15s}
+#hframe{border:0;width:100%;height:100%;background:#fff}
+.zoom{display:flex;gap:4px}
+@media (max-width:560px){
+  .meta{display:none}
+  .hide-sm{display:none}
+  .card{padding:22px}
+}
+@media print{ #viewer .bar{display:none} }
+</style>
+</head>
+<body>
+
+<!-- Password screen -->
+<main id="login" class="hidden">
+  <form class="card" id="loginForm" autocomplete="on">
+    <h1>Physics Tutoring</h1>
+    <p>Notes, problem sets and practice for Byungmoon Cho's tutees.</p>
+    <input type="text" name="username" value="tutee" autocomplete="username" class="sr" tabindex="-1" aria-hidden="true">
+    <label class="field" for="pw">Password</label>
+    <input id="pw" name="password" type="password" autocomplete="current-password" required autofocus>
+    <label class="row check"><input type="checkbox" id="remember" checked> Keep me signed in on this device</label>
+    <button class="btn primary" id="go" type="submit">Open</button>
+    <div class="err" id="err" role="alert"></div>
+  </form>
+</main>
+
+<!-- Library -->
+<div id="lib" class="hidden">
+  <header class="top"><div class="wrap">
+    <div class="brand">Physics Tutoring<small>Byungmoon Cho</small></div>
+    <div class="spacer"></div>
+    <button class="btn" id="signout" type="button">Sign out</button>
+  </div></header>
+  <main class="wrap">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="search"><label class="sr" for="q">Search</label><input id="q" type="search" placeholder="Search titles (e.g. friction, Topic 8, KEY)"></div>
+    <div id="list"></div>
+    <footer>For my tutees' personal study. Please don't share the password or pass the files on. Questions? Ask me at our next session.</footer>
+  </main>
+</div>
+
+<!-- Viewer -->
+<section id="viewer" class="hidden" aria-label="Document viewer">
+  <div class="bar">
+    <button class="btn" id="vback" type="button" aria-label="Back to list">&larr;<span class="hide-sm"> Back</span></button>
+    <div id="vtitle"></div>
+    <div class="zoom" id="zoomCtl">
+      <button class="btn" id="zout" type="button" aria-label="Zoom out">&minus;</button>
+      <button class="btn" id="zin" type="button" aria-label="Zoom in">+</button>
+    </div>
+    <button class="btn hide-sm" id="vopen" type="button">Open in new tab</button>
+    <button class="btn" id="vdl" type="button">Download</button>
+  </div>
+  <div id="vbody">
+    <div id="progress"><div id="ptext">Loading&hellip;</div><div class="meter"><div id="pbar"></div></div></div>
+    <div id="pages"></div>
+  </div>
+</section>
+
+<script>
+(() => {
+"use strict";
+const STORE = "tutoring.kek.v1";
+const $ = (id) => document.getElementById(id);
+const te = new TextEncoder(), td = new TextDecoder();
+const b64d = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const b64e = (u) => btoa(String.fromCharCode(...new Uint8Array(u)));
+let KEYINFO = null, CEK = null, CAT = null, ITEMS = new Map(), current = null, section = null;
+
+function store(kind){ try { return kind === "local" ? localStorage : sessionStorage; } catch(e){ return null; } }
+function saveKek(raw, salt, remember){
+  const v = JSON.stringify({ salt, kek: b64e(raw) });
+  for (const k of ["local","session"]) { const s = store(k); try { s && s.removeItem(STORE); } catch(e){} }
+  const s = store(remember ? "local" : "session"); try { s && s.setItem(STORE, v); } catch(e){}
+}
+function loadKek(){
+  for (const k of ["local","session"]) { const s = store(k); try { const v = s && s.getItem(STORE); if (v) return JSON.parse(v); } catch(e){} }
+  return null;
+}
+function clearKek(){ for (const k of ["local","session"]) { const s = store(k); try { s && s.removeItem(STORE); } catch(e){} } }
+
+async function deriveKek(pw, info){
+  const base = await crypto.subtle.importKey("raw", te.encode(pw.normalize("NFC")), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name:"PBKDF2", hash:"SHA-256", salt:b64d(info.salt), iterations:info.iter }, base, 256);
+  return new Uint8Array(bits);
+}
+async function unwrap(kekRaw, info){
+  const kek = await crypto.subtle.importKey("raw", kekRaw, "AES-GCM", false, ["decrypt"]);
+  const cekRaw = await crypto.subtle.decrypt({ name:"AES-GCM", iv:b64d(info.iv) }, kek, b64d(info.wk));
+  return crypto.subtle.importKey("raw", cekRaw, "AES-GCM", false, ["decrypt"]);
+}
+async function dec(buf){
+  const u = new Uint8Array(buf);
+  return crypto.subtle.decrypt({ name:"AES-GCM", iv:u.subarray(0,12) }, CEK, u.subarray(12));
+}
+
+async function fetchBin(url, onProgress){
+  const r = await fetch(url, { cache:"no-cache" });
+  if (!r.ok) throw new Error("HTTP " + r.status + " for " + url);
+  const total = +r.headers.get("content-length") || 0;
+  if (!r.body || !total || !onProgress) return r.arrayBuffer();
+  const reader = r.body.getReader(); const out = new Uint8Array(total); let got = 0;
+  for (;;) { const { done, value } = await reader.read(); if (done) break;
+    if (got + value.length > out.length) { // content-length was compressed size; fall back
+      const rest = [out.subarray(0,got), value]; let more;
+      while (!(more = await reader.read()).done) rest.push(more.value);
+      const n = rest.reduce((a,b)=>a+b.length,0), all = new Uint8Array(n); let o=0; for (const p of rest){ all.set(p,o); o+=p.length; }
+      return all.buffer; }
+    out.set(value, got); got += value.length; onProgress(got / total); }
+  return out.buffer.slice(0, got);
+}
+
+async function openLibrary(){
+  CAT = JSON.parse(td.decode(await dec(await fetchBin("d/catalog.bin"))));
+  ITEMS.clear();
+  for (const s of CAT.sections) for (const g of s.groups) for (const sub of g.subs) for (const it of sub.items) {
+    it._crumb = [g.name, sub.name].filter(Boolean).join(" · "); it._sec = s.id; ITEMS.set(it.id, it);
+  }
+  $("login").classList.add("hidden"); $("lib").classList.remove("hidden");
+  renderTabs(); route();
+}
+
+async function start(){
+  try { KEYINFO = await (await fetch("key.json", { cache:"no-cache" })).json(); }
+  catch(e){ showLogin("Couldn't reach the site. Check your connection and reload."); return; }
+  const saved = loadKek();
+  if (saved && saved.salt === KEYINFO.salt) {
+    try { CEK = await unwrap(b64d(saved.kek), KEYINFO); await openLibrary(); return; }
+    catch(e){ clearKek(); }
+  } else if (saved) { clearKek(); }
+  showLogin("");
+}
+function showLogin(msg){ $("lib").classList.add("hidden"); $("viewer").classList.add("hidden"); $("login").classList.remove("hidden"); $("err").textContent = msg || ""; setTimeout(()=>$("pw").focus(),0); }
+
+$("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault(); const pw = $("pw").value; if (!pw) return;
+  $("go").disabled = true; $("go").textContent = "Checking…"; $("err").textContent = "";
+  try {
+    const raw = await deriveKek(pw, KEYINFO);
+    try { CEK = await unwrap(raw, KEYINFO); } catch(err){ throw new Error("bad"); }
+    saveKek(raw, KEYINFO.salt, $("remember").checked); $("pw").value = "";
+    await openLibrary();
+  } catch(err){
+    $("err").textContent = err.message === "bad" ? "That password isn't right. Try again." : "Something went wrong: " + err.message;
+  } finally { $("go").disabled = false; $("go").textContent = "Open"; }
+});
+$("signout").addEventListener("click", () => { clearKek(); location.hash = ""; location.reload(); });
+
+/* ---------- library rendering ---------- */
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const fmtSize = (b) => !b ? "" : b < 1e6 ? Math.max(1, Math.round(b/1e3)) + " KB" : (b/1e6).toFixed(b < 1e7 ? 1 : 0) + " MB";
+function renderTabs(){
+  const saved = (() => { try { return localStorage.getItem("tutoring.tab"); } catch(e){ return null; } })();
+  section = CAT.sections.find(s => s.id === saved) ? saved : CAT.sections[0].id;
+  $("tabs").innerHTML = CAT.sections.map(s => `<button class="tab" role="tab" data-s="${s.id}" aria-selected="${s.id===section}">${esc(s.name)}</button>`).join("");
+  $("tabs").onclick = (e) => { const b = e.target.closest(".tab"); if (!b) return; section = b.dataset.s;
+    try { localStorage.setItem("tutoring.tab", section); } catch(e){}
+    for (const t of $("tabs").children) t.setAttribute("aria-selected", t.dataset.s === section); renderList(); };
+  renderList();
+}
+function itemHTML(it, crumb){
+  const code = it.c ? `<span class="code${it.c.length > 5 ? " wide" : ""}">${esc(it.c)}</span>` : `<span class="code blank">·</span>`;
+  const badge = it.k ? `<span class="badge">KEY</span>` : "";
+  const meta = it.type === "link" ? "College Board ↗" : it.type === "html" ? "page" : [it.pages ? it.pages + " pp" : "", fmtSize(it.size)].filter(Boolean).join(" · ");
+  const inner = `${code}<span class="t">${esc(it.t)}${crumb ? `<span class="crumb">${esc(it._crumb)}</span>` : ""}</span>${badge}<span class="meta">${meta}</span>`;
+  if (it.type === "link") return `<li><a class="item" href="${esc(it.url)}" target="_blank" rel="noopener noreferrer">${inner}</a></li>`;
+  return `<li><button class="item" type="button" data-id="${it.id}">${inner}</button></li>`;
+}
+function renderList(){
+  const q = $("q").value.trim().toLowerCase();
+  const s = CAT.sections.find(x => x.id === section);
+  let html = "";
+  if (q) {
+    const terms = q.split(/\s+/);
+    const hits = [...ITEMS.values()].filter(it => it._sec === section && terms.every(w => (it.t + " " + it._crumb + " " + (it.c||"") + (it.k ? " key" : "")).toLowerCase().includes(w)));
+    html = hits.length ? `<ul class="items">${hits.map(it => itemHTML(it, true)).join("")}</ul>` : `<div class="empty">Nothing matches “${esc(q)}” in ${esc(s.name)}.</div>`;
+    html = `<div class="group" style="padding:6px 8px">${html}</div>`;
+  } else {
+    for (const g of s.groups) {
+      const n = g.subs.reduce((a, x) => a + x.items.length, 0);
+      html += `<details class="group"${g.open ? " open" : ""}><summary>${esc(g.name)}<span class="count">${n}</span></summary>`;
+      if (g.note) html += `<p class="note">${esc(g.note)}</p>`;
+      for (const sub of g.subs) {
+        html += `<div class="sub">${sub.name ? `<h3>${esc(sub.name)}</h3>` : ""}${sub.note ? `<p class="note">${esc(sub.note)}</p>` : ""}<ul class="items">${sub.items.map(it => itemHTML(it, false)).join("")}</ul></div>`;
+      }
+      html += `</details>`;
+    }
+  }
+  $("list").innerHTML = html;
+}
+$("q").addEventListener("input", renderList);
+$("list").addEventListener("click", (e) => { const b = e.target.closest("button.item"); if (b) location.hash = "#v=" + b.dataset.id; });
+
+/* ---------- viewer ---------- */
+let viewToken = 0, blobUrl = null, pdfDoc = null, zoom = 1, observer = null, pageViews = [];
+window.addEventListener("hashchange", route);
+function route(){
+  if (!CAT) return;
+  const m = location.hash.match(/^#v=([\w-]+)/);
+  if (m && ITEMS.has(m[1])) openViewer(ITEMS.get(m[1])); else closeViewer();
+}
+function closeViewer(){
+  viewToken++; $("viewer").classList.add("hidden"); document.body.style.overflow = "";
+  if (observer) { observer.disconnect(); observer = null; }
+  if (pdfDoc) { pdfDoc.destroy(); pdfDoc = null; }
+  if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
+  pageViews = []; $("pages").innerHTML = ""; document.title = "Physics Tutoring";
+}
+$("vback").addEventListener("click", () => { if (history.length > 1 && /^#v=/.test(location.hash)) history.back(); else location.hash = ""; });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("viewer").classList.contains("hidden")) $("vback").click(); });
+
+function loadPdfJs(){
+  if (window.pdfjsLib) return Promise.resolve();
+  return new Promise((res, rej) => { const s = document.createElement("script"); s.src = "lib/pdf.min.js"; s.onload = () => {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "lib/pdf.worker.min.js"; res(); }; s.onerror = () => rej(new Error("viewer failed to load")); document.head.appendChild(s); });
+}
+function setProgress(text, frac){ $("progress").classList.remove("hidden"); $("ptext").textContent = text; $("pbar").style.width = Math.round((frac||0)*100) + "%"; }
+
+async function openViewer(it){
+  closeViewer(); const token = ++viewToken; current = it; zoom = 1;
+  $("viewer").classList.remove("hidden"); document.body.style.overflow = "hidden";
+  $("vtitle").textContent = it.t; document.title = it.t + " · Physics Tutoring";
+  const isPdf = it.type === "pdf";
+  $("zoomCtl").classList.toggle("hidden", !isPdf); $("vopen").classList.toggle("hidden", !isPdf);
+  $("vdl").textContent = isPdf ? "Download" : "Print";
+  $("vbody").scrollTop = 0;
+  setProgress("Downloading… " + fmtSize(it.size), 0);
+  try {
+    const enc = await fetchBin("d/" + it.id + ".bin", f => token === viewToken && setProgress("Downloading… " + Math.round(f*100) + "% of " + fmtSize(it.size), f));
+    if (token !== viewToken) return;
+    setProgress("Unlocking…", 1);
+    const plain = await dec(enc);
+    if (token !== viewToken) return;
+    if (isPdf) {
+      blobUrl = URL.createObjectURL(new Blob([plain], { type:"application/pdf" }));
+      await loadPdfJs(); if (token !== viewToken) return;
+      pdfDoc = await pdfjsLib.getDocument({ data:new Uint8Array(plain), isEvalSupported:false, standardFontDataUrl:"lib/standard_fonts/" }).promise;
+      if (token !== viewToken) return;
+      await layoutPages(token);
+      $("progress").classList.add("hidden");
+    } else {
+      $("progress").classList.add("hidden");
+      $("pages").innerHTML = `<iframe id="hframe" title="${esc(it.t)}"></iframe>`;
+      $("pages").style.maxWidth = "none"; $("pages").style.padding = "0"; $("pages").style.height = "100%";
+      $("hframe").srcdoc = td.decode(plain);
+    }
+  } catch(err){
+    if (token === viewToken) setProgress("Couldn't open this file (" + err.message + "). Check your connection and try again.", 0);
+  }
+}
+$("vdl").addEventListener("click", () => {
+  if (!current) return;
+  if (current.type !== "pdf") { const f = $("hframe"); if (f) f.contentWindow.print(); return; }
+  if (!blobUrl) return;
+  const a = document.createElement("a"); a.href = blobUrl; a.download = (current.t.replace(/[\\/:*?"<>|]+/g, " ").trim() || "document") + ".pdf";
+  document.body.appendChild(a); a.click(); a.remove();
+});
+$("vopen").addEventListener("click", () => { if (blobUrl) window.open(blobUrl, "_blank", "noopener"); });
+
+function baseWidth(){ return Math.min($("vbody").clientWidth - 16, 900); }
+async function layoutPages(token){
+  const pages = $("pages"); pages.style.padding = ""; pages.style.height = ""; pages.innerHTML = "";
+  pageViews = [];
+  const w = baseWidth() * zoom; pages.style.maxWidth = (w + 16) + "px";
+  for (let i = 1; i <= pdfDoc.numPages; i++) {
+    const page = await pdfDoc.getPage(i); if (token !== viewToken) return;
+    const vp = page.getViewport({ scale:1 });
+    const div = document.createElement("div"); div.className = "page";
+    div.style.width = w + "px"; div.style.height = Math.round(w * vp.height / vp.width) + "px";
+    div.innerHTML = `<span class="pnum">${i} / ${pdfDoc.numPages}</span>`; div.dataset.n = i;
+    pages.appendChild(div); pageViews.push({ div, page, canvas:null, task:null, renderedW:0 });
+    if (i === 1) $("progress").classList.add("hidden");
+  }
+  if (observer) observer.disconnect();
+  observer = new IntersectionObserver(entries => {
+    for (const e of entries) { const pv = pageViews[e.target.dataset.n - 1]; if (!pv) continue;
+      if (e.isIntersecting) renderPage(pv, token); else unrender(pv); }
+  }, { root:$("vbody"), rootMargin:"1200px 0px" });
+  for (const pv of pageViews) observer.observe(pv.div);
+}
+function unrender(pv){ if (pv.task) { pv.task.cancel(); pv.task = null; } if (pv.canvas) { pv.canvas.width = 0; pv.canvas.height = 0; pv.canvas.remove(); pv.canvas = null; pv.renderedW = 0; } }
+async function renderPage(pv, token){
+  const cssW = pv.div.clientWidth; const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const target = Math.min(Math.round(cssW * dpr), 2400);
+  if (pv.canvas && pv.renderedW === target) return;
+  unrender(pv);
+  const vp1 = pv.page.getViewport({ scale:1 }); const vp = pv.page.getViewport({ scale: target / vp1.width });
+  const c = document.createElement("canvas"); c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+  pv.canvas = c; pv.renderedW = target; pv.div.prepend(c);
+  const task = pv.page.render({ canvasContext:c.getContext("2d"), viewport:vp }); pv.task = task;
+  try { await task.promise; } catch(e) { /* cancelled */ } finally { if (pv.task === task) pv.task = null; }
+}
+function rezoom(f){
+  if (!pdfDoc) return; const body = $("vbody"); const rel = body.scrollTop / Math.max(1, body.scrollHeight);
+  zoom = Math.max(0.5, Math.min(3, f)); const w = baseWidth() * zoom; $("pages").style.maxWidth = (w + 16) + "px";
+  for (const pv of pageViews) { const vp = pv.page.getViewport({ scale:1 }); pv.div.style.width = w + "px"; pv.div.style.height = Math.round(w * vp.height / vp.width) + "px"; unrender(pv); }
+  body.scrollTop = rel * body.scrollHeight;
+  if (observer) { observer.disconnect(); for (const pv of pageViews) observer.observe(pv.div); }
+}
+$("zin").addEventListener("click", () => rezoom(zoom * 1.25));
+$("zout").addEventListener("click", () => rezoom(zoom / 1.25));
+let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (pdfDoc) rezoom(zoom); }, 250); });
+
+if (!window.crypto || !crypto.subtle) { showLogin("This browser can't open the site (it needs a secure https connection and a current browser)."); }
+else start();
+})();
+</script>
+</body>
+</html>
