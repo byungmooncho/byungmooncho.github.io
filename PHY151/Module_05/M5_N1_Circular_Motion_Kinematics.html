@@ -563,27 +563,20 @@ and forgot that the merry-go-round is one rigid object.</p></div>
 </div>
 
 <script>
-/* Answers open in page order: each "Show" button unlocks only after the previous one has been opened.
-   A locked button is not silent: clicking it explains, and points at the button that is next in line. */
+/* Reveals are plain show/hide, each independent -- no sequential unlocking.
+   topics/course-design.md, carried into Note_Artifact_Spec_2026-10-20. */
 (function(){
-  var btns=[].slice.call(document.querySelectorAll('.rev .rbtn')); if(!btns.length) return;
-  function next(){ for(var i=0;i<btns.length;i++){ if(btns[i].getAttribute('data-opened')!=='1') return i; } return -1; }
-  function gate(){ var n=next();
-    btns.forEach(function(b,i){ var locked = n>-1 && i>n; b.classList.toggle('locked', locked);
-      b.setAttribute('aria-disabled', locked?'true':'false'); b.title = locked ? 'Open the one above first' : ''; }); }
-  function tell(b){ var n=next(); var m=b.parentNode.querySelector('.rlock');
-    if(!m){ m=document.createElement('div'); m.className='rlock'; b.parentNode.insertBefore(m, b.nextSibling); }
-    var k=btns.indexOf(b)-n; m.textContent='Locked — open the one above first (' + (k===1?'the previous':'the next unopened') + ' “' + btns[n].getAttribute('data-label') + '” button, ' + k + ' above).';
-    m.hidden=false; clearTimeout(m._t); m._t=setTimeout(function(){ m.hidden=true; }, 6000);
-    var t=btns[n]; t.classList.add('pulse'); setTimeout(function(){ t.classList.remove('pulse'); }, 2500);
-    if(t.getBoundingClientRect().top<0) t.scrollIntoView({block:'center', behavior:'smooth'}); }
-  btns.forEach(function(b){ b.addEventListener('click', function(){
-    if(b.classList.contains('locked')){ tell(b); return; }
-    var d=document.getElementById(b.getAttribute('aria-controls')); var open=d.hidden; d.hidden=!open;
-    var e=document.getElementById(b.getAttribute('aria-controls')+'E'); if(e) e.hidden=open;
-    if(open) b.setAttribute('data-opened','1');
-    b.setAttribute('aria-expanded', open?'true':'false'); b.textContent = open ? 'Hide' : b.getAttribute('data-label'); gate(); }); });
-  gate();
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d = document.getElementById(b.getAttribute('aria-controls'));
+      var e = document.getElementById(b.getAttribute('aria-controls') + 'E');
+      var open = d.hidden;
+      d.hidden = !open;
+      if (e) e.hidden = open;
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label');
+    });
+  });
 })();
 </script>
 
