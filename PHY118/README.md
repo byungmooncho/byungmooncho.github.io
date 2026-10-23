@@ -1,6 +1,6 @@
 # PHY 118 — Course Overhaul
 
-Working folder for the PHY 118 overhaul, following the workflow developed for PHY 151/152:
+Working folder for the PHY 118 overhaul, following the house workflow:
 
 1. Link inventory (shell embeds mapped to modules)
 2. Question-pool audit
