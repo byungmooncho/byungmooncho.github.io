@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N9 — Slope and Area Under Motion Graphs</title>
+<style>
+  /* ==================================================================
+     FLCC Physics note page — hybrid guided-notes template
+     Same stylesheet as M1 N3, M3 N5, M3 N9; keep identical across pages.
+     Adds: .ladder (kinematic ladder diagram, this note only).
+     ================================================================== */
+  :root{
+    --ink:#1d2b23;
+    --paper:#ffffff;
+    --green:#1e6b3c;      /* FLCC course green */
+    --green-soft:#eaf3ed;
+    --rule:#d7e2da;
+    --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  /* --- header ------------------------------------------------------ */
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+
+  /* --- strobe divider ------------------------------------------------ */
+  .strobe{ display:flex; align-items:center; margin:2.2rem 0 1.6rem; }
+  .strobe span{ width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; }
+  .strobe.uniform span + span{ margin-left:26px; }
+  .strobe.accel span:nth-child(2){ margin-left:10px; }
+  .strobe.accel span:nth-child(3){ margin-left:22px; }
+  .strobe.accel span:nth-child(4){ margin-left:38px; }
+  .strobe.accel span:nth-child(5){ margin-left:58px; }
+  .strobe.accel span:nth-child(6){ margin-left:82px; }
+  .strobe small{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    color:var(--muted); margin-left:auto; padding-left:1rem; white-space:nowrap;
+  }
+
+  /* --- synopsis ----------------------------------------------------- */
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  /* --- performance expectations -------------------------------------- */
+  .pe{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    border:1px solid var(--rule); border-radius:8px;
+    padding:.8rem 1rem; margin:1rem 0;
+  }
+  .pe .label{
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); font-weight:600; display:block; margin-bottom:.35rem;
+  }
+  .pe b{ color:var(--green); }
+
+  /* --- kinematic ladder ---------------------------------------------- */
+  .ladder{
+    display:grid; grid-template-columns:auto 1fr auto; align-items:stretch;
+    gap:0 .9rem; margin:1.4rem auto; max-width:560px;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  .ladder .rung{
+    grid-column:2; border:1.5px solid var(--green); border-radius:8px;
+    background:var(--green-soft); text-align:center; padding:.55rem .8rem;
+  }
+  .ladder .rung b{ font-size:1.05rem; }
+  .ladder .rung small{ display:block; color:var(--muted); font-size:.78rem; }
+  .ladder .gap{ grid-column:2; height:2.2rem; }
+  .ladder .down, .ladder .up{
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted);
+    line-height:1.3; text-align:center;
+  }
+  .ladder .down{ grid-column:1; }
+  .ladder .up{ grid-column:3; }
+  .ladder .down b, .ladder .up b{ color:var(--green); font-size:.78rem; letter-spacing:.06em; }
+  .ladder .arrow{ font-size:1.3rem; color:var(--green); line-height:1; }
+  /* rows: use explicit grid rows so side labels span the gaps */
+  .ladder .r1{ grid-row:1; } .ladder .g1{ grid-row:2; } .ladder .r2{ grid-row:3; }
+  .ladder .g2{ grid-row:4; } .ladder .r3{ grid-row:5; }
+  .ladder .d1{ grid-row:1 / span 3; } .ladder .d2{ grid-row:3 / span 3; }
+  .ladder .u1{ grid-row:1 / span 3; } .ladder .u2{ grid-row:3 / span 3; }
+
+  /* --- headings & lists ---------------------------------------------- */
+  h2{ font-size:1.25rem; margin:0 0 .8rem; font-weight:700; }
+  ol.tasks{ margin:.2rem 0 0; padding-left:1.3rem; }
+  ol.tasks li{ margin:.55rem 0; }
+  ol.tasks b{ font-weight:700; }
+
+  /* --- video slot ---------------------------------------------------- */
+  .video-slot{
+    border:1.5px dashed var(--rule); border-radius:8px;
+    padding:1rem 1.1rem; background:#fbfdfc;
+  }
+  .video-slot .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.5rem;
+  }
+  .video-frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfe4d7; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; text-align:center; padding:1rem;
+  }
+
+  /* --- equations ------------------------------------------------------ */
+  .eq-list{ margin:.5rem 0 0; padding:0; list-style:none; counter-reset:eq; }
+  .eq-list li{
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem .9rem; border:1px solid var(--rule); border-radius:6px; margin:.6rem 0;
+  }
+  .eq-list li::before{
+    counter-increment:eq; content:"Eq. " counter(eq);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    color:var(--green); font-weight:600; flex:none; width:3.2em;
+  }
+  .eq-list math{ font-size:1.25rem; }
+  .eq-list .use{
+    margin-left:auto; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.82rem; color:var(--muted); text-align:right; max-width:16em;
+  }
+  @media (max-width:540px){
+    .eq-list li{ flex-wrap:wrap; }
+    .eq-list .use{ margin-left:3.2em; text-align:left; max-width:none; }
+  }
+
+  /* --- downloads ------------------------------------------------------ */
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem;
+    text-decoration:none; color:inherit; display:block; background:#fff;
+  }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .dl-card .kind{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{
+    margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+
+    /* ---- interactive (added 2026-09-18) ---------------------------------- */
+    .sim{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; background:var(--paper); }
+    .sim-head{ background:var(--green); color:#fff; padding:.6rem 1rem;
+      font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; }
+    .sim canvas{ display:block; width:100%; height:auto; }
+    .sim-panel{ padding:1rem 1.1rem; border-top:1px solid var(--rule); }
+    .ctrl label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; font-weight:600;
+      color:var(--green); display:flex; justify-content:space-between; gap:1rem; }
+    .ctrl input[type=range]{ width:100%; accent-color:var(--green); margin-top:.35rem; }
+    .ctrl + .ctrl{ margin-top:.8rem; }
+    .readout{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.9rem; }
+    .chip{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; background:var(--green-soft);
+      border:1px solid var(--rule); border-radius:20px; padding:.35rem .8rem; color:var(--ink); }
+    .sim-hint{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; color:var(--muted); margin-top:.7rem; }
+  
+.sign-note{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; line-height:1.55; color:var(--ink,#1d2b23); background:#fdf6ea; border-left:3px solid var(--amber,#c77b1f); border-radius:0 6px 6px 0; padding:.6rem .85rem; margin:.9rem 0; }
+.sign-note b{ color:#8a5512; }
+/* CALC-151:start */
+/* --- calculus layer (PHY 151 only; stripped by mirror_151_to_118.py) ------
+   Replaces the inline-styled "In calculus notation" box that sat in this note
+   until 2026-09-27. Same calc151 register as the rest of Modules 1 and 3. */
+.calc151{ border:1px solid var(--rule,#d7e2da); border-left:5px solid var(--ink,#1d2b23);
+  border-radius:0 8px 8px 0; padding:1rem 1.15rem; margin:1.6rem 0; background:#f7faf8; }
+.calc151 .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted,#5c6b62);
+  font-weight:600; display:block; margin-bottom:.4rem; }
+.calc151 p{ margin:0 0 .5rem; }
+.calc151 ol{ margin:.2rem 0 0; padding-left:1.3rem; }
+.calc151 li{ margin:.55rem 0; }
+.calc151 .space{ display:block; border-bottom:1px solid var(--rule,#d7e2da);
+  height:1.4rem; margin:.4rem 0 0; }
+/* CALC-151:end */
+  /* --- video banner (slim, as Modules 4-6) --- */
+  .video{ margin-bottom:1.4rem; border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+  .video .frame{ position:relative; width:100%; padding-top:56.25%; border-radius:6px; overflow:hidden; background:#0f1f16; margin-top:.5rem; }
+  .video .frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 1 · Measurements and Motion</span>
+    <span>Note 9</span>
+  </div>
+
+  <h1>Slope and Area Under the Curve of Motion Graphs</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    You already know that the slope of distance vs. time is speed, and the slope of velocity vs. time
+    is acceleration. Now the reverse: the <em>area under</em> acceleration vs. time is the change in
+    velocity, and the area under velocity vs. time is the change in distance. Slope takes you down
+    the ladder; area brings you back up. One freefall measurement, three graphs — and you will verify
+    every step of it, in both directions, with your own numbers.
+  </div>
+
+  <div class="pe">
+    <span class="label">Performance expectations</span>
+    <b>Calculate</b> velocity change from the area under the acceleration&nbsp;vs.&nbsp;time graph ·
+    <b>Calculate</b> distance change from the area under the velocity&nbsp;vs.&nbsp;time graph ·
+    <b>Verify</b> each result against the next graph in the chain, including a unit check at every step.
+  </div>
+
+  <h2>One idea, drawn once</h2>
+  <div class="ladder" role="img" aria-label="Kinematic ladder: taking the slope moves you from distance to velocity to acceleration; taking the area under the curve moves you from acceleration back to velocity and from velocity back to distance.">
+    <div class="down d1"><b>slope</b><span class="arrow">&#8595;</span></div>
+    <div class="rung r1"><b>Distance &nbsp;d(t)</b><small>where it is — meters</small></div>
+    <div class="gap g1"></div>
+    <div class="rung r2"><b>Velocity &nbsp;v(t)</b><small>how fast it moves — m/s</small></div>
+    <div class="gap g2"></div>
+    <div class="rung r3"><b>Acceleration &nbsp;a(t)</b><small>how fast the speed changes — m/s²</small></div>
+    <div class="up u1"><span class="arrow">&#8593;</span><b>area under<br>the curve</b></div>
+    <div class="down d2"><b>slope</b><span class="arrow">&#8595;</span></div>
+    <div class="up u2"><span class="arrow">&#8593;</span><b>area under<br>the curve</b></div>
+  </div>
+
+  <!-- CALC-151:start -->
+<div class="calc151">
+<span class="label">With calculus</span>
+    <p>The whole ladder is just derivatives going down, and integrals going back up:</p>
+    <p>v = dx/dt &nbsp;&nbsp;&nbsp;&nbsp; a = dv/dt = d&sup2;x/dt&sup2; <span>(down the ladder)</span></p>
+    <p>&Delta;v = &int;a&nbsp;dt &nbsp;&nbsp;&nbsp;&nbsp; &Delta;d = &int;v&nbsp;dt <span>(up the ladder)</span></p>
+<p>The ladder is not symmetric, and that asymmetry is the whole content of this note.</p>
+<ol>
+  <li>Going <b>down</b> the ladder needs nothing but the graph in front of you. Going <b>up</b> needs one
+  extra piece of information at each step. What is that extra piece, physically, at each of the two steps
+  up?<span class="space"></span></li>
+  <li>This note reads &Delta;<em>v</em> off the area under the acceleration&ndash;time graph. Write that as
+  an integral, and name the theorem that lets you trade &ldquo;area under a curve&rdquo; for
+  &ldquo;antiderivative.&rdquo;<span class="space"></span></li>
+  <li>A velocity&ndash;time graph dips below the axis for part of its run. What does the area over that
+  stretch contribute to &Delta;<em>d</em>, and what is the object doing there?<span class="space"></span></li>
+  <li>Reading a <b>slope</b> needs only a small piece of the graph around one point; reading an <b>area</b>
+  needs the whole interval. Say what that difference is, in the language of derivatives and
+  integrals.<span class="space"></span></li>
+</ol>
+</div>
+<!-- CALC-151:end -->
+
+  
+  <h2>Play with it: read the slope, then read the area</h2>
+  <p>Motion from rest under a steady acceleration, shown on all three graphs at once. Drag
+  <b>acceleration</b> to change the motion and <b>time</b> to move the marker. Going <em>down</em> the
+  ladder, each graph's <b>slope</b> is the graph below it. Going <em>up</em>, each graph's shaded
+  <b>area</b> is the graph above it — and the chips let you check both readings against the numbers.</p>
+
+  <div class="sign-note"><b>Sign convention on this graph.</b> The physics is <b>a = −g = −9.8&nbsp;m/s&sup2;</b>: upward is positive, and <i>g</i>&nbsp;=&nbsp;9.8&nbsp;m/s&sup2; is a magnitude that never carries a sign. All three graphs below plot <em>magnitudes</em> &mdash; how far the object has fallen, and how fast, as time grows &mdash; so they take |<i>a</i>|&nbsp;=&nbsp;<i>g</i>&nbsp;=&nbsp;+9.8&nbsp;m/s&sup2; and the whole slope-and-area ladder stays above the axis. That is a convenience for reading slopes and areas, not a change to the physics.</div>
+<div class="sim" id="sim">
+    <div class="sim-head"><span>&#9654;</span> Interactive &middot; Slope And Area Explorer</div>
+    <canvas id="simCanvas" width="720" height="460" role="img"
+      aria-label="Three stacked graphs against time for motion from rest at constant acceleration: distance with a tangent line whose slope is the velocity, velocity with a shaded triangle whose area is the distance and a slope equal to the acceleration, and acceleration with a shaded rectangle whose area is the velocity change."></canvas>
+    <div class="sim-panel">
+      <div class="ctrl">
+        <label for="aSlider">Acceleration <span><span id="aVal">2.0</span> m/s&sup2;</span></label>
+        <input type="range" id="aSlider" min="0.5" max="5" step="0.1" value="2">
+      </div>
+      <div class="ctrl">
+        <label for="tSlider">Time marker <span><span id="tVal">2.00</span> s</span></label>
+        <input type="range" id="tSlider" min="0.1" max="4" step="0.05" value="2">
+      </div>
+      <div class="readout">
+        <span class="chip">slope of d&ndash;t = <b id="outSlopeD">4.0</b> m/s = v</span>
+        <span class="chip">slope of v&ndash;t = <b id="outSlopeV">2.0</b> m/s&sup2; = a</span>
+        <span class="chip">area under a&ndash;t = <b id="outAreaA">4.0</b> m/s = v</span>
+        <span class="chip">area under v&ndash;t = <b id="outAreaV">4.0</b> m = d</span>
+      </div>
+      <div class="sim-hint" id="simHint">Slope takes you down the ladder; area brings you back up.</div>
+    </div>
+  </div>
+
+  <h2>Your tasks in this note</h2>
+  <ol class="tasks">
+    <li><b>Start at the bottom:</b> the acceleration graph of a freefalling object is a flat line at 9.8&nbsp;m/s². Take the area under it up to 0.6&nbsp;s — a simple rectangle — and show its units come out as velocity.</li>
+    <li><b>Climb one rung:</b> the velocity graph of the <em>same</em> fall. Its best-fit slope is 9.4&nbsp;m/s² — and you should be wondering why that isn't 9.8. (You're right to wonder; that gap is measurement uncertainty, and it gets its own story later.) Read Δv off the line and check it against your rectangle.</li>
+    <li><b>Area again:</b> take the area under the velocity line — a triangle this time — and show its units come out as distance.</li>
+    <li><b>Top of the ladder:</b> the distance graph of the same fall. Read Δd directly and check it against your triangle. Three graphs, one motion, every step verified in both directions.</li>
+    <!-- 2026-10-25: added so the "area is a CHANGE" step has to be taken. Every other case on this
+         page starts from rest, where Δv and v are the same number and the distinction never bites. -->
+    <li><b>One that does not start from rest.</b> A cart is <i>already</i> rolling at 2 m/s when a
+    steady push gives it an acceleration of 3 m/s² for 4 s. The area under its acceleration graph is
+    3 × 4 = 12. Is the cart moving at 12 m/s at the end? Say what the area actually gives you, and
+    what you must do with it to get the speed.</li>
+  </ol>
+
+  <div class="strobe accel" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <small>the freefall itself — each interval longer than the last</small>
+  </div>
+
+  <div class="strobe uniform" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <h2>The key relationships</h2>
+  <p>The unit check is the point: multiply the axes together and the area's units tell you what quantity you've found.</p>
+  <ul class="eq-list">
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mtext>slope of </mtext><mi>d</mi><mtext>–</mtext><mi>t</mi>
+        <mo>=</mo><mfrac><mrow><mi>&#x394;</mi><mi>d</mi></mrow><mrow><mi>&#x394;</mi><mi>t</mi></mrow></mfrac>
+        <mo>=</mo><mi>v</mi>
+      </math>
+      <span class="use">m divided by s gives m/s — a velocity</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mtext>slope of </mtext><mi>v</mi><mtext>–</mtext><mi>t</mi>
+        <mo>=</mo><mfrac><mrow><mi>&#x394;</mi><mi>v</mi></mrow><mrow><mi>&#x394;</mi><mi>t</mi></mrow></mfrac>
+        <mo>=</mo><mi>a</mi>
+      </math>
+      <span class="use">m/s divided by s gives m/s² — an acceleration</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mtext>area under </mtext><mi>a</mi><mtext>–</mtext><mi>t</mi>
+        <mo>=</mo><mi>a</mi><mo>&#x22C5;</mo><mi>&#x394;</mi><mi>t</mi>
+        <mo>=</mo><mi>&#x394;</mi><mi>v</mi>
+      </math>
+      <span class="use">m/s² times s gives m/s — a velocity change</span>
+    </li>
+    <li>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mtext>area under </mtext><mi>v</mi><mtext>–</mtext><mi>t</mi>
+        <mo>=</mo><mi>&#x394;</mi><mi>d</mi>
+      </math>
+      <span class="use">m/s times s gives m — a distance change (a triangle here, because the speed grows steadily)</span>
+    </li>
+  </ul>
+
+  <div class="strobe uniform" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="video"><span class="label">Watch &middot; the note worked through</span>
+    <!-- When the recording is posted, replace the line below with:
+         <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N8 — Dr. Cho works through the note"></iframe></div>
+         (adds about 420 px to the page; the page reports its own height to the wrapper) -->
+    Recording to come.&nbsp; Print the guided notes (link just below), watch, and fill them in as you go.
+  </div>
+
+  <h2>Your notes</h2>
+  <div class="downloads">
+    <!-- Point these hrefs at files in this course's Manage Files area
+         (Insert Quicklink → Course File), NOT at external storage. -->
+    <a class="dl-card" href="https://byungmooncho.github.io/PHY151/handouts/M1_N9_Slope_and_Area_Under_Motion_Graphs.pdf" target="_blank" rel="noopener">
+      <span class="kind">Before the video</span>
+      <span class="name">Guided notes — blank (PDF)</span>
+      <span class="hint">Contains all three graphs of the freefall data — do the area calculations right on them.</span>
+    </a>
+    <div class="dl-card static">
+      <span class="kind">After the module</span>
+      <span class="name">Completed notes (PDF)</span>
+      <span class="hint">Released when Module 1 closes — includes the filled summary and labeled ladder.</span>
+    </div>
+  </div>
+
+  <footer>
+    Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 151
+  </footer>
+
+</div>
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits.
+
+   V4 (2026-09-17). V3 sent document.documentElement.scrollHeight, whose FLOOR is the
+   iframe's own viewport height -- so a box taller than the content reported the BOX
+   height back, the parent applied it, and the value ratcheted upward without bound
+   (measured: box 12000px -> reported 12000px). That is the compounding loop behind the
+   PHY118 4.1943e+07px incident; it was never D2L's ReadSpeaker.
+
+   Measuring the content element is viewport-independent, so the reported height is the
+   note's real height at whatever width the pane is, and it can come back DOWN as well
+   as up. Verified: box 800 / 6000 / 12000px all report the same height. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)   + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* ==================================================================
+   Slope And Area Explorer - PHY 151 M1 N8. Added 2026-09-18.
+   Motion from rest, constant a. Three stacked panels, distance on top so the
+   layout matches the ladder diagram above: slope reads downward, area upward.
+     d-t : parabola, with the TANGENT at t drawn - its slope is v(t)
+     v-t : straight line; shaded triangle 0..t has area d(t); its slope is a
+     a-t : flat line;     shaded rectangle 0..t has area v(t)
+   Axes are FIXED ceilings from the slider limits (a <= 5 m/s^2, t <= 4 s), never
+   refitted to the current values, so a bigger acceleration really does draw a
+   steeper line and a larger area.
+   See Cross_Course_Notes/Interactive_Sim_Fixed_Scale_Principle.md
+   ================================================================== */
+(function(){
+  var cv = document.getElementById('simCanvas');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+
+  var AXIS='#1f5fbf', GREEN='#1e6b3c', GRIDLINE='#d7e2da', INK='#1d2b23', MUTED='#5c6b62';
+  var ORANGE='#c8631b', BLUE='#1f5fbf';
+
+  var T_MAX = 4, A_MAX = 5;
+  var D_CEIL = 0.5*A_MAX*T_MAX*T_MAX * 1.06;   /* 40 m  -> 42.4 */
+  var V_CEIL = A_MAX*T_MAX * 1.06;             /* 20 m/s -> 21.2 */
+  var A_CEIL = A_MAX * 1.12;                   /* 5 m/s^2 -> 5.6 */
+
+  var padL = 74, padR = 22, gap = 16;
+  var panelH = (H - 2*gap - 12) / 3;
+  function panelTop(i){ return 8 + i*(panelH + gap); }
+  var x0 = padL, x1 = W - padR;
+  function tx(tt){ return x0 + (tt/T_MAX)*(x1 - x0); }
+
+  var el = {
+    a: document.getElementById('aSlider'), t: document.getElementById('tSlider'),
+    aVal: document.getElementById('aVal'), tVal: document.getElementById('tVal'),
+    slopeD: document.getElementById('outSlopeD'), slopeV: document.getElementById('outSlopeV'),
+    areaA: document.getElementById('outAreaA'), areaV: document.getElementById('outAreaV'),
+    hint: document.getElementById('simHint')
+  };
+
+  function frame(i, label, ceil){
+    var top = panelTop(i), bot = top + panelH;
+    ctx.strokeStyle = GRIDLINE; ctx.lineWidth = 1;
+    for(var k=1;k<=4;k++){ var gx = tx(T_MAX*k/4);
+      ctx.beginPath(); ctx.moveTo(gx, top); ctx.lineTo(gx, bot); ctx.stroke(); }
+    ctx.strokeStyle = AXIS; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(x0, top-2); ctx.lineTo(x0, bot); ctx.lineTo(x1, bot); ctx.stroke();
+    ctx.fillStyle = INK; ctx.font = '600 12px Segoe UI, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(label, 6, top + 11);
+    /* axis numbers right-aligned just left of the axis, and the ceiling dropped
+       below the title row - at x0-26 it ran straight through the panel label */
+    ctx.fillStyle = MUTED; ctx.font = '10.5px Segoe UI, sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('0', x0 - 7, bot + 3);
+    ctx.fillText(ceil.toFixed(0), x0 - 7, top + 24);
+    ctx.textAlign = 'left';
+    return { top: top, bot: bot, yy: function(v){ return bot - (v/ceil)*(bot - top); } };
+  }
+  function marker(x, y){
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = ORANGE; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  }
+  function tag(text, x, y, colour){
+    ctx.font = '600 11px Segoe UI, sans-serif';
+    var w = ctx.measureText(text).width;
+    x = Math.min(x, x1 - w - 4);
+    ctx.fillStyle = 'rgba(255,255,255,0.88)'; ctx.fillRect(x - 3, y - 11, w + 6, 15);
+    ctx.fillStyle = colour; ctx.textAlign = 'left'; ctx.fillText(text, x, y);
+  }
+
+  function draw(){
+    var a = parseFloat(el.a.value), t = parseFloat(el.t.value);
+    var v = a*t, d = 0.5*a*t*t;
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+
+    /* ---- panel 0: distance, with the tangent whose slope is v ---- */
+    var P = frame(0, 'distance  d (m)', D_CEIL);
+    ctx.strokeStyle = GREEN; ctx.lineWidth = 2.4; ctx.beginPath();
+    for(var k=0;k<=80;k++){ var tt = T_MAX*k/80, X = tx(tt), Y = P.yy(0.5*a*tt*tt);
+      if(k===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y); }
+    ctx.stroke();
+    var half = Math.min(0.9, t, T_MAX - t);            /* tangent: d = d0 + v*(tt-t) */
+    ctx.strokeStyle = ORANGE; ctx.lineWidth = 2; ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(tx(t-half), P.yy(Math.max(0, d - v*half)));
+    ctx.lineTo(tx(t+half), P.yy(Math.min(D_CEIL, d + v*half)));
+    ctx.stroke();
+    marker(tx(t), P.yy(d));
+    tag('slope of this tangent = v = ' + v.toFixed(1) + ' m/s', tx(t) + 10, P.yy(d) - 8, ORANGE);
+
+    /* ---- panel 1: velocity, shaded triangle = d, slope = a ---- */
+    var Q = frame(1, 'velocity  v (m/s)', V_CEIL);
+    ctx.fillStyle = 'rgba(30,107,60,0.20)';
+    ctx.beginPath(); ctx.moveTo(tx(0), Q.bot); ctx.lineTo(tx(t), Q.bot); ctx.lineTo(tx(t), Q.yy(v));
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = BLUE; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(tx(0), Q.yy(0)); ctx.lineTo(tx(T_MAX), Q.yy(a*T_MAX)); ctx.stroke();
+    marker(tx(t), Q.yy(v));
+    tag('shaded area = d = ' + d.toFixed(1) + ' m', tx(0) + 8, Q.bot - 8, GREEN);
+    tag('slope = a = ' + a.toFixed(1) + ' m/s\u00B2', tx(t) + 10, Q.yy(v) - 8, BLUE);
+
+    /* ---- panel 2: acceleration, shaded rectangle = v ---- */
+    var R = frame(2, 'acceleration  a (m/s\u00B2)', A_CEIL);
+    ctx.fillStyle = 'rgba(31,95,191,0.18)';
+    ctx.fillRect(tx(0), R.yy(a), tx(t) - tx(0), R.bot - R.yy(a));
+    ctx.strokeStyle = GREEN; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(tx(0), R.yy(a)); ctx.lineTo(tx(T_MAX), R.yy(a)); ctx.stroke();
+    marker(tx(t), R.yy(a));
+    /* at large a the flat line sits near the panel top, where a label above it
+       would land on the panel title - drop it inside the rectangle instead */
+    var aLabelY = R.yy(a) - 8 < R.top + 32 ? R.yy(a) + 17 : R.yy(a) - 8;
+    tag('shaded area = change in v = ' + v.toFixed(1) + ' m/s', tx(0) + 8, aLabelY, BLUE);
+    ctx.fillStyle = MUTED; ctx.font = '11px Segoe UI, sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('time t (s) \u2192', x1, H - 4);
+    ctx.textAlign = 'left';
+
+    el.aVal.textContent = a.toFixed(1);
+    el.tVal.textContent = t.toFixed(2);
+    el.slopeD.textContent = v.toFixed(1);
+    el.slopeV.textContent = a.toFixed(1);
+    el.areaA.textContent = v.toFixed(1);
+    el.areaV.textContent = d.toFixed(1);
+    el.hint.textContent = 'At t = ' + t.toFixed(2) + ' s the tangent on d\u2013t has slope ' + v.toFixed(1)
+      + ' m/s, and that is exactly the height of the v\u2013t line. The triangle under v\u2013t has area '
+      + d.toFixed(1) + ' m, which is exactly the height of the d\u2013t curve.';
+  }
+
+  el.a.addEventListener('input', draw);
+  el.t.addEventListener('input', draw);
+  draw();
+})();
+</script>
+
+
+<script>
+/* flccSettleV6 (2026-10-06) - fixes the first-paint WIDTH race.
+
+   The V4 reporter above fires on load, on window resize, and from a
+   ResizeObserver on document.body. Measured 2026-10-06: none of those fire when
+   only the frame's WIDTH changes. Inside Brightspace the frame is briefly
+   collapsed at first paint, so a page reported its ~60px-wide height (11358px
+   for a page that is really 1967px) and the V5 wrapper kept that number forever.
+   Seen live on the M3 and M4 reference indexes; it is a race, so a reload can
+   hide it.
+
+   This re-measures a few times while layout settles, and posts only when the
+   number actually changes. It does NOT change any page's height, so every
+   declared wrapper baseline stays valid. Remove it only together with a reporter
+   that re-fires on a width-only change. */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){
+    var el = document.querySelector('.note-wrap') || document.body;
+    var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height
+      + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+      + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+  }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    var w = document.querySelector('.note-wrap'); if (w) ro.observe(w);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>
