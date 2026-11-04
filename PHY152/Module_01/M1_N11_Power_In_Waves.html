@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N11 &mdash; Power In Waves</title>
+<style>
+  /* FLCC Physics note page — Module 1, Oscillations, Waves and Sound, Note 11
+     "Power In Waves".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-10-21i_M1_N11_Built.md.
+
+     NO CALC FENCE, AND NOT A DEFERRAL.  Definitions, a geometric area and one logarithm
+     — no calculus to fence — so it mirrors to the partner course unchanged.  The
+     directory-level trap stands: RUN THE MIRROR ON NAMED FILES, because Notes 5 and 7
+     in this same folder are not safe.
+
+     SOURCE.  Page 5 of the six-page "Complete" master, 2025 Spring - the third of the
+     three notes that master splits into (Cho's call 2026-10-21).  The page prints NOTHING
+     and carries no ink annotations: it is Word pen ink FLATTENED TO RASTERS by the Foxit
+     export, readable only by rendering it.
+
+     THIS IS THE PAGE WHOSE INK RUNS OFF THE BOTTOM.  The export clips the last line
+     mid-stroke.  Recovered from the .docx fallback rasters in document order (fragment
+     29): "reference I0 = 1x10^-12 W/m^2".  Without that recovery the decibel definition
+     on this page has no reference and is unusable.
+
+     THE SECTION HEADING IS HIS: "3. Power in Waves".  So is the subheading, "Sound
+     intensity level (decibel)".  The printed sheet's own labels on this master are a
+     section ahead of his ink and he struck them out; the ink's numbering is the real one.
+
+     THE TITLE AND SYNOPSIS.  Title is his own section title.  The synopsis is the second
+     of his two sentences with the scope narrowed to this note — his sentence covers
+     energy AND power, and energy is Note 10.  Flagged in the key.
+
+     NO HTML TAGS INSIDE <text>: bold inside a figure is <tspan font-weight="700">.
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.95rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  .disp{ display:block; margin:.6rem 0 .8rem; text-align:center; font-size:1.08rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 &middot; Oscillations, Waves and Sound</span><span>Note 11</span></div>
+<h1>Power In Waves</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>We round up the notes with equations for calculating power in
+waves.</div>
+
+<div class="hook"><span class="label">Before you read on &mdash; predict</span><p>You are standing in an open field listening
+to a loudspeaker, and you walk until you are <b>twice as far away</b>.&nbsp; <b>(1)</b> What happens to the
+<i>intensity</i>?&nbsp; <b>(2)</b> What happens to the <i>amplitude</i> of the wave?&nbsp; <b>(3)</b> By how many
+<i>decibels</i> does the level drop?&nbsp; Write down your three answers.&nbsp; This note gives you all three, and the third
+one is a number worth carrying around.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Define</b> power and intensity, and give the SI unit of each.</li>
+<li><b>Derive</b> <i>I</i> = <i>P</i>/4&pi;<i>r</i><sup>2</sup> from the area of a sphere, and say what is <i>not</i> being used up as the wave spreads.</li>
+<li><b>Explain</b> why intensity goes as the square of the amplitude.</li>
+<li><b>Define</b> the decibel against its reference <i>I</i><sub>0</sub>, and convert an intensity ratio into a level difference.</li>
+<li><b>State</b> what a 10&nbsp;dB rise means physically, and what level a sound at the reference intensity has.</li>
+</ol></div>
+
+<h2>3.&nbsp; Power in Waves</h2>
+
+<p>Note 10 counted the energy an oscillator carries.&nbsp; This note follows that energy outwards: how fast it leaves the
+source, how thinly it is spread by the time it reaches you, and why we end up measuring it on a logarithmic scale.</p>
+
+<ol class="items tasks">
+  <li>Write <b>power</b> and <b>intensity</b> as definitions, and give the SI unit of each.</li>
+  <li>A source radiates <i>P</i><sub>source</sub> equally in every direction.&nbsp; At a distance <i>r</i>, what area is that
+  power spread over?&nbsp; Write <i>I</i>(<i>r</i>).</li>
+  <li>Write <i>I</i><sub>1</sub> and <i>I</i><sub>2</sub> at two distances and form the ratio
+  <i>I</i><sub>1</sub>/<i>I</i><sub>2</sub>.&nbsp; What cancels, and what does that tell you?</li>
+  <li>Intensity turns out to go as the <b>square of the amplitude</b>.&nbsp; Given <i>E</i> = &frac12;<i>kA</i>&sup2; for a
+  sinusoidal wave, why is that the relationship you should have expected?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">1)&nbsp; <b>Power = Energy / time</b>, measured in <b>W</b>.&nbsp;&nbsp;&nbsp; <b>Intensity = Power /
+  Area</b>, measured in <b>W/m&sup2;</b>.&nbsp; <span class="why">&mdash; intensity is the one your ear, your skin and a solar
+  panel actually respond to: power alone says nothing until you say how much area it is crossing</span></span>
+  <span class="step">2)&nbsp; Equally in every direction means the power is spread over a whole sphere, and the area of a
+  sphere of radius <i>r</i> is 4&pi;<i>r</i>&sup2;.&nbsp; So</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><i>I</i>(<i>r</i>) = <i>P</i><sub>source</sub> /
+  4&pi;<i>r</i>&sup2;</span>
+  <span class="step">3)&nbsp; <i>I</i><sub>1</sub> = <i>P</i><sub>source</sub>/4&pi;<i>r</i><sub>1</sub>&sup2; and
+  <i>I</i><sub>2</sub> = <i>P</i><sub>source</sub>/4&pi;<i>r</i><sub>2</sub>&sup2;, so dividing one by the other</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><i>I</i><sub>1</sub> / <i>I</i><sub>2</sub> =
+  <i>r</i><sub>2</sub>&sup2; / <i>r</i><sub>1</sub>&sup2;</span>
+  <span class="step"><b><i>P</i><sub>source</sub> and the 4&pi; both cancel.</b>&nbsp; <span class="why">&mdash; so you can
+  compare two places without ever knowing how loud the source is, which is what makes this usable in practice</span></span>
+  <span class="step">4)&nbsp; <i>E</i> = &frac12;<i>kA</i>&sup2; &mdash; the energy of an oscillation goes as the square of its
+  amplitude &mdash; and intensity is just that energy delivered per second per square metre.&nbsp; Nothing in the journey
+  changes the <i>A</i>&sup2;, so</span>
+  <span class="step" style="text-align:center;font-size:1.12rem"><i>I</i> &prop; <i>A</i>&sup2;</span>
+  <span class="step">Putting the last two together: if the intensity falls by four, the amplitude falls by two.</span>
+</div></div></div>
+
+<div class="fig">
+<svg viewBox="0 0 780 400" role="img" aria-label="A point source with two concentric wavefronts at two radii, the same power crossing each.">
+<defs><marker id="n4e-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker><marker id="n4e-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="n4e-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker><marker id="n4e-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d2601a"/></marker><marker id="n4e-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8ea8"/></marker><marker id="n4e-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker></defs>
+<circle cx="290" cy="200" r="78" fill="none" stroke="#1636c8" stroke-width="2.2"/>
+<circle cx="290" cy="200" r="155" fill="none" stroke="#1636c8" stroke-width="2.2"/>
+<circle cx="290" cy="200" r="6" fill="#b3261e"/>
+<line x1="302.0" y1="200.0" x2="312.0" y2="200.0" stroke="#b3261e" stroke-width="1.6"/>
+<line x1="298.5" y1="191.5" x2="305.6" y2="184.4" stroke="#b3261e" stroke-width="1.6"/>
+<line x1="290.0" y1="188.0" x2="290.0" y2="178.0" stroke="#b3261e" stroke-width="1.6"/>
+<line x1="281.5" y1="191.5" x2="274.4" y2="184.4" stroke="#b3261e" stroke-width="1.6"/>
+<line x1="278.0" y1="200.0" x2="268.0" y2="200.0" stroke="#b3261e" stroke-width="1.6"/>
+<line x1="281.5" y1="208.5" x2="274.4" y2="215.6" stroke="#b3261e" stroke-width="1.6"/>
+<line x1="290.0" y1="212.0" x2="290.0" y2="222.0" stroke="#b3261e" stroke-width="1.6"/>
+<line x1="298.5" y1="208.5" x2="305.6" y2="215.6" stroke="#b3261e" stroke-width="1.6"/>
+<text x="290" y="244" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e">source</text>
+<text x="290" y="262" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e"><tspan font-style='italic'>P</tspan><tspan font-size='10' baseline-shift='-4'>source</tspan></text>
+<line x1="290" y1="200" x2="218.2" y2="230.5" stroke="#1d2b23" stroke-width="1.8"/>
+<line x1="290" y1="200" x2="207.9" y2="331.4" stroke="#1d2b23" stroke-width="1.8"/>
+<text x="242.9203728584258" y="210.286216813298" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23"><tspan font-style='italic'>r</tspan><tspan font-size='10' baseline-shift='-4'>1</tspan></text>
+<text x="217.9327609542055" y="308.5290148253119" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23"><tspan font-style='italic'>r</tspan><tspan font-size='10' baseline-shift='-4'>2</tspan></text>
+<circle cx="340.1" cy="140.2" r="4.5" fill="#0f8ea8"/>
+<circle cx="442.6" cy="173.1" r="4.5" fill="#0f8ea8"/>
+<line x1="340.1" y1="140.2" x2="500" y2="118" stroke="#0f8ea8" stroke-width="1.1"/>
+<line x1="442.6" y1="173.1" x2="500" y2="192" stroke="#0f8ea8" stroke-width="1.1"/>
+<text x="508" y="114" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0f8ea8"><tspan font-style='italic'>I</tspan><tspan font-size='10' baseline-shift='-4'>1</tspan> = <tspan font-style='italic'>P</tspan><tspan font-size='10' baseline-shift='-4'>source</tspan> / 4&pi;<tspan font-style='italic'>r</tspan><tspan font-size='10' baseline-shift='-4'>1</tspan>&sup2;</text>
+<text x="508" y="188" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0f8ea8"><tspan font-style='italic'>I</tspan><tspan font-size='10' baseline-shift='-4'>2</tspan> = <tspan font-style='italic'>P</tspan><tspan font-size='10' baseline-shift='-4'>source</tspan> / 4&pi;<tspan font-style='italic'>r</tspan><tspan font-size='10' baseline-shift='-4'>2</tspan>&sup2;</text>
+<text x="508" y="250" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#d2601a">same power through both</text>
+<text x="508" y="272" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#d2601a">&mdash; only the area grew</text>
+<text x="508" y="300" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">area of a sphere = 4&pi;<tspan font-style='italic'>r</tspan>&sup2;</text>
+</svg>
+  <div class="fig-note">The same power crosses both spheres &mdash; nothing is absorbed, nothing leaks out of the sides.&nbsp;
+  The only thing that changed between <i>r</i><sub>1</sub> and <i>r</i><sub>2</sub> is how much area it had to cross, and area
+  goes as <i>r</i>&sup2;.</div>
+</div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big"><i>I</i> = <i>P</i><sub>source</sub> / 4&pi;<i>r</i>&sup2;</span>
+<p>The <b>inverse-square law</b>, and notice what it is <i>not</i>: nothing here is being used up.&nbsp; The source puts out the
+same power whether you stand near it or far from it; all that happens is that the power gets spread over a bigger and bigger
+sphere.&nbsp; Every inverse-square law in physics &mdash; sound, light, gravity, the electric field &mdash; is this same piece
+of geometry, which is why the exponent is exactly 2 and not 1.9.</p></div>
+
+<h2>Sound intensity level (decibel)</h2>
+
+<p>A quiet room and a jet engine differ in intensity by about a factor of a trillion.&nbsp; No linear scale is going to show
+both ends of that comfortably, so sound is measured logarithmically, against a fixed reference.</p>
+
+<ol class="items tasks" start="5">
+  <li>Write the definition of the sound intensity level in decibels, and say what the reference
+  <i>I</i><sub>0</sub> is.</li>
+  <li>What does an increase of <b>10 dB</b> mean, in terms of intensity?&nbsp; And what level does a sound at the reference
+  intensity itself have?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <span class="step">5)&nbsp; <b>dB = (10 dB) log<sub>10</sub>(<i>I</i>/<i>I</i><sub>0</sub>)</b>, with the reference</span>
+  <span class="step" style="text-align:center;font-size:1.1rem"><i>I</i><sub>0</sub> = 1 &times; 10<sup>&minus;12</sup>
+  W/m&sup2;</span>
+  <span class="step">which is about the faintest sound a healthy ear can detect.&nbsp; <span class="why">&mdash; it is a chosen
+  reference, not a law of nature; the decibel is a ratio, so it only means something once you say a ratio to what</span></span>
+  <span class="step">6)&nbsp; Adding 10 dB adds 1 to log<sub>10</sub>(<i>I</i>/<i>I</i><sub>0</sub>), so it multiplies the
+  intensity by <b>10</b>.&nbsp; Every 10 dB is another factor of ten.</span>
+  <span class="step">And at <i>I</i> = <i>I</i><sub>0</sub> the ratio is 1, log<sub>10</sub>1 = 0, so the level is
+  <b>0 dB</b>.&nbsp; <span class="why">&mdash; 0 dB is not silence. It is "exactly at the threshold", and a quieter sound has a
+  negative level</span></span>
+</div></div></div>
+
+<span class="disp" style="font-size:1.16rem">dB = (10 dB) log<sub>10</sub>(<i>I</i> / <i>I</i><sub>0</sub>)</span>
+
+<h2>Looking ahead</h2>
+<p>Everything so far has had the source and the listener standing still.&nbsp; <b>Note 12</b> sets them moving: when a source or
+an observer is travelling, the frequency that arrives is not the frequency that left.</p>
+
+<div class="ahead"><b>Where this sits.</b> Note 10 found the energy stored in one oscillator and it went as A&sup2;. This note
+sends that energy out into space, and the A&sup2; survives the trip: intensity goes as amplitude squared at every distance. The
+1/r&sup2; is not physics on top of that &mdash; it is the geometry of a sphere, and it would be true of anything spreading
+evenly in three dimensions.</div>
+
+<div class="callback"><span class="label">Back to your prediction</span><p><b>(1) The intensity drops to a quarter.</b>&nbsp;
+<i>I</i> &prop; 1/<i>r</i>&sup2;, so doubling <i>r</i> divides <i>I</i> by 4 &mdash; while the <i>power</i> of the loudspeaker
+has not changed at all.&nbsp; <b>(2) The amplitude halves.</b>&nbsp; <i>I</i> &prop; <i>A</i>&sup2;, so a factor of 4 in
+intensity is a factor of 2 in amplitude.&nbsp; <b>(3) Down 6 dB</b> &mdash; (10 dB) log<sub>10</sub>(&frac14;) =
+&minus;6.02 dB.&nbsp; <b>Every doubling of distance costs you 6 dB</b>, whatever the source and whatever the starting level,
+which is the one number from this note worth remembering by itself.</p></div>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; You walk from 1&nbsp;m to 2&nbsp;m from a small loudspeaker.&nbsp; The intensity</p>
+    <label><input type="radio" name="q1" value="a"> halves</label>
+    <label><input type="radio" name="q1" value="b"> drops to one quarter</label>
+    <label><input type="radio" name="q1" value="c"> is unchanged</label>
+    <label><input type="radio" name="q1" value="d"> drops to one eighth</label>
+    <div class="qfb"></div></div>
+  <div id="card-q2"><p class="qtext">2.&nbsp; A source radiates 50&nbsp;W uniformly.&nbsp; What is the intensity at 2.0&nbsp;m, in W/m&sup2;?</p>
+    <div class="qnum"><input type="number" id="q2input" step="any" inputmode="decimal" aria-label="intensity in watts per square metre"><span class="unit">W/m&sup2;</span></div><div class="qfb"></div></div>
+  <div id="card-q3"><p class="qtext">3.&nbsp; What is the sound intensity level of <i>I</i> = 1.0 &times; 10<sup>&minus;6</sup>&nbsp;W/m&sup2;, in dB?</p>
+    <div class="qnum"><input type="number" id="q3input" step="any" inputmode="decimal" aria-label="level in decibels"><span class="unit">dB</span></div><div class="qfb"></div></div>
+  <div id="card-q4"><p class="qtext">4.&nbsp; A sound at 0&nbsp;dB is</p>
+    <label><input type="radio" name="q4" value="a"> silence</label>
+    <label><input type="radio" name="q4" value="b"> at the reference intensity, the threshold of hearing</label>
+    <label><input type="radio" name="q4" value="c"> impossible</label>
+    <label><input type="radio" name="q4" value="d"> the loudest sound</label>
+    <div class="qfb"></div></div>
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N11 — Dr. Cho works through the note"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill in the figure and both derivations
+  as we work them.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M1_N11_Power_In_Waves_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the figure is there as a frame and both derivations are blank, to fill in as we work them.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 1 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 1 Note 11, "Power In Waves"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. Power is energy per unit time [W]. Intensity is power per unit area [W/m^2].
+     F2. I = P_source / 4 pi r^2. The inverse-square law is the GEOMETRY OF A SPHERE, not an absorption.
+     F3. Nothing is used up: the source emits the same power however far away you stand.
+     F4. I is proportional to A^2, carried over from Note 10.
+     F5. dB = (10 dB) log10(I/I_0) with I_0 = 1e-12 W/m^2. The reference is chosen, not a law of nature.
+     F6. +10 dB is a factor of ten in intensity. 0 dB is the threshold of hearing, NOT silence.
+     F7. Every doubling of distance costs about 6 dB.  << CLAUDE'S ARITHMETIC, not on his board. Flagged in the key. Cut this line if the result is cut.
+
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, Note 11.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY={q1:'b',q4:'b'};
+  var WHY={q1:'I = P/4&pi;r&sup2;.&nbsp; Twice the distance spreads the same power over four times the area.',q2:'I = P/4&pi;r&sup2; = 50/(4&pi; &times; 4.0) = 0.99 W/m&sup2;.',q3:'dB = 10 log<sub>10</sub>(I/I<sub>0</sub>) = 10 log<sub>10</sub>(10<sup>&minus;6</sup>/10<sup>&minus;12</sup>) = 10(6) = 60 dB.',q4:'0 dB means I = I<sub>0</sub> = 10<sup>&minus;12</sup> W/m&sup2;.&nbsp; That is the threshold, not silence.&nbsp; The reference is chosen, not a law.'};
+  function set(card,ok,msg){ var el=card.querySelector('.qfb'); el.className='qfb '+(ok?'ok':'no'); el.textContent=(ok?'Correct. ':'Not quite. ')+msg; }
+  function grade(){ var n=0;
+    var v_q2=parseFloat(document.getElementById('q2input').value); var ok_q2=isFinite(v_q2)&&Math.abs(v_q2-(0.99))<=0.03; if(ok_q2)n++; set(document.getElementById('card-q2'),ok_q2,WHY.q2);
+    var v_q3=parseFloat(document.getElementById('q3input').value); var ok_q3=isFinite(v_q3)&&Math.abs(v_q3-(60.0))<=0.5; if(ok_q3)n++; set(document.getElementById('card-q3'),ok_q3,WHY.q3);
+    ['q1','q4'].forEach(function(q){ var sel=document.querySelector('input[name="'+q+'"]:checked'); var ok=!!(sel&&sel.value===KEY[q]); if(ok)n++; set(document.getElementById('card-'+q),ok,WHY[q]); });
+    document.getElementById('ticketScore').textContent=n+' of 4.'; }
+  function clear(){ document.querySelectorAll('.qfb').forEach(function(e){e.textContent='';e.className='qfb';}); document.querySelectorAll('#ticket input[type=radio]').forEach(function(e){e.checked=false;}); document.getElementById('q2input').value='';document.getElementById('q3input').value=''; document.getElementById('ticketScore').textContent=''; }
+  document.getElementById('ticketCheck').addEventListener('click',grade); document.getElementById('ticketReset').addEventListener('click',clear);
+})();
+</script>
+
+</body>
+</html>

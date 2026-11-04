@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M1 N9 &mdash; Sound Is A Pressure Wave</title>
+<style>
+  /* FLCC Physics note page — Module 1, Oscillations, Waves and Sound, Note 9
+     "Sound Is A Pressure Wave".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-03_M1_N9_Sound_Built_And_Notes_Shifted.md.
+
+     THIS NOTE IS WRITTEN, NOT TRANSCRIBED.  There is NO 25SP ink for sound - the masters
+     go straight from standing waves to energy - so nothing on this page comes off a scan.
+     Cho's call of 2026-11-03: sound goes after Note 8, built by combining his own
+     conceptual-course note on the same subject with the converted deck page, under a
+     ONE-TIME suspension of the deck-source rule that he granted explicitly.  The key
+     lists, line by line, what is his and what is not.  THE SUSPENSION IS FOR THIS NOTE
+     ONLY; the standing rule is unchanged.
+
+     WHY IT EXISTS.  Notes 11 and 12 both lean on sound without it ever being defined -
+     11 lands on intensity and decibels, 12 needs the speed of sound.  This closes that.
+
+     CALC-152 FENCE.  The fenced block derives the quarter-wavelength offset instead of
+     asserting it: p = -B ds/dx turns a cosine displacement into a sine pressure.  The
+     algebra partner keeps the picture and the stated result and loses the derivation,
+     which is exactly what the fence is for - the note still stands without it.
+     Body blocks in HTML comments, CSS block in CSS comments.
+
+     THE TABLE IS HIS, from his own conceptual note (White and White, Physics and Music,
+     p.40).  The textbook is deliberately NOT named anywhere on this page: the partner
+     course's mirror refuses any output naming it, and his note pages never cite it.
+
+     FIGURES ARE COMPUTED, NOT EYEBALLED.  Fig 1 places every molecule at x + A sin(kx)
+     and draws the pressure as -cos(kx), so the crowding and the pressure curve agree by
+     construction.  Fig 2 draws cos against sin from the same k.  Fig 3 is the line
+     v = 331.5 + 0.610T.
+     ================================================================== */
+
+:root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.95rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  .disp{ display:block; margin:.6rem 0 .8rem; text-align:center; font-size:1.08rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+
+  /* CALC-152:start */
+  .calc152{ border-left:4px solid #6b4fa8; background:#f7f5fc; padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .calc152 h3{ font-size:1.08rem; margin:.1rem 0 .5rem; font-weight:700; color:#4a3579; }
+  .calc152 p{ margin:.45rem 0; }
+  /* CALC-152:end */
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); text-align:left; padding:.45rem .7rem; border:1px solid var(--rule); font-weight:600; }
+  table.grid td{ padding:.4rem .7rem; border:1px solid var(--rule); }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 1 &middot; Oscillations, Waves and Sound</span><span>Note 9</span></div>
+<h1>Sound Is A Pressure Wave</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>Notes 1 to 8 built the wave in general and then trapped one between
+two ends.&nbsp; This note asks what a <i>sound</i> wave is, and the answer is that it is a pressure wave.&nbsp; The air does not
+travel across the room with the sound &mdash; it crowds together and spreads apart in place, and what travels is the
+pattern.&nbsp; Everything else here follows from that: how fast the pattern moves, and what the medium has to do with it.</div>
+
+<div class="hook"><span class="label">Before you read on &mdash; predict</span><p>Clap once in an empty room.&nbsp;
+<b>(1)</b> Does any air make the trip from your hands to the far wall?&nbsp; <b>(2)</b> At the instant the air at some spot is
+squeezed hardest, is that same air also moving fastest?&nbsp; <b>(3)</b> Sound runs through steel about fifteen times faster
+than through air.&nbsp; Is that because steel is <i>heavier</i>, or because it is <i>stiffer</i>?&nbsp; Write down your three
+answers.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Describe</b> a sound wave as a longitudinal pressure variation about <i>P</i><sub>0</sub>, and define compression and rarefaction in terms of pressure.</li>
+<li><b>State</b> that displacement and pressure run a quarter wavelength out of step, and say which node goes with which antinode.</li>
+<li><b>Explain</b> the speed of sound as a stiffness over an inertia, and connect &radic;(<i>B</i>/&rho;) to &radic;(<i>F</i><sub>T</sub>/&mu;).</li>
+<li><b>Use</b> <i>v</i> = 331.5 + 0.610<i>T</i> to find a speed from a temperature, and a temperature from a speed.</li>
+<li><b>Compute</b> a wavelength from a frequency, and check the answer against the size of a real object.</li>
+</ol></div>
+
+<h2>1.&nbsp; Compressions and rarefactions</h2>
+
+<p>A sound wave is a <b>longitudinal</b> wave in a material: the medium vibrates along the line the wave travels, not across
+it.&nbsp; Each molecule slides a little way forward and back about its own spot.&nbsp; Where the molecules crowd, the pressure
+sits above the everyday value <i>P</i><sub>0</sub>; where they spread out, it sits below.&nbsp; Those are the
+<b>compressions</b> and the <b>rarefactions</b>, and one wavelength is the distance from one compression to the next.</p>
+
+<ol class="items tasks">
+  <li>Define a compression and a rarefaction in terms of <i>pressure</i> rather than crowding.</li>
+  <li>The molecule picture and the pressure graph are the same wave drawn twice.&nbsp; Which of the two does a microphone
+  actually measure, and why does that matter for the mathematics you are about to use?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">1)&nbsp; A <b>compression</b> is a pressure <i>maximum</i>; a <b>rarefaction</b> is a pressure
+  <i>minimum</i>.&nbsp; <span class="why">&mdash; both are measured against <i>P</i><sub>0</sub>, the pressure the room is at
+  when nothing is sounding; a sound wave is a small wobble on top of a large steady pressure</span></span>
+  <span class="step">2)&nbsp; A microphone measures <b>pressure</b>.&nbsp; It cannot see molecules, and what it hands you is an
+  ordinary sinusoid oscillating about <i>P</i><sub>0</sub>.&nbsp; <span class="why">&mdash; which is the useful part: once the
+  wave is written as a pressure, a longitudinal wave takes <i>exactly</i> the same mathematics as the transverse ones in Notes 7
+  and 8, and nothing from those notes has to be relearned</span></span>
+</div></div></div>
+
+<div class="fig">
+<svg viewBox="0 0 780 362" role="img" aria-label="Air molecules crowded into compressions and spread into rarefactions, with the pressure traced below as a wave about atmospheric pressure.">
+<circle cx="60.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="68.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="77.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="86.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="94.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="102.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="111.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="119.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="126.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="134.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="141.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="148.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="155.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="161.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="167.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="173.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="179.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="184.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="189.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="193.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="197.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="201.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="205.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="208.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="212.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="215.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="218.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="220.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="223.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="226.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="228.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="231.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="234.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="237.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="239.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="243.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="246.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="249.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="253.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="257.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="261.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="266.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="270.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="275.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="281.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="287.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="293.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="299.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="306.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="313.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="320.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="328.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="335.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="344.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="352.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="360.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="369.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="377.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="386.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="395.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="403.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="412.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="421.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="429.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="437.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="446.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="454.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="461.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="469.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="476.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="483.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="490.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="496.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="502.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="508.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="514.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="519.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="524.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="528.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="532.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="536.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="540.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="543.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="547.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="550.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="553.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="555.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="558.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="561.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="563.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="566.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="569.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="572.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="574.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="578.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="581.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="584.7" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="588.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="592.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="596.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="601.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="605.8" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="610.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="616.4" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="622.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="628.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="634.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="641.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="648.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="655.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="663.1" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="670.9" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="679.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="687.2" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="695.5" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="704.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="712.6" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="721.3" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="730.0" cy="150" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="60.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="68.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="77.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="86.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="94.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="102.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="111.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="119.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="126.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="134.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="141.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="148.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="155.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="161.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="167.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="173.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="179.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="184.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="189.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="193.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="197.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="201.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="205.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="208.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="212.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="215.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="218.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="220.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="223.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="226.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="228.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="231.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="234.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="237.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="239.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="243.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="246.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="249.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="253.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="257.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="261.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="266.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="270.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="275.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="281.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="287.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="293.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="299.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="306.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="313.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="320.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="328.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="335.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="344.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="352.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="360.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="369.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="377.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="386.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="395.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="403.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="412.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="421.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="429.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="437.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="446.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="454.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="461.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="469.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="476.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="483.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="490.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="496.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="502.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="508.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="514.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="519.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="524.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="528.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="532.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="536.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="540.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="543.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="547.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="550.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="553.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="555.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="558.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="561.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="563.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="566.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="569.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="572.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="574.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="578.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="581.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="584.7" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="588.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="592.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="596.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="601.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="605.8" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="610.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="616.4" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="622.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="628.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="634.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="641.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="648.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="655.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="663.1" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="670.9" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="679.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="687.2" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="695.5" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="704.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="712.6" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="721.3" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="730.0" cy="172" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="60.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="68.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="77.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="86.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="94.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="102.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="111.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="119.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="126.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="134.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="141.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="148.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="155.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="161.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="167.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="173.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="179.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="184.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="189.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="193.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="197.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="201.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="205.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="208.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="212.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="215.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="218.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="220.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="223.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="226.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="228.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="231.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="234.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="237.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="239.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="243.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="246.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="249.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="253.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="257.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="261.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="266.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="270.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="275.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="281.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="287.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="293.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="299.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="306.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="313.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="320.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="328.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="335.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="344.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="352.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="360.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="369.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="377.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="386.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="395.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="403.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="412.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="421.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="429.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="437.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="446.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="454.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="461.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="469.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="476.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="483.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="490.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="496.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="502.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="508.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="514.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="519.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="524.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="528.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="532.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="536.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="540.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="543.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="547.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="550.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="553.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="555.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="558.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="561.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="563.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="566.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="569.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="572.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="574.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="578.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="581.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="584.7" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="588.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="592.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="596.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="601.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="605.8" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="610.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="616.4" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="622.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="628.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="634.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="641.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="648.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="655.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="663.1" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="670.9" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="679.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="687.2" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="695.5" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="704.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="712.6" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="721.3" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<circle cx="730.0" cy="194" r="2.7" fill="#1d2b23" opacity="0.8"/>
+<line x1="60" y1="272" x2="730" y2="272" stroke="#5c6b62" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="736" y="277" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62"><tspan font-style="italic">P</tspan><tspan font-size="9" baseline-shift="-4">0</tspan></text>
+<polyline points="60.0,318.0 62.8,317.9 65.6,317.7 68.4,317.4 71.2,317.0 74.0,316.4 76.8,315.7 79.5,314.9 82.3,314.0 85.1,313.0 87.9,311.8 90.7,310.6 93.5,309.2 96.3,307.7 99.1,306.2 101.9,304.5 104.7,302.8 107.5,300.9 110.2,299.0 113.0,297.1 115.8,295.0 118.6,292.9 121.4,290.7 124.2,288.5 127.0,286.2 129.8,283.9 132.6,281.6 135.4,279.2 138.2,276.8 141.0,274.4 143.8,272.0 146.5,269.6 149.3,267.2 152.1,264.8 154.9,262.4 157.7,260.1 160.5,257.8 163.3,255.5 166.1,253.3 168.9,251.1 171.7,249.0 174.5,246.9 177.2,245.0 180.0,243.1 182.8,241.2 185.6,239.5 188.4,237.8 191.2,236.3 194.0,234.8 196.8,233.4 199.6,232.2 202.4,231.0 205.2,230.0 208.0,229.1 210.8,228.3 213.5,227.6 216.3,227.0 219.1,226.6 221.9,226.3 224.7,226.1 227.5,226.0 230.3,226.1 233.1,226.3 235.9,226.6 238.7,227.0 241.5,227.6 244.2,228.3 247.0,229.1 249.8,230.0 252.6,231.0 255.4,232.2 258.2,233.4 261.0,234.8 263.8,236.3 266.6,237.8 269.4,239.5 272.2,241.2 275.0,243.1 277.8,245.0 280.5,246.9 283.3,249.0 286.1,251.1 288.9,253.3 291.7,255.5 294.5,257.8 297.3,260.1 300.1,262.4 302.9,264.8 305.7,267.2 308.5,269.6 311.2,272.0 314.0,274.4 316.8,276.8 319.6,279.2 322.4,281.6 325.2,283.9 328.0,286.2 330.8,288.5 333.6,290.7 336.4,292.9 339.2,295.0 342.0,297.1 344.8,299.0 347.5,300.9 350.3,302.8 353.1,304.5 355.9,306.2 358.7,307.7 361.5,309.2 364.3,310.6 367.1,311.8 369.9,313.0 372.7,314.0 375.5,314.9 378.2,315.7 381.0,316.4 383.8,317.0 386.6,317.4 389.4,317.7 392.2,317.9 395.0,318.0 397.8,317.9 400.6,317.7 403.4,317.4 406.2,317.0 409.0,316.4 411.8,315.7 414.5,314.9 417.3,314.0 420.1,313.0 422.9,311.8 425.7,310.6 428.5,309.2 431.3,307.7 434.1,306.2 436.9,304.5 439.7,302.8 442.5,300.9 445.2,299.0 448.0,297.1 450.8,295.0 453.6,292.9 456.4,290.7 459.2,288.5 462.0,286.2 464.8,283.9 467.6,281.6 470.4,279.2 473.2,276.8 476.0,274.4 478.8,272.0 481.5,269.6 484.3,267.2 487.1,264.8 489.9,262.4 492.7,260.1 495.5,257.8 498.3,255.5 501.1,253.3 503.9,251.1 506.7,249.0 509.5,246.9 512.2,245.0 515.0,243.1 517.8,241.2 520.6,239.5 523.4,237.8 526.2,236.3 529.0,234.8 531.8,233.4 534.6,232.2 537.4,231.0 540.2,230.0 543.0,229.1 545.8,228.3 548.5,227.6 551.3,227.0 554.1,226.6 556.9,226.3 559.7,226.1 562.5,226.0 565.3,226.1 568.1,226.3 570.9,226.6 573.7,227.0 576.5,227.6 579.2,228.3 582.0,229.1 584.8,230.0 587.6,231.0 590.4,232.2 593.2,233.4 596.0,234.8 598.8,236.3 601.6,237.8 604.4,239.5 607.2,241.2 610.0,243.1 612.8,245.0 615.5,246.9 618.3,249.0 621.1,251.1 623.9,253.3 626.7,255.5 629.5,257.8 632.3,260.1 635.1,262.4 637.9,264.8 640.7,267.2 643.5,269.6 646.2,272.0 649.0,274.4 651.8,276.8 654.6,279.2 657.4,281.6 660.2,283.9 663.0,286.2 665.8,288.5 668.6,290.7 671.4,292.9 674.2,295.0 677.0,297.1 679.8,299.0 682.5,300.9 685.3,302.8 688.1,304.5 690.9,306.2 693.7,307.7 696.5,309.2 699.3,310.6 702.1,311.8 704.9,313.0 707.7,314.0 710.5,314.9 713.2,315.7 716.0,316.4 718.8,317.0 721.6,317.4 724.4,317.7 727.2,317.9 730.0,318.0" fill="none" stroke="#1636c8" stroke-width="2.4"/>
+<line x1="227.5" y1="140" x2="227.5" y2="220" stroke="#b3261e" stroke-width="1.3" stroke-dasharray="4 4"/>
+<text x="227.5" y="130" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e">compression</text>
+<text x="227.5" y="114" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#b3261e">pressure maximum</text>
+<line x1="395.0" y1="140" x2="395.0" y2="206" stroke="#0f8ea8" stroke-width="1.3" stroke-dasharray="4 4"/>
+<line x1="395.0" y1="240" x2="395.0" y2="324" stroke="#0f8ea8" stroke-width="1.3" stroke-dasharray="4 4"/>
+<text x="395.0" y="130" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#0f8ea8">rarefaction</text>
+<text x="395.0" y="114" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#0f8ea8">pressure minimum</text>
+<line x1="227.5" y1="228" x2="562.5" y2="228" stroke="#c77b1f" stroke-width="1.8"/>
+<line x1="227.5" y1="222" x2="227.5" y2="234" stroke="#c77b1f" stroke-width="1.8"/>
+<line x1="562.5" y1="222" x2="562.5" y2="234" stroke="#c77b1f" stroke-width="1.8"/>
+<text x="395.0" y="218" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f"><tspan font-style="italic">&#955;</tspan></text>
+<text x="60" y="60" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">the air, at one instant</text>
+<text x="60" y="346" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">the pressure at the same instant</text>
+</svg>
+  <div class="fig-note">Figure 1.&nbsp; One instant.&nbsp; Every molecule has been moved off its resting place by the same
+  rule, and the pressure curve below is drawn from that same rule &mdash; so the crowding and the curve agree by construction
+  rather than by drawing.&nbsp; No molecule travels; each is displaced a little and will come back.</div>
+</div>
+
+<h2>2.&nbsp; Displacement and pressure are not in step</h2>
+
+<p>This is the idea worth the most in this note.&nbsp; Two things vary along the wave: <b>how far the molecules swing</b>, and
+<b>what the pressure does</b>.&nbsp; They do not peak in the same places.&nbsp; They are a quarter of a wavelength apart.</p>
+
+<div class="fig">
+<svg viewBox="0 0 780 340" role="img" aria-label="Displacement drawn as a cosine and pressure as a sine, a quarter wavelength out of step, with a displacement node marked against a pressure antinode.">
+<line x1="70" y1="100" x2="720" y2="100" stroke="#5c6b62" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="62" y="105" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">0</text>
+<text x="70" y="34" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">displacement  s</text>
+<line x1="70" y1="250" x2="720" y2="250" stroke="#5c6b62" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="62" y="255" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">0</text>
+<text x="70" y="184" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5c6b62">pressure  p</text>
+<polyline points="70.0,48.0 72.5,48.0 75.0,48.1 77.5,48.3 80.0,48.5 82.5,48.9 85.0,49.2 87.5,49.7 90.0,50.2 92.5,50.7 95.0,51.4 97.5,52.1 100.0,52.8 102.5,53.7 105.0,54.6 107.5,55.5 110.0,56.5 112.5,57.6 115.0,58.7 117.5,59.9 120.0,61.1 122.5,62.4 125.0,63.7 127.5,65.0 130.0,66.5 132.5,67.9 135.0,69.4 137.5,71.0 140.0,72.6 142.5,74.2 145.0,75.8 147.5,77.5 150.0,79.2 152.5,81.0 155.0,82.7 157.5,84.5 160.0,86.3 162.5,88.2 165.0,90.0 167.5,91.9 170.0,93.7 172.5,95.6 175.0,97.5 177.5,99.4 180.0,101.3 182.5,103.1 185.0,105.0 187.5,106.9 190.0,108.8 192.5,110.6 195.0,112.4 197.5,114.3 200.0,116.1 202.5,117.9 205.0,119.6 207.5,121.3 210.0,123.0 212.5,124.7 215.0,126.4 217.5,128.0 220.0,129.5 222.5,131.1 225.0,132.6 227.5,134.0 230.0,135.4 232.5,136.8 235.0,138.1 237.5,139.3 240.0,140.5 242.5,141.7 245.0,142.8 247.5,143.8 250.0,144.8 252.5,145.7 255.0,146.6 257.5,147.4 260.0,148.2 262.5,148.8 265.0,149.5 267.5,150.0 270.0,150.5 272.5,150.9 275.0,151.3 277.5,151.5 280.0,151.8 282.5,151.9 285.0,152.0 287.5,152.0 290.0,151.9 292.5,151.8 295.0,151.6 297.5,151.4 300.0,151.0 302.5,150.6 305.0,150.2 307.5,149.6 310.0,149.1 312.5,148.4 315.0,147.7 317.5,146.9 320.0,146.0 322.5,145.1 325.0,144.2 327.5,143.1 330.0,142.1 332.5,140.9 335.0,139.7 337.5,138.5 340.0,137.2 342.5,135.9 345.0,134.5 347.5,133.0 350.0,131.6 352.5,130.1 355.0,128.5 357.5,126.9 360.0,125.3 362.5,123.6 365.0,121.9 367.5,120.2 370.0,118.4 372.5,116.7 375.0,114.9 377.5,113.1 380.0,111.2 382.5,109.4 385.0,107.5 387.5,105.6 390.0,103.8 392.5,101.9 395.0,100.0 397.5,98.1 400.0,96.2 402.5,94.4 405.0,92.5 407.5,90.6 410.0,88.8 412.5,86.9 415.0,85.1 417.5,83.3 420.0,81.6 422.5,79.8 425.0,78.1 427.5,76.4 430.0,74.7 432.5,73.1 435.0,71.5 437.5,69.9 440.0,68.4 442.5,67.0 445.0,65.5 447.5,64.1 450.0,62.8 452.5,61.5 455.0,60.3 457.5,59.1 460.0,57.9 462.5,56.9 465.0,55.8 467.5,54.9 470.0,54.0 472.5,53.1 475.0,52.3 477.5,51.6 480.0,50.9 482.5,50.4 485.0,49.8 487.5,49.4 490.0,49.0 492.5,48.6 495.0,48.4 497.5,48.2 500.0,48.1 502.5,48.0 505.0,48.0 507.5,48.1 510.0,48.2 512.5,48.5 515.0,48.7 517.5,49.1 520.0,49.5 522.5,50.0 525.0,50.5 527.5,51.2 530.0,51.8 532.5,52.6 535.0,53.4 537.5,54.3 540.0,55.2 542.5,56.2 545.0,57.2 547.5,58.3 550.0,59.5 552.5,60.7 555.0,61.9 557.5,63.2 560.0,64.6 562.5,66.0 565.0,67.4 567.5,68.9 570.0,70.5 572.5,72.0 575.0,73.6 577.5,75.3 580.0,77.0 582.5,78.7 585.0,80.4 587.5,82.1 590.0,83.9 592.5,85.7 595.0,87.6 597.5,89.4 600.0,91.2 602.5,93.1 605.0,95.0 607.5,96.9 610.0,98.7 612.5,100.6 615.0,102.5 617.5,104.4 620.0,106.3 622.5,108.1 625.0,110.0 627.5,111.8 630.0,113.7 632.5,115.5 635.0,117.3 637.5,119.0 640.0,120.8 642.5,122.5 645.0,124.2 647.5,125.8 650.0,127.4 652.5,129.0 655.0,130.6 657.5,132.1 660.0,133.5 662.5,135.0 665.0,136.3 667.5,137.6 670.0,138.9 672.5,140.1 675.0,141.3 677.5,142.4 680.0,143.5 682.5,144.5 685.0,145.4 687.5,146.3 690.0,147.2 692.5,147.9 695.0,148.6 697.5,149.3 700.0,149.8 702.5,150.3 705.0,150.8 707.5,151.1 710.0,151.5 712.5,151.7 715.0,151.9 717.5,152.0 720.0,152.0" fill="none" stroke="#1e6b3c" stroke-width="2.6"/>
+<polyline points="70.0,250.0 72.5,248.1 75.0,246.2 77.5,244.4 80.0,242.5 82.5,240.6 85.0,238.8 87.5,236.9 90.0,235.1 92.5,233.3 95.0,231.6 97.5,229.8 100.0,228.1 102.5,226.4 105.0,224.7 107.5,223.1 110.0,221.5 112.5,219.9 115.0,218.4 117.5,217.0 120.0,215.5 122.5,214.1 125.0,212.8 127.5,211.5 130.0,210.3 132.5,209.1 135.0,207.9 137.5,206.9 140.0,205.8 142.5,204.9 145.0,204.0 147.5,203.1 150.0,202.3 152.5,201.6 155.0,200.9 157.5,200.4 160.0,199.8 162.5,199.4 165.0,199.0 167.5,198.6 170.0,198.4 172.5,198.2 175.0,198.1 177.5,198.0 180.0,198.0 182.5,198.1 185.0,198.2 187.5,198.5 190.0,198.7 192.5,199.1 195.0,199.5 197.5,200.0 200.0,200.5 202.5,201.2 205.0,201.8 207.5,202.6 210.0,203.4 212.5,204.3 215.0,205.2 217.5,206.2 220.0,207.2 222.5,208.3 225.0,209.5 227.5,210.7 230.0,211.9 232.5,213.2 235.0,214.6 237.5,216.0 240.0,217.4 242.5,218.9 245.0,220.5 247.5,222.0 250.0,223.6 252.5,225.3 255.0,227.0 257.5,228.7 260.0,230.4 262.5,232.1 265.0,233.9 267.5,235.7 270.0,237.6 272.5,239.4 275.0,241.2 277.5,243.1 280.0,245.0 282.5,246.9 285.0,248.7 287.5,250.6 290.0,252.5 292.5,254.4 295.0,256.3 297.5,258.1 300.0,260.0 302.5,261.8 305.0,263.7 307.5,265.5 310.0,267.3 312.5,269.0 315.0,270.8 317.5,272.5 320.0,274.2 322.5,275.8 325.0,277.4 327.5,279.0 330.0,280.6 332.5,282.1 335.0,283.5 337.5,285.0 340.0,286.3 342.5,287.6 345.0,288.9 347.5,290.1 350.0,291.3 352.5,292.4 355.0,293.5 357.5,294.5 360.0,295.4 362.5,296.3 365.0,297.2 367.5,297.9 370.0,298.6 372.5,299.3 375.0,299.8 377.5,300.3 380.0,300.8 382.5,301.1 385.0,301.5 387.5,301.7 390.0,301.9 392.5,302.0 395.0,302.0 397.5,302.0 400.0,301.9 402.5,301.7 405.0,301.5 407.5,301.1 410.0,300.8 412.5,300.3 415.0,299.8 417.5,299.3 420.0,298.6 422.5,297.9 425.0,297.2 427.5,296.3 430.0,295.4 432.5,294.5 435.0,293.5 437.5,292.4 440.0,291.3 442.5,290.1 445.0,288.9 447.5,287.6 450.0,286.3 452.5,285.0 455.0,283.5 457.5,282.1 460.0,280.6 462.5,279.0 465.0,277.4 467.5,275.8 470.0,274.2 472.5,272.5 475.0,270.8 477.5,269.0 480.0,267.3 482.5,265.5 485.0,263.7 487.5,261.8 490.0,260.0 492.5,258.1 495.0,256.3 497.5,254.4 500.0,252.5 502.5,250.6 505.0,248.7 507.5,246.9 510.0,245.0 512.5,243.1 515.0,241.2 517.5,239.4 520.0,237.6 522.5,235.7 525.0,233.9 527.5,232.1 530.0,230.4 532.5,228.7 535.0,227.0 537.5,225.3 540.0,223.6 542.5,222.0 545.0,220.5 547.5,218.9 550.0,217.4 552.5,216.0 555.0,214.6 557.5,213.2 560.0,211.9 562.5,210.7 565.0,209.5 567.5,208.3 570.0,207.2 572.5,206.2 575.0,205.2 577.5,204.3 580.0,203.4 582.5,202.6 585.0,201.8 587.5,201.2 590.0,200.5 592.5,200.0 595.0,199.5 597.5,199.1 600.0,198.7 602.5,198.5 605.0,198.2 607.5,198.1 610.0,198.0 612.5,198.0 615.0,198.1 617.5,198.2 620.0,198.4 622.5,198.6 625.0,199.0 627.5,199.4 630.0,199.8 632.5,200.4 635.0,200.9 637.5,201.6 640.0,202.3 642.5,203.1 645.0,204.0 647.5,204.9 650.0,205.8 652.5,206.9 655.0,207.9 657.5,209.1 660.0,210.3 662.5,211.5 665.0,212.8 667.5,214.1 670.0,215.5 672.5,217.0 675.0,218.4 677.5,219.9 680.0,221.5 682.5,223.1 685.0,224.7 687.5,226.4 690.0,228.1 692.5,229.8 695.0,231.6 697.5,233.3 700.0,235.1 702.5,236.9 705.0,238.8 707.5,240.6 710.0,242.5 712.5,244.4 715.0,246.2 717.5,248.1 720.0,250.0" fill="none" stroke="#b3261e" stroke-width="2.6"/>
+<line x1="178.3" y1="30" x2="178.3" y2="320" stroke="#1636c8" stroke-width="1.5" stroke-dasharray="5 4"/>
+<circle cx="178.3" cy="100" r="5" fill="#1636c8"/>
+<circle cx="178.3" cy="198.0" r="5" fill="#1636c8"/>
+<text x="188.3" y="86" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8">displacement node</text>
+<text x="188.3" y="186.0" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8">pressure antinode</text>
+<line x1="70.0" y1="318" x2="178.3" y2="318" stroke="#c77b1f" stroke-width="1.8"/>
+<line x1="70.0" y1="312" x2="70.0" y2="324" stroke="#c77b1f" stroke-width="1.8"/>
+<line x1="178.3" y1="312" x2="178.3" y2="324" stroke="#c77b1f" stroke-width="1.8"/>
+<text x="124.2" y="308" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f"><tspan font-style="italic">&#955;</tspan>/4</text>
+</svg>
+  <div class="fig-note">Figure 2.&nbsp; Displacement drawn as a cosine and pressure as a sine of the same
+  <i>k</i>.&nbsp; Where the molecules swing hardest they are not being squeezed, and where they do not move at all the squeeze
+  is greatest.</div>
+</div>
+
+<ol class="items tasks" start="3">
+  <li>Finish the sentence from the figure, both ways round: a displacement <b>node</b> is a pressure ________, and a
+  displacement <b>antinode</b> is a pressure ________.</li>
+  <li>Why should that be?&nbsp; Think about what the molecules on either side of a displacement node are doing at the moment the
+  node itself is standing still.</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <span class="step">3)&nbsp; A displacement node is a pressure <b>antinode</b>.&nbsp; A displacement antinode is a pressure
+  <b>node</b>.</span>
+  <span class="step">4)&nbsp; At a displacement node the air itself cannot move, but the air on either side is moving toward it
+  and then away from it.&nbsp; Squeeze from both sides, then stretch from both sides &mdash; the biggest pressure swing
+  anywhere.&nbsp; At an antinode the molecules move together, as a block, so nothing is compressed and the pressure barely
+  changes.&nbsp; <span class="why">&mdash; students who have not separated these two words get every air-column question
+  backwards, because a closed end is a displacement node and therefore a pressure antinode</span></span>
+</div></div></div>
+
+<!-- CALC-152:start -->
+<div class="calc152">
+<h3>Where the quarter wavelength comes from</h3>
+<p>The figure asserts the offset.&nbsp; One line of calculus produces it.&nbsp; Squeeze a slab of air and the pressure change
+depends on how much the displacement is <i>changing across</i> the slab &mdash; not on the displacement itself:</p>
+<span class="disp" style="font-size:1.14rem"><i>p</i>(<i>x</i>,<i>t</i>) = &minus;<i>B</i> &part;<i>s</i>/&part;<i>x</i></span>
+<p>with <i>B</i> the bulk modulus and <i>s</i> the displacement.&nbsp; Take the ordinary travelling wave of Note 7 and put it
+in:</p>
+<div class="eq">
+  <span class="step"><i>s</i>(<i>x</i>,<i>t</i>) = <i>s</i><sub>max</sub> cos(<i>kx</i> &minus; &omega;<i>t</i>)</span>
+  <span class="step">&part;<i>s</i>/&part;<i>x</i> = &minus;<i>k s</i><sub>max</sub> sin(<i>kx</i> &minus; &omega;<i>t</i>)</span>
+  <span class="step"><i>p</i>(<i>x</i>,<i>t</i>) = <i>B k s</i><sub>max</sub> sin(<i>kx</i> &minus; &omega;<i>t</i>)
+  <span class="why">&mdash; a <b>sine</b>, where the displacement was a <b>cosine</b></span></span>
+</div>
+<p>A sine against a cosine is a quarter cycle apart, which in space is a quarter wavelength.&nbsp; The offset is not a
+convention and not a drawing choice: it is what differentiating a cosine does.&nbsp; It also hands you the amplitude of the
+pressure wave for free, <i>p</i><sub>max</sub> = <i>B k s</i><sub>max</sub> &mdash; so a high-frequency sound of the same
+displacement amplitude is a <i>louder</i> one, because <i>k</i> is bigger.</p>
+</div>
+<!-- CALC-152:end -->
+
+<h2>3.&nbsp; What the speed depends on</h2>
+
+<p>Sound needs something to travel in.&nbsp; Pump the air out of a jar with a bell ringing inside and the bell goes quiet while
+you can still see it striking: there is nothing left to compress.&nbsp; What is left to ask is what about the medium sets the
+speed &mdash; and you have met the answer already, in a different costume.</p>
+
+<ol class="items tasks" start="5">
+  <li>Write down the wave speed on a string from Note 8, and name what each symbol measures about the string.</li>
+  <li>Read the table below.&nbsp; Write the rough pattern in one line each for gases, liquids and solids.&nbsp; Then say what
+  hydrogen is doing there.</li>
+</ol>
+
+<table class="grid">
+<tr><th>Medium</th><th>Speed (m/s)</th><th>Medium</th><th>Speed (m/s)</th></tr>
+<tr><td>Air (0&nbsp;&deg;C)</td><td>331.5</td><td>Alcohol</td><td>1,213</td></tr>
+<tr><td>Carbon dioxide</td><td>258</td><td>Water</td><td>1,435</td></tr>
+<tr><td>Hydrogen</td><td>1,269</td><td>Oak, with grain</td><td>3,850</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>Steel</td><td>5,130</td></tr>
+</table>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev3" data-label="Show the working">Show the working</button><div class="rbody" id="rev3" hidden><div class="eq">
+  <span class="step">5)&nbsp; <i>v</i> = &radic;(<i>F</i><sub>T</sub>/&micro;) &mdash; the tension measures how hard the string
+  pulls <i>back</i> when you displace it, and &micro; measures how much string there is to move.&nbsp;
+  <span class="why">&mdash; a stiffness over an inertia, under a square root</span></span>
+  <span class="step">6)&nbsp; Gases around 300 m/s, liquids around 1,300, solids around 4,000.&nbsp; Sound goes faster in
+  stiffer, more tightly bound media: the push reaches the next molecule sooner when the neighbours are held closely.</span>
+  <span class="step"><b>Hydrogen is the outlier</b>, and it is the one that proves the shape of the formula.&nbsp; It is a gas,
+  so it is not stiff &mdash; but it is extremely light, and the inertia sits <i>underneath</i> the square root.&nbsp; Hydrogen
+  is about 14.5 times lighter than air per molecule, and &radic;14.5 = 3.8, so it should carry sound about 3.8 times faster:
+  331.5 &times; 3.8 &asymp; 1,260 m/s against the measured 1,269.&nbsp; <span class="why">&mdash; the rule is not "gases are
+  slow"; it is stiffness over inertia, and hydrogen wins it back on the bottom</span></span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big"><i>v</i> = &radic;(<i>B</i>/&rho;)</span>
+<p>Every wave speed in this module has the same shape: <b>a stiffness over an inertia, under a square root</b>.&nbsp; On a
+string it was the tension over the mass per length.&nbsp; In a fluid it is the <b>bulk modulus</b> <i>B</i>, which measures how
+hard the material resists being squeezed, over the <b>density</b> &rho;, which measures how much of it there is to move.&nbsp;
+In a solid rod the bulk modulus is replaced by Young's modulus and nothing else changes.&nbsp; Stiff and light is fast; floppy
+and heavy is slow.</p></div>
+
+<!-- CALC-152:start -->
+<div class="calc152">
+<p><b>This is not a coincidence.</b>&nbsp; Note 7 derived the wave equation
+&part;&sup2;<i>y</i>/&part;<i>x</i>&sup2; = (1/<i>v</i>&sup2;) &part;&sup2;<i>y</i>/&part;<i>t</i>&sup2; for a string and read
+the speed off the constant in front.&nbsp; Run the same argument on a slab of fluid, with <i>p</i> = &minus;<i>B</i>
+&part;<i>s</i>/&part;<i>x</i> in place of the tension, and the identical equation comes out with
+<i>v</i>&sup2; = <i>B</i>/&rho;.&nbsp; One derivation, two media &mdash; which is why the formulas look the same.</p>
+</div>
+<!-- CALC-152:end -->
+
+<h2>4.&nbsp; And on temperature</h2>
+
+<p>For air there is one more dependence worth carrying, and it is a straight line.</p>
+
+<div class="fig">
+<svg viewBox="0 0 760 360" role="img" aria-label="Speed of sound in air against temperature: a straight line of intercept 331.5 metres per second and slope 0.610 per degree Celsius.">
+<line x1="96" y1="300.0" x2="700" y2="300.0" stroke="#e8efe9" stroke-width="1"/>
+<text x="86" y="305.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">325</text>
+<line x1="96" y1="265.7" x2="700" y2="265.7" stroke="#e8efe9" stroke-width="1"/>
+<text x="86" y="270.7" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">330</text>
+<line x1="96" y1="231.4" x2="700" y2="231.4" stroke="#e8efe9" stroke-width="1"/>
+<text x="86" y="236.4" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">335</text>
+<line x1="96" y1="197.1" x2="700" y2="197.1" stroke="#e8efe9" stroke-width="1"/>
+<text x="86" y="202.1" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">340</text>
+<line x1="96" y1="162.9" x2="700" y2="162.9" stroke="#e8efe9" stroke-width="1"/>
+<text x="86" y="167.9" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">345</text>
+<line x1="96" y1="128.6" x2="700" y2="128.6" stroke="#e8efe9" stroke-width="1"/>
+<text x="86" y="133.6" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">350</text>
+<line x1="96" y1="94.3" x2="700" y2="94.3" stroke="#e8efe9" stroke-width="1"/>
+<text x="86" y="99.3" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">355</text>
+<line x1="96" y1="60.0" x2="700" y2="60.0" stroke="#e8efe9" stroke-width="1"/>
+<text x="86" y="65.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">360</text>
+<line x1="96.0" y1="300" x2="96.0" y2="60" stroke="#e8efe9" stroke-width="1"/>
+<text x="96.0" y="322" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">0</text>
+<line x1="247.0" y1="300" x2="247.0" y2="60" stroke="#e8efe9" stroke-width="1"/>
+<text x="247.0" y="322" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">10</text>
+<line x1="398.0" y1="300" x2="398.0" y2="60" stroke="#e8efe9" stroke-width="1"/>
+<text x="398.0" y="322" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">20</text>
+<line x1="549.0" y1="300" x2="549.0" y2="60" stroke="#e8efe9" stroke-width="1"/>
+<text x="549.0" y="322" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">30</text>
+<line x1="700.0" y1="300" x2="700.0" y2="60" stroke="#e8efe9" stroke-width="1"/>
+<text x="700.0" y="322" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62">40</text>
+<line x1="96" y1="300" x2="700" y2="300" stroke="#1d2b23" stroke-width="1.6"/>
+<line x1="96" y1="300" x2="96" y2="60" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="398" y="346" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">temperature <tspan font-style="italic">T</tspan> (&#176;C)</text>
+<text x="26" y="180" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23" transform="rotate(-90 26 180)">speed <tspan font-style="italic">v</tspan> (m/s)</text>
+<line x1="96.0" y1="255.4" x2="700.0" y2="88.1" stroke="#1e6b3c" stroke-width="2.8"/>
+<circle cx="96.0" cy="255.4" r="5" fill="#1e6b3c"/>
+<text x="106.0" y="275.4" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1e6b3c">331.5 m/s at 0 &#176;C</text>
+<circle cx="398.0" cy="171.8" r="5.5" fill="#b3261e"/>
+<line x1="398.0" y1="171.8" x2="398.0" y2="300" stroke="#b3261e" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="398.0" y1="171.8" x2="96" y2="171.8" stroke="#b3261e" stroke-width="1.2" stroke-dasharray="4 4"/>
+<text x="412.0" y="155.8" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e">room temperature: 343.7 m/s</text>
+</svg>
+  <div class="fig-note">Figure 3.&nbsp; Intercept 331.5 m/s at 0&nbsp;&deg;C, slope 0.610 (m/s) per &deg;C, so
+  <i>v</i> = 331.5 + 0.610<i>T</i> with <i>T</i> in &deg;C.</div>
+</div>
+
+<ol class="items tasks" start="7">
+  <li>Room temperature is about 70&nbsp;&deg;F, which is about 20&nbsp;&deg;C.&nbsp; What is the speed of sound there?</li>
+  <li>You run an experiment and measure 338 m/s.&nbsp; How warm was the room?</li>
+  <li>You see lightning and hear the thunder 10 seconds later.&nbsp; How far away did it strike?</li>
+</ol>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev4" data-label="Show the working">Show the working</button><div class="rbody" id="rev4" hidden><div class="eq">
+  <span class="step">7)&nbsp; <i>v</i> = 331.5 + 0.610(20) = <b>343.7 m/s</b>.&nbsp; <span class="why">&mdash; this is where the
+  343 m/s you have been using all semester comes from; it was never a constant, it was room temperature</span></span>
+  <span class="step">8)&nbsp; <i>T</i> = (338 &minus; 331.5)/0.610 = <b>10.7 &deg;C</b>, about 51&nbsp;&deg;F.&nbsp; Cold.</span>
+  <span class="step">9)&nbsp; <i>d</i> = <i>vt</i> = 343 &times; 10 = <b>3,430 m</b>, about 3.4 km or just over two
+  miles.&nbsp; <span class="why">&mdash; the rule of thumb, three seconds to the kilometre or five to the mile, is this
+  calculation; light arrives effectively instantly, so the delay is all sound</span></span>
+</div></div></div>
+
+<h2>5.&nbsp; One wavelength, to finish</h2>
+
+<p>With a speed in hand, <i>v</i> = <i>f</i>&lambda; from Note 2 turns any pitch into a length.</p>
+
+<div class="eq">
+  <span class="step">An A<sub>3</sub> on a cello, 220 Hz, in room-temperature air:</span>
+  <span class="step" style="text-align:center;font-size:1.12rem">&lambda; = <i>v</i>/<i>f</i> = 343 / 220 = <b>1.56 m</b></span>
+  <span class="step">A hertz is a per-second, so m/s divided by 1/s leaves metres.&nbsp; A metre and a half is about the length
+  of a cello &mdash; roughly the right size for an instrument that plays that note, which is the sort of check worth making
+  every time.</span>
+</div>
+
+<h2>Looking ahead</h2>
+<p>You now know what is travelling and how fast.&nbsp; <b>Note 10</b> counts the energy a wave carries, <b>Note 11</b> follows
+that energy outwards into intensity and decibels &mdash; both of which are about sound, and now have a medium to be about
+&mdash; and <b>Note 12</b> sets the source moving.</p>
+
+<div class="ahead"><b>Where this sits.</b> Note 8 trapped a wave between two ends. This note says what the wave is made of when
+the medium is air, and gives it a speed. Nothing here is new mathematics: the pressure wave is the same sinusoid as every wave
+since Note 2, and <i>v</i> = &radic;(<i>B</i>/&rho;) is the same stiffness-over-inertia as the string.</div>
+
+<div class="callback"><span class="label">Back to your prediction</span><p><b>(1) No air makes the trip.</b>&nbsp; Each molecule
+slides a little way and comes back; what crosses the room is the pattern and the energy it carries.&nbsp; Sound in a room is not
+a draught.&nbsp; <b>(2) No &mdash; the opposite.</b>&nbsp; Squeeze and swing are a quarter wavelength apart: where the air is
+squeezed hardest it is momentarily not moving at all.&nbsp; <b>(3) Because it is stiffer.</b>&nbsp; Steel is far denser than
+air, which on its own would make sound <i>slower</i>; it wins because its stiffness beats its density by much more than the
+density costs it.</p></div>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; In a sound wave, a point where the displacement is always zero is</p>
+    <label><input type="radio" name="q1" value="a"> also a pressure node</label>
+    <label><input type="radio" name="q1" value="b"> a pressure antinode</label>
+    <label><input type="radio" name="q1" value="c"> outside the wave</label>
+    <label><input type="radio" name="q1" value="d"> a point of zero pressure</label>
+    <div class="qfb"></div></div>
+  <div id="card-q2"><p class="qtext">2.&nbsp; Using <i>v</i> = 331.5 + 0.610<i>T</i>, what is the speed of sound in air at 20&nbsp;&deg;C, in m/s?</p>
+    <div class="qnum"><input type="number" id="q2input" step="any" inputmode="decimal" aria-label="speed in metres per second"><span class="unit">m/s</span></div><div class="qfb"></div></div>
+  <div id="card-q3"><p class="qtext">3.&nbsp; Concert A is 440&nbsp;Hz.&nbsp; At <i>v</i> = 343&nbsp;m/s, what is its wavelength, in m?</p>
+    <div class="qnum"><input type="number" id="q3input" step="any" inputmode="decimal" aria-label="wavelength in metres"><span class="unit">m</span></div><div class="qfb"></div></div>
+  <div id="card-q4"><p class="qtext">4.&nbsp; Saying sound is longitudinal means that the air</p>
+    <label><input type="radio" name="q4" value="a"> moves across the direction of travel</label>
+    <label><input type="radio" name="q4" value="b"> moves along the direction of travel</label>
+    <label><input type="radio" name="q4" value="c"> does not move at all</label>
+    <label><input type="radio" name="q4" value="d"> travels with the wave</label>
+    <div class="qfb"></div></div>
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M1 N9 — Dr. Cho works through the note"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill in all three figures and the derivation as we work
+  them.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M1_N9_Sound_Is_A_Pressure_Wave_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the three figures are there as frames and the derivation is blank, to fill in as we work them.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 1 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 1 Note 9, "Sound Is A Pressure Wave"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. Sound is a LONGITUDINAL pressure wave: the medium oscillates along the line of travel.
+     F2. A compression is a pressure maximum and a rarefaction a pressure minimum, both measured against P_0.
+     F3. Displacement and pressure are a QUARTER WAVELENGTH out of step: a displacement node is a pressure antinode.
+     F4. Every wave speed in this module is a stiffness over an inertia under a square root: sqrt(F_T/mu) on a string, sqrt(B/rho) in a fluid.
+     F5. For air, v = 331.5 + 0.610 T with T in Celsius. This is where 343 m/s comes from, and it is why it is not a constant.
+     F6. v = f lambda turns any pitch into a length, and that length should be checkable against a real object.
+
+     Calculus-dependent items continue below, inside the CALC-152 fence, so that
+     the partner course is not handed a list promising material the mirror strips.
+     ========================================================================== -->
+
+<!-- CALC-152:start -->
+<!-- ========== calc152 half: items resting on the fenced calculus ==========
+
+     F7. [calc]  p(x,t) = -B ds/dx: pressure is proportional to the SPATIAL DERIVATIVE of the displacement, not to the displacement.
+     F8. [calc]  Differentiating a cosine gives a sine, which is WHY displacement and pressure sit a quarter wavelength apart. The offset is derived here, not asserted.
+     F9. [calc]  p_max = B k s_max, so at equal displacement amplitude a higher frequency is the louder one.
+     F10. [calc]  The wave-equation argument of Note 7, run on a slab of fluid, returns v^2 = B/rho.
+     ========== -->
+<!-- CALC-152:end -->
+
+<script>
+/* Check-yourself ticket, Note 9.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY={q1:'b',q4:'b'};
+  var WHY={q1:'A displacement node is a pressure ANTINODE.&nbsp; The two run a quarter wavelength out of step.',q2:'v = 331.5 + 0.610(20) = 343.7 m/s.&nbsp; This is where the familiar 343 comes from &mdash; and why it is not a constant.',q3:'&lambda; = v/f = 343/440 = 0.78 m &mdash; about the length of your arm, which is the check worth doing.',q4:'The air oscillates back and forth ALONG the line the wave travels, making compressions and rarefactions.'};
+  function set(card,ok,msg){ var el=card.querySelector('.qfb'); el.className='qfb '+(ok?'ok':'no'); el.textContent=(ok?'Correct. ':'Not quite. ')+msg; }
+  function grade(){ var n=0;
+    var v_q2=parseFloat(document.getElementById('q2input').value); var ok_q2=isFinite(v_q2)&&Math.abs(v_q2-(343.7))<=0.5; if(ok_q2)n++; set(document.getElementById('card-q2'),ok_q2,WHY.q2);
+    var v_q3=parseFloat(document.getElementById('q3input').value); var ok_q3=isFinite(v_q3)&&Math.abs(v_q3-(0.78))<=0.01; if(ok_q3)n++; set(document.getElementById('card-q3'),ok_q3,WHY.q3);
+    ['q1','q4'].forEach(function(q){ var sel=document.querySelector('input[name="'+q+'"]:checked'); var ok=!!(sel&&sel.value===KEY[q]); if(ok)n++; set(document.getElementById('card-'+q),ok,WHY[q]); });
+    document.getElementById('ticketScore').textContent=n+' of 4.'; }
+  function clear(){ document.querySelectorAll('.qfb').forEach(function(e){e.textContent='';e.className='qfb';}); document.querySelectorAll('#ticket input[type=radio]').forEach(function(e){e.checked=false;}); document.getElementById('q2input').value='';document.getElementById('q3input').value=''; document.getElementById('ticketScore').textContent=''; }
+  document.getElementById('ticketCheck').addEventListener('click',grade); document.getElementById('ticketReset').addEventListener('click',clear);
+})();
+</script>
+
+</body>
+</html>
