@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2R4 &mdash; Ray Tracing and Two-Lens Systems</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 1 (Oscillations, Waves and Sound)
+     Chapter 15 (University Physics Volume 1)
+     Trevor decks "a-Harmonic Oscillators" + "c-Coordinate Systems for Oscillators"
+     "Harmonic Oscillators and Hooke's Law" - web-page version of the lecture
+     slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+
+     FIRST CONVERTED REFERENCE PAGE IN PHY 152.  Before 2026-10-21 nothing in this
+     course had been converted: no reference\ directory existed under PHY152\ at
+     all.  Triage: Planning\M1_aOscillations_Deck_Triage_PHY152_2026-10-21.md.
+
+     Tier B reference page: faithful transcription, shorter synopsis, lead
+     paragraphs and captions added because a page has no voice.  No probe, no
+     exit ticket, no PE card.  References are LEAVES - no link from this page to
+     any note page (playbook Step 5a).
+
+     TWO DECKS ON ONE PAGE.  Deck c is seven slides on where to put the origin and
+     deck a already spends two slides on it - a s5 and c s3 are the SAME figure.
+     Merged so the question is answered once, properly.
+
+     TREVOR'S COORDINATE CONVENTION IS KEPT, NOT NORMALISED.  On the placement
+     figure the origin is at the free end of the unstretched spring and +y points
+     DOWN, so his three algebra columns read -F_s + F_g = ma with the symbols as
+     magnitudes.  Flipping it to the usual +y-up would contradict his own picture.
+
+     TREVOR'S REFERENCE SLIDE CITES UNIVERSITY PHYSICS VOLUME 2, which is
+     electricity and magnetism.  Oscillations is VOLUME 1, chapter 15 - and deck
+     c proves the slip is a paste error by citing Volume 1 correctly one slide
+     earlier.  This page cites Volume 1.  Trevor's decks are not altered.
+
+     PHY 119 will have its own page for these decks when that course starts,
+     written for College Physics from the same source.  It is NOT generated from
+     this file, and the notes mirror is never run over a reference\ directory.
+
+     Same design system as the module note pages; hosted on GitHub Pages, reached
+     by link from the Module 1 reference index.  Never framed, so no wrapper.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 &middot; Optics</span>
+    <span>Chapter 2 (University Physics) &middot; Decks: Ray Tracing &middot; Two-Lens Systems</span>
+  </div>
+
+  <h1>Ray Tracing and Two-Lens Systems</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    Three rays behave so simply that you can draw them without calculating anything, and where they
+    cross is where the image is. That is the whole of ray tracing. Once you can do it for one lens you
+    can do it for two, because the second lens does not care where its object came from &mdash; the
+    image made by the first <em>is</em> the object for the second, and nothing else about the method
+    changes.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    The thin lens equation and the sign conventions. Ray tracing and the equation are two ways of
+    saying the same thing, and a construction that disagrees with the arithmetic means one of them
+    was done wrong.
+  </div>
+
+  <h2>The three &ldquo;special&rdquo; rays</h2>
+
+  <p>Any ray leaving the object is bent by the lens, but three of them are bent in ways you can state
+  in a sentence, which is what makes them drawable:</p>
+
+  <figure>
+<svg viewBox="0 0 1000 560" role="img" aria-label="Three panels, each showing one of the special rays through a converging lens. Top: a ray arriving parallel to the axis leaves through the far focal point. Middle: a ray aimed at the centre of the lens carries straight on undeviated. Bottom: a ray passing through the near focal point leaves parallel to the axis.">
+<defs><marker id="r4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<line x1="70.0" y1="98.0" x2="930.0" y2="98.0" stroke="#1d2b23" stroke-width="1.3"/><ellipse cx="500.0" cy="98.0" rx="11" ry="62.0" fill="#cfe0ff" fill-opacity="0.55" stroke="#1636c8" stroke-width="2"/><circle cx="350.0" cy="98.0" r="4" fill="#c77b1f"/><circle cx="650.0" cy="98.0" r="4" fill="#c77b1f"/><text x="350.0" y="118.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#c77b1f">F</text><text x="650.0" y="118.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#c77b1f">F</text><text x="80.0" y="34.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="600">P-ray — parallel in, through the far focus</text><line x1="100.0" y1="54.0" x2="500.0" y2="54.0" stroke="#b3261e" stroke-width="2.2"/><line x1="500.0" y1="54.0" x2="930.0" y2="180.1" stroke="#b3261e" stroke-width="2.2" marker-end="url(#r4a)"/>
+<line x1="70.0" y1="278.0" x2="930.0" y2="278.0" stroke="#1d2b23" stroke-width="1.3"/><ellipse cx="500.0" cy="278.0" rx="11" ry="62.0" fill="#cfe0ff" fill-opacity="0.55" stroke="#1636c8" stroke-width="2"/><circle cx="350.0" cy="278.0" r="4" fill="#c77b1f"/><circle cx="650.0" cy="278.0" r="4" fill="#c77b1f"/><text x="350.0" y="298.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#c77b1f">F</text><text x="650.0" y="298.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#c77b1f">F</text><text x="80.0" y="214.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1f8a44" font-weight="600">M-ray — through the middle, undeviated</text><line x1="100.0" y1="234.0" x2="500.0" y2="278.0" stroke="#1f8a44" stroke-width="2.2"/><line x1="500.0" y1="278.0" x2="930.0" y2="325.3" stroke="#1f8a44" stroke-width="2.2" marker-end="url(#r4a)"/>
+<line x1="70.0" y1="458.0" x2="930.0" y2="458.0" stroke="#1d2b23" stroke-width="1.3"/><ellipse cx="500.0" cy="458.0" rx="11" ry="62.0" fill="#cfe0ff" fill-opacity="0.55" stroke="#1636c8" stroke-width="2"/><circle cx="350.0" cy="458.0" r="4" fill="#c77b1f"/><circle cx="650.0" cy="458.0" r="4" fill="#c77b1f"/><text x="350.0" y="478.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#c77b1f">F</text><text x="650.0" y="478.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#c77b1f">F</text><text x="80.0" y="394.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#7b1fa2" font-weight="600">F-ray — through the near focus, parallel out</text><line x1="100.0" y1="414.0" x2="500.0" y2="484.4" stroke="#7b1fa2" stroke-width="2.2"/><line x1="500.0" y1="484.4" x2="930.0" y2="484.4" stroke="#7b1fa2" stroke-width="2.2" marker-end="url(#r4a)"/>
+</svg>
+<figcaption><b>Figure&nbsp;1.</b>&nbsp; Trevor&rsquo;s three &ldquo;special&rdquo; rays.&nbsp; Each one
+is drawn here from the rule it illustrates rather than by hand, so the P-ray really does cross the
+axis at <i>F</i> and the F-ray really does leave parallel.&nbsp; <b>The colours are only for
+clarity</b> &mdash; his words &mdash; and different colours do behave slightly differently in real
+glass, but nothing like this much.</figcaption>
+</figure>
+
+  <table class="defs">
+    <tr><td class="term">P-rays</td><td class="eq">travelling parallel to the principal axis
+      &mdash; they all go through the focal point on the other side of the lens.</td></tr>
+    <tr><td class="term">M-rays</td><td class="eq">travelling through the centre (middle) of the lens
+      &mdash; they are not deflected.</td></tr>
+    <tr><td class="term">F-rays</td><td class="eq">travelling through the focal point before the lens
+      &mdash; they exit parallel to the principal axis on the other side.</td></tr>
+  </table>
+
+  <div class="tip"><b>Where the bending actually happens.</b>&nbsp; The refraction occurs at the two
+  surfaces, where the glass meets the air. We draw it as a single kink at the centre plane of the lens
+  because that is a very good approximation for a thin lens, and because drawing both surfaces makes
+  the picture unreadable.</div>
+
+  <h2>Tracing one lens</h2>
+
+  <figure>
+<svg viewBox="0 0 1000 420" role="img" aria-label="An object outside the focal length of a converging lens. The three special rays leave its tip, refract at the lens and cross at a single point on the far side, where an inverted image stands.">
+<defs><marker id="r4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<line x1="60" y1="190.0" x2="950" y2="190.0" stroke="#1d2b23" stroke-width="1.5"/>
+<ellipse cx="470.0" cy="190.0" rx="11" ry="100.0" fill="#cfe0ff" fill-opacity="0.55" stroke="#1636c8" stroke-width="2"/>
+<circle cx="320.0" cy="190.0" r="4" fill="#c77b1f"/><circle cx="620.0" cy="190.0" r="4" fill="#c77b1f"/>
+<text x="320.0" y="210.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f">F</text><text x="620.0" y="210.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f">F</text>
+<line x1="90.0" y1="190.0" x2="90.0" y2="124.0" stroke="#b3261e" stroke-width="3.2" marker-end="url(#r4a)"/>
+<text x="78.0" y="118.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">object</text>
+<line x1="90.0" y1="124.0" x2="470.0" y2="124.0" stroke="#b3261e" stroke-width="2.0"/><line x1="470.0" y1="124.0" x2="940.0" y2="330.8" stroke="#b3261e" stroke-width="2.0" marker-end="url(#r4a)"/>
+<line x1="90.0" y1="124.0" x2="940.0" y2="271.6" stroke="#1f8a44" stroke-width="2.0"/>
+<line x1="90.0" y1="124.0" x2="470.0" y2="233.0" stroke="#7b1fa2" stroke-width="2.0"/><line x1="470.0" y1="233.0" x2="940.0" y2="233.0" stroke="#7b1fa2" stroke-width="2.0" marker-end="url(#r4a)"/>
+<line x1="717.8" y1="190.0" x2="717.8" y2="233.0" stroke="#4a148c" stroke-width="3.4" marker-end="url(#r4a)"/>
+<text x="731.8" y="217.5" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#4a148c">image</text>
+<line x1="90.0" y1="340.0" x2="470.0" y2="340.0" stroke="#5f6368" stroke-width="1.2"/>
+<text x="280.0" y="360.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368" font-weight="600">dₒ</text>
+<line x1="470.0" y1="340.0" x2="717.8260869565217" y2="340.0" stroke="#5f6368" stroke-width="1.2"/>
+<text x="593.9" y="360.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368" font-weight="600">dᵢ</text>
+</svg>
+<figcaption><b>Figure&nbsp;2.</b>&nbsp; <b>Where the special rays come together is where the image
+is.</b>&nbsp; Drawn to scale, so the crossing point is the one the thin lens equation produces and
+not one placed by eye.</figcaption>
+</figure>
+
+  <p>Two rays are enough to fix the image &mdash; two lines cross at one point. The third is worth
+  drawing anyway as a check: if it does not arrive at the same place, something is wrong, and it is
+  usually a focal point on the wrong side.</p>
+
+  <div class="tip"><b>For the lab:</b>&nbsp; use the template Trevor provides, a ruler, and a few
+  different coloured pencils. One colour per ray is the difference between a diagram you can read
+  afterwards and a tangle.</div>
+
+  <h2>When the rays refuse to cross</h2>
+
+  <p>Move the object <em>inside</em> the focal length and the three rules still hold, but the refracted
+  rays come out diverging. They never meet, so there is no real image &mdash; but their backward
+  extensions do meet, and that is where the eye sees the image:</p>
+
+  <figure>
+<svg viewBox="0 0 1000 400" role="img" aria-label="An object closer to a converging lens than its focal point. The parallel ray and the centre ray diverge after the lens, and their backward extensions, drawn dashed, meet on the object's own side further from the lens, where an upright magnified virtual image stands.">
+<defs><marker id="r4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<line x1="60" y1="250.0" x2="950" y2="250.0" stroke="#1d2b23" stroke-width="1.5"/>
+<ellipse cx="660.0" cy="250.0" rx="11" ry="112.0" fill="#cfe0ff" fill-opacity="0.55" stroke="#1636c8" stroke-width="2"/>
+<circle cx="880.0" cy="250.0" r="4" fill="#c77b1f"/><circle cx="440.0" cy="250.0" r="4" fill="#c77b1f"/>
+<text x="880.0" y="270.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f">F</text><text x="440.0" y="270.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f">F</text>
+<line x1="524.7" y1="250.0" x2="524.7" y2="214.0" stroke="#b3261e" stroke-width="3.2" marker-end="url(#r4a)"/>
+<text x="524.7" y="276.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">object</text>
+<line x1="524.7" y1="214.0" x2="660.0" y2="214.0" stroke="#b3261e" stroke-width="2.0"/>
+<line x1="660.0" y1="214.0" x2="940.0" y2="259.8" stroke="#b3261e" stroke-width="2.0" marker-end="url(#r4a)"/>
+<line x1="308.6" y1="156.5" x2="660.0" y2="214.0" stroke="#b3261e" stroke-width="1.5" stroke-dasharray="7 6"/>
+<line x1="524.7" y1="214.0" x2="940.0" y2="324.5" stroke="#1f8a44" stroke-width="2.0"/>
+<line x1="308.6" y1="156.5" x2="524.7" y2="214.0" stroke="#1f8a44" stroke-width="1.5" stroke-dasharray="7 6"/>
+<line x1="308.6" y1="250.0" x2="308.6" y2="156.5" stroke="#4a148c" stroke-width="3.4" marker-end="url(#r4a)"/>
+<text x="308.6" y="144.5" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#4a148c">virtual image</text>
+<text x="930.0" y="130.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">the two rays DIVERGE after the lens —</text>
+<text x="930.0" y="150.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">so you extend them BACKWARDS</text>
+</svg>
+<figcaption><b>Figure&nbsp;3.</b>&nbsp; When the rays refuse to cross.&nbsp; Drawn to scale from
+<i>f</i>&nbsp;=&nbsp;2.00&nbsp;cm and <i>d</i><sub>o</sub>&nbsp;=&nbsp;1.23&nbsp;cm, giving
+<i>d</i><sub>i</sub>&nbsp;=&nbsp;&minus;3.19&nbsp;cm and <i>m</i>&nbsp;=&nbsp;+2.60 &mdash; the
+corrected values; see M2R3 for why two of his slides disagree about them.</figcaption>
+</figure>
+
+  <div class="mathblock">
+    <div class="mathline"><i>d</i><sub>i</sub> = <i>f d</i><sub>o</sub>/(<i>d</i><sub>o</sub> &minus; <i>f</i>)
+      = (2.00)(1.23)/(1.23 &minus; 2.00) = <b>&minus;3.19&nbsp;cm</b>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <i>m</i> = &minus;<i>d</i><sub>i</sub>/<i>d</i><sub>o</sub> = <b>+2.60</b></div>
+  </div>
+
+  <p class="why">Negative <i>d</i><sub>i</sub>, so virtual and on the object&rsquo;s own side;
+  positive <i>m</i>, so upright; |<i>m</i>|&nbsp;&gt;&nbsp;1, so magnified. The construction and the
+  equation agree, which is the point of doing both.</p>
+
+  <h2>Two lenses: the image of the first is the object of the second</h2>
+
+  <p>Many optical instruments use more than one lens, and the strategy is to treat the system as a
+  series of single lenses rather than as something new. <b>The image from the first lens becomes the
+  object for the second lens.</b> Solve lens 1 completely, hand its image over, and solve lens 2 the
+  way you would solve any single lens.</p>
+
+  <div class="mathblock">
+    <div class="mathline"><i>d</i><sub>o2</sub> = <i>L</i> &minus; <i>d</i><sub>i1</sub>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <i>m</i><sub>t</sub> = <i>m</i><sub>1</sub> &times; <i>m</i><sub>2</sub></div>
+  </div>
+
+  <p class="why">The total magnification is the <em>product</em>, not the sum. Two inversions undo
+  each other; a doubling followed by a halving leaves the size alone.</p>
+
+  <h2>His worked example</h2>
+
+  <p>A converging lens has a focal length of <b>8.0&nbsp;cm</b>. An object is <b>4.0&nbsp;cm</b> to the
+  left of it. A second converging lens of the same focal length sits <b>12.0&nbsp;cm</b> to the right.
+  Relative to the second lens, where is the final image, and what is the total magnification?</p>
+
+  <div class="mathblock">
+    <div class="mathline"><b>Lens 1.</b>&nbsp; <i>d</i><sub>i1</sub> =
+      (8.0)(4.0)/(4.0 &minus; 8.0) = 32/(&minus;4.0) = <b>&minus;8.0&nbsp;cm</b>
+      &nbsp;&nbsp;&nbsp; <i>m</i><sub>1</sub> = &minus;(&minus;8.0)/4.0 = <b>+2.0</b></div>
+    <div class="mathline"><b>Hand it over.</b>&nbsp; <i>d</i><sub>o2</sub> =
+      <i>L</i> &minus; <i>d</i><sub>i1</sub> = 12.0 &minus; (&minus;8.0) = <b>+20.0&nbsp;cm</b></div>
+    <div class="mathline"><b>Lens 2.</b>&nbsp; <i>d</i><sub>i2</sub> =
+      (8.0)(20.0)/(20.0 &minus; 8.0) = 160/12 = <b>13.3&nbsp;cm</b>
+      &nbsp;&nbsp;&nbsp; <i>m</i><sub>2</sub> = &minus;13.3/20.0 = <b>&minus;0.665</b></div>
+    <div class="mathline"><b>The system.</b>&nbsp; <i>m</i><sub>t</sub> =
+      (2.0)(&minus;0.665) = <b>&minus;1.33</b></div>
+  </div>
+
+  <figure>
+<svg viewBox="0 0 1000 470" role="img" aria-label="Two converging lenses twelve centimetres apart. An object four centimetres in front of the first lens, inside its focal length, produces an upright virtual image further to the left. That image acts as the object for the second lens, which forms a real inverted final image to its right.">
+<defs><marker id="r4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<line x1="50" y1="250.0" x2="960" y2="250.0" stroke="#1d2b23" stroke-width="1.5"/>
+<ellipse cx="260.0" cy="250.0" rx="11" ry="120.0" fill="#cfe0ff" fill-opacity="0.55" stroke="#1f8a44" stroke-width="2"/><ellipse cx="524.0" cy="250.0" rx="11" ry="120.0" fill="#cfe0ff" fill-opacity="0.55" stroke="#1636c8" stroke-width="2"/>
+<text x="260.0" y="116.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1f8a44" font-weight="600">lens 1</text><text x="524.0" y="116.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" font-weight="600">lens 2</text>
+<circle cx="436.0" cy="250.0" r="4" fill="#c77b1f"/><circle cx="700.0" cy="250.0" r="4" fill="#c77b1f"/>
+<text x="436.0" y="270.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#c77b1f">F₁</text><text x="700.0" y="270.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#c77b1f">F₂</text>
+<line x1="172.0" y1="250.0" x2="172.0" y2="220.0" stroke="#b3261e" stroke-width="3.2" marker-end="url(#r4a)"/>
+<text x="182.0" y="274.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e">object</text>
+<line x1="172.0" y1="220.0" x2="260.0" y2="220.0" stroke="#1f8a44" stroke-width="1.9"/>
+<line x1="260.0" y1="220.0" x2="524.0" y2="265.0" stroke="#1f8a44" stroke-width="1.9"/>
+<line x1="84.0" y1="190.0" x2="260.0" y2="220.0" stroke="#1f8a44" stroke-width="1.4" stroke-dasharray="6 5"/>
+<line x1="172.0" y1="220.0" x2="524.0" y2="340.0" stroke="#1f8a44" stroke-width="1.9"/>
+<line x1="84.0" y1="190.0" x2="172.0" y2="220.0" stroke="#1f8a44" stroke-width="1.4" stroke-dasharray="6 5"/>
+<line x1="84.0" y1="250.0" x2="84.0" y2="190.0" stroke="#0f7b7b" stroke-width="3.2" marker-end="url(#r4a)"/>
+<text x="84.0" y="180.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#0f7b7b">image 1 = object 2</text>
+<line x1="84.0" y1="190.0" x2="524.0" y2="190.0" stroke="#1636c8" stroke-width="1.9"/>
+<line x1="524.0" y1="190.0" x2="817.3" y2="290.0" stroke="#1636c8" stroke-width="1.9" marker-end="url(#r4a)"/>
+<line x1="84.0" y1="190.0" x2="817.3" y2="290.0" stroke="#4a148c" stroke-width="1.9" marker-end="url(#r4a)"/>
+<line x1="817.3" y1="250.0" x2="817.3" y2="290.0" stroke="#4a148c" stroke-width="3.4" marker-end="url(#r4a)"/>
+<text x="831.3" y="296.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#4a148c">final image</text>
+<line x1="260.0" y1="400.0" x2="524.0" y2="400.0" stroke="#5f6368" stroke-width="1.2"/>
+<text x="392.0" y="420.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">L = 12.0 cm</text>
+<line x1="84.0" y1="360.0" x2="524.0" y2="360.0" stroke="#0f7b7b" stroke-width="1.2"/>
+<text x="304.0" y="352.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f7b7b">dₒ₂ = L − dᵢ₁ = 12 − (−8) = 20.0 cm</text>
+</svg>
+<figcaption><b>Figure&nbsp;4.</b>&nbsp; His worked example, drawn to scale.&nbsp; Solved in two
+stages before it was drawn: lens&nbsp;1 gives <i>d</i><sub>i1</sub>&nbsp;=&nbsp;&minus;8.0&nbsp;cm,
+that image becomes the object for lens&nbsp;2 at <i>d</i><sub>o2</sub>&nbsp;=&nbsp;20.0&nbsp;cm, and
+the final image lands 13.3&nbsp;cm beyond it.</figcaption>
+</figure>
+
+  <p class="why">Watch the sign of <i>d</i><sub>o2</sub>. Here lens 1 made a <em>virtual</em> image,
+  8&nbsp;cm on its own left, so that image is 20&nbsp;cm in front of lens 2 and
+  <i>d</i><sub>o2</sub> is comfortably positive. Had lens 1 formed its image <em>past</em> lens 2,
+  <i>d</i><sub>o2</sub> would have come out negative &mdash; a virtual object &mdash; and the
+  equation would have handled it with no special case at all.</p>
+
+  <h2>In short</h2>
+
+  <ul>
+    <li>Three rays are drawable without calculating anything: <b>parallel in</b> leaves through the
+      far focus, <b>through the middle</b> carries straight on, <b>through the near focus</b> leaves
+      parallel.</li>
+    <li><b>Where they cross is the image.</b> Two fix it; the third is the check.</li>
+    <li>If they diverge instead of crossing, extend them <b>backwards</b> &mdash; the image is virtual,
+      upright and on the object&rsquo;s own side.</li>
+    <li>For two lenses, solve them <b>one at a time</b>: the image of the first is the object of the
+      second, with <i>d</i><sub>o2</sub> = <i>L</i> &minus; <i>d</i><sub>i1</sub>.</li>
+    <li>Magnifications <b>multiply</b>.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/25-6-image-formation-by-lenses" target="_blank" rel="noopener">25.6 Image Formation by Lenses</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 3</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-3/pages/2-4-thin-lenses" target="_blank" rel="noopener">2.4 Thin Lenses</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentations <em>Ray Tracing</em> and <em>Two-Lens Systems</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   This page is reached by link, not framed, so the reporter is inert here - it is kept so the
+   page behaves if it is ever embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>

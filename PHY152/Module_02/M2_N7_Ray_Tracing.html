@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ray Tracing</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 7
+     "Ray Tracing".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08d_M2_N5_to_N9_Built.md.
+
+     THIS NOTE IS A SPLIT.  Its source is section 3 of the same master -- the whole of
+     page 3.  The three rules are inked across the top of that page in his hand, each
+     beside a small printed panel.
+
+     WHAT IS HIS: all three rules, in his own words -- "Rays parallel to principal axis
+     => go through focus on the other side of lens"; "Rays going through center of lens
+     => Nothing happens!  Keeps going without bending"; "Rays traveling through focus
+     before lens => Come out parallel to optic axis on the other side of lens".  The
+     naming of BOTH "optic axis" and "principal axis" for the same line is his, written
+     in the margin.  The two full constructions at the foot of the page are his too.
+
+     WHAT IS CLAUDE'S: the title, synopsis, hook, Performance Expectations, the
+     "any two of the three, and the third is the check" paragraph, the in-flow task, the
+     virtual-image discussion, the punchline, the ticket and the foundation list.
+
+     THE WORKED EXAMPLE IS HIS CONSTRUCTION, NOT A NUMERIC PROBLEM (changed 2026-11-08).
+     Page 3 carries the three rules and two inked constructions and NO NUMBERS AT ALL,
+     so the example is traced rather than calculated: P-ray, M-ray, read off the
+     crossing, F-ray as the check.  The 25 cm / 10 cm numeric problem that used to sit
+     here was invented and has been removed.
+
+     FIGURE 1 IS HIS THREE-PANEL LAYOUT, REDRAWN.  Every ray in it is generated from the
+     rule it illustrates rather than drawn by hand, so the F-rays really do leave
+     parallel and the P-rays really do cross at the focus.  FIGURE 2 is the object-inside
+     -the-focal-length case, solved first (di = -225 px, m = +2.5) and then traced: the
+     two backward extensions meet at the point the equation produced.
+
+     NO CALC FENCE: there is no calculus in this note.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 7</span></div>
+<h1>Ray Tracing</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>Note&nbsp;6 found the image by arithmetic.&nbsp; This note finds it with a
+straightedge.&nbsp; Three rules &mdash; one for a ray parallel to the axis, one for a ray through the middle, one for a ray through the
+focus &mdash; are enough to locate any image a thin lens can make, and to see at a glance whether it is real or virtual.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>You trace two rays carefully and they <b>spread apart</b>
+after the lens instead of crossing.&nbsp; Have you made a mistake, or has the lens told you something?&nbsp; Decide now.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>State</b> all three ray rules without looking them up.</li>
+<li><b>Construct</b> an image by tracing at least two rays from the tip of the object.</li>
+<li><b>Distinguish</b> a real image from a virtual one by whether the refracted rays themselves cross, or only their backward
+extensions do.</li>
+<li><b>Check</b> a construction against 1/<i>d</i><sub>o</sub> + 1/<i>d</i><sub>i</sub> = 1/<i>f</i>, and say what it means when they
+disagree.</li>
+</ol></div>
+
+<h2>3.&nbsp; Ray tracing</h2>
+
+<p>Two names for the same line, and both are used: the <b>optic axis</b> and the <b>principal axis</b>.</p>
+
+<div class="fig">
+<svg viewBox="0 0 1000 580" role="img" aria-label="Three panels, one for each ray-tracing rule. Top: two rays arriving parallel to the principal axis refract through the focal point on the far side of the lens and cross there. Middle: a ray aimed at the centre of the lens passes straight through without bending. Bottom: two rays passing through the focal point in front of the lens leave parallel to the principal axis on the other side.">
+<defs><marker id="n7a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+
+<line x1="60" y1="110.0" x2="950" y2="110.0" stroke="#1d2b23" stroke-width="1.4"/><ellipse cx="470.0" cy="110.0" rx="13" ry="84" fill="#dfe9fb" stroke="#1636c8" stroke-width="2.1"/><line x1="110.00" y1="58.00" x2="470.00" y2="58.00" stroke="#b3261e" stroke-width="2.1"/><line x1="470.00" y1="58.00" x2="905.00" y2="187.26" stroke="#b3261e" stroke-width="2.1" marker-end="url(#n7a)"/><line x1="110.00" y1="162.00" x2="470.00" y2="162.00" stroke="#b3261e" stroke-width="2.1"/><line x1="470.00" y1="162.00" x2="905.00" y2="32.74" stroke="#b3261e" stroke-width="2.1" marker-end="url(#n7a)"/><circle cx="645.0" cy="110.0" r="4.5" fill="#b3261e"/>
+<text x="645.0" y="136.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">focus</text>
+<text x="60.0" y="14.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e">P-rays &mdash; parallel to the axis</text>
+<text x="60.0" y="36.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">go through the focus on the far side</text>
+
+<line x1="60" y1="290.0" x2="950" y2="290.0" stroke="#1d2b23" stroke-width="1.4"/><ellipse cx="470.0" cy="290.0" rx="13" ry="84" fill="#dfe9fb" stroke="#1636c8" stroke-width="2.1"/><line x1="110.00" y1="232.00" x2="470.00" y2="290.00" stroke="#7b1fa2" stroke-width="2.1"/><line x1="470.00" y1="290.00" x2="905.00" y2="360.08" stroke="#7b1fa2" stroke-width="2.1" marker-end="url(#n7a)"/><circle cx="470.0" cy="290.0" r="4.5" fill="#7b1fa2"/>
+<text x="60.0" y="194.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#7b1fa2">M-rays &mdash; through the middle of the lens</text>
+<text x="60.0" y="216.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">carry straight on; nothing happens to them</text>
+
+<line x1="60" y1="470.0" x2="950" y2="470.0" stroke="#1d2b23" stroke-width="1.4"/><ellipse cx="470.0" cy="470.0" rx="13" ry="84" fill="#dfe9fb" stroke="#1636c8" stroke-width="2.1"/><line x1="110.00" y1="524.97" x2="470.00" y2="418.00" stroke="#0f7b7b" stroke-width="2.1"/><line x1="470.00" y1="418.00" x2="905.00" y2="418.00" stroke="#0f7b7b" stroke-width="2.1" marker-end="url(#n7a)"/><line x1="110.00" y1="415.03" x2="470.00" y2="522.00" stroke="#0f7b7b" stroke-width="2.1"/><line x1="470.00" y1="522.00" x2="905.00" y2="522.00" stroke="#0f7b7b" stroke-width="2.1" marker-end="url(#n7a)"/><circle cx="295.0" cy="470.0" r="4.5" fill="#0f7b7b"/>
+<text x="295.0" y="496.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f7b7b">focus</text>
+<text x="60.0" y="374.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#0f7b7b">F-rays &mdash; through the focus before the lens</text>
+<text x="60.0" y="396.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">come out parallel to the axis on the far side</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; Three rules, and that is the whole of ray tracing.&nbsp; Each one says what a lens does to
+<i>one particular</i> ray &mdash; and every one of the three is reversible, which is why you may trace in either direction.</div>
+
+<ul class="items">
+<li><b>Rays parallel to the principal axis</b> &rArr; go through the focus on the other side of the lens.</li>
+<li><b>Rays going through the centre of the lens</b> &rArr; nothing happens; they keep going without bending.</li>
+<li><b>Rays travelling through the focus before the lens</b> &rArr; come out parallel to the optic axis on the other side.</li>
+</ul>
+
+<p>Any <b>two</b> of the three locate the image.&nbsp; The third is the check &mdash; if it does not arrive at the same point, something
+in the construction is wrong, and it is nearly always the focal point that has been put on the wrong side.</p>
+
+<h2>Worked example &mdash; trace it with no numbers at all</h2>
+
+<ol class="items tasks">
+<li>An object stands <b>outside</b> the focal length of a converging lens.&nbsp; Using nothing but the three rules above &mdash; no
+distances, no equation &mdash; locate its image, and say whether it is real or virtual, upright or inverted, before you measure
+anything.</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step"><b>Draw the P-ray.</b>&nbsp; From the tip of the object, parallel to the axis.&nbsp; At the lens it bends and
+  <i>goes through the focus on the other side of the lens</i>, and it keeps going.</span>
+  <span class="step"><b>Draw the M-ray.</b>&nbsp; From the same tip, straight at the centre of the lens.&nbsp; Nothing happens &mdash;
+  it keeps going without bending.</span>
+  <span class="step"><b>Read off where they cross.</b>&nbsp; The P-ray is heading <i>down</i> across the axis and the M-ray is heading
+  down too but less steeply, so the two meet <b>on the far side of the lens, below the axis</b>.&nbsp; The light itself arrives
+  there, so the image is <b>real</b>, and it is below the axis, so it is <b>inverted</b>.</span>
+  <span class="step"><b>Check with the third rule.</b>&nbsp; The F-ray leaves the tip through the near focus and comes out parallel to
+  the axis.&nbsp; It arrives at the same point.&nbsp; If it does not, the focal point has been put on the wrong side &mdash; that is
+  nearly always the mistake.</span>
+  <span class="step">No arithmetic was used anywhere above.&nbsp; <b>The construction and the equation are the same statement</b>:
+  the point where the rays cross <i>is</i> the solution of 1/<i>d</i><sub>o</sub> + 1/<i>d</i><sub>i</sub> = 1/<i>f</i>.</span>
+</div></div></div>
+
+<h2>When the rays refuse to cross</h2>
+
+<p>Move the object <i>inside</i> the focal length and the construction changes character.&nbsp; The refracted rays still obey all three
+rules, but they diverge.</p>
+
+<div class="fig">
+<svg viewBox="0 0 1000 460" role="img" aria-label="An object placed closer to a converging lens than its focal length. The parallel ray refracts through the far focal point and the central ray passes straight on, but the two refracted rays spread apart instead of crossing. Traced backwards as dashed lines they meet far to the left of the lens, where an upright virtual image stands two and a half times the height of the object.">
+<defs><marker id="n7a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+
+<line x1="40" y1="290.0" x2="975.0" y2="290.0" stroke="#1d2b23" stroke-width="1.5"/>
+<ellipse cx="640.0" cy="290.0" rx="14" ry="110" fill="#dfe9fb" stroke="#1636c8" stroke-width="2.2"/>
+<circle cx="790.0" cy="290.0" r="4.5" fill="#1d2b23"/><text x="790.0" y="316.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23" font-style="italic">F</text>
+<circle cx="490.0" cy="290.0" r="4.5" fill="#1d2b23"/><text x="490.0" y="316.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23" font-style="italic">F</text>
+
+<line x1="550.0" y1="290.0" x2="550.0" y2="220.0" stroke="#7b1fa2" stroke-width="5"/>
+<path d="M 542.0 233.0 L 550.0 218.0 L 558.0 233.0 Z" fill="#7b1fa2"/>
+<text x="550.0" y="316.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#7b1fa2">Object</text>
+
+<line x1="550.00" y1="220.00" x2="640.00" y2="220.00" stroke="#1636c8" stroke-width="2.1"/>
+<line data-skel="n7-refr-p" x1="640.00" y1="220.00" x2="955.00" y2="367.00" stroke="#1636c8" stroke-width="2.1" marker-end="url(#n7a)"/>
+<line x1="550.00" y1="220.00" x2="640.00" y2="290.00" stroke="#1636c8" stroke-width="2.1"/>
+<line data-skel="n7-refr-m" x1="640.00" y1="290.00" x2="826.43" y2="435.00" stroke="#1636c8" stroke-width="2.1" marker-end="url(#n7a)"/>
+<line data-skel="n7-back-p" x1="640.00" y1="220.00" x2="415.00" y2="115.00" stroke="#1636c8" stroke-width="1.5" stroke-dasharray="7 5"/>
+<line data-skel="n7-back-m" x1="640.00" y1="290.00" x2="415.00" y2="115.00" stroke="#1636c8" stroke-width="1.5" stroke-dasharray="7 5"/>
+
+<line data-skel="n7-image" x1="415.0" y1="290.0" x2="415.0" y2="115.0" stroke="#b3261e" stroke-width="5"/>
+<path data-skel="n7-image-head" d="M 406.0 129.0 L 415.0 113.0 L 424.0 129.0 Z" fill="#b3261e"/>
+<text x="415.0" y="101.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">Image &mdash; virtual</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 2.</b>&nbsp; Object inside the focal length.&nbsp; The two refracted rays never cross, so they are traced
+<i>backwards</i> (dashed) until they do.&nbsp; That meeting point is the virtual image &mdash; upright, magnified, and on the same side
+as the object.&nbsp; The arithmetic agrees: <i>d</i><sub>i</sub> = &minus;225&nbsp;px and <i>m</i> = +2.5.</div>
+
+<p>Trace them backwards and they meet.&nbsp; That meeting point is a <b>virtual image</b>: no light actually passes through it, which
+is why you cannot catch it on a screen &mdash; but your eye, which only ever sees the directions rays arrive from, sees an object
+standing there.</p>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">Parallel &rarr; through F&nbsp;&nbsp;&middot;&nbsp;&nbsp;through the middle &rarr; straight on&nbsp;&nbsp;&middot;&nbsp;&nbsp;through F &rarr; parallel</span>
+<p>Back to the prediction: rays that spread apart are not a mistake.&nbsp; They are the lens telling you the image is virtual &mdash;
+the same message the equation sends as a negative <i>d</i><sub>i</sub>.</p></div>
+
+<h2>Looking ahead</h2>
+<p>Three rules and one equation now cover every single thin lens.&nbsp; <b>Note&nbsp;8</b> keeps them and adds curved mirrors, which
+turn out to need no new physics at all &mdash; only a sign convention of their own.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; A ray arrives parallel to the principal axis of a converging lens.&nbsp; Where does it
+  go after the lens?</p>
+    <label><input type="radio" name="q1" value="a"> Straight on, undeviated.</label>
+    <label><input type="radio" name="q1" value="b"> Through the focal point on the far side.</label>
+    <label><input type="radio" name="q1" value="c"> Back through the focal point on the near side.</label>
+    <label><input type="radio" name="q1" value="d"> Parallel to the axis still, but displaced sideways.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Which ray is unchanged by a thin lens?</p>
+    <label><input type="radio" name="q2" value="a"> The one parallel to the axis.</label>
+    <label><input type="radio" name="q2" value="b"> The one through the near focal point.</label>
+    <label><input type="radio" name="q2" value="c"> The one aimed at the centre of the lens.</label>
+    <label><input type="radio" name="q2" value="d"> The one arriving at 45&deg; to the axis.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; In a finished construction, the refracted rays themselves never meet &mdash; only their
+  backward extensions do.&nbsp; The image is:</p>
+    <label><input type="radio" name="q3" value="a"> Real, and could be caught on a screen.</label>
+    <label><input type="radio" name="q3" value="b"> Virtual, and could not be caught on a screen.</label>
+    <label><input type="radio" name="q3" value="c"> Nonexistent &mdash; no image is formed.</label>
+    <label><input type="radio" name="q3" value="d"> Real, but inverted rather than upright.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; How many of the three rays do you need to locate an image?</p>
+    <div class="qnum"><input type="number" id="q4input" step="any" inputmode="decimal" aria-label="number of rays needed"></div><div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N7 &mdash; Dr. Cho on ray tracing"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N7_Ray_Tracing_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the refracted rays are yours to draw.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 7, "Ray Tracing"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. The P-ray rule: parallel to the axis in, through the far focal point out.
+     F2. The M-ray rule: aimed at the centre of the lens, straight through.
+     F3. The F-ray rule: through the near focal point in, parallel to the axis out.
+     F4. Two rays locate an image; the third is a check.
+     F5. "Optic axis" and "principal axis" are the same line.
+     F6. Refracted rays that cross => real image.  Refracted rays that diverge, with
+         only their BACKWARD extensions crossing => virtual image.
+     F7. A virtual image cannot be caught on a screen, because no light passes
+         through it.
+     F8. A construction and the thin lens equation are the same statement; the
+         crossing point IS the solution.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 7.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q1": "b", "q2": "c", "q3": "b"};
+  var NUM = {"q4": [2.0, 0.01]};
+  var WHY = {
+    "q1": "That is the P-ray rule: parallel in, through the far focal point out.",
+    "q2": "The M-ray, aimed at the centre of the lens, carries straight on. Nothing happens to it.",
+    "q3": "Only the backward extensions meet, so no light actually passes through that point: the image is virtual and cannot be caught on a screen.",
+    "q4": "Two rays fix a point. The third is worth tracing as a check &mdash; if it misses, the construction is wrong."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '\u2713 ' : '\u2717 ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

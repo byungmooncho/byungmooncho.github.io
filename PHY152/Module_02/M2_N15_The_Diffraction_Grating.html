@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Diffraction Grating</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 15
+     "The Diffraction Grating".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08f_M2_N12_to_N16_Built.md.
+
+     THIS NOTE IS A SPLIT.  Its source is the fourth part of section 3 - pages 15 and
+     16.  BOTH PAGES ARE 100% FREE-WRITE.
+
+     WHAT IS HIS: the grating drawing and the order fan with m = 0 central (white) and
+     +-1, +-2 dispersing R to V; d sin(theta) = m lambda; "d is distance between
+     'lines' / 'slits'"; the dispersion rearrangement sin(theta) = m lambda / d; the
+     10,000 lines per cm calculation giving d = 1e-6 m; and the whole first-order worked
+     example - theta_V = 22.3, theta_R = 49.5, y_V = 0.815 m, y_R = 2.328 m.
+
+     WHAT IS CLAUDE'S: the title, synopsis, hook, Performance Expectations, the remark
+     that extra slits sharpen rather than move the maxima, the punchline, the ticket and
+     the foundation list.
+
+     A ROUNDING DRIFT, FLAGGED IN THE KEY.  Recomputing from HIS OWN ANGLES gives
+     y_V = 2 tan(22.3) = 0.820 m and y_R = 2 tan(49.5) = 2.339 m; he wrote 0.815 and
+     2.328.  A drift of about 0.3 percent, not an error of method.  The note carries his
+     numbers.
+
+     FIGURE 1 IS DRAWN TO SCALE FROM HIS ANGLES, so y_V and y_R on the drawing really
+     are the tangents of 22.3 and 49.5 degrees.  FIGURE 2 CARRIES NO ANGLES ON PURPOSE:
+     the grating of the worked example has NO SECOND-ORDER RED, since sin(theta) would
+     have to be 1.52.  Worth a word in class; it is not in his ink.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 15</span></div>
+<h1>The Diffraction Grating</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>Two slits give broad, faint fringes.&nbsp; Ten thousand slits per
+centimetre give maxima that are <b>narrow, bright and far apart</b> &mdash; far enough apart that each wavelength in a beam lands in
+its own place.&nbsp; The equation is the one from Note&nbsp;10, unchanged.&nbsp; What changes is what it is good for.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>The condition is still
+<i>d</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i> &mdash; identical to the double slit.&nbsp; So what does adding <b>thousands
+more slits</b> actually buy you, if the equation does not change?</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Compute</b> the slit spacing <i>d</i> of a grating from its ruling in lines per centimetre.</li>
+<li><b>Apply</b> <i>d</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i> to find the angle of a given wavelength in a given
+order.</li>
+<li><b>Explain</b> dispersion: why a grating separates white light into spectra, one per order.</li>
+<li><b>Locate</b> a line on a screen a known distance away, using tan&nbsp;<i>&theta;</i> = <i>y</i>/<i>D</i>.</li>
+</ol></div>
+
+<h2>Diffraction grating</h2>
+
+<span class="disp" style="font-size:1.3rem"><i>d</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i></span>
+
+<p>where <b><i>d</i> is the distance between the &ldquo;lines&rdquo;</b> &mdash; the slits.&nbsp; A grating is specified by how many
+lines are ruled per centimetre, so <i>d</i> is whatever is left when you divide:</p>
+
+<div class="hook" style="border-style:dashed"><span class="label">Worked, in one line</span>
+<p><b>10&nbsp;000 lines per cm</b>&nbsp; &rarr;&nbsp;
+<i>d</i> = 1&nbsp;cm / 10&nbsp;000 = <b>1 &times; 10<sup>&minus;6</sup>&nbsp;m</b></p></div>
+
+<div class="fig">
+<svg viewBox="0 0 1000 560" role="img" aria-label="A grating fans white light into orders. The zeroth order goes straight through undeviated and stays white. On either side the first and second orders spread into spectra, violet closest to the centre and red furthest out.">
+<defs><marker id="n15b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<line x1="60" y1="280.0" x2="300.0" y2="280.0" stroke="#1d2b23" stroke-width="2.6" marker-end="url(#n15b)"/>
+<text x="64.0" y="266.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23">white light</text>
+<rect x="293.0" y="150.0" width="14" height="260" fill="#cfd6de" stroke="#1d2b23" stroke-width="1.6"/>
+<line x1="300.0" y1="280.0" x2="610.5" y2="202.6" stroke="#6a3fc0" stroke-width="2.2"/><line x1="300.0" y1="280.0" x2="587.6" y2="139.7" stroke="#b3261e" stroke-width="2.2"/><text x="625.1" y="166.7" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">m = +1</text><line x1="300.0" y1="280.0" x2="610.5" y2="357.4" stroke="#6a3fc0" stroke-width="2.2"/><line x1="300.0" y1="280.0" x2="587.6" y2="420.3" stroke="#b3261e" stroke-width="2.2"/><text x="625.1" y="403.3" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">m = -1</text><line x1="300.0" y1="280.0" x2="577.1" y2="120.0" stroke="#6a3fc0" stroke-width="2.2"/><line x1="300.0" y1="280.0" x2="522.3" y2="49.8" stroke="#b3261e" stroke-width="2.2"/><text x="572.7" y="72.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">m = +2</text><line x1="300.0" y1="280.0" x2="577.1" y2="440.0" stroke="#6a3fc0" stroke-width="2.2"/><line x1="300.0" y1="280.0" x2="522.3" y2="510.2" stroke="#b3261e" stroke-width="2.2"/><text x="572.7" y="498.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">m = -2</text>
+<line x1="300.0" y1="280.0" x2="630.0" y2="280.0" stroke="#1d2b23" stroke-width="2.6"/>
+<text x="656.0" y="285.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23" font-weight="600">m = 0</text>
+<text x="656.0" y="306.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">central &mdash; white</text>
+<text x="60.0" y="44.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23">Each order is a whole spectrum: violet nearest the centre, red furthest out.</text>
+<text x="60.0" y="66.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">The zeroth order is undeviated, so it stays white.</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 2.</b>&nbsp; The orders, schematically.&nbsp; <b>No angles are marked here on purpose</b>: for the
+grating in the worked example there is no second-order red at all, because sin&nbsp;<i>&theta;</i> would have to be 1.52.&nbsp; How
+many orders you get depends on <i>d</i>.</div>
+
+<h2>Dispersion</h2>
+
+<p>Rearranged, the condition reads</p>
+
+<span class="disp" style="font-size:1.2rem">sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i> / <i>d</i></span>
+
+<p>so within one order the angle depends on <i>&lambda;</i>.&nbsp; <b>Every wavelength goes somewhere different</b>, and white light
+arriving at the grating leaves as a fan of spectra &mdash; one for each order, with the zeroth order going straight through
+undeviated and staying white.</p>
+
+<h2>Worked example</h2>
+
+<p>Using the <b>10&nbsp;000 lines/cm</b> grating above, a screen is placed <b>2&nbsp;m</b> away.&nbsp; For <b>first order</b>
+(<i>m</i> = 1), take violet at <i>&lambda;</i><sub>V</sub> = <b>380&nbsp;nm</b> and red at
+<i>&lambda;</i><sub>R</sub> = <b>760&nbsp;nm</b>.&nbsp; Find the two angles, then <i>y</i><sub>V</sub> and
+<i>y</i><sub>R</sub>.</p>
+
+<div class="fig">
+<svg viewBox="0 0 1000 740" role="img" aria-label="White light passes through a diffraction grating and the first-order beam fans out. Violet light at 380 nanometres leaves at 22.3 degrees and lands close to the centre line on a screen two metres away; red light at 760 nanometres leaves at 49.5 degrees and lands more than twice as far down. The drawing is to scale, so the two distances are the tangents of those angles.">
+<defs><marker id="n15a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+
+<line x1="40" y1="110.0" x2="160.0" y2="110.0" stroke="#1d2b23" stroke-width="2.6" marker-end="url(#n15a)"/>
+<text x="44.0" y="96.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23">white light</text>
+<rect x="153.0" y="54.0" width="14" height="112" fill="#cfd6de" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="160.0" y="40.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23">grating</text>
+
+<line x1="160.0" y1="110.0" x2="620.0" y2="110.0" stroke="#5f6368" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="568.0" y="98.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">m = 0</text>
+
+<line x1="160.0" y1="110.0" x2="580.0" y2="282.3" stroke="#6a3fc0" stroke-width="2.4" marker-end="url(#n15a)"/>
+<line data-skel="red-ray" x1="160.0" y1="110.0" x2="580.0" y2="601.8" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n15a)"/>
+
+<line x1="580.0" y1="70.0" x2="580.0" y2="661.8" stroke="#1d2b23" stroke-width="2.4"/>
+<text x="590.0" y="60.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23">screen</text>
+
+<path d="M 270.0 110.0 A 110 110 0 0 1 261.8 151.7" fill="none" stroke="#6a3fc0" stroke-width="1.8"/>
+<text x="286.0" y="144.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#6a3fc0" font-style="italic">&theta;<tspan font-size="11" baseline-shift="sub">V</tspan> = 22.3&deg;</text>
+<path data-skel="red-arc" d="M 370.0 110.0 A 210 210 0 0 1 296.4 269.7" fill="none" stroke="#b3261e" stroke-width="1.8"/>
+<g data-skel="red-angle"><text x="336.0" y="286.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-style="italic">&theta;<tspan font-size="11" baseline-shift="sub">R</tspan> = 49.5&deg;</text></g>
+
+<line x1="638.0" y1="110.0" x2="638.0" y2="282.3" stroke="#6a3fc0" stroke-width="1.6" marker-start="url(#n15a)" marker-end="url(#n15a)"/>
+<text x="648.0" y="202.1" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#6a3fc0" font-style="italic">y<tspan font-size="11" baseline-shift="sub">V</tspan></text>
+<text x="672.0" y="202.1" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#6a3fc0">= 0.815 m</text>
+<line data-skel="red-dim" x1="780.0" y1="110.0" x2="780.0" y2="601.8" stroke="#b3261e" stroke-width="1.6" marker-start="url(#n15a)" marker-end="url(#n15a)"/>
+<g data-skel="red-dimlabel"><text x="790.0" y="361.9" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#b3261e" font-style="italic">y<tspan font-size="11" baseline-shift="sub">R</tspan></text>
+<text x="814.0" y="361.9" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e">= 2.328 m</text></g>
+
+<circle cx="580.0" cy="282.3" r="6" fill="#6a3fc0"/><text x="568.0" y="288.3" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#6a3fc0">V 380 nm</text>
+<g data-skel="red-spot"><circle cx="580.0" cy="601.8" r="6" fill="#b3261e"/><text x="568.0" y="607.8" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">R 760 nm</text></g>
+
+<line x1="160.0" y1="697.8" x2="580.0" y2="697.8" stroke="#1d2b23" stroke-width="1.4" marker-start="url(#n15a)" marker-end="url(#n15a)"/>
+<text x="370.0" y="689.8" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23">2 m</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; First order, drawn to scale.&nbsp; A grating does not just bend light &mdash; it bends
+each <b>wavelength</b> by a different amount, and by a lot.&nbsp; Red leaves at more than twice the angle of violet and lands nearly
+three times as far down the screen.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step"><b>The angles.</b>&nbsp; sin&nbsp;<i>&theta;</i><sub>V</sub> =
+  (1)(380 &times; 10<sup>&minus;9</sup>) / 1 &times; 10<sup>&minus;6</sup> = 0.380, so
+  <i>&theta;</i><sub>V</sub> = <b>22.3&deg;</b>.</span>
+  <span class="step">sin&nbsp;<i>&theta;</i><sub>R</sub> = (1)(760 &times; 10<sup>&minus;9</sup>) / 1 &times;
+  10<sup>&minus;6</sup> = 0.760, so <i>&theta;</i><sub>R</sub> = <b>49.5&deg;</b>.</span>
+  <span class="step"><b>On the screen.</b>&nbsp; <i>y</i><sub>V</sub>/2&nbsp;m = tan&nbsp;<i>&theta;</i><sub>V</sub>, so
+  <i>y</i><sub>V</sub> = 2&nbsp;tan&nbsp;22.3&deg; = <b>0.815&nbsp;m</b>.</span>
+  <span class="step"><i>y</i><sub>R</sub>/2&nbsp;m = tan&nbsp;<i>&theta;</i><sub>R</sub>, so
+  <i>y</i><sub>R</sub> = 2&nbsp;tan&nbsp;49.5&deg; = <b>2.328&nbsp;m</b>.</span>
+  <span class="step">The visible spectrum, which spans one octave of wavelength, is spread over <b>more than a metre and a half</b>
+  of screen in first order alone.&nbsp; That is what a grating is for.</span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i>/<i>d</i>&nbsp;&nbsp;&mdash;&nbsp;&nbsp;one angle per wavelength</span>
+<p>Back to the prediction: the extra slits do not change <i>where</i> the maxima are.&nbsp; They change how <b>sharp</b> they are
+&mdash; with thousands of slits, light at the wrong angle is cancelled by some other slit, so each maximum narrows to a line.&nbsp;
+The equation locates them; the number of slits is what makes them worth locating.</p></div>
+
+<h2>Looking ahead</h2>
+<p>A grating separates two <i>wavelengths</i> that arrive together.&nbsp; <b>Note&nbsp;16</b> asks the last question of the module:
+when two <i>objects</i> arrive together, how close can they be before diffraction makes them one blur?</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; A grating is ruled with 5&nbsp;000 lines per cm.&nbsp; What is <i>d</i>, in
+  micrometres?</p>
+    <div class="qnum"><input type="number" id="q1input" step="any" inputmode="decimal" aria-label="slit spacing in micrometres"><span class="unit">&micro;m</span></div><div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Why is the zeroth order of a grating <b>white</b>?</p>
+    <label><input type="radio" name="q2" value="a"> Because the grating absorbs all colours equally there.</label>
+    <label><input type="radio" name="q2" value="b"> Because <i>m</i> = 0 gives sin&nbsp;&theta; = 0 for every wavelength, so none of them is deviated.</label>
+    <label><input type="radio" name="q2" value="c"> Because the first order has taken all the colour out.</label>
+    <label><input type="radio" name="q2" value="d"> It is not; the zeroth order is also a spectrum.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; Light of 600&nbsp;nm meets a grating with <i>d</i> = 2.0&nbsp;&micro;m.&nbsp; At what
+  angle, in degrees, is the <b>second</b> order?</p>
+    <div class="qnum"><input type="number" id="q3input" step="any" inputmode="decimal" aria-label="angle in degrees"><span class="unit">&deg;</span></div><div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; Within one order of a grating, which colour comes out at the <b>largest</b>
+  angle?</p>
+    <label><input type="radio" name="q4" value="a"> Violet, because it has the shortest wavelength.</label>
+    <label><input type="radio" name="q4" value="b"> Red, because sin&nbsp;&theta; grows with &lambda;.</label>
+    <label><input type="radio" name="q4" value="c"> They all emerge at the same angle in a given order.</label>
+    <label><input type="radio" name="q4" value="d"> Green, which sits at the peak of the response.</label>
+    <div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N15 &mdash; Dr. Cho on the diffraction grating"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N15_The_Diffraction_Grating_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the red ray is yours to place.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 15, "The Diffraction Grating"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. d sin(theta) = m lambda, the same condition as the double slit.
+     F2. d is the spacing between rulings; from N lines per cm, d = 1 cm / N.
+     F3. sin(theta) = m lambda / d - within an order, each wavelength has its own
+         angle.  That is dispersion.
+     F4. The zeroth order is undeviated for every wavelength, so it stays white.
+     F5. In each order, violet sits nearest the centre and red furthest out.
+     F6. tan(theta) = y / D locates a line on a screen a distance D away.
+     F7. Many slits do not move the maxima; they make them SHARP.
+     F8. An order exists only while m lambda / d is at most 1.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 15.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q2": "b", "q4": "b"};
+  var NUM = {"q1": [2.0, 0.05], "q3": [36.87, 0.4]};
+  var WHY = {
+    "q1": "d = 1 cm / 5000 = 2.0 &times; 10&minus;6 m = 2.0 &micro;m.",
+    "q2": "m = 0 gives sin&theta; = 0 whatever &lambda; is, so no wavelength is deviated and they all stay superposed: white.",
+    "q3": "sin&theta; = m&lambda;/d = 2(600 &times; 10&minus;9)/(2.0 &times; 10&minus;6) = 0.600, so &theta; = 36.9&deg;.",
+    "q4": "sin&theta; = m&lambda;/d grows with &lambda;, so within an order the longest wavelength comes out furthest from the centre: red."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '\u2713 ' : '\u2717 ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

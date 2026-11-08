@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Lens Maker&rsquo;s Equation</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 5
+     "The Lens Maker's Equation".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08d_M2_N5_to_N9_Built.md.
+
+     THIS NOTE IS A SPLIT.  Its source is section 1 of the eight-page
+     "M2 N2 Geometric Optics" master (25SP) -- the whole of page 1, 528 strokes of ink
+     over a printed heading.
+
+     WHAT IS HIS: the opening statement that a ray through a curved surface bends by
+     Snell's law; "R = Radius of curvature, describes edge of refracting surface"; the
+     biconvex lens sketch with n1 / n2 / n1 and n2 > n1, glass and air; the lens with
+     R1 and R2 labelled "Lens side 1" and "Lens side 2"; the full lens maker's equation
+     with the thickness term; every one of the six definitions, including "refractive
+     index of the medium in which the object sits" for n1; the two reduction conditions
+     d << R and n1 = 1; and the thin-lens-in-air result.
+
+     WHAT IS CLAUDE'S: the title, the synopsis, the predict hook, the Performance
+     Expectations (class "pe lp"), the punchline
+     wording, the four ticket questions and the foundation list.
+
+     ONE THING HIS PAGE HAS THAT THIS NOTE DOES NOT: a photograph of the laser bench
+     with a lens on it.  A photograph of his own apparatus cannot be redrawn, and a
+     stock substitute would be a different bench.  It belongs in the recording, or as a
+     scan if he wants it on the page.
+
+     THE FIGURE IS COMPUTED, not sketched.  Both lens surfaces are sampled from real
+     circles of radius 300 px about real centres of curvature, so the R1 and R2 drawn on
+     it are the actual radii of the actual arcs, and the "both radii are equal, only the
+     signs differ" point is visible rather than asserted.
+
+     NO CALC FENCE: there is no calculus in this note.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 5</span></div>
+<h1>The Lens Maker&rsquo;s Equation</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>A lens is two curved refracting surfaces back to back, and a ray crossing each
+one bends by Snell&rsquo;s law &mdash; the law of Note&nbsp;3, nothing new.&nbsp; Do that twice and out falls a single number, the focal
+length, written in terms of the two radii and the glass.&nbsp; This note builds that equation and then throws most of it away.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>Two lenses are ground from the same glass to the same
+shape, but one is made <b>twice as thick through the middle</b>.&nbsp; Do they have the same focal length?&nbsp; Commit to an answer.
+&nbsp; Then read the last line of this note.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Identify</b> <i>R</i> on a lens surface as the radius of the circle that surface is a piece of.</li>
+<li><b>State</b> the lens maker&rsquo;s equation and say what each of <i>f</i>, <i>R</i><sub>1</sub>, <i>R</i><sub>2</sub>,
+<i>n</i><sub>1</sub>, <i>n</i><sub>2</sub> and <i>d</i> stands for.</li>
+<li><b>Reduce</b> it to the thin-lens-in-air form, and say exactly which two assumptions you used.</li>
+<li><b>Compute</b> a focal length from two radii and a refractive index.</li>
+</ol></div>
+
+<h2>1.&nbsp; Lens maker&rsquo;s equation</h2>
+
+<p><b>A ray of light travelling through a curved surface will bend according to Snell&rsquo;s law.</b>&nbsp; That is the entire physical
+input.&nbsp; Everything below is geometry applied to it twice &mdash; once going in, once coming out.</p>
+
+<p><b><i>R</i> = radius of curvature</b>, which describes the edge of the refracting surface.</p>
+
+<div class="fig">
+<svg viewBox="0 0 1000 470" role="img" aria-label="A thin biconvex lens drawn on an optical axis. Surface 1 faces left and surface 2 faces right. Each surface is an arc of a circle: the centre of curvature C one is marked to the right of the lens and the centre C two to the left, with the radii R one and R two drawn from each centre out to its own surface. The glass between the surfaces is labelled n two and the air on both sides n one, with n two greater than n one. The centre thickness d is marked between the two vertices.">
+<defs>
+<marker id="n5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker>
+<marker id="n5t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0f7b7b"/></marker>
+<marker id="n5d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker>
+</defs>
+
+<line x1="40" y1="250.0" x2="960" y2="250.0" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="900" y="238.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">optical axis</text>
+
+<path d="M 366.32,172.00 L 365.63,174.60 L 364.97,177.20 L 364.33,179.80 L 363.72,182.40 L 363.13,185.00 L 362.56,187.60 L 362.02,190.20 L 361.50,192.80 L 361.01,195.40 L 360.54,198.00 L 360.10,200.60 L 359.67,203.20 L 359.27,205.80 L 358.90,208.40 L 358.55,211.00 L 358.22,213.60 L 357.91,216.20 L 357.63,218.80 L 357.37,221.40 L 357.13,224.00 L 356.91,226.60 L 356.72,229.20 L 356.55,231.80 L 356.41,234.40 L 356.28,237.00 L 356.18,239.60 L 356.10,242.20 L 356.05,244.80 L 356.01,247.40 L 356.00,250.00 L 356.01,252.60 L 356.05,255.20 L 356.10,257.80 L 356.18,260.40 L 356.28,263.00 L 356.41,265.60 L 356.55,268.20 L 356.72,270.80 L 356.91,273.40 L 357.13,276.00 L 357.37,278.60 L 357.63,281.20 L 357.91,283.80 L 358.22,286.40 L 358.55,289.00 L 358.90,291.60 L 359.27,294.20 L 359.67,296.80 L 360.10,299.40 L 360.54,302.00 L 361.01,304.60 L 361.50,307.20 L 362.02,309.80 L 362.56,312.40 L 363.13,315.00 L 363.72,317.60 L 364.33,320.20 L 364.97,322.80 L 365.63,325.40 L 366.32,328.00 L 374.68,328.00 L 375.37,325.40 L 376.03,322.80 L 376.67,320.20 L 377.28,317.60 L 377.87,315.00 L 378.44,312.40 L 378.98,309.80 L 379.50,307.20 L 379.99,304.60 L 380.46,302.00 L 380.90,299.40 L 381.33,296.80 L 381.73,294.20 L 382.10,291.60 L 382.45,289.00 L 382.78,286.40 L 383.09,283.80 L 383.37,281.20 L 383.63,278.60 L 383.87,276.00 L 384.09,273.40 L 384.28,270.80 L 384.45,268.20 L 384.59,265.60 L 384.72,263.00 L 384.82,260.40 L 384.90,257.80 L 384.95,255.20 L 384.99,252.60 L 385.00,250.00 L 384.99,247.40 L 384.95,244.80 L 384.90,242.20 L 384.82,239.60 L 384.72,237.00 L 384.59,234.40 L 384.45,231.80 L 384.28,229.20 L 384.09,226.60 L 383.87,224.00 L 383.63,221.40 L 383.37,218.80 L 383.09,216.20 L 382.78,213.60 L 382.45,211.00 L 382.10,208.40 L 381.73,205.80 L 381.33,203.20 L 380.90,200.60 L 380.46,198.00 L 379.99,195.40 L 379.50,192.80 L 378.98,190.20 L 378.44,187.60 L 377.87,185.00 L 377.28,182.40 L 376.67,179.80 L 376.03,177.20 L 375.37,174.60 L 374.68,172.00 Z" fill="#dfe9fb" stroke="#1636c8" stroke-width="2.4" stroke-linejoin="round"/>
+<line x1="366.32" y1="172.0" x2="374.68" y2="172.0" stroke="#1636c8" stroke-width="2.4"/>
+<line x1="366.32" y1="328.0" x2="374.68" y2="328.0" stroke="#1636c8" stroke-width="2.4"/>
+
+<!-- radii, from the true centres to true points on the true arcs -->
+<circle cx="656.0" cy="250.0" r="4.5" fill="#b3261e"/>
+<text x="666.0" y="274.0" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-style="italic">C<tspan font-size="12" baseline-shift="sub">1</tspan></text>
+<line x1="656.0" y1="250.0" x2="361.27" y2="194.00" stroke="#b3261e" stroke-width="2" marker-end="url(#n5a)"/>
+<text x="509" y="210" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#b3261e" font-style="italic">R<tspan font-size="12" baseline-shift="sub">1</tspan></text>
+
+<circle data-skel="c2-dot" cx="85.0" cy="250.0" r="4.5" fill="#0f7b7b"/>
+<text data-skel="c2-label" x="75.0" y="274.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#0f7b7b" font-style="italic">C<tspan font-size="12" baseline-shift="sub">2</tspan></text>
+<line data-skel="r2-line" x1="85.0" y1="250.0" x2="379.73" y2="306.00" stroke="#0f7b7b" stroke-width="2" marker-end="url(#n5t)"/>
+<text data-skel="r2-label" x="232" y="304" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#0f7b7b" font-style="italic">R<tspan font-size="12" baseline-shift="sub">2</tspan></text>
+
+<!-- which surface is which -->
+<line x1="250" y1="100.0" x2="364.28" y2="180.0" stroke="#5f6368" stroke-width="1.3"/>
+<text x="246" y="94.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#3c4043">Lens side 1</text>
+<line x1="560" y1="100.0" x2="377.65" y2="184.0" stroke="#5f6368" stroke-width="1.3"/>
+<text x="566" y="94.0" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#3c4043">Lens side 2</text>
+
+<!-- media -->
+<text x="150" y="346.0" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#1d2b23" font-style="italic">n<tspan font-size="13" baseline-shift="sub">1</tspan></text>
+<text x="150" y="370.0" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">air</text>
+<text x="800" y="346.0" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#1d2b23" font-style="italic">n<tspan font-size="13" baseline-shift="sub">1</tspan></text>
+<text x="800" y="370.0" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">air</text>
+<text x="352.0" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#1636c8" font-style="italic">n<tspan font-size="13" baseline-shift="sub">2</tspan></text>
+<text x="352.0" y="124.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1636c8">glass</text>
+<text x="500" y="444" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23" font-style="italic">n<tspan font-size="12" baseline-shift="sub">2</tspan> &gt; n<tspan font-size="12" baseline-shift="sub">1</tspan></text>
+
+<!-- centre thickness -->
+<line x1="356.0" y1="344.0" x2="356.0" y2="374.0" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="385.0" y1="344.0" x2="385.0" y2="374.0" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="310.0" y1="364.0" x2="356.0" y2="364.0" stroke="#1d2b23" stroke-width="1.4" marker-end="url(#n5d)"/>
+<line x1="431.0" y1="364.0" x2="385.0" y2="364.0" stroke="#1d2b23" stroke-width="1.4" marker-end="url(#n5d)"/>
+<text x="370" y="400.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#1d2b23" font-style="italic">d</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; Every curved surface in this note is a piece of a circle, and <i>R</i> is that circle&rsquo;s
+radius &mdash; drawn here from each real centre of curvature out to its own real arc.&nbsp; <b>Both arcs above have the same radius</b>;
+they get opposite signs in the equation only because they bulge in opposite directions.</div>
+
+<p>Carrying Snell&rsquo;s law across both surfaces and collecting the terms gives the focal length of the lens:</p>
+
+<span class="disp" style="font-size:1.12rem">1/<i>f</i> = (<i>n</i><sub>2</sub>/<i>n</i><sub>1</sub> &minus; 1) [ 1/<i>R</i><sub>1</sub>
+&minus; 1/<i>R</i><sub>2</sub> + (<i>n</i><sub>2</sub> &minus; 1)<i>d</i> / (<i>n</i><sub>2</sub><i>R</i><sub>1</sub><i>R</i><sub>2</sub>) ]</span>
+
+<ul class="items">
+<li><i>f</i> &mdash; focal length of the lens</li>
+<li><i>R</i><sub>1</sub> &mdash; radius of curvature of lens side 1</li>
+<li><i>R</i><sub>2</sub> &mdash; radius of curvature of lens side 2</li>
+<li><i>n</i><sub>1</sub> &mdash; refractive index of the medium in which the object sits</li>
+<li><i>n</i><sub>2</sub> &mdash; refractive index of the lens</li>
+<li><i>d</i> &mdash; thickness of the lens</li>
+</ul>
+
+<h2>The form you will actually use</h2>
+
+<p>For a <b>thin lens in air</b>, two things are true at once: <i>d</i> &lt;&lt; <i>R</i>, so the last term inside the bracket is
+negligible; and <i>n</i><sub>1</sub> = 1, so <i>n</i><sub>2</sub>/<i>n</i><sub>1</sub> is just the index of the glass, <i>n</i>.&nbsp;
+Both assumptions together collapse the equation to</p>
+
+<span class="disp" style="font-size:1.2rem">1/<i>f</i> = (<i>n</i> &minus; 1) [ 1/<i>R</i><sub>1</sub> &minus; 1/<i>R</i><sub>2</sub> ]</span>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">1/<i>f</i> = (<i>n</i> &minus; 1) [ 1/<i>R</i><sub>1</sub> &minus; 1/<i>R</i><sub>2</sub> ]</span>
+<p>Back to the prediction: the thickness <i>d</i> dropped out.&nbsp; Two lenses of the same glass and the same curvature have the
+<b>same focal length</b> however thick they are through the middle &mdash; as long as both are thin enough for <i>d</i> &lt;&lt; <i>R</i>
+to hold.&nbsp; Make one thick enough and the term comes back.</p></div>
+
+<h2>Looking ahead</h2>
+<p>The lens maker&rsquo;s equation is about <i>grinding</i> a lens &mdash; glass and curvature in, focal length out.&nbsp; From
+<b>Note&nbsp;6</b> onward the focal length is simply given to you, and the question becomes where the image lands.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; In the lens maker&rsquo;s equation, what is <i>R</i><sub>1</sub>?</p>
+    <label><input type="radio" name="q1" value="a"> The distance from the lens to its focal point.</label>
+    <label><input type="radio" name="q1" value="b"> The radius of the circle that lens side 1 is a piece of.</label>
+    <label><input type="radio" name="q1" value="c"> Half the thickness of the lens at its centre.</label>
+    <label><input type="radio" name="q1" value="d"> The height of the lens from the optical axis to its rim.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Which <b>two</b> assumptions take the full equation to
+  1/<i>f</i> = (<i>n</i> &minus; 1)[1/<i>R</i><sub>1</sub> &minus; 1/<i>R</i><sub>2</sub>]?</p>
+    <label><input type="radio" name="q2" value="a"> The lens is thin, and it sits in air.</label>
+    <label><input type="radio" name="q2" value="b"> The lens is thin, and the object is far away.</label>
+    <label><input type="radio" name="q2" value="c"> The two radii are equal, and the lens sits in air.</label>
+    <label><input type="radio" name="q2" value="d"> The light is monochromatic, and the rays are close to the axis.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; A thin lens in air has <i>n</i> = 1.60, <i>R</i><sub>1</sub> = +12&nbsp;cm and
+  <i>R</i><sub>2</sub> = &minus;12&nbsp;cm.&nbsp; Find <i>f</i>, in cm.</p>
+    <div class="qnum"><input type="number" id="q3input" step="any" inputmode="decimal" aria-label="focal length in centimetres"><span class="unit">cm</span></div><div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; Two lenses are ground from the same glass to the same two radii, but lens B is twice as
+  thick through the middle.&nbsp; Both are thin.&nbsp; How do their focal lengths compare?</p>
+    <label><input type="radio" name="q4" value="a"> B&rsquo;s focal length is half of A&rsquo;s.</label>
+    <label><input type="radio" name="q4" value="b"> B&rsquo;s focal length is twice A&rsquo;s.</label>
+    <label><input type="radio" name="q4" value="c"> They are the same: <i>d</i> has dropped out of the thin-lens form.</label>
+    <label><input type="radio" name="q4" value="d"> It cannot be decided without knowing the lens diameter.</label>
+    <div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N5 &mdash; Dr. Cho on the lens maker's equation"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N5_The_Lens_Makers_Equation_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the second radius is yours to construct.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 5, "The Lens Maker's Equation"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. A lens is two refracting surfaces; a ray bends at each one by Snell's law.
+     F2. R is the radius of curvature of a lens surface - the radius of the circle
+         that surface is a piece of.
+     F3. The lens maker's equation in full, including the thickness term.
+     F4. What each symbol means: f, R1, R2, n1 (medium the OBJECT sits in), n2
+         (the lens), d (thickness).
+     F5. The two assumptions that give the thin-lens-in-air form: d << R, and
+         n1 = 1.
+     F6. The reduced form 1/f = (n - 1)[1/R1 - 1/R2], and computing f from it.
+     F7. Opposite-facing surfaces take opposite signs, so for a biconvex lens the
+         two terms ADD.
+     F8. Thickness does not appear in the reduced form: a thicker thin lens of the
+         same glass and curvature has the same focal length.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 5.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q1": "b", "q2": "a", "q4": "c"};
+  var NUM = {"q3": [10.0, 0.2]};
+  var WHY = {
+    "q1": "R is the radius of the circle that the lens surface is a piece of. It is a property of the GRINDING, not of where the light goes.",
+    "q2": "Thin (d &lt;&lt; R, so the last bracket term vanishes) AND in air (n1 = 1, so n2/n1 is just n). Both are needed; neither alone is enough.",
+    "q3": "1/f = (1.60 &minus; 1)[1/12 &minus; 1/(&minus;12)] = 0.60 &times; 0.16667 = 0.100 cm&minus;1, so f = +10 cm.",
+    "q4": "d has dropped out of the thin-lens form, so the two focal lengths are the same. Make one thick enough that d is no longer small compared with R and the term comes back."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '\u2713 ' : '\u2717 ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

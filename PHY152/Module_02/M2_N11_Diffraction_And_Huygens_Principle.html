@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diffraction and Huygens&rsquo; Principle</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 11
+     "Diffraction and Huygens' Principle".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08e_M2_N10_N11_Built.md.
+
+     THIS NOTE IS A SPLIT.  Its source is section 2 of the same master - pages 3, 4
+     and 5.  PAGE 5 IS 100% FREE-WRITE: not one printed element on it.
+
+     WHAT IS HIS: "bend around corner => Diffraction" over the breakwater photograph;
+     BOTH of his statements of Huygens' principle - the circled one ("Every point of a
+     advancing wavefront is a new center of disturbance from which emanates independent
+     waves in all directions") and the margin one ("Serves as a source of secondary
+     wavelets and the new wavefront is the tangential surface of all secondary
+     wavelets"); the four-case walk across the single slit with "pairwise cancellation
+     for all rays" and "some rays survive and don't cancel!"; a sin(theta) = m lambda,
+     sin(theta) = m lambda / a, m = +-1, +-2, +-3, DARK; the two-part 550 nm worked
+     example; the intensity law I = I0 (sin beta / beta)^2 with beta = pi D sin(theta)
+     / lambda and D = slit width; the sideband labels I0, I1 at 3pi/2, I2 at 5pi/2;
+     "When D increases, narrower"; and I1 = 0.045 I0.
+
+     WHAT IS CLAUDE'S: the title, synopsis, hook, Performance Expectations, the
+     four-case TABLE (his is four annotations under four printed panels), the
+     "same algebra, opposite physics" framing, the punchline, the ticket and the
+     foundation list.
+
+     ONE TRANSCRIPTION DECISION, FLAGGED IN THE KEY.  On page 5 the three lines giving
+     the zeros are written "theta = pi, I = 0" and "theta = 2pi, I = 0", but the axis
+     of his own sketch is labelled beta and the formula requires beta.  The note writes
+     BETA.  Reproducing the slip would teach a wrong variable.
+
+     HIS ARITHMETIC WAS CHECKED: a = 1.56e-6 m and theta_1 = 20.6 degrees are both
+     correct for his rounding, and 0.045 is correct to three places.
+
+     THE BREAKWATER PHOTOGRAPH IS NOT IN THE NOTE - it is a Google Earth image he
+     annotated.  The idea is carried in the opening sentence instead.
+
+     ALL THREE FIGURES ARE COMPUTED.  Figure 1's envelope is the EXACT outer boundary
+     of the union of equal wavelets on a segment - a straight run plus two true
+     quarter-arcs - so "the tangential surface of all secondary wavelets" is drawn
+     rather than asserted.  Figure 2's pairing ticks are real projections of the real
+     ray origins.  Figure 3 is (sin beta / beta)^2 sampled at 900 points.
+
+     NO CALC FENCE: there is no calculus in this note.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 11</span></div>
+<h1>Diffraction and Huygens&rsquo; Principle</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>Waves bend around corners.&nbsp; Huygens&rsquo; principle says why, in one
+sentence, and that sentence then does something strange: it makes a <b>single</b> slit produce bright and dark bands &mdash; with the
+roles of <i>m&lambda;</i> and (<i>m</i>&nbsp;+&nbsp;&frac12;)<i>&lambda;</i> <b>exactly reversed</b> from Note&nbsp;10.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>In Note&nbsp;10, <i>d</i>&nbsp;sin&nbsp;<i>&theta;</i> =
+<i>m&lambda;</i> gave a <b>bright</b> fringe.&nbsp; In this note, <i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i> gives a
+<b>dark</b> one.&nbsp; Same-looking equation, opposite answer.&nbsp; What is different about the physical situation?&nbsp; Guess now;
+Figure&nbsp;2 settles it.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>State</b> Huygens&rsquo; principle and use it to explain why a wave bends around an obstacle.</li>
+<li><b>Explain</b> the pairwise-cancellation argument for the single-slit minima.</li>
+<li><b>Apply</b> <i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i> to locate the <b>dark</b> fringes of a single slit, and say
+why it is not the bright ones.</li>
+<li><b>Use</b> <i>I</i> = <i>I</i><sub>0</sub>(sin&nbsp;<i>&beta;</i>/<i>&beta;</i>)<sup>2</sup> with
+<i>&beta;</i> = <i>&pi;D</i>&nbsp;sin&nbsp;<i>&theta;</i>/<i>&lambda;</i> to find the intensity at a given angle.</li>
+</ol></div>
+
+<h2>2.&nbsp; Diffraction</h2>
+
+<p>Waves <b>bend around a corner</b>.&nbsp; Ocean swell arriving at the end of a breakwater does not stop at the line of the wall and
+leave flat water behind it &mdash; the crests curl round into the sheltered area.&nbsp; That bending is <b>diffraction</b>.</p>
+
+<h3>Huygens&rsquo; principle</h3>
+
+<div class="punch" style="margin:.7rem 0"><span class="label">Huygens&rsquo; principle</span>
+<span class="big">Every point of an advancing wavefront is a new centre of disturbance<br>from which emanate independent waves in all directions</span>
+<p>Each point serves as a source of <b>secondary wavelets</b>, and the new wavefront is the <b>tangential surface</b> of all those
+secondary wavelets.</p></div>
+
+<div class="fig">
+<svg viewBox="0 0 1000 610" role="img" aria-label="A plane wavefront arrives from the left at a barrier with an opening. Inside the opening a row of points each sends out a circular secondary wavelet. The new wavefront beyond the barrier is the surface that just touches all of those wavelets: flat in the middle, but curving round at each edge so that light spreads into the region that should have been shadow.">
+<defs><marker id="n11a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+
+<line x1="150" y1="40" x2="150" y2="570" stroke="#1636c8" stroke-width="2"/><line x1="220" y1="40" x2="220" y2="570" stroke="#1636c8" stroke-width="2"/><line x1="290" y1="40" x2="290" y2="570" stroke="#1636c8" stroke-width="2"/><line x1="360" y1="40" x2="360" y2="570" stroke="#1636c8" stroke-width="2"/>
+<line x1="150" y1="290.0" x2="402.0" y2="290.0" stroke="#1636c8" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#n11a)"/>
+<text x="150" y="30" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">incoming wavefronts</text>
+
+<rect x="411.0" y="40" width="18" height="165.0" fill="#555b5e"/>
+<rect x="411.0" y="375.0" width="18" height="195.0" fill="#555b5e"/>
+<line x1="386.0" y1="205.0" x2="386.0" y2="375.0" stroke="#7b1fa2" stroke-width="1.5" marker-start="url(#n11a)" marker-end="url(#n11a)"/>
+<text x="376.0" y="296.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#7b1fa2" font-style="italic">a</text>
+
+<path d="M 420.0 20.0 A 185 185 0 0 1 420.0 390.0" fill="none" stroke="#b9c6dd" stroke-width="1.2"/><path d="M 420.0 41.2 A 185 185 0 0 1 420.0 411.2" fill="none" stroke="#b9c6dd" stroke-width="1.2"/><path d="M 420.0 62.5 A 185 185 0 0 1 420.0 432.5" fill="none" stroke="#b9c6dd" stroke-width="1.2"/><path d="M 420.0 83.8 A 185 185 0 0 1 420.0 453.8" fill="none" stroke="#b9c6dd" stroke-width="1.2"/><path d="M 420.0 105.0 A 185 185 0 0 1 420.0 475.0" fill="none" stroke="#b9c6dd" stroke-width="1.2"/><path d="M 420.0 126.2 A 185 185 0 0 1 420.0 496.2" fill="none" stroke="#b9c6dd" stroke-width="1.2"/><path d="M 420.0 147.5 A 185 185 0 0 1 420.0 517.5" fill="none" stroke="#b9c6dd" stroke-width="1.2"/><path d="M 420.0 168.8 A 185 185 0 0 1 420.0 538.8" fill="none" stroke="#b9c6dd" stroke-width="1.2"/><path d="M 420.0 190.0 A 185 185 0 0 1 420.0 560.0" fill="none" stroke="#b9c6dd" stroke-width="1.2"/>
+<circle cx="420.0" cy="205.0" r="3.4" fill="#c77b1f"/><circle cx="420.0" cy="226.2" r="3.4" fill="#c77b1f"/><circle cx="420.0" cy="247.5" r="3.4" fill="#c77b1f"/><circle cx="420.0" cy="268.8" r="3.4" fill="#c77b1f"/><circle cx="420.0" cy="290.0" r="3.4" fill="#c77b1f"/><circle cx="420.0" cy="311.2" r="3.4" fill="#c77b1f"/><circle cx="420.0" cy="332.5" r="3.4" fill="#c77b1f"/><circle cx="420.0" cy="353.8" r="3.4" fill="#c77b1f"/><circle cx="420.0" cy="375.0" r="3.4" fill="#c77b1f"/>
+<path data-skel="envelope" d="M 420.0 20.0 A 185 185 0 0 1 605.0 205.0 L 605.0 375.0 A 185 185 0 0 1 420.0 560.0" fill="none" stroke="#0f7b7b" stroke-width="3"/>
+<text data-skel="env-label" x="621.0" y="284.0" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0f7b7b">the new wavefront</text>
+<text data-skel="env-sub" x="621.0" y="306.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">&mdash; tangent to every wavelet</text>
+<text x="448.0" y="582.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">light arrives here, in the &ldquo;shadow&rdquo;</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; <b>Huygens&rsquo; principle.</b>&nbsp; Every point of an advancing wavefront is a new centre
+of disturbance from which independent waves emanate in all directions &mdash; it serves as a source of <b>secondary wavelets</b>, and
+the new wavefront is the <b>tangential surface</b> of all of them.&nbsp; In the middle the tangent surface is flat, so the wave carries
+straight on.&nbsp; <b>At the edges it curves round</b>, and that is diffraction.</div>
+
+<h3>One slit, and why it goes dark</h3>
+
+<p>Huygens says every point across the opening is itself a source.&nbsp; So the light arriving at one spot on the screen is the sum of
+contributions from <i>every</i> point of the slit &mdash; and those contributions can cancel each other.</p>
+
+<div class="fig">
+<svg viewBox="0 0 1000 620" role="img" aria-label="A single slit of width a with eight rays leaving it at the same angle. A perpendicular dropped from the top of the slit onto the ray from the bottom cuts off a segment equal to a times the sine of theta. Each ray lands at its own point along that segment, evenly spaced. Red arcs join each ray in the top half to its partner in the bottom half, and every such pair is separated by exactly half the segment.">
+<defs><marker id="n11b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+
+<rect x="221.0" y="24" width="18" height="176" fill="#555b5e"/>
+<rect x="221.0" y="480" width="18" height="100" fill="#555b5e"/>
+<line x1="194.0" y1="200.0" x2="194.0" y2="480.0" stroke="#7b1fa2" stroke-width="1.5" marker-start="url(#n11b)" marker-end="url(#n11b)"/>
+<text x="182.0" y="346.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#7b1fa2" font-style="italic">a</text>
+
+<line x1="230.0" y1="217.5" x2="459.8" y2="24.7" stroke="#0f7b7b" stroke-width="1.7" marker-end="url(#n11b)"/><line x1="230.0" y1="252.5" x2="459.8" y2="59.7" stroke="#0f7b7b" stroke-width="1.7" marker-end="url(#n11b)"/><line x1="230.0" y1="287.5" x2="459.8" y2="94.7" stroke="#0f7b7b" stroke-width="1.7" marker-end="url(#n11b)"/><line x1="230.0" y1="322.5" x2="459.8" y2="129.7" stroke="#0f7b7b" stroke-width="1.7" marker-end="url(#n11b)"/><line x1="230.0" y1="357.5" x2="459.8" y2="164.7" stroke="#0f7b7b" stroke-width="1.7" marker-end="url(#n11b)"/><line x1="230.0" y1="392.5" x2="459.8" y2="199.7" stroke="#0f7b7b" stroke-width="1.7" marker-end="url(#n11b)"/><line x1="230.0" y1="427.5" x2="459.8" y2="234.7" stroke="#0f7b7b" stroke-width="1.7" marker-end="url(#n11b)"/><line x1="230.0" y1="462.5" x2="459.8" y2="269.7" stroke="#0f7b7b" stroke-width="1.7" marker-end="url(#n11b)"/>
+<line x1="230.0" y1="200.0" x2="367.87" y2="364.31" stroke="#1d2b23" stroke-width="1.5" stroke-dasharray="6 4"/>
+<line x1="230.0" y1="480.0" x2="367.87" y2="364.31" stroke="#b3261e" stroke-width="4"/>
+<circle cx="359.26" cy="371.54" r="3.6" fill="#1d2b23"/><circle cx="342.02" cy="386.00" r="3.6" fill="#1d2b23"/><circle cx="324.79" cy="400.46" r="3.6" fill="#1d2b23"/><circle cx="307.55" cy="414.92" r="3.6" fill="#1d2b23"/><circle cx="290.32" cy="429.39" r="3.6" fill="#1d2b23"/><circle cx="273.09" cy="443.85" r="3.6" fill="#1d2b23"/><circle cx="255.85" cy="458.31" r="3.6" fill="#1d2b23"/><circle cx="238.62" cy="472.77" r="3.6" fill="#1d2b23"/>
+<path data-skel="pair-0" d="M 359.26 371.54 Q 354.36 435.70 290.32 429.39" fill="none" stroke="#b3261e" stroke-width="1.8"/><path data-skel="pair-1" d="M 342.02 386.00 Q 337.12 450.16 273.09 443.85" fill="none" stroke="#b3261e" stroke-width="1.8"/><path data-skel="pair-2" d="M 324.79 400.46 Q 319.89 464.62 255.85 458.31" fill="none" stroke="#b3261e" stroke-width="1.8"/><path data-skel="pair-3" d="M 307.55 414.92 Q 302.65 479.09 238.62 472.77" fill="none" stroke="#b3261e" stroke-width="1.8"/>
+<text x="390.9" y="540.2" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#b3261e"><tspan font-style="italic">a</tspan> sin <tspan font-style="italic">&theta;</tspan> = <tspan font-style="italic">&lambda;</tspan></text>
+<text x="595.9" y="290.3" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e">each pair differs by <tspan font-style="italic">&lambda;</tspan>/2<tspan x="595.9" dy="22">&mdash; so every ray has a partner</tspan><tspan x="595.9" dy="22">that cancels it exactly</tspan></text>
+<text x="760" y="110" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0f7b7b">to the screen &rarr;</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 2.</b>&nbsp; <b>Pairwise cancellation.</b>&nbsp; At the angle where
+<i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>&lambda;</i>, the rays spread evenly across the red segment.&nbsp; Pair each ray in the top
+half with the one directly below it in the bottom half: every pair is <i>&lambda;</i>/2 apart, so every pair cancels, and
+<b>nothing at all</b> reaches the screen at that angle.&nbsp; That is why <i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i>
+gives <b>darkness</b> here, and brightness in Note&nbsp;10.</div>
+
+<p>Walk along the four cases and the pattern appears:</p>
+
+<table class="tbl">
+<thead><tr><th>Condition</th><th>What happens across the slit</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td><i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = 0<i>&lambda;</i></td><td>every ray in step with every other</td><td><b>Bright</b> &mdash; the central maximum</td></tr>
+<tr><td><i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = 1<i>&lambda;</i></td><td>pairwise cancellation for all rays</td><td><b>Dark</b></td></tr>
+<tr><td><i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = <sup>3</sup>&frasl;<sub>2</sub><i>&lambda;</i></td><td>some rays survive and do not cancel</td><td><b>Bright</b> &mdash; a side peak</td></tr>
+<tr><td><i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = 2<i>&lambda;</i></td><td>pairwise cancellation for all rays</td><td><b>Dark</b></td></tr>
+</tbody></table>
+
+<div class="punch"><span class="label">The single-slit minima</span>
+<span class="big"><i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i>&nbsp;&nbsp;&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i>/<i>a</i>&nbsp;&nbsp;&nbsp;<i>m</i> = &plusmn;1, &plusmn;2, &plusmn;3&hellip;</span>
+<p>and these are <b>DARK</b>.&nbsp; Note that <i>m</i> = 0 is excluded: the centre is the brightest point of the whole pattern.</p></div>
+
+<h2>Worked example</h2>
+
+<p>A laser of <i>&lambda;</i> = <b>550&nbsp;nm</b> falls on a single slit.&nbsp; The <b>second diffraction minimum</b> is at
+<i>&theta;</i> = <b>45&deg;</b>.</p>
+
+<ol class="items tasks">
+<li><b>(1)</b> What is the width of the slit?&nbsp; <b>(2)</b> At what angle is the first minimum?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step"><b>(1)</b>&nbsp; A <b>minimum</b>, so <i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i> &mdash; the dark
+  condition.&nbsp; The <b>second</b> one, so <i>m</i> = 2.</span>
+  <span class="step"><i>a</i> = 2(550 &times; 10<sup>&minus;9</sup>) / sin&nbsp;45&deg; =
+  <b>1.56 &times; 10<sup>&minus;6</sup>&nbsp;m</b>.</span>
+  <span class="step"><b>(2)</b>&nbsp; Same equation, <i>m</i> = 1:
+  <i>&theta;</i><sub>1</sub> = sin<sup>&minus;1</sup>[ (1)(550 &times; 10<sup>&minus;9</sup>) /
+  1.56 &times; 10<sup>&minus;6</sup> ] = <b>20.6&deg;</b>.</span>
+  <span class="step">Notice that 20.6&deg; is <b>not</b> half of 45&deg;.&nbsp; The minima are evenly spaced in
+  sin&nbsp;<i>&theta;</i>, not in <i>&theta;</i> &mdash; which is exactly what Figure&nbsp;3&rsquo;s horizontal axis is telling
+  you.</span>
+</div></div></div>
+
+<h2>How bright, not just where</h2>
+
+<p>The conditions above say where the pattern is dark.&nbsp; The full intensity is</p>
+
+<span class="disp" style="font-size:1.2rem"><i>I</i> = <i>I</i><sub>0</sub> (sin&nbsp;<i>&beta;</i> / <i>&beta;</i>)<sup>2</sup>,&nbsp;&nbsp;&nbsp;
+<i>&beta;</i> = <i>&pi;D</i>&nbsp;sin&nbsp;<i>&theta;</i> / <i>&lambda;</i></span>
+
+<p>where <i>D</i> is the <b>slit width</b>.&nbsp; At <i>&theta;</i> = 0 the ratio (sin&nbsp;<i>&beta;</i>/<i>&beta;</i>) &rarr; 1, so
+<i>I</i> = <i>I</i><sub>0</sub>: the central bright fringe.&nbsp; At <i>&beta;</i> = <i>&pi;</i> and <i>&beta;</i> = 2<i>&pi;</i>,
+sin&nbsp;<i>&beta;</i> = 0 and so <i>I</i> = 0 &mdash; the dark fringes again, from the other direction.</p>
+
+<div class="fig">
+<svg viewBox="0 0 1000 420" role="img" aria-label="The single-slit intensity curve. A tall central peak sits at beta equals zero, dropping to exactly zero at every whole multiple of pi, with small side peaks in between. The first side peak reaches only about four and a half per cent of the central intensity.">
+<line x1="60.0" y1="350.0" x2="960.0" y2="350.0" stroke="#1d2b23" stroke-width="1.4"/>
+<line x1="515.0" y1="360.0" x2="515.0" y2="57.0" stroke="#1d2b23" stroke-width="1.4"/>
+<text x="501.0" y="51.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23" font-style="italic">I</text>
+<text x="956.0" y="374.0" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23" font-style="italic">&beta;</text>
+<line x1="116.56" y1="350.0" x2="116.56" y2="296.0" stroke="#c6cbd1" stroke-width="1.1" stroke-dasharray="4 4"/><text x="116.56" y="376.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="600">D</text><line x1="249.38" y1="350.0" x2="249.38" y2="296.0" stroke="#c6cbd1" stroke-width="1.1" stroke-dasharray="4 4"/><text x="249.38" y="376.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="600">D</text><line x1="382.19" y1="350.0" x2="382.19" y2="296.0" stroke="#c6cbd1" stroke-width="1.1" stroke-dasharray="4 4"/><text x="382.19" y="376.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="600">D</text><line x1="647.81" y1="350.0" x2="647.81" y2="296.0" stroke="#c6cbd1" stroke-width="1.1" stroke-dasharray="4 4"/><text x="647.81" y="376.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="600">D</text><line x1="780.62" y1="350.0" x2="780.62" y2="296.0" stroke="#c6cbd1" stroke-width="1.1" stroke-dasharray="4 4"/><text x="780.62" y="376.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="600">D</text><line x1="913.44" y1="350.0" x2="913.44" y2="296.0" stroke="#c6cbd1" stroke-width="1.1" stroke-dasharray="4 4"/><text x="913.44" y="376.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="600">D</text>
+<text x="116.56" y="398.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">&minus;3&pi;</text><text x="249.38" y="398.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">&minus;2&pi;</text><text x="382.19" y="398.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">&minus;&pi;</text><text x="515.00" y="398.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">0</text><text x="647.81" y="398.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">&pi;</text><text x="780.62" y="398.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">2&pi;</text><text x="913.44" y="398.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">3&pi;</text>
+<polyline points="90.00,349.09 90.94,349.15 91.89,349.20 92.83,349.25 93.78,349.30 94.72,349.35 95.67,349.39 96.61,349.44 97.56,349.49 98.50,349.53 99.44,349.57 100.39,349.62 101.33,349.66 102.28,349.69 103.22,349.73 104.17,349.77 105.11,349.80 106.06,349.83 107.00,349.86 107.94,349.88 108.89,349.91 109.83,349.93 110.78,349.95 111.72,349.96 112.67,349.98 113.61,349.99 114.56,349.99 115.50,350.00 116.44,350.00 117.39,350.00 118.33,349.99 119.28,349.99 120.22,349.98 121.17,349.96 122.11,349.95 123.06,349.93 124.00,349.91 124.94,349.88 125.89,349.85 126.83,349.82 127.78,349.78 128.72,349.74 129.67,349.70 130.61,349.66 131.56,349.61 132.50,349.56 133.44,349.51 134.39,349.45 135.33,349.39 136.28,349.33 137.22,349.27 138.17,349.20 139.11,349.13 140.06,349.06 141.00,348.99 141.94,348.91 142.89,348.84 143.83,348.76 144.78,348.68 145.72,348.59 146.67,348.51 147.61,348.42 148.56,348.34 149.50,348.25 150.44,348.16 151.39,348.07 152.33,347.98 153.28,347.89 154.22,347.80 155.17,347.71 156.11,347.62 157.06,347.53 158.00,347.44 158.94,347.35 159.89,347.26 160.83,347.17 161.78,347.08 162.72,346.99 163.67,346.91 164.61,346.83 165.56,346.74 166.50,346.66 167.44,346.58 168.39,346.51 169.33,346.43 170.28,346.36 171.22,346.29 172.17,346.23 173.11,346.16 174.06,346.10 175.00,346.05 175.94,345.99 176.89,345.94 177.83,345.90 178.78,345.85 179.72,345.81 180.67,345.78 181.61,345.74 182.56,345.72 183.50,345.69 184.44,345.67 185.39,345.65 186.33,345.64 187.28,345.64 188.22,345.63 189.17,345.63 190.11,345.64 191.06,345.65 192.00,345.66 192.94,345.68 193.89,345.71 194.83,345.73 195.78,345.77 196.72,345.80 197.67,345.84 198.61,345.89 199.56,345.94 200.50,345.99 201.44,346.05 202.39,346.11 203.33,346.17 204.28,346.24 205.22,346.31 206.17,346.39 207.11,346.46 208.06,346.54 209.00,346.63 209.94,346.72 210.89,346.81 211.83,346.90 212.78,346.99 213.72,347.09 214.67,347.19 215.61,347.29 216.56,347.39 217.50,347.49 218.44,347.60 219.39,347.70 220.33,347.81 221.28,347.91 222.22,348.02 223.17,348.12 224.11,348.23 225.06,348.33 226.00,348.44 226.94,348.54 227.89,348.64 228.83,348.74 229.78,348.84 230.72,348.93 231.67,349.02 232.61,349.11 233.56,349.20 234.50,349.29 235.44,349.37 236.39,349.44 237.33,349.51 238.28,349.58 239.22,349.65 240.17,349.71 241.11,349.76 242.06,349.81 243.00,349.86 243.94,349.89 244.89,349.93 245.83,349.95 246.78,349.98 247.72,349.99 248.67,350.00 249.61,350.00 250.56,349.99 251.50,349.98 252.44,349.96 253.39,349.94 254.33,349.90 255.28,349.86 256.22,349.82 257.17,349.76 258.11,349.70 259.06,349.63 260.00,349.55 260.94,349.46 261.89,349.37 262.83,349.27 263.78,349.16 264.72,349.05 265.67,348.92 266.61,348.79 267.56,348.66 268.50,348.51 269.44,348.36 270.39,348.20 271.33,348.03 272.28,347.86 273.22,347.68 274.17,347.50 275.11,347.31 276.06,347.11 277.00,346.91 277.94,346.70 278.89,346.49 279.83,346.27 280.78,346.05 281.72,345.82 282.67,345.59 283.61,345.36 284.56,345.12 285.50,344.88 286.44,344.64 287.39,344.40 288.33,344.15 289.28,343.90 290.22,343.65 291.17,343.41 292.11,343.16 293.06,342.91 294.00,342.66 294.94,342.41 295.89,342.16 296.83,341.92 297.78,341.68 298.72,341.44 299.67,341.20 300.61,340.97 301.56,340.74 302.50,340.51 303.44,340.29 304.39,340.08 305.33,339.87 306.28,339.67 307.22,339.47 308.17,339.28 309.11,339.10 310.06,338.93 311.00,338.76 311.94,338.61 312.89,338.46 313.83,338.32 314.78,338.19 315.72,338.07 316.67,337.97 317.61,337.87 318.56,337.78 319.50,337.70 320.44,337.64 321.39,337.59 322.33,337.55 323.28,337.52 324.22,337.50 325.17,337.49 326.11,337.50 327.06,337.52 328.00,337.56 328.94,337.60 329.89,337.66 330.83,337.73 331.78,337.82 332.72,337.91 333.67,338.02 334.61,338.15 335.56,338.28 336.50,338.43 337.44,338.59 338.39,338.76 339.33,338.94 340.28,339.14 341.22,339.34 342.17,339.56 343.11,339.79 344.06,340.02 345.00,340.27 345.94,340.53 346.89,340.79 347.83,341.06 348.78,341.35 349.72,341.63 350.67,341.93 351.61,342.23 352.56,342.53 353.50,342.85 354.44,343.16 355.39,343.48 356.33,343.80 357.28,344.12 358.22,344.44 359.17,344.77 360.11,345.09 361.06,345.41 362.00,345.73 362.94,346.04 363.89,346.35 364.83,346.66 365.78,346.95 366.72,347.24 367.67,347.53 368.61,347.80 369.56,348.06 370.50,348.31 371.44,348.55 372.39,348.77 373.33,348.98 374.28,349.17 375.22,349.35 376.17,349.50 377.11,349.64 378.06,349.76 379.00,349.85 379.94,349.93 380.89,349.98 381.83,350.00 382.78,349.99 383.72,349.96 384.67,349.90 385.61,349.81 386.56,349.69 387.50,349.54 388.44,349.36 389.39,349.14 390.33,348.88 391.28,348.59 392.22,348.26 393.17,347.90 394.11,347.49 395.06,347.04 396.00,346.56 396.94,346.02 397.89,345.45 398.83,344.83 399.78,344.17 400.72,343.46 401.67,342.71 402.61,341.91 403.56,341.06 404.50,340.16 405.44,339.22 406.39,338.22 407.33,337.17 408.28,336.07 409.22,334.92 410.17,333.72 411.11,332.47 412.06,331.17 413.00,329.81 413.94,328.40 414.89,326.93 415.83,325.42 416.78,323.84 417.72,322.22 418.67,320.54 419.61,318.81 420.56,317.03 421.50,315.19 422.44,313.30 423.39,311.36 424.33,309.37 425.28,307.32 426.22,305.22 427.17,303.07 428.11,300.88 429.06,298.63 430.00,296.33 430.94,293.99 431.89,291.59 432.83,289.16 433.78,286.67 434.72,284.14 435.67,281.57 436.61,278.95 437.56,276.30 438.50,273.60 439.44,270.86 440.39,268.09 441.33,265.28 442.28,262.43 443.22,259.55 444.17,256.64 445.11,253.69 446.06,250.72 447.00,247.72 447.94,244.69 448.89,241.64 449.83,238.57 450.78,235.48 451.72,232.36 452.67,229.23 453.61,226.09 454.56,222.93 455.50,219.76 456.44,216.58 457.39,213.39 458.33,210.20 459.28,207.00 460.22,203.80 461.17,200.61 462.11,197.41 463.06,194.22 464.00,191.04 464.94,187.87 465.89,184.71 466.83,181.56 467.78,178.43 468.72,175.31 469.67,172.22 470.61,169.14 471.56,166.10 472.50,163.07 473.44,160.08 474.39,157.12 475.33,154.19 476.28,151.30 477.22,148.44 478.17,145.62 479.11,142.85 480.06,140.12 481.00,137.43 481.94,134.79 482.89,132.20 483.83,129.66 484.78,127.18 485.72,124.75 486.67,122.38 487.61,120.06 488.56,117.81 489.50,115.62 490.44,113.49 491.39,111.43 492.33,109.44 493.28,107.52 494.22,105.66 495.17,103.88 496.11,102.17 497.06,100.54 498.00,98.98 498.94,97.50 499.89,96.10 500.83,94.77 501.78,93.53 502.72,92.37 503.67,91.29 504.61,90.29 505.56,89.38 506.50,88.55 507.44,87.81 508.39,87.15 509.33,86.58 510.28,86.10 511.22,85.70 512.17,85.40 513.11,85.18 514.06,85.04 515.00,85.00 515.94,85.04 516.89,85.18 517.83,85.40 518.78,85.70 519.72,86.10 520.67,86.58 521.61,87.15 522.56,87.81 523.50,88.55 524.44,89.38 525.39,90.29 526.33,91.29 527.28,92.37 528.22,93.53 529.17,94.77 530.11,96.10 531.06,97.50 532.00,98.98 532.94,100.54 533.89,102.17 534.83,103.88 535.78,105.66 536.72,107.52 537.67,109.44 538.61,111.43 539.56,113.49 540.50,115.62 541.44,117.81 542.39,120.06 543.33,122.38 544.28,124.75 545.22,127.18 546.17,129.66 547.11,132.20 548.06,134.79 549.00,137.43 549.94,140.12 550.89,142.85 551.83,145.62 552.78,148.44 553.72,151.30 554.67,154.19 555.61,157.12 556.56,160.08 557.50,163.07 558.44,166.10 559.39,169.14 560.33,172.22 561.28,175.31 562.22,178.43 563.17,181.56 564.11,184.71 565.06,187.87 566.00,191.04 566.94,194.22 567.89,197.41 568.83,200.61 569.78,203.80 570.72,207.00 571.67,210.20 572.61,213.39 573.56,216.58 574.50,219.76 575.44,222.93 576.39,226.09 577.33,229.23 578.28,232.36 579.22,235.48 580.17,238.57 581.11,241.64 582.06,244.69 583.00,247.72 583.94,250.72 584.89,253.69 585.83,256.64 586.78,259.55 587.72,262.43 588.67,265.28 589.61,268.09 590.56,270.86 591.50,273.60 592.44,276.30 593.39,278.95 594.33,281.57 595.28,284.14 596.22,286.67 597.17,289.16 598.11,291.59 599.06,293.99 600.00,296.33 600.94,298.63 601.89,300.88 602.83,303.07 603.78,305.22 604.72,307.32 605.67,309.37 606.61,311.36 607.56,313.30 608.50,315.19 609.44,317.03 610.39,318.81 611.33,320.54 612.28,322.22 613.22,323.84 614.17,325.42 615.11,326.93 616.06,328.40 617.00,329.81 617.94,331.17 618.89,332.47 619.83,333.72 620.78,334.92 621.72,336.07 622.67,337.17 623.61,338.22 624.56,339.22 625.50,340.16 626.44,341.06 627.39,341.91 628.33,342.71 629.28,343.46 630.22,344.17 631.17,344.83 632.11,345.45 633.06,346.02 634.00,346.56 634.94,347.04 635.89,347.49 636.83,347.90 637.78,348.26 638.72,348.59 639.67,348.88 640.61,349.14 641.56,349.36 642.50,349.54 643.44,349.69 644.39,349.81 645.33,349.90 646.28,349.96 647.22,349.99 648.17,350.00 649.11,349.98 650.06,349.93 651.00,349.85 651.94,349.76 652.89,349.64 653.83,349.50 654.78,349.35 655.72,349.17 656.67,348.98 657.61,348.77 658.56,348.55 659.50,348.31 660.44,348.06 661.39,347.80 662.33,347.53 663.28,347.24 664.22,346.95 665.17,346.66 666.11,346.35 667.06,346.04 668.00,345.73 668.94,345.41 669.89,345.09 670.83,344.77 671.78,344.44 672.72,344.12 673.67,343.80 674.61,343.48 675.56,343.16 676.50,342.85 677.44,342.53 678.39,342.23 679.33,341.93 680.28,341.63 681.22,341.35 682.17,341.06 683.11,340.79 684.06,340.53 685.00,340.27 685.94,340.02 686.89,339.79 687.83,339.56 688.78,339.34 689.72,339.14 690.67,338.94 691.61,338.76 692.56,338.59 693.50,338.43 694.44,338.28 695.39,338.15 696.33,338.02 697.28,337.91 698.22,337.82 699.17,337.73 700.11,337.66 701.06,337.60 702.00,337.56 702.94,337.52 703.89,337.50 704.83,337.49 705.78,337.50 706.72,337.52 707.67,337.55 708.61,337.59 709.56,337.64 710.50,337.70 711.44,337.78 712.39,337.87 713.33,337.97 714.28,338.07 715.22,338.19 716.17,338.32 717.11,338.46 718.06,338.61 719.00,338.76 719.94,338.93 720.89,339.10 721.83,339.28 722.78,339.47 723.72,339.67 724.67,339.87 725.61,340.08 726.56,340.29 727.50,340.51 728.44,340.74 729.39,340.97 730.33,341.20 731.28,341.44 732.22,341.68 733.17,341.92 734.11,342.16 735.06,342.41 736.00,342.66 736.94,342.91 737.89,343.16 738.83,343.41 739.78,343.65 740.72,343.90 741.67,344.15 742.61,344.40 743.56,344.64 744.50,344.88 745.44,345.12 746.39,345.36 747.33,345.59 748.28,345.82 749.22,346.05 750.17,346.27 751.11,346.49 752.06,346.70 753.00,346.91 753.94,347.11 754.89,347.31 755.83,347.50 756.78,347.68 757.72,347.86 758.67,348.03 759.61,348.20 760.56,348.36 761.50,348.51 762.44,348.66 763.39,348.79 764.33,348.92 765.28,349.05 766.22,349.16 767.17,349.27 768.11,349.37 769.06,349.46 770.00,349.55 770.94,349.63 771.89,349.70 772.83,349.76 773.78,349.82 774.72,349.86 775.67,349.90 776.61,349.94 777.56,349.96 778.50,349.98 779.44,349.99 780.39,350.00 781.33,350.00 782.28,349.99 783.22,349.98 784.17,349.95 785.11,349.93 786.06,349.89 787.00,349.86 787.94,349.81 788.89,349.76 789.83,349.71 790.78,349.65 791.72,349.58 792.67,349.51 793.61,349.44 794.56,349.37 795.50,349.29 796.44,349.20 797.39,349.11 798.33,349.02 799.28,348.93 800.22,348.84 801.17,348.74 802.11,348.64 803.06,348.54 804.00,348.44 804.94,348.33 805.89,348.23 806.83,348.12 807.78,348.02 808.72,347.91 809.67,347.81 810.61,347.70 811.56,347.60 812.50,347.49 813.44,347.39 814.39,347.29 815.33,347.19 816.28,347.09 817.22,346.99 818.17,346.90 819.11,346.81 820.06,346.72 821.00,346.63 821.94,346.54 822.89,346.46 823.83,346.39 824.78,346.31 825.72,346.24 826.67,346.17 827.61,346.11 828.56,346.05 829.50,345.99 830.44,345.94 831.39,345.89 832.33,345.84 833.28,345.80 834.22,345.77 835.17,345.73 836.11,345.71 837.06,345.68 838.00,345.66 838.94,345.65 839.89,345.64 840.83,345.63 841.78,345.63 842.72,345.64 843.67,345.64 844.61,345.65 845.56,345.67 846.50,345.69 847.44,345.72 848.39,345.74 849.33,345.78 850.28,345.81 851.22,345.85 852.17,345.90 853.11,345.94 854.06,345.99 855.00,346.05 855.94,346.10 856.89,346.16 857.83,346.23 858.78,346.29 859.72,346.36 860.67,346.43 861.61,346.51 862.56,346.58 863.50,346.66 864.44,346.74 865.39,346.83 866.33,346.91 867.28,346.99 868.22,347.08 869.17,347.17 870.11,347.26 871.06,347.35 872.00,347.44 872.94,347.53 873.89,347.62 874.83,347.71 875.78,347.80 876.72,347.89 877.67,347.98 878.61,348.07 879.56,348.16 880.50,348.25 881.44,348.34 882.39,348.42 883.33,348.51 884.28,348.59 885.22,348.68 886.17,348.76 887.11,348.84 888.06,348.91 889.00,348.99 889.94,349.06 890.89,349.13 891.83,349.20 892.78,349.27 893.72,349.33 894.67,349.39 895.61,349.45 896.56,349.51 897.50,349.56 898.44,349.61 899.39,349.66 900.33,349.70 901.28,349.74 902.22,349.78 903.17,349.82 904.11,349.85 905.06,349.88 906.00,349.91 906.94,349.93 907.89,349.95 908.83,349.96 909.78,349.98 910.72,349.99 911.67,349.99 912.61,350.00 913.56,350.00 914.50,350.00 915.44,349.99 916.39,349.99 917.33,349.98 918.28,349.96 919.22,349.95 920.17,349.93 921.11,349.91 922.06,349.88 923.00,349.86 923.94,349.83 924.89,349.80 925.83,349.77 926.78,349.73 927.72,349.69 928.67,349.66 929.61,349.62 930.56,349.57 931.50,349.53 932.44,349.49 933.39,349.44 934.33,349.39 935.28,349.35 936.22,349.30 937.17,349.25 938.11,349.20 939.06,349.15 940.00,349.09" fill="none" stroke="#b3261e" stroke-width="2.6" stroke-linejoin="round"/>
+<line x1="515.0" y1="85.0" x2="442.0" y2="85.0" stroke="#5f6368" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="435.3" y="91.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23" font-style="italic">I<tspan font-size="12" baseline-shift="sub">0</tspan></text>
+<line x1="714.22" y1="338.1" x2="784.22" y2="222.0" stroke="#0f7b7b" stroke-width="1.3"/>
+<text x="792.22" y="218.0" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0f7b7b"><tspan font-style="italic">I</tspan><tspan font-size="11" baseline-shift="sub">1</tspan> at <tspan font-style="italic">&beta;</tspan> = 3&pi;/2<tspan x="792.22" dy="21">= 0.045 <tspan font-style="italic">I</tspan><tspan font-size="11" baseline-shift="sub">0</tspan></tspan></text>
+<text x="80.0" y="51.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">narrower slit &rarr; wider pattern</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 3.</b>&nbsp; The single-slit intensity, sampled from
+<i>I</i> = <i>I</i><sub>0</sub>(sin&nbsp;<i>&beta;</i>/<i>&beta;</i>)<sup>2</sup>.&nbsp; <b>D</b> marks each dark fringe: the curve
+touches zero at every whole multiple of &pi;.&nbsp; The first side peak reaches <b>4.5&nbsp;%</b> of the centre &mdash; which is why
+the central maximum is the only part of a single-slit pattern that is easy to see.</div>
+
+<p>The first side peak sits at <i>&beta;</i> = 3<i>&pi;</i>/2, midway between the first two zeros:</p>
+
+<span class="disp"><i>I</i><sub>1</sub> = <i>I</i><sub>0</sub>(sin(3<i>&pi;</i>/2) / (3<i>&pi;</i>/2))<sup>2</sup> =
+<b>0.045 <i>I</i><sub>0</sub></b></span>
+
+<p>and because <i>&beta;</i> carries <i>D</i> in the numerator, <b>widening the slit narrows the pattern</b>.&nbsp; Squeeze the slit
+and the light spreads out further &mdash; which is the opposite of what a ray picture would predict, and is the clearest everyday sign
+that light is a wave.</p>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">Two slits: <i>m&lambda;</i> is bright.&nbsp; One slit: <i>m&lambda;</i> is dark.</span>
+<p>Back to the prediction: in Note&nbsp;10, <i>d</i> is the gap <b>between</b> two sources and <i>m&lambda;</i> means they arrive in
+step.&nbsp; Here, <i>a</i> is the width of a single source, <i>m&lambda;</i> is the spread <b>across</b> it, and it means every ray
+finds a partner half a wavelength away.&nbsp; <b>Same algebra, opposite physics.</b></p></div>
+
+<h2>Looking ahead</h2>
+<p>Interference needed two paths through air.&nbsp; <b>Note&nbsp;12</b> gets its two paths from a single film of soap or coating
+&mdash; and runs into something neither of the last two notes needed: reflection can flip a wave over.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; For a <b>single</b> slit, <i>a</i>&nbsp;sin&nbsp;<i>&theta;</i> = <i>m&lambda;</i>
+  locates:</p>
+    <label><input type="radio" name="q1" value="a"> The bright fringes, as for a double slit.</label>
+    <label><input type="radio" name="q1" value="b"> The dark fringes.</label>
+    <label><input type="radio" name="q1" value="c"> The central maximum only.</label>
+    <label><input type="radio" name="q1" value="d"> Nothing &mdash; single slits produce no pattern.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Light of 600&nbsp;nm passes a slit 2.0&nbsp;&micro;m wide.&nbsp; At what angle, in
+  degrees, is the <b>first</b> minimum?</p>
+    <div class="qnum"><input type="number" id="q2input" step="any" inputmode="decimal" aria-label="angle in degrees"><span class="unit">&deg;</span></div><div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; A slit is made <b>narrower</b>.&nbsp; What happens to the diffraction pattern?</p>
+    <label><input type="radio" name="q3" value="a"> It spreads out and gets wider.</label>
+    <label><input type="radio" name="q3" value="b"> It narrows toward a sharp bright line.</label>
+    <label><input type="radio" name="q3" value="c"> It is unchanged; only the brightness falls.</label>
+    <label><input type="radio" name="q3" value="d"> The fringes reverse, dark for bright.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; What fraction of the central intensity does the first side peak reach?&nbsp; Give it
+  as a decimal.</p>
+    <div class="qnum"><input type="number" id="q4input" step="any" inputmode="decimal" aria-label="fraction of central intensity"></div><div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N11 &mdash; Dr. Cho on diffraction"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N11_Diffraction_And_Huygens_Principle_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the new wavefront is yours to construct.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 11, "Diffraction and Huygens' Principle"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. Diffraction is a wave bending around a corner or an edge.
+     F2. Huygens' principle: every point of an advancing wavefront is a new centre of
+         disturbance emitting secondary wavelets in all directions.
+     F3. The new wavefront is the TANGENTIAL SURFACE of all those secondary wavelets -
+         flat in the middle of an opening, curved at its edges.
+     F4. Pairwise cancellation: at a sin(theta) = m lambda every ray in the top half
+         of the slit has a partner lambda/2 away in the bottom half.
+     F5. a sin(theta) = m lambda, m = +-1, +-2, +-3, gives the DARK fringes of a
+         single slit.  m = 0 is excluded - the centre is the brightest point.
+     F6. The contrast with F4 of Note 10: d is a gap BETWEEN sources, a is the width
+         of ONE source.  Same algebra, opposite result.
+     F7. I = I0 (sin beta / beta)^2 with beta = pi D sin(theta) / lambda, D the slit
+         width; I = I0 at the centre and I = 0 at every whole multiple of pi.
+     F8. The first side peak is at beta = 3pi/2 and reaches 0.045 I0.
+     F9. A NARROWER slit gives a WIDER pattern.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 11.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q1": "b", "q3": "a"};
+  var NUM = {"q2": [17.46, 0.3], "q4": [0.045, 0.004]};
+  var WHY = {
+    "q1": "For a SINGLE slit this is the condition for pairwise cancellation across the slit, so it gives the DARK fringes. The same-looking equation in Note 10 gives bright ones.",
+    "q2": "a sin&theta; = m&lambda; with m = 1: sin&theta; = 600e-9 / 2.0e-6 = 0.300, so &theta; = 17.5&deg;.",
+    "q3": "&beta; carries D in the numerator, so a smaller slit needs a larger angle to reach the same &beta;: the pattern SPREADS. Narrow the slit and the light fans out.",
+    "q4": "I1 = I0 (sin(3&pi;/2)/(3&pi;/2))&sup2; = 0.045 I0 &mdash; about four and a half per cent."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '\u2713 ' : '\u2717 ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

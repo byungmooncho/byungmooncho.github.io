@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Michelson Interferometer</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 13
+     "The Michelson Interferometer".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08f_M2_N12_to_N16_Built.md.
+
+     THIS NOTE IS A SPLIT.  Its source is the second part of section 3 - pages 9 and 10.
+     BOTH PAGES ARE 100% FREE-WRITE.  Page 9 does not even carry the printed header.
+
+     WHAT IS HIS: the whole instrument drawing, with M1 movable, M2 fixed, the
+     beamsplitter, the compensator plate and the eye; Delta-d = 2 d1 - 2 d2 = m lambda_0
+     constructive, (m + 1/2) lambda_0 destructive; the ring-fringe sketch with the point
+     marked x; HIS SENTENCE VERBATIM - "When M1 is moved a distance Delta-d = lambda_0/2
+     then this path difference changes by lambda_0 and each fringe moves to the position
+     previously occupied by an adjacent fringe"; "by counting # of fringes, m, passing a
+     single point we can measure minute displacement accurate to a fraction of
+     wavelength"; and BOTH WORKED EXAMPLES - the single fringe shift (315 nm) and the
+     gas cell (n = 1.00193), including the derivation 2tn - 2t = m lambda.
+
+     WHAT IS CLAUDE'S: the title, synopsis, hook, Performance Expectations, the
+     punchline, the ticket and the foundation list.
+
+     ONE SLIP OF THE PEN, FLAGGED IN THE KEY.  His first example writes "Delta-d =
+     (1) lambda_0/2 = 650/2 = 315 nm" for a 630 nm laser.  315 IS 630/2, so the answer
+     is right and the 650 is a slip.  The note writes 630.
+
+     FIGURE 2'S RINGS ARE REAL EQUAL-INCLINATION FRINGES - radii proportional to
+     sqrt(m), so they crowd together outward.  Drawing them evenly spaced would be a lie
+     students would then carry into the lab.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 13</span></div>
+<h1>The Michelson Interferometer</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>Split a beam in two, send the halves down separate arms, bring them back
+together and let them interfere.&nbsp; Because the path difference is now <b>adjustable</b>, the fringe pattern becomes a ruler
+&mdash; one whose smallest division is a fraction of a wavelength of light.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>You move one mirror by <b>315&nbsp;nm</b>.&nbsp; That
+is about a three-hundredth of the thickness of a human hair.&nbsp; What would you have to <b>see</b> for that movement to be
+measurable &mdash; and could you count it by eye?</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Describe</b> the path of each half-beam through a Michelson interferometer.</li>
+<li><b>Explain</b> why moving a mirror by <i>&lambda;</i>/2 shifts the pattern by a whole fringe.</li>
+<li><b>Compute</b> a mirror displacement from a fringe count, and a fringe count from a displacement.</li>
+<li><b>Apply</b> the same fringe-counting idea to a <b>refractive index</b> measurement with a gas cell.</li>
+</ol></div>
+
+<h2>Michelson interferometer</h2>
+
+<div class="fig">
+<svg viewBox="0 0 1000 620" role="img" aria-label="A Michelson interferometer. A laser beam meets a half-silvered beamsplitter set at forty-five degrees. Half the beam goes up to a movable mirror a distance d one away; half goes right, through a compensator plate, to a fixed mirror a distance d two away. Both beams return to the beamsplitter and travel down together to the detector, where they interfere.">
+<defs><marker id="n13a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+
+<rect x="70" y="294.0" width="96" height="52" fill="#eef1f5" stroke="#1d2b23" stroke-width="1.8" rx="4"/>
+<text x="118.0" y="326.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23">Laser</text>
+<text x="118.0" y="280.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">630 nm</text>
+
+<line x1="166" y1="320.0" x2="420.0" y2="320.0" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n13a)"/>
+
+<line x1="394.0" y1="346.0" x2="446.0" y2="294.0" stroke="#0f7b7b" stroke-width="6" stroke-linecap="round"/>
+<text x="386.0" y="382.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f7b7b">beamsplitter</text>
+
+<line x1="420.0" y1="320.0" x2="420.0" y2="100.0" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n13a)"/>
+<rect x="362.0" y="80.0" width="116" height="14" fill="#9aa6b2" stroke="#1d2b23" stroke-width="1.6"/>
+<text x="420.0" y="68.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23" font-style="italic">M<tspan font-size="11" baseline-shift="sub">1</tspan> (movable)</text>
+<line x1="512.0" y1="54.0" x2="512.0" y2="124.0" stroke="#7b1fa2" stroke-width="2" marker-start="url(#n13a)" marker-end="url(#n13a)"/>
+<text x="524.0" y="96.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#7b1fa2">move it by &lambda;<tspan font-size="11" baseline-shift="sub">0</tspan>/2</text>
+<text x="524.0" y="118.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#7b1fa2">&rarr; one fringe passes</text>
+<line x1="324.0" y1="320.0" x2="324.0" y2="100.0" stroke="#1d2b23" stroke-width="1.4" marker-start="url(#n13a)" marker-end="url(#n13a)"/>
+<text x="312.0" y="210.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#1d2b23" font-style="italic">d<tspan font-size="11" baseline-shift="sub">1</tspan></text>
+
+<line data-skel="arm2-beam" x1="420.0" y1="320.0" x2="700.0" y2="320.0" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n13a)"/>
+<line x1="550.0" y1="346.0" x2="550.0" y2="294.0" stroke="#c77b1f" stroke-width="6" stroke-linecap="round"/>
+<text x="550.0" y="280.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f">compensator</text>
+<rect data-skel="arm2-mirror" x="706.0" y="262.0" width="14" height="116" fill="#9aa6b2" stroke="#1d2b23" stroke-width="1.6"/>
+<g data-skel="arm2-label"><text x="730.0" y="326.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23" font-style="italic">M<tspan font-size="11" baseline-shift="sub">2</tspan> (fixed)</text></g>
+<line data-skel="arm2-dim" x1="420.0" y1="416.0" x2="700.0" y2="416.0" stroke="#1d2b23" stroke-width="1.4" marker-start="url(#n13a)" marker-end="url(#n13a)"/>
+<g data-skel="arm2-dimlabel"><text x="560.0" y="438.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#1d2b23" font-style="italic">d<tspan font-size="11" baseline-shift="sub">2</tspan></text></g>
+
+<line x1="420.0" y1="320.0" x2="420.0" y2="520.0" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n13a)"/>
+<path d="M 380.0 542.0 Q 420.0 506.0 460.0 542.0 Q 420.0 578.0 380.0 542.0 Z" fill="none" stroke="#1d2b23" stroke-width="1.8"/>
+<circle cx="420.0" cy="542.0" r="9" fill="#1d2b23"/>
+<text x="476.0" y="548.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">the two beams arrive together here</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; The beam is split in two, the halves travel down <b>separate arms</b>, and they are
+recombined.&nbsp; The compensator plate puts the same thickness of glass in both arms so that the only difference left is the one you
+control.&nbsp; <b>Move M<sub>1</sub> and the path difference changes &mdash; by twice the distance you moved it</b>, because the light
+goes down the arm and back.</div>
+
+<p>The two half-beams travel 2<i>d</i><sub>1</sub> and 2<i>d</i><sub>2</sub> &mdash; down each arm and back &mdash; so the path
+difference is</p>
+
+<span class="disp" style="font-size:1.2rem">&Delta;<i>d</i> = 2<i>d</i><sub>1</sub> &minus; 2<i>d</i><sub>2</sub></span>
+
+<ul class="items">
+<li>&Delta;<i>d</i> = <i>m&lambda;</i><sub>0</sub> &rarr; <b>constructive</b></li>
+<li>&Delta;<i>d</i> = (<i>m</i>&nbsp;+&nbsp;&frac12;)<i>&lambda;</i><sub>0</sub> &rarr; <b>destructive</b></li>
+</ul>
+
+<div class="fig">
+<svg viewBox="0 0 1000 440" role="img" aria-label="Concentric circular interference fringes seen at the detector. The rings are not evenly spaced: their radii go as the square root of the order, so they crowd closer together further out. A cross marks one fixed point through which the rings pass as the mirror is moved.">
+<defs><marker id="n13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<circle cx="330.0" cy="220.0" r="137.7" fill="#f4f6f8"/>
+<circle cx="330.0" cy="220.0" r="46.00" fill="none" stroke="#1d2b23" stroke-width="2.6"/><circle cx="330.0" cy="220.0" r="65.05" fill="none" stroke="#1d2b23" stroke-width="2.6"/><circle cx="330.0" cy="220.0" r="79.67" fill="none" stroke="#1d2b23" stroke-width="2.6"/><circle cx="330.0" cy="220.0" r="92.00" fill="none" stroke="#1d2b23" stroke-width="2.6"/><circle cx="330.0" cy="220.0" r="102.86" fill="none" stroke="#1d2b23" stroke-width="2.6"/><circle cx="330.0" cy="220.0" r="112.68" fill="none" stroke="#1d2b23" stroke-width="2.6"/><circle cx="330.0" cy="220.0" r="121.70" fill="none" stroke="#1d2b23" stroke-width="2.6"/>
+<circle cx="330.0" cy="220.0" r="4" fill="#1d2b23"/>
+<path d="M 398.6743371481683 209.0 L 420.6743371481683 231.0 M 398.6743371481683 231.0 L 420.6743371481683 209.0" stroke="#b3261e" stroke-width="3"/>
+<line x1="409.7" y1="204.0" x2="439.7" y2="80.3" stroke="#b3261e" stroke-width="1.2"/>
+<text x="445.7" y="78.3" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">count them passing here</text>
+<line x1="479.7" y1="220.0" x2="547.7" y2="220.0" stroke="#7b1fa2" stroke-width="2" marker-end="url(#n13b)"/>
+<text x="600.0" y="166.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23">Move M<tspan font-size="11" baseline-shift="sub">1</tspan> by &lambda;<tspan font-size="11" baseline-shift="sub">0</tspan>/2 and</text>
+<text x="600.0" y="190.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23">the path difference changes by &lambda;</text>
+<text x="600.0" y="214.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#5f6368">&mdash; every ring moves to where its</text>
+<text x="600.0" y="238.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#5f6368">neighbour used to be.</text>
+<text x="600.0" y="278.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23">So <tspan font-weight="600">counting rings measures distance</tspan>,</text>
+<text x="600.0" y="302.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23">to a fraction of a wavelength.</text>
+<text x="330.0" y="393.7" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">radii go as &radic;<tspan font-style="italic">m</tspan> &mdash; the rings crowd outward</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 2.</b>&nbsp; The fringes are circles, and they are <b>not evenly spaced</b> &mdash; the bright rings sit
+at radii proportional to &radic;<i>m</i>, so they bunch up toward the edge.&nbsp; Pick one point, mark it, and count rings as they
+sweep past.</div>
+
+<p>When M<sub>1</sub> is moved a distance &Delta;<i>d</i> = <i>&lambda;</i><sub>0</sub>/2, <b>the path difference changes by
+<i>&lambda;</i><sub>0</sub></b> &mdash; the factor of two from the round trip &mdash; and each fringe moves to the position previously
+occupied by an adjacent fringe.</p>
+
+<div class="punch" style="margin:.8rem 0"><span class="label">The consequence</span>
+<span class="big">By counting the number of fringes <i>m</i> passing a single point,<br>we can measure minute displacement accurate to a fraction of a wavelength</span></div>
+
+<h2>Worked example 1 &mdash; how far did the mirror move?</h2>
+
+<p><i>&lambda;</i> = <b>630&nbsp;nm</b>.&nbsp; M<sub>1</sub> is moved and <b>a single fringe shifts</b>.&nbsp; How much did the mirror
+move?</p>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">One fringe, so <i>m</i> = 1 and the <b>path difference</b> changed by one whole wavelength.</span>
+  <span class="step">The mirror moves half that, because the light makes the trip twice:
+  &Delta;<i>d</i> = (1)<i>&lambda;</i><sub>0</sub>/2 = 630&nbsp;nm / 2 = <b>315&nbsp;nm</b>.</span>
+  <span class="step">Back to the prediction: you do not need to <i>see</i> 315&nbsp;nm.&nbsp; You need to see <b>one ring move over
+  by one</b>, which is centimetres of movement on the screen.&nbsp; <b>That is the whole trick of the instrument</b> &mdash; it
+  converts a distance you cannot resolve into one you can.</span>
+</div></div></div>
+
+<h2>Worked example 2 &mdash; the refractive index of a gas</h2>
+
+<p>A cell of length <i>t</i> = <b>2&nbsp;cm</b> is placed in one arm and slowly filled with gas.&nbsp; With
+<i>&lambda;</i> = <b>632.8&nbsp;nm</b>, <b>122 fringes</b> shift as it fills.&nbsp; What is the refractive index of the gas?</p>
+
+<ol class="items tasks">
+<li>Nothing moved.&nbsp; So what changed the path difference?&nbsp; Answer that first and the algebra is two lines.</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev2" data-label="Show the working">Show the working</button><div class="rbody" id="rev2" hidden><div class="eq">
+  <span class="step">The light crosses the cell <b>twice</b>, so the optical path through it is 2<i>tn</i> with gas and 2<i>t</i>
+  with vacuum.&nbsp; The change is the difference:</span>
+  <span class="step">2<i>tn</i> &minus; 2<i>t</i> = <i>m&lambda;</i>&nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+  2<i>t</i>(<i>n</i> &minus; 1) = <i>m&lambda;</i></span>
+  <span class="step"><i>n</i> &minus; 1 = <i>m&lambda;</i> / 2<i>t</i>&nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+  <i>n</i> = 1 + <i>m&lambda;</i> / 2<i>t</i></span>
+  <span class="step"><i>n</i> = 1 + 122(632.8 &times; 10<sup>&minus;9</sup>) / [2(2 &times; 10<sup>&minus;2</sup>)] =
+  <b>1.00193</b></span>
+  <span class="step">A refractive index that differs from vacuum in the <b>third decimal place</b>, measured by counting rings in an
+  eyepiece.&nbsp; No other technique in this module comes close to that.</span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">Move the mirror &lambda;<sub>0</sub>/2 &rarr; one fringe passes</span>
+<p>Everything else about this instrument follows from the factor of two.&nbsp; A displacement too small to see becomes a count you
+can make by eye, and the same count &mdash; with nothing moving at all &mdash; weighs the optical thickness of a gas.</p></div>
+
+<h2>Looking ahead</h2>
+<p>Notes 10 and 11 treated interference and diffraction as separate effects.&nbsp; They are not: real slits have width <i>and</i>
+separation.&nbsp; <b>Note&nbsp;14</b> puts the two patterns together, and finds that some of Note&nbsp;10&rsquo;s bright fringes
+simply are not there.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; Why does moving a mirror by <i>&lambda;</i>/2 change the path difference by a whole
+  <i>&lambda;</i>?</p>
+    <label><input type="radio" name="q1" value="a"> Because the beamsplitter doubles the wavelength.</label>
+    <label><input type="radio" name="q1" value="b"> Because the light travels down that arm and back, so it covers the shift twice.</label>
+    <label><input type="radio" name="q1" value="c"> Because the compensator plate adds an equal amount.</label>
+    <label><input type="radio" name="q1" value="d"> It does not; it changes it by <i>&lambda;</i>/2.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; With <i>&lambda;</i> = 500&nbsp;nm, a mirror is moved and <b>8</b> fringes pass.&nbsp;
+  How far did it move, in nm?</p>
+    <div class="qnum"><input type="number" id="q2input" step="any" inputmode="decimal" aria-label="mirror displacement in nanometres"><span class="unit">nm</span></div><div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; In a Michelson, the circular fringes are spaced:</p>
+    <label><input type="radio" name="q3" value="a"> Evenly, like the fringes of a double slit.</label>
+    <label><input type="radio" name="q3" value="b"> With radii going as &radic;<i>m</i>, so they crowd together outward.</label>
+    <label><input type="radio" name="q3" value="c"> With radii going as <i>m</i><sup>2</sup>, so they spread out.</label>
+    <label><input type="radio" name="q3" value="d"> Randomly; the spacing carries no information.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; A 5.0&nbsp;cm cell is filled with a gas of <i>n</i> = 1.00050 using
+  <i>&lambda;</i> = 500&nbsp;nm.&nbsp; How many fringes shift?</p>
+    <div class="qnum"><input type="number" id="q4input" step="any" inputmode="decimal" aria-label="number of fringes"></div><div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N13 &mdash; Dr. Cho on the Michelson interferometer"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N13_The_Michelson_Interferometer_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the second arm is yours to complete.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 13, "The Michelson Interferometer"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. A beamsplitter divides the beam; the halves travel separate arms and are
+         recombined.
+     F2. The path difference is Delta-d = 2 d1 - 2 d2 - twice each arm, because the
+         light goes down and back.
+     F3. Delta-d = m lambda_0 is constructive; (m + 1/2) lambda_0 is destructive.
+     F4. Moving one mirror by lambda_0/2 changes the path difference by a whole
+         lambda_0, so one fringe passes any fixed point.
+     F5. Counting fringes therefore measures displacement to a fraction of a
+         wavelength.
+     F6. The fringes are circles whose radii go as sqrt(m); they crowd outward.
+     F7. A gas cell of length t in one arm: 2t(n - 1) = m lambda, so
+         n = 1 + m lambda / 2t.
+     F8. The compensator plate equalises the glass in the two arms.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 13.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q1": "b", "q3": "b"};
+  var NUM = {"q2": [2000.0, 10.0], "q4": [100.0, 1.0]};
+  var WHY = {
+    "q1": "The light goes down the arm and back, so moving the mirror by x changes the path by 2x. That factor of two is the whole instrument.",
+    "q2": "&Delta;d = m&lambda;/2 = 8(500)/2 = 2000 nm = 2.0 &micro;m.",
+    "q3": "Michelson fringes are circles of equal inclination: the bright rings sit at radii proportional to &radic;m, so they crowd together outward.",
+    "q4": "m = 2t(n &minus; 1)/&lambda; = 2(0.050)(0.00050)/(500 &times; 10&minus;9) = 100 fringes."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '\u2713 ' : '\u2717 ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

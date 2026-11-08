@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 N1 &mdash; What Light Is, and How Fast</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 1
+     "What Light Is, and How Fast".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08_M2_N1_Built.md.
+
+     THIS NOTE IS A SPLIT.  Its source is "M2 N1 Nature of Light" (25SP), a four-page
+     master whose printed body is five numbered headings and nothing else; the whole
+     lesson is in 1,546 bare ink strokes on top of it.  Cho's call 2026-11-08 was to
+     split that master into four notes along his own numbering.  This note is his
+     sections 1 and 2, from pages 1 and 2.
+
+     THE PROSE IS HIS, TRANSCRIBED.  The Maxwell/Faraday paragraph, the claim that
+     light is a solution of Maxwell's equations, the observation that light's speed was
+     measured before anyone thought it was an EM wave, the point that 1/sqrt(eps0 mu0)
+     matching the known value is what gave the game away, his question "at what speed,
+     compared c, will light travel in transparent media?", and v = c/n with n > 1 are
+     all his words and his order.  Light edits for sentence flow only.
+
+     THE "KEY" BOX IS HIS, VERBATIM, including the "w.r.t. time" wording and his use of
+     M rather than B for the magnetic field.  M is kept because it is what he wrote and
+     what he said in class; a page that silently renames it teaches a different symbol
+     from the one on his board.
+
+     THE TITLE IS CLAUDE'S.  His master titles the whole four-page sheet "Nature of
+     Light" and numbers the sections but gives this pair no name of its own.
+
+     THE PERFORMANCE EXPECTATIONS ARE CLAUDE'S, marked class="pe lp" to distinguish
+     them from the serif "pe doc" blocks that are transcribed from his own masters.
+     Vet, reword or cut them; nothing downstream depends on the wording.
+
+     THE FOUR CHECK-YOURSELF QUESTIONS ARE CLAUDE'S, written against the foundation
+     list at the foot of this file.  Both numeric answers were recomputed from first
+     principles before they went near the page.
+
+     FIGURE 1 IS A TRANSCRIPTION of his freehand sketch on page 1 — the E and M
+     sinusoids on one propagation axis, with the arrows from axis to curve that he drew.
+     His ink uses cyan for E and purple for M; this page uses the house blue and red so
+     the figure matches the rest of the corpus. Both sine paths are computed, so the two
+     fields cross zero and peak together, which is the point the figure has to make.
+
+     NO CALC FENCE: there is no calculus in this note, and no shipped page in this
+     course carries a fence.  It survives the mirror unchanged.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 1</span></div>
+<h1>What Light Is, and How Fast</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>Light turns out to be a solution of Maxwell&rsquo;s equations &mdash; an
+electromagnetic wave that carries itself along and needs nothing to travel through.&nbsp; A speed falls straight out of those equations,
+and it matched a number experimenters had already measured.&nbsp; This note is that story, and then what becomes of that speed when the
+light is in water or glass instead of nothing.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>Light crosses empty space at
+<i>c</i> = 3&times;10<sup>8</sup>&nbsp;m/s.&nbsp; Now send it into a block of glass.&nbsp; <b>At what speed, compared with <i>c</i>, does
+it travel there</b> &mdash; faster, slower, or the same?&nbsp; Write down your answer and one sentence of reason.&nbsp; Section 2 settles
+it.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Say</b> what light is, in the sense Maxwell&rsquo;s equations give: an electromagnetic wave, self&#8209;sustaining, needing no medium.</li>
+<li><b>State</b> the relationship between a changing electric field and a changing magnetic field, and say which causes which.</li>
+<li><b>Explain</b> why <i>c</i> = 1/&radic;(&epsilon;<sub>0</sub>&mu;<sub>0</sub>) was the clue that light is electromagnetic, given that
+light&rsquo;s speed had already been measured.</li>
+<li><b>Use</b> <i>v</i> = <i>c</i>/<i>n</i> to find the speed of light in a transparent medium, and say why <i>n</i> &gt; 1 means what it means.</li>
+</ol></div>
+
+<h2>1.&nbsp; What is light?</h2>
+
+<p>To this day, one can&rsquo;t say light is <i>fully</i> understood &mdash; that story runs on into quantum mechanics.&nbsp; But the clues
+as to its nature were first gleaned from the work on electricity and magnetism by Faraday, and especially by Maxwell.</p>
+
+<p>Faraday&rsquo;s experimental results, and his idea of <b>fields</b> permeating and propagating through space and time, were formulated
+rigorously by Maxwell in his famous equations.&nbsp; <b>Light is a solution of Maxwell&rsquo;s equations</b>: an electromagnetic wave
+travelling at a fixed speed,</p>
+
+<span class="disp" style="font-size:1.16rem"><i>c</i> = 1 / &radic;(&epsilon;<sub>0</sub>&mu;<sub>0</sub>) = 3&times;10<sup>8</sup>&nbsp;m/s</span>
+
+<p>Counter-intuitively, such a disturbance of electromagnetic nature is <b>self-sustaining</b>, requiring no medium.&nbsp; Light propagates
+through vacuum at speed <i>c</i>, the maximal speed.</p>
+
+<div class="fig">
+<svg viewBox="0 0 860 350" role="img" aria-label="An electromagnetic wave. A straight propagation axis runs left to right. An electric field oscillates as a sine wave in the vertical plane, drawn in blue with arrows from the axis to the curve. A magnetic field oscillates as a sine wave of the same wavelength in the plane at right angles to it, drawn in red and shown in perspective. The two are in step: both cross zero together and both peak together.">
+<defs>
+<marker id="n1e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker>
+<marker id="n1m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker>
+<marker id="n1k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.4" markerHeight="6.4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker>
+</defs>
+<line x1="120.0" y1="88.0" x2="120.0" y2="272.0" stroke="#cfd3d7" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="250.0" y1="88.0" x2="250.0" y2="272.0" stroke="#cfd3d7" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="380.0" y1="88.0" x2="380.0" y2="272.0" stroke="#cfd3d7" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="510.0" y1="88.0" x2="510.0" y2="272.0" stroke="#cfd3d7" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="640.0" y1="88.0" x2="640.0" y2="272.0" stroke="#cfd3d7" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="64.0" y1="180.0" x2="696.0" y2="180.0" stroke="#1d2b23" stroke-width="2" marker-end="url(#n1k)"/>
+<text x="702.0" y="170.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23">direction</text>
+<text x="702.0" y="190.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23">of travel</text>
+<line x1="43.6" y1="210.0" x2="91.2" y2="140.0" stroke="#b9bcc0" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="10" y="235.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#7a7f85">the plane M lies in,</text>
+<text x="10" y="250.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#7a7f85">seen edge-on</text>
+<line x1="177.8" y1="180.0" x2="177.8" y2="97.3" stroke="#1636c8" stroke-width="1.7" marker-end="url(#n1e)"/>
+<line x1="177.8" y1="180.0" x2="208.6" y2="134.7" stroke="#b3261e" stroke-width="1.7" marker-end="url(#n1m)"/>
+<line x1="235.6" y1="180.0" x2="235.6" y2="151.3" stroke="#1636c8" stroke-width="1.7" marker-end="url(#n1e)"/>
+<line x1="235.6" y1="180.0" x2="246.3" y2="164.3" stroke="#b3261e" stroke-width="1.7" marker-end="url(#n1m)"/>
+<line x1="293.3" y1="180.0" x2="293.3" y2="252.7" stroke="#1636c8" stroke-width="1.7" marker-end="url(#n1e)"/>
+<line x1="293.3" y1="180.0" x2="266.2" y2="219.8" stroke="#b3261e" stroke-width="1.7" marker-end="url(#n1m)"/>
+<line x1="351.1" y1="180.0" x2="351.1" y2="234.0" stroke="#1636c8" stroke-width="1.7" marker-end="url(#n1e)"/>
+<line x1="351.1" y1="180.0" x2="331.0" y2="209.6" stroke="#b3261e" stroke-width="1.7" marker-end="url(#n1m)"/>
+<line x1="408.9" y1="180.0" x2="408.9" y2="126.0" stroke="#1636c8" stroke-width="1.7" marker-end="url(#n1e)"/>
+<line x1="408.9" y1="180.0" x2="429.0" y2="150.4" stroke="#b3261e" stroke-width="1.7" marker-end="url(#n1m)"/>
+<line x1="466.7" y1="180.0" x2="466.7" y2="107.3" stroke="#1636c8" stroke-width="1.7" marker-end="url(#n1e)"/>
+<line x1="466.7" y1="180.0" x2="493.8" y2="140.2" stroke="#b3261e" stroke-width="1.7" marker-end="url(#n1m)"/>
+<line x1="524.4" y1="180.0" x2="524.4" y2="208.7" stroke="#1636c8" stroke-width="1.7" marker-end="url(#n1e)"/>
+<line x1="524.4" y1="180.0" x2="513.7" y2="195.7" stroke="#b3261e" stroke-width="1.7" marker-end="url(#n1m)"/>
+<line x1="582.2" y1="180.0" x2="582.2" y2="262.7" stroke="#1636c8" stroke-width="1.7" marker-end="url(#n1e)"/>
+<line x1="582.2" y1="180.0" x2="551.4" y2="225.3" stroke="#b3261e" stroke-width="1.7" marker-end="url(#n1m)"/>
+<polyline points="120.00,180.00 122.85,178.19 125.70,176.39 128.55,174.59 131.39,172.80 134.23,171.03 137.05,169.26 139.87,167.51 142.67,165.79 145.45,164.08 148.22,162.40 150.97,160.74 153.70,159.12 156.41,157.52 159.09,155.97 161.75,154.44 164.39,152.96 166.99,151.52 169.56,150.13 172.11,148.78 174.62,147.47 177.09,146.22 179.54,145.02 181.94,143.88 184.31,142.79 186.63,141.75 188.92,140.78 191.17,139.87 193.37,139.01 195.53,138.23 197.65,137.50 199.72,136.84 201.75,136.25 203.73,135.73 205.67,135.27 207.55,134.88 209.39,134.57 211.19,134.32 212.93,134.14 214.63,134.04 216.28,134.00 217.88,134.04 219.43,134.14 220.94,134.32 222.39,134.57 223.80,134.88 225.17,135.27 226.48,135.73 227.75,136.25 228.97,136.84 230.15,137.50 231.28,138.23 232.37,139.01 233.42,139.87 234.42,140.78 235.38,141.75 236.31,142.79 237.19,143.88 238.04,145.02 238.84,146.22 239.62,147.47 240.36,148.78 241.06,150.13 241.74,151.52 242.39,152.96 243.00,154.44 243.59,155.97 244.16,157.52 244.70,159.12 245.22,160.74 245.72,162.40 246.20,164.08 246.67,165.79 247.12,167.51 247.55,169.26 247.98,171.03 248.39,172.80 248.80,174.59 249.20,176.39 249.60,178.19 250.00,180.00 250.40,181.81 250.80,183.61 251.20,185.41 251.61,187.20 252.02,188.97 252.45,190.74 252.88,192.49 253.33,194.21 253.80,195.92 254.28,197.60 254.78,199.26 255.30,200.88 255.84,202.48 256.41,204.03 257.00,205.56 257.61,207.04 258.26,208.48 258.94,209.87 259.64,211.22 260.38,212.53 261.16,213.78 261.96,214.98 262.81,216.12 263.69,217.21 264.62,218.25 265.58,219.22 266.58,220.13 267.63,220.99 268.72,221.77 269.85,222.50 271.03,223.16 272.25,223.75 273.52,224.27 274.83,224.73 276.20,225.12 277.61,225.43 279.06,225.68 280.57,225.86 282.12,225.96 283.72,226.00 285.37,225.96 287.07,225.86 288.81,225.68 290.61,225.43 292.45,225.12 294.33,224.73 296.27,224.27 298.25,223.75 300.28,223.16 302.35,222.50 304.47,221.77 306.63,220.99 308.83,220.13 311.08,219.22 313.37,218.25 315.69,217.21 318.06,216.12 320.46,214.98 322.91,213.78 325.38,212.53 327.89,211.22 330.44,209.87 333.01,208.48 335.61,207.04 338.25,205.56 340.91,204.03 343.59,202.48 346.30,200.88 349.03,199.26 351.78,197.60 354.55,195.92 357.33,194.21 360.13,192.49 362.95,190.74 365.77,188.97 368.61,187.20 371.45,185.41 374.30,183.61 377.15,181.81 380.00,180.00 382.85,178.19 385.70,176.39 388.55,174.59 391.39,172.80 394.23,171.03 397.05,169.26 399.87,167.51 402.67,165.79 405.45,164.08 408.22,162.40 410.97,160.74 413.70,159.12 416.41,157.52 419.09,155.97 421.75,154.44 424.39,152.96 426.99,151.52 429.56,150.13 432.11,148.78 434.62,147.47 437.09,146.22 439.54,145.02 441.94,143.88 444.31,142.79 446.63,141.75 448.92,140.78 451.17,139.87 453.37,139.01 455.53,138.23 457.65,137.50 459.72,136.84 461.75,136.25 463.73,135.73 465.67,135.27 467.55,134.88 469.39,134.57 471.19,134.32 472.93,134.14 474.63,134.04 476.28,134.00 477.88,134.04 479.43,134.14 480.94,134.32 482.39,134.57 483.80,134.88 485.17,135.27 486.48,135.73 487.75,136.25 488.97,136.84 490.15,137.50 491.28,138.23 492.37,139.01 493.42,139.87 494.42,140.78 495.38,141.75 496.31,142.79 497.19,143.88 498.04,145.02 498.84,146.22 499.62,147.47 500.36,148.78 501.06,150.13 501.74,151.52 502.39,152.96 503.00,154.44 503.59,155.97 504.16,157.52 504.70,159.12 505.22,160.74 505.72,162.40 506.20,164.08 506.67,165.79 507.12,167.51 507.55,169.26 507.98,171.03 508.39,172.80 508.80,174.59 509.20,176.39 509.60,178.19 510.00,180.00 510.40,181.81 510.80,183.61 511.20,185.41 511.61,187.20 512.02,188.97 512.45,190.74 512.88,192.49 513.33,194.21 513.80,195.92 514.28,197.60 514.78,199.26 515.30,200.88 515.84,202.48 516.41,204.03 517.00,205.56 517.61,207.04 518.26,208.48 518.94,209.87 519.64,211.22 520.38,212.53 521.16,213.78 521.96,214.98 522.81,216.12 523.69,217.21 524.62,218.25 525.58,219.22 526.58,220.13 527.63,220.99 528.72,221.77 529.85,222.50 531.03,223.16 532.25,223.75 533.52,224.27 534.83,224.73 536.20,225.12 537.61,225.43 539.06,225.68 540.57,225.86 542.12,225.96 543.72,226.00 545.37,225.96 547.07,225.86 548.81,225.68 550.61,225.43 552.45,225.12 554.33,224.73 556.27,224.27 558.25,223.75 560.28,223.16 562.35,222.50 564.47,221.77 566.63,220.99 568.83,220.13 571.08,219.22 573.37,218.25 575.69,217.21 578.06,216.12 580.46,214.98 582.91,213.78 585.38,212.53 587.89,211.22 590.44,209.87 593.01,208.48 595.61,207.04 598.25,205.56 600.91,204.03 603.59,202.48 606.30,200.88 609.03,199.26 611.78,197.60 614.55,195.92 617.33,194.21 620.13,192.49 622.95,190.74 625.77,188.97 628.61,187.20 631.45,185.41 634.30,183.61 637.15,181.81 640.00,180.00" fill="none" stroke="#b3261e" stroke-width="2.6" stroke-linejoin="round"/>
+<polyline points="120.00,180.00 121.62,176.70 123.25,173.41 124.88,170.13 126.50,166.86 128.12,163.61 129.75,160.39 131.38,157.20 133.00,154.04 134.62,150.93 136.25,147.85 137.88,144.83 139.50,141.86 141.12,138.96 142.75,136.11 144.38,133.33 146.00,130.63 147.62,128.00 149.25,125.45 150.88,122.98 152.50,120.60 154.12,118.32 155.75,116.13 157.38,114.03 159.00,112.04 160.62,110.16 162.25,108.38 163.88,106.71 165.50,105.16 167.12,103.72 168.75,102.39 170.38,101.19 172.00,100.11 173.62,99.15 175.25,98.32 176.88,97.61 178.50,97.03 180.12,96.58 181.75,96.26 183.38,96.06 185.00,96.00 186.62,96.06 188.25,96.26 189.88,96.58 191.50,97.03 193.12,97.61 194.75,98.32 196.38,99.15 198.00,100.11 199.62,101.19 201.25,102.39 202.88,103.72 204.50,105.16 206.12,106.71 207.75,108.38 209.38,110.16 211.00,112.04 212.62,114.03 214.25,116.13 215.88,118.32 217.50,120.60 219.12,122.98 220.75,125.45 222.38,128.00 224.00,130.63 225.62,133.33 227.25,136.11 228.88,138.96 230.50,141.86 232.12,144.83 233.75,147.85 235.38,150.93 237.00,154.04 238.62,157.20 240.25,160.39 241.88,163.61 243.50,166.86 245.12,170.13 246.75,173.41 248.38,176.70 250.00,180.00 251.62,183.30 253.25,186.59 254.88,189.87 256.50,193.14 258.12,196.39 259.75,199.61 261.38,202.80 263.00,205.96 264.62,209.07 266.25,212.15 267.88,215.17 269.50,218.14 271.12,221.04 272.75,223.89 274.38,226.67 276.00,229.37 277.62,232.00 279.25,234.55 280.88,237.02 282.50,239.40 284.12,241.68 285.75,243.87 287.38,245.97 289.00,247.96 290.62,249.84 292.25,251.62 293.88,253.29 295.50,254.84 297.12,256.28 298.75,257.61 300.38,258.81 302.00,259.89 303.62,260.85 305.25,261.68 306.88,262.39 308.50,262.97 310.12,263.42 311.75,263.74 313.38,263.94 315.00,264.00 316.62,263.94 318.25,263.74 319.88,263.42 321.50,262.97 323.12,262.39 324.75,261.68 326.38,260.85 328.00,259.89 329.62,258.81 331.25,257.61 332.88,256.28 334.50,254.84 336.12,253.29 337.75,251.62 339.38,249.84 341.00,247.96 342.62,245.97 344.25,243.87 345.88,241.68 347.50,239.40 349.12,237.02 350.75,234.55 352.38,232.00 354.00,229.37 355.62,226.67 357.25,223.89 358.88,221.04 360.50,218.14 362.12,215.17 363.75,212.15 365.38,209.07 367.00,205.96 368.62,202.80 370.25,199.61 371.88,196.39 373.50,193.14 375.12,189.87 376.75,186.59 378.38,183.30 380.00,180.00 381.62,176.70 383.25,173.41 384.88,170.13 386.50,166.86 388.12,163.61 389.75,160.39 391.38,157.20 393.00,154.04 394.62,150.93 396.25,147.85 397.88,144.83 399.50,141.86 401.12,138.96 402.75,136.11 404.38,133.33 406.00,130.63 407.62,128.00 409.25,125.45 410.88,122.98 412.50,120.60 414.12,118.32 415.75,116.13 417.38,114.03 419.00,112.04 420.62,110.16 422.25,108.38 423.88,106.71 425.50,105.16 427.12,103.72 428.75,102.39 430.38,101.19 432.00,100.11 433.62,99.15 435.25,98.32 436.88,97.61 438.50,97.03 440.12,96.58 441.75,96.26 443.38,96.06 445.00,96.00 446.62,96.06 448.25,96.26 449.88,96.58 451.50,97.03 453.12,97.61 454.75,98.32 456.38,99.15 458.00,100.11 459.62,101.19 461.25,102.39 462.88,103.72 464.50,105.16 466.12,106.71 467.75,108.38 469.38,110.16 471.00,112.04 472.62,114.03 474.25,116.13 475.88,118.32 477.50,120.60 479.12,122.98 480.75,125.45 482.38,128.00 484.00,130.63 485.62,133.33 487.25,136.11 488.88,138.96 490.50,141.86 492.12,144.83 493.75,147.85 495.38,150.93 497.00,154.04 498.62,157.20 500.25,160.39 501.88,163.61 503.50,166.86 505.12,170.13 506.75,173.41 508.38,176.70 510.00,180.00 511.62,183.30 513.25,186.59 514.88,189.87 516.50,193.14 518.12,196.39 519.75,199.61 521.38,202.80 523.00,205.96 524.62,209.07 526.25,212.15 527.88,215.17 529.50,218.14 531.12,221.04 532.75,223.89 534.38,226.67 536.00,229.37 537.62,232.00 539.25,234.55 540.88,237.02 542.50,239.40 544.12,241.68 545.75,243.87 547.38,245.97 549.00,247.96 550.62,249.84 552.25,251.62 553.88,253.29 555.50,254.84 557.12,256.28 558.75,257.61 560.38,258.81 562.00,259.89 563.62,260.85 565.25,261.68 566.88,262.39 568.50,262.97 570.12,263.42 571.75,263.74 573.38,263.94 575.00,264.00 576.62,263.94 578.25,263.74 579.88,263.42 581.50,262.97 583.12,262.39 584.75,261.68 586.38,260.85 588.00,259.89 589.62,258.81 591.25,257.61 592.88,256.28 594.50,254.84 596.12,253.29 597.75,251.62 599.38,249.84 601.00,247.96 602.62,245.97 604.25,243.87 605.88,241.68 607.50,239.40 609.12,237.02 610.75,234.55 612.38,232.00 614.00,229.37 615.62,226.67 617.25,223.89 618.88,221.04 620.50,218.14 622.12,215.17 623.75,212.15 625.38,209.07 627.00,205.96 628.62,202.80 630.25,199.61 631.88,196.39 633.50,193.14 635.12,189.87 636.75,186.59 638.38,183.30 640.00,180.00" fill="none" stroke="#1636c8" stroke-width="2.6" stroke-linejoin="round"/>
+<text x="100.0" y="78.0" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#1636c8" font-weight="600">E-field</text>
+<text x="210.0" y="260.0" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#b3261e" font-weight="600">M-field</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; The two fields rise and fall <i>together</i>: at every dashed line both are zero at once, and
+between them both are at full strength at once.&nbsp; M is drawn receding, in the plane at right angles to E &mdash; which is why its crest
+appears shifted to the right on the page even though it sits at the same point along the axis.&nbsp; Nothing is oscillating up and down
+<i>in</i> the wave: no rope, no air, no medium at all.&nbsp; What travels is the pattern of the fields themselves.</div>
+
+<div class="punch"><span class="label">Key</span>
+<span class="big">Change (w.r.t. time) in <i>E</i> causes change (w.r.t. time) in <i>M</i></span>
+<p>That is the engine of the whole thing.&nbsp; A changing electric field makes a changing magnetic field, which makes a changing electric
+field, and so on down the line &mdash; which is why the wave keeps going with nothing to travel through.</p></div>
+
+<h2>2.&nbsp; How fast does light travel?</h2>
+
+<p>Maxwell&rsquo;s equations, which were written to encapsulate the known experimental results of Faraday and Ampere and others, not only
+reveal that light is an electromagnetic wave &mdash; they reveal <b>how fast it should travel</b>.</p>
+
+<p>Light speed was measured <i>before</i> anyone thought light was an electromagnetic wave.&nbsp; The electromagnetic nature of light was
+inferred from the fact that <b>1/&radic;(&epsilon;<sub>0</sub>&mu;<sub>0</sub>) happened to match the then-known value of the speed of
+light</b>.</p>
+
+<p>Light speed <i>c</i> is the speed when light travels in <b>vacuum</b> &mdash; that is, in nothing.&nbsp; But light can also travel
+through transparent media such as water or glass.</p>
+
+<ol class="items tasks">
+<li>At what speed, compared with <i>c</i>, will light travel in a transparent medium?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">Slower.&nbsp; The speed in the medium is</span>
+  <span class="step">&nbsp; &nbsp; <b><i>v</i> = <i>c</i>/<i>n</i></b>&nbsp; &nbsp;where <i>n</i> is the <b>refractive index</b> of that medium.</span>
+  <span class="step">Every transparent medium has <b><i>n</i> &gt; 1</b>, so <i>v</i> is always less than <i>c</i>.&nbsp; Vacuum is the
+  case <i>n</i> = 1, and nothing beats it.</span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big"><i>v</i> = <i>c</i>/<i>n</i>,&nbsp; with <i>n</i> &gt; 1</span>
+<p>One constant out of two constants of electromagnetism, and then one number per material that says how much the material slows the light
+down.&nbsp; That single number <i>n</i> is what the whole of the next three notes runs on.</p></div>
+
+<h2>Looking ahead</h2>
+<p>You now have what light is and how fast it goes.&nbsp; <b>Note 2</b> is the <b>law of reflection</b> &mdash; what happens when that light
+arrives at a shiny surface instead of carrying straight on.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; Light travels through a medium of refractive index <i>n</i> = 1.5.&nbsp; What is its speed
+  there, in m/s?&nbsp; Use <i>c</i> = 3.00&times;10<sup>8</sup>&nbsp;m/s.</p>
+    <div class="qnum"><input type="number" id="q1input" step="any" inputmode="decimal" aria-label="speed of light in a medium of refractive index 1.5, in metres per second"><span class="unit">m/s</span></div><div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Which statement about an electromagnetic wave is correct?</p>
+    <label><input type="radio" name="q2" value="a"> It needs a medium to travel through, like sound does.</label>
+    <label><input type="radio" name="q2" value="b"> The electric and magnetic fields are parallel to each other.</label>
+    <label><input type="radio" name="q2" value="c"> The two fields are at right angles to each other and to the direction of travel.</label>
+    <label><input type="radio" name="q2" value="d"> Only the electric field oscillates; the magnetic field is constant.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; Why was it such strong evidence that light is electromagnetic when
+  1/&radic;(&epsilon;<sub>0</sub>&mu;<sub>0</sub>) was worked out?</p>
+    <label><input type="radio" name="q3" value="a"> Because the speed of light had already been measured, and the two numbers agreed.</label>
+    <label><input type="radio" name="q3" value="b"> Because it proved light needs no medium.</label>
+    <label><input type="radio" name="q3" value="c"> Because &epsilon;<sub>0</sub> and &mu;<sub>0</sub> are properties of light itself.</label>
+    <label><input type="radio" name="q3" value="d"> Because it showed light is the fastest thing there is.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; Light slows to 2.00&times;10<sup>8</sup>&nbsp;m/s inside a certain glass.&nbsp; What is the
+  refractive index of that glass?</p>
+    <div class="qnum"><input type="number" id="q4input" step="any" inputmode="decimal" aria-label="refractive index of the glass"><span class="unit">&nbsp;</span></div><div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N1 &mdash; Dr. Cho on what light is"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N1_What_Light_Is_And_How_Fast_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the wave figure is started for you to finish.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 1, "What Light Is, and How Fast"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. Light is a solution of Maxwell's equations: an electromagnetic wave.
+     F2. The wave is SELF-SUSTAINING and needs NO MEDIUM.  This is the property that
+         separates it from sound and from a wave on a string.
+     F3. E and M are perpendicular to each other and both perpendicular to the
+         direction of travel; they rise and fall in step, crossing zero together and
+         peaking together.
+     F4. A change in E with respect to time causes a change in M with respect to time,
+         and that mutual regeneration is why the wave propagates.
+     F5. c = 1/sqrt(eps0 mu0) = 3x10^8 m/s, the speed in vacuum, and the maximal speed.
+     F6. The historical argument: light's speed was measured BEFORE anyone thought light
+         was electromagnetic.  The match between the measured value and the value built
+         only from eps0 and mu0 is the evidence.  A question testing F6 must test the
+         ORDER of events, not just the formula.
+     F7. In a transparent medium, v = c/n, where n is the refractive index.
+     F8. n > 1 for every transparent medium, so light is always slower in matter than in
+         vacuum.  Vacuum is the case n = 1.
+     F9. Both directions are fair game: v from c and n, and n from c and v.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 1.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = { q2:'c', q3:'a' };
+  var WHY = {
+    q1:'v = c/n = (3.00×10⁸)/1.5 = 2.0×10⁸ m/s.',
+    q2:'E and M are perpendicular to each other and both perpendicular to the direction of travel — and no medium is needed at all.',
+    q3:'The speed had already been measured. Maxwell’s equations predicted a speed built only from ε₀ and μ₀, and it matched — that coincidence is the evidence.',
+    q4:'n = c/v = (3.00×10⁸)/(2.00×10⁸) = 1.50.'
+  };
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '✓ ' : '✗ ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    var v1 = num('q1input');
+    var ok1 = close(v1, 2.0e8, 0.1e8);
+    fb(document.getElementById('card-q1'), ok1, WHY.q1);
+    if (ok1) n++;
+
+    ['q2','q3'].forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]);
+      if (ok) n++;
+    });
+
+    var v4 = num('q4input');
+    var ok4 = close(v4, 1.50, 0.02);
+    fb(document.getElementById('card-q4'), ok4, WHY.q4);
+    if (ok4) n++;
+
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    ['q1input','q4input'].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ''; });
+    ['q2','q3'].forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

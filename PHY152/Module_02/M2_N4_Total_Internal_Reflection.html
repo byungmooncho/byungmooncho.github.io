@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 N4 &mdash; Total Internal Reflection</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 4
+     "Total Internal Reflection".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08c_M2_N2_N3_N4_Built.md.
+
+     THIS NOTE IS A SPLIT, AND ITS SOURCE IS A STAMP.  Section 5 of the "M2 N1 Nature
+     of Light" master (25SP) exists ONLY inside the second stamped image on page 4 -- a
+     raster image of his handwriting, added after the sheet was printed.  The printed
+     heading "5. Total Internal Reflection" was struck through at the top of page 3 and
+     never rewritten, so this section has no heading anywhere in the ink.
+
+     THAT MATTERS FOR THE AUDIT TRAIL: a stamp annotation carries no ink strokes, is not
+     flattened page content, and is not in the .docx -- so all three of the standard ink
+     checks report this page as untouched.  Rendering it and looking is the only check
+     that finds it.
+
+     WHAT IS HIS: the glass-to-air geometry with the ordinary ray and the grazing ray,
+     theta_c marked on the steeper one, the chain n_i sin(theta_i) = n_r sin(theta_r)
+     -> n_i sin(theta_c) = n_r sin(90) = n_r -> sin(theta_c) = n_r/n_i =
+     n_air/n_glass, and the "Principle of Least Time" sketch with the figure on the
+     sand and the swimmer in the sea.
+
+     WHAT IS CLAUDE'S: the title (see above -- there is no heading in the ink), the
+     synopsis, the predict hook, the Performance Expectations (class "pe lp"), the
+     observation that sin(theta_c) <= 1 forces n_r < n_i, the optical-fibre line, the
+     four ticket questions and the foundation list.
+
+     THE FIGURES ARE DRAWN TO SCALE.  theta_c = asin(1.00/1.50) = 41.8 degrees and the
+     ordinary ray at 30 degrees refracts to 48.6 degrees, both computed rather than
+     sketched, so the "runs ahead of it" claim in the caption is visible in the picture.
+
+     NO CALC FENCE: there is no calculus in this note.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 4</span></div>
+<h1>Total Internal Reflection</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>Run the light the other way &mdash; out of glass into air instead of in
+&mdash; and Snell&rsquo;s law gives a refracted angle that is <i>bigger</i> than the one you started with.&nbsp; Push far enough and
+it reaches 90&deg;.&nbsp; Past that there is no refracted ray at all, and the surface behaves like a perfect mirror.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>Light inside glass meets the surface with air above
+it.&nbsp; As you tilt the ray further from the normal, the refracted ray in the air tilts faster.&nbsp; <b>What happens when the
+refracted ray reaches 90&deg;</b>, and what can possibly happen after that?&nbsp; Write down a guess before you read on.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Explain</b> why total internal reflection happens only going from a denser medium to a less dense one.</li>
+<li><b>Derive</b> sin&thinsp;&theta;<sub>c</sub> = <i>n</i><sub>r</sub>/<i>n</i><sub>i</sub> by setting &theta;<sub>r</sub> = 90&deg; in Snell&rsquo;s law.</li>
+<li><b>Calculate</b> a critical angle from two refractive indices, and say what happens above and below it.</li>
+<li><b>State</b> the principle of least time and connect it to the bending of a ray at a boundary.</li>
+</ol></div>
+
+<h2>5.&nbsp; Total internal reflection</h2>
+
+<div class="fig">
+<svg viewBox="0 0 780 440" role="img" aria-label="Light inside glass meets the surface with air above. An ordinary ray leaves into the air, bending away from the normal. A second ray arriving at the critical angle refracts along the surface itself, at ninety degrees to the normal. Any steeper ray cannot leave at all.">
+<defs>
+<marker id="n4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker>
+<marker id="n4r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker>
+</defs>
+<rect x="50" y="50" width="680" height="200" fill="#f7fbff"/>
+<rect x="50" y="250.0" width="680" height="150" fill="#e9eef5"/>
+<line x1="50" y1="250.0" x2="730" y2="250.0" stroke="#0f7b7b" stroke-width="2.6"/>
+<text x="64" y="80" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#0f7b7b" font-weight="600">Air</text>
+<text x="64" y="104" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f7b7b"><tspan font-style="italic">n</tspan><tspan font-size="11" baseline-shift="sub">air</tspan> = 1.00</text>
+<text x="64" y="284.0" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#0f7b7b" font-weight="600">glass</text>
+<text x="64" y="308.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0f7b7b"><tspan font-style="italic">n</tspan><tspan font-size="11" baseline-shift="sub">glass</tspan> = 1.50</text>
+<line x1="360.0" y1="80.0" x2="360.0" y2="420.0" stroke="#1d2b23" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="370.0" y="74.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23">Normal</text>
+
+<line x1="255.0" y1="431.9" x2="360.0" y2="250.0" stroke="#1636c8" stroke-width="2.4" marker-end="url(#n4a)"/>
+<line x1="360.0" y1="250.0" x2="502.5" y2="124.3" stroke="#1636c8" stroke-width="2.4" marker-end="url(#n4a)"/>
+<path d="M 329.0 303.7 A 62.0 62.0 0 0 1 360.0 312.0" fill="none" stroke="#1636c8" stroke-width="1.6"/>
+<text x="330.0" y="336.0" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8" font-style="italic">&#952;<tspan font-size="11" baseline-shift="sub">i</tspan></text>
+<text x="510.5" y="126.3" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-style="italic">&#952;<tspan font-size="11" baseline-shift="sub">r</tspan></text>
+
+<line data-skel="grazing" x1="220.0" y1="406.5" x2="360.0" y2="250.0" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n4r)"/>
+<line x1="360.0" y1="250.0" x2="560.0" y2="250.0" stroke="#b3261e" stroke-width="2.4" marker-end="url(#n4r)"/>
+<path data-skel="theta-c-arc" d="M 298.0 319.3 A 93.0 93.0 0 0 1 360.0 343.0" fill="none" stroke="#b3261e" stroke-width="1.6"/>
+<text data-skel="theta-c-label" x="304.0" y="378.0" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-style="italic">&#952;<tspan font-size="11" baseline-shift="sub">c</tspan></text>
+<text x="456.0" y="236.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">&#952;<tspan font-size="11" baseline-shift="sub">r</tspan> = 90&deg;</text>
+<text x="456.0" y="272.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e">grazes along the surface</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; Drawn to scale.&nbsp; The blue ray leaves at
+&theta;<sub>i</sub> = 30&deg; and refracts to 48.6&deg; &mdash; bending <i>away</i> from the normal, because it is
+going into the <i>less</i> dense medium.&nbsp; Push &theta;<sub>i</sub> up and &theta;<sub>r</sub> runs ahead of it until it hits
+90&deg;.&nbsp; The angle at which that happens is &theta;<sub>c</sub>, and that is the whole of the critical angle.</div>
+
+<ol class="items tasks">
+<li>Find the angle &theta;<sub>c</sub> at which the refracted ray just grazes the surface, in terms of
+<i>n</i><sub>i</sub> and <i>n</i><sub>r</sub>.&nbsp; Then put the numbers in for glass and air.</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">Start from Snell&rsquo;s law:&nbsp; &nbsp;<i>n</i><sub>i</sub> sin&thinsp;<i>&theta;</i><sub>i</sub> =
+  <i>n</i><sub>r</sub> sin&thinsp;<i>&theta;</i><sub>r</sub></span>
+  <span class="step">&ldquo;Grazing the surface&rdquo; means <i>&theta;</i><sub>r</sub> = 90&deg;, and sin&thinsp;90&deg; = 1:</span>
+  <span class="step">&nbsp; &nbsp;<i>n</i><sub>i</sub> sin&thinsp;<i>&theta;</i><sub>c</sub> =
+  <i>n</i><sub>r</sub> sin&thinsp;90&deg; = <i>n</i><sub>r</sub></span>
+  <span class="step">&nbsp; &nbsp;<b>sin&thinsp;<i>&theta;</i><sub>c</sub> = <i>n</i><sub>r</sub>/<i>n</i><sub>i</sub> =
+  <i>n</i><sub>air</sub>/<i>n</i><sub>glass</sub></b></span>
+  <span class="step">For glass and air: sin&thinsp;<i>&theta;</i><sub>c</sub> = 1.00/1.50 = 0.667, so
+  <b><i>&theta;</i><sub>c</sub> = 41.8&deg;</b>.</span>
+  <span class="step">Note what the equation requires: sin&thinsp;<i>&theta;</i><sub>c</sub> cannot exceed 1, so there is only a
+  critical angle when <i>n</i><sub>r</sub> &lt; <i>n</i><sub>i</sub>.&nbsp; <b>Dense to less dense, or it does not happen at
+  all.</b></span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">sin&thinsp;<i>&theta;</i><sub>c</sub> = <i>n</i><sub>r</sub>/<i>n</i><sub>i</sub></span>
+<p>Below &theta;<sub>c</sub> some light leaves and some reflects.&nbsp; At &theta;<sub>c</sub> the refracted ray lies flat along the
+surface.&nbsp; Above it, <b>none</b> of the light gets out &mdash; it is all reflected back inside, which is why the equation is the
+whole working principle of an optical fibre.</p></div>
+
+<h2>Why light bends at all: the principle of least time</h2>
+
+<div class="fig">
+<svg viewBox="0 0 720 380" role="img" aria-label="A lifeguard on the sand must reach a swimmer in the sea. Three possible routes are drawn, each a straight line on the sand meeting a straight line in the water at a different point on the shoreline. The route actually taken is neither the shortest line nor the one with least water, but the one that takes the least time.">
+<rect x="30" y="30" width="660" height="156" fill="#fdf8ec"/>
+<rect x="30" y="186.0" width="660" height="164" fill="#eaf4f7"/>
+<line x1="30" y1="186.0" x2="690" y2="186.0" stroke="#0f7b7b" stroke-width="2.4"/>
+<text x="44" y="56" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#9a7b3f" font-weight="600">sand &mdash; you run fast here</text>
+<text x="44" y="336" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#0f7b7b" font-weight="600">Sea &mdash; you swim slowly here</text>
+<path d="M 150.0 60.0 L 375.0 186.0 L 600.0 326.0" fill="none" stroke="#9aa0a6" stroke-width="1.8" stroke-dasharray="5 4"/>
+<path d="M 150.0 60.0 L 483.0 186.0 L 600.0 326.0" fill="none" stroke="#1636c8" stroke-width="2.6" stroke-dasharray=""/>
+<text x="483.0" y="174.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">the path light takes</text>
+<path d="M 150.0 60.0 L 564.0 186.0 L 600.0 326.0" fill="none" stroke="#9aa0a6" stroke-width="1.8" stroke-dasharray="5 4"/>
+<circle cx="150.0" cy="60.0" r="6" fill="#1d2b23"/><text x="138.0" y="48.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23">you</text>
+<circle cx="600.0" cy="326.0" r="6" fill="#1d2b23"/><text x="612.0" y="332.0" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23">swimmer</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 2 &mdash; the principle of least time.</b>&nbsp; Running is fast, swimming is slow, so the quickest
+route is not the straight line and not the one with the least water in it, but a bent one &mdash; more sand, less sea.&nbsp; Light
+does the same thing at a boundary, and the angle it chooses is the one Snell&rsquo;s law gives.</div>
+
+<h2>Looking ahead</h2>
+<p>That closes the first chapter of this module &mdash; what light is, and what a single flat surface does to it.&nbsp; Next the
+surfaces start to curve, and curved surfaces make <b>images</b>.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; Find the critical angle for water (<i>n</i> = 1.33) against air
+  (<i>n</i> = 1.00), in degrees.</p>
+    <div class="qnum"><input type="number" id="q1input" step="any" inputmode="decimal" aria-label="critical angle in degrees"><span class="unit">&deg;</span></div><div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Total internal reflection can happen when light travels&hellip;</p>
+    <label><input type="radio" name="q2" value="a"> from a less dense medium into a denser one.</label>
+    <label><input type="radio" name="q2" value="b"> from a denser medium into a less dense one.</label>
+    <label><input type="radio" name="q2" value="c"> in either direction, provided the angle is large enough.</label>
+    <label><input type="radio" name="q2" value="d"> only in a vacuum.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; A ray inside glass (&theta;<sub>c</sub> = 41.8&deg;) meets the surface at 55&deg; from
+  the normal.&nbsp; What happens?</p>
+    <label><input type="radio" name="q3" value="a"> It refracts out at 90&deg;, along the surface.</label>
+    <label><input type="radio" name="q3" value="b"> It refracts out at some angle less than 90&deg;.</label>
+    <label><input type="radio" name="q3" value="c"> None of it leaves: it is totally internally reflected.</label>
+    <label><input type="radio" name="q3" value="d"> It is absorbed by the surface.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; A material has a critical angle of 34.0&deg; against air.&nbsp; What is its
+  refractive index?</p>
+    <div class="qnum"><input type="number" id="q4input" step="any" inputmode="decimal" aria-label="refractive index"><span class="unit">&nbsp;</span></div><div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N4 &mdash; Dr. Cho on total internal reflection"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N4_Total_Internal_Reflection_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the critical ray is yours to add.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 4, "Total Internal Reflection"
+
+     F1. sin(theta_c) = n_r / n_i, obtained by setting theta_r = 90 degrees in Snell's law.
+     F2. TIR happens ONLY going from denser to less dense (n_r < n_i), because
+         sin(theta_c) cannot exceed 1.  A question offering "either direction" is testing F2.
+     F3. Below theta_c: partly refracted, partly reflected.  AT theta_c: refracted ray
+         grazes along the surface.  ABOVE theta_c: nothing leaves, all reflected.
+     F4. theta_c from two indices, and an index from theta_c - both directions.
+     F5. Worked values that recur: glass/air theta_c = 41.8 deg; water/air = 48.8 deg.
+     F6. The optical fibre is the application; the light is trapped by F3's third case.
+     F7. The principle of least time: the path taken is the quickest one, not the
+         shortest, because the speeds in the two media differ.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 4.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = { q2:'b', q3:'c' };
+  var WHY = {
+    q1:'sin\u03b8_c = n_air/n_water = 1.00/1.33 = 0.7519, so \u03b8_c = 48.8\u00b0.',
+    q2:'Only dense to less dense. sin\u03b8_c = n_r/n_i must be at most 1, which needs n_r < n_i.',
+    q3:'55\u00b0 is past the critical angle, so none of it leaves \u2014 it is totally internally reflected.',
+    q4:'n = 1/sin34\u00b0 = 1/0.5592 = 1.79.'
+  };
+  function fb(c,ok,m){var d=c.querySelector('.qfb');d.className='qfb '+(ok?'good':'bad');d.innerHTML=(ok?'✓ ':'✗ ')+m;}
+  function num(id){var e=document.getElementById(id);return e&&e.value.trim()!==''?parseFloat(e.value):null;}
+  function close(a,b,t){return a!==null&&isFinite(a)&&Math.abs(a-b)<=t;}
+  var btn=document.getElementById('ticketCheck'); if(!btn) return;
+  btn.addEventListener('click',function(){
+    var n=0;
+    var ok1=close(num("q1input"),48.75,0.6); fb(document.getElementById('card-q1'),ok1,WHY.q1); if(ok1)n++;
+    ['q2','q3'].forEach(function(q){
+      var s=document.querySelector('input[name="'+q+'"]:checked');
+      var ok=!!s&&s.value===KEY[q]; fb(document.getElementById('card-'+q),ok,WHY[q]); if(ok)n++;});
+    var ok4=close(num("q4input"),1.788,0.02); fb(document.getElementById('card-q4'),ok4,WHY.q4); if(ok4)n++;
+    document.getElementById('ticketScore').textContent=n+' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click',function(){
+    ['q1input','q4input'].forEach(function(id){var e=document.getElementById(id); if(e)e.value='';});
+    ['q2','q3'].forEach(function(q){Array.prototype.forEach.call(document.querySelectorAll('input[name="'+q+'"]'),function(r){r.checked=false;});});
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'),function(d){d.className='qfb';d.innerHTML='';});
+    document.getElementById('ticketScore').textContent='';
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image Formation With Lenses and Spherical Mirrors</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 8
+     "Image Formation With Lenses and Spherical Mirrors".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08d_M2_N5_to_N9_Built.md.
+
+     THIS NOTE IS A SPLIT.  Its source is section 4 of the same master -- pages 4 and 5
+     together.  IT IS THE LIGHTEST-INKED SECTION OF THE MASTER: pages 4 and 5 are almost
+     entirely printed reference material, and his ink on them amounts to "R = 2f", a
+     drawn R dimension on the concave-mirror figure, and a construction annotation on
+     the mirror derivation.  Page 6 carries one more piece of his ink that belongs here
+     -- the red ring around the CONVEX LENS column of the quadrant table.
+
+     WHAT IS HIS: R = 2f and the R dimension; the two printed sign-convention tables,
+     which are his reference pages; and the emphasis on the convex-lens column, which is
+     his red circle and is honoured in the note under the second table.
+
+     WHAT IS CLAUDE'S: the title (it follows his printed heading), synopsis, hook,
+     Performance Expectations, the punchline, the ticket and the foundation list.
+
+     THE WORKED EXAMPLE IS HIS (changed 2026-11-08): the bulb, the lens and the screen
+     at the top of page 4, f = 0.50 m and do = 0.75 m giving di = 1.50 m and m = -2.  It
+     replaced an invented concave-mirror problem (R = 40 cm, do = 30 cm).  FIGURE 2 is
+     drawn to scale from those three numbers, so the screen sits where the thin-lens
+     equation puts it and the picture cannot disagree with the arithmetic.
+
+     THE TWO TABLES ARE REBUILT AS REAL TABLES, not carried across as pictures of
+     tables.  They are the thing students will come back to during every later problem,
+     and a screenshot of a table cannot be searched, zoomed, reflowed on a phone or read
+     aloud by a screen reader.  The wording inside them is his printed wording.
+
+     FIGURE 1 IS COMPUTED.  The mirror is a real arc of a real circle of radius 360 px
+     about a real centre of curvature, F sits at R/2 because the arithmetic puts it
+     there, and the image is placed by 1/do + 1/di = 1/f (di = 288 px, m = -0.60) with
+     all three rays traced to it.  The reflection points sit ON the arc, not on the
+     vertex plane, so no ray pokes through the glass.
+
+     NO CALC FENCE: there is no calculus in this note.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 8</span></div>
+<h1>Image Formation With Lenses and Spherical Mirrors</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>A curved mirror needs no new equation.&nbsp; The thin lens equation and the
+magnification equation both carry over unchanged &mdash; all that changes is which way the signs point, and one short relation between
+the radius of a mirror and its focal length.&nbsp; This note is that relation and those sign tables, and it is the note to keep open
+during every problem that follows.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>A concave mirror is ground to a radius of curvature of
+<b>40&nbsp;cm</b>.&nbsp; Where is its focal point?&nbsp; Write a number down.&nbsp; Most people&rsquo;s first answer is 40.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Relate</b> the radius of curvature of a spherical mirror to its focal length.</li>
+<li><b>Apply</b> the mirror and thin lens equation 1/<i>d</i><sub>o</sub> + 1/<i>d</i><sub>i</sub> = 1/<i>f</i> to a mirror.</li>
+<li><b>Read</b> the sign convention table correctly for concave and convex mirrors and for converging and diverging lenses.</li>
+<li><b>Predict</b> whether a given arrangement gives a real or virtual, upright or inverted image, <i>before</i> computing anything.</li>
+</ol></div>
+
+<h2>4.&nbsp; Image formation with lenses and spherical mirrors</h2>
+
+<span class="disp" style="font-size:1.3rem"><i>R</i> = 2<i>f</i></span>
+
+<p>The centre of curvature sits at twice the focal length.&nbsp; Grind a mirror to radius <i>R</i> and you have fixed its focal length
+at <i>R</i>/2 &mdash; there is no further choice in the matter.</p>
+
+<div class="fig">
+<svg viewBox="0 0 1000 520" role="img" aria-label="A concave mirror drawn as an arc of a circle. The centre of curvature C is marked on the axis at a distance R from the mirror, and the focal point F exactly halfway between them. An upright object stands outside C. Three rays leave its tip: one parallel to the axis which reflects through F, one through F which reflects parallel to the axis, and one striking the vertex which reflects at an equal angle on the other side. All three cross between F and C, where a smaller inverted image is formed.">
+<defs><marker id="n8a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+
+<line x1="50.0" y1="270.0" x2="910.0" y2="270.0" stroke="#1d2b23" stroke-width="1.5"/>
+<text x="54.0" y="258.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">optical axis</text>
+
+<path d="M 787.26,120.00 L 789.51,125.00 L 791.66,130.00 L 793.73,135.00 L 795.71,140.00 L 797.60,145.00 L 799.41,150.00 L 801.14,155.00 L 802.78,160.00 L 804.35,165.00 L 805.83,170.00 L 807.24,175.00 L 808.57,180.00 L 809.82,185.00 L 811.00,190.00 L 812.10,195.00 L 813.13,200.00 L 814.08,205.00 L 814.96,210.00 L 815.77,215.00 L 816.51,220.00 L 817.18,225.00 L 817.77,230.00 L 818.29,235.00 L 818.75,240.00 L 819.13,245.00 L 819.44,250.00 L 819.69,255.00 L 819.86,260.00 L 819.97,265.00 L 820.00,270.00 L 819.97,275.00 L 819.86,280.00 L 819.69,285.00 L 819.44,290.00 L 819.13,295.00 L 818.75,300.00 L 818.29,305.00 L 817.77,310.00 L 817.18,315.00 L 816.51,320.00 L 815.77,325.00 L 814.96,330.00 L 814.08,335.00 L 813.13,340.00 L 812.10,345.00 L 811.00,350.00 L 809.82,355.00 L 808.57,360.00 L 807.24,365.00 L 805.83,370.00 L 804.35,375.00 L 802.78,380.00 L 801.14,385.00 L 799.41,390.00 L 797.60,395.00 L 795.71,400.00 L 793.73,405.00 L 791.66,410.00 L 789.51,415.00 L 787.26,420.00" fill="none" stroke="#1636c8" stroke-width="3"/>
+<text x="876.0" y="130.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">concave<tspan x="876.0" dy="18">mirror</tspan></text>
+
+<circle cx="460.0" cy="270.0" r="4.5" fill="#1d2b23"/><text x="460.0" y="296.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23" font-style="italic">C</text>
+<circle cx="640.0" cy="270.0" r="4.5" fill="#0f7b7b"/><text x="640.0" y="296.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0f7b7b" font-style="italic">F</text>
+
+<line x1="340.0" y1="270.0" x2="340.0" y2="180.0" stroke="#7b1fa2" stroke-width="5"/>
+<path d="M 331.0 194.0 L 340.0 178.0 L 349.0 194.0 Z" fill="#7b1fa2"/>
+<text x="340.0" y="296.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#7b1fa2">Object</text>
+
+<!-- given: the three incident rays -->
+<line x1="340.00" y1="180.00" x2="808.57" y2="180.00" stroke="#b3261e" stroke-width="2.1"/>
+<line x1="340.00" y1="180.00" x2="815.93" y2="324.00" stroke="#0f7b7b" stroke-width="2.1"/>
+<line x1="340.00" y1="180.00" x2="820.00" y2="270.00" stroke="#c77b1f" stroke-width="2.1"/>
+<!-- consequence: the three reflected rays -->
+<line data-skel="n8-refl-p" x1="808.57" y1="180.00" x2="532.00" y2="324.00" stroke="#b3261e" stroke-width="2.1" marker-end="url(#n8a)"/>
+<line data-skel="n8-refl-f" x1="815.93" y1="324.00" x2="532.00" y2="324.00" stroke="#0f7b7b" stroke-width="2.1" marker-end="url(#n8a)"/>
+<line data-skel="n8-refl-v" x1="820.00" y1="270.00" x2="532.00" y2="324.00" stroke="#c77b1f" stroke-width="2.1" marker-end="url(#n8a)"/>
+
+<line data-skel="n8-image" x1="532.0" y1="270.0" x2="532.0" y2="324.0" stroke="#b3261e" stroke-width="5"/>
+<path data-skel="n8-image-head" d="M 523.0 310.0 L 532.0 326.0 L 541.0 310.0 Z" fill="#b3261e"/>
+<text data-skel="n8-image-label" x="532.0" y="354.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">Image</text>
+
+<!-- R and f -->
+<line x1="460.0" y1="466.0" x2="820.0" y2="466.0" stroke="#1d2b23" stroke-width="1.4"/>
+<line x1="460.0" y1="456.0" x2="460.0" y2="476.0" stroke="#1d2b23" stroke-width="1.2"/>
+<line x1="820.0" y1="456.0" x2="820.0" y2="476.0" stroke="#1d2b23" stroke-width="1.2"/>
+<text x="640.0" y="460.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#1d2b23" font-style="italic">R</text>
+<line x1="640.0" y1="436.0" x2="820.0" y2="436.0" stroke="#0f7b7b" stroke-width="1.4"/>
+<line x1="640.0" y1="426.0" x2="640.0" y2="446.0" stroke="#0f7b7b" stroke-width="1.2"/>
+<text x="730.0" y="430.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#0f7b7b" font-style="italic">f</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; A concave mirror, object outside <i>C</i>.&nbsp; The arc is a real piece of a circle of
+radius <i>R</i> centred on <i>C</i>, and <i>F</i> sits exactly halfway along it.&nbsp; The three reflected rays cross between
+<i>F</i> and <i>C</i> because 1/<i>d</i><sub>o</sub> + 1/<i>d</i><sub>i</sub> = 1/<i>f</i> says they must.</div>
+
+<h2>Sign convention for spherical mirrors and thin lenses</h2>
+
+<p>Applies to the mirror and thin lens equation 1/<i>d</i><sub>o</sub> + 1/<i>d</i><sub>i</sub> = 1/<i>f</i> and to the magnification
+equation <i>h</i><sub>i</sub>/<i>h</i><sub>o</sub> = &minus;<i>d</i><sub>i</sub>/<i>d</i><sub>o</sub>.</p>
+
+<table class="tbl">
+<thead><tr><th></th><th>Spherical mirrors</th><th>Lenses</th></tr></thead>
+<tbody>
+<tr><td rowspan="2"><b>Focal length (<i>f</i>)</b></td><td>+ for concave mirrors</td><td>+ for a converging lens</td></tr>
+<tr><td>&minus; for convex mirrors</td><td>&minus; for a diverging lens</td></tr>
+<tr><td rowspan="2"><b>Object distance (<i>d</i><sub>o</sub>)</b></td><td>+ if the object is in front of the mirror (real object)</td><td>+ if the object is to the left of the lens (real object)</td></tr>
+<tr><td>&minus; if the object is behind the mirror (virtual object)<sup>&lowast;</sup></td><td>&minus; if the object is to the right of the lens (virtual object)<sup>&lowast;</sup></td></tr>
+<tr><td rowspan="2"><b>Image distance (<i>d</i><sub>i</sub>)</b></td><td>+ if the image is in front of the mirror (real image)</td><td>+ for a real image formed to the right of the lens by a real object</td></tr>
+<tr><td>&minus; if the image is behind the mirror (virtual image)</td><td>&minus; for a virtual image formed to the left of the lens by a real object</td></tr>
+<tr><td rowspan="2"><b>Magnification (<i>m</i>)</b></td><td>+ for an image upright with respect to the object</td><td>+ for an image upright with respect to the object</td></tr>
+<tr><td>&minus; for an image inverted with respect to the object</td><td>&minus; for an image inverted with respect to the object</td></tr>
+</tbody></table>
+
+<div class="fig-note"><sup>&lowast;</sup>&nbsp; An optical system using several mirrors or lenses sometimes uses the image formed by the
+first as the object for the second.&nbsp; When that image falls on the far side, the object distance is negative and the object is
+called <b>virtual</b>.&nbsp; That is exactly the situation Note&nbsp;9 is about.</div>
+
+<h2>The same thing as a quick table</h2>
+
+<table class="tbl">
+<thead>
+<tr><th rowspan="2"></th><th colspan="2">Mirror</th><th colspan="2">Lens</th></tr>
+<tr><th>Concave</th><th>Convex</th><th>Concave</th><th>Convex</th></tr>
+</thead>
+<tbody>
+<tr><td><b>Object (<i>o</i>)</b></td><td>+ Left</td><td>+ Left</td><td>+ Left</td><td>+ Left</td></tr>
+<tr><td><b>Focal point (<i>f</i>)</b></td><td>+ Left</td><td>&minus; Right</td><td>&minus; Left</td><td>+ Right</td></tr>
+<tr><td><b>Image (<i>i</i>)</b></td><td>+ / &minus;</td><td>&minus; Right</td><td>&minus; Left</td><td>+ / &minus;</td></tr>
+<tr><td><b>Magnification (<i>m</i>)</b></td><td>+ / &minus;</td><td>+</td><td>+</td><td>+ / &minus;</td></tr>
+</tbody></table>
+
+<div class="fig-note">The two columns with <b>+ / &minus;</b> in them are the only ones where the answer depends on where you put the
+object; everywhere else the sign is fixed by the optic alone.&nbsp; <b>The convex lens is the one to know cold</b> &mdash; it is the
+case the rest of this module keeps coming back to, and the one with the most room to go wrong.</div>
+
+<h2>Worked example</h2>
+
+<ol class="items tasks">
+<li>A light bulb stands <b>0.75&nbsp;m</b> in front of a converging lens of focal length <b>0.50&nbsp;m</b>.&nbsp; A screen is moved
+back and forth behind the lens until the bulb comes into focus on it.&nbsp; <b>Where does the screen have to be, and what does the
+picture on it look like?</b></li>
+</ol>
+
+<div class="fig">
+<svg viewBox="0 0 1000 430" role="img" aria-label="A light bulb stands 0.75 metres in front of a converging lens of focal length 0.50 metres. A screen stands 1.50 metres beyond the lens. Two rays leave the top of the bulb: one parallel to the axis which refracts through the focal point beyond the lens, and one straight through the centre of the lens undeviated. They meet on the screen, where an inverted image twice the size of the bulb is formed.">
+<defs><marker id="n8a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+
+<line x1="60" y1="215.0" x2="745.0" y2="215.0" stroke="#1d2b23" stroke-width="1.5"/>
+
+<ellipse cx="400.0" cy="215.0" rx="11" ry="86" fill="#cfe0ff" fill-opacity="0.55" stroke="#1636c8" stroke-width="2"/>
+<text x="400.0" y="123.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">lens</text>
+
+<line x1="287.5" y1="215.0" x2="287.5" y2="157.0" stroke="#b3261e" stroke-width="3.2" marker-end="url(#n8a)"/>
+<text x="287.5" y="145.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">bulb</text>
+
+<circle cx="475.0" cy="215.0" r="4" fill="#c77b1f"/>
+<text x="475.0" y="235.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f">F</text>
+
+<line x1="287.5" y1="241.0" x2="400.0" y2="241.0" stroke="#5f6368" stroke-width="1.2"/>
+<text x="343.8" y="259.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368"><tspan font-weight="600">d</tspan><tspan font-size="11" dy="4">o</tspan><tspan dy="-4"> = 0.75 m</tspan></text>
+<line x1="400.0" y1="87.0" x2="475.0" y2="87.0" stroke="#c77b1f" stroke-width="1.2"/>
+<text x="437.5" y="79.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f"><tspan font-weight="600">f</tspan> = 0.50 m</text>
+
+<line data-skel="n8b-in" x1="287.50" y1="157.00" x2="400.00" y2="157.00" stroke="#1636c8" stroke-width="2.0" marker-end="url(#n8a)"/>
+<line data-skel="n8b-p" x1="400.00" y1="157.00" x2="625.00" y2="331.00" stroke="#1636c8" stroke-width="2.0"/>
+<line data-skel="n8b-m" x1="287.50" y1="157.00" x2="625.00" y2="331.00" stroke="#1636c8" stroke-width="2.0"/>
+
+<g data-skel="n8b-screen">
+<line x1="625.0" y1="110.0" x2="625.0" y2="365.0" stroke="#5f6368" stroke-width="3"/>
+<text x="639.0" y="123.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">screen</text>
+<line x1="625.0" y1="215.0" x2="625.0" y2="331.0" stroke="#7b1fa2" stroke-width="3.2" marker-end="url(#n8a)"/>
+<text x="611.0" y="265.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#7b1fa2">image</text>
+<line x1="400.0" y1="287.0" x2="625.0" y2="287.0" stroke="#5f6368" stroke-width="1.2"/>
+<text x="512.5" y="305.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#7b1fa2"><tspan font-weight="600">d</tspan><tspan font-size="11" dy="4">i</tspan><tspan dy="-4"> = 1.50 m</tspan></text>
+</g>
+</svg>
+<div class="cap"><b>Figure&nbsp;2.</b>&nbsp; The bulb, the lens and the screen.&nbsp; The bulb and the focal length are given;
+<b>where the screen goes is what the equation decides.</b></div>
+</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="rev1" data-label="Show the working">Show the working</button><div class="rbody" id="rev1" hidden><div class="eq">
+  <span class="step">1/<i>d</i><sub>o</sub> + 1/<i>d</i><sub>i</sub> = 1/<i>f</i>, so 1/0.75 + 1/<i>d</i><sub>i</sub> = 1/0.50.</span>
+  <span class="step">1/<i>d</i><sub>i</sub> = 2.000 &minus; 1.333 = 0.667&nbsp;m<sup>&minus;1</sup>, so
+  <i>d</i><sub>i</sub> = <b>+1.50&nbsp;m</b>.&nbsp; The screen goes a metre and a half behind the lens.</span>
+  <span class="step"><i>m</i> = &minus;<i>d</i><sub>i</sub>/<i>d</i><sub>o</sub> = &minus;1.50/0.75 = <b>&minus;2</b>.</span>
+  <span class="step">Positive <i>d</i><sub>i</sub> means <b>real</b> &mdash; and it had better be, because a virtual image cannot
+  land on a screen.&nbsp; Negative <i>m</i> means <b>inverted</b>, and |<i>m</i>| = 2 means <b>twice the size</b>.&nbsp; That is why
+  the bulb on the screen is upside down.</span>
+</div></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big"><i>R</i> = 2<i>f</i>, and every equation from Note&nbsp;6 still holds</span>
+<p>Back to the prediction: a 40&nbsp;cm radius gives a <b>20&nbsp;cm</b> focal length, not 40.&nbsp; Mirrors bring no new physics into
+this module &mdash; only new signs, and one factor of two.</p></div>
+
+<h2>Looking ahead</h2>
+<p>Everything so far has used one optic at a time.&nbsp; <b>Note&nbsp;9</b> puts two in a row, and the whole trick is in the footnote
+to the table above: <i>the image of the first becomes the object of the second</i>.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; A concave mirror has a radius of curvature of 50&nbsp;cm.&nbsp; What is its focal
+  length, in cm?</p>
+    <div class="qnum"><input type="number" id="q1input" step="any" inputmode="decimal" aria-label="focal length in centimetres"><span class="unit">cm</span></div><div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Which sign does <i>f</i> take for a <b>convex</b> mirror?</p>
+    <label><input type="radio" name="q2" value="a"> Positive, as for all mirrors.</label>
+    <label><input type="radio" name="q2" value="b"> Negative.</label>
+    <label><input type="radio" name="q2" value="c"> Positive if the object is real, negative otherwise.</label>
+    <label><input type="radio" name="q2" value="d"> Convex mirrors have no focal length.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; A calculation for a mirror returns <i>d</i><sub>i</sub> = &minus;15&nbsp;cm.&nbsp;
+  Where is the image?</p>
+    <label><input type="radio" name="q3" value="a"> 15&nbsp;cm in front of the mirror; it is real.</label>
+    <label><input type="radio" name="q3" value="b"> 15&nbsp;cm behind the mirror; it is virtual.</label>
+    <label><input type="radio" name="q3" value="c"> At the centre of curvature.</label>
+    <label><input type="radio" name="q3" value="d"> There is no image.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; An object is 15&nbsp;cm in front of a concave mirror of radius 20&nbsp;cm.&nbsp; Find
+  the magnification <i>m</i>.</p>
+    <div class="qnum"><input type="number" id="q4input" step="any" inputmode="decimal" aria-label="magnification"></div><div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N8 &mdash; Dr. Cho on image formation"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N8_Image_Formation_With_Lenses_And_Spherical_Mirrors_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the reflected rays are yours to draw.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 8, "Image Formation With Lenses and Spherical Mirrors"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. R = 2f for a spherical mirror.
+     F2. The mirror and thin lens equation 1/do + 1/di = 1/f applies unchanged to
+         mirrors.
+     F3. The magnification equation hi/ho = -di/do applies unchanged to mirrors.
+     F4. Mirror signs: f positive for concave, negative for convex; di positive in
+         front of the mirror (real), negative behind it (virtual).
+     F5. Lens signs: f positive for converging, negative for diverging; di positive
+         to the right for a real image from a real object.
+     F6. m positive means upright, negative means inverted, for both mirrors and
+         lenses.
+     F7. A VIRTUAL OBJECT (do negative) arises when the image of one optic falls
+         beyond the next one.
+     F8. For a concave mirror, an object between F and C gives a real, inverted,
+         magnified image.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 8.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q2": "b", "q3": "b"};
+  var NUM = {"q1": [25.0, 0.2], "q4": [-2.0, 0.05]};
+  var WHY = {
+    "q1": "f = R/2 = 50/2 = 25 cm.",
+    "q2": "A convex mirror has a negative focal length, exactly as a diverging lens does.",
+    "q3": "For a mirror, a negative di puts the image BEHIND the mirror, and it is virtual.",
+    "q4": "f = R/2 = 10 cm. 1/15 + 1/di = 1/10 gives di = +30 cm, so m = &minus;30/15 = &minus;2: real, inverted, twice the size."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '\u2713 ' : '\u2717 ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

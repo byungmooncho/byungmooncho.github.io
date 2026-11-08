@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2 N2 &mdash; The Law of Reflection</title>
+<style>
+  /* FLCC Physics note page — Module 2, Optics, Note 2
+     "The Law of Reflection".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-08b_M2_N1_Built.md and its successor.
+
+     THIS NOTE IS A SPLIT.  Its source is section 3 of the four-page "M2 N1 Nature of
+     Light" master (25SP), which occupies the lower third of page 2.  The printed sheet
+     gives it the heading "3. Law of Reflection", struck through where it printed at the
+     top of the page and rewritten by hand lower down, where the material actually
+     begins; this note follows the ink, not the printed position.
+
+     WHAT IS HIS: the sentence "Light bounces off shiny surface!!", the ray diagram with
+     the dotted NORMAL, the labels incident / Reflection, the angles theta_i and
+     theta_r, and the result theta_i = theta_r.  That is the whole of his section.
+
+     WHAT IS CLAUDE'S: the title, the synopsis, the predict hook and its 30-degrees-from
+     -the-surface trap, the Performance Expectations (class "pe lp"), the one in-flow
+     task and its working, the punchline wording, the four ticket questions and the
+     foundation list.  This is the thinnest section of the master -- a third of a page --
+     so the ratio of Claude to Cho is higher here than anywhere else in the module.
+     That is flagged rather than hidden: if it reads as padded, cut it back to his three
+     lines and the figure, or fold the note into Note 3.
+
+     THE FIGURE IS A TRANSCRIPTION of his sketch, with the geometry computed so the two
+     angles are equal to the pixel rather than equal by eye.  The hatching under the
+     mirror and the "shiny surface" label are additions for legibility.
+
+     NO CALC FENCE: there is no calculus in this note.
+
+     ================================================================== */
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+
+  .problem{ border:2px solid var(--green-deep); border-radius:10px; padding:.9rem 1.1rem; margin:1.3rem 0; background:#fbfdfc; }
+  .problem .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.35rem; }
+  .problem p{ margin:.2rem 0 .5rem; }
+  .problem ol{ margin:.3rem 0 0; padding-left:1.5rem; } .problem li{ margin:.3rem 0; }
+
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ol.tasks{ list-style:decimal; } ol.tasks > li{ margin:.6rem 0; }
+
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .eq .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-left:.6rem; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule); padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  .callback{ border:1.5px dashed var(--green); border-radius:8px; background:#fbfdfc; padding:.9rem 1.1rem; margin:1.6rem 0; }
+  .callback .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .callback p{ margin:0; }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem; font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; }
+  .pe.lp li{ margin:.32rem 0; }
+  .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem; border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer; margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule); border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.ok{ color:var(--green-deep); } .ticket .qfb.no{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .lab-note{ background:var(--green-soft); border-left:4px solid var(--green);
+    border-radius:0 6px 6px 0; padding:.85rem 1.05rem; margin:1.3rem 0 0;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; line-height:1.55; }
+  .lab-note strong{ color:var(--green-deep); }
+  .lab-note a{ color:var(--green-deep); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 2 &middot; Optics</span><span>Note 2</span></div>
+<h1>The Law of Reflection</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>Light bounces off a shiny surface, and it does so by a rule so simple it
+can be written in three symbols.&nbsp; The whole of this note is that rule, the convention it is measured in, and why that convention
+is the part people get wrong.</div>
+
+<div class="hook"><span class="label">Before you start &mdash; predict</span><p>A ray of light strikes a flat mirror, making an angle
+of <b>30&deg; with the mirror surface</b>.&nbsp; At what angle does it leave, <b>measured from the normal</b>?&nbsp; Write down a
+number before you read on.&nbsp; If you answered 30&deg;, the figure below is for you.</p></div>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>State</b> the law of reflection, and say what each angle in it is measured from.</li>
+<li><b>Draw</b> the normal at a point of incidence, and mark &theta;<sub>i</sub> and &theta;<sub>r</sub> correctly on a ray diagram.</li>
+<li><b>Convert</b> between an angle given from the surface and the same angle measured from the normal.</li>
+<li><b>Predict</b> the direction of a reflected ray given the direction of the incident ray.</li>
+</ol></div>
+
+<h2>3.&nbsp; Law of reflection</h2>
+
+<p><b>Light bounces off a shiny surface.</b></p>
+
+<div class="fig">
+<svg viewBox="0 0 760 380" role="img" aria-label="A ray of light strikes a flat mirror. A dashed normal stands perpendicular to the mirror at the point of incidence. The incident ray arrives from the upper left making an angle theta i with the normal, and the reflected ray leaves to the upper right making an equal angle theta r with the normal. Both angles are measured from the normal, not from the mirror surface.">
+<defs><marker id="n2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1636c8"/></marker></defs>
+<line x1="80" y1="300.0" x2="700" y2="300.0" stroke="#1d2b23" stroke-width="2.6"/>
+<line x1="100.0" y1="300.0" x2="87.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="124.0" y1="300.0" x2="111.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="148.0" y1="300.0" x2="135.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="172.0" y1="300.0" x2="159.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="196.0" y1="300.0" x2="183.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="220.0" y1="300.0" x2="207.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="244.0" y1="300.0" x2="231.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="268.0" y1="300.0" x2="255.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="292.0" y1="300.0" x2="279.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="316.0" y1="300.0" x2="303.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="340.0" y1="300.0" x2="327.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="364.0" y1="300.0" x2="351.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="388.0" y1="300.0" x2="375.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="412.0" y1="300.0" x2="399.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="436.0" y1="300.0" x2="423.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="460.0" y1="300.0" x2="447.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="484.0" y1="300.0" x2="471.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="508.0" y1="300.0" x2="495.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="532.0" y1="300.0" x2="519.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="556.0" y1="300.0" x2="543.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="580.0" y1="300.0" x2="567.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="604.0" y1="300.0" x2="591.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="628.0" y1="300.0" x2="615.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="652.0" y1="300.0" x2="639.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="676.0" y1="300.0" x2="663.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/><line x1="700.0" y1="300.0" x2="687.0" y2="315.0" stroke="#9aa0a6" stroke-width="1.4"/>
+<line x1="380.0" y1="300.0" x2="380.0" y2="60" stroke="#1d2b23" stroke-width="1.8" stroke-dasharray="7 5"/>
+<text x="390.0" y="54" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23" font-weight="600">NORMAL</text>
+<line x1="246.9" y1="110.0" x2="380.0" y2="300.0" stroke="#1636c8" stroke-width="2.4" marker-end="url(#n2a)"/>
+<line data-skel="reflected" x1="380.0" y1="300.0" x2="513.1" y2="110.0" stroke="#1636c8" stroke-width="2.4" marker-end="url(#n2a)"/>
+<path d="M 337.6 239.4 A 74.0 74.0 0 0 1 380.0 226.0" fill="none" stroke="#b3261e" stroke-width="1.8"/>
+<path data-skel="theta-r-arc" d="M 380.0 226.0 A 74.0 74.0 0 0 1 422.4 239.4" fill="none" stroke="#b3261e" stroke-width="1.8"/>
+<text x="336.0" y="222.0" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#b3261e" font-style="italic">&#952;<tspan font-size="12" baseline-shift="sub">i</tspan></text>
+<text data-skel="theta-r-label" x="408.0" y="222.0" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#b3261e" font-style="italic">&#952;<tspan font-size="12" baseline-shift="sub">r</tspan></text>
+<text x="236.9" y="98.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8">incident</text>
+<text data-skel="reflected-label" x="523.1" y="98.0" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8">reflected</text>
+<text x="92" y="334.0" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">shiny surface</text>
+</svg>
+</div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; Both angles are measured <b>from the normal</b> &mdash; the dashed line standing at right
+angles to the surface &mdash; and never from the surface itself.&nbsp; That convention is the single most common place to go wrong,
+and every equation in this module assumes it.</div>
+
+<span class="disp" style="font-size:1.2rem"><i>&theta;</i><sub>i</sub> = <i>&theta;</i><sub>r</sub></span>
+
+<p>The angle the light arrives at equals the angle it leaves at.&nbsp; Nothing in that statement depends on the colour of the light,
+on how bright it is, or on what the mirror is made of.</p>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big"><i>&theta;</i><sub>i</sub> = <i>&theta;</i><sub>r</sub>, both measured from the normal</span>
+<p>Back to the prediction: 30&deg; from the <i>surface</i> is <b>60&deg; from the normal</b>, so the ray leaves at 60&deg;, not
+30&deg;.&nbsp; Three symbols and one convention &mdash; and the convention is the half that costs marks.&nbsp; Read every angle in
+this module from the normal, and keep doing it when the surface stops being flat and starts being a lens.</p></div>
+
+<h2>Looking ahead</h2>
+<p>A shiny surface sends the light back.&nbsp; A <i>transparent</i> one lets it through instead &mdash; but not along the same line
+it arrived on.&nbsp; <b>Note 3</b> is the law of refraction, and the bending that goes with it.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; A ray strikes a mirror at 25&deg; <b>to the mirror surface</b>.&nbsp; What is
+  <i>&theta;</i><sub>r</sub>, measured from the normal, in degrees?</p>
+    <div class="qnum"><input type="number" id="q1input" step="any" inputmode="decimal" aria-label="angle of reflection from the normal, in degrees"><span class="unit">&deg;</span></div><div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; The law of reflection says the two angles are equal.&nbsp; Equal to what, exactly?</p>
+    <label><input type="radio" name="q2" value="a"> Both measured from the mirror surface.</label>
+    <label><input type="radio" name="q2" value="b"> Both measured from the normal to the surface.</label>
+    <label><input type="radio" name="q2" value="c"> The incident angle from the surface, the reflected angle from the normal.</label>
+    <label><input type="radio" name="q2" value="d"> Both measured from the horizontal, whatever the surface is doing.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; A ray arrives along the normal itself, straight at the mirror.&nbsp; What happens?</p>
+    <label><input type="radio" name="q3" value="a"> It is absorbed; there is no reflected ray.</label>
+    <label><input type="radio" name="q3" value="b"> It reflects at 90&deg; and travels along the surface.</label>
+    <label><input type="radio" name="q3" value="c"> It comes straight back the way it came, since &theta;<sub>i</sub> = &theta;<sub>r</sub> = 0.</label>
+    <label><input type="radio" name="q3" value="d"> It cannot be answered without knowing the mirror material.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; A ray hits a mirror with <i>&theta;</i><sub>i</sub> = 38&deg;.&nbsp; Through what
+  <b>total</b> angle is it turned, in degrees?</p>
+    <div class="qnum"><input type="number" id="q4input" step="any" inputmode="decimal" aria-label="total turning angle in degrees"><span class="unit">&deg;</span></div><div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       <div class="frame"><iframe src="YOUR_EMBED_URL" allowfullscreen title="M2 N2 &mdash; Dr. Cho on the law of reflection"></iframe></div>
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M2_N2_The_Law_Of_Reflection_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the reflected ray is yours to draw.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 2 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 2 Note 2, "The Law of Reflection"
+
+     The contract rungs 2 and 3 are written against.  An item needing something
+     that is not on this list goes back to the note, or gets cut.
+
+     F1. The law of reflection: theta_i = theta_r.
+     F2. BOTH angles are measured from the NORMAL - the line perpendicular to the
+         surface at the point of incidence - never from the surface itself.
+     F3. Converting between the two conventions: an angle A from the surface is
+         (90 - A) from the normal.  A question that gives an angle "to the mirror"
+         is testing F3, not F1.
+     F4. The total turn of the ray is theta_i + theta_r = 2 theta_i.
+     F5. Normal incidence (theta_i = 0) sends the ray straight back along its path.
+     F6. The law does not depend on colour, intensity, or the material of the mirror.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M2 Note 2.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = { q2:'b', q3:'c' };
+  var WHY = {
+    q1:'25° from the SURFACE is 90 − 25 = 65° from the normal, and θr = θi = 65°.',
+    q2:'Both are measured from the normal. Measuring from the surface is the commonest error in this module.',
+    q3:'θi = 0, so θr = 0: the ray retraces its own path straight back.',
+    q4:'The ray turns through θi + θr = 38 + 38 = 76°.'
+  };
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '✓ ' : '✗ ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    var ok1 = close(num('q1input'), 65, 0.5);
+    fb(document.getElementById('card-q1'), ok1, WHY.q1); if (ok1) n++;
+    ['q2','q3'].forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    var ok4 = close(num('q4input'), 76, 0.5);
+    fb(document.getElementById('card-q4'), ok4, WHY.q4); if (ok4) n++;
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    ['q1input','q4input'].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ''; });
+    ['q2','q3'].forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

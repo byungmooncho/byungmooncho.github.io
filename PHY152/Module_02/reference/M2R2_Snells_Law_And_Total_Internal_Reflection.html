@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2R2 &mdash; Snell&rsquo;s Law and Total Internal Reflection</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 1 (Oscillations, Waves and Sound)
+     Chapter 15 (University Physics Volume 1)
+     Trevor decks "a-Harmonic Oscillators" + "c-Coordinate Systems for Oscillators"
+     "Harmonic Oscillators and Hooke's Law" - web-page version of the lecture
+     slides by Dr. H. Trevor Johnson-Steigelman (CC BY-NC-SA 4.0).
+
+     FIRST CONVERTED REFERENCE PAGE IN PHY 152.  Before 2026-10-21 nothing in this
+     course had been converted: no reference\ directory existed under PHY152\ at
+     all.  Triage: Planning\M1_aOscillations_Deck_Triage_PHY152_2026-10-21.md.
+
+     Tier B reference page: faithful transcription, shorter synopsis, lead
+     paragraphs and captions added because a page has no voice.  No probe, no
+     exit ticket, no PE card.  References are LEAVES - no link from this page to
+     any note page (playbook Step 5a).
+
+     TWO DECKS ON ONE PAGE.  Deck c is seven slides on where to put the origin and
+     deck a already spends two slides on it - a s5 and c s3 are the SAME figure.
+     Merged so the question is answered once, properly.
+
+     TREVOR'S COORDINATE CONVENTION IS KEPT, NOT NORMALISED.  On the placement
+     figure the origin is at the free end of the unstretched spring and +y points
+     DOWN, so his three algebra columns read -F_s + F_g = ma with the symbols as
+     magnitudes.  Flipping it to the usual +y-up would contradict his own picture.
+
+     TREVOR'S REFERENCE SLIDE CITES UNIVERSITY PHYSICS VOLUME 2, which is
+     electricity and magnetism.  Oscillations is VOLUME 1, chapter 15 - and deck
+     c proves the slip is a paste error by citing Volume 1 correctly one slide
+     earlier.  This page cites Volume 1.  Trevor's decks are not altered.
+
+     PHY 119 will have its own page for these decks when that course starts,
+     written for College Physics from the same source.  It is NOT generated from
+     this file, and the notes mirror is never run over a reference\ directory.
+
+     Same design system as the module note pages; hosted on GitHub Pages, reached
+     by link from the Module 1 reference index.  Never framed, so no wrapper.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 2 &middot; Optics</span>
+    <span>Chapter 1 (University Physics) &middot; Decks: Snell&rsquo;s Law &middot; Total Internal Reflection</span>
+  </div>
+
+  <h1>Snell&rsquo;s Law and Total Internal Reflection</h1>
+  <p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+  <div class="synopsis">
+    <span class="label">The idea</span>
+    A ray crossing from one medium into another bends, and the amount it bends by is fixed entirely
+    by the two indices of refraction. That one relation &mdash; Snell&rsquo;s law &mdash; is the whole
+    of refraction, and it is derived here from nothing more than two right triangles standing on the
+    same hypotenuse. Run it the other way, from dense to thin, and it eventually asks for a sine
+    greater than one; what the light does instead is the second half of this page.
+  </div>
+
+  <div class="known">
+    <span class="label">You already know this</span>
+    That light slows in matter by the factor <i>n</i>, and that wave fronts and rays are
+    perpendicular to each other. Both are on the Nature of Light page, and Snell&rsquo;s law is just
+    those two facts applied at a boundary.
+  </div>
+
+  <h2>Why a ray bends at all</h2>
+
+  <p>Nothing bends the ray directly. What happens is that <b>one edge of the wavefront enters the
+  slow medium before the other edge does</b>, so that edge falls behind, and the front pivots. The
+  ray &mdash; perpendicular to the front &mdash; pivots with it.</p>
+
+  <figure>
+<svg viewBox="0 0 1000 430" role="img" aria-label="Wavefronts arriving at a slant on the boundary between two media. In the faster upper medium the fronts are widely spaced and steeply tilted; in the slower lower medium they are closer together and less steeply tilted, and the ray perpendicular to them has bent towards the normal.">
+<defs><marker id="r2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<rect x="30" y="26" width="940" height="189.0" fill="#e8f5e9"/>
+<rect x="30" y="215.0" width="940" height="185.0" fill="#efe3d4"/>
+<line x1="263.9" y1="30.0" x2="27.1" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="27.1" y1="215.0" x2="-383.9" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/><line x1="354.9" y1="30.0" x2="118.1" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="118.1" y1="215.0" x2="-292.9" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/><line x1="445.8" y1="30.0" x2="209.0" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="209.0" y1="215.0" x2="-202.0" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/><line x1="536.8" y1="30.0" x2="300.0" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="300.0" y1="215.0" x2="-111.0" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/><line x1="627.7" y1="30.0" x2="391.0" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="391.0" y1="215.0" x2="-20.1" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/><line x1="718.7" y1="30.0" x2="481.9" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="481.9" y1="215.0" x2="70.9" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/><line x1="809.7" y1="30.0" x2="572.9" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="572.9" y1="215.0" x2="161.9" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/><line x1="900.6" y1="30.0" x2="663.8" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="663.8" y1="215.0" x2="252.8" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/><line x1="991.6" y1="30.0" x2="754.8" y2="215.0" stroke="#1636c8" stroke-width="2.2"/><line x1="754.8" y1="215.0" x2="343.8" y2="400.0" stroke="#0f7b7b" stroke-width="2.2"/>
+<line x1="30" y1="215.0" x2="970" y2="215.0" stroke="#1d2b23" stroke-width="2.6"/>
+<line x1="186.1" y1="69.2" x2="300.0" y2="215.0" stroke="#b3261e" stroke-width="3.0" marker-end="url(#r2a)"/>
+<line x1="300.0" y1="215.0" x2="375.9" y2="383.7" stroke="#b3261e" stroke-width="3.0" marker-end="url(#r2a)"/>
+<line x1="300.0" y1="95.0" x2="300.0" y2="335.0" stroke="#1d2b23" stroke-width="1.3" stroke-dasharray="6 5"/>
+<text x="46.0" y="52.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1f8a44" font-weight="600">n₁ — faster, longer λ</text>
+<text x="46.0" y="245.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#8d6e63" font-weight="600">n₂ — slower, shorter λ</text>
+<text x="310.0" y="87.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">normal</text>
+<rect x="588" y="56" width="372" height="96" fill="#ffffff" fill-opacity="0.88" rx="6"/>
+<text x="774.0" y="90.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">the FREQUENCY cannot change,</text>
+<text x="774.0" y="112.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">so the wavelength must —</text>
+<text x="774.0" y="134.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">and the front has to tilt with it</text>
+</svg>
+<figcaption><b>Figure&nbsp;1.</b>&nbsp; Why a ray bends at all.&nbsp; The near edge of each wavefront
+enters the slow medium before the far edge does, so it falls behind &mdash; and the front pivots.
+Drawn with <i>n</i><sub>1</sub>&nbsp;=&nbsp;1.00, <i>n</i><sub>2</sub>&nbsp;=&nbsp;1.50 and
+<i>&theta;</i><sub>1</sub>&nbsp;=&nbsp;38&deg;, so the wavelengths really are in the ratio
+<i>n</i><sub>1</sub>/<i>n</i><sub>2</sub> and the refracted angle really is
+24.2&deg;.</figcaption>
+</figure>
+
+  <h2>The ray diagram</h2>
+
+  <figure>
+<svg viewBox="0 0 1000 440" role="img" aria-label="A ray in air strikes the surface of water. Part of it reflects at an equal angle on the other side of the normal, and part refracts into the water, bending towards the normal. The incident, reflected and refracted angles are all marked from the normal.">
+<defs><marker id="r2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<rect x="40" y="36" width="920" height="184.0" fill="#eaf4ff"/>
+<rect x="40" y="220.0" width="920" height="180.0" fill="#cfe6f5"/>
+<line x1="40" y1="220.0" x2="960" y2="220.0" stroke="#1d2b23" stroke-width="2.4"/>
+<line x1="480.0" y1="50.0" x2="480.0" y2="390.0" stroke="#1d2b23" stroke-width="1.3" stroke-dasharray="6 5"/>
+<text x="480.0" y="38.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">normal</text>
+<line x1="341.1" y1="76.1" x2="480.0" y2="220.0" stroke="#b3261e" stroke-width="2.8" marker-end="url(#r2a)"/>
+<line x1="480.0" y1="220.0" x2="618.9" y2="76.1" stroke="#c77b1f" stroke-width="2.4" marker-end="url(#r2a)"/>
+<line x1="480.0" y1="220.0" x2="584.5" y2="390.6" stroke="#1636c8" stroke-width="2.8" marker-end="url(#r2a)"/>
+<path d="M 435.5 174.0 A 64.0 64.0 0 0 1 480.0 156.0" fill="none" stroke="#b3261e" stroke-width="1.6"/>
+<path d="M 480.0 140.0 A 80.0 80.0 0 0 1 535.6 162.5" fill="none" stroke="#c77b1f" stroke-width="1.6"/>
+<path d="M 513.4 274.6 A 64.0 64.0 0 0 1 480.0 284.0" fill="none" stroke="#1636c8" stroke-width="1.6"/>
+<text x="440.0" y="146.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e">&#952;<tspan font-size='11' dy='4'>i</tspan></text>
+<text x="526.0" y="132.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#c77b1f">&#952;<tspan font-size='11' dy='4'>r</tspan></text>
+<text x="516.0" y="306.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8">&#952;<tspan font-size='11' dy='4'>2</tspan></text>
+<text x="58.0" y="62.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1f8a44" font-weight="600">Air   n = 1.00</text>
+<text x="58.0" y="252.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0277bd" font-weight="600">Water   n = 1.33</text>
+<text x="820.0" y="70.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e">incident 44&deg;</text>
+<text x="820.0" y="92.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f">reflected 44&deg;</text>
+<text x="820.0" y="114.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8">refracted 31.5&deg;</text>
+<text x="820.0" y="144.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">some light reflects</text>
+<text x="820.0" y="164.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#5f6368">at the interface too</text>
+</svg>
+<figcaption><b>Figure&nbsp;2.</b>&nbsp; Refraction is the <b>bending of a light ray at an interface
+between two media of different refractive index</b>.&nbsp; Going into the denser medium it bends
+<em>towards</em> the normal.&nbsp; Note that <b>some of the light reflects at the interface</b> as
+well &mdash; refraction and reflection happen together, always.&nbsp; Every angle here is computed:
+31.49&deg; is asin(1.00&nbsp;sin&nbsp;44&deg;&nbsp;/&nbsp;1.33).</figcaption>
+</figure>
+
+  <div class="mathblock">
+    <div class="mathline" style="font-size:1.3rem"><i>n</i><sub>1</sub> sin&nbsp;<i>&theta;</i><sub>1</sub>
+      = <i>n</i><sub>2</sub> sin&nbsp;<i>&theta;</i><sub>2</sub></div>
+  </div>
+
+  <h2>Where Snell&rsquo;s law comes from</h2>
+
+  <p>This is Trevor&rsquo;s derivation, and it is worth following once because it explains the shape
+  of the result rather than just asserting it. Start with the two wavelengths and one shared
+  length:</p>
+
+  <figure>
+<svg viewBox="0 0 1000 460" role="img" aria-label="A geometric construction on the interface. One wavefront touches the boundary at the left end of a segment while the other end has yet to arrive; in the time it takes to travel one wavelength in the first medium, the wave in the second medium travels a shorter wavelength. The two right triangles share the same hypotenuse along the interface.">
+<defs><marker id="r2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<rect x="40" y="40" width="920" height="210.0" fill="#e8f5e9"/>
+<rect x="40" y="250.0" width="920" height="170.0" fill="#efe3d4"/>
+<line x1="40" y1="250.0" x2="960" y2="250.0" stroke="#1d2b23" stroke-width="2.4"/>
+<path d="M 420.0 250.0 L 650.0 250.0 L 515.0304595683031 136.7471084035961 Z" fill="#1636c8" fill-opacity="0.13" stroke="#1636c8" stroke-width="2"/>
+<path d="M 420.0 250.0 L 650.0 250.0 L 472.7224767311316 346.6773504782561 Z" fill="#0f7b7b" fill-opacity="0.13" stroke="#0f7b7b" stroke-width="2"/>
+<line x1="420.0" y1="250.0" x2="650.0" y2="250.0" stroke="#1d2b23" stroke-width="2.6"/>
+<text x="535.0" y="240.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#1d2b23" font-weight="600">L</text>
+<text x="598.5" y="187.4" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8">&#955;<tspan font-size='11' dy='4'>i</tspan><tspan dy='-4'> = v</tspan><tspan font-size='11' dy='4'>1</tspan><tspan dy='-4'>&#916;t</tspan></text>
+<text x="432.4" y="318.3" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#0f7b7b">&#955;<tspan font-size='11' dy='4'>r</tspan><tspan dy='-4'> = v</tspan><tspan font-size='11' dy='4'>2</tspan><tspan dy='-4'>&#916;t</tspan></text>
+<line x1="420.0" y1="100.0" x2="420.0" y2="380.0" stroke="#1d2b23" stroke-width="1.2" stroke-dasharray="6 5"/>
+<text x="412.0" y="92.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1d2b23">normal</text>
+<text x="454.0" y="202.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8">&#952;<tspan font-size='11' dy='4'>i</tspan></text>
+<text x="446.0" y="306.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#0f7b7b">&#952;<tspan font-size='11' dy='4'>r</tspan></text>
+<text x="760.0" y="96.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8">sin &#952;<tspan font-size='11' dy='4'>i</tspan><tspan dy='-4'> = &#955;</tspan><tspan font-size='11' dy='4'>i</tspan><tspan dy='-4'>/L</tspan></text>
+<text x="760.0" y="126.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#0f7b7b">sin &#952;<tspan font-size='11' dy='4'>r</tspan><tspan dy='-4'> = &#955;</tspan><tspan font-size='11' dy='4'>r</tspan><tspan dy='-4'>/L</tspan></text>
+<text x="760.0" y="160.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5f6368">same L, so</text>
+<text x="760.0" y="186.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1d2b23" font-weight="600">&#955;<tspan font-size='11' dy='4'>i</tspan><tspan dy='-4'>/sin &#952;</tspan><tspan font-size='11' dy='4'>i</tspan><tspan dy='-4'> = &#955;</tspan><tspan font-size='11' dy='4'>r</tspan><tspan dy='-4'>/sin &#952;</tspan><tspan font-size='11' dy='4'>r</tspan></text>
+</svg>
+<figcaption><b>Figure&nbsp;3.</b>&nbsp; The derivation, drawn.&nbsp; One wavefront reaches the
+interface at the left end of <i>L</i> while the other end still has <i>&#955;</i><sub>i</sub> to go;
+in that same <i>&#916;t</i> the wave already inside the second medium advances only
+<i>&#955;</i><sub>r</sub>.&nbsp; <b>Both right triangles stand on the same hypotenuse <i>L</i></b>,
+and that single shared length is the whole proof.&nbsp; Drawn to scale for
+<i>n</i><sub>1</sub>&nbsp;=&nbsp;1.00, <i>n</i><sub>2</sub>&nbsp;=&nbsp;1.60,
+<i>&theta;</i><sub>i</sub>&nbsp;=&nbsp;50&deg;.</figcaption>
+</figure>
+
+  <div class="mathblock">
+    <div class="mathline">sin&nbsp;<i>&theta;</i><sub>i</sub> = <i>&#955;</i><sub>i</sub>/<i>L</i>
+      &nbsp;&#8658;&nbsp; <i>L</i> = <i>&#955;</i><sub>i</sub>/sin&nbsp;<i>&theta;</i><sub>i</sub>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      sin&nbsp;<i>&theta;</i><sub>r</sub> = <i>&#955;</i><sub>r</sub>/<i>L</i>
+      &nbsp;&#8658;&nbsp; <i>L</i> = <i>&#955;</i><sub>r</sub>/sin&nbsp;<i>&theta;</i><sub>r</sub></div>
+    <div class="mathline">It is the same <i>L</i>, so&nbsp;&nbsp;
+      <i>&#955;</i><sub>i</sub>/sin&nbsp;<i>&theta;</i><sub>i</sub> =
+      <i>&#955;</i><sub>r</sub>/sin&nbsp;<i>&theta;</i><sub>r</sub></div>
+    <div class="mathline">and since <i>v</i> = <i>f&#955;</i> with <b><i>f</i> the same in both
+      media</b>, <i>&#955;</i> = <i>c</i>/(<i>f n</i>):</div>
+    <div class="mathline">(<i>c</i>/<i>f n</i><sub>i</sub>)/sin&nbsp;<i>&theta;</i><sub>i</sub>
+      = (<i>c</i>/<i>f n</i><sub>r</sub>)/sin&nbsp;<i>&theta;</i><sub>r</sub></div>
+    <div class="mathline" style="font-size:1.2rem">&there4;&nbsp;
+      <i>n</i><sub>i</sub> sin&nbsp;<i>&theta;</i><sub>i</sub> =
+      <i>n</i><sub>r</sub> sin&nbsp;<i>&theta;</i><sub>r</sub></div>
+  </div>
+
+  <p class="why">The frequency is the one quantity that cannot change at the boundary &mdash; the
+  far side is driven by the near side, cycle for cycle &mdash; so <i>c</i> and <i>f</i> cancel out
+  of both sides and only the indices survive. That is why Snell&rsquo;s law mentions no speeds and
+  no wavelengths.</p>
+
+  <h2>Total internal reflection</h2>
+
+  <p>Run it the other way. Rearranged, Snell&rsquo;s law says</p>
+
+  <div class="mathblock">
+    <div class="mathline">sin&nbsp;<i>&theta;</i><sub>r</sub> =
+      (<i>n</i><sub>i</sub>/<i>n</i><sub>r</sub>) sin&nbsp;<i>&theta;</i><sub>i</sub></div>
+  </div>
+
+  <p>For <i>n</i><sub>i</sub> &lt; <i>n</i><sub>r</sub> the factor is less than one and there is
+  always an answer. <b>But for <i>n</i><sub>i</sub> &gt; <i>n</i><sub>r</sub> the factor exceeds
+  one</b>, and past some incident angle the right-hand side is greater than 1. That is a problem,
+  because sin&nbsp;<i>&phi;</i> only ever lies between &minus;1 and 1 &mdash; so
+  sin<sup>&minus;1</sup> has no answer to give.</p>
+
+  <p>What the light does instead is reflect. <b>All of it.</b> When the entire wave is reflected back
+  into the medium it came from, that is <b>total internal reflection</b>.</p>
+
+  <figure>
+<svg viewBox="0 0 1000 460" role="img" aria-label="Three rays inside glass striking the surface with air above it. The first, at a shallow angle from the normal, refracts out into the air. The second, at the critical angle, leaves grazing along the surface. The third, at a steeper angle, does not leave at all and is reflected entirely back into the glass.">
+<defs><marker id="r2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<rect x="30" y="40" width="940" height="190.0" fill="#eaf4ff"/>
+<rect x="30" y="230.0" width="940" height="200.0" fill="#dfe9c8"/>
+<line x1="30" y1="230.0" x2="970" y2="230.0" stroke="#1d2b23" stroke-width="2.4"/>
+<line x1="148.8" y1="406.2" x2="220.0" y2="230.0" stroke="#1f8a44" stroke-width="2.6" marker-end="url(#r2a)"/><line x1="220.0" y1="230.0" x2="220.0" y2="120.0" stroke="#1d2b23" stroke-width="1.1" stroke-dasharray="5 4"/><line x1="220.0" y1="230.0" x2="304.3" y2="105.9" stroke="#1f8a44" stroke-width="2.4" marker-end="url(#r2a)"/><text x="220.0" y="430.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1f8a44" font-weight="600">below &#952;<tspan font-size='11' dy='4'>c</tspan></text><line x1="373.3" y1="371.6" x2="500.0" y2="230.0" stroke="#c77b1f" stroke-width="2.6" marker-end="url(#r2a)"/><line x1="500.0" y1="230.0" x2="500.0" y2="120.0" stroke="#1d2b23" stroke-width="1.1" stroke-dasharray="5 4"/><line x1="500.0" y1="230.0" x2="670.0" y2="230.0" stroke="#c77b1f" stroke-width="2.8" marker-end="url(#r2a)"/><text x="500.0" y="430.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#c77b1f" font-weight="600">at &#952;<tspan font-size='11' dy='4'>c</tspan></text><line x1="618.9" y1="330.7" x2="780.0" y2="230.0" stroke="#b3261e" stroke-width="2.6" marker-end="url(#r2a)"/><line x1="780.0" y1="230.0" x2="780.0" y2="120.0" stroke="#1d2b23" stroke-width="1.1" stroke-dasharray="5 4"/><line x1="780.0" y1="230.0" x2="941.1" y2="330.7" stroke="#b3261e" stroke-width="2.8" marker-end="url(#r2a)"/><text x="780.0" y="430.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e" font-weight="600">above &#952;<tspan font-size='11' dy='4'>c</tspan></text>
+<text x="46.0" y="66.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#0277bd" font-weight="600">air   nᵣ = 1.00</text>
+<text x="46.0" y="258.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#558b2f" font-weight="600">glass   nᵢ = 1.50</text>
+<text x="820.0" y="92.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#1d2b23" font-weight="600">&#952;<tspan font-size='11' dy='4'>c</tspan><tspan dy='-4'> = asin(n</tspan><tspan font-size='11' dy='4'>r</tspan><tspan dy='-4'>/n</tspan><tspan font-size='11' dy='4'>i</tspan><tspan dy='-4'>)</tspan></text>
+<text x="820.0" y="118.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#1d2b23" font-weight="600">= 41.8&deg;</text>
+</svg>
+<figcaption><b>Figure&nbsp;4.</b>&nbsp; Going from a high-index medium to a low-index one, strange
+things happen.&nbsp; Below the critical angle the ray gets out; <b>at</b> it the refracted ray grazes
+along the surface at 90&deg;; above it there is no refracted ray at all and <b>the whole wave is
+reflected back into the glass</b>.&nbsp; All three angles are computed, and
+<i>&theta;</i><sub>c</sub>&nbsp;=&nbsp;41.81&deg; for this pair.</figcaption>
+</figure>
+
+  <p>The boundary case is the one worth memorising. Set the refracted ray grazing along the surface,
+  <i>&theta;</i><sub>r</sub> = 90&deg;, and solve:</p>
+
+  <div class="mathblock">
+    <div class="mathline"><i>n</i><sub>i</sub> sin&nbsp;<i>&theta;</i><sub>c</sub> =
+      <i>n</i><sub>r</sub> sin&nbsp;90&deg; = <i>n</i><sub>r</sub></div>
+    <div class="mathline" style="font-size:1.2rem"><i>&theta;</i><sub>c</sub> =
+      sin<sup>&minus;1</sup>(<i>n</i><sub>r</sub>/<i>n</i><sub>i</sub>)</div>
+  </div>
+
+  <div class="tip"><b>Which way is the ray going?</b>&nbsp; We usually draw this with the ray coming
+  <em>up</em> from below, because the index of air is lower than the index of water or glass &mdash;
+  so total internal reflection is what happens looking <em>out</em> of the denser medium, not into
+  it. Get the two indices the wrong way round and the formula hands you a sine bigger than one for
+  every angle.</div>
+
+  <h2>In short</h2>
+
+  <ul>
+    <li>A ray bends at an interface because <b>one edge of the wavefront slows before the other</b>.</li>
+    <li><b>Snell&rsquo;s law:</b> <i>n</i><sub>1</sub> sin&nbsp;<i>&theta;</i><sub>1</sub> =
+      <i>n</i><sub>2</sub> sin&nbsp;<i>&theta;</i><sub>2</sub>, every angle measured from the
+      normal.</li>
+    <li>It follows from two right triangles on <b>the same hypotenuse</b>, plus the fact that the
+      frequency is unchanged across the boundary.</li>
+    <li>Going into a denser medium the ray bends <b>towards</b> the normal; coming out, away from
+      it. <b>Some light reflects at the interface either way.</b></li>
+    <li>From dense to thin there is a <b>critical angle</b>,
+      <i>&theta;</i><sub>c</sub> = sin<sup>&minus;1</sup>(<i>n</i><sub>r</sub>/<i>n</i><sub>i</sub>),
+      beyond which none of the light gets out at all.</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul class="refs">
+    <li>Paul Peter Urone, Roger Hinrichs, <em>College Physics</em>, OpenStax, Houston, TX, Jun 21, 2012 &mdash;
+      <a href="https://openstax.org/books/college-physics/pages/25-3-the-law-of-refraction" target="_blank" rel="noopener">25.3 The Law of Refraction</a> &middot;
+      <a href="https://openstax.org/books/college-physics/pages/25-4-total-internal-reflection" target="_blank" rel="noopener">25.4 Total Internal Reflection</a></li>
+    <li>Samuel J. Ling, William Moebs, Jeff Sanny, <em>University Physics Volume 3</em>, OpenStax, Houston, TX, Oct 6, 2016 &mdash;
+      <a href="https://openstax.org/books/university-physics-volume-3/pages/1-4-refraction" target="_blank" rel="noopener">1.4 Refraction</a> &middot;
+      <a href="https://openstax.org/books/university-physics-volume-3/pages/1-5-total-internal-reflection" target="_blank" rel="noopener">1.5 Total Internal Reflection</a></li>
+  </ul>
+
+  <footer>
+    This page is adapted from the presentations <em>Snell&rsquo;s Law</em> and
+    <em>Total Internal Reflection</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   This page is reached by link, not framed, so the reporter is inert here - it is kept so the
+   page behaves if it is ever embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>
