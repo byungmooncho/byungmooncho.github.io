@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHY 152 Lab 04 &mdash; Converging Lenses</title>
+<style>
+  /* FLCC Physics lab manual - PHY 152, Module 1, Lab 01 "Mass-Spring Oscillation".
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+     Build record: Logs\LOG_ENTRY_2026-11-03b_M1_Labs_Rebuilt.md
+
+     BASE: the handout Cho issues to his students (26SP). It is INHERITED, not his - it
+     traces to the 2021 course materials, and no copyright line appears on any copy.
+     NO COPYRIGHT STAMP IS CLAIMED ON THIS PAGE for that reason; the footer states the
+     provenance instead. Cho's call 2026-11-03.
+
+     FIGURE NUMBERING IS CORRECTED, Cho's call 2026-11-03. The source numbers TWO
+     different figures "Fig. 1" (the lab apparatus and the kit setup) and captions the
+     raw data table "Fig. 2" while every reference in the procedure calls it Fig. 3.
+     Restored to the scheme the text already assumes: 1 apparatus, 2 setup, 3 raw,
+     4 processed, 5 raw times, 6 processed periods.
+
+     THE PERCENT DIFFERENCE IS HIS, NOT THE CONVENTIONAL ONE. The source divides by k_d
+     alone; the archive copy divides by the mean. Cho confirmed 2026-11-03 that his
+     course uses the k_d denominator. Left exactly as he issues it.
+
+     NO APPARATUS PHOTO. The source's reference is a vendor product image on an external
+     URL; it is not reproduced. The apparatus is drawn instead.
+     ================================================================== */
+
+:root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --sans:Calibri, Carlito, "Segoe UI", Arial, sans-serif;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:1.1rem; line-height:1.6;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+
+  .eyebrow{
+    font-family:var(--sans); font-size:.8rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:700; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{ font-size:1.3rem; margin:2rem 0 .8rem; font-weight:700; }
+  h3{ font-size:1.06rem; margin:1.4rem 0 .4rem; font-weight:700; color:var(--green-deep); }
+
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:700; display:block; margin-bottom:.25rem;
+  }
+  .logistics{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; margin:1.1rem 0 0; font-size:.9rem; }
+  .logistics .chip{ background:#fff; border:1px solid var(--rule); border-radius:20px; padding:.3rem .85rem; }
+  .logistics .chip b{ color:var(--green-deep); }
+
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe .head{
+    background:var(--green-soft); border-bottom:1px solid var(--rule);
+    padding:.6rem 1.1rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
+  }
+  .pe .head strong{ font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:700; }
+  .pe .head span{ font-size:.88rem; color:var(--muted); }
+  .pe ul{ list-style:none; margin:0; padding:.5rem .6rem; }
+  .pe li{ display:flex; gap:.7rem; align-items:flex-start; padding:.5rem .6rem; border-radius:6px; }
+  .pe li + li{ border-top:1px solid var(--rule); }
+  .pe li .tick{
+    flex:none; width:1.6rem; height:1.6rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:.72rem; font-weight:700; margin-top:.1rem;
+  }
+  .pe li .txt{ flex:1; }
+
+  .prior{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.8rem 0; }
+  .prior .head{
+    background:linear-gradient(90deg, var(--green), var(--green-deep));
+    color:#fff; padding:.7rem 1.1rem; display:flex; align-items:center; gap:.6rem;
+  }
+  .prior .head .spark{ font-size:1.15rem; line-height:1; }
+  .prior .head strong{ font-size:1rem; }
+  .prior .body{ padding:1rem 1.1rem 1.15rem; }
+  .prior p{ margin:.2rem 0 1rem; }
+  .prior p:last-child{ margin-bottom:0; }
+  .prior .cases{ display:grid; gap:.7rem; grid-template-columns:1fr; margin:.4rem 0 1rem; }
+  @media (min-width:560px){ .prior .cases{ grid-template-columns:1fr 1fr; } }
+  .case{ background:var(--green-soft); border-radius:8px; padding:.75rem .8rem; }
+  .case .emoji{ font-size:1.5rem; line-height:1; display:block; margin-bottom:.35rem; }
+  .case b{ font-size:.98rem; display:block; }
+  .case small{ color:var(--muted); font-size:.9rem; display:block; }
+
+  ol.questions{ margin:.2rem 0 0; padding-left:1.3rem; list-style-type:upper-roman; }
+  ol.questions li{ margin:.35rem 0; }
+  ol.steps{ padding-left:1.3rem; }
+  ol.steps > li{ margin:.45rem 0; line-height:1.45; }   /* margin was .65, leading was the
+     body 1.6.  Tighter leading is normal for a numbered procedure and it is the single
+     biggest lever on a 60-step lab: it is what brings the page under D2L MAX_FRAME_HEIGHT. */
+  ul.kit{ padding-left:1.3rem; }
+  ul.kit li{ margin:.22rem 0; }
+
+  .eqn{
+    font-family:"Cambria Math", Calibri, Carlito, serif; font-size:1.18rem; text-align:center;
+    background:#fff; border:1px solid var(--rule); border-radius:8px; padding:.8rem 1rem; margin:.9rem 0;
+    color:var(--green-deep); font-weight:700; letter-spacing:.02em;
+  }
+  .eqn small{ display:block; font-family:var(--sans); font-size:.85rem; font-weight:400; color:var(--muted); margin-top:.4rem; letter-spacing:0; }
+
+  table.spec{ width:100%; border-collapse:collapse; margin:.9rem 0 1.2rem; font-size:.95rem; }
+  table.spec th, table.spec td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:700; }
+  table.spec caption{ caption-side:top; text-align:left; font-size:.86rem; color:var(--muted); padding-bottom:.35rem; }
+
+  .probe{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:1rem 1.1rem; margin:1.6rem 0; background:#fffdf8;
+  }
+  .probe .q{ font-weight:700; margin:0 0 .7rem; }
+  .probe .opts{ display:grid; gap:.5rem; }
+  .probe .opt{
+    font-family:var(--sans); font-size:1rem; text-align:left; color:var(--ink);
+    border:1px solid var(--rule); background:#fff; border-radius:6px; padding:.55rem .8rem; cursor:pointer;
+  }
+  .probe .opt:hover{ border-color:var(--amber); }
+  .probe .opt.correct{ border-color:var(--green); background:var(--green-soft); }
+  .probe .opt.wrong{ border-color:#c0392b; background:#fdecea; }
+  .probe .feedback{ font-size:.95rem; margin-top:.7rem; color:var(--green-deep); min-height:1.2em; }
+
+  .watch{
+    border:1px solid var(--rule); border-left:4px solid var(--amber);
+    border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.3rem 0; background:#fffdf8;
+  }
+  .watch b{ color:#9a5c10; }
+
+  .ticket{ border:1px solid var(--rule); border-radius:12px; overflow:hidden; margin:1.6rem 0; }
+  .ticket .t-head{ background:linear-gradient(90deg, var(--green), var(--green-deep)); color:#fff; padding:.75rem 1.1rem; }
+  .ticket .t-head strong{ font-size:1.02rem; display:flex; align-items:center; gap:.5rem; }
+  .ticket .t-head .sub{ display:block; font-size:.88rem; opacity:.92; margin-top:.2rem; }
+  .ticket .t-body{ padding:1rem 1.1rem 1.2rem; }
+  .check-group{ margin:0 0 1.1rem; }
+  .check-group > .gh{
+    font-size:.8rem; letter-spacing:.07em; text-transform:uppercase; color:var(--green);
+    font-weight:700; display:block; margin-bottom:.4rem;
+  }
+  .check-group label{ display:flex; gap:.6rem; align-items:flex-start; font-size:.97rem;
+    border:1px solid var(--rule); border-radius:6px; padding:.5rem .7rem; margin-bottom:.4rem; cursor:pointer; background:#fff; }
+  .check-group label:hover{ border-color:var(--green); }
+  .check-group input{ margin-top:.25rem; accent-color:var(--green); flex:none; }
+  .check-group input:checked + span{ color:var(--muted); text-decoration:line-through; }
+  .ticket .score{
+    font-weight:700; font-size:.98rem; margin-top:.6rem; padding:.7rem .95rem; border-radius:8px;
+    background:var(--green-soft); border:1px solid var(--rule);
+  }
+
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none; color:inherit; display:block; background:#fff; }
+  .dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ cursor:default; background:#fbfdfc; }
+  .dl-card.static:hover{ border-color:var(--rule); background:#fbfdfc; }
+  .dl-card .kind{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:700; }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.95rem; color:var(--muted); }
+
+  .refs{ font-size:1rem; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-size:.88rem; color:var(--muted); }
+  footer .attrib{ display:block; margin-top:.3rem; }
+
+  @media print{
+    body{ font-size:11pt; }
+    .note-wrap{ max-width:none; padding:0; }
+    .ticket, .pe, .prior, .probe, table.spec{ break-inside:avoid; }
+    h2, h3{ break-after:avoid; }
+    a{ color:inherit; text-decoration:none; }
+    .probe .opts{ counter-reset:opt; }
+    .probe .opt{ cursor:default; border:none; padding:.12rem 0 .12rem 1.8rem; position:relative; background:none; }
+    .probe .opt::before{
+      counter-increment:opt; content:"(" counter(opt, upper-alpha) ")";
+      position:absolute; left:0; font-weight:700; color:#5c6b62;
+    }
+    .probe .feedback{ display:none; }
+    .check-group label{ break-inside:avoid; }
+    .ticket .score{ display:none; }
+  }
+
+  .calc152{ border-left:4px solid #6b4fa8; background:#f7f5fc; padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .calc152 h3{ font-size:1.06rem; margin:.1rem 0 .5rem; font-weight:700; color:#4a3579; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:.4rem; }
+  /* VIDEO EMBEDS.  The LB01 .video rule styled a dashed PLACEHOLDER box with no iframe in it,
+     so an embed inherited the HTML default 300x150 and collapsed.  A real embed needs its own
+     aspect box.  The pair sits two-up on the desktop column and stacks below 560px. */
+  .video-pair{ display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin:1.4rem 0; }
+  .video-pair .video{ margin:0; }
+  .video{ border:1px solid var(--rule); border-radius:8px; padding:.55rem .6rem .5rem;
+          background:#fbfdfc; margin:1.4rem 0; }
+  .video iframe{ display:block; width:100%; aspect-ratio:16/9; height:auto; border:0;
+          border-radius:6px; background:#0d0f0e; }
+  .video .cap{ display:block; font-family:"Segoe UI", system-ui, sans-serif; font-size:.78rem;
+          line-height:1.35; color:var(--muted); margin-top:.4rem; }
+  @media (max-width:560px){ .video-pair{ grid-template-columns:1fr; } }
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.55rem .9rem .45rem; margin:.9rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.4rem; }
+  table.grid{ border-collapse:collapse; width:100%; margin:.8rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.93rem; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); text-align:left; padding:.42rem .65rem; border:1px solid var(--rule); font-weight:600; }
+  table.grid td{ padding:.38rem .65rem; border:1px solid var(--rule); color:var(--muted); }
+  .eqn{ text-align:center; margin:.7rem 0; font-size:1.08rem; }
+  .warn{ border-left:4px solid var(--amber); background:#fdf6e9; padding:.8rem 1.05rem; margin:1.1rem 0; border-radius:0 6px 6px 0; }
+
+</style>
+</head>
+<body>
+<div class="note-wrap">
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>PHY 152 &middot; Module 2</span><span>Lab 04</span></div>
+<h1>Converging Lenses: Two Routes to a Focal Length, and a Two-Lens System</h1>
+<div class="synopsis"><span class="label">Synopsis</span>You will find the focal length of the same lens two independent ways &mdash; once by focusing a very distant object, once from the intercept of a straight line fitted to 1/d<sub>i</sub> against 1/d<sub>o</sub> &mdash; and then put two lenses in series and check the magnification you measure against the one the thin lens equation predicts. The data come from the lab videos; the analysis and the report are yours.</div>
+<div class="logistics"><span class="chip"><b>Code</b> LB4-M2</span><span class="chip"><b>Due</b> See the Module&nbsp;2 Lab&nbsp;4 folder on Brightspace</span><span class="chip"><b>Pairs with</b> Note&nbsp;6, Note&nbsp;7 and Note&nbsp;9</span><span class="chip"><b>Where</b> From the videos, at home</span><span class="chip"><b>Report</b> Full lab report &mdash; use the Lab Template</span></div>
+<h2>The lab videos</h2>
+<div class="warn"><b>These videos are the experiment.</b>&nbsp; This lab was filmed in the physics laboratory. Every measurement comes off the video, so watch each part before you start that section and keep the handout beside you. <b>Take screenshots as you go</b> &mdash; a video-based lab gives you no apparatus to photograph, so your screenshots are the figures in your report.</div>
+<div class="video-pair"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/6w9ZfQI4pow" title="Part 1 &mdash; introduction" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><span class="cap">Part 1 &mdash; introduction</span></div><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/M6w-kiSjF00" title="Part 2 &mdash; focal length of lens 1, introduction" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><span class="cap">Part 2 &mdash; focal length of lens 1, introduction</span></div></div>
+<div class="video-pair"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/LgihJ50Q8Po" title="Part 3 &mdash; focal length of lens 1, data" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><span class="cap">Part 3 &mdash; focal length of lens 1, data</span></div><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/-81zcwc2bYw" title="Part 4 &mdash; focal length of lens 2, introduction" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><span class="cap">Part 4 &mdash; focal length of lens 2, introduction</span></div></div>
+<div class="video-pair"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/KJCwDv2gEZE" title="Part 5 &mdash; focal length of lens 2, data" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><span class="cap">Part 5 &mdash; focal length of lens 2, data</span></div><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/ugHFunvso1s" title="Part 6 &mdash; the double-lens setup, introduction" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><span class="cap">Part 6 &mdash; the double-lens setup, introduction</span></div></div>
+<div class="video-pair"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/vxZ_I4Bdp70" title="Part 7 &mdash; the double-lens setup, data" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><span class="cap">Part 7 &mdash; the double-lens setup, data</span></div></div>
+<h2>What you need</h2>
+<ul class="kit"><li>Optical bench</li><li>Light source (the object)</li><li>Image screen</li><li>10&nbsp;cm converging lens</li><li>20&nbsp;cm converging lens</li><li>Vernier caliper</li><li>The printed Ray Tracing Template, for Part&nbsp;III</li><li>A straight edge</li></ul>
+<div class="fig"><svg viewBox="0 10.0 620 236.0" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Optical bench: light source, converging lens and screen, with the three recorded positions" style="max-width:620px"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="context-stroke"/></marker></defs><rect x="40" y="150.0" width="540" height="16" rx="3" fill="#8d9aa3" stroke="#6d7b73" stroke-width="1.2"/><line x1="50.00" y1="150.00" x2="50.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="102.00" y1="150.00" x2="102.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="154.00" y1="150.00" x2="154.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="206.00" y1="150.00" x2="206.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="258.00" y1="150.00" x2="258.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="310.00" y1="150.00" x2="310.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="362.00" y1="150.00" x2="362.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="414.00" y1="150.00" x2="414.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="466.00" y1="150.00" x2="466.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="518.00" y1="150.00" x2="518.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><line x1="570.00" y1="150.00" x2="570.00" y2="166.00" stroke="#f2f5f7" stroke-width="1.00"/><rect x="92" y="104.0" width="34" height="46" rx="4" fill="#efe3c8" stroke="#9a8a62" stroke-width="1.4"/><line x1="109.00" y1="112.00" x2="109.00" y2="138.00" stroke="#c77b1f" stroke-width="3.00"/><text x="109.00" y="80.00" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5b6b61" text-anchor="middle" font-weight="400">light source</text><text x="109.00" y="94.00" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5b6b61" text-anchor="middle" font-weight="400">(the object)</text><path d="M 300.0 85.0 Q 313.0 116.0 300.0 147.0 Q 287.0 116.0 300.0 85.0 Z" fill="#cdd9f2" stroke="#7f93bb" stroke-width="1.6"/><text x="300.00" y="78.00" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5b6b61" text-anchor="middle" font-weight="400">converging lens</text><rect x="466" y="80.0" width="12" height="70" rx="2" fill="#e9eeec" stroke="#6d7b73" stroke-width="1.4"/><text x="492.00" y="94.00" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5b6b61" text-anchor="start" font-weight="400">screen</text><text x="492.00" y="108.00" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5b6b61" text-anchor="start" font-weight="400">(real image)</text><line x1="109.00" y1="166.00" x2="109.00" y2="190.00" stroke="#c77b1f" stroke-width="1.40" stroke-dasharray="5 4"/><text x="109.00" y="206.00" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f" text-anchor="middle" font-style="italic" font-weight="600">x<tspan baseline-shift="sub" font-size="10">o</tspan></text><line x1="300.00" y1="166.00" x2="300.00" y2="190.00" stroke="#c77b1f" stroke-width="1.40" stroke-dasharray="5 4"/><text x="300.00" y="206.00" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f" text-anchor="middle" font-style="italic" font-weight="600">x<tspan baseline-shift="sub" font-size="10">L</tspan></text><line x1="472.00" y1="166.00" x2="472.00" y2="190.00" stroke="#c77b1f" stroke-width="1.40" stroke-dasharray="5 4"/><text x="472.00" y="206.00" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f" text-anchor="middle" font-style="italic" font-weight="600">x<tspan baseline-shift="sub" font-size="10">i</tspan></text><text x="310.00" y="236.00" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5b6b61" text-anchor="middle" font-weight="400">every position is read off the bench scale, in cm</text></svg><span class="fig-note"><b>Fig. 1</b>&nbsp; The optical bench. The light source is the object; the screen is where a real image is found. Each of the three positions is read off the bench scale.</span></div>
+<p>The optical bench carries the light source, one or two lenses and the screen, and every component slides along it. The bench is marked in centimetres, so what you read off it is always a <em>position</em>. Distances come later, as differences.</p>
+<h2>Part I &mdash; focal length from the theory of converging lenses</h2>
+<p>The focal length of a lens is the distance at which parallel rays come into focus.</p>
+<div class="fig"><svg viewBox="0 12.0 560 310.0" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Parallel rays refracted by a converging lens meet at the focal point" style="max-width:560px"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="context-stroke"/></marker></defs><line x1="40.00" y1="165.00" x2="540.00" y2="165.00" stroke="#5b6b61" stroke-width="1.20" stroke-dasharray="6 4"/><path d="M 250.0 60.0 Q 265.0 165.0 250.0 270.0 Q 235.0 165.0 250.0 60.0 Z" fill="#cdd9f2" stroke="#7f93bb" stroke-width="1.6"/><line x1="60.00" y1="81.00" x2="250.00" y2="81.00" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="250.00" y1="81.00" x2="520.00" y2="232.20" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="60.00" y1="123.00" x2="250.00" y2="123.00" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="250.00" y1="123.00" x2="520.00" y2="198.60" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="60.00" y1="165.00" x2="250.00" y2="165.00" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="250.00" y1="165.00" x2="520.00" y2="165.00" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="60.00" y1="207.00" x2="250.00" y2="207.00" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="250.00" y1="207.00" x2="520.00" y2="131.40" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="60.00" y1="249.00" x2="250.00" y2="249.00" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><line x1="250.00" y1="249.00" x2="520.00" y2="97.80" stroke="#b3261e" stroke-width="2.20" marker-end="url(#ah)"/><circle cx="400.00" cy="165.00" r="4.50" fill="#1d2b23"/><text x="408.00" y="153.00" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" text-anchor="start" font-style="italic" font-weight="600">F</text><line x1="250.00" y1="283.00" x2="400.00" y2="283.00" stroke="#1636c8" stroke-width="1.50"/><line x1="250.00" y1="277.00" x2="250.00" y2="289.00" stroke="#1636c8" stroke-width="1.50"/><line x1="400.00" y1="277.00" x2="400.00" y2="289.00" stroke="#1636c8" stroke-width="1.50"/><text x="325.00" y="305.00" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" text-anchor="middle" font-style="italic" font-weight="600">f</text><text x="52.00" y="47.00" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5b6b61" text-anchor="start" font-weight="400">parallel rays from a distant object</text></svg><span class="fig-note"><b>Fig. 2</b>&nbsp; Rays from a distant object arrive parallel and are brought together at the focal point, which is what makes Part I work: with the object far enough away, the image distance IS the focal length.</span></div>
+<p>In practice, if an object is much farther away than the focal length, its image is in focus at the focal point &mdash; and this is the one situation where the image distance and the focal length are the same number. That gives a quick way to measure a focal length: hold the lens in one hand and a piece of paper in the other and move them until something very far away comes into focus. The gap between lens and paper is the focal length. It works best in a shadowed area with a brightly lit subject; in the video the lab is darkened and the &ldquo;object&rdquo; is a stand of trees well outside the window.</p>
+<h3>Procedure</h3>
+<ol class="steps"><li>Mount the <b>10&nbsp;cm</b> converging lens on the bench at about the <b>140&nbsp;cm</b> mark. Record its position as x<sub>L</sub> in Table&nbsp;3.</li><li>Point the optical bench at some distant object.</li><li>Place the screen at about the <b>150&nbsp;cm</b> mark.</li><li>Move the screen toward or away from the lens until a sharp image forms on it. Watch the image sharpen &mdash; not the screen&rsquo;s position.</li><li>Record the screen&rsquo;s position as x<sub>i</sub> in Table&nbsp;3.</li><li>Repeat steps 1&ndash;5 twice more with the lens at different positions.</li><li>From the raw data, calculate the lens-to-image distance for each trial and record it in Table&nbsp;4.</li><li>Average the three. That average is the focal length from the theory of converging lenses. Record it as f<sub>1</sub>.</li><li>Calculate the percent accuracy of f<sub>1</sub> against the lens&rsquo;s stated focal length of 10&nbsp;cm.</li></ol>
+<table class="grid"><caption>Table 3 &mdash; raw data, Part I</caption><tr><th>Trial</th><th>Lens position x<sub>L</sub> (cm)</th><th>Image position x<sub>i</sub> (cm)</th></tr><tr><td>1</td><td></td><td></td></tr><tr><td>2</td><td></td><td></td></tr><tr><td>3</td><td></td><td></td></tr></table>
+<table class="grid"><caption>Table 4 &mdash; image distance, Part I</caption><tr><th>Trial</th><th>Image distance d<sub>i</sub> (cm)</th></tr><tr><td>1</td><td></td></tr><tr><td>2</td><td></td></tr><tr><td>3</td><td></td></tr><tr><td><b>Average</b></td><td></td></tr></table>
+<h2>Part II &mdash; focal length from the thin lens equation</h2>
+<p>The thin lens equation ties the focal length to the object and image distances:</p>
+<div class="eqn">1/f &nbsp;=&nbsp; 1/d<sub>o</sub> &nbsp;+&nbsp; 1/d<sub>i</sub></div>
+<p>Written that way it is already the equation of a straight line. Plot 1/d<sub>i</sub> against 1/d<sub>o</sub> and the line has slope &minus;1 and an intercept of 1/f on the vertical axis &mdash; so it is the <em>intercept</em> that gives you the focal length.</p>
+<div class="warn"><b>Positions are not distances.</b>&nbsp; The object distance d<sub>o</sub> is the gap between the object and the lens; the image distance d<sub>i</sub> is the gap between the lens and the image. Both are differences of two bench readings. Carrying a position into a calculation that wants a distance is the single most common error in this lab.</div>
+<div class="fig"><svg viewBox="0 10.0 600 334.0" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Positions on the bench versus the object and image distances derived from them" style="max-width:600px"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="context-stroke"/></marker></defs><line x1="30.00" y1="150.00" x2="570.00" y2="150.00" stroke="#5b6b61" stroke-width="1.20" stroke-dasharray="6 4"/><path d="M 300.0 75.0 Q 314.0 150.0 300.0 225.0 Q 286.0 150.0 300.0 75.0 Z" fill="#cdd9f2" stroke="#7f93bb" stroke-width="1.6"/><line x1="60.00" y1="150.00" x2="60.00" y2="88.00" stroke="#1636c8" stroke-width="2.60" marker-end="url(#ah)"/><text x="60.00" y="76.00" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8" text-anchor="middle" font-style="italic" font-weight="400">object</text><line x1="430.00" y1="150.00" x2="430.00" y2="183.58" stroke="#1636c8" stroke-width="2.60" marker-end="url(#ah)"/><text x="446.00" y="179.58" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8" text-anchor="start" font-style="italic" font-weight="400">image</text><line x1="60.00" y1="156.00" x2="60.00" y2="208.00" stroke="#c77b1f" stroke-width="1.30" stroke-dasharray="5 4"/><text x="60.00" y="222.00" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f" text-anchor="middle" font-style="italic" font-weight="600">x<tspan baseline-shift="sub" font-size="10">o</tspan></text><line x1="300.00" y1="156.00" x2="300.00" y2="208.00" stroke="#c77b1f" stroke-width="1.30" stroke-dasharray="5 4"/><text x="300.00" y="222.00" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f" text-anchor="middle" font-style="italic" font-weight="600">x<tspan baseline-shift="sub" font-size="10">L</tspan></text><line x1="430.00" y1="156.00" x2="430.00" y2="208.00" stroke="#c77b1f" stroke-width="1.30" stroke-dasharray="5 4"/><text x="430.00" y="222.00" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#c77b1f" text-anchor="middle" font-style="italic" font-weight="600">x<tspan baseline-shift="sub" font-size="10">i</tspan></text><line x1="60.00" y1="266.00" x2="300.00" y2="266.00" stroke="#1636c8" stroke-width="1.60"/><line x1="60.00" y1="260.00" x2="60.00" y2="272.00" stroke="#1636c8" stroke-width="1.60"/><line x1="300.00" y1="260.00" x2="300.00" y2="272.00" stroke="#1636c8" stroke-width="1.60"/><text x="180.00" y="254.00" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" text-anchor="middle" font-style="italic" font-weight="600">d<tspan baseline-shift="sub" font-size="10">o</tspan></text><line x1="300.00" y1="266.00" x2="430.00" y2="266.00" stroke="#1636c8" stroke-width="1.60"/><line x1="300.00" y1="260.00" x2="300.00" y2="272.00" stroke="#1636c8" stroke-width="1.60"/><line x1="430.00" y1="260.00" x2="430.00" y2="272.00" stroke="#1636c8" stroke-width="1.60"/><text x="365.00" y="254.00" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" text-anchor="middle" font-style="italic" font-weight="600">d<tspan baseline-shift="sub" font-size="10">i</tspan></text><text x="300.00" y="296.00" font-family="Segoe UI, system-ui, sans-serif" font-size="12" fill="#5b6b61" text-anchor="middle" font-weight="400">a distance is a DIFFERENCE of two positions</text></svg><span class="fig-note"><b>Fig. 5</b>&nbsp; Positions against distances. The bench gives you positions; both distances are differences you work out from them. Confusing the two is the most common way to lose marks here.</span></div>
+<h3>Procedure</h3>
+<ol class="steps"><li>Place the <b>10&nbsp;cm</b> lens at the <b>100&nbsp;cm</b> position and record it as x<sub>L</sub>. Leave the lens there for the rest of Part&nbsp;II.</li><li>Place the lighted object at the <b>40&nbsp;cm</b> position and record it as x<sub>o</sub> in Table&nbsp;6.</li><li>Place the screen beyond the lens, past the 100&nbsp;cm mark.</li><li>Move the screen until a sharp image appears.</li><li>Record the screen position as x<sub>i</sub> in Table&nbsp;6.</li><li>Repeat steps 2&ndash;5 for x<sub>o</sub> = 45, 50, 55, 60, 65, 70, 75, 80 and 85&nbsp;cm.</li><li>From the raw data, calculate d<sub>o</sub> and d<sub>i</sub> in cm and record them in Table&nbsp;7.</li><li>Calculate 1/d<sub>o</sub> and 1/d<sub>i</sub> and record them in Table&nbsp;7.</li><li>Plot 1/d<sub>i</sub> on the vertical axis against 1/d<sub>o</sub> on the horizontal axis as a scatter plot in Excel.</li><li>Fit a linear trendline and display its equation on the chart.</li><li>Take the vertical-axis intercept from that equation and, using the thin lens equation, work out the focal length. Record it as f<sub>2</sub>.</li><li>Calculate the percent accuracy of f<sub>2</sub> against the stated 10&nbsp;cm.</li></ol>
+<table class="grid"><caption>Table 6 &mdash; raw data, Part II</caption><tr><th>Object position x<sub>o</sub> (cm)</th><th>Image position x<sub>i</sub> (cm)</th></tr><tr><td>40.0</td><td></td></tr><tr><td>45.0</td><td></td></tr><tr><td>50.0</td><td></td></tr><tr><td>55.0</td><td></td></tr><tr><td>60.0</td><td></td></tr><tr><td>65.0</td><td></td></tr><tr><td>70.0</td><td></td></tr><tr><td>75.0</td><td></td></tr><tr><td>80.0</td><td></td></tr><tr><td>85.0</td><td></td></tr></table>
+<table class="grid"><caption>Table 7 &mdash; processed data, Part II</caption><tr><th>Object distance d<sub>o</sub> (cm)</th><th>Image distance d<sub>i</sub> (cm)</th><th>1/d<sub>o</sub> (cm<sup>&minus;1</sup>)</th><th>1/d<sub>i</sub> (cm<sup>&minus;1</sup>)</th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></table>
+<h2>Part III &mdash; the image formed by two converging lenses</h2>
+<p>With more than one lens the algebra could get heavy, but it does not have to: take the lenses one at a time and apply the thin lens equation twice. The trick is that <b>the image from the first lens is the object of the second</b>. Measure every distance from the lens in play to the object or image that belongs to it. Here you record the positions of each lens and each image, then take differences.</p>
+<h3>Procedure</h3>
+<ol class="steps"><li>Prepare a raw data table like Table&nbsp;8.</li><li>Place the object at the <b>30&nbsp;cm</b> mark and record it as x<sub>o</sub>.</li><li>Place the <b>10&nbsp;cm</b> lens at the <b>50&nbsp;cm</b> mark. Call it lens&nbsp;1 and record its position as x<sub>L1</sub>.</li><li>Find the image position for this lens with the screen and record it as x<sub>i1</sub>.</li><li>Place the <b>20&nbsp;cm</b> lens at the <b>115&nbsp;cm</b> position. Call it lens&nbsp;2 and record its position as x<sub>L2</sub>.</li><li>The image due to lens&nbsp;1 is now the object of lens&nbsp;2.</li><li>Move the screen beyond lens&nbsp;2 and find the image it forms. Record that position as x<sub>i2</sub>.</li><li>With the vernier caliper, measure the size of the object and of the final image. Record them as h<sub>o</sub> and h<sub>i2</sub>.</li><li>Determine the magnification from the heights, M = h<sub>i2</sub> / h<sub>o</sub>. Call it the experimental magnification 1, M<sub>e1</sub>.</li><li>From the raw data, calculate the object distance d<sub>o1</sub> (lens&nbsp;1 to the object) and the image distance d<sub>i1</sub> (lens&nbsp;1 to the first image).</li><li>Calculate the magnification of the first lens, M<sub>1</sub> = &minus;d<sub>i1</sub> / d<sub>o1</sub>.</li><li>Again from the raw data, calculate d<sub>o2</sub> (lens&nbsp;2 to the first image) and d<sub>i2</sub> (lens&nbsp;2 to the second image).</li><li>Calculate the magnification of the second lens, M<sub>2</sub> = &minus;d<sub>i2</sub> / d<sub>o2</sub>.</li><li>Calculate the overall magnification M = (M<sub>1</sub>)(M<sub>2</sub>). Call it the experimental magnification 2, M<sub>e2</sub>.</li><li>Draw a ray diagram for this two-lens case, using the nominal focal lengths, the original lens positions x<sub>L1</sub> and x<sub>L2</sub>, and the object position x<sub>o</sub>. <b>Use the Ray Tracing Template that comes with this lab</b> &mdash; print it and use a straight edge to draw the parallel ray, the focal ray and the middle ray, with the techniques from the lecture notes and the textbook.</li><li>Now work out the image distances and the magnifications theoretically, from the lens equation and the magnification equation. Call that magnification M<sub>t</sub>.</li><li>Calculate the percent difference between M<sub>e1</sub> and M<sub>t</sub>, and between M<sub>e2</sub> and M<sub>t</sub>. Base both percentages on the theoretical magnification M<sub>t</sub>.</li></ol>
+<table class="grid"><caption>Table 8 &mdash; raw data, the two-lens system</caption><tr><th>Object pos. x<sub>o</sub> (cm)</th><th>Lens 1 pos. x<sub>L1</sub> (cm)</th><th>Image 1 pos. x<sub>i1</sub> (cm)</th><th>Lens 2 pos. x<sub>L2</sub> (cm)</th><th>Image 2 pos. x<sub>i2</sub> (cm)</th><th>Object height h<sub>o</sub> (cm)</th><th>Image height h<sub>i2</sub> (cm)</th></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>
+<h2>What your report must contain</h2>
+<p>A full lab report on the Lab Template. Write each of the three parts up as its own section, and give each section an experimental method, a data analysis and a conclusion of its own &mdash; then an overall conclusion at the end.</p>
+<ul><li>Screenshots from the videos, one set per part, large enough to read.</li><li>Your own sketch of each lens setup &mdash; not a copy of a figure from here.</li><li>Tables 3, 4, 6, 7 and 8 completed, with units in the header rows.</li><li>The 1/d<sub>i</sub> against 1/d<sub>o</sub> scatter plot, with its linear trendline and the equation shown on the chart.</li><li>Both focal lengths, f<sub>1</sub> and f<sub>2</sub>, each with its percent accuracy against 10&nbsp;cm.</li><li><b>The Part&nbsp;III ray diagram, on the printed template.</b> Many students forget this one.</li><li>M<sub>e1</sub>, M<sub>e2</sub> and M<sub>t</sub>, and the two percent differences.</li><li>Sample calculations &mdash; one worked instance of each distinct calculation, by hand or typed, not a spreadsheet dump.</li></ul>
+<h2>Questions for your discussion</h2>
+<ol class="steps"><li>Part&nbsp;I treats the image distance as the focal length. What has to be true of the object for that to hold, and roughly how far off would you be if the &ldquo;distant&rdquo; object were only ten focal lengths away?</li><li>Your two focal lengths f<sub>1</sub> and f<sub>2</sub> came from the same lens. Which do you trust more, and what in your own data supports that?</li><li>The fitted line should have slope &minus;1. What does yours have, and what would a slope noticeably different from &minus;1 tell you about the measurements?</li><li>Why does the intercept give the focal length while the slope does not depend on it at all?</li><li>In Part&nbsp;III you found the magnification twice, once from heights and once as (M<sub>1</sub>)(M<sub>2</sub>). If those disagree, which measurement would you suspect first, and why?</li><li>The image of lens&nbsp;1 is the object of lens&nbsp;2 even though nothing physical sits there. Explain in a sentence or two why the second lens cannot tell the difference.</li></ol>
+
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/PHY152_LB04_Converging_Lenses.pdf" target="_blank" rel="noopener"><span class="kind">Handout &middot; PDF</span><span class="name">This lab, printable</span><span class="hint">take it to the desk with the videos.</span></a>
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/PHY152_LB04_Ray_Tracing_Template.pdf" target="_blank" rel="noopener"><span class="kind">PDF</span><span class="name">Ray Tracing Template</span><span class="hint">print it &mdash; Part III’s ray diagram goes on this.</span></a>
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/PHY152_LB04_Example_Workbook.xlsx" target="_blank" rel="noopener"><span class="kind">Excel</span><span class="name">Data workbook</span><span class="hint">all five tables, with the reciprocals and the plot set up.</span></a>
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/PHY152_LB04_Example_Starter.docx" target="_blank" rel="noopener"><span class="kind">Word</span><span class="name">Report starter</span><span class="hint">the section headings, with the openers now mostly withdrawn.</span></a>
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/PHY152_LB04_Rubric.docx" target="_blank" rel="noopener"><span class="kind">Word</span><span class="name">Grading rubric</span><span class="hint">read it before you write, not after.</span></a>
+</div>
+
+<footer><span class="attrib">The Converging Lenses laboratory — its design, procedure and sequence — is © 2021 Selim Araci and Trevor Johnson-Steigelman.&nbsp; This page, its redrawn figures, its rebuilt data tables and the accompanying workbook are new work: Copyright © 2026 by Dr. Byungmoon Cho · FLCC Physics · PHY 152.&nbsp; Three errors in the source handout are corrected here and listed in the instructor key.</span></footer>
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script><script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+</div>
+</body>
+</html>
