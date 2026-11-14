@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3R6 &mdash; Gauss&rsquo;s Law</title>
+<style>
+  /* ==================================================================
+     FLCC Physics - PHY 152 - Module 3 (Electricity)
+     Trevor deck conversion, Tier B reference page.
+
+     This page is a web version of one or more of Dr. H. Trevor
+     Johnson-Steigelman's lecture decks (CC BY-NC-SA 4.0).  His attribution and
+     licence travel with it; the source decks are named at the foot of the page
+     and in the eyebrow above the title.
+
+     TIER B, NOT A NOTE.  A lead paragraph, figure captions and tip boxes are
+     added here because framing is accepted on a reference page; the physics,
+     the worked examples and the figures are his.  No probe, no exit ticket, no
+     performance-expectation card - those belong to the module notes.
+
+     EVERY FIGURE IS REDRAWN AS SCALABLE SVG.  Photographs and third-party
+     imagery are never reproduced; where a slide carried one, this page says in
+     words what it showed.  Deck defects are recorded in the session log and in
+     Planning\\M3_Deck_Conversion_Plan_2026-11-13.md, and never propagated.
+
+     REFERENCES ARE LEAVES (playbook Step 5a).  Notes link to reference pages;
+     a reference page never links back to a note.  Prose mentions are fine.
+
+     PHY 119 will have its own pages for these decks when that course starts,
+     written for College Physics from the same source.  They are NOT generated
+     from this file, and the notes mirror is never run over a reference\\
+     directory.
+
+     Same design system as the module note pages; hosted on GitHub Pages and
+     reached by link from the Module 3 reference index.  Never framed, so no
+     wrapper - the index is the only framed page in the set.
+     ================================================================== */
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --blue:#2457b8; --red:#c0392b; --violet:#6b4ea8;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.25; margin:1rem 0 .25rem; font-weight:700; }
+  .byline{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; color:var(--muted); margin:0 0 1rem; }
+  .byline a{ color:var(--green); }
+  h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700; border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+  h3{ font-size:1.08rem; margin:1.4rem 0 .4rem; font-weight:700; font-family:"Segoe UI", system-ui, sans-serif; color:var(--green-deep); }
+  a{ color:var(--green); }
+
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green); padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.25rem;
+  }
+
+  .tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+  .tip .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+
+  .known{ background:#f4f8f5; border:1px dashed var(--green); border-radius:8px; padding:.75rem 1rem; margin:1.3rem 0; font-size:.98rem; }
+  .known .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green-deep); font-weight:700; display:block; margin-bottom:.2rem; }
+
+  .check{ border:1px solid var(--rule); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:.85rem 1.1rem; margin:1.5rem 0; background:#f7f9fd; }
+  .check .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); font-weight:700; display:block; margin-bottom:.25rem; }
+  .check .q{ font-weight:700; margin:0 0 .5rem; }
+  .check .ans{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.9rem; color:var(--green-deep); border-top:1px solid var(--rule); padding-top:.5rem; margin-top:.2rem; }
+  .check .ans b{ color:var(--green-deep); }
+
+  table.defs{ border-collapse:collapse; margin:1rem 0; width:100%; }
+  table.defs td{ padding:.45rem .6rem; border-bottom:1px solid var(--rule); vertical-align:top; }
+  table.defs td.term{ font-weight:700; white-space:nowrap; text-align:right; width:9.5rem; color:var(--green-deep); }
+  table.defs td.eq{ width:1.5rem; text-align:center; color:var(--muted); }
+  table.defs em{ color:var(--muted); }
+
+  table.grid{ border-collapse:collapse; width:100%; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  table.grid th, table.grid td{ border:1px solid var(--rule); padding:.45rem .6rem; text-align:left; }
+  table.grid th{ background:var(--green-soft); color:var(--green-deep); font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* math */
+  .m{ font-family:"Cambria Math", Cambria, "STIX Two Math", "Times New Roman", serif; font-style:italic; }
+  .m .up{ font-style:normal; }
+  .up{ font-size:.72em; line-height:0; vertical-align:super; font-style:normal; }
+  table.grid th .m, table.grid th .up, table.grid th .nocaps,
+  table.defs .term .m, .mathblock .head .m{ text-transform:none; }
+  sub{ font-size:.72em; line-height:0; }
+  .mathblock{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.4rem 0; }
+  .mathblock .head{ background:var(--green-soft); color:var(--green-deep); padding:.55rem 1.1rem; font-family:"Segoe UI", system-ui, sans-serif; font-weight:600; font-size:.95rem; }
+  .mathblock .body{ padding:.8rem 1.1rem 1rem; overflow-x:auto; }
+  .mathline{ font-size:1.12rem; line-height:2.1; }
+  .why{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); margin:.3rem 0 0; }
+  .frac{ display:inline-block; vertical-align:middle; text-align:center; margin:0 .25em; line-height:1.15; }
+  .frac .top{ display:block; padding:0 .3em .1em; border-bottom:1.5px solid currentColor; }
+  .frac .bot{ display:block; padding:.1em .3em 0; }
+
+  /* figures */
+  figure{ margin:1.2rem 0; }
+  figure svg{ display:block; width:100%; height:auto; max-width:640px; margin:0 auto; }
+  figure svg.sq{ max-width:340px; }
+  figcaption{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); text-align:center; margin-top:.4rem; }
+  svg text{ font-family:"Segoe UI", system-ui, sans-serif; font-size:13px; fill:var(--ink); }
+  svg text.lbl{ font-family:"Cambria Math", Cambria, "Times New Roman", serif; font-style:italic; font-size:15px; }
+  svg text.sm{ font-size:11px; fill:var(--muted); }
+
+  .refs{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.88rem; color:var(--muted); }
+  .refs li{ margin:.3rem 0; }
+  footer{ margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--rule); font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 3 &middot; Electricity</span>
+    <span>Chapter 6 (University Physics) &middot; Deck: Flux and Gauss&rsquo;s Law</span>
+  </div>
+
+<h1>Gauss&rsquo;s Law</h1>
+
+<p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman
+     (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>),
+     adapted for PHY&nbsp;152.</p>
+
+<div class="synopsis"><span class="label">The idea</span>Adding up the contributions of a million pieces of charge is correct and slow. <b>Gauss&rsquo;s law replaces the whole integral with one counting argument: the number of field lines leaving a closed surface depends only on the charge inside it.</b> Where the geometry is symmetric enough, that turns a hard integral into one line of algebra.</div>
+
+<h2>Flux</h2>
+
+<p><b>Flux</b> is the amount of something flowing through an area. For the electric field nothing actually flows, but the bookkeeping is identical.</p>
+
+<div class="mathblock"><div class="mathline">&Phi; = <b><i>E</i></b> &middot; <b><i>A</i></b> = <i>EA</i> cos <i>&theta;</i></div></div>
+
+<figure><svg viewBox="0 0 620 310" role="img" aria-label="Three flat loops in the same uniform field: one face-on with full flux, one tilted with reduced flux, one edge-on with none" xmlns="http://www.w3.org/2000/svg"><defs><marker id="hr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="hb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="hk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="hg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="hm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker><marker id="ha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker></defs><line x1="52.0" y1="76.0" x2="204.0" y2="76.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="52.0" y1="112.0" x2="204.0" y2="112.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="52.0" y1="148.0" x2="204.0" y2="148.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="52.0" y1="184.0" x2="204.0" y2="184.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="52.0" y1="220.0" x2="204.0" y2="220.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><ellipse cx="128" cy="148" rx="46.0" ry="62" fill="#ffffff" fill-opacity="0.75" stroke="#1f4e8c" stroke-width="2.6"/><line x1="128.0" y1="148.0" x2="186.0" y2="148.0" stroke="#1e6b3c" stroke-width="2.2" marker-end="url(#hg)"/><text x="200.0" y="144.0" font-size="15" text-anchor="start" fill="#1e6b3c" font-style="normal" font-weight="normal"><tspan font-style="italic">A</tspan></text><text x="128.0" y="248.0" font-size="14" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="bold">face-on</text><text x="128.0" y="270.0" font-size="13" text-anchor="middle" fill="#5c6b62" font-style="normal" font-weight="normal">&#934; = <tspan font-style="italic">EA</tspan></text><line x1="232.0" y1="76.0" x2="384.0" y2="76.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="232.0" y1="112.0" x2="384.0" y2="112.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="232.0" y1="148.0" x2="384.0" y2="148.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="232.0" y1="184.0" x2="384.0" y2="184.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="232.0" y1="220.0" x2="384.0" y2="220.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><ellipse cx="308" cy="148" rx="28.3" ry="62" fill="#ffffff" fill-opacity="0.75" stroke="#1f4e8c" stroke-width="2.6"/><line x1="308.0" y1="148.0" x2="343.7" y2="102.3" stroke="#1e6b3c" stroke-width="2.2" marker-end="url(#hg)"/><text x="354.6" y="98.3" font-size="15" text-anchor="start" fill="#1e6b3c" font-style="normal" font-weight="normal"><tspan font-style="italic">A</tspan></text><text x="308.0" y="248.0" font-size="14" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="bold">tilted</text><text x="308.0" y="270.0" font-size="13" text-anchor="middle" fill="#5c6b62" font-style="normal" font-weight="normal">&#934; = <tspan font-style="italic">EA</tspan> cos <tspan font-style="italic">&#952;</tspan></text><line x1="412.0" y1="76.0" x2="564.0" y2="76.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="412.0" y1="112.0" x2="564.0" y2="112.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="412.0" y1="148.0" x2="564.0" y2="148.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="412.0" y1="184.0" x2="564.0" y2="184.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><line x1="412.0" y1="220.0" x2="564.0" y2="220.0" stroke="#c77b1f" stroke-width="1.1" marker-end="url(#ha)"/><ellipse cx="488" cy="148" rx="2.5" ry="62" fill="#ffffff" fill-opacity="0.75" stroke="#1f4e8c" stroke-width="2.6"/><line x1="488.0" y1="148.0" x2="488.0" y2="90.0" stroke="#1e6b3c" stroke-width="2.2" marker-end="url(#hg)"/><text x="494.0" y="86.0" font-size="15" text-anchor="start" fill="#1e6b3c" font-style="normal" font-weight="normal"><tspan font-style="italic">A</tspan></text><text x="488.0" y="248.0" font-size="14" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="bold">edge-on</text><text x="488.0" y="270.0" font-size="13" text-anchor="middle" fill="#5c6b62" font-style="normal" font-weight="normal">&#934; = 0</text><text x="40.0" y="46.0" font-size="16" text-anchor="start" fill="#c77b1f" font-style="normal" font-weight="normal"><tspan font-style="italic">E</tspan></text></svg><figcaption><b>Figure 1.</b>&nbsp; The same loop and the same field, three ways round. <b>The area vector points perpendicular to the surface</b>, and the dot product is the projection of one onto the other &mdash; which is why an edge-on loop catches nothing at all.</figcaption></figure>
+
+<div class="tip"><b>Flux is a scalar, but we give it a sign.</b>&nbsp; Out of a closed surface counts positive, in counts negative. Trevor&rsquo;s own phrasing is the honest one: <em>flux doesn&rsquo;t really have a direction mathematically, but we assign it one.</em></div>
+
+<p>For a surface that bends, or a field that varies over it, chop the surface into patches <i>dA</i> small enough that neither changes across them, and add:</p>
+
+<div class="mathblock"><div class="mathline">&Phi; = &#8750; <b><i>E</i></b> &middot; <i>d</i><b><i>A</i></b></div></div>
+
+<p class="why">The circle on the integral sign means the surface is <b>closed</b> &mdash; it has an inside. That is not decoration; everything below depends on it.</p>
+
+<h2>Gauss&rsquo;s law</h2>
+
+<div class="mathblock"><div class="mathline">&#8750; <b><i>E</i></b> &middot; <i>d</i><b><i>A</i></b> = <span class="frac"><span class="top"><i>q</i><sub>enc</sub></span><span class="bot"><i>&epsilon;</i><sub>0</sub></span></span></div></div>
+
+<figure><svg viewBox="0 0 680 382" role="img" aria-label="Two closed surfaces in a field: one with a charge inside, where more lines leave than enter, and one with the charge outside, where every line that enters also leaves" xmlns="http://www.w3.org/2000/svg"><defs><marker id="hr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="hb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="hk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="hg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="hm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker><marker id="ha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker></defs><line x1="163.6" y1="195.1" x2="243.6" y2="213.4" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="160.9" y1="200.7" x2="225.1" y2="251.9" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="156.1" y1="204.6" x2="191.7" y2="278.5" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="150.0" y1="206.0" x2="150.0" y2="288.0" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="143.9" y1="204.6" x2="108.3" y2="278.5" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="139.1" y1="200.7" x2="74.9" y2="251.9" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="136.4" y1="195.1" x2="56.4" y2="213.4" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="136.4" y1="188.9" x2="56.4" y2="170.6" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="139.1" y1="183.3" x2="74.9" y2="132.1" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="143.9" y1="179.4" x2="108.3" y2="105.5" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="150.0" y1="178.0" x2="150.0" y2="96.0" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="156.1" y1="179.4" x2="191.7" y2="105.5" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="160.9" y1="183.3" x2="225.1" y2="132.1" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="163.6" y1="188.9" x2="243.6" y2="170.6" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><circle cx="150.0" cy="192.0" r="72.0" fill="none" stroke="#1f4e8c" stroke-width="2.6" stroke-dasharray="8 5"/><circle cx="150.0" cy="192.0" r="13.0" fill="#ffffff" stroke="#c0392b" stroke-width="2.0"/><line x1="143.5" y1="192.0" x2="156.5" y2="192.0" stroke="#c0392b" stroke-width="2.4"/><line x1="150.0" y1="185.5" x2="150.0" y2="198.5" stroke="#c0392b" stroke-width="2.4"/><text x="150.0" y="332.0" font-size="14" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="bold">charge inside</text><text x="150.0" y="356.0" font-size="13" text-anchor="middle" fill="#5c6b62" font-style="normal" font-weight="normal">&#934; = <tspan font-style="italic">q</tspan>/<tspan font-style="italic">&#949;</tspan><tspan baseline-shift="sub" font-size="10">0</tspan></text><line x1="399.6" y1="195.1" x2="614.1" y2="244.1" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="396.9" y1="200.7" x2="568.9" y2="337.9" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="392.1" y1="204.6" x2="427.7" y2="278.5" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="386.0" y1="206.0" x2="386.0" y2="288.0" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="379.9" y1="204.6" x2="344.3" y2="278.5" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="375.1" y1="200.7" x2="310.9" y2="251.9" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="372.4" y1="195.1" x2="292.4" y2="213.4" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="372.4" y1="188.9" x2="292.4" y2="170.6" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="375.1" y1="183.3" x2="310.9" y2="132.1" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="379.9" y1="179.4" x2="344.3" y2="105.5" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="386.0" y1="178.0" x2="386.0" y2="96.0" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="392.1" y1="179.4" x2="427.7" y2="105.5" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="396.9" y1="183.3" x2="568.9" y2="46.1" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><line x1="399.6" y1="188.9" x2="614.1" y2="139.9" stroke="#5c6b62" stroke-width="1.1" marker-end="url(#hm)"/><circle cx="510.0" cy="192.0" r="72.0" fill="none" stroke="#1f4e8c" stroke-width="2.6" stroke-dasharray="8 5"/><circle cx="386.0" cy="192.0" r="13.0" fill="#ffffff" stroke="#c0392b" stroke-width="2.0"/><line x1="379.5" y1="192.0" x2="392.5" y2="192.0" stroke="#c0392b" stroke-width="2.4"/><line x1="386.0" y1="185.5" x2="386.0" y2="198.5" stroke="#c0392b" stroke-width="2.4"/><text x="510.0" y="332.0" font-size="14" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="bold">charge outside</text><text x="510.0" y="356.0" font-size="13" text-anchor="middle" fill="#5c6b62" font-style="normal" font-weight="normal">&#934; = 0</text></svg><figcaption><b>Figure 2.</b>&nbsp; <b>Every line that enters a closed surface without a charge inside also leaves it</b>, so the two contributions cancel exactly and the net flux is zero. Put the charge inside and the lines have nowhere to go but out.</figcaption></figure>
+
+<div class="known"><b>Read the law carefully, because it says less than it looks like it says.</b><br>&nbsp;&nbsp;&bull;&nbsp; The <em>flux</em> depends only on the enclosed charge. Charge outside the surface contributes nothing to it.<br>&nbsp;&nbsp;&bull;&nbsp; <b>The <em>field</em> at a point on the surface depends on everything, inside and out.</b> Moving an outside charge changes <b><i>E</i></b> all over the surface &mdash; it just rearranges the flux without changing the total.<br>&nbsp;&nbsp;&bull;&nbsp; So the law is always true, and only sometimes <em>useful</em>: you can pull <i>E</i> out of the integral only when symmetry says it is constant over the surface.</div>
+
+<h2>Choosing the surface: the line of charge</h2>
+
+<p>The wire of <em>Fields by Integration</em> took a trigonometric substitution and most of a page. Trevor puts the alternative plainly: <em>two options &mdash; set up the integral using small pieces and play with the angles, or set up Gauss&rsquo;s law and integrate.</em></p>
+
+<figure><svg viewBox="0 0 620 400" role="img" aria-label="A cylindrical Gaussian surface round a charged wire, with the two flat ends and the curved side, and the curved side unrolled into a rectangle" xmlns="http://www.w3.org/2000/svg"><defs><marker id="hr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="hb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="hk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="hg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="hm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker><marker id="ha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c77b1f"/></marker></defs><line x1="60.0" y1="125.0" x2="520.0" y2="125.0" stroke="#b3261e" stroke-width="3.0"/><text x="540.0" y="130.0" font-size="13" text-anchor="start" fill="#b3261e" font-style="italic" font-weight="normal">wire</text><path d="M 138 69 L 322 69" stroke="none"/><rect x="138" y="69" width="184" height="112" fill="#f3e8fb" stroke="#1f4e8c" stroke-width="2.2"/><ellipse cx="138" cy="125" rx="24" ry="56" fill="#e7d5f5" stroke="#1f4e8c" stroke-width="2.2"/><ellipse cx="322" cy="125" rx="24" ry="56" fill="#e7d5f5" stroke="#1f4e8c" stroke-width="2.2"/><line x1="230.0" y1="69.0" x2="230.0" y2="17.0" stroke="#1e6b3c" stroke-width="2.4" marker-end="url(#hg)"/><text x="238.0" y="25.0" font-size="14" text-anchor="start" fill="#1e6b3c" font-style="normal" font-weight="normal"><tspan font-style="italic">E</tspan> &#8741; <tspan font-style="italic">dA</tspan></text><line x1="114.0" y1="95.0" x2="58.0" y2="95.0" stroke="#b3261e" stroke-width="2.2" marker-end="url(#hr)"/><text x="50.0" y="100.0" font-size="14" text-anchor="end" fill="#b3261e" font-style="normal" font-weight="normal"><tspan font-style="italic">dA</tspan></text><text x="134.0" y="207.0" font-size="13" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="normal">End 1</text><text x="326.0" y="207.0" font-size="13" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="normal">End 2</text><text x="230.0" y="207.0" font-size="13" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="normal">the label</text><line x1="230.0" y1="125.0" x2="230.0" y2="69.0" stroke="#1d2b23" stroke-width="1.3" stroke-dasharray="4 4"/><text x="220.0" y="97.0" font-size="14" text-anchor="end" fill="#1d2b23" font-style="normal" font-weight="normal"><tspan font-style="italic">s</tspan></text><line x1="138.0" y1="235.0" x2="322.0" y2="235.0" stroke="#1d2b23" stroke-width="1.4" marker-end="url(#hk)"/><line x1="322.0" y1="235.0" x2="138.0" y2="235.0" stroke="#1d2b23" stroke-width="1.4" marker-end="url(#hk)"/><text x="230.0" y="227.0" font-size="13" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="normal"><tspan font-style="italic">&#8467;</tspan></text><rect x="400.0" y="230.0" width="160.0" height="110.0" rx="0.0" fill="#f3e8fb" stroke="#1f4e8c" stroke-width="2.2"/><line x1="400.0" y1="218.0" x2="560.0" y2="218.0" stroke="#1d2b23" stroke-width="1.4" marker-end="url(#hk)"/><line x1="560.0" y1="218.0" x2="400.0" y2="218.0" stroke="#1d2b23" stroke-width="1.4" marker-end="url(#hk)"/><text x="480.0" y="210.0" font-size="13" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="normal"><tspan font-style="italic">&#8467;</tspan></text><text x="388.0" y="290.0" font-size="14" text-anchor="end" fill="#1d2b23" font-style="normal" font-weight="normal">2<tspan font-style="italic">&#960;s</tspan></text><text x="480.0" y="366.0" font-size="14" text-anchor="middle" fill="#1d2b23" font-style="normal" font-weight="bold">area = 2<tspan font-style="italic">&#960;s&#8467;</tspan></text><text x="100.0" y="262.0" font-size="14" text-anchor="start" fill="#5c6b62" font-style="italic" font-weight="normal">Peel the label off and</text><text x="100.0" y="284.0" font-size="14" text-anchor="start" fill="#5c6b62" font-style="italic" font-weight="normal">flatten it: it is a rectangle,</text><text x="100.0" y="306.0" font-size="14" text-anchor="start" fill="#5c6b62" font-style="italic" font-weight="normal">and its area is the only</text><text x="100.0" y="328.0" font-size="14" text-anchor="start" fill="#5c6b62" font-style="italic" font-weight="normal">one in the problem.</text></svg><figcaption><b>Figure 3.</b>&nbsp; A cylinder of radius <i>s</i> and length <i>&#8467;</i> round the wire, in three parts: two flat <b>ends</b> and the curved <b>label</b>. <b>On the ends <i>E</i> lies in the surface, so they contribute nothing</b>; on the label <i>E</i> is perpendicular to it and the same size everywhere.</figcaption></figure>
+
+<div class="mathblock"><div class="mathline"><i>E</i> (2<i>&#960;s&#8467;</i>) = <span class="frac"><span class="top"><i>&lambda;&#8467;</i></span><span class="bot"><i>&epsilon;</i><sub>0</sub></span></span>&nbsp;&nbsp;&#8658;&nbsp;&nbsp;<b><i>E</i> = <span class="frac"><span class="top"><i>&lambda;</i></span><span class="bot">2<i>&#960;&epsilon;</i><sub>0</sub> <i>s</i></span></span></b></div></div>
+
+<div class="tip"><b>The length cancels, and it had to.</b>&nbsp; Nothing in the problem picks out a length along an infinite wire, so no answer may depend on the one you chose for your cylinder. <b>If <i>&#8467;</i> survives to the end, something went wrong.</b></div>
+
+<p class="why">Compare the two routes and the pattern is clear: <b>Gauss does the work when there is enough symmetry to make <i>E</i> constant on a surface you can name</b>, and that is spherical, cylindrical or planar symmetry &mdash; nothing else. For a finite wire, a ring or a disc, there is no such surface and the integral is the only way.</p>
+
+<p class="refs"><b>Sources.</b>&nbsp; Trevor Johnson-Steigelman, <em>Flux and Gauss&rsquo;s Law</em> (8 slides) and <em>Gauss&rsquo;s Law &mdash; Line of Charge</em> (6 slides). Further reading: OpenStax <em>University Physics Volume 2</em> &sect;6.1&ndash;6.4.</p>
+
+  <footer>
+    This page is adapted from the presentation <em>Flux and Gauss&rsquo;s Law</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 152 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   This page is reached by link, not framed, so the reporter is inert here - it is kept so the
+   page behaves if it is ever embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>
