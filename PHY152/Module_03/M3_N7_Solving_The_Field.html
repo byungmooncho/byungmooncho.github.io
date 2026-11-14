@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N7 &mdash; Solving the Field</title>
+<style>
+  /* FLCC Physics note page - Module 3, Electricity, Note 7
+     "Solving the Field: By Integration, Then by Gauss's Law".  THE INTEGRATION
+     SHEET, HIS SECTION 3 EXAMPLES AND HIS SECTION 5 CONDUCTOR.
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+
+     ★ THE MODULE'S ONE TRUE FREE-WRITE.  His 25SP master
+     "M3 N6 Gauss Law_Electric Flux and Electric Charge" prints 127 to 166
+     characters a page - the running header and a section label, nothing more -
+     and carries 1,665 live /Subtype /Ink strokes.  THE TRANSCRIBER RULE IS AT
+     FULL STRENGTH HERE.  Every equation, every result and every annotation on
+     this page is read off that ink.  All six pages were rendered and read.
+
+     ★ SPLIT IN TWO, 2026-11-11.  Built whole this note came to 11,351 px closed
+     against D2L's 10,000 ceiling.  Both natural seams were measured and put to
+     him; he chose the cut AFTER Gauss's law, because it is the only one that
+     keeps "integrate the hard way, then watch Gauss hand it back in two lines"
+     inside a single note - which is the reason the integration sheet was folded
+     in here at all.  Note 6 is 4,521 px, Note 7 is 8,319 px.  Module 3 goes
+     from fourteen notes to FIFTEEN; Electric Potential - Examples becomes N15.
+     ONE CONTENT SOURCE: body_n13.py writes every word once and split_n13.py
+     cuts it, asserting that no paragraph lands in both halves.
+
+     SECOND SOURCE, FOLDED IN BY HIS DECISION 2026-11-10:
+     "E Field for line_ring_and plates" - 7 pp, ZERO printed characters and only
+     6 ink annotations in the PDF, because the ink is WORD PEN INK: 399 ink parts
+     and 798 contentPart elements in the .docx.  Word writes a fallback raster
+     beside every one (40 to 158 images a page), so the printed PDF renders his
+     handwriting faithfully and LibreOffice was not needed.  All seven pages read.
+
+     THE PAIRING IS THE LESSON, and the order is his: the integrations go AHEAD
+     of his section 3, so his Gauss examples land as the payoff rather than as a
+     repeat.  The line and the plane come back from Gauss in two or three lines
+     each; THE RING DOES NOT, and that is why the ring earns its page - it is the
+     control case that marks the boundary of the method.
+
+     NO CALC-152 FENCE ANYWHERE IN THIS NOTE.  The fence marks calculus Claude
+     added for the 152 audience; every line of calculus here is his.  The note
+     therefore does NOT mirror to PHY 119 - it is calculus end to end, like M1
+     N2a and N3, and the partner-course question is deferred the same way.
+
+     HIS SECTION NUMBERING IS PRESERVED, INCLUDING ITS GAP.  The printed labels
+     run 1, 2, 3, then 5 - there is no section 4 on the master, and page 4
+     (cylinder and plane) carries no label at all, so it continues section 3.
+     Transcribed as printed; not renumbered.
+
+     WHAT IS HIS.  Both section-1 sketches, the flux definition in his shorthand,
+     the out-flowing / in-flowing annotations, the "E-component along n-hat"
+     gloss, both forms of Gauss's law and the boxed "what we are interested!!";
+     the whole point-charge demonstration; all three integrations with their
+     element setups, their vanishing components, their Taylor expansion and BOTH
+     far-field checks; the insulating sphere in both regions and its E-against-r
+     graph; the cylinder, its "cylinder without top & bottom" note and the
+     circled lambda / 2 pi eps0 r; the pillbox and sigma / 2 eps0 with his
+     "surface" gloss; the whole conductor section including "Conductor: free
+     electrons!!", the quoted paragraph, "Where do excess charge go?", "No net
+     charge interior, E = 0" and "They go to the surface!!"; and both plate
+     results.
+
+     WHAT IS CLAUDE'S.  The SYNOPSIS (his master carries no prose at all, so
+     there was none to transcribe - the same situation as M1 N5 Doppler, and the
+     same treatment); the subtitle; the headings "The hard way first" and its
+     three sub-headings; all thirteen figure captions; the "Keep score" and
+     "Compare" boxes; the closing argument about the ring; the Check yourself
+     ticket; the foundation list; the Looking ahead paragraph; and the pointer
+     to Note 5.
+
+     FIGURE 9 IS COMPUTED FROM HIS OWN TWO RESULTS, not traced: E_in = rho r/3eps
+     and E_out = rho R^3/3 eps r^2 are plotted directly, so the peak lands at
+     r = R by construction and the two branches meet there exactly.
+
+     ⚠ ONE PHYSICS FLAG FOR HIM, NOT FIXED.  On master p. 6 the first figure is
+     drawn as a CONDUCTOR (E = 0 on one side) and his annotation beside it reads
+     E = sigma / 2 eps0, which is the ISOLATED SHEET result; for a conducting
+     surface all the flux leaves through one face and the standard result is
+     sigma / eps0.  His two-plate result on the same page, E = sigma / eps0,
+     follows correctly from superposing two sheets, so his line of reasoning is
+     coherent if the figure is read as a sheet.  NOTHING WAS CORRECTED: the page
+     ships both of his results as he wrote them and puts the discrepancy to the
+     student as an open question, which is the treatment N7's item 15 and N11's
+     item 2 were given.
+
+     DEFECTS CAUGHT ONLY BY RENDERING THE FIGURES: the combining arrow U+20D7
+     does not render in the page's serif stack and came out as a stray bar beside
+     every vector (eleven of them), so vectors are BOLD here, which is also what
+     his own printed pages use; the Gaussian cylinder's charge axis ran through
+     its own caption and its label fell off the top of the frame; the outer
+     Gaussian circle on the sphere figure reached the caption line; and both
+     branch labels on Figure 9 sat on top of the curve.
+     ================================================================== */
+
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65; }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .1rem; font-weight:700; }
+  .subtitle{ font-family:"Segoe UI", system-ui, sans-serif; font-size:1rem; color:var(--muted); margin:0 0 .3rem; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.06rem; margin:1.3rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:.2rem 0 0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem; }
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ul.items{ padding-left:1.3rem; margin:.4rem 0; } ul.items > li{ margin:.4rem 0; }
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .disp{ display:block; margin:.7rem 0 .9rem; text-align:center; font-size:1.12rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green);
+    border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule);
+    padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  table.doc{ border-collapse:collapse; width:100%; margin:.6rem 0 .8rem; font-size:.95rem; }
+  table.doc th, table.doc td{ border:1px solid var(--rule); padding:.32rem .55rem; text-align:left;
+    vertical-align:top; font-weight:400; }
+  table.doc th{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    color:var(--green-deep); background:var(--green-soft); }
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none;
+    color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; } .pe.lp li{ margin:.32rem 0; } .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem;
+    border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer;
+    margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule);
+    border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.good{ color:var(--green-deep); } .ticket .qfb.bad{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .openq{ border-left:4px solid var(--amber); background:#fdf8ef; border-radius:0 6px 6px 0;
+    padding:.8rem 1.05rem; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .openq .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.3rem; }
+  .openq ul{ margin:.4rem 0 0; padding-left:1.2rem; } .openq li{ margin:.45rem 0; list-style:none; }
+  .openq li::before{ content:"\2014\00a0\00a0"; color:var(--muted); }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 3 &middot; Electricity</span><span>Note 7</span></div>
+
+<h1>Solving the Field: By Integration, Then by Gauss&rsquo;s Law</h1>
+
+<p class="subtitle">Three objects worked twice over &mdash; and the one the short way cannot touch</p>
+
+<div class="synopsis"><span class="label">Where this sits</span><b>Note&nbsp;6</b> established Gauss&rsquo;s law, <i>&#949;</i><sub>0</sub>&#934; = <i>q</i><sub>enclosed</sub>, and checked it on a point charge.&nbsp; This note spends it.&nbsp; Three charged objects are worked right through by <b>direct integration</b> first, and then the same objects are handed to Gauss&rsquo;s law.&nbsp; <b>Watch which ones come back cheap, and which one does not.</b></div>
+
+<h2>The hard way first</h2>
+
+<p>Gauss&rsquo;s law is about to look like a cheat, so it is worth seeing the bill it is paying. &nbsp;Here are three charged objects done by <b>direct integration</b> &mdash; set up the element, write its distance, add up the contributions.&nbsp; Two of these three will come back in two lines each once Gauss is let loose on them.&nbsp; <b>The third will not, and that is the point of including it.</b></p>
+
+<h3>A line of charge</h3>
+
+<div class="fig"><svg viewBox="0 0 760 330" role="img" aria-label="A horizontal rod with an element marked at a distance l from its centre, and a field point P at height z above the centre." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><rect x="140.0" y="229.0" width="440.0" height="22.0" rx="3.0" fill="#eef5f1" stroke="#1d2b23" stroke-width="1.80"/><rect x="231.0" y="229.0" width="18.0" height="22.0" rx="0.0" fill="#cfe0d6" stroke="#1d2b23" stroke-width="1.60"/><text x="240.0" y="274.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">dl</tspan></text><text x="140.0" y="286.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal">&#8722;<tspan font-style="italic">L</tspan>/2</text><text x="580.0" y="286.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal">+<tspan font-style="italic">L</tspan>/2</text><text x="360.0" y="286.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal">0</text><line x1="240.0" y1="304.0" x2="360.0" y2="304.0" stroke="#5c6b62" stroke-width="1.40" marker-end="url(#h13m)"/><text x="300.0" y="324.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">l</tspan></text><circle cx="360.0" cy="70.0" r="5.0" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="370.0" y="62.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="start" fill="#1d2b23" font-weight="bold" font-style="normal"><tspan font-style="italic">P</tspan></text><line x1="360.0" y1="229.0" x2="360.0" y2="70.0" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="6 5"/><text x="372.0" y="155.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">z</tspan></text><line x1="240.0" y1="229.0" x2="360.0" y2="70.0" stroke="#1f4e8c" stroke-width="1.80" marker-end="url(#h13b)"/><text x="284.0" y="149.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="end" fill="#1f4e8c" font-weight="bold" font-style="normal"><tspan font-weight="bold">r</tspan></text><line x1="640.0" y1="120.0" x2="700.0" y2="120.0" stroke="#1d2b23" stroke-width="1.40" marker-end="url(#h13)"/><text x="706.0" y="125.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">i&#770;</tspan></text><line x1="640.0" y1="120.0" x2="640.0" y2="60.0" stroke="#1d2b23" stroke-width="1.40" marker-end="url(#h13)"/><text x="634.0" y="54.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="end" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">j&#770;</tspan></text></svg></div>
+<div class="fig-note"><b>Figure 8.</b>&nbsp; His construction: a rod from &minus;<i>L</i>/2 to +<i>L</i>/2, the element <i>dl</i> at distance <i>l</i> from the centre, the field point <i>P</i> at height <i>z</i>.&nbsp; <b>Everything that follows is read off this picture</b>, which is why he draws it before writing anything.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r2" data-label="Show his setup and the integral">Show his setup and the integral</button><div class="rbody" id="r2" hidden><p class="eq"><span class="step"><b>r</b> = <i>l</i> <i>i&#770;</i> + <i>z</i> <i>j&#770;</i>,&nbsp;&nbsp; |<b>r</b>| = (<i>l</i><sup>2</sup> + <i>z</i><sup>2</sup>)<sup>&#189;</sup> = <i>r</i></span><span class="step"><i>q</i> = <i>&#955;</i><i>L</i>,&nbsp;&nbsp; <i>dq</i> = <i>&#955;</i> <i>dl</i></span><span class="step"><i>d</i><b>E</b> = <i>k</i> <i>&#955;</i> <i>dl</i> / (<i>l</i><sup>2</sup> + <i>z</i><sup>2</sup>)<sup>3/2</sup> &#215; (<i>l</i> <i>i&#770;</i> + <i>z</i> <i>j&#770;</i>)</span></p><p>which splits into two integrals, and he numbers them &#9312; and &#9313;:</p><p class="eq"><span class="step">&#9312;&nbsp; the <i>i&#770;</i> part &nbsp;&#8594;&nbsp; <b>0</b></span><span class="step">&#9313;&nbsp; the <i>j&#770;</i> part &nbsp;&#8594;&nbsp; <i>k</i><i>&#955;</i><i>L</i> / [<i>z</i> &#8730;((<i>L</i>/2)<sup>2</sup> + <i>z</i><sup>2</sup>)]</span></p><p>&#9312; vanishes, and it has to: for every element on the left there is one on the right pushing back the other way.&nbsp; With <i>&#955;</i><i>L</i> = <i>q</i>:</p><p class="eq"><span class="step"><b>E</b> = <i>k</i> <i>q</i> / [<i>z</i> &#8730;((<i>L</i>/2)<sup>2</sup> + <i>z</i><sup>2</sup>)] &#8201;<i>j&#770;</i></span></p></div></div>
+
+<p>Then he does what he does at the end of every one of these &mdash; he takes the limits and checks them.</p>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r3" data-label="Show both limits">Show both limits</button><div class="rbody" id="r3" hidden><p><b>Long rod, close up</b> (<i>L</i> &rarr; &#8734;):&nbsp; expand (1 + 4<i>z</i><sup>2</sup>/<i>L</i><sup>2</sup>)<sup>&minus;&#189;</sup> &#8776; 1 &minus; &#189;(2<i>z</i>/<i>L</i>)<sup>2</sup>, and the bracket collapses to 2/<i>L</i>:</p><p class="eq"><span class="step"><b>E</b> &#8776; 2<i>k</i><i>&#955;</i> / <i>z</i> &#8201;<i>j&#770;</i></span><span class="step"><b>E</b> = <i>&#955;</i> / (2&#960;<i>&#949;</i><sub>0</sub><i>z</i>) &#8201;<i>j&#770;</i>&nbsp;&nbsp;<span style="color:#5c6b62">&#8212; he circles this one</span></span></p><p><b>Far away</b> (<i>z</i> &gt;&gt; <i>L</i>):</p><p class="eq"><span class="step"><b>E</b> = <i>k</i> <i>q</i> / (<i>z</i> &#8730;<i>z</i><sup>2</sup>) = <i>k</i> <i>q</i> / <i>z</i><sup>2</sup></span></p><p>and his note beside it: <b>&ldquo;When <i>z</i> is very far, line charge looks like a point charge!!&rdquo;</b>&nbsp; That is the check you run on every one of these &mdash; back off far enough and any finite blob has to look like a point charge, or the answer is wrong.</p></div></div>
+
+<h3>A ring of charge</h3>
+
+<div class="fig"><svg viewBox="0 0 700 400" role="img" aria-label="A ring of charge drawn in perspective with a point P on the axis above its centre." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><ellipse cx="300.0" cy="285.0" rx="165.0" ry="56.0" fill="none" stroke="#1d2b23" stroke-width="2.2"/><circle cx="300.0" cy="90.0" r="5.0" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="310.0" y="82.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="start" fill="#1d2b23" font-weight="bold" font-style="normal"><tspan font-style="italic">P</tspan></text><line x1="300.0" y1="285.0" x2="300.0" y2="90.0" stroke="#5c6b62" stroke-width="1.40" stroke-dasharray="6 5"/><text x="288.0" y="187.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="end" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">z</tspan></text><circle cx="435.2" cy="317.1" r="7.0" fill="#cfe0d6" stroke="#1d2b23" stroke-width="1.60"/><text x="445.2" y="337.1" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">dq</tspan> = <tspan font-style="italic">&#955;R d&#952;</tspan></text><line x1="435.2" y1="317.1" x2="300.0" y2="90.0" stroke="#1f4e8c" stroke-width="1.80" marker-end="url(#h13b)"/><text x="377.6" y="203.6" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="start" fill="#1f4e8c" font-weight="bold" font-style="normal"><tspan font-weight="bold">r</tspan></text><line x1="300.0" y1="285.0" x2="435.2" y2="317.1" stroke="#5c6b62" stroke-width="1.40"/><text x="364.0" y="315.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">R</tspan></text><text x="326.0" y="279.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">&#952;</tspan></text><line x1="540.0" y1="300.0" x2="606.0" y2="300.0" stroke="#1d2b23" stroke-width="1.40" marker-end="url(#h13)"/><text x="612.0" y="305.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">i&#770;</tspan></text><line x1="540.0" y1="300.0" x2="584.0" y2="262.0" stroke="#1d2b23" stroke-width="1.40" marker-end="url(#h13)"/><text x="590.0" y="258.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">j&#770;</tspan></text><line x1="540.0" y1="300.0" x2="540.0" y2="240.0" stroke="#1d2b23" stroke-width="1.40" marker-end="url(#h13)"/><text x="534.0" y="234.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="end" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">k&#770;</tspan></text></svg></div>
+<div class="fig-note"><b>Figure 9.</b>&nbsp; His construction for the ring, with the field point on the axis.&nbsp; Every element is <b>the same distance</b> from <i>P</i> &mdash; which is what makes this one doable at all.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r4" data-label="Show his integral and the limit">Show his integral and the limit</button><div class="rbody" id="r4" hidden><p class="eq"><span class="step"><b>E</b> = &#8747;<sub>0</sub><sup>2&#960;</sup> <i>k</i> <i>&#955;</i> <i>R d&#952;</i> / (<i>R</i><sup>2</sup> + <i>z</i><sup>2</sup>)<sup>3/2</sup> &#215; [<i>z</i> <i>k&#770;</i> &minus; <i>R</i>(cos&#952; <i>i&#770;</i> + sin&#952; <i>j&#770;</i>)]</span></p><p>The <i>i&#770;</i> and <i>j&#770;</i> terms integrate to zero over a full turn &mdash; he marks both with a small <b>0</b> &mdash; and the <i>k&#770;</i> term survives:</p><p class="eq"><span class="step"><b>E</b> = <i>k</i><i>&#955;</i>(2&#960;<i>R</i>)&#8201;<i>z</i> / (<i>R</i><sup>2</sup> + <i>z</i><sup>2</sup>)<sup>3/2</sup> &#8201;<i>k&#770;</i></span><span class="step"><b>E</b> = (1 / 4&#960;<i>&#949;</i><sub>0</sub>)&#8201;<i>Q z</i> / (<i>R</i><sup>2</sup> + <i>z</i><sup>2</sup>)<sup>3/2</sup> &#8201;<i>k&#770;</i></span></p><p>And the same check: for <i>z</i> &gt;&gt; <i>R</i> this goes to <i>Q</i>/4&#960;<i>&#949;</i><sub>0</sub><i>z</i><sup>2</sup> &mdash; <b>&ldquo;again, far enough away, looks like a point charge.&rdquo;</b></p></div></div>
+
+<h3>A disc of charge</h3>
+
+<div class="fig"><svg viewBox="0 0 700 400" role="img" aria-label="A disc of charge in perspective with a small wedge-shaped element marked on it and a point P on the axis above." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><ellipse cx="300.0" cy="285.0" rx="175.0" ry="60.0" fill="#eef5f1" stroke="#1d2b23" stroke-width="2.0"/><circle cx="300.0" cy="90.0" r="5.0" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="310.0" y="82.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="start" fill="#1d2b23" font-weight="bold" font-style="normal"><tspan font-style="italic">P</tspan></text><line x1="300.0" y1="285.0" x2="300.0" y2="90.0" stroke="#5c6b62" stroke-width="1.40" stroke-dasharray="6 5"/><text x="288.0" y="187.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="end" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">z</tspan></text><path d="M 400.6 298.9 L 439.5 304.3 L 415.3 318.2 L 383.1 308.9 Z" fill="#cfe0d6" stroke="#1e6b3c" stroke-width="1.80"/><text x="450.0" y="341.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal"><tspan font-style="italic">dq</tspan> = <tspan font-style="italic">&#963; r dr d&#952;</tspan></text><line x1="429.0" y1="311.6" x2="300.0" y2="90.0" stroke="#1f4e8c" stroke-width="1.80" marker-end="url(#h13b)"/><text x="374.0" y="203.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="start" fill="#1f4e8c" font-weight="bold" font-style="normal"><tspan font-weight="bold">r</tspan></text><line x1="300.0" y1="285.0" x2="393.0" y2="304.2" stroke="#5c6b62" stroke-width="1.40"/><text x="350.0" y="305.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">r</tspan></text><text x="150.0" y="279.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">R</tspan></text><line x1="300.0" y1="285.0" x2="125.0" y2="285.0" stroke="#5c6b62" stroke-width="1.20" stroke-dasharray="4 4"/></svg></div>
+<div class="fig-note"><b>Figure 10.</b>&nbsp; His construction for the disc.&nbsp; The element is a little wedge and the integral runs over both <i>r</i> and <i>&#952;</i>.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r5" data-label="Show his double integral">Show his double integral</button><div class="rbody" id="r5" hidden><p>His note on the way through: <b>&ldquo;<i>i&#770;</i> and <i>j&#770;</i> terms vanish!&nbsp; Only <i>k&#770;</i> term survive.&rdquo;</b></p><p class="eq"><span class="step"><b>E</b> = <i>k</i><i>&#963;</i><i>z</i>(2&#960;) <i>k&#770;</i> &#8747;<sub>0</sub><sup>R</sup> <i>r dr</i> / (<i>r</i><sup>2</sup> + <i>z</i><sup>2</sup>)<sup>3/2</sup></span><span class="step"><b>E</b> = (<i>&#963;</i> / 2<i>&#949;</i><sub>0</sub>)&#8201;<i>k&#770;</i> [1 &minus; <i>z</i> / (<i>R</i><sup>2</sup> + <i>z</i><sup>2</sup>)<sup>&#189;</sup>]</span></p><p><b>Let the disc grow without limit</b> (<i>R</i> &rarr; &#8734;) and the second term goes to zero:</p><p class="eq"><span class="step"><b>E</b> = <i>&#963;</i> / 2<i>&#949;</i><sub>0</sub> &#8201;<i>k&#770;</i></span></p><p>His own line under it, exclamation marks and all: <b>&ldquo;The field is constant!&nbsp; i.e. independent of the distance from the plane!!&rdquo;</b></p></div></div>
+
+<div class="openq"><span class="label">Keep score</span><p>Three objects, three pages of calculus, three answers:&nbsp; <b><i>&#955;</i>/2&#960;<i>&#949;</i><sub>0</sub><i>z</i></b> for the long line, <b><i>Qz</i>/4&#960;<i>&#949;</i><sub>0</sub>(<i>R</i><sup>2</sup>+<i>z</i><sup>2</sup>)<sup>3/2</sup></b> for the ring, and <b><i>&#963;</i>/2<i>&#949;</i><sub>0</sub></b> for the big flat sheet.&nbsp; <b>Watch which two come back.</b></p></div>
+
+<h2>3.&nbsp; Solving the Electric Field with Gauss&rsquo;s Law: Examples</h2>
+
+<div class="synopsis"><span class="label">The method, in four steps</span><b>The previous note gave the two conditions; this is the procedure they make.</b>&nbsp; Every example below runs these same four beats, and the ring at the end fails at step&nbsp;2.<ol style="margin:.5rem 0 0 1.1rem;padding:0"><li><b>Name the symmetry.</b>&nbsp; Spherical, cylindrical or planar &mdash; that is the whole list, and it decides everything after it.</li><li><b>Draw the surface that symmetry hands you</b>: the one where <b>E</b> lies along the outward normal, and has <b>the same size everywhere it matters</b>.&nbsp; Those are his two conditions, and they are the only reason <i>E</i> can come out of the integral.</li><li><b>Count <i>q</i><sub>enc</sub></b> &mdash; what is inside that surface, and nothing else.</li><li><b><i>&#949;</i><sub>0</sub>&#934; = <i>q</i><sub>enc</sub></b>, and solve for <i>E</i>.</li></ol></div>
+
+<h3>A solid insulating sphere, charged all the way through</h3>
+
+<p class="disp"><b>Spherical &rarr; a concentric sphere &rarr; <i>q</i><sub>enc</sub> = <i>&#961;</i><sub>0</sub> &times; <b>the charged volume it encloses</b> &mdash; which stops growing at <i>r</i> = <i>R</i> &rarr; solve.</b></p>
+
+<p>His annotations set this one up: <b>&ldquo;object = insulator as opposed to conductor&rdquo;</b> and <b>&ldquo;charge is evenly distributed.&rdquo;</b>&nbsp; That matters, because it is what lets you say how much charge a surface drawn <i>inside</i> the object encloses.</p>
+
+<div class="fig"><svg viewBox="0 0 940 520" role="img" aria-label="A uniformly charged sphere drawn twice: once with a Gaussian surface inside it, once with one outside it." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><circle cx="248.0" cy="222.0" r="118.0" fill="#eef2f8" stroke="#1f4e8c" stroke-width="1.80"/><circle cx="262.1" cy="222.0" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="230.0" cy="238.5" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="250.8" cy="190.7" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="270.7" cy="251.5" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="206.4" cy="214.6" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="287.4" cy="196.9" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="234.8" cy="271.0" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="222.9" cy="173.6" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="302.5" cy="241.9" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="191.3" cy="245.4" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="275.3" cy="163.6" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="268.2" cy="286.4" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="187.1" cy="186.7" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="319.4" cy="206.3" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="204.4" cy="284.0" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="237.9" cy="144.3" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="309.8" cy="274.1" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="164.8" cy="225.4" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="308.7" cy="161.6" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="243.9" cy="309.8" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="190.3" cy="152.8" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="339.5" cy="234.3" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="170.5" cy="275.9" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="269.2" cy="127.9" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="297.0" cy="307.5" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="152.3" cy="191.5" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="248.0" cy="222.0" r="74.0" fill="none" stroke="#b3261e" stroke-width="2.00" stroke-dasharray="8 6"/><circle cx="248.0" cy="222.0" r="3.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><line x1="248.0" y1="222.0" x2="300.5" y2="169.5" stroke="#b3261e" stroke-width="1.80"/><text x="277.6" y="189.4" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="end" fill="#b3261e" font-weight="normal" font-style="normal" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke"><tspan font-style="italic">r</tspan></text><line x1="248.0" y1="222.0" x2="164.2" y2="305.8" stroke="#1f4e8c" stroke-width="1.80"/><text x="196.1" y="283.4" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="end" fill="#1f4e8c" font-weight="normal" font-style="normal" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke"><tspan font-style="italic">R</tspan></text><text x="248.0" y="408.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="14.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">inside &#8212; the surface encloses only part of the charge</text><text x="248.0" y="440.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">q</tspan><tspan font-size="12" dy="5">enc</tspan><tspan dy="-5"> = </tspan><tspan font-style="italic">&#961;</tspan><tspan font-size="12" dy="5">0</tspan><tspan dy="-5">(4/3)&#960;<tspan font-style="italic">r</tspan></tspan><tspan font-size="12" dy="-8">3</tspan></text><circle cx="692.0" cy="222.0" r="118.0" fill="#eef2f8" stroke="#1f4e8c" stroke-width="1.80"/><circle cx="706.1" cy="222.0" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="674.0" cy="238.5" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="694.8" cy="190.7" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="714.7" cy="251.5" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="650.4" cy="214.6" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="731.4" cy="196.9" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="678.8" cy="271.0" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="666.9" cy="173.6" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="746.5" cy="241.9" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="635.3" cy="245.4" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="719.3" cy="163.6" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="712.2" cy="286.4" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="631.1" cy="186.7" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="763.4" cy="206.3" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="648.4" cy="284.0" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="681.9" cy="144.3" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="753.8" cy="274.1" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="608.8" cy="225.4" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="752.7" cy="161.6" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="687.9" cy="309.8" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="634.3" cy="152.8" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="783.5" cy="234.3" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="614.5" cy="275.9" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="713.2" cy="127.9" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="741.0" cy="307.5" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="596.3" cy="191.5" r="2.0" fill="#1f4e8c" stroke="#1f4e8c" stroke-width="0.60"/><circle cx="692.0" cy="222.0" r="152.0" fill="none" stroke="#b3261e" stroke-width="2.00" stroke-dasharray="8 6"/><circle cx="692.0" cy="222.0" r="3.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><line x1="692.0" y1="222.0" x2="799.9" y2="114.1" stroke="#b3261e" stroke-width="1.80"/><text x="752.8" y="155.1" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="end" fill="#b3261e" font-weight="normal" font-style="normal" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke"><tspan font-style="italic">r</tspan></text><line x1="692.0" y1="222.0" x2="608.2" y2="305.8" stroke="#1f4e8c" stroke-width="1.80"/><text x="640.1" y="283.4" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="end" fill="#1f4e8c" font-weight="normal" font-style="normal" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round" paint-order="stroke"><tspan font-style="italic">R</tspan></text><text x="692.0" y="408.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="14.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">outside &#8212; it encloses all of it</text><text x="692.0" y="440.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">q</tspan><tspan font-size="12" dy="5">enc</tspan><tspan dy="-5"> = </tspan><tspan font-style="italic">&#961;</tspan><tspan font-size="12" dy="5">0</tspan><tspan dy="-5">(4/3)&#960;<tspan font-style="italic">R</tspan></tspan><tspan font-size="12" dy="-8">3</tspan></text><text x="470.0" y="36.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="15.0" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal">same sphere, same law &#8212; what changes is how much charge the surface has caught</text></svg></div>
+<div class="fig-note"><b>Figure 11.</b>&nbsp; The two cases he draws side by side: a Gaussian surface inside the charged sphere, and one outside it.&nbsp; Inside, the surface encloses only part of the charge; outside, it encloses all of it.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r6" data-label="Show both regions">Show both regions</button><div class="rbody" id="r6" hidden><p><b>Inside</b> (<i>r</i> &lt; <i>R</i>):</p><p class="eq"><span class="step"><i>E</i><sub>in</sub>(4&#960;<i>r</i><sup>2</sup>) = <i>q</i><sub>within</sub> / <i>&#949;</i><sub>0</sub> = <i>&#961;</i><sub>0</sub>(4/3)&#960;<i>r</i><sup>3</sup> / <i>&#949;</i><sub>0</sub></span><span class="step"><b><i>E</i><sub>in</sub> = <i>&#961;</i><sub>0</sub><i>r</i> / 3<i>&#949;</i><sub>0</sub></b>&nbsp;&nbsp;<span style="color:#5c6b62">&#8212; <i>E</i><sub>in</sub> &#8733; <i>r</i></span></span></p><p><b>Outside</b> (<i>r</i> &gt; <i>R</i>):</p><p class="eq"><span class="step"><i>E</i><sub>out</sub>(4&#960;<i>r</i><sup>2</sup>) = <i>q</i><sub>tot</sub> / <i>&#949;</i><sub>0</sub> = <i>&#961;</i><sub>0</sub>(4/3)&#960;<i>R</i><sup>3</sup> / <i>&#949;</i><sub>0</sub></span><span class="step"><b><i>E</i><sub>out</sub> = <i>&#961;</i><sub>0</sub><i>R</i><sup>3</sup> / 3<i>&#949;</i><sub>0</sub><i>r</i><sup>2</sup></b>&nbsp;&nbsp;<span style="color:#5c6b62">&#8212; <i>E</i><sub>out</sub> &#8733; 1/<i>r</i><sup>2</sup></span></span></p></div></div>
+
+<p>Two different laws in the two regions, and his graph of them is the thing to carry away:</p>
+
+<div class="fig"><svg viewBox="0 0 760 420" role="img" aria-label="A graph of field strength against distance from the centre of a uniformly charged sphere: a straight rise to a peak at the surface, then a one-over-r-squared fall." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><line x1="110.0" y1="330.0" x2="110.0" y2="64.0" stroke="#1d2b23" stroke-width="1.80" marker-end="url(#h13)"/><line x1="110.0" y1="330.0" x2="686.0" y2="330.0" stroke="#1d2b23" stroke-width="1.80" marker-end="url(#h13)"/><text x="94.0" y="74.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">E</tspan></text><text x="684.0" y="354.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">r</tspan></text><line x1="345.2" y1="330.0" x2="345.2" y2="112.6" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="6 6"/><text x="345.2" y="354.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">R</tspan></text><text x="227.6" y="318.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="12.5" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">inside</text><text x="507.6" y="318.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="12.5" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">outside</text><g data-skel="draw-this"><path d="M 110.0 330.0 L 111.4 328.7 L 112.8 327.4 L 114.2 326.1 L 115.6 324.8 L 117.0 323.5 L 118.4 322.2 L 119.8 320.9 L 121.2 319.6 L 122.6 318.4 L 124.0 317.1 L 125.4 315.8 L 126.8 314.5 L 128.2 313.2 L 129.6 311.9 L 131.0 310.6 L 132.4 309.3 L 133.8 308.0 L 135.2 306.7 L 136.6 305.4 L 138.0 304.1 L 139.4 302.8 L 140.8 301.5 L 142.2 300.2 L 143.6 298.9 L 145.0 297.7 L 146.4 296.4 L 147.8 295.1 L 149.2 293.8 L 150.6 292.5 L 152.0 291.2 L 153.4 289.9 L 154.8 288.6 L 156.2 287.3 L 157.6 286.0 L 159.0 284.7 L 160.4 283.4 L 161.8 282.1 L 163.2 280.8 L 164.6 279.5 L 166.0 278.2 L 167.4 276.9 L 168.8 275.7 L 170.2 274.4 L 171.6 273.1 L 173.0 271.8 L 174.4 270.5 L 175.8 269.2 L 177.2 267.9 L 178.6 266.6 L 180.0 265.3 L 181.4 264.0 L 182.8 262.7 L 184.2 261.4 L 185.6 260.1 L 187.0 258.8 L 188.4 257.5 L 189.8 256.2 L 191.2 254.9 L 192.6 253.7 L 194.0 252.4 L 195.4 251.1 L 196.8 249.8 L 198.2 248.5 L 199.6 247.2 L 201.0 245.9 L 202.4 244.6 L 203.8 243.3 L 205.2 242.0 L 206.6 240.7 L 208.0 239.4 L 209.4 238.1 L 210.8 236.8 L 212.2 235.5 L 213.6 234.2 L 215.0 233.0 L 216.4 231.7 L 217.8 230.4 L 219.2 229.1 L 220.6 227.8 L 222.0 226.5 L 223.4 225.2 L 224.8 223.9 L 226.2 222.6 L 227.6 221.3 L 229.0 220.0 L 230.4 218.7 L 231.8 217.4 L 233.2 216.1 L 234.6 214.8 L 236.0 213.5 L 237.4 212.2 L 238.8 211.0 L 240.2 209.7 L 241.6 208.4 L 243.0 207.1 L 244.4 205.8 L 245.8 204.5 L 247.2 203.2 L 248.6 201.9 L 250.0 200.6 L 251.4 199.3 L 252.8 198.0 L 254.2 196.7 L 255.6 195.4 L 257.0 194.1 L 258.4 192.8 L 259.8 191.5 L 261.2 190.2 L 262.6 189.0 L 264.0 187.7 L 265.4 186.4 L 266.8 185.1 L 268.2 183.8 L 269.6 182.5 L 271.0 181.2 L 272.4 179.9 L 273.8 178.6 L 275.2 177.3 L 276.6 176.0 L 278.0 174.7 L 279.4 173.4 L 280.8 172.1 L 282.2 170.8 L 283.6 169.5 L 285.0 168.3 L 286.4 167.0 L 287.8 165.7 L 289.2 164.4 L 290.6 163.1 L 292.0 161.8 L 293.4 160.5 L 294.8 159.2 L 296.2 157.9 L 297.6 156.6 L 299.0 155.3 L 300.4 154.0 L 301.8 152.7 L 303.2 151.4 L 304.6 150.1 L 306.0 148.8 L 307.4 147.5 L 308.8 146.3 L 310.2 145.0 L 311.6 143.7 L 313.0 142.4 L 314.4 141.1 L 315.8 139.8 L 317.2 138.5 L 318.6 137.2 L 320.0 135.9 L 321.4 134.6 L 322.8 133.3 L 324.2 132.0 L 325.6 130.7 L 327.0 129.4 L 328.4 128.1 L 329.8 126.8 L 331.2 125.5 L 332.6 124.3 L 334.0 123.0 L 335.4 121.7 L 336.8 120.4 L 338.2 119.1 L 339.6 117.8 L 341.0 116.5 L 342.4 115.2 L 343.8 113.9 L 345.2 112.6 L 346.6 115.2 L 348.0 117.7 L 349.4 120.2 L 350.8 122.6 L 352.2 125.0 L 353.6 127.3 L 355.0 129.7 L 356.4 131.9 L 357.8 134.2 L 359.2 136.3 L 360.6 138.5 L 362.0 140.6 L 363.4 142.7 L 364.8 144.8 L 366.2 146.8 L 367.6 148.8 L 369.0 150.7 L 370.4 152.6 L 371.8 154.5 L 373.2 156.4 L 374.6 158.2 L 376.0 160.0 L 377.4 161.8 L 378.8 163.6 L 380.2 165.3 L 381.6 167.0 L 383.0 168.6 L 384.4 170.3 L 385.8 171.9 L 387.2 173.5 L 388.6 175.1 L 390.0 176.6 L 391.4 178.1 L 392.8 179.6 L 394.2 181.1 L 395.6 182.6 L 397.0 184.0 L 398.4 185.4 L 399.8 186.8 L 401.2 188.2 L 402.6 189.5 L 404.0 190.9 L 405.4 192.2 L 406.8 193.5 L 408.2 194.8 L 409.6 196.0 L 411.0 197.3 L 412.4 198.5 L 413.8 199.7 L 415.2 200.9 L 416.6 202.1 L 418.0 203.2 L 419.4 204.4 L 420.8 205.5 L 422.2 206.6 L 423.6 207.7 L 425.0 208.8 L 426.4 209.9 L 427.8 210.9 L 429.2 212.0 L 430.6 213.0 L 432.0 214.0 L 433.4 215.0 L 434.8 216.0 L 436.2 217.0 L 437.6 217.9 L 439.0 218.9 L 440.4 219.8 L 441.8 220.8 L 443.2 221.7 L 444.6 222.6 L 446.0 223.5 L 447.4 224.4 L 448.8 225.2 L 450.2 226.1 L 451.6 226.9 L 453.0 227.8 L 454.4 228.6 L 455.8 229.4 L 457.2 230.2 L 458.6 231.0 L 460.0 231.8 L 461.4 232.6 L 462.8 233.4 L 464.2 234.1 L 465.6 234.9 L 467.0 235.6 L 468.4 236.4 L 469.8 237.1 L 471.2 237.8 L 472.6 238.5 L 474.0 239.2 L 475.4 239.9 L 476.8 240.6 L 478.2 241.3 L 479.6 242.0 L 481.0 242.6 L 482.4 243.3 L 483.8 243.9 L 485.2 244.6 L 486.6 245.2 L 488.0 245.8 L 489.4 246.5 L 490.8 247.1 L 492.2 247.7 L 493.6 248.3 L 495.0 248.9 L 496.4 249.5 L 497.8 250.0 L 499.2 250.6 L 500.6 251.2 L 502.0 251.7 L 503.4 252.3 L 504.8 252.8 L 506.2 253.4 L 507.6 253.9 L 509.0 254.5 L 510.4 255.0 L 511.8 255.5 L 513.2 256.0 L 514.6 256.5 L 516.0 257.0 L 517.4 257.5 L 518.8 258.0 L 520.2 258.5 L 521.6 259.0 L 523.0 259.5 L 524.4 260.0 L 525.8 260.4 L 527.2 260.9 L 528.6 261.4 L 530.0 261.8 L 531.4 262.3 L 532.8 262.7 L 534.2 263.2 L 535.6 263.6 L 537.0 264.0 L 538.4 264.5 L 539.8 264.9 L 541.2 265.3 L 542.6 265.7 L 544.0 266.2 L 545.4 266.6 L 546.8 267.0 L 548.2 267.4 L 549.6 267.8 L 551.0 268.2 L 552.4 268.6 L 553.8 268.9 L 555.2 269.3 L 556.6 269.7 L 558.0 270.1 L 559.4 270.5 L 560.8 270.8 L 562.2 271.2 L 563.6 271.6 L 565.0 271.9 L 566.4 272.3 L 567.8 272.6 L 569.2 273.0 L 570.6 273.3 L 572.0 273.7 L 573.4 274.0 L 574.8 274.3 L 576.2 274.7 L 577.6 275.0 L 579.0 275.3 L 580.4 275.7 L 581.8 276.0 L 583.2 276.3 L 584.6 276.6 L 586.0 276.9 L 587.4 277.2 L 588.8 277.5 L 590.2 277.8 L 591.6 278.2 L 593.0 278.5 L 594.4 278.7 L 595.8 279.0 L 597.2 279.3 L 598.6 279.6 L 600.0 279.9 L 601.4 280.2 L 602.8 280.5 L 604.2 280.8 L 605.6 281.0 L 607.0 281.3 L 608.4 281.6 L 609.8 281.9 L 611.2 282.1 L 612.6 282.4 L 614.0 282.7 L 615.4 282.9 L 616.8 283.2 L 618.2 283.4 L 619.6 283.7 L 621.0 283.9 L 622.4 284.2 L 623.8 284.4 L 625.2 284.7 L 626.6 284.9 L 628.0 285.2 L 629.4 285.4 L 630.8 285.7 L 632.2 285.9 L 633.6 286.1 L 635.0 286.4 L 636.4 286.6 L 637.8 286.8 L 639.2 287.1 L 640.6 287.3 L 642.0 287.5 L 643.4 287.7 L 644.8 288.0 L 646.2 288.2 L 647.6 288.4 L 649.0 288.6 L 650.4 288.8 L 651.8 289.0 L 653.2 289.2 L 654.6 289.5 L 656.0 289.7 L 657.4 289.9 L 658.8 290.1 L 660.2 290.3 L 661.6 290.5 L 663.0 290.7 L 664.4 290.9 L 665.8 291.1 L 667.2 291.3 L 668.6 291.5 L 670.0 291.7" fill="none" stroke="#b3261e" stroke-width="2.40"/><circle cx="345.2" cy="112.6" r="5.0" fill="#b3261e" stroke="#b3261e" stroke-width="1.00"/><text x="232.3" y="293.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="end" fill="#b3261e" font-weight="normal" font-style="normal"><tspan font-style="italic">E</tspan><tspan font-size="11" dy="4">in</tspan><tspan dy="-4"> &#8733; </tspan><tspan font-style="italic">r</tspan></text><text x="446.0" y="217.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="start" fill="#b3261e" font-weight="normal" font-style="normal"><tspan font-style="italic">E</tspan><tspan font-size="11" dy="4">out</tspan><tspan dy="-4"> &#8733; 1/</tspan><tspan font-style="italic">r</tspan><tspan font-size="11" dy="-7">2</tspan></text><text x="380.0" y="36.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal">the two branches meet at the surface &#8212; they have to, and that is the check</text></g></svg></div>
+<div class="fig-note"><b>Figure 12.</b>&nbsp; Both branches plotted to scale from his own results.&nbsp; Straight line out to the surface, then falling away as 1/<i>r</i><sup>2</sup>.&nbsp; The peak is at <i>r</i> = <i>R</i> and the branches meet there exactly &mdash; <b>substitute <i>r</i> = <i>R</i> into both and you get the same number</b>, which is how a two-region answer is checked.</div>
+
+<h3>A long line of charge &mdash; the one we already did the hard way</h3>
+
+<p class="disp"><b>Cylindrical &rarr; a coaxial cylinder, no flux through the ends &rarr; <i>q</i><sub>enc</sub> = <i>&#955;</i><i>L</i> &rarr; solve.</b></p>
+
+<div class="fig"><svg viewBox="0 0 700 440" role="img" aria-label="A vertical line of charge with a coaxial dashed cylinder round it, open at top and bottom, and field arrows pointing radially out through its curved side." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><line x1="310.0" y1="44.0" x2="310.0" y2="356.0" stroke="#1d2b23" stroke-width="2.40"/><text x="318.0" y="352.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="12.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">the line of charge</text><line x1="218.0" y1="90.0" x2="218.0" y2="310.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="8 6"/><line x1="402.0" y1="90.0" x2="402.0" y2="310.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="8 6"/><ellipse cx="310.0" cy="90.0" rx="92.0" ry="30.0" fill="none" stroke="#b3261e" stroke-width="1.8" stroke-dasharray="8 6"/><ellipse cx="310.0" cy="310.0" rx="92.0" ry="30.0" fill="none" stroke="#b3261e" stroke-width="1.8" stroke-dasharray="8 6"/><line x1="302.0" y1="142.0" x2="160.0" y2="142.0" stroke="#b3261e" stroke-width="2.00" marker-end="url(#h13r)"/><line x1="318.0" y1="142.0" x2="460.0" y2="142.0" stroke="#b3261e" stroke-width="2.00" marker-end="url(#h13r)"/><line x1="302.0" y1="200.0" x2="160.0" y2="200.0" stroke="#b3261e" stroke-width="2.00" marker-end="url(#h13r)"/><line x1="318.0" y1="200.0" x2="460.0" y2="200.0" stroke="#b3261e" stroke-width="2.00" marker-end="url(#h13r)"/><line x1="302.0" y1="258.0" x2="160.0" y2="258.0" stroke="#b3261e" stroke-width="2.00" marker-end="url(#h13r)"/><line x1="318.0" y1="258.0" x2="460.0" y2="258.0" stroke="#b3261e" stroke-width="2.00" marker-end="url(#h13r)"/><text x="472.0" y="206.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="18.0" text-anchor="start" fill="#b3261e" font-weight="bold" font-style="normal"><tspan font-weight="bold">E</tspan></text><line x1="310.0" y1="44.0" x2="402.0" y2="44.0" stroke="#5c6b62" stroke-width="1.40" marker-end="url(#h13m)"/><text x="356.0" y="36.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">r</tspan></text><line x1="134.0" y1="90.0" x2="134.0" y2="310.0" stroke="#5c6b62" stroke-width="1.40" marker-end="url(#h13m)"/><line x1="134.0" y1="310.0" x2="134.0" y2="90.0" stroke="#5c6b62" stroke-width="1.40" marker-end="url(#h13m)"/><text x="124.0" y="206.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="end" fill="#5c6b62" font-weight="normal" font-style="normal"><tspan font-style="italic">L</tspan></text><text x="350.0" y="404.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal">no flux through the top or the bottom &#8212; the field is parallel to them</text></svg></div>
+<div class="fig-note"><b>Figure 13.</b>&nbsp; The Gaussian surface is a cylinder sharing the line&rsquo;s axis.&nbsp; His note on it: <b>&ldquo;cylinder without top &amp; bottom&rdquo;</b> &mdash; not because they are missing, but because <b>no flux goes through them</b>.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r7" data-label="Show the three lines">Show the three lines</button><div class="rbody" id="r7" hidden><p class="eq"><span class="step">&#8750;<sub>S</sub> <b>E</b> &#183; <i>d</i><b>A</b> = <i>q</i><sub>enc</sub> / <i>&#949;</i><sub>0</sub></span><span class="step"><i>E</i>(2&#960;<i>rL</i>) = <i>q</i><sub>enc</sub> / <i>&#949;</i><sub>0</sub></span><span class="step"><i>E</i> = <i>q</i><sub>enc</sub> / (2&#960;<i>rL</i><i>&#949;</i><sub>0</sub>)</span></p><p>and with his <b>&ldquo;<i>q</i><sub>enc</sub>/<i>L</i> = <i>&#955;</i>&rdquo;</b> &mdash; the linear charge density, C/m:</p><p class="eq"><span class="step"><b><i>E</i> = <i>&#955;</i> / 2&#960;<i>&#949;</i><sub>0</sub><i>r</i></b>&nbsp;&nbsp;<span style="color:#5c6b62">&#8212; he circles this one too, in green</span></span></p></div></div>
+
+<div class="punch"><span class="label">Compare</span><span class="big">three lines against two pages</span><p>That is the same <b><i>&#955;</i>/2&#960;<i>&#949;</i><sub>0</sub><i>r</i></b> you got earlier from a vector integral, a Taylor expansion and a limit.&nbsp; <b>Nothing was skipped.</b>&nbsp; The symmetry that made the dot product trivial and pulled <i>E</i> out of the integral did all the work the calculus had been doing by hand.</p></div>
+
+<h3>A flat sheet of charge &mdash; also already done the hard way</h3>
+
+<p class="disp"><b>Planar &rarr; a pillbox straddling the sheet, no flux through the sides &rarr; <i>q</i><sub>enc</sub> = <i>&#963;</i><i>A</i> &rarr; solve.</b></p>
+
+<div class="fig"><svg viewBox="0 0 760 380" role="img" aria-label="A flat charged sheet seen edge-on in perspective with a box straddling it, and field arrows leaving through the top and the bottom faces." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><path d="M 110 215 L 470 215 L 610 137 L 250 137 Z" fill="#e7e9f3" stroke="#1d2b23" stroke-width="1.60"/><text x="150.0" y="201.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="184.0" y="177.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="218.0" y="153.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="212.0" y="201.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="246.0" y="177.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="280.0" y="153.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="274.0" y="201.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="308.0" y="177.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="342.0" y="153.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="336.0" y="201.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="370.0" y="177.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="404.0" y="153.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="398.0" y="201.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="432.0" y="177.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="466.0" y="153.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="460.0" y="201.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="494.0" y="177.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="528.0" y="153.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="522.0" y="201.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="556.0" y="177.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="590.0" y="153.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><line x1="320.0" y1="117.0" x2="416.0" y2="117.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="416.0" y1="117.0" x2="416.0" y2="193.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="416.0" y1="193.0" x2="320.0" y2="193.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="320.0" y1="193.0" x2="320.0" y2="117.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="354.0" y1="83.0" x2="450.0" y2="83.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="450.0" y1="83.0" x2="450.0" y2="159.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="450.0" y1="159.0" x2="354.0" y2="159.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="354.0" y1="159.0" x2="354.0" y2="83.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="320.0" y1="117.0" x2="354.0" y2="83.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="416.0" y1="117.0" x2="450.0" y2="83.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="416.0" y1="193.0" x2="450.0" y2="159.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="320.0" y1="193.0" x2="354.0" y2="159.0" stroke="#b3261e" stroke-width="1.80" stroke-dasharray="7 5"/><line x1="385.0" y1="94.0" x2="385.0" y2="8.0" stroke="#b3261e" stroke-width="2.20" marker-end="url(#h13r)"/><line x1="385.0" y1="182.0" x2="385.0" y2="268.0" stroke="#b3261e" stroke-width="2.20" marker-end="url(#h13r)"/><text x="397.0" y="24.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="start" fill="#b3261e" font-weight="bold" font-style="normal"><tspan font-weight="bold">E</tspan></text><text x="397.0" y="258.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="17.0" text-anchor="start" fill="#b3261e" font-weight="bold" font-style="normal"><tspan font-weight="bold">E</tspan></text><text x="462.0" y="105.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="start" fill="#b3261e" font-weight="bold" font-style="normal"><tspan font-style="italic">A</tspan></text><text x="380.0" y="356.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal">flux leaves through TWO faces, so the 2 in <tspan font-style="italic">E</tspan>(2<tspan font-style="italic">A</tspan>) is the whole story</text></svg></div>
+<div class="fig-note"><b>Figure 14.</b>&nbsp; A box straddling the sheet.&nbsp; The sides carry no flux, so only the two end faces count &mdash; which is where the 2 comes from.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r8" data-label="Show the two lines">Show the two lines</button><div class="rbody" id="r8" hidden><p class="eq"><span class="step"><i>E</i>(2<i>A</i>) = <i>q</i><sub>enc</sub> / <i>&#949;</i><sub>0</sub></span><span class="step"><i>E</i> = <i>q</i><sub>enc</sub> / (2<i>A</i><i>&#949;</i><sub>0</sub>) = <b><i>&#963;</i> / 2<i>&#949;</i><sub>0</sub></b></span></p><p>with his own marginal note on what <i>&#963;</i> is: <b>&ldquo;surface&rdquo;</b> charge density.&nbsp; Two lines, against the double integral over the disc and a limit.</p></div></div>
+
+<div class="openq"><span class="label">And the one that did not come back</span><p><b>The ring fails at step&nbsp;2.</b>&nbsp; Try to draw a Gaussian surface for it and you will find there is no good one: no surface around a ring has the field at the same strength all over it, and none has the field everywhere along its normal.&nbsp; <b>Gauss&rsquo;s law is still true for the ring &mdash; it is always true &mdash; it is just useless</b>, because you cannot get <i>E</i> out of the integral.&nbsp; That is the honest boundary of the method, and it is why the ring was worth the page.</p></div>
+
+<h2>5.&nbsp; Charge on a Conductor</h2>
+
+<p>His opening annotation is the whole explanation: <b>&ldquo;Conductor: free electrons!!&rdquo;</b> and then, in full:</p>
+
+<blockquote>&ldquo;Electrons will respond immediately to electric field and redistribute to establish new equilibrium.&nbsp; e&#8315;s no longer move!!&rdquo;</blockquote>
+
+<p>So he asks the question that follows: <b>&ldquo;Where do excess charge go?&rdquo;</b></p>
+
+<div class="fig"><svg viewBox="0 0 760 360" role="img" aria-label="An irregular conducting blob with plus signs all round its outer edge and none inside, labelled E equals zero in the interior." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><path d="M 190.0 160.0 C 180.0 60.0 320.0 40.0 410.0 52.0 C 510.0 70.0 550.0 160.0 520.0 220.0 C 488.0 282.0 376.0 302.0 294.0 280.0 C 210.0 260.0 198.0 210.0 190.0 160.0 Z" fill="#f3eef6" stroke="#1d2b23" stroke-width="2.20"/><text x="546.0" y="175.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="526.3" y="223.4" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="481.8" y="256.8" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="435.0" y="278.9" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="387.6" y="300.3" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="329.3" y="314.4" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="267.0" y="303.9" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="224.4" y="266.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="210.6" y="218.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="210.0" y="175.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="210.6" y="131.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="224.4" y="84.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="267.0" y="46.1" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="329.3" y="35.6" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="387.6" y="49.7" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="435.0" y="71.1" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="481.8" y="93.2" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="526.3" y="126.6" font-family='Charter, Georgia, "Times New Roman", serif' font-size="16.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="360.0" y="164.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="24.0" text-anchor="middle" fill="#b3261e" font-weight="bold" font-style="normal"><tspan font-weight="bold">E</tspan> = 0</text><text x="360.0" y="198.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="14.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">no net charge anywhere inside</text><text x="380.0" y="338.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal">the electrons are free, so they move until nothing is pushing them &#8212; and that is the surface</text></svg></div>
+<div class="fig-note"><b>Figure 15.</b>&nbsp; His answer, written across the figure: <b>&ldquo;No net charge interior, <i>E</i> = 0&rdquo;</b> and <b>&ldquo;They go to the surface!!&rdquo;</b>&nbsp; <b>Note the shape</b> &mdash; he draws a lump, not a sphere, because the result does not need one.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r9" data-label="Show why it has to be the surface">Show why it has to be the surface</button><div class="rbody" id="r9" hidden><p>Gauss&rsquo;s law is what forces it.&nbsp; Draw any closed surface entirely inside the metal.&nbsp; In equilibrium the electrons have stopped moving, so <b><i>E</i> = 0</b> everywhere on that surface, so the flux through it is zero, so:</p><p class="eq"><span class="step"><i>q</i><sub>enc</sub> = <i>&#949;</i><sub>0</sub> &#215; 0 = <b>0</b></span></p><p>and that holds for <b>every</b> surface you can draw inside the metal, however small.&nbsp; There is nowhere left for the charge to be except the surface.</p></div></div>
+
+<p>One consequence he flags with <b>&ldquo;Note!!&rdquo;</b>, and then uses:</p>
+
+<p class="eq"><span class="step"><i>E</i> = <i>&#963;</i> / 2<i>&#949;</i><sub>0</sub>&nbsp;&nbsp;<span style="color:#5c6b62">&#8212; one sheet, from the pillbox above</span></span><span class="step"><i>E</i> = <i>&#963;</i> / <i>&#949;</i><sub>0</sub>&nbsp;&nbsp;<span style="color:#5c6b62">&#8212; between two oppositely charged plates</span></span></p>
+
+<div class="fig"><svg viewBox="0 0 700 380" role="img" aria-label="Two vertical plates, the left positive and the right negative, with evenly spaced horizontal field arrows running between them." xmlns="http://www.w3.org/2000/svg"><defs><marker id="h13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="h13r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="h13b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker><marker id="h13g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="h13m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><rect x="178.0" y="60.0" width="22.0" height="260.0" rx="0.0" fill="#e7e9f3" stroke="#1d2b23" stroke-width="1.60"/><rect x="500.0" y="60.0" width="22.0" height="260.0" rx="0.0" fill="#d9d9d9" stroke="#1d2b23" stroke-width="1.60"/><text x="189.0" y="83.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="83.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="78.0" x2="494.0" y2="78.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="189.0" y="111.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="111.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="106.0" x2="494.0" y2="106.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="189.0" y="139.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="139.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="134.0" x2="494.0" y2="134.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="189.0" y="167.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="167.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="162.0" x2="494.0" y2="162.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="189.0" y="195.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="195.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="190.0" x2="494.0" y2="190.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="189.0" y="223.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="223.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="218.0" x2="494.0" y2="218.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="189.0" y="251.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="251.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="246.0" x2="494.0" y2="246.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="189.0" y="279.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="279.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="274.0" x2="494.0" y2="274.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="189.0" y="307.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">+</text><text x="511.0" y="307.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal">&#8722;</text><line x1="204.0" y1="302.0" x2="494.0" y2="302.0" stroke="#b3261e" stroke-width="1.90" marker-end="url(#h13r)"/><text x="350.0" y="38.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">uniform, evenly spaced, parallel</text><text x="350.0" y="364.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="20.0" text-anchor="middle" fill="#1d2b23" font-weight="bold" font-style="normal"><tspan font-style="italic">E</tspan> = <tspan font-style="italic">&#963;</tspan> / <tspan font-style="italic">&#949;</tspan><tspan font-size="11" dy="4">0</tspan></text></svg></div>
+<div class="fig-note"><b>Figure 16.</b>&nbsp; Two plates, and his result for the gap, <b><i>E</i> = <i>&#963;</i>/<i>&#949;</i><sub>0</sub></b> &mdash; twice one sheet&rsquo;s, because <b>both</b> sheets push a positive test charge the same way in the gap, and opposite ways outside it.</div>
+
+<div class="openq"><span class="label">One to check for yourself</span><p>On his page the first of those two figures is drawn as a <b>conductor</b>, with <i>E</i> = 0 on one side, and the annotation beside it reads <i>&#963;</i>/2<i>&#949;</i><sub>0</sub>.&nbsp; Work out what the pillbox gives you for a <b>conducting surface</b>, where all the flux leaves through one face instead of two, and see whether you get the same thing.&nbsp; <b>Then ask which of the two pictures the annotation was meant for.</b></p></div>
+
+<p>This is also where <b>Note&nbsp;5</b> picks the thread up: every geometry on this page has a potential to go with it, got by integrating the field you just found.&nbsp; <i>V</i>(<i>r</i>) = &minus;&#8747;<b>E</b>&#183;<i>d</i><b>r</b> turns the sphere, the shell and the cylinder here into the potentials worked there &mdash; <b>same objects, same hand, other quantity</b>.</p>
+
+<div class="punch"><span class="label">The whole note in one line</span><span class="big"><i>&#949;</i><sub>0</sub>&#934; = <i>q</i><sub>enclosed</sub></span><p>Gauss&rsquo;s law is <b>always true</b> and <b>only sometimes useful</b>.&nbsp; It is true for the ring, for a lump of putty, for your hand &mdash; and it is useful exactly when the object has enough symmetry that you can find a surface where <i>E</i> is constant and along the normal. &nbsp;Sphere, cylinder, plane.&nbsp; That is the list.</p></div>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; Inside a uniformly charged insulating sphere the field
+  grows as <i>E</i> &#8733; <i>r</i>.&nbsp; Why does it not blow up near the centre the way a point
+  charge&rsquo;s does?</p>
+    <label><input type="radio" name="q1" value="a"> Because the enclosed charge falls off as <i>r</i><sup>3</sup>, faster than the area grows.</label>
+    <label><input type="radio" name="q1" value="b"> Because the field of an insulator is always zero inside.</label>
+    <label><input type="radio" name="q1" value="c"> Because the charges repel each other out of the middle.</label>
+    <label><input type="radio" name="q1" value="d"> It does blow up; the graph is only an approximation.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Gauss&rsquo;s law gives the field of a long line in
+  three lines but is no help at all for a ring.&nbsp; That is because for the ring:</p>
+    <label><input type="radio" name="q2" value="a"> the law does not apply.</label>
+    <label><input type="radio" name="q2" value="b"> the law applies but no surface lets you take <i>E</i> out of the integral.</label>
+    <label><input type="radio" name="q2" value="c"> the enclosed charge is zero.</label>
+    <label><input type="radio" name="q2" value="d"> the flux is zero.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; A hollow metal ball carries excess charge.&nbsp; The
+  field in the metal itself, in N/C, is:</p>
+    <div class="qnum"><input type="number" id="q3input" step="any" inputmode="decimal"
+    aria-label="field in the metal in newtons per coulomb"><span class="unit">N/C</span></div>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; Move twice as far from a very large charged sheet.&nbsp;
+  The field:</p>
+    <label><input type="radio" name="q4" value="a"> does not change.</label>
+    <label><input type="radio" name="q4" value="b"> halves.</label>
+    <label><input type="radio" name="q4" value="c"> falls to a quarter.</label>
+    <label><input type="radio" name="q4" value="d"> doubles.</label>
+    <div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<h2>Looking ahead</h2>
+
+<p>That is the field half of Module&nbsp;3 finished &mdash; the force, the field, the potential, and the one shortcut that reaches the field without the integral.&nbsp; <b>Note&nbsp;8</b> steps back from all of it and asks a different kind of question: why do the electrostatic equations look so much like Newton&rsquo;s, and what can you get for free once you notice it?</p>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M3_N7_Solving_The_Field_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the integrals are yours to run.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 3 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+</div>
+
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 3 Note 7, "Solving the Field: By Integration, Then by Gauss's Law" (F7 onward are
+     this note's; F1 to F6 come from Note 6)
+
+     F1. FLUX IS LINE DENSITY, not area.  The same area in a denser field
+         carries more flux.  (Planted in Note 3, collected here.)
+     F2. Only the component of E ALONG THE NORMAL carries flux: dPhi = E.n dA.
+         A field lying flat in a surface carries none.
+     F3. The SIGN of the flux through a closed surface is the sign of the
+         enclosed charge: out-flowing for +, in-flowing for -.
+     F4. GAUSS'S LAW: eps0 * Phi = q_enclosed, i.e. the closed-surface integral
+         of E.dA equals q_enc / eps0.
+     F5. The flux depends on the ENCLOSED CHARGE ALONE - not the shape or size
+         of the surface, nor where the charge sits inside it.
+     F6. It is ALWAYS TRUE and ONLY SOMETIMES USEFUL.  It yields E only when a
+         surface exists on which E is constant in size and along the normal:
+         sphere, cylinder, plane.  That is the whole list.
+     F7. Uniform insulating sphere: E_in = rho r / 3 eps0 (proportional to r)
+         inside, E_out = rho R^3 / 3 eps0 r^2 (as 1/r^2) outside.  The two
+         branches MEET at r = R, which is how a two-region answer is checked.
+     F8. Long line: E = lambda / 2 pi eps0 r.  The Gaussian cylinder carries no
+         flux through its top or bottom.
+     F9. Infinite sheet: E = sigma / 2 eps0, independent of distance.  The 2 in
+         E(2A) is the two end faces of the pillbox.
+     F10. Between two oppositely charged plates the two sheets add: E = sigma/eps0.
+     F11. CONDUCTOR IN EQUILIBRIUM: free electrons redistribute until E = 0
+          inside, so every interior Gaussian surface encloses no net charge, so
+          all excess charge sits on the SURFACE.
+     F12. The same three geometries by DIRECT INTEGRATION give the same answers
+          the long way: finite line -> kq / z sqrt((L/2)^2 + z^2), going to
+          lambda/2 pi eps0 z as L grows; ring -> kQz/(R^2+z^2)^{3/2}; disc ->
+          (sigma/2 eps0)[1 - z/(R^2+z^2)^{1/2}], going to sigma/2 eps0.
+     F13. EVERY INTEGRATION IS CHECKED IN THE FAR FIELD: back off far enough and
+          any finite charged object looks like a point charge, kq/z^2.
+     F14. The RING is the control case: Gauss's law applies to it and is of no
+          help, because no surface lets E come out of the integral.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M3 Note 7.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q1": "a", "q2": "b", "q4": "a"};
+  var NUM = {"q3": [0.0, 0.001]};
+  var WHY = {
+    "q1": "A sphere of radius r encloses charge going as r cubed, while its area grows only as r squared.  The ratio goes as r, so E rises from zero.  A point charge is different because ALL of its charge is enclosed however small you draw the surface.",
+    "q2": "The law is always true.  It is USEFUL only when some surface has E constant in size and along the normal everywhere on it, so E can come out of the integral.  A ring has no such surface - which is exactly why it had to be integrated the long way.",
+    "q3": "ZERO.  In equilibrium the free electrons have stopped moving, so no field is left in the metal to push them - and Gauss's law then forces every bit of excess charge onto the surface, since every surface drawn inside encloses no net charge.",
+    "q4": "It does not change.  E = sigma / 2 eps0 has no r in it at all - his own line was 'The field is constant!  i.e. independent of the distance from the plane!!'  That is why g is constant near the ground, too."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '✓ ' : '✗ ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

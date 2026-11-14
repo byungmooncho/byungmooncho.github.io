@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N5 &mdash; Electric Potential: The Calculus</title>
+<style>
+  /* FLCC Physics note page - Module 3, Electricity, Note 5
+     "Electric Potential: The Calculus".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+
+     THIS NOTE IS THE CALCULUS LAYER CUT OUT OF NOTE 7.  He approved the split on
+     2026-11-10 after N7 measured 11,133 px closed against D2L's 10,000 ceiling,
+     and the CALC-152 fence was the seam he named.  The content is NOT rewritten:
+     it is N7's fenced block, moved.
+
+     SOURCE.  His own worked solutions in
+     _Cho_Own_Coursework_Archive\\PHY261_Electricity_Magnetism_Spring2020\\, the
+     pages footed "Electric Potential 16-21, 37-41, 43-48": E = -grad V off the
+     contour spacing, V by integration with the far-field check, the rod and the
+     two arcs, and V(r) = -integral E.dr as the bridge to Gauss.
+
+     NO FENCE WRAPPER, DELIBERATELY.  In N7 this material sat in a div.calc152
+     carrying a "With calculus" badge, because it had an algebra-level note around
+     it to be distinguished from.  Here the whole note is the calculus, so the
+     wrapper and the badge were dropped - and with them the only thing in Module 3
+     that needed the .calc152 rule, which has been removed from N7 as well.
+
+     TWO CROSS-REFERENCES REWORDED, AND NOTHING ELSE.  "Look again at the map of
+     equipotential lines in Figure 2" and "Remember the two world's views?" both
+     pointed at things on the same page; they now name Note 4, which is where
+     those things stayed.  Every other sentence is as it was in N7.
+
+     WHAT IS CLAUDE'S.  The title and subtitle; the "Where this sits" box; the
+     Check yourself ticket; the foundation list; the Looking ahead paragraph; and
+     the two rewordings above.  The three section headings and all of the body are
+     as they were written for N7 from his PHY 261 pages.
+
+     THE ARITHMETIC WAS VERIFIED INDEPENDENTLY when this material was first built
+     on 2026-11-10: quarter arc K(lambda)(pi)/2, half arc -KQ(pi)/L with
+     E = 2KQ(pi)/L^2, rod (KQ/L)ln[(x+L/2)/(x-L/2)], and the solid sphere
+     3KQ/2R - KQr^2/2R^3, continuous at r = R.
+     ================================================================== */
+
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65; }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .1rem; font-weight:700; }
+  .subtitle{ font-family:"Segoe UI", system-ui, sans-serif; font-size:1rem; color:var(--muted); margin:0 0 .3rem; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.06rem; margin:1.3rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:.2rem 0 0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem; }
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ul.items{ padding-left:1.3rem; margin:.4rem 0; } ul.items > li{ margin:.4rem 0; }
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .disp{ display:block; margin:.7rem 0 .9rem; text-align:center; font-size:1.12rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green);
+    border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule);
+    padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  table.doc{ border-collapse:collapse; width:100%; margin:.6rem 0 .8rem; font-size:.95rem; }
+  table.doc th, table.doc td{ border:1px solid var(--rule); padding:.32rem .55rem; text-align:left;
+    vertical-align:top; font-weight:400; }
+  table.doc th{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    color:var(--green-deep); background:var(--green-soft); }
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none;
+    color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; } .pe.lp li{ margin:.32rem 0; } .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem;
+    border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer;
+    margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule);
+    border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.good{ color:var(--green-deep); } .ticket .qfb.bad{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .openq{ border-left:4px solid var(--amber); background:#fdf8ef; border-radius:0 6px 6px 0;
+    padding:.8rem 1.05rem; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .openq .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.3rem; }
+  .openq ul{ margin:.4rem 0 0; padding-left:1.2rem; } .openq li{ margin:.45rem 0; list-style:none; }
+  .openq li::before{ content:"\2014\00a0\00a0"; color:var(--muted); }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 3 &middot; Electricity</span><span>Note 5</span></div>
+
+<h1>Electric Potential: The Calculus</h1>
+
+<p class="subtitle">Reading <b>E</b> off a contour map, finding <i>V</i> by integration, and getting every Gauss geometry for free</p>
+
+<div class="synopsis"><span class="label">Where this sits</span><b>Note&nbsp;4</b> did electric
+potential with algebra, and everything in it stands on its own.&nbsp; This note is the same subject with calculus in
+hand, and it is where the energy picture stops being merely tidier than the force picture and starts being
+<i>cheaper</i> &mdash; one scalar integral instead of two or three vector ones, and then a whole catalogue of fields
+turned into potentials for nothing.</div>
+
+
+<h3>Reading the field straight off the map</h3>
+
+<p>Here is the payoff for doing the scalar first: <b>if you know <i>V</i> everywhere, you already know E everywhere.</b>&nbsp; You
+never have to go back and do that vector integral at all.</p>
+
+<p>Look again at the map of equipotential lines in <b>Figure&nbsp;2 of Note&nbsp;4</b>, and think of it as a contour map of a hill, because that is exactly
+what it is.&nbsp; Two things are true about <b>E</b> at every single point on that map:</p>
+
+<ul class="items">
+<li><b>E</b> points the way <i>V</i> falls &mdash; <b>straight downhill</b>.</li>
+<li><b>E</b> is <b>perpendicular</b> to the equipotential line it is standing on.</li>
+</ul>
+
+<p>How steep the hill is tells you how big <b>E</b> is:</p>
+
+<span class="disp" style="font-size:1.2rem"><i>E</i> = &Delta;<i>V</i>&thinsp;/&thinsp;&Delta;<i>r</i></span>
+
+<p>the change in potential divided by the distance you walked to get that change.&nbsp; Where the lines are crowded together
+<i>V</i> is dropping fast, so the field is strong; where they are spread apart, the field is weak.&nbsp; <b>You can read the field
+strength straight off the spacing!</b></p>
+
+<p>That is all <b>E</b> = &minus;&nabla;<i>V</i> is saying.&nbsp; The minus sign is &ldquo;downhill,&rdquo; and the gradient is
+&ldquo;how steep.&rdquo;&nbsp; Notice that this lets you get the whole field off a contour map without doing a single integral, which
+on an exam is usually a good deal faster.</p>
+
+<h3>Going the other way &mdash; <i>V</i> by integration</h3>
+
+<p>We already know how to find the field of a charge that is spread out: you chop it into little pieces, find the d<b>E</b> from each
+piece, and add the pieces up.&nbsp; <b>The adding up is where it gets painful, though!</b>&nbsp; <b>E</b> is a vector, so
+&ldquo;adding up&rdquo; means components, and components mean two or three integrals with a lot of geometry to keep straight.</p>
+
+<p>Now here is the good news.&nbsp; <b>The potential is much kinder, because <i>V</i> is a scalar.</b>&nbsp; Remember the two world&rsquo;s views from <b>Note&nbsp;4</b>?&nbsp; This is exactly where the energy perspective earns its keep.&nbsp; You chop the charge into the very same
+little pieces, you write d<i>V</i> = <i>K</i>&thinsp;d<i>q</i>/<i>r</i> for each one, and you add.&nbsp; <b>Just numbers, no
+directions, one integral.</b></p>
+
+<p>So it is the same recipe as before with the worst step crossed out:</p>
+
+<ol class="items">
+<li>Draw the charge, pick your little piece, say where it is.</li>
+<li>Say where the point of interest is.</li>
+<li>Write d<i>q</i> in terms of the charge density.</li>
+<li>Write <i>r</i>, the distance from the piece to the point.</li>
+<li>Integrate <i>K</i>&thinsp;d<i>q</i>/<i>r</i> over the whole charge.</li>
+</ol>
+
+<p><b>And then, always, check it.</b>&nbsp; Back away far enough and any finite blob of charge has to look like a point charge, so
+<i>V</i> should collapse to <i>KQ</i>/<i>r</i>.&nbsp; If it doesn&rsquo;t, it is your answer that is wrong, not the limit!</p>
+
+<table class="doc">
+<thead><tr><th>Charge</th><th>Point</th><th>Result</th><th>Far-field check</th></tr></thead>
+<tbody>
+<tr><td>Finite rod, length <i>L</i>, charge <i>Q</i></td><td>on its axis, distance <i>x</i> from the centre</td>
+    <td><i>V</i> = (<i>KQ</i>/<i>L</i>)&thinsp;ln[(<i>x</i>&nbsp;+&nbsp;<i>L</i>/2)/(<i>x</i>&nbsp;&minus;&nbsp;<i>L</i>/2)]</td>
+    <td>for <i>x</i> &gt;&gt; <i>L</i> this &rarr; <i>KQ</i>/<i>x</i>&nbsp; &#10003;</td></tr>
+<tr><td>Quarter-circle arc, radius <i>R</i>, density &lambda;</td><td>at the centre</td>
+    <td><i>V</i> = <i>K</i>&lambda;&pi;/2</td>
+    <td>every piece is the same distance <i>R</i> away, so the integral is just the total charge over <i>R</i></td></tr>
+<tr><td>Half-circle arc, length <i>L</i>, charge &minus;<i>Q</i></td><td>at the centre</td>
+    <td><i>V</i> = &minus;<i>KQ</i>&pi;/<i>L</i></td>
+    <td>and the field there is <b>not</b> zero &mdash; <i>E</i> = &minus;2<i>KQ</i>&pi;/<i>L</i>&sup2; &icirc;</td></tr>
+</tbody></table>
+
+<p>That last row is the lesson of this whole note in one line.&nbsp; <b>The arc has a perfectly good potential at its centre and a
+perfectly good field there too, and neither one tells you the other without doing the work.</b></p>
+
+<h3>And the bridge to Gauss</h3>
+
+<p>In the Gauss note we find <i>E</i>(<i>r</i>) for a whole catalogue of shapes &mdash; the solid insulating sphere, the metal sphere,
+the hollow shell, the coaxial cable.&nbsp; Each one takes a Gaussian surface, a symmetry argument and two lines of algebra.</p>
+
+<p><b>We get the potential of every one of them for free.</b>&nbsp;
+&Delta;<i>V</i> = &minus;&int;<b>E</b>&middot;d<b>r</b>, and the field is already in hand.&nbsp; All that is left is an integral along a
+radial line from infinity in to wherever you want <i>V</i>.&nbsp; Where <i>E</i> changes form &mdash; inside the sphere against
+outside it &mdash; integrate piecewise and match at the boundary: <b><i>V</i> is continuous across the surface even where <i>E</i>
+jumps.</b></p>
+
+<p>The solid insulating sphere is the one to work carefully, because it shows both features at once.&nbsp; Outside,
+<i>V</i> = <i>KQ</i>/<i>r</i>.&nbsp; Inside,</p>
+
+<span class="disp" style="font-size:1.18rem"><i>V</i>(<i>r</i>) = 3<i>KQ</i>/2<i>R</i> &minus; <i>KQr</i>&sup2;/2<i>R</i>&sup3;</span>
+
+<p>a parabola, flattening to its maximum at the centre.&nbsp; Graph it under <i>E</i>(<i>r</i>) on the same axis and you can see the
+relationship: <b><i>E</i> is the slope of <i>V</i></b>, and at the centre, where <i>V</i> is flat, <i>E</i> is zero.</p>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; On a contour map of <i>V</i>, the equipotential lines in one region are
+  packed twice as close together as in another.&nbsp; Compared with the second region, the field in the first is:</p>
+    <label><input type="radio" name="q1" value="a"> twice as strong.</label>
+    <label><input type="radio" name="q1" value="b"> half as strong.</label>
+    <label><input type="radio" name="q1" value="c"> the same &mdash; spacing is a drawing convention.</label>
+    <label><input type="radio" name="q1" value="d"> four times as strong.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Why is finding <i>V</i> by integration easier than finding
+  <b>E</b> by integration?</p>
+    <label><input type="radio" name="q2" value="a"> <i>V</i> is a scalar, so there are no components to resolve.</label>
+    <label><input type="radio" name="q2" value="b"> <i>V</i> falls off as 1/<i>r</i> instead of 1/<i>r</i><sup>2</sup>.</label>
+    <label><input type="radio" name="q2" value="c"> The charge element d<i>q</i> is simpler for <i>V</i>.</label>
+    <label><input type="radio" name="q2" value="d"> It is not easier; it just looks that way.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; At the centre of a half-circle arc of charge, the potential is
+  &minus;<i>KQ</i>&pi;/<i>L</i>.&nbsp; What is the field there?</p>
+    <label><input type="radio" name="q3" value="a"> Zero, because the potential is a single number there.</label>
+    <label><input type="radio" name="q3" value="b"> Not zero &mdash; <i>V</i> at a point tells you nothing about <b>E</b> at that point on its own.</label>
+    <label><input type="radio" name="q3" value="c"> Zero, by symmetry.</label>
+    <label><input type="radio" name="q3" value="d"> &minus;<i>KQ</i>&pi;/<i>L</i>, the same number.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; You integrate <i>K</i>&thinsp;d<i>q</i>/<i>r</i> over a finite rod and get an
+  answer.&nbsp; What is the one check you always run on it?</p>
+    <label><input type="radio" name="q4" value="a"> That it has the right units.</label>
+    <label><input type="radio" name="q4" value="b"> That it goes to <i>KQ</i>/<i>r</i> far away.</label>
+    <label><input type="radio" name="q4" value="c"> That it is positive.</label>
+    <label><input type="radio" name="q4" value="d"> That it matches the field you found earlier.</label>
+    <div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<h2>Looking ahead</h2>
+<p>That is potential done twice, once each way.&nbsp; <b>Note&nbsp;6</b> goes after the one thing this module has
+been circling since <b>Note&nbsp;3</b>, when the phrase <b>flux = line density</b> first appeared: a way to get the
+field of a whole charged object without adding up a single piece, provided the object is symmetric enough.&nbsp;
+That is Gauss&rsquo;s law.</p>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M3_N5_Electric_Potential_The_Calculus_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the integrals are yours to run.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 3 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+</div>
+
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 3 Note 5, "Electric Potential: The Calculus"
+
+     These were F13 to F19 of Note 4 while the calculus was fenced inside it.
+
+     F1. E = -grad V.  E points downhill and is perpendicular to the equipotential
+         through the point; its size is dV/dr, read off the contour spacing.
+     F2. The whole field comes off a contour map with no integral at all.
+     F3. V by integration: dV = K dq / r, summed as a SCALAR - no components, one
+         integral instead of two or three.
+     F4. The recipe: locate the element, locate the point, write dq, write r,
+         integrate - then CHECK the far-field limit against KQ/r.
+     F5. Finite rod on axis: V = (KQ/L) ln[(x + L/2)/(x - L/2)].
+     F6. Arc at its centre: every element is the same r away, so V is just the
+         total charge over R - but E there is NOT zero.  A potential at a point
+         and a field at that point are different questions.
+     F7. Delta V = - integral E.dr recovers the potential of every Gauss geometry
+         from its field, piecewise, with V continuous across a boundary even where
+         E jumps.
+     F8. Solid insulating sphere: V = 3KQ/2R - KQr^2/2R^3 inside, KQ/r outside.
+         E is the slope of V, so E = 0 at the centre where V is flat.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M3 Note 5 (calculus).  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q1": "a", "q2": "a", "q3": "b", "q4": "b"};
+  var NUM = {};
+  var WHY = {
+    "q1": "E = dV/dr, so crowded contours mean a steep hill and a strong field.  Twice the crowding is twice the field - and you read it straight off the spacing, with no integral at all.",
+    "q2": "V is a SCALAR.  You add numbers, not components, so one integral replaces the two or three that E needs plus all the geometry that goes with them.  That is the whole reason the energy picture earns its keep.",
+    "q3": "Not zero.  Every piece of the arc is the same distance R from the centre, so V is just the total charge over R - but the field there is E = -2KQ(pi)/L^2.  A potential at a point and a field at that point are different questions.",
+    "q4": "Back away far enough and any finite blob has to look like a point charge, so V must collapse to KQ/r.  If it does not, the answer is wrong, not the limit."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '✓ ' : '✗ ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

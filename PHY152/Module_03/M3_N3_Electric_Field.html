@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N3 &mdash; Electric Field</title>
+<style>
+  /* FLCC Physics note page - Module 3, Electricity, Note 3
+     "Electric Field Is Force On A Unit Positive Charge".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+
+     SOURCE.  25SP master "M3 N3 Electric Field" - 5 pages, 950 printed chars/page,
+     Mode A (scaffolded), and 745 LIVE /Subtype /Ink strokes which were rendered and
+     READ page by page before this page was written.  Numbering: this is N6 in the
+     settled eleven-note Module 3 order; the master's own number is N3.
+
+     WHAT IS HIS.  The title; the whole synopsis; the Performance Expectations; every
+     one of the fifteen numbered items, verbatim; and EVERY ANSWER behind every reveal,
+     transcribed from his red ink - "outward pointing E-Field", "larger charge, more
+     field lines!", "(Flux = line density)", "source"/"sink", "E-Field originates from
+     + charge and ends at - charge", "You don't have to have source and sink always
+     together! + or - charge exist by themselves", the arrow-length/arrow-direction
+     pair, "E-Fields are vectors!", "@ (x) there is no force!!", and the Q14 answer.
+
+     WHAT IS CLAUDE'S.  The four figures; the punchline box; the Check-yourself ticket;
+     the foundation list; and the decision to move his synopsis paragraphs 2 and 3 out
+     of the Synopsis and into the body, where the anatomy rule puts teaching.  His
+     paragraph 1 is the Synopsis, unchanged.
+
+     NO WORKED EXAMPLE.  This note is a simulation note and his master carries no
+     worked arithmetic anywhere in it.  None has been invented.  Per the standing rule,
+     that absence is reported rather than filled.
+
+     FIGURE 6 IS HIS.  It is "Electric field and electric potential plots_KEY.pdf" pp. 1-2,
+     redrawn: his three cases, his axis convention, his F1/F2 labelling.  The curves are
+     computed from the signed 1/r^2 superposition, not sketched.  The potential half of
+     that same sheet (pp. 3-4) went into Note 4.
+
+     FIGURES ARE COMPUTED, NOT EYEBALLED.  Figures 3 and 4 are real streamlines of the
+     two-charge field, integrated numerically (RK2) from seeds ringing each charge.
+     Figure 2's arrow lengths are exactly proportional to 1/r^2 - checked, L*r^2 is
+     constant to 0.1% across all six sensors.  Figure 4's null point is placed exactly
+     midway between the two charges, which is where it is.
+
+     THE PHYSICS FLAG RAISED ON 2026-11-10 IS CLOSED.  The 25SP PDF's item-10 ink reads
+     "E-Fields from + cancels with E-Fields from +", which could only be a slip since
+     item 9 sets up a dipole.  HIS OWN REGENTS MASTER SETTLES IT: packet p. 32 answers
+     the same question "Fields from + & - cancel.  They add like vectors."  That is his
+     wording and it is what the reveal now carries.  Nothing was invented or corrected.
+
+     THE SUMMARY IS NOT BLANK.  Packet p. 32 item 15 carries his own five answers; the
+     first build left the section empty on the assumption that he had not filled it in.
+     They are now behind a reveal, after the student's own five.
+
+     ================================================================== */
+
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65; }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .1rem; font-weight:700; }
+  .subtitle{ font-family:"Segoe UI", system-ui, sans-serif; font-size:1rem; color:var(--muted); margin:0 0 .3rem; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.06rem; margin:1.3rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:.2rem 0 0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem; }
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ul.items{ padding-left:1.3rem; margin:.4rem 0; } ul.items > li{ margin:.4rem 0; }
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .disp{ display:block; margin:.7rem 0 .9rem; text-align:center; font-size:1.12rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green);
+    border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule);
+    padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  table.doc{ border-collapse:collapse; width:100%; margin:.6rem 0 .8rem; font-size:.95rem; }
+  table.doc th, table.doc td{ border:1px solid var(--rule); padding:.32rem .55rem; text-align:left;
+    vertical-align:top; font-weight:400; }
+  table.doc th{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    color:var(--green-deep); background:var(--green-soft); }
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none;
+    color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; } .pe.lp li{ margin:.32rem 0; } .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem;
+    border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer;
+    margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule);
+    border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.good{ color:var(--green-deep); } .ticket .qfb.bad{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .openq{ border-left:4px solid var(--amber); background:#fdf8ef; border-radius:0 6px 6px 0;
+    padding:.8rem 1.05rem; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .openq .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.3rem; }
+  .openq ul{ margin:.4rem 0 0; padding-left:1.2rem; } .openq li{ margin:.45rem 0; list-style:none; }
+  .openq li::before{ content:"\2014\00a0\00a0"; color:var(--muted); }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 3 &middot; Electricity</span><span>Note 3</span></div>
+<h1>Electric Field Is Force On A Unit Positive Charge</h1>
+<p class="subtitle">E-Field PhET Simulation</p>
+
+<div class="synopsis"><span class="label">Synopsis</span>This note is about a &ldquo;field.&rdquo;&nbsp; Specifically, the
+electric field.&nbsp; You should think about the field as a &ldquo;sphere of influence.&rdquo;&nbsp; For example, if we are next to
+a planet like the Earth (like being on the surface as we are now), we are in its <i>gravitational</i> field, or its gravitational
+&ldquo;influence.&rdquo;&nbsp; The strength of this influence is known as the gravitational field strength, <i>g</i>, which we
+otherwise know as the acceleration due to gravity, 9.8&nbsp;m/s&sup2;.&nbsp; So, what does a field do?&nbsp; <b>It accelerates
+stuff!</b>&nbsp; The gravitational field accelerates mass; in the same way, the electric field, which is a sphere of influence by a
+charge, accelerates another charge that happens to be close by.&nbsp; The electric field strength, or electric field, has the
+symbol&nbsp;<b>E</b>.</div>
+
+<p>When we think about gravity, we focus on <i>a</i> mass and the force of gravity on the mass.&nbsp; For example, when we are at the
+Earth&rsquo;s surface, we &ldquo;feel&rdquo; the gravity as weight given by <i>F</i><sub>G</sub> = <i>mg</i>.&nbsp; We say the Earth
+pulls us.&nbsp; But we also know that we pull the Earth by the same magnitude towards us.&nbsp; We have the gravitational influence
+that the Earth feels, but we don&rsquo;t typically talk about this; we or other objects around the Earth that move because of the
+Earth&rsquo;s influence are the focus.&nbsp; <b>The idea of the field is to emphasize this influence</b> and facilitate figuring out
+the force on the object of interest due to the field source.&nbsp; If a charge <i>q</i> is in the sphere of influence of another
+charge, the force on <i>q</i> is <i>F</i><sub>E</sub> = <i>qE</i>; here, <b>E</b> is analogous to <i>g</i>, an influence generated by
+other nearby charges.</p>
+
+<p>The following PhET simulation shows that every charge emits influences through electric fields represented by <b>field
+lines</b>.&nbsp; Another charge &ldquo;takes a cue&rdquo; from the lines and &ldquo;figures out&rdquo; the force on itself and, thus,
+how to move (accelerate).&nbsp; These lines have directions: <b>they originate from the positive charges and terminate on the negative
+charges.</b>&nbsp; You will place a +1 unit charge in the field generated by one or more charges.&nbsp; This +1 unit charge will
+conveniently reveal the direction and strength of the influence (i.e., force) from the charge(s) that generated the field.&nbsp; (This
++1 unit charge is, thus, known as the <b>&ldquo;test charge&rdquo;</b> and, by default, <i>always</i> positive.)</p>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Draw</b> field lines emitted by positive and negative charges separately (single charges) or together (dipole).</li>
+<li><b>Describe</b> the strength and direction of the force a charge feels in the electric field using the test charge.</li>
+</ol></div>
+
+<h2>Instructions and questions</h2>
+
+<ol class="items">
+<li>Type &ldquo;electric field phet sim&rdquo; into the Google search bar, select and run
+<a href="https://phet.colorado.edu/en/simulations/charges-and-fields" target="_blank" rel="noopener">&ldquo;Charges and Fields&rdquo;
+PhET simulation</a>.</li>
+<li>Check the <b>Grid</b> box.</li>
+<li>Pick a positive or negative charge from the box at the bottom of the screen and drag and drop it onto the grid.&nbsp; The sensor is
+your test charge that reveals the strength and direction of the force a +1 unit charge (the test charge) would experience.</li>
+</ol>
+
+<h2>Part I &mdash; point charge</h2>
+
+<ol class="items" start="4">
+<li>Drag and drop a <b>+1&nbsp;nC</b> charge onto the middle of the Positive Charge box below and <b>draw the field lines</b>.&nbsp;
+Note that relative field strength is indicated by the brightness of the arrows, not by their length, and your field lines should be
+continuous and indicate the directions.</li>
+</ol>
+
+<div class="fig"><svg viewBox="0 0 1000 500" role="img" aria-label="A single positive charge at the centre with sixteen straight field lines pointing radially outward, evenly spaced all round.">
+<line x1="517.0" y1="225.0" x2="696.0" y2="225.0" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(628.0,225.0) rotate(0.0) translate(0,-4.8)"/>
+<line x1="515.7" y1="231.5" x2="681.1" y2="300.0" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(618.2,274.0) rotate(22.5) translate(0,-4.8)"/>
+<line x1="512.0" y1="237.0" x2="638.6" y2="363.6" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(590.5,315.5) rotate(45.0) translate(0,-4.8)"/>
+<line x1="506.5" y1="240.7" x2="575.0" y2="406.1" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(549.0,343.2) rotate(67.5) translate(0,-4.8)"/>
+<line x1="500.0" y1="242.0" x2="500.0" y2="421.0" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(500.0,353.0) rotate(90.0) translate(0,-4.8)"/>
+<line x1="493.5" y1="240.7" x2="425.0" y2="406.1" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(451.0,343.2) rotate(112.5) translate(0,-4.8)"/>
+<line x1="488.0" y1="237.0" x2="361.4" y2="363.6" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(409.5,315.5) rotate(135.0) translate(0,-4.8)"/>
+<line x1="484.3" y1="231.5" x2="318.9" y2="300.0" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(381.8,274.0) rotate(157.5) translate(0,-4.8)"/>
+<line x1="483.0" y1="225.0" x2="304.0" y2="225.0" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(372.0,225.0) rotate(180.0) translate(0,-4.8)"/>
+<line x1="484.3" y1="218.5" x2="318.9" y2="150.0" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(381.8,176.0) rotate(202.5) translate(0,-4.8)"/>
+<line x1="488.0" y1="213.0" x2="361.4" y2="86.4" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(409.5,134.5) rotate(225.0) translate(0,-4.8)"/>
+<line x1="493.5" y1="209.3" x2="425.0" y2="43.9" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(451.0,106.8) rotate(247.5) translate(0,-4.8)"/>
+<line x1="500.0" y1="208.0" x2="500.0" y2="29.0" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(500.0,97.0) rotate(270.0) translate(0,-4.8)"/>
+<line x1="506.5" y1="209.3" x2="575.0" y2="43.9" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(549.0,106.8) rotate(292.5) translate(0,-4.8)"/>
+<line x1="512.0" y1="213.0" x2="638.6" y2="86.4" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(590.5,134.5) rotate(315.0) translate(0,-4.8)"/>
+<line x1="515.7" y1="218.5" x2="681.1" y2="150.0" stroke="#b3261e" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#b3261e" transform="translate(618.2,176.0) rotate(337.5) translate(0,-4.8)"/>
+<circle cx="500" cy="225" r="15" fill="#fff" stroke="#b3261e" stroke-width="2.4"/><line x1="493" y1="225" x2="507" y2="225" stroke="#b3261e" stroke-width="2.6"/><line x1="500" y1="218" x2="500" y2="232" stroke="#b3261e" stroke-width="2.6"/>
+<text x="500" y="477" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#b3261e" font-weight="600" font-style="normal">Field lines point OUT &mdash; a &ldquo;source&rdquo;</text>
+</svg></div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; A single positive charge.&nbsp; The lines are straight, they are evenly spaced all round, and they all point away from the charge.</div>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r1" data-label="Show the answer">Show the answer</button><div class="rbody" id="r1" hidden><p><b>Outward pointing E-Field.</b></p><p>The positive charge is a <b>&ldquo;source&rdquo;</b> of E-field.</p><p><b>Note: larger charge, more field lines!</b>&nbsp; And that is worth a name of its own &mdash;</p><p class="disp"><b>Flux = line density</b></p></div></div>
+
+<ol class="items" start="5">
+<li>Clear the field and repeat the procedure with a <b>&minus;1&nbsp;nC</b> source charge.</li>
+</ol>
+
+<div class="fig"><svg viewBox="0 0 1000 500" role="img" aria-label="A single negative charge at the centre with sixteen straight field lines pointing radially inward from all directions.">
+<line x1="517.0" y1="225.0" x2="696.0" y2="225.0" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(628.0,225.0) rotate(180.0) translate(0,-4.8)"/>
+<line x1="515.7" y1="231.5" x2="681.1" y2="300.0" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(618.2,274.0) rotate(202.5) translate(0,-4.8)"/>
+<line x1="512.0" y1="237.0" x2="638.6" y2="363.6" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(590.5,315.5) rotate(225.0) translate(0,-4.8)"/>
+<line x1="506.5" y1="240.7" x2="575.0" y2="406.1" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(549.0,343.2) rotate(247.5) translate(0,-4.8)"/>
+<line x1="500.0" y1="242.0" x2="500.0" y2="421.0" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(500.0,353.0) rotate(270.0) translate(0,-4.8)"/>
+<line x1="493.5" y1="240.7" x2="425.0" y2="406.1" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(451.0,343.2) rotate(292.5) translate(0,-4.8)"/>
+<line x1="488.0" y1="237.0" x2="361.4" y2="363.6" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(409.5,315.5) rotate(315.0) translate(0,-4.8)"/>
+<line x1="484.3" y1="231.5" x2="318.9" y2="300.0" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(381.8,274.0) rotate(337.5) translate(0,-4.8)"/>
+<line x1="483.0" y1="225.0" x2="304.0" y2="225.0" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(372.0,225.0) rotate(360.0) translate(0,-4.8)"/>
+<line x1="484.3" y1="218.5" x2="318.9" y2="150.0" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(381.8,176.0) rotate(382.5) translate(0,-4.8)"/>
+<line x1="488.0" y1="213.0" x2="361.4" y2="86.4" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(409.5,134.5) rotate(405.0) translate(0,-4.8)"/>
+<line x1="493.5" y1="209.3" x2="425.0" y2="43.9" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(451.0,106.8) rotate(427.5) translate(0,-4.8)"/>
+<line x1="500.0" y1="208.0" x2="500.0" y2="29.0" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(500.0,97.0) rotate(450.0) translate(0,-4.8)"/>
+<line x1="506.5" y1="209.3" x2="575.0" y2="43.9" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(549.0,106.8) rotate(472.5) translate(0,-4.8)"/>
+<line x1="512.0" y1="213.0" x2="638.6" y2="86.4" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(590.5,134.5) rotate(495.0) translate(0,-4.8)"/>
+<line x1="515.7" y1="218.5" x2="681.1" y2="150.0" stroke="#1636c8" stroke-width="1.9"/>
+<path d="M 0 0 L 17.1 4.8 L 0 9.5 z" fill="#1636c8" transform="translate(618.2,176.0) rotate(517.5) translate(0,-4.8)"/>
+<circle cx="500" cy="225" r="15" fill="#fff" stroke="#1636c8" stroke-width="2.4"/><line x1="493" y1="225" x2="507" y2="225" stroke="#1636c8" stroke-width="2.6"/>
+<text x="500" y="477" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#1636c8" font-weight="600" font-style="normal">Field lines point IN &mdash; a &ldquo;sink&rdquo;</text>
+</svg></div>
+<div class="fig-note"><b>Figure 2.</b>&nbsp; The same picture for a negative charge, with every arrow reversed.&nbsp; Same spacing, same straightness, opposite direction.</div>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r2" data-label="Show the answer">Show the answer</button><div class="rbody" id="r2" hidden><p><b>Inward pointing E-Field.</b>&nbsp; The negative charge is a <b>&ldquo;sink&rdquo;</b> of E-field.</p><p>So, putting the two together: <b>E-Field originates from the + charge and ends at the &minus; charge.</b></p><p><b>But you don&rsquo;t have to have source and sink always together!</b>&nbsp; A + or a &minus; charge can exist by itself.&nbsp; A lone positive charge still has field lines; they just run off to infinity instead of landing on something.</p></div></div>
+
+<ol class="items" start="6">
+<li>Drag and drop an <b>E-Field Sensor</b> and place it in the spots below at various distances from positive or negative source charge
+to measure the field strength (a &ldquo;force&rdquo;-like quantity represented by a <b>vector</b>).&nbsp; <b>Draw each location&rsquo;s
+field strength vector</b> (this is the force a +1 unit charge feels).</li>
+</ol>
+
+<div class="fig"><svg viewBox="0 0 960 758" role="img" aria-label="Two boxes. In the first a positive charge with five measured points around it, each carrying an arrow pointing away from the charge, longest nearest it. In the second a negative charge with five measured points, each arrow pointing toward the charge. Every arrow is labelled with its measured field strength in volts per metre.">
+<marker id="sv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker>
+<rect x="30" y="8" width="900" height="356" fill="#fff" stroke="#1d2b23" stroke-width="1.4"/>
+<text x="480.0" y="32.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15.5" fill="#1d2b23" font-weight="700">Positive Charge: E-Field Sensor</text>
+<circle cx="79.5" cy="52.9" r="4.4" fill="#1d2b23"/>
+<line x1="79.5" y1="52.9" x2="65.4" y2="48.4" stroke="#b3261e" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="-4.3" y="56.4" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="67.7" y="69.4" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">0.44 V/m</text>
+<circle cx="266.7" cy="134.0" r="4.4" fill="#1d2b23"/>
+<line x1="266.7" y1="134.0" x2="224.7" y2="125.7" stroke="#b3261e" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="167.6" y="135.4" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="239.6" y="148.4" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">3.03 V/m</text>
+<circle cx="559.2" cy="137.2" r="4.4" fill="#1d2b23"/>
+<line x1="559.2" y1="137.2" x2="649.2" y2="106.9" stroke="#b3261e" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="606.7" y="126.6" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="612.7" y="139.6" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">12.9 V/m</text>
+<circle cx="631.2" cy="243.7" r="4.4" fill="#1d2b23"/>
+<line x1="631.2" y1="243.7" x2="677.4" y2="262.7" stroke="#b3261e" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="654.6" y="260.1" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="660.6" y="273.1" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">4.01 V/m</text>
+<circle cx="174.9" cy="280.7" r="4.4" fill="#1d2b23"/>
+<line x1="174.9" y1="280.7" x2="152.5" y2="289.4" stroke="#b3261e" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="86.6" y="291.5" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="158.6" y="304.5" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">1.06 V/m</text>
+<circle cx="456.6" cy="171.8" r="14" fill="#fff" stroke="#b3261e" stroke-width="2.4"/><line x1="450.1" y1="171.8" x2="463.1" y2="171.8" stroke="#b3261e" stroke-width="2.6"/><line x1="456.6" y1="165.3" x2="456.6" y2="178.3" stroke="#b3261e" stroke-width="2.6"/>
+<rect x="30" y="394" width="900" height="356" fill="#fff" stroke="#1d2b23" stroke-width="1.4"/>
+<text x="480.0" y="418.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15.5" fill="#1d2b23" font-weight="700">Negative Charge: E-Field Sensor</text>
+<circle cx="157.8" cy="548.5" r="4.4" fill="#1d2b23"/>
+<line x1="157.8" y1="548.5" x2="189.4" y2="551.3" stroke="#1636c8" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="71.8" y="553.6" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="143.8" y="566.6" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">1.67 V/m</text>
+<circle cx="337.8" cy="543.9" r="4.4" fill="#1d2b23"/>
+<line x1="337.8" y1="543.9" x2="406.4" y2="565.0" stroke="#1636c8" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="252.2" y="546.9" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="324.2" y="559.9" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">12.3 V/m</text>
+<circle cx="273.0" cy="645.0" r="4.4" fill="#1d2b23"/>
+<line x1="273.0" y1="645.0" x2="313.8" y2="626.2" stroke="#1636c8" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="187.9" y="655.2" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="259.9" y="668.2" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">3.15 V/m</text>
+<circle cx="631.2" cy="686.3" r="4.4" fill="#1d2b23"/>
+<line x1="631.2" y1="686.3" x2="604.6" y2="671.2" stroke="#1636c8" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="637.9" y="697.2" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="643.9" y="710.2" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">1.57 V/m</text>
+<circle cx="714.9" cy="448.8" r="4.4" fill="#1d2b23"/>
+<line x1="714.9" y1="448.8" x2="638.8" y2="481.9" stroke="#1636c8" stroke-width="2.6" marker-end="url(#sv)"/>
+<rect x="722.1" y="450.8" width="74" height="17" rx="3" fill="#fff" opacity=".9"/>
+<text x="728.1" y="463.8" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">9.62 V/m</text>
+<circle cx="430.5" cy="572.4" r="14" fill="#fff" stroke="#1636c8" stroke-width="2.4"/><line x1="424.0" y1="572.4" x2="437.0" y2="572.4" stroke="#1636c8" stroke-width="2.6"/>
+</svg></div>
+<div class="fig-note"><b>Figure 3.</b>&nbsp; <b>The ten readings taken in class, at the ten places they were taken.</b>&nbsp; The sensor reads the force on the <b>test charge</b> &mdash; a +1 charge, always positive &mdash; so around the positive source every arrow points <b>away</b>, and around the negative source every arrow points <b>toward</b>.&nbsp; Look at the numbers, not just the picture: <b>12.9 V/m close in against 0.44 V/m out at the corner.</b>&nbsp; The far one is not a little weaker, it is nearly thirty times weaker.&nbsp; <i>Arrow lengths are compressed so the smallest stays visible.</i></div>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r3" data-label="Show the answer">Show the answer</button><div class="rbody" id="r3" hidden><p>The sensor is the <b>test charge, +1 charge</b>.&nbsp; Around the positive source the arrows point straight away from it; around the negative source they point straight at it.&nbsp; In both cases they get shorter fast as you move out.</p></div></div>
+
+<h2>Part II &mdash; electric dipole (one positive and one negative charge close by in space)</h2>
+
+<ol class="items" start="7">
+<li>What does the E-Field Sensor show?<br>
+The <b>length</b> of the arrow: _______________<br>
+The <b>direction</b> of the arrow: _______________</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r4" data-label="Show the answer">Show the answer</button><div class="rbody" id="r4" hidden><p><b>The length of the arrow:</b> the strength of the E-field, |<b>E</b>|.</p><p><b>The direction of the arrow:</b> whether a + test charge there is attracted or repelled.</p></div></div>
+
+<ol class="items" start="8">
+<li>How do the E-Field Sensor arrows for the negative charge differ from those for the positive charge?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r5" data-label="Show the answer">Show the answer</button><div class="rbody" id="r5" hidden><p>They point the opposite way &mdash; in toward the negative charge rather than out from the positive one.&nbsp; The <b>lengths</b> at the same distance are the same, because the two charges have the same magnitude.</p></div></div>
+
+<ol class="items" start="9">
+<li>Drag and drop a <b>+1&nbsp;nC</b> and <b>&minus;1&nbsp;nC</b> charge onto the field (the negative charge closer to the top of the
+field and the positive charge closer to the bottom).&nbsp; <b>Draw the resulting electric field</b> around the negative and positive
+charges.&nbsp; <b>Indicate the direction of the field lines!&nbsp; (Where do they begin, and where do they end?)</b></li>
+</ol>
+
+<div class="fig"><svg viewBox="0 0 1000 560" role="img" aria-label="A dipole: a negative charge above a positive charge. Fourteen curved field lines leave the positive charge in all directions and curve round to enter the negative charge, with arrowheads showing the direction of travel from plus to minus.">
+<defs><marker id="dp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.2" markerHeight="5.2" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<path d="M 513 393 L 515 393 L 521 395 L 528 396 L 534 397 L 541 399 L 547 400 L 554 401 L 560 402 L 567 403 L 573 403 L 580 404 L 587 404 L 593 404 L 600 405 L 606 404 L 613 404 L 619 404 L 626 403 L 633 402 L 639 401 L 646 400 L 652 399 L 658 397 L 665 395 L 671 393 L 677 391 L 683 388 L 689 385 L 695 382 L 701 379 L 706 375 L 712 372 L 717 368 L 722 363 L 727 359 L 731 354 L 736 349 L 740 344 L 744 338 L 747 333 L 750 327 L 753 321 L 755 315 L 757 309 L 759 302 L 760 296 L 761 289 L 761 283 L 761 276 L 761 269 L 760 263 L 759 256 L 757 250 L 755 244 L 752 238 L 750 232 L 746 226 L 743 220 L 739 215 L 735 210 L 731 205 L 726 200 L 721 196 L 716 191 L 711 188 L 705 184 L 700 180 L 694 177 L 688 174 L 682 171 L 676 169 L 670 166 L 663 164 L 657 163 L 651 161 L 644 160 L 638 158 L 631 157 L 625 157 L 618 156 L 612 156 L 605 155 L 598 155 L 592 156 L 585 156 L 579 156 L 572 157 L 565 158 L 559 158 L 552 159 L 546 160 L 539 162 L 533 163 L 526 164 L 520 166 L 513 167 L 507 168" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 487 167 L 485 167 L 479 165 L 472 164 L 466 163 L 459 161 L 453 160 L 446 159 L 440 158 L 433 157 L 427 157 L 420 156 L 413 156 L 407 156 L 400 155 L 394 156 L 387 156 L 381 156 L 374 157 L 367 158 L 361 159 L 354 160 L 348 161 L 342 163 L 335 165 L 329 167 L 323 169 L 317 172 L 311 175 L 305 178 L 299 181 L 294 185 L 288 188 L 283 192 L 278 197 L 273 201 L 269 206 L 264 211 L 260 216 L 256 222 L 253 227 L 250 233 L 247 239 L 245 245 L 243 251 L 241 258 L 240 264 L 239 271 L 239 277 L 239 284 L 239 291 L 240 297 L 241 304 L 243 310 L 245 316 L 248 322 L 250 328 L 254 334 L 257 340 L 261 345 L 265 350 L 269 355 L 274 360 L 279 364 L 284 369 L 289 372 L 295 376 L 300 380 L 306 383 L 312 386 L 318 389 L 324 391 L 330 394 L 337 396 L 343 397 L 349 399 L 356 400 L 362 402 L 369 403 L 375 403 L 382 404 L 388 404 L 395 405 L 402 405 L 408 404 L 415 404 L 421 404 L 428 403 L 435 402 L 441 402 L 448 401 L 454 400 L 461 398 L 467 397 L 474 396 L 480 394 L 487 393 L 493 392" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 510 398 L 512 399 L 517 404 L 522 408 L 528 412 L 533 416 L 538 420 L 543 423 L 549 427 L 554 431 L 560 435 L 565 438 L 571 442 L 576 445 L 582 449 L 588 452 L 593 456 L 599 459 L 605 462 L 611 465 L 617 468 L 623 471 L 629 474 L 635 476 L 641 479 L 647 482 L 653 484 L 659 486 L 665 489 L 671 491 L 678 493 L 684 495 L 690 497 L 697 498 L 703 500 L 710 502 L 716 503 L 722 504 L 729 506 L 735 507 L 742 508 L 748 509 L 755 509 L 762 510 L 768 511 L 775 511 L 781 511 L 788 512 L 795 512 L 801 512 L 808 512 L 814 511 L 821 511 L 828 510 L 834 510 L 841 509 L 847 508 L 854 507 L 860 506 L 867 505 L 873 503 L 880 502 L 886 500 L 892 498 L 899 497 L 905 495 L 911 492 L 917 490 L 923 488 L 929 485 L 936 482 L 941 479 L 947 476 L 953 473 L 959 470 L 965 467 L 970 463 L 976 459 L 981 456 L 986 452 L 991 448 L 997 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 490 162 L 488 161 L 483 156 L 478 152 L 472 148 L 467 144 L 462 140 L 457 137 L 451 133 L 446 129 L 440 125 L 435 122 L 429 118 L 424 115 L 418 111 L 412 108 L 407 104 L 401 101 L 395 98 L 389 95 L 383 92 L 377 89 L 371 86 L 365 84 L 359 81 L 353 78 L 347 76 L 341 74 L 335 71 L 329 69 L 322 67 L 316 65 L 310 63 L 303 62 L 297 60 L 290 58 L 284 57 L 278 56 L 271 54 L 265 53 L 258 52 L 252 51 L 245 51 L 238 50 L 232 49 L 225 49 L 219 49 L 212 48 L 205 48 L 199 48 L 192 48 L 186 49 L 179 49 L 172 50 L 166 50 L 159 51 L 153 52 L 146 53 L 140 54 L 133 55 L 127 57 L 120 58 L 114 60 L 108 62 L 101 63 L 95 65 L 89 68 L 83 70 L 77 72 L 71 75 L 64 78 L 59 81 L 53 84 L 47 87 L 41 90 L 35 93 L 30 97 L 24 101 L 19 104 L 14 108 L 9 112 L 3 117" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 506 402 L 507 404 L 509 410 L 512 416 L 515 421 L 518 427 L 521 433 L 524 439 L 527 445 L 530 451 L 533 457 L 536 463 L 540 468 L 543 474 L 546 480 L 549 486 L 552 491 L 556 497 L 559 503 L 562 509 L 566 514 L 569 520 L 573 525 L 576 531 L 580 537 L 583 542 L 587 548 L 591 553 L 593 557" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 494 158 L 493 156 L 491 150 L 488 144 L 485 139 L 482 133 L 479 127 L 476 121 L 473 115 L 470 109 L 467 103 L 464 97 L 460 92 L 457 86 L 454 80 L 451 74 L 448 69 L 444 63 L 441 57 L 438 51 L 434 46 L 431 40 L 427 35 L 424 29 L 420 23 L 417 18 L 413 12 L 409 7 L 407 3" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 500 403 L 500 405 L 500 412 L 500 418 L 500 425 L 500 432 L 500 438 L 500 445 L 500 451 L 500 458 L 500 465 L 500 471 L 500 478 L 500 484 L 500 491 L 500 498 L 500 504 L 500 511 L 500 517 L 500 524 L 500 531 L 500 537 L 500 544 L 500 550 L 500 557" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 500 157 L 500 155 L 500 148 L 500 142 L 500 135 L 500 128 L 500 122 L 500 115 L 500 109 L 500 102 L 500 95 L 500 89 L 500 82 L 500 76 L 500 69 L 500 62 L 500 56 L 500 49 L 500 43 L 500 36 L 500 29 L 500 23 L 500 16 L 500 10 L 500 3" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 494 402 L 493 404 L 491 410 L 488 416 L 485 421 L 482 427 L 479 433 L 476 439 L 473 445 L 470 451 L 467 457 L 464 463 L 460 468 L 457 474 L 454 480 L 451 486 L 448 491 L 444 497 L 441 503 L 438 509 L 434 514 L 431 520 L 427 525 L 424 531 L 420 537 L 417 542 L 413 548 L 409 553 L 407 557" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 506 158 L 507 156 L 509 150 L 512 144 L 515 139 L 518 133 L 521 127 L 524 121 L 527 115 L 530 109 L 533 103 L 536 97 L 540 92 L 543 86 L 546 80 L 549 74 L 552 69 L 556 63 L 559 57 L 562 51 L 566 46 L 569 40 L 573 35 L 576 29 L 580 23 L 583 18 L 587 12 L 591 7 L 593 3" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 490 398 L 488 399 L 483 404 L 478 408 L 472 412 L 467 416 L 462 420 L 457 423 L 451 427 L 446 431 L 440 435 L 435 438 L 429 442 L 424 445 L 418 449 L 412 452 L 407 456 L 401 459 L 395 462 L 389 465 L 383 468 L 377 471 L 371 474 L 365 476 L 359 479 L 353 482 L 347 484 L 341 486 L 335 489 L 329 491 L 322 493 L 316 495 L 310 497 L 303 498 L 297 500 L 290 502 L 284 503 L 278 504 L 271 506 L 265 507 L 258 508 L 252 509 L 245 509 L 238 510 L 232 511 L 225 511 L 219 511 L 212 512 L 205 512 L 199 512 L 192 512 L 186 511 L 179 511 L 172 510 L 166 510 L 159 509 L 153 508 L 146 507 L 140 506 L 133 505 L 127 503 L 120 502 L 114 500 L 108 498 L 101 497 L 95 495 L 89 492 L 83 490 L 77 488 L 71 485 L 64 482 L 59 479 L 53 476 L 47 473 L 41 470 L 35 467 L 30 463 L 24 459 L 19 456 L 14 452 L 9 448 L 3 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 510 162 L 512 161 L 517 156 L 522 152 L 528 148 L 533 144 L 538 140 L 543 137 L 549 133 L 554 129 L 560 125 L 565 122 L 571 118 L 576 115 L 582 111 L 588 108 L 593 104 L 599 101 L 605 98 L 611 95 L 617 92 L 623 89 L 629 86 L 635 84 L 641 81 L 647 78 L 653 76 L 659 74 L 665 71 L 671 69 L 678 67 L 684 65 L 690 63 L 697 62 L 703 60 L 710 58 L 716 57 L 722 56 L 729 54 L 735 53 L 742 52 L 748 51 L 755 51 L 762 50 L 768 49 L 775 49 L 781 49 L 788 48 L 795 48 L 801 48 L 808 48 L 814 49 L 821 49 L 828 50 L 834 50 L 841 51 L 847 52 L 854 53 L 860 54 L 867 55 L 873 57 L 880 58 L 886 60 L 892 62 L 899 63 L 905 65 L 911 68 L 917 70 L 923 72 L 929 75 L 936 78 L 941 81 L 947 84 L 953 87 L 959 90 L 965 93 L 970 97 L 976 101 L 981 104 L 986 108 L 991 112 L 997 117" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 487 393 L 485 393 L 479 395 L 472 396 L 466 397 L 459 399 L 453 400 L 446 401 L 440 402 L 433 403 L 427 403 L 420 404 L 413 404 L 407 404 L 400 405 L 394 404 L 387 404 L 381 404 L 374 403 L 367 402 L 361 401 L 354 400 L 348 399 L 342 397 L 335 395 L 329 393 L 323 391 L 317 388 L 311 385 L 305 382 L 299 379 L 294 375 L 288 372 L 283 368 L 278 363 L 273 359 L 269 354 L 264 349 L 260 344 L 256 338 L 253 333 L 250 327 L 247 321 L 245 315 L 243 309 L 241 302 L 240 296 L 239 289 L 239 283 L 239 276 L 239 269 L 240 263 L 241 256 L 243 250 L 245 244 L 248 238 L 250 232 L 254 226 L 257 220 L 261 215 L 265 210 L 269 205 L 274 200 L 279 196 L 284 191 L 289 188 L 295 184 L 300 180 L 306 177 L 312 174 L 318 171 L 324 169 L 330 166 L 337 164 L 343 163 L 349 161 L 356 160 L 362 158 L 369 157 L 375 157 L 382 156 L 388 156 L 395 155 L 402 155 L 408 156 L 415 156 L 421 156 L 428 157 L 435 158 L 441 158 L 448 159 L 454 160 L 461 162 L 467 163 L 474 164 L 480 166 L 487 167 L 493 168" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 513 167 L 515 167 L 521 165 L 528 164 L 534 163 L 541 161 L 547 160 L 554 159 L 560 158 L 567 157 L 573 157 L 580 156 L 587 156 L 593 156 L 600 155 L 606 156 L 613 156 L 619 156 L 626 157 L 633 158 L 639 159 L 646 160 L 652 161 L 658 163 L 665 165 L 671 167 L 677 169 L 683 172 L 689 175 L 695 178 L 701 181 L 706 185 L 712 188 L 717 192 L 722 197 L 727 201 L 731 206 L 736 211 L 740 216 L 744 222 L 747 227 L 750 233 L 753 239 L 755 245 L 757 251 L 759 258 L 760 264 L 761 271 L 761 277 L 761 284 L 761 291 L 760 297 L 759 304 L 757 310 L 755 316 L 752 322 L 750 328 L 746 334 L 743 340 L 739 345 L 735 350 L 731 355 L 726 360 L 721 364 L 716 369 L 711 372 L 705 376 L 700 380 L 694 383 L 688 386 L 682 389 L 676 391 L 670 394 L 663 396 L 657 397 L 651 399 L 644 400 L 638 402 L 631 403 L 625 403 L 618 404 L 612 404 L 605 405 L 598 405 L 592 404 L 585 404 L 579 404 L 572 403 L 565 402 L 559 402 L 552 401 L 546 400 L 539 398 L 533 397 L 526 396 L 520 394 L 513 393 L 507 392" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 487 387 L 485 387 L 479 385 L 472 383 L 466 382 L 460 380 L 453 378 L 447 376 L 441 374 L 435 372 L 428 369 L 422 366 L 417 364 L 411 360 L 405 357 L 400 353 L 394 349 L 389 345 L 384 341 L 380 336 L 376 331 L 372 325 L 368 320 L 365 314 L 363 308 L 360 302 L 359 295 L 358 289 L 357 282 L 357 276 L 358 269 L 359 263 L 361 256 L 363 250 L 366 244 L 369 238 L 373 233 L 377 228 L 381 223 L 386 218 L 391 214 L 396 209 L 401 206 L 407 202 L 413 199 L 418 196 L 424 193 L 430 190 L 437 188 L 443 185 L 449 183 L 455 181 L 462 179 L 468 178 L 474 176 L 481 174 L 487 173 L 492 172" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 513 173 L 515 173 L 521 175 L 528 177 L 534 178 L 540 180 L 547 182 L 553 184 L 559 186 L 565 188 L 572 191 L 578 194 L 583 196 L 589 200 L 595 203 L 600 207 L 606 211 L 611 215 L 616 219 L 620 224 L 624 229 L 628 235 L 632 240 L 635 246 L 637 252 L 640 258 L 641 265 L 642 271 L 643 278 L 643 284 L 642 291 L 641 297 L 639 304 L 637 310 L 634 316 L 631 322 L 627 327 L 623 332 L 619 337 L 614 342 L 609 346 L 604 351 L 599 354 L 593 358 L 587 361 L 582 364 L 576 367 L 570 370 L 563 372 L 557 375 L 551 377 L 545 379 L 538 381 L 532 382 L 526 384 L 519 386 L 513 387 L 508 388" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 490 382 L 488 381 L 483 376 L 478 372 L 473 368 L 468 364 L 463 359 L 458 355 L 454 350 L 449 345 L 445 340 L 441 335 L 437 329 L 433 324 L 430 318 L 427 312 L 425 306 L 423 300 L 422 293 L 421 287 L 421 280 L 421 273 L 422 267 L 423 260 L 425 254 L 427 248 L 430 242 L 433 236 L 437 231 L 441 225 L 445 220 L 449 215 L 454 210 L 458 205 L 463 201 L 468 196 L 473 192 L 478 188 L 483 184 L 488 180 L 493 175" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 510 178 L 512 179 L 517 184 L 522 188 L 527 192 L 532 196 L 537 201 L 542 205 L 546 210 L 551 215 L 555 220 L 559 225 L 563 231 L 567 236 L 570 242 L 573 248 L 575 254 L 577 260 L 578 267 L 579 273 L 579 280 L 579 287 L 578 293 L 577 300 L 575 306 L 573 312 L 570 318 L 567 324 L 563 329 L 559 335 L 555 340 L 551 345 L 546 350 L 542 355 L 537 359 L 532 364 L 527 368 L 522 372 L 517 376 L 512 380 L 507 385" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 494 378 L 493 376 L 491 370 L 488 364 L 485 358 L 482 352 L 480 346 L 477 340 L 475 334 L 473 328 L 471 322 L 469 315 L 467 309 L 466 302 L 465 296 L 464 289 L 464 283 L 464 276 L 464 269 L 465 263 L 466 256 L 468 250 L 469 243 L 471 237 L 473 231 L 475 225 L 478 219 L 480 212 L 483 206 L 486 200 L 488 194 L 491 188 L 494 182 L 497 176" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 506 182 L 507 184 L 509 190 L 512 196 L 515 202 L 518 208 L 520 214 L 523 220 L 525 226 L 527 232 L 529 238 L 531 245 L 533 251 L 534 258 L 535 264 L 536 271 L 536 277 L 536 284 L 536 291 L 535 297 L 534 304 L 532 310 L 531 317 L 529 323 L 527 329 L 525 335 L 522 341 L 520 348 L 517 354 L 514 360 L 512 366 L 509 372 L 506 378 L 503 384" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 500 377 L 500 375 L 500 368 L 500 362 L 500 355 L 500 348 L 500 342 L 500 335 L 500 329 L 500 322 L 500 315 L 500 309 L 500 302 L 500 296 L 500 289 L 500 282 L 500 276 L 500 269 L 500 263 L 500 256 L 500 249 L 500 243 L 500 236 L 500 230 L 500 223 L 500 216 L 500 210 L 500 203 L 500 197 L 500 190 L 500 183 L 500 177" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 500 183 L 500 185 L 500 192 L 500 198 L 500 205 L 500 212 L 500 218 L 500 225 L 500 231 L 500 238 L 500 245 L 500 251 L 500 258 L 500 264 L 500 271 L 500 278 L 500 284 L 500 291 L 500 297 L 500 304 L 500 311 L 500 317 L 500 324 L 500 330 L 500 337 L 500 344 L 500 350 L 500 357 L 500 363 L 500 370 L 500 377 L 500 383" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 506 378 L 507 376 L 509 370 L 512 364 L 515 358 L 518 352 L 520 346 L 523 340 L 525 334 L 527 328 L 529 322 L 531 315 L 533 309 L 534 302 L 535 296 L 536 289 L 536 283 L 536 276 L 536 269 L 535 263 L 534 256 L 532 250 L 531 243 L 529 237 L 527 231 L 525 225 L 522 219 L 520 212 L 517 206 L 514 200 L 512 194 L 509 188 L 506 182 L 503 176" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 494 182 L 493 184 L 491 190 L 488 196 L 485 202 L 482 208 L 480 214 L 477 220 L 475 226 L 473 232 L 471 238 L 469 245 L 467 251 L 466 258 L 465 264 L 464 271 L 464 277 L 464 284 L 464 291 L 465 297 L 466 304 L 468 310 L 469 317 L 471 323 L 473 329 L 475 335 L 478 341 L 480 348 L 483 354 L 486 360 L 488 366 L 491 372 L 494 378 L 497 384" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 510 382 L 512 381 L 517 376 L 522 372 L 527 368 L 532 364 L 537 359 L 542 355 L 546 350 L 551 345 L 555 340 L 559 335 L 563 329 L 567 324 L 570 318 L 573 312 L 575 306 L 577 300 L 578 293 L 579 287 L 579 280 L 579 273 L 578 267 L 577 260 L 575 254 L 573 248 L 570 242 L 567 236 L 563 231 L 559 225 L 555 220 L 551 215 L 546 210 L 542 205 L 537 201 L 532 196 L 527 192 L 522 188 L 517 184 L 512 180 L 507 175" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 490 178 L 488 179 L 483 184 L 478 188 L 473 192 L 468 196 L 463 201 L 458 205 L 454 210 L 449 215 L 445 220 L 441 225 L 437 231 L 433 236 L 430 242 L 427 248 L 425 254 L 423 260 L 422 267 L 421 273 L 421 280 L 421 287 L 422 293 L 423 300 L 425 306 L 427 312 L 430 318 L 433 324 L 437 329 L 441 335 L 445 340 L 449 345 L 454 350 L 458 355 L 463 359 L 468 364 L 473 368 L 478 372 L 483 376 L 488 380 L 493 385" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 513 387 L 515 387 L 521 385 L 528 383 L 534 382 L 540 380 L 547 378 L 553 376 L 559 374 L 565 372 L 572 369 L 578 366 L 583 364 L 589 360 L 595 357 L 600 353 L 606 349 L 611 345 L 616 341 L 620 336 L 624 331 L 628 325 L 632 320 L 635 314 L 637 308 L 640 302 L 641 295 L 642 289 L 643 282 L 643 276 L 642 269 L 641 263 L 639 256 L 637 250 L 634 244 L 631 238 L 627 233 L 623 228 L 619 223 L 614 218 L 609 214 L 604 209 L 599 206 L 593 202 L 587 199 L 582 196 L 576 193 L 570 190 L 563 188 L 557 185 L 551 183 L 545 181 L 538 179 L 532 178 L 526 176 L 519 174 L 513 173 L 508 172" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 487 173 L 485 173 L 479 175 L 472 177 L 466 178 L 460 180 L 453 182 L 447 184 L 441 186 L 435 188 L 428 191 L 422 194 L 417 196 L 411 200 L 405 203 L 400 207 L 394 211 L 389 215 L 384 219 L 380 224 L 376 229 L 372 235 L 368 240 L 365 246 L 363 252 L 360 258 L 359 265 L 358 271 L 357 278 L 357 284 L 358 291 L 359 297 L 361 304 L 363 310 L 366 316 L 369 322 L 373 327 L 377 332 L 381 337 L 386 342 L 391 346 L 396 351 L 401 354 L 407 358 L 413 361 L 418 364 L 424 367 L 430 370 L 437 372 L 443 375 L 449 377 L 455 379 L 462 381 L 468 382 L 474 384 L 481 386 L 487 387 L 492 388" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(725.3,360.4) rotate(-43.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(274.7,199.6) rotate(-43.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(680.0,170.4) rotate(-156.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(320.0,389.6) rotate(-156.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(671.5,490.7) rotate(18.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(328.5,69.3) rotate(18.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(864.5,505.3) rotate(-11.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(135.5,54.7) rotate(-11.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(534.4,458.7) rotate(62.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(465.6,101.3) rotate(62.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(567.0,516.0) rotate(58.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(433.0,44.0) rotate(58.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,458.0) rotate(90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,102.0) rotate(90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,515.2) rotate(90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,44.8) rotate(90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(465.6,458.7) rotate(118.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(534.4,101.3) rotate(118.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(433.0,516.0) rotate(121.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(567.0,44.0) rotate(121.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(328.5,490.7) rotate(161.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(671.5,69.3) rotate(161.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(135.5,505.3) rotate(-169.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(864.5,54.7) rotate(-169.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(274.7,360.4) rotate(-136.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(725.3,199.6) rotate(-136.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(320.0,170.4) rotate(-23.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(680.0,389.6) rotate(-23.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(374.3,329.1) rotate(-127.5) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(625.7,230.9) rotate(-127.5) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(396.0,209.4) rotate(-37.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(604.0,350.6) rotate(-37.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(428.3,314.1) rotate(-115.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(571.7,245.9) rotate(-115.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(440.7,225.2) rotate(-53.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(559.3,334.8) rotate(-53.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(467.2,308.8) rotate(-102.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(532.8,251.2) rotate(-102.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(473.1,230.9) rotate(-71.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(526.9,329.1) rotate(-71.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,306.6) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,253.4) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,231.8) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,328.2) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(532.8,308.8) rotate(-77.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(467.2,251.2) rotate(-77.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(526.9,230.9) rotate(-108.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(473.1,329.1) rotate(-108.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(571.7,314.1) rotate(-65.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(428.3,245.9) rotate(-65.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(559.3,225.2) rotate(-126.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(440.7,334.8) rotate(-126.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(625.7,329.1) rotate(-52.5) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(374.3,230.9) rotate(-52.5) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(604.0,209.4) rotate(-142.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(396.0,350.6) rotate(-142.4) translate(0,-4.2)"/>
+<circle cx="500" cy="390" r="15" fill="#fff" stroke="#b3261e" stroke-width="2.4"/><line x1="493" y1="390" x2="507" y2="390" stroke="#b3261e" stroke-width="2.6"/><line x1="500" y1="383" x2="500" y2="397" stroke="#b3261e" stroke-width="2.6"/>
+<circle cx="500" cy="170" r="15" fill="#fff" stroke="#1636c8" stroke-width="2.4"/><line x1="493" y1="170" x2="507" y2="170" stroke="#1636c8" stroke-width="2.6"/>
+</svg></div>
+<div class="fig-note"><b>Figure 4.</b>&nbsp; The dipole.&nbsp; Every line <b>begins</b> on the positive charge and <b>ends</b> on the negative one &mdash; there is nowhere else for them to start or stop.&nbsp; The lines near the middle run almost straight across; the ones that leave sideways have to swing a long way round.</div>
+
+<ol class="items" start="10">
+<li>Move the charges closer.&nbsp; <b>What changes occur, particularly concerning the field strength farther away from the source
+charges and, thus, the <u>resultant</u> field strength (the sum of the two fields) in general?</b></li>
+<li>Looking at the field strength at a location far enough away from these source charges, what can you say about the field when they
+appear to be atop one another?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r6" data-label="Show the answer &mdash; 10 and 11 together">Show the answer &mdash; 10 and 11 together</button><div class="rbody" id="r6" hidden><p>The two fields <b>cancel</b>: the E-field from one charge cancels the E-field from the other, and the <b>resultant is zero when they are overlapped</b>.</p><p>That is the answer to both questions.&nbsp; Far enough away, a + and a &minus; sitting almost on top of each other look like <b>no charge at all</b>.</p></div></div>
+
+<ol class="items" start="12">
+<li>Lay one source charge directly on top of the other.&nbsp; What can you say happens to the field in general?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r7" data-label="Show the answer">Show the answer</button><div class="rbody" id="r7" hidden><p><b>Fields from + &amp; &minus; cancel.&nbsp; They add like vectors.</b></p><p>That is the whole of it.&nbsp; Two vectors the same size pointing opposite ways come to nothing, and from far enough away a + and a &minus; sitting on top of each other look like <b>no charge at all</b>.</p></div></div>
+
+<h2>Part III &mdash; two like charges close by</h2>
+
+<ol class="items" start="13">
+<li>Reset the field and drop <b>two negative charges in a vertical line</b>, with one charge near the top and the other near the
+bottom.&nbsp; <b>Draw the resulting E-Field.</b></li>
+</ol>
+
+<div class="fig"><svg viewBox="0 0 1000 560" role="img" aria-label="Two negative charges one above the other. Field lines come in from every direction and end on the charges, and the picture is the same above and below. Exactly midway between them the two fields are equal and opposite, so the field there is zero; that point is marked with a circled cross.">
+<defs><marker id="tn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.2" markerHeight="5.2" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<path d="M 998 73 L 996 74 L 986 77 L 976 81 L 967 85 L 957 88 L 947 92 L 937 96 L 928 99 L 918 103 L 908 106 L 898 110 L 889 114 L 879 117 L 869 121 L 859 124 L 850 128 L 840 131 L 830 135 L 820 138 L 810 142 L 801 145 L 791 149 L 781 152 L 771 155 L 761 159 L 751 162 L 741 165 L 731 168 L 722 171 L 712 174 L 702 177 L 692 180 L 682 183 L 671 185 L 661 188 L 651 190 L 641 192 L 631 194 L 621 196 L 610 197 L 600 198 L 590 199 L 579 199 L 569 199 L 558 198 L 548 196 L 538 194 L 528 192 L 518 190 L 513 188" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 998 487 L 996 486 L 986 483 L 976 479 L 967 475 L 957 472 L 947 468 L 937 464 L 928 461 L 918 457 L 908 454 L 898 450 L 889 446 L 879 443 L 869 439 L 859 436 L 850 432 L 840 429 L 830 425 L 820 422 L 810 418 L 801 415 L 791 411 L 781 408 L 771 405 L 761 401 L 751 398 L 741 395 L 731 392 L 722 389 L 712 386 L 702 383 L 692 380 L 682 377 L 671 375 L 661 372 L 651 370 L 641 368 L 631 366 L 621 364 L 610 363 L 600 362 L 590 361 L 579 361 L 569 361 L 558 362 L 548 364 L 538 366 L 528 368 L 518 370 L 513 372" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 998 203 L 996 203 L 986 204 L 975 206 L 965 207 L 955 209 L 944 210 L 934 212 L 924 213 L 913 214 L 903 216 L 893 217 L 882 218 L 872 220 L 862 221 L 852 223 L 841 224 L 831 225 L 821 227 L 810 228 L 800 229 L 790 230 L 779 232 L 769 233 L 759 234 L 748 235 L 738 237 L 728 238 L 717 239 L 707 240 L 697 241 L 686 242 L 676 242 L 666 243 L 655 244 L 645 244 L 634 245 L 624 245 L 614 244 L 603 244 L 593 243 L 583 241 L 573 238 L 563 235 L 553 230 L 544 225 L 536 219 L 528 212 L 520 205 L 513 198 L 509 194" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 998 357 L 996 357 L 986 356 L 975 354 L 965 353 L 955 351 L 944 350 L 934 348 L 924 347 L 913 346 L 903 344 L 893 343 L 882 342 L 872 340 L 862 339 L 852 337 L 841 336 L 831 335 L 821 333 L 810 332 L 800 331 L 790 330 L 779 328 L 769 327 L 759 326 L 748 325 L 738 323 L 728 322 L 717 321 L 707 320 L 697 319 L 686 318 L 676 318 L 666 317 L 655 316 L 645 316 L 634 315 L 624 315 L 614 316 L 603 316 L 593 317 L 583 319 L 573 322 L 563 325 L 553 330 L 544 335 L 536 341 L 528 348 L 520 355 L 513 362 L 509 366" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 997 271 L 995 271 L 984 271 L 974 271 L 964 272 L 953 272 L 943 272 L 932 272 L 922 272 L 912 272 L 901 273 L 891 273 L 880 273 L 870 273 L 860 273 L 849 273 L 839 274 L 828 274 L 818 274 L 808 274 L 797 274 L 787 274 L 776 274 L 766 275 L 756 275 L 745 275 L 735 275 L 724 275 L 714 275 L 704 275 L 693 275 L 683 276 L 672 276 L 662 276 L 652 276 L 641 276 L 631 276 L 620 276 L 610 276 L 600 276 L 589 275 L 579 275 L 568 274 L 558 273 L 548 271 L 538 268 L 529 262 L 523 254 L 518 245 L 514 235 L 511 225 L 508 215 L 505 205 L 503 198" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 997 289 L 995 289 L 984 289 L 974 289 L 964 288 L 953 288 L 943 288 L 932 288 L 922 288 L 912 288 L 901 287 L 891 287 L 880 287 L 870 287 L 860 287 L 849 287 L 839 286 L 828 286 L 818 286 L 808 286 L 797 286 L 787 286 L 776 286 L 766 285 L 756 285 L 745 285 L 735 285 L 724 285 L 714 285 L 704 285 L 693 285 L 683 284 L 672 284 L 662 284 L 652 284 L 641 284 L 631 284 L 620 284 L 610 284 L 600 284 L 589 285 L 579 285 L 568 286 L 558 287 L 548 289 L 538 292 L 529 298 L 523 306 L 518 315 L 514 325 L 511 335 L 508 345 L 505 355 L 503 362" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 3 271 L 5 271 L 16 271 L 26 271 L 36 272 L 47 272 L 57 272 L 68 272 L 78 272 L 88 272 L 99 273 L 109 273 L 120 273 L 130 273 L 140 273 L 151 273 L 161 274 L 172 274 L 182 274 L 192 274 L 203 274 L 213 274 L 224 274 L 234 275 L 244 275 L 255 275 L 265 275 L 276 275 L 286 275 L 296 275 L 307 275 L 317 276 L 328 276 L 338 276 L 348 276 L 359 276 L 369 276 L 380 276 L 390 276 L 400 276 L 411 275 L 421 275 L 432 274 L 442 273 L 452 271 L 462 268 L 471 262 L 477 254 L 482 245 L 486 235 L 489 225 L 492 215 L 495 205 L 497 198" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 3 289 L 5 289 L 16 289 L 26 289 L 36 288 L 47 288 L 57 288 L 68 288 L 78 288 L 88 288 L 99 287 L 109 287 L 120 287 L 130 287 L 140 287 L 151 287 L 161 286 L 172 286 L 182 286 L 192 286 L 203 286 L 213 286 L 224 286 L 234 285 L 244 285 L 255 285 L 265 285 L 276 285 L 286 285 L 296 285 L 307 285 L 317 284 L 328 284 L 338 284 L 348 284 L 359 284 L 369 284 L 380 284 L 390 284 L 400 284 L 411 285 L 421 285 L 432 286 L 442 287 L 452 289 L 462 292 L 471 298 L 477 306 L 482 315 L 486 325 L 489 335 L 492 345 L 495 355 L 497 362" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 2 203 L 4 203 L 14 204 L 25 206 L 35 207 L 45 209 L 56 210 L 66 212 L 76 213 L 87 214 L 97 216 L 107 217 L 118 218 L 128 220 L 138 221 L 148 223 L 159 224 L 169 225 L 179 227 L 190 228 L 200 229 L 210 230 L 221 232 L 231 233 L 241 234 L 252 235 L 262 237 L 272 238 L 283 239 L 293 240 L 303 241 L 314 242 L 324 242 L 334 243 L 345 244 L 355 244 L 366 245 L 376 245 L 386 244 L 397 244 L 407 243 L 417 241 L 427 238 L 437 235 L 447 230 L 456 225 L 464 219 L 472 212 L 480 205 L 487 198 L 491 194" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 2 357 L 4 357 L 14 356 L 25 354 L 35 353 L 45 351 L 56 350 L 66 348 L 76 347 L 87 346 L 97 344 L 107 343 L 118 342 L 128 340 L 138 339 L 148 337 L 159 336 L 169 335 L 179 333 L 190 332 L 200 331 L 210 330 L 221 328 L 231 327 L 241 326 L 252 325 L 262 323 L 272 322 L 283 321 L 293 320 L 303 319 L 314 318 L 324 318 L 334 317 L 345 316 L 355 316 L 366 315 L 376 315 L 386 316 L 397 316 L 407 317 L 417 319 L 427 322 L 437 325 L 447 330 L 456 335 L 464 341 L 472 348 L 480 355 L 487 362 L 491 366" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 2 73 L 4 74 L 14 77 L 24 81 L 33 85 L 43 88 L 53 92 L 63 96 L 72 99 L 82 103 L 92 106 L 102 110 L 111 114 L 121 117 L 131 121 L 141 124 L 150 128 L 160 131 L 170 135 L 180 138 L 190 142 L 199 145 L 209 149 L 219 152 L 229 155 L 239 159 L 249 162 L 259 165 L 269 168 L 278 171 L 288 174 L 298 177 L 308 180 L 318 183 L 329 185 L 339 188 L 349 190 L 359 192 L 369 194 L 379 196 L 390 197 L 400 198 L 410 199 L 421 199 L 431 199 L 442 198 L 452 196 L 462 194 L 472 192 L 482 190 L 487 188" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 2 487 L 4 486 L 14 483 L 24 479 L 33 475 L 43 472 L 53 468 L 63 464 L 72 461 L 82 457 L 92 454 L 102 450 L 111 446 L 121 443 L 131 439 L 141 436 L 150 432 L 160 429 L 170 425 L 180 422 L 190 418 L 199 415 L 209 411 L 219 408 L 229 405 L 239 401 L 249 398 L 259 395 L 269 392 L 278 389 L 288 386 L 298 383 L 308 380 L 318 377 L 329 375 L 339 372 L 349 370 L 359 368 L 369 366 L 379 364 L 390 363 L 400 362 L 410 361 L 421 361 L 431 361 L 442 362 L 452 364 L 462 366 L 472 368 L 482 370 L 487 372" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 182 3 L 184 5 L 192 11 L 201 17 L 209 23 L 217 29 L 226 35 L 234 42 L 243 48 L 251 54 L 259 60 L 268 66 L 276 72 L 285 78 L 294 84 L 302 90 L 311 95 L 319 101 L 328 107 L 337 112 L 346 118 L 355 123 L 364 129 L 373 134 L 382 139 L 391 144 L 400 149 L 409 153 L 419 158 L 428 162 L 438 166 L 448 169 L 458 173 L 467 176 L 477 179 L 487 182" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 182 557 L 184 555 L 192 549 L 201 543 L 209 537 L 217 531 L 226 525 L 234 518 L 243 512 L 251 506 L 259 500 L 268 494 L 276 488 L 285 482 L 294 476 L 302 470 L 311 465 L 319 459 L 328 453 L 337 448 L 346 442 L 355 437 L 364 431 L 373 426 L 382 421 L 391 416 L 400 411 L 409 407 L 419 402 L 428 398 L 438 394 L 448 391 L 458 387 L 467 384 L 477 381 L 487 378" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 353 4 L 354 6 L 360 14 L 366 23 L 372 31 L 378 40 L 384 48 L 390 57 L 397 65 L 403 73 L 409 82 L 415 90 L 422 98 L 428 106 L 435 114 L 442 122 L 448 130 L 455 138 L 462 146 L 469 153 L 476 161 L 484 168 L 491 176" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 353 556 L 354 554 L 360 546 L 366 537 L 372 529 L 378 520 L 384 512 L 390 503 L 397 495 L 403 487 L 409 478 L 415 470 L 422 462 L 428 454 L 435 446 L 442 438 L 448 430 L 455 422 L 462 414 L 469 407 L 476 399 L 484 392 L 491 384" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 456 3 L 457 6 L 459 16 L 461 26 L 464 36 L 466 46 L 468 56 L 470 66 L 473 77 L 475 87 L 478 97 L 480 107 L 482 117 L 485 127 L 487 137 L 490 147 L 493 157 L 495 167 L 497 172" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 456 557 L 457 554 L 459 544 L 461 534 L 464 524 L 466 514 L 468 504 L 470 494 L 473 483 L 475 473 L 478 463 L 480 453 L 482 443 L 485 433 L 487 423 L 490 413 L 493 403 L 495 393 L 497 388" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 544 3 L 543 6 L 541 16 L 539 26 L 536 36 L 534 46 L 532 56 L 530 66 L 527 77 L 525 87 L 522 97 L 520 107 L 518 117 L 515 127 L 513 137 L 510 147 L 507 157 L 505 167 L 503 172" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 544 557 L 543 554 L 541 544 L 539 534 L 536 524 L 534 514 L 532 504 L 530 494 L 527 483 L 525 473 L 522 463 L 520 453 L 518 443 L 515 433 L 513 423 L 510 413 L 507 403 L 505 393 L 503 388" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 647 4 L 646 6 L 640 14 L 634 23 L 628 31 L 622 40 L 616 48 L 610 57 L 603 65 L 597 73 L 591 82 L 585 90 L 578 98 L 572 106 L 565 114 L 558 122 L 552 130 L 545 138 L 538 146 L 531 153 L 524 161 L 516 168 L 509 176" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 647 556 L 646 554 L 640 546 L 634 537 L 628 529 L 622 520 L 616 512 L 610 503 L 603 495 L 597 487 L 591 478 L 585 470 L 578 462 L 572 454 L 565 446 L 558 438 L 552 430 L 545 422 L 538 414 L 531 407 L 524 399 L 516 392 L 509 384" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 818 3 L 816 5 L 808 11 L 799 17 L 791 23 L 783 29 L 774 35 L 766 42 L 757 48 L 749 54 L 741 60 L 732 66 L 724 72 L 715 78 L 706 84 L 698 90 L 689 95 L 681 101 L 672 107 L 663 112 L 654 118 L 645 123 L 636 129 L 627 134 L 618 139 L 609 144 L 600 149 L 591 153 L 581 158 L 572 162 L 562 166 L 552 169 L 542 173 L 533 176 L 523 179 L 513 182" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 818 557 L 816 555 L 808 549 L 799 543 L 791 537 L 783 531 L 774 525 L 766 518 L 757 512 L 749 506 L 741 500 L 732 494 L 724 488 L 715 482 L 706 476 L 698 470 L 689 465 L 681 459 L 672 453 L 663 448 L 654 442 L 645 437 L 636 431 L 627 426 L 618 421 L 609 416 L 600 411 L 591 407 L 581 402 L 572 398 L 562 394 L 552 391 L 542 387 L 533 384 L 523 381 L 513 378" fill="none" stroke="#1e6b3c" stroke-width="1.6" opacity=".85"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(751.3,161.8) rotate(161.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(751.3,398.2) rotate(-161.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(589.5,198.8) rotate(176.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(589.5,361.2) rotate(-176.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(738.0,236.5) rotate(173.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(738.0,323.5) rotate(-173.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(572.5,238.3) rotate(-165.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(572.5,321.7) rotate(165.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(724.4,275.1) rotate(179.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(724.4,284.9) rotate(-179.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(538.0,267.8) rotate(-160.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(538.0,292.2) rotate(160.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(275.6,275.1) rotate(0.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(275.6,284.9) rotate(-0.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(462.0,267.8) rotate(-19.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(462.0,292.2) rotate(19.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(262.0,236.5) rotate(6.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(262.0,323.5) rotate(-6.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(427.5,238.3) rotate(-14.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(427.5,321.7) rotate(14.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(248.7,161.8) rotate(18.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(248.7,398.2) rotate(-18.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(410.5,198.8) rotate(3.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(410.5,361.2) rotate(-3.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(328.2,106.7) rotate(33.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(328.2,453.3) rotate(-33.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(438.0,165.7) rotate(22.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(438.0,394.3) rotate(-22.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(421.8,98.1) rotate(51.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(421.8,461.9) rotate(-51.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(469.1,153.4) rotate(47.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(469.1,406.6) rotate(-47.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(477.5,96.8) rotate(76.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(477.5,463.2) rotate(-76.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(490.0,147.3) rotate(75.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(490.0,412.7) rotate(-75.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(522.5,96.8) rotate(103.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(522.5,463.2) rotate(-103.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(510.0,147.3) rotate(104.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(510.0,412.7) rotate(-104.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(578.2,98.1) rotate(128.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(578.2,461.9) rotate(-128.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(530.9,153.4) rotate(132.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(530.9,406.6) rotate(-132.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(671.8,106.7) rotate(146.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(671.8,453.3) rotate(-146.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(562.0,165.7) rotate(157.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(562.0,394.3) rotate(-157.9) translate(0,-4.2)"/>
+<circle cx="500" cy="185" r="15" fill="#fff" stroke="#1636c8" stroke-width="2.4"/><line x1="493" y1="185" x2="507" y2="185" stroke="#1636c8" stroke-width="2.6"/>
+<circle cx="500" cy="375" r="15" fill="#fff" stroke="#1636c8" stroke-width="2.4"/><line x1="493" y1="375" x2="507" y2="375" stroke="#1636c8" stroke-width="2.6"/>
+<circle cx="500" cy="280" r="13" fill="#fff" stroke="#b3261e" stroke-width="2.6"/>
+<line x1="492" y1="272" x2="508" y2="288" stroke="#b3261e" stroke-width="2.4"/>
+<line x1="492" y1="288" x2="508" y2="272" stroke="#b3261e" stroke-width="2.4"/>
+<line x1="484" y1="280" x2="380" y2="280" stroke="#b3261e" stroke-width="1.3" stroke-dasharray="5 4"/>
+<rect x="208" y="262" width="168" height="26" rx="5" fill="#fff" opacity=".92"/>
+<text x="372" y="285" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="600" font-style="normal">the field is zero here</text>
+</svg></div>
+<div class="fig-note"><b>Figure 5.</b>&nbsp; Two like charges.&nbsp; Now there is nowhere for the lines to begin, so they all come in from far away.&nbsp; Between the two charges the two fields pull in opposite directions &mdash; and <b>exactly midway</b> they are equal and opposite.</div>
+
+<ol class="items" start="14">
+<li>Is there a place where the field equals zero?&nbsp; Why is or isn&rsquo;t there such a spot?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r8" data-label="Show the answer">Show the answer</button><div class="rbody" id="r8" hidden><p><b>Yes &mdash; at the &otimes;</b>, exactly halfway between the two charges.</p><p><b>Because E-fields add like vectors.</b>&nbsp; Because E-fields <b>are</b> vectors.</p><p>And there, <b>there is no force!!</b>&nbsp; A test charge dropped exactly on that spot feels nothing at all.</p></div></div>
+
+<h3>The same three cases, as graphs</h3>
+<p>You have been drawing field <i>maps</i>.&nbsp; Here is the same information plotted along the line that runs straight through
+the two charges &mdash; the force a +1 test charge feels at each point, with rightward counted as positive.&nbsp; <i>F</i><sub>1</sub>
+is the force from charge 1 alone and <i>F</i><sub>2</sub> the force from charge 2 alone; what the test charge actually feels is the
+two of them added.</p>
+
+<div class="fig"><svg viewBox="0 0 960 1072" role="img" aria-label="Three stacked plots of the force on a positive test charge along the line through two charges, with the direction convention marked on the axis and force arrows drawn at three sample points.">
+<g transform="translate(0,0)">
+<clipPath id="cpE1"><rect x="88" y="30" width="846" height="270"/></clipPath>
+<rect x="0" y="0" width="960" height="352" fill="#fff" stroke="#d7e2da" stroke-width="1"/>
+<marker id="ahE1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker>
+<line x1="361.0" y1="30" x2="361.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="661.0" y1="30" x2="661.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="92" y1="168.0" x2="930" y2="168.0" stroke="#1d2b23" stroke-width="1.5"/>
+<g clip-path="url(#cpE1)">
+<path d="M 94.0 180.6 L 123.0 183.9 L 148.0 187.8 L 169.5 192.5 L 188.5 198.2 L 205.0 205.0 L 219.5 212.9 L 232.0 222.1 L 243.5 233.2 L 253.5 245.9 L 262.5 260.8 L 270.5 277.9 L 278.0 298.6 L 284.5 321.8 L 290.0 346.5 L 295.5 377.8 L 300.0 409.9" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 422.5 -70.0 L 429.0 -26.6 L 437.0 12.2 L 441.5 29.1 L 446.0 43.4 L 451.0 56.9 L 456.0 68.3 L 462.0 79.8 L 468.0 89.4 L 474.5 98.1 L 482.0 106.5 L 490.0 113.9 L 498.5 120.4 L 508.0 126.4 L 518.0 131.5 L 528.5 135.9 L 540.5 140.1 L 567.5 146.9 L 600.5 152.3 L 640.5 156.5 L 689.5 159.7 L 751.0 162.1 L 828.5 163.9 L 928.0 165.2" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 170.8 L 194.0 172.1 L 271.5 173.9 L 333.0 176.4 L 382.5 179.6 L 422.5 183.8 L 455.5 189.3 L 469.5 192.5 L 482.5 196.2 L 494.5 200.5 L 505.0 205.0 L 515.0 210.2 L 524.5 216.3 L 533.0 222.9 L 541.0 230.5 L 548.5 239.1 L 555.0 248.1 L 561.0 258.0 L 567.0 269.9 L 572.0 281.6 L 577.0 295.6 L 581.5 310.4 L 586.0 328.0 L 593.5 365.5 L 600.0 409.9" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 722.5 -70.0 L 727.0 -38.6 L 732.5 -8.0 L 738.0 16.2 L 744.5 38.9 L 752.0 59.3 L 760.0 76.2 L 769.0 90.8 L 779.0 103.4 L 790.5 114.3 L 803.0 123.4 L 817.5 131.3 L 834.0 137.9 L 853.0 143.6 L 874.5 148.3 L 899.5 152.2 L 928.0 155.4" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 183.4 L 122.5 186.9 L 147.5 191.2 L 169.0 196.1 L 187.5 201.9 L 204.0 208.8 L 218.5 216.9 L 231.0 226.1 L 242.5 237.2 L 252.5 249.8 L 261.5 264.5 L 269.5 281.4 L 276.5 300.1 L 283.0 322.2 L 289.0 348.1 L 294.0 375.2 L 299.0 409.0" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 420.5 -70.7 L 427.5 -19.0 L 431.5 4.0 L 436.0 25.8 L 441.0 46.0 L 446.0 62.9 L 451.5 78.6 L 458.0 94.2 L 469.5 116.1 L 483.0 135.9 L 496.5 152.2 L 529.5 188.3 L 545.5 209.0 L 553.0 220.7 L 559.5 232.5 L 565.5 245.2 L 571.0 258.7 L 580.5 288.2 L 588.5 321.8 L 595.5 361.4 L 602.0 411.1" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 723.5 -69.2 L 728.5 -36.2 L 733.5 -9.7 L 739.5 15.7 L 746.0 37.4 L 753.5 57.0 L 761.5 73.3 L 770.5 87.6 L 780.5 99.9 L 792.0 110.7 L 804.5 119.7 L 819.0 127.7 L 835.0 134.3 L 853.5 140.0 L 875.0 144.9 L 899.5 149.1 L 928.0 152.6" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+</g>
+<text x="373.0" y="50.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e" font-weight="700">F<tspan font-size='10' dy='4'>1</tspan></text>
+<text x="673.0" y="50.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e" font-weight="700">F<tspan font-size='10' dy='4'>2</tspan></text>
+<line x1="148" y1="110.0" x2="96" y2="110.0" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#ahE1)"/>
+<text x="154.0" y="114.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62" font-weight="700">&minus; direction</text>
+<line x1="874" y1="110.0" x2="926" y2="110.0" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#ahE1)"/>
+<text x="868.0" y="114.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62" font-weight="700">+ direction</text>
+<circle cx="218.5" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="218.5" y1="152.0" x2="156.5" y2="152.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE1)"/><text x="187.5" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="218.5" y1="184.0" x2="202.6" y2="184.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE1)"/><text x="210.5" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<circle cx="511.0" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="511.0" y1="152.0" x2="569.3" y2="152.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE1)"/><text x="540.1" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="511.0" y1="184.0" x2="452.7" y2="184.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE1)"/><text x="481.9" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<circle cx="803.5" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="803.5" y1="152.0" x2="819.4" y2="152.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE1)"/><text x="811.5" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="803.5" y1="184.0" x2="865.5" y2="184.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE1)"/><text x="834.5" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<circle cx="511.0" cy="168.0" r="11" fill="#fff" stroke="#b3261e" stroke-width="2.4"/>
+<line x1="504.0" y1="161.0" x2="518.0" y2="175.0" stroke="#b3261e" stroke-width="2.2"/>
+<line x1="504.0" y1="175.0" x2="518.0" y2="161.0" stroke="#b3261e" stroke-width="2.2"/>
+<rect x="527.0" y="132.0" width="150" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="533.0" y="147.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">total field = 0 here</text>
+<rect x="459.0" y="34.0" width="104" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="511.0" y="49.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">F<tspan font-size='10' dy='3'>1</tspan><tspan dy='-3'> + F</tspan><tspan font-size='10' dy='3'>2</tspan></text>
+<text x="14.0" y="24.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">Case 1</text>
+<text x="14.0" y="46.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">&#8853; &amp; &#8853;</text>
+<rect x="352.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="361.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">1</text>
+<rect x="652.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="661.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">2</text>
+<circle cx="361.0" cy="168.0" r="13" fill="#fff" stroke="#b3261e" stroke-width="2.2"/><line x1="355.0" y1="168.0" x2="367.0" y2="168.0" stroke="#b3261e" stroke-width="2.4"/><line x1="361.0" y1="162.0" x2="361.0" y2="174.0" stroke="#b3261e" stroke-width="2.4"/>
+<circle cx="661.0" cy="168.0" r="13" fill="#fff" stroke="#b3261e" stroke-width="2.2"/><line x1="655.0" y1="168.0" x2="667.0" y2="168.0" stroke="#b3261e" stroke-width="2.4"/><line x1="661.0" y1="162.0" x2="661.0" y2="174.0" stroke="#b3261e" stroke-width="2.4"/>
+</g>
+<text x="14.0" y="339.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="600">the thick line is what a + test charge actually feels &mdash; it crosses zero at the &otimes;, which IS the null</text>
+<g transform="translate(0,360)">
+<clipPath id="cpE2"><rect x="88" y="30" width="846" height="270"/></clipPath>
+<rect x="0" y="0" width="960" height="352" fill="#fff" stroke="#d7e2da" stroke-width="1"/>
+<marker id="ahE2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker>
+<line x1="361.0" y1="30" x2="361.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="661.0" y1="30" x2="661.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="92" y1="168.0" x2="930" y2="168.0" stroke="#1d2b23" stroke-width="1.5"/>
+<g clip-path="url(#cpE2)">
+<path d="M 94.0 155.4 L 123.0 152.1 L 148.0 148.2 L 169.5 143.5 L 188.5 137.8 L 205.0 131.0 L 219.5 123.1 L 232.0 113.9 L 243.5 102.8 L 253.5 90.1 L 262.5 75.2 L 270.5 58.1 L 278.0 37.4 L 284.5 14.2 L 290.0 -10.5 L 295.5 -41.8 L 300.0 -73.9" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 422.5 406.0 L 429.0 362.6 L 437.0 323.8 L 441.5 306.9 L 446.0 292.6 L 451.0 279.1 L 456.0 267.7 L 462.0 256.2 L 468.0 246.6 L 474.5 237.9 L 482.0 229.5 L 490.0 222.1 L 498.5 215.6 L 508.0 209.6 L 518.0 204.5 L 528.5 200.1 L 540.5 195.9 L 567.5 189.1 L 600.5 183.7 L 640.5 179.5 L 689.5 176.3 L 751.0 173.9 L 828.5 172.1 L 928.0 170.8" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 165.2 L 194.0 163.9 L 271.5 162.1 L 333.0 159.6 L 382.5 156.4 L 422.5 152.2 L 455.5 146.7 L 469.5 143.5 L 482.5 139.8 L 494.5 135.5 L 505.0 131.0 L 515.0 125.8 L 524.5 119.7 L 533.0 113.1 L 541.0 105.5 L 548.5 96.9 L 555.0 87.9 L 561.0 78.0 L 567.0 66.1 L 572.0 54.4 L 577.0 40.4 L 581.5 25.6 L 586.0 8.0 L 593.5 -29.5 L 600.0 -73.9" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 722.5 406.0 L 727.0 374.6 L 732.5 344.0 L 738.0 319.8 L 744.5 297.1 L 752.0 276.7 L 760.0 259.8 L 769.0 245.2 L 779.0 232.6 L 790.5 221.7 L 803.0 212.6 L 817.5 204.7 L 834.0 198.1 L 853.0 192.4 L 874.5 187.7 L 899.5 183.8 L 928.0 180.6" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 152.6 L 122.5 149.1 L 147.5 144.8 L 169.0 139.9 L 187.5 134.1 L 204.0 127.2 L 218.5 119.1 L 231.0 109.9 L 242.5 98.8 L 252.5 86.2 L 261.5 71.5 L 269.5 54.6 L 276.5 35.9 L 283.0 13.8 L 289.0 -12.1 L 294.0 -39.2 L 299.0 -73.0" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 420.5 406.7 L 427.5 355.0 L 431.5 332.0 L 436.0 310.2 L 441.0 290.0 L 446.0 273.1 L 451.5 257.4 L 458.0 241.8 L 469.5 219.9 L 483.0 200.1 L 496.5 183.8 L 529.5 147.7 L 545.5 127.0 L 553.0 115.3 L 559.5 103.5 L 565.5 90.8 L 571.0 77.3 L 580.5 47.8 L 588.5 14.2 L 595.5 -25.4 L 602.0 -75.1" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 723.5 405.2 L 728.5 372.2 L 733.5 345.7 L 739.5 320.3 L 746.0 298.6 L 753.5 279.0 L 761.5 262.7 L 770.5 248.4 L 780.5 236.1 L 792.0 225.3 L 804.5 216.3 L 819.0 208.3 L 835.0 201.7 L 853.5 196.0 L 875.0 191.1 L 899.5 186.9 L 928.0 183.4" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+</g>
+<text x="349.0" y="50.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" font-weight="700">F<tspan font-size='10' dy='4'>1</tspan></text>
+<text x="649.0" y="50.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" font-weight="700">F<tspan font-size='10' dy='4'>2</tspan></text>
+<line x1="148" y1="110.0" x2="96" y2="110.0" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#ahE2)"/>
+<text x="154.0" y="114.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62" font-weight="700">&minus; direction</text>
+<line x1="874" y1="110.0" x2="926" y2="110.0" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#ahE2)"/>
+<text x="868.0" y="114.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62" font-weight="700">+ direction</text>
+<circle cx="218.5" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="218.5" y1="152.0" x2="280.5" y2="152.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE2)"/><text x="249.5" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="218.5" y1="184.0" x2="234.4" y2="184.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE2)"/><text x="226.5" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<circle cx="511.0" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="511.0" y1="152.0" x2="452.7" y2="152.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE2)"/><text x="481.9" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="511.0" y1="184.0" x2="569.3" y2="184.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE2)"/><text x="540.1" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<circle cx="803.5" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="803.5" y1="152.0" x2="787.6" y2="152.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE2)"/><text x="795.5" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="803.5" y1="184.0" x2="741.5" y2="184.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE2)"/><text x="772.5" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<circle cx="511.0" cy="168.0" r="11" fill="#fff" stroke="#b3261e" stroke-width="2.4"/>
+<line x1="504.0" y1="161.0" x2="518.0" y2="175.0" stroke="#b3261e" stroke-width="2.2"/>
+<line x1="504.0" y1="175.0" x2="518.0" y2="161.0" stroke="#b3261e" stroke-width="2.2"/>
+<rect x="527.0" y="132.0" width="150" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="533.0" y="147.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">total field = 0 here</text>
+<rect x="459.0" y="34.0" width="104" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="511.0" y="49.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">F<tspan font-size='10' dy='3'>1</tspan><tspan dy='-3'> + F</tspan><tspan font-size='10' dy='3'>2</tspan></text>
+<text x="14.0" y="24.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">Case 2</text>
+<text x="14.0" y="46.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8" font-weight="700">&#8854; &amp; &#8854;</text>
+<rect x="352.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="361.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">1</text>
+<rect x="652.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="661.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">2</text>
+<circle cx="361.0" cy="168.0" r="13" fill="#fff" stroke="#1636c8" stroke-width="2.2"/><line x1="355.0" y1="168.0" x2="367.0" y2="168.0" stroke="#1636c8" stroke-width="2.4"/>
+<circle cx="661.0" cy="168.0" r="13" fill="#fff" stroke="#1636c8" stroke-width="2.2"/><line x1="655.0" y1="168.0" x2="667.0" y2="168.0" stroke="#1636c8" stroke-width="2.4"/>
+</g>
+<text x="14.0" y="699.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="600">the same, every arrow reversed &mdash; and the resultant still crosses zero in the middle</text>
+<g transform="translate(0,720)">
+<clipPath id="cpE3"><rect x="88" y="30" width="846" height="270"/></clipPath>
+<rect x="0" y="0" width="960" height="352" fill="#fff" stroke="#d7e2da" stroke-width="1"/>
+<marker id="ahE3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker>
+<line x1="361.0" y1="30" x2="361.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="661.0" y1="30" x2="661.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="92" y1="168.0" x2="930" y2="168.0" stroke="#1d2b23" stroke-width="1.5"/>
+<g clip-path="url(#cpE3)">
+<path d="M 94.0 180.6 L 123.0 183.9 L 148.0 187.8 L 169.5 192.5 L 188.5 198.2 L 205.0 205.0 L 219.5 212.9 L 232.0 222.1 L 243.5 233.2 L 253.5 245.9 L 262.5 260.8 L 270.5 277.9 L 278.0 298.6 L 284.5 321.8 L 290.0 346.5 L 295.5 377.8 L 300.0 409.9" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 422.5 -70.0 L 429.0 -26.6 L 437.0 12.2 L 441.5 29.1 L 446.0 43.4 L 451.0 56.9 L 456.0 68.3 L 462.0 79.8 L 468.0 89.4 L 474.5 98.1 L 482.0 106.5 L 490.0 113.9 L 498.5 120.4 L 508.0 126.4 L 518.0 131.5 L 528.5 135.9 L 540.5 140.1 L 567.5 146.9 L 600.5 152.3 L 640.5 156.5 L 689.5 159.7 L 751.0 162.1 L 828.5 163.9 L 928.0 165.2" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 165.2 L 194.0 163.9 L 271.5 162.1 L 333.0 159.6 L 382.5 156.4 L 422.5 152.2 L 455.5 146.7 L 469.5 143.5 L 482.5 139.8 L 494.5 135.5 L 505.0 131.0 L 515.0 125.8 L 524.5 119.7 L 533.0 113.1 L 541.0 105.5 L 548.5 96.9 L 555.0 87.9 L 561.0 78.0 L 567.0 66.1 L 572.0 54.4 L 577.0 40.4 L 581.5 25.6 L 586.0 8.0 L 593.5 -29.5 L 600.0 -73.9" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 722.5 406.0 L 727.0 374.6 L 732.5 344.0 L 738.0 319.8 L 744.5 297.1 L 752.0 276.7 L 760.0 259.8 L 769.0 245.2 L 779.0 232.6 L 790.5 221.7 L 803.0 212.6 L 817.5 204.7 L 834.0 198.1 L 853.0 192.4 L 874.5 187.7 L 899.5 183.8 L 928.0 180.6" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 177.8 L 123.5 180.8 L 149.0 184.6 L 171.0 189.2 L 190.0 194.7 L 206.5 201.3 L 221.0 209.3 L 234.0 218.9 L 245.0 229.7 L 255.0 242.6 L 264.0 257.9 L 272.0 275.7 L 279.0 295.7 L 285.5 319.5 L 291.0 345.1 L 296.5 377.6 L 301.0 411.1" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 424.5 -71.3 L 431.0 -32.7 L 438.5 -0.0 L 447.0 26.7 L 452.0 38.7 L 457.0 48.7 L 462.5 57.8 L 468.5 65.8 L 475.0 72.7 L 481.5 78.1 L 489.0 82.6 L 496.5 85.7 L 504.0 87.5 L 512.0 88.0 L 520.0 87.1 L 527.5 85.0 L 535.0 81.6 L 542.0 77.0 L 548.5 71.3 L 555.0 64.0 L 560.5 56.3 L 566.0 46.9 L 571.0 36.5 L 575.5 25.3 L 584.0 -1.9 L 591.5 -35.3 L 598.0 -74.8" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 721.5 407.0 L 726.0 374.3 L 731.5 342.5 L 737.0 317.5 L 743.5 294.1 L 750.5 274.4 L 758.5 257.0 L 767.5 241.9 L 777.5 229.1 L 788.5 218.4 L 801.5 209.0 L 816.0 201.1 L 832.5 194.6 L 851.5 189.1 L 873.0 184.6 L 898.5 180.8 L 928.0 177.8" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+</g>
+<text x="373.0" y="50.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e" font-weight="700">F<tspan font-size='10' dy='4'>1</tspan></text>
+<text x="649.0" y="50.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" font-weight="700">F<tspan font-size='10' dy='4'>2</tspan></text>
+<line x1="148" y1="110.0" x2="96" y2="110.0" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#ahE3)"/>
+<text x="154.0" y="114.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62" font-weight="700">&minus; direction</text>
+<line x1="874" y1="110.0" x2="926" y2="110.0" stroke="#5c6b62" stroke-width="1.4" marker-end="url(#ahE3)"/>
+<text x="868.0" y="114.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="12.5" fill="#5c6b62" font-weight="700">+ direction</text>
+<circle cx="218.5" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="218.5" y1="152.0" x2="156.5" y2="152.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE3)"/><text x="187.5" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="218.5" y1="184.0" x2="234.4" y2="184.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE3)"/><text x="226.5" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<circle cx="511.0" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="511.0" y1="152.0" x2="569.3" y2="152.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE3)"/><text x="540.1" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="511.0" y1="184.0" x2="569.3" y2="184.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE3)"/><text x="540.1" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<circle cx="803.5" cy="168.0" r="4.2" fill="#1d2b23"/>
+<line x1="803.5" y1="152.0" x2="819.4" y2="152.0" stroke="#b3261e" stroke-width="2.3" marker-end="url(#ahE3)"/><text x="811.5" y="143.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">F<tspan font-size='9' dy='3'>1</tspan></text>
+<line x1="803.5" y1="184.0" x2="741.5" y2="184.0" stroke="#1636c8" stroke-width="2.3" marker-end="url(#ahE3)"/><text x="772.5" y="203.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1636c8" font-weight="700">F<tspan font-size='9' dy='3'>2</tspan></text>
+<rect x="459.0" y="34.0" width="104" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="511.0" y="49.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">F<tspan font-size='10' dy='3'>1</tspan><tspan dy='-3'> + F</tspan><tspan font-size='10' dy='3'>2</tspan></text>
+<text x="14.0" y="24.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">Case 3</text>
+<text x="14.0" y="46.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">&#8853; &amp; &#8854;</text>
+<rect x="352.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="361.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">1</text>
+<rect x="652.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="661.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">2</text>
+<circle cx="361.0" cy="168.0" r="13" fill="#fff" stroke="#b3261e" stroke-width="2.2"/><line x1="355.0" y1="168.0" x2="367.0" y2="168.0" stroke="#b3261e" stroke-width="2.4"/><line x1="361.0" y1="162.0" x2="361.0" y2="174.0" stroke="#b3261e" stroke-width="2.4"/>
+<circle cx="661.0" cy="168.0" r="13" fill="#fff" stroke="#1636c8" stroke-width="2.2"/><line x1="655.0" y1="168.0" x2="667.0" y2="168.0" stroke="#1636c8" stroke-width="2.4"/>
+</g>
+<text x="14.0" y="1059.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="600">the resultant never touches the axis between the charges: nothing cancels, so the dipole has no null</text>
+</svg></div>
+<div class="fig-note"><b>Figure 6.</b>&nbsp; <b>Up on these plots means the force pushes to the RIGHT</b> &mdash; the convention is written on each axis.&nbsp; The black dots are three places to stand, and the two arrows at each one are what charge 1 and charge 2 do to a + test charge put there.&nbsp; <b>Cases 1 and 2 are the like-charge pairs:</b> outside, both arrows point the same way; between the charges they <b>oppose</b>, and at the midpoint they are equal &mdash; <b>that is the &otimes; you just found.</b>&nbsp; <b>Case 3 is the dipole:</b> between the charges both arrows point the <b>same</b> way, so nothing can cancel, and the dipole has no null anywhere.&nbsp; <i>Arrow lengths are drawn to a compressed scale so the small ones stay visible &mdash; the nearer charge really wins by more than the picture shows.</i></div>
+<div class="fig-note" style="margin-top:-.2rem"><b>And read the thick black line first.</b>&nbsp; The two thin curves are what each charge would do <i>on its own</i>; the thick one is <b>F</b><sub>1</sub> + <b>F</b><sub>2</sub>, which is what a test charge actually feels.&nbsp; In Cases 1 and 2 it <b>crosses the axis</b>, and the crossing is marked &otimes; &mdash; <b>that crossing is the null</b>, and it is the only thing on the page that proves one exists.&nbsp; In Case 3 the thick line dips between the charges and <b>never touches the axis</b>.&nbsp; No crossing, no null.</div>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r9" data-label="Now show mine">Now show mine</button><div class="rbody" id="r9" hidden><ul class="items"><li><b>+ charge E-fields point away.</b></li><li><b>&minus; charge, the same, toward.</b></li><li><b>E-fields can cancel or add, like vectors.</b></li><li><b>E-field gets weaker further away from charges.</b></li><li><b>Like charges, at mid points, fields cancel.&nbsp; Zero field.</b></li></ul></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">E-fields are vectors</span>
+<p>Almost everything in this note follows from that one sentence.&nbsp; Two fields at the same point do not take turns and do not
+average &mdash; they <b>add head to tail</b>.&nbsp; That is why a + and a &minus; on top of each other give nothing, and why two
+negatives give a dead spot exactly in the middle.&nbsp; And the other keeper: <b>flux = line density</b>, which is the idea Gauss&rsquo;s
+law is built on later in this module.</p></div>
+
+<h2>Summary</h2>
+<div class="openq"><span class="label">Write your five first</span>
+<p>Summarize <b>five things</b> you learned about the electric field from this simulation.&nbsp; Write yours before you open mine
+&mdash; the point is what <i>you</i> took away.</p>
+<ul><li></li><li></li><li></li><li></li><li></li></ul></div>
+
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; Field lines are drawn around an isolated charge and they point <b>inward</b>.&nbsp; The
+  charge is:</p>
+    <label><input type="radio" name="q1" value="a"> Positive &mdash; a source.</label>
+    <label><input type="radio" name="q1" value="b"> Negative &mdash; a sink.</label>
+    <label><input type="radio" name="q1" value="c"> Neutral.</label>
+    <label><input type="radio" name="q1" value="d"> Impossible to say without a test charge.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; An E-Field Sensor reads 8.0&nbsp;V/m at 10&nbsp;cm from a point charge.&nbsp; What does
+  it read at 20&nbsp;cm, in V/m?</p>
+    <div class="qnum"><input type="number" id="q2input" step="any" inputmode="decimal" aria-label="field strength in volts per metre"><span class="unit">V/m</span></div><div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; Two <b>like</b> charges of equal size sit 12&nbsp;cm apart.&nbsp; Where on the line
+  joining them is the field zero?</p>
+    <label><input type="radio" name="q3" value="a"> Nowhere &mdash; like charges never give a null.</label>
+    <label><input type="radio" name="q3" value="b"> Exactly midway, 6&nbsp;cm from each.</label>
+    <label><input type="radio" name="q3" value="c"> At each charge.</label>
+    <label><input type="radio" name="q3" value="d"> Everywhere between them.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; A region of field lines is drawn twice as densely as the region beside it.&nbsp; This
+  means:</p>
+    <label><input type="radio" name="q4" value="a"> The field there is stronger.</label>
+    <label><input type="radio" name="q4" value="b"> The field there points the other way.</label>
+    <label><input type="radio" name="q4" value="c"> Nothing &mdash; spacing is only a drawing convention.</label>
+    <label><input type="radio" name="q4" value="d"> There is more charge sitting at that spot.</label>
+    <div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<h2>Looking ahead</h2>
+<p>You now have a picture of the field and a rule for adding fields.&nbsp; <b>Note&nbsp;4</b> asks the other half of the question:
+not what force a charge feels, but <b>how much energy it carries</b> &mdash; and because energy is a scalar, that turns out to be the
+easier half.</p>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       &lt;div class="frame"&gt;&lt;iframe src="YOUR_EMBED_URL" allowfullscreen title="M3 N3 &mdash; Dr. Cho on the electric field"&gt;&lt;/iframe&gt;&lt;/div&gt;
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M3_N3_Electric_Field_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the field lines are yours to draw.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 3 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 3 Note 3, "Electric Field Is Force On A Unit Positive Charge"
+
+     F1. A field is a sphere of influence; it accelerates stuff.  E is to charge
+         what g is to mass.
+     F2. F_E = qE, by analogy with F_G = mg.
+     F3. Field lines ORIGINATE on positive charge and TERMINATE on negative charge.
+     F4. A positive charge is a SOURCE; a negative charge is a SINK.
+     F5. Source and sink do not have to come in pairs - a lone charge has a field.
+     F6. Line density IS flux: more charge, more lines.
+     F7. The test charge is +1 and always positive; the sensor arrow's LENGTH is |E|
+         and its DIRECTION is whether a + charge there is attracted or repelled.
+     F8. Field strength falls as 1/r^2.
+     F9. E-FIELDS ARE VECTORS.  They add head to tail, not by averaging.
+     F10. A dipole's two fields cancel far away, and cancel completely when the two
+          charges are superposed.
+     F11. Two LIKE charges give a null point exactly midway between them, where a test
+          charge feels no force.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M3 Note 3.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q1": "b", "q3": "b", "q4": "a"};
+  var NUM = {"q2": [2.0, 0.05]};
+  var WHY = {
+    "q1": "Lines point IN, so the charge is a sink: negative.  Out is a source, in is a sink.",
+    "q2": "Field falls as 1/r&sup2;.  Twice the distance is a quarter of the field: 8.0 / 4 = 2.0 V/m.",
+    "q3": "Midway the two fields are equal in size and opposite in direction, so they cancel - and E-fields are vectors, which is why they can.  A test charge there feels no force at all.",
+    "q4": "Line density is flux.  Crowded lines mean a stronger field; the spacing is doing real work, not decoration."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '\u2713 ' : '\u2717 ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

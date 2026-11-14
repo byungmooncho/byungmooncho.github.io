@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N4 &mdash; Electric Potential</title>
+<style>
+  /* FLCC Physics note page - Module 3, Electricity, Note 4
+     "Electric Potential Is The Energy Of a Unit Positive Charge In An E-Field".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+
+     SOURCE, TWO LAYERS.
+     (a) 25SP master "M3 N4 Electric potential" - 6 pages, 1191 printed chars/page,
+         Mode A, and ZERO ink in the PDF or the .docx.  All prose below the Synopsis
+         is his, transcribed.
+     (b) THE ANSWER LAYER IS NOT IN THAT FILE.  It is the completed Regents Lab 6
+         answer key in his red ink, marked KEY /35, which carries an answer to every
+         numbered item of this same lesson.  Every reveal below is transcribed from it.
+     (c) THE CALCULUS LAYER HAS MOVED OUT, 2026-11-10e.  It was fenced CALC-152 here,
+         and the fence passed its test - deleting it leaves the simulation note
+         complete, which is why this page is unchanged apart from the deletion.  He
+         split it off because this page measured 11,133 px closed against D2L's
+         10,000 ceiling.  It is now Note 5, "Electric Potential: The Calculus",
+         carrying its own foundation list (the old F13 to F19) and the .calc152 rule
+         is gone from this stylesheet with it.  THIS NOTE NOW CARRIES NO FENCE AND
+         MIRRORS TO PHY 119 UNCHANGED.
+
+     WHAT IS CLAUDE'S.  The two figures; the punchline; the ticket; the foundation
+     list; and
+     moving his synopsis paragraphs 2-5 into the body, where the anatomy rule puts
+     teaching.  His paragraph 1 is the Synopsis, unchanged.
+
+     HIS WORKED EXAMPLE IS HIS.  "2 V and 0.5 C gives 1 J; 4 J in 2 C gives 2 V" is
+     his own, from the master, and is used rather than one invented here.
+
+     FIGURE 1 IS HIS - the five voltmeter readings and their positions, off packet p. 34.
+     FIGURE 2 IS HIS - the equipotential map, off packet p. 36: his orientation (MINUS on
+     top), his labelled contours, his 0 V line, his field-strength arrow drawn at right
+     angles to it.  Contours are SOLVED for the named voltage by bisection and then traced
+     with a Newton correction at every step; V is constant along each to 0.00.  The first
+     attempt had no correction, drifted a few px per lap, never closed, and rendered as a
+     thick spiral of a dozen overlapping loops.
+     FIGURE 3 IS HIS.  It is "Electric field and electric potential plots_KEY.pdf" pp. 3-4,
+     redrawn: his three cases, his two-curve presentation.  He did NOT draw the resultant
+     on that sheet and it is not drawn here either.  Curves are computed from the real 1/r
+     superposition.  ONE SILENT FIX, per the minor-error rule: his sheet labels the curves
+     on the POTENTIAL page "E1" and "E2"; they are labelled V1 and V2 here.  The field half
+     of that same sheet (pp. 1-2) went into Note 3.
+
+     FIGURE 1 IS COMPUTED.  The contours are real equipotentials, traced by
+     integrating PERPENDICULAR to the field; V is constant along each to better than
+     3%, and none crosses the 0 V plane, which was checked numerically, not by eye.
+     The 0 V line is drawn dead straight because for two equal and opposite charges
+     that is exactly what it is.
+
+     ONE PHYSICS FLAG, OPEN, see the log entry.  Part III item 17 asks what happens to
+     field and potential when two LIKE charges are placed on top of each other.  His
+     key answers "both go to zero ... equal and opposite so they cancel", which is the
+     Part II dipole answer; two like charges ADD.  THAT REVEAL IS DELIBERATELY ABSENT
+     from this page - the item is left as an open question - rather than published
+     wrong or silently corrected.
+
+     ================================================================== */
+
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65; }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .1rem; font-weight:700; }
+  .subtitle{ font-family:"Segoe UI", system-ui, sans-serif; font-size:1rem; color:var(--muted); margin:0 0 .3rem; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.06rem; margin:1.3rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:.2rem 0 0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem; }
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ul.items{ padding-left:1.3rem; margin:.4rem 0; } ul.items > li{ margin:.4rem 0; }
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .disp{ display:block; margin:.7rem 0 .9rem; text-align:center; font-size:1.12rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green);
+    border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule);
+    padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  table.doc{ border-collapse:collapse; width:100%; margin:.6rem 0 .8rem; font-size:.95rem; }
+  table.doc th, table.doc td{ border:1px solid var(--rule); padding:.32rem .55rem; text-align:left;
+    vertical-align:top; font-weight:400; }
+  table.doc th{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    color:var(--green-deep); background:var(--green-soft); }
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none;
+    color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; } .pe.lp li{ margin:.32rem 0; } .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem;
+    border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer;
+    margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule);
+    border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.good{ color:var(--green-deep); } .ticket .qfb.bad{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .openq{ border-left:4px solid var(--amber); background:#fdf8ef; border-radius:0 6px 6px 0;
+    padding:.8rem 1.05rem; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .openq .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.3rem; }
+  .openq ul{ margin:.4rem 0 0; padding-left:1.2rem; } .openq li{ margin:.45rem 0; list-style:none; }
+  .openq li::before{ content:"\2014\00a0\00a0"; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 3 &middot; Electricity</span><span>Note 4</span></div>
+<h1>Electric Potential Is The Energy Of a Unit Positive Charge In An E-Field</h1>
+<p class="subtitle">E-Field PhET Simulation</p>
+
+<div class="synopsis"><span class="label">Synopsis</span>We explored the electric field in the last PhET simulation lab.&nbsp; You
+should recognize that <b>a field is a cue for force</b>.&nbsp; Specifically, the field lines tell you how an object &mdash; a mass in a
+gravitational field, a charge in an electric field &mdash; will accelerate, because it knows the force acting on it.&nbsp; This note is
+about the other way of looking at the same situation.</div>
+
+<h2>Two world&rsquo;s views</h2>
+
+<p>Remember in mechanics that physicists have two &ldquo;world&rsquo;s views&rdquo;?&nbsp; One is the <b>force</b> perspective.&nbsp;
+The other is the <b>energy</b> perspective.&nbsp; We can analyze the behavior of an object using either, or both.&nbsp; However, I told
+you that they prefer the energy perspective if they have the choice, because the math is simpler: <b>force is a vector</b>, requiring
+three equations for three dimensions, whereas <b>energy is a scalar</b>, so it is just one equation for an object.</p>
+
+<p>So now, let&rsquo;s talk about the energy of a charge in a field!&nbsp; But first, here is a reminder about work (energy),
+<i>W</i>&nbsp;(J): <i>W</i> = <i>Fd</i>, where <i>F</i> is the force (N) and <i>d</i>&nbsp;(m) is the distance over which the force is
+applied.&nbsp; So work done in a gravitational field is <i>W</i><sub>G</sub> = <i>F</i><sub>g</sub><i>d</i> = <i>mgh</i>, where
+<i>F</i><sub>g</sub> = <i>mg</i>, <i>m</i> is the mass (kg), <i>g</i> is the acceleration due to gravity (9.8&nbsp;m/s&sup2;), and
+<i>h</i> is the distance over which the gravity force held sway.</p>
+
+<h2>A new term &mdash; potential</h2>
+
+<p>At this point, I need to introduce a new term, <b>potential</b>.&nbsp; <b>This is not a new concept!</b>&nbsp; Just like the field
+is a force-like quantity (when you see &ldquo;field,&rdquo; think &ldquo;force&rdquo;), the potential is an energy-like quantity, so
+<b>when you see potential, you should think &ldquo;energy.&rdquo;</b></p>
+
+<p>The field appears in the force equation: <i>F</i><sub>g</sub> = <i>mg</i>, where <i>g</i> is the gravitational field, and
+<i>F</i><sub>E</sub> = <i>qE</i>, where <i>E</i> is the electrostatic field.&nbsp; The potential appears in the energy equation.&nbsp;
+So for gravity,</p>
+
+<span class="disp"><i>W</i><sub>G</sub> = <i>F</i><sub>g</sub><i>d</i> = <i>mgh</i> = <i>mU</i><sub>G</sub></span>
+
+<p>where <i>W</i><sub>G</sub> is the gravitational potential energy (as opposed to just potential), and <i>U</i><sub>G</sub> is the
+gravitational potential, which is just <i>gh</i>, <b>the field multiplied by distance!</b>&nbsp; For electrostatic force,</p>
+
+<span class="disp"><i>W</i><sub>E</sub> = <i>F</i><sub>E</sub><i>d</i> = <i>qEd</i> = <i>qV</i><sub>E</sub></span>
+
+<p>where <i>W</i><sub>E</sub> is the electrostatic potential energy and <i>V</i><sub>E</sub> is the <b>electric potential</b>, which is
+just <i>Ed</i>, the electric field multiplied by distance.&nbsp; We will just drop the subscript E in <i>V</i><sub>E</sub> and call this
+<b>potential</b>.</p>
+
+<p>You are already very familiar with <i>V</i>: it has its own unit, the <b>volt</b> (V), and, yes, it&rsquo;s the same as
+&ldquo;voltage&rdquo; volts as you see in batteries!&nbsp; So you have been using the electrostatic potential to gauge your battery
+level &mdash; voltage goes down as batteries wear out, or as their energy content decreases over time.&nbsp; It&rsquo;s not the actual
+energy measured in J, but a very good indication of how much energy you have left in the battery.&nbsp; Refer to your Reference Table
+for &ldquo;V&rdquo; on p.&nbsp;4; it is denoted as <b>&ldquo;potential difference.&rdquo;</b>&nbsp; This is completely equivalent to
+electrostatic potential or voltage.</p>
+
+<h2>How physicists define it</h2>
+
+<p>Finally, I want to describe how physicists define electric potential:</p>
+
+<span class="disp" style="font-size:1.24rem"><i>V</i> = <i>W</i>/<i>q</i></span>
+
+<p>the same equation as <i>W</i><sub>E</sub> = <i>qV</i><sub>E</sub>, where I just drop the subscript E and rearrange for
+<i>V</i>.&nbsp; In other words, the electrostatic potential, or voltage, is <b>the energy per charge</b> &mdash; the energy in each
+coulomb of charge (J/C, joules per coulomb).</p>
+
+<div class="hook"><span class="label">Try the arithmetic on it</span>
+<p>So if you have <b>2&nbsp;V</b> of potential and <b>0.5&nbsp;C</b>, you have <b>1&nbsp;J</b>.&nbsp; If there is <b>4&nbsp;J</b> of
+energy in the charge in a field, and there is <b>2&nbsp;C</b>, then you have <b>2&nbsp;V</b> of potential.</p></div>
+
+<p>We could do this with gravitation, too, but we just didn&rsquo;t &mdash; perhaps there were no compelling reasons for us.&nbsp; Why
+for electrostatics?&nbsp; <b>Here, it&rsquo;s really useful for electricity!</b>&nbsp; In electricity, we have voltages and other
+parameters to describe electric circuits, and electrostatic potential or potential difference (completely equivalent to voltage,
+<i>V</i>) is a crucial quantity, rather than energies in joules or forces in newtons.&nbsp; More on that soon.</p>
+
+<p>For completeness, let me add the definition of the electric field: <i>E</i> = <i>F</i><sub>E</sub>/<i>q</i>, which reads as
+<b>force per charge</b>, or force experienced by each coulomb of charge.</p>
+
+<div class="pe lp"><span class="label">Performance expectations</span>
+<ol>
+<li><b>Describe</b> electrostatic potential as energy in 1 coulomb of charge.</li>
+<li><b>Describe</b> the potential of a charge next to a single charge.</li>
+<li><b>Describe</b> the potential of a charge between lines of opposite charges by recognizing the fields between the lines.</li>
+<li><b>Describe</b> equipotential lines.</li>
+</ol></div>
+
+<h2>Instructions and questions</h2>
+
+<p>In this second part of the <a href="https://phet.colorado.edu/en/simulations/charges-and-fields" target="_blank" rel="noopener">
+&ldquo;Charges and Fields&rdquo; PhET simulation</a>, you will explore the potential of a charge (energy in a coulomb of charge) in an
+electric field.&nbsp; First, you have just a single charge generating a spherical field.&nbsp; Second, you will make lines of charges,
+one with positive and one with negative charges, and observe the fields and potentials between and outside the lines of charges.</p>
+
+<ol class="items">
+<li>Jump back into the simulation.&nbsp; Check the <b>Grid</b> and <b>Voltage</b> boxes.</li>
+</ol>
+
+<h2>Part I &mdash; potentials in single positive and negative charges</h2>
+
+<ol class="items" start="2">
+<li>Use the <b>voltmeter</b> to determine the electric potential (an &ldquo;energy&rdquo;-like quantity represented by just a number) at
+each location, labeling each spot as you go.&nbsp; <b>Include the sign of the potential.</b>&nbsp; Repeat the procedure with a negative
+source charge.</li>
+<li>What is the sign of the potential?</li>
+<li>How does the potential value change with the distance from the charge?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r1" data-label="Show the answer">Show the answer</button><div class="rbody" id="r1" hidden><p><b>Positive source charge:</b> positive, everywhere.&nbsp; Readings came out like +1.803&nbsp;V, +3.512&nbsp;V, +5.083&nbsp;V, +5.472&nbsp;V, +12.86&nbsp;V &mdash; the big one nearest the charge.</p><p><b>Negative source charge:</b> negative.&nbsp; &minus;1.299&nbsp;V, &minus;2.476&nbsp;V, &minus;3.991&nbsp;V, &minus;4.506&nbsp;V, &minus;6.180&nbsp;V.</p><p><b>In both cases the value decreases with distance.</b></p></div></div>
+<div class="fig"><svg viewBox="0 0 960 480" role="img" aria-label="A box with a single positive charge near the middle and five measured points around it, each labelled with its voltmeter reading. The nearest point reads plus 12.86 volts and the farthest plus 1.803 volts. Every reading is positive.">
+<rect x="40" y="40" width="880" height="400" fill="#fff" stroke="#1d2b23" stroke-width="1.4"/>
+<text x="480.0" y="66.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23" font-weight="700">Positive Charge: Voltmeter</text>
+<line x1="76.1" y1="117.2" x2="461.5" y2="241.2" stroke="#d7e2da" stroke-width="1" stroke-dasharray="3 4"/>
+<circle cx="76.1" cy="117.2" r="4.6" fill="#1d2b23"/>
+<text x="86.1" y="141.2" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">+1.803 V</text>
+<line x1="256.5" y1="262.4" x2="461.5" y2="241.2" stroke="#d7e2da" stroke-width="1" stroke-dasharray="3 4"/>
+<circle cx="256.5" cy="262.4" r="4.6" fill="#1d2b23"/>
+<text x="266.5" y="286.4" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">+5.083 V</text>
+<line x1="564.5" y1="188.8" x2="461.5" y2="241.2" stroke="#d7e2da" stroke-width="1" stroke-dasharray="3 4"/>
+<circle cx="564.5" cy="188.8" r="4.6" fill="#1d2b23"/>
+<text x="554.5" y="212.8" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">+12.86 V</text>
+<line x1="637.5" y1="302.8" x2="461.5" y2="241.2" stroke="#d7e2da" stroke-width="1" stroke-dasharray="3 4"/>
+<circle cx="637.5" cy="302.8" r="4.6" fill="#1d2b23"/>
+<text x="627.5" y="326.8" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">+5.472 V</text>
+<line x1="191.4" y1="347.6" x2="461.5" y2="241.2" stroke="#d7e2da" stroke-width="1" stroke-dasharray="3 4"/>
+<circle cx="191.4" cy="347.6" r="4.6" fill="#1d2b23"/>
+<text x="201.4" y="371.6" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">+3.512 V</text>
+<circle cx="461.5" cy="241.2" r="14" fill="#fff" stroke="#b3261e" stroke-width="2.4"/><line x1="455.0" y1="241.2" x2="468.0" y2="241.2" stroke="#b3261e" stroke-width="2.6"/><line x1="461.5" y1="234.7" x2="461.5" y2="247.7" stroke="#b3261e" stroke-width="2.6"/>
+<text x="50.0" y="428.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#5c6b62" font-weight="600">every reading positive &nbsp;&middot;&nbsp; and the closer you stand, the bigger it gets</text>
+</svg></div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; The five readings taken in class, at the five places they were taken.&nbsp; <b>Every one is positive</b>, and the one nearest the charge is far and away the biggest &mdash; +12.86 V against +1.803 V out at the corner.&nbsp; Potential does not point anywhere; it is just a number at each spot.</div>
+
+<ol class="items" start="5">
+<li>What are the <b>similarities and differences</b> in the values of the potentials between the positive and negative single
+charges?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r2" data-label="Show the answer">Show the answer</button><div class="rbody" id="r2" hidden><p><b>Similarities</b></p><ul class="items"><li>Magnitude decreases with distance.</li><li>At the charge, potential is maximum (infinite); it falls to zero at infinite distance.</li></ul><p><b>Differences</b></p><ul class="items"><li>The signs are opposite.</li><li>The positive one runs from <b>+max down to zero</b>; the negative one runs from <b>&minus;max up to zero</b>.</li></ul></div></div>
+
+<h2>Part II &mdash; potential in a dipole (one positive and one negative charge in close proximity)</h2>
+
+<ol class="items" start="6">
+<li>To create a dipole, place one positive and one negative charge on the grid, vertically aligned, with a reasonable distance between
+them.</li>
+<li>Use the voltmeter to measure the electric potential along locations approximately <b>equal distances from the charges</b>.&nbsp;
+What can you say, generally, about the value of the electric potential equal distance from the opposite charges?</li>
+<li><b>Draw the line of zero potential</b> on your field map below.</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r3" data-label="Show the answer">Show the answer</button><div class="rbody" id="r3" hidden><p><b>Zero.</b>&nbsp; Anywhere equidistant from the two charges, the potential is zero &mdash; and that set of points is a <b>straight line</b> running midway between them.</p></div></div>
+<div class="fig"><svg viewBox="0 0 960 620" role="img" aria-label="A negative charge above a positive charge. Closed equipotential contours ring each one, labelled minus 300, minus 200 and minus 100 volts around the negative charge and plus 300, plus 200 and plus 100 volts around the positive one. A straight dashed horizontal line midway between them is the zero volt line. At the midpoint an arrow perpendicular to that line points up toward the negative charge, marking the field direction.">
+<marker id="em" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.6" markerHeight="5.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker>
+<rect x="0" y="0" width="960" height="620" fill="#fcfdfc"/>
+<path d="M 478 413 L 479 411 L 482 405 L 486 398 L 489 391 L 493 384 L 496 377 L 499 370 L 502 363 L 504 356 L 507 349 L 509 342 L 510 334 L 512 327 L 513 319 L 513 312 L 513 304 L 512 296 L 511 289 L 510 281 L 508 274 L 506 267 L 503 260 L 501 252 L 498 245 L 495 239 L 491 232 L 488 225 L 484 218 L 481 212 L 478 207" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 484 418 L 486 417 L 492 413 L 498 409 L 504 404 L 510 400 L 516 395 L 522 390 L 528 385 L 533 380 L 538 374 L 543 368 L 548 362 L 552 356 L 556 349 L 559 343 L 562 336 L 564 328 L 566 321 L 566 313 L 566 306 L 566 298 L 564 291 L 562 283 L 560 276 L 556 269 L 553 263 L 548 256 L 544 250 L 539 245 L 534 239 L 528 234 L 522 229 L 516 224 L 510 219 L 504 215 L 498 210 L 492 206 L 485 202 L 484 201" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 487 428 L 489 428 L 496 428 L 504 428 L 512 428 L 519 427 L 527 427 L 534 426 L 542 425 L 550 424 L 557 423 L 564 421 L 572 420 L 579 418 L 586 416 L 594 413 L 601 410 L 608 407 L 614 404 L 621 400 L 627 396 L 634 391 L 640 387 L 645 382 L 651 376 L 655 370 L 660 364 L 664 358 L 668 351 L 671 344 L 673 337 L 675 330 L 677 322 L 678 315 L 678 307 L 677 300 L 676 292 L 675 285 L 672 277 L 669 270 L 666 264 L 662 257 L 658 251 L 653 245 L 648 239 L 642 234 L 637 229 L 631 225 L 624 220 L 618 216 L 611 213 L 604 210 L 597 207 L 590 204 L 583 202 L 575 200 L 568 198 L 561 196 L 553 195 L 546 194 L 538 193 L 530 193 L 523 192 L 515 192 L 508 192 L 500 192 L 492 192 L 487 192" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 484 438 L 486 439 L 492 443 L 498 447 L 505 451 L 511 455 L 518 459 L 524 463 L 531 467 L 537 471 L 544 474 L 551 478 L 557 481 L 564 485 L 571 488 L 578 491 L 585 494 L 592 497 L 599 500 L 606 502 L 613 505 L 621 507 L 628 510 L 635 512 L 643 514 L 650 516 L 657 517 L 665 519 L 672 520 L 680 522 L 687 523 L 695 524 L 702 525 L 710 525 L 717 526 L 725 526 L 733 526 L 740 526 L 748 526 L 755 526 L 763 525 L 771 525 L 778 524 L 786 523 L 793 522 L 801 521 L 808 519 L 816 517 L 823 515 L 830 513 L 837 511 L 845 509 L 852 506 L 859 503 L 866 500 L 873 497 L 879 493 L 886 490 L 893 486 L 899 482 L 906 478 L 912 474 L 918 469 L 924 464 L 930 459 L 935 454 L 941 449 L 946 444 L 951 438" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 478 443 L 479 445 L 482 451 L 486 458 L 490 465 L 493 471 L 497 478 L 501 485 L 505 491 L 508 498 L 512 504 L 516 511 L 520 517 L 524 524 L 528 530 L 532 537 L 536 543 L 540 550 L 545 556 L 549 562 L 553 568 L 557 575 L 562 581 L 566 587 L 571 593 L 575 599 L 580 606 L 584 612" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 462 443 L 461 445 L 458 451 L 454 458 L 450 465 L 447 471 L 443 478 L 439 485 L 435 491 L 432 498 L 428 504 L 424 511 L 420 517 L 416 524 L 412 530 L 408 537 L 404 543 L 400 550 L 395 556 L 391 562 L 387 568 L 383 575 L 378 581 L 374 587 L 369 593 L 365 599 L 360 606 L 356 612" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 456 438 L 454 439 L 448 443 L 442 447 L 435 451 L 429 455 L 422 459 L 416 463 L 409 467 L 403 471 L 396 474 L 389 478 L 383 481 L 376 485 L 369 488 L 362 491 L 355 494 L 348 497 L 341 500 L 334 502 L 327 505 L 319 507 L 312 510 L 305 512 L 297 514 L 290 516 L 283 517 L 275 519 L 268 520 L 260 522 L 253 523 L 245 524 L 238 525 L 230 525 L 223 526 L 215 526 L 207 526 L 200 526 L 192 526 L 185 526 L 177 525 L 169 525 L 162 524 L 154 523 L 147 522 L 139 521 L 132 519 L 124 517 L 117 515 L 110 513 L 103 511 L 95 509 L 88 506 L 81 503 L 74 500 L 67 497 L 61 493 L 54 490 L 47 486 L 41 482 L 34 478 L 28 474 L 22 469 L 16 464 L 10 459 L 9 458" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 453 428 L 451 428 L 444 428 L 436 428 L 428 428 L 421 427 L 413 427 L 406 426 L 398 425 L 390 424 L 383 423 L 376 421 L 368 420 L 361 418 L 354 416 L 346 413 L 339 410 L 332 407 L 326 404 L 319 400 L 313 396 L 306 391 L 300 387 L 295 382 L 289 376 L 285 370 L 280 364 L 276 358 L 272 351 L 269 344 L 267 337 L 265 330 L 263 322 L 262 315 L 262 307 L 263 300 L 264 292 L 265 285 L 268 277 L 271 270 L 274 264 L 278 257 L 282 251 L 287 245 L 292 239 L 298 234 L 303 229 L 309 225 L 316 220 L 322 216 L 329 213 L 336 210 L 343 207 L 350 204 L 357 202 L 365 200 L 372 198 L 379 196 L 387 195 L 394 194 L 402 193 L 410 193 L 417 192 L 425 192 L 432 192 L 440 192 L 448 192 L 453 192" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 456 418 L 454 417 L 448 413 L 442 409 L 436 404 L 430 400 L 424 395 L 418 390 L 412 385 L 407 380 L 402 374 L 397 368 L 392 362 L 388 356 L 384 349 L 381 343 L 378 336 L 376 328 L 374 321 L 374 313 L 374 306 L 374 298 L 376 291 L 378 283 L 380 276 L 384 269 L 387 263 L 392 256 L 396 250 L 401 245 L 406 239 L 412 234 L 418 229 L 424 224 L 430 219 L 436 215 L 442 210 L 448 206 L 455 202 L 456 201" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 462 413 L 461 411 L 458 405 L 454 398 L 451 391 L 447 384 L 444 377 L 441 370 L 438 363 L 436 356 L 433 349 L 431 342 L 430 334 L 428 327 L 427 319 L 427 312 L 427 304 L 428 296 L 429 289 L 430 281 L 432 274 L 434 267 L 437 260 L 439 252 L 442 245 L 445 239 L 449 232 L 452 225 L 456 218 L 459 212 L 462 207" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 462 207 L 461 209 L 458 215 L 454 222 L 451 229 L 447 236 L 444 243 L 441 250 L 438 257 L 436 264 L 433 271 L 431 278 L 430 286 L 428 293 L 427 301 L 427 308 L 427 316 L 428 324 L 429 331 L 430 339 L 432 346 L 434 353 L 437 360 L 439 368 L 442 375 L 445 381 L 449 388 L 452 395 L 456 402 L 459 408 L 462 413" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 456 202 L 454 203 L 448 207 L 442 211 L 436 216 L 430 220 L 424 225 L 418 230 L 412 235 L 407 240 L 402 246 L 397 252 L 392 258 L 388 264 L 384 271 L 381 277 L 378 284 L 376 292 L 374 299 L 374 307 L 374 314 L 374 322 L 376 329 L 378 337 L 380 344 L 384 351 L 387 357 L 392 364 L 396 370 L 401 375 L 406 381 L 412 386 L 418 391 L 424 396 L 430 401 L 436 405 L 442 410 L 448 414 L 455 418 L 456 419" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 453 192 L 451 192 L 444 192 L 436 192 L 428 192 L 421 193 L 413 193 L 406 194 L 398 195 L 390 196 L 383 197 L 376 199 L 368 200 L 361 202 L 354 204 L 346 207 L 339 210 L 332 213 L 326 216 L 319 220 L 313 224 L 306 229 L 300 233 L 295 238 L 289 244 L 285 250 L 280 256 L 276 262 L 272 269 L 269 276 L 267 283 L 265 290 L 263 298 L 262 305 L 262 313 L 263 320 L 264 328 L 265 335 L 268 343 L 271 350 L 274 356 L 278 363 L 282 369 L 287 375 L 292 381 L 298 386 L 303 391 L 309 395 L 316 400 L 322 404 L 329 407 L 336 410 L 343 413 L 350 416 L 357 418 L 365 420 L 372 422 L 379 424 L 387 425 L 394 426 L 402 427 L 410 427 L 417 428 L 425 428 L 432 428 L 440 428 L 448 428 L 453 428" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 456 182 L 454 181 L 448 177 L 442 173 L 435 169 L 429 165 L 422 161 L 416 157 L 409 153 L 403 149 L 396 146 L 389 142 L 383 139 L 376 135 L 369 132 L 362 129 L 355 126 L 348 123 L 341 120 L 334 118 L 327 115 L 319 113 L 312 110 L 305 108 L 297 106 L 290 104 L 283 103 L 275 101 L 268 100 L 260 98 L 253 97 L 245 96 L 238 95 L 230 95 L 223 94 L 215 94 L 207 94 L 200 94 L 192 94 L 185 94 L 177 95 L 169 95 L 162 96 L 154 97 L 147 98 L 139 99 L 132 101 L 124 103 L 117 105 L 110 107 L 103 109 L 95 111 L 88 114 L 81 117 L 74 120 L 67 123 L 61 127 L 54 130 L 47 134 L 41 138 L 34 142 L 28 146 L 22 151 L 16 156 L 10 161 L 5 166 L -1 171 L -6 176 L -11 182" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 462 177 L 461 175 L 458 169 L 454 162 L 450 155 L 447 149 L 443 142 L 439 135 L 435 129 L 432 122 L 428 116 L 424 109 L 420 103 L 416 96 L 412 90 L 408 83 L 404 77 L 400 70 L 395 64 L 391 58 L 387 52 L 383 45 L 378 39 L 374 33 L 369 27 L 365 21 L 360 14 L 356 8" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 478 177 L 479 175 L 482 169 L 486 162 L 490 155 L 493 149 L 497 142 L 501 135 L 505 129 L 508 122 L 512 116 L 516 109 L 520 103 L 524 96 L 528 90 L 532 83 L 536 77 L 540 70 L 545 64 L 549 58 L 553 52 L 557 45 L 562 39 L 566 33 L 571 27 L 575 21 L 580 14 L 584 8" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 484 182 L 486 181 L 492 177 L 498 173 L 505 169 L 511 165 L 518 161 L 524 157 L 531 153 L 537 149 L 544 146 L 551 142 L 557 139 L 564 135 L 571 132 L 578 129 L 585 126 L 592 123 L 599 120 L 606 118 L 613 115 L 621 113 L 628 110 L 635 108 L 643 106 L 650 104 L 657 103 L 665 101 L 672 100 L 680 98 L 687 97 L 695 96 L 702 95 L 710 95 L 717 94 L 725 94 L 733 94 L 740 94 L 748 94 L 755 94 L 763 95 L 771 95 L 778 96 L 786 97 L 793 98 L 801 99 L 808 101 L 816 103 L 823 105 L 830 107 L 837 109 L 845 111 L 852 114 L 859 117 L 866 120 L 873 123 L 879 127 L 886 130 L 893 134 L 899 138 L 906 142 L 912 146 L 918 151 L 924 156 L 930 161 L 931 162" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 487 192 L 489 192 L 496 192 L 504 192 L 512 192 L 519 193 L 527 193 L 534 194 L 542 195 L 550 196 L 557 197 L 564 199 L 572 200 L 579 202 L 586 204 L 594 207 L 601 210 L 608 213 L 614 216 L 621 220 L 627 224 L 634 229 L 640 233 L 645 238 L 651 244 L 655 250 L 660 256 L 664 262 L 668 269 L 671 276 L 673 283 L 675 290 L 677 298 L 678 305 L 678 313 L 677 320 L 676 328 L 675 335 L 672 343 L 669 350 L 666 356 L 662 363 L 658 369 L 653 375 L 648 381 L 642 386 L 637 391 L 631 395 L 624 400 L 618 404 L 611 407 L 604 410 L 597 413 L 590 416 L 583 418 L 575 420 L 568 422 L 561 424 L 553 425 L 546 426 L 538 427 L 530 427 L 523 428 L 515 428 L 508 428 L 500 428 L 492 428 L 487 428" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 484 202 L 486 203 L 492 207 L 498 211 L 504 216 L 510 220 L 516 225 L 522 230 L 528 235 L 533 240 L 538 246 L 543 252 L 548 258 L 552 264 L 556 271 L 559 277 L 562 284 L 564 292 L 566 299 L 566 307 L 566 314 L 566 322 L 564 329 L 562 337 L 560 344 L 556 351 L 553 357 L 548 364 L 544 370 L 539 375 L 534 381 L 528 386 L 522 391 L 516 396 L 510 401 L 504 405 L 498 410 L 492 414 L 485 418 L 484 419" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 478 207 L 479 209 L 482 215 L 486 222 L 489 229 L 493 236 L 496 243 L 499 250 L 502 257 L 504 264 L 507 271 L 509 278 L 510 286 L 512 293 L 513 301 L 513 308 L 513 316 L 512 324 L 511 331 L 510 339 L 508 346 L 506 353 L 503 360 L 501 368 L 498 375 L 495 381 L 491 388 L 488 395 L 484 402 L 481 408 L 478 413" fill="none" stroke="#6b7a72" stroke-width="1.5" stroke-dasharray="7 5"/>
+<path d="M 470 392 L 469 392 L 465 392 L 461 393 L 457 394 L 454 396 L 450 398 L 447 400 L 444 402 L 441 405 L 439 408 L 437 412 L 435 415 L 434 419 L 433 423 L 433 427 L 433 430 L 433 434 L 434 438 L 435 442 L 437 445 L 439 449 L 441 452 L 444 455 L 446 458 L 450 460 L 453 462 L 456 463 L 460 465 L 464 465 L 468 466 L 472 466 L 476 465 L 479 465 L 483 464 L 487 462 L 490 460 L 493 458 L 496 455 L 499 452 L 501 449 L 503 446 L 505 442 L 506 438 L 507 435 L 507 431 L 507 427 L 507 423 L 506 419 L 505 416 L 503 412 L 501 409 L 499 405 L 496 403 L 493 400 L 490 398 L 487 396 L 483 394 L 479 393 L 476 392 L 470 392" fill="none" stroke="#b3261e" stroke-width="1.9" opacity="1"/>
+<rect x="389" y="456" width="58" height="19" rx="3" fill="#fcfdfc" opacity=".96"/>
+<text x="418.0" y="470.9" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#b3261e" font-weight="700">+500 V</text>
+<path d="M 470 228 L 469 228 L 465 228 L 461 227 L 457 226 L 454 224 L 450 222 L 447 220 L 444 218 L 441 215 L 439 212 L 437 208 L 435 205 L 434 201 L 433 197 L 433 193 L 433 190 L 433 186 L 434 182 L 435 178 L 437 175 L 439 171 L 441 168 L 444 165 L 446 162 L 450 160 L 453 158 L 456 157 L 460 155 L 464 155 L 468 154 L 472 154 L 476 155 L 479 155 L 483 156 L 487 158 L 490 160 L 493 162 L 496 165 L 499 168 L 501 171 L 503 174 L 505 178 L 506 182 L 507 185 L 507 189 L 507 193 L 507 197 L 506 201 L 505 204 L 503 208 L 501 211 L 499 215 L 496 217 L 493 220 L 490 222 L 487 224 L 483 226 L 479 227 L 476 228 L 470 228" fill="none" stroke="#1636c8" stroke-width="1.9" opacity="1"/>
+<rect x="389" y="144" width="58" height="19" rx="3" fill="#fcfdfc" opacity=".96"/>
+<text x="418.0" y="159.1" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8" font-weight="700">&minus;500 V</text>
+<path d="M 470 385 L 469 385 L 465 385 L 461 386 L 457 387 L 453 388 L 450 390 L 447 392 L 443 394 L 440 396 L 437 399 L 435 402 L 433 405 L 431 408 L 429 412 L 427 416 L 426 419 L 426 423 L 425 427 L 425 431 L 426 435 L 426 439 L 427 442 L 428 446 L 430 450 L 432 453 L 434 456 L 437 459 L 439 462 L 442 465 L 446 467 L 449 469 L 453 470 L 456 472 L 460 473 L 464 474 L 468 474 L 472 474 L 475 474 L 479 473 L 483 472 L 487 471 L 490 469 L 494 467 L 497 465 L 500 463 L 503 460 L 505 457 L 508 454 L 510 450 L 511 447 L 513 443 L 514 440 L 514 436 L 515 432 L 515 428 L 514 424 L 514 420 L 513 416 L 511 413 L 510 409 L 508 406 L 506 403 L 503 400 L 500 397 L 497 394 L 494 392 L 491 390 L 487 389 L 484 387 L 480 386 L 476 386 L 472 385 L 470 385" fill="none" stroke="#b3261e" stroke-width="1.3" opacity=".62"/>
+<path d="M 470 235 L 469 235 L 465 235 L 461 234 L 457 233 L 453 232 L 450 230 L 447 228 L 443 226 L 440 224 L 437 221 L 435 218 L 433 215 L 431 212 L 429 208 L 427 204 L 426 201 L 426 197 L 425 193 L 425 189 L 426 185 L 426 181 L 427 178 L 428 174 L 430 170 L 432 167 L 434 164 L 437 161 L 439 158 L 442 155 L 446 153 L 449 151 L 453 150 L 456 148 L 460 147 L 464 146 L 468 146 L 472 146 L 475 146 L 479 147 L 483 148 L 487 149 L 490 151 L 494 153 L 497 155 L 500 157 L 503 160 L 505 163 L 508 166 L 510 170 L 511 173 L 513 177 L 514 180 L 514 184 L 515 188 L 515 192 L 514 196 L 514 200 L 513 204 L 511 207 L 510 211 L 508 214 L 506 217 L 503 220 L 500 223 L 497 226 L 494 228 L 491 230 L 487 231 L 484 233 L 480 234 L 476 234 L 472 235 L 470 235" fill="none" stroke="#1636c8" stroke-width="1.3" opacity=".62"/>
+<path d="M 470 376 L 469 376 L 465 376 L 461 376 L 457 377 L 453 378 L 450 379 L 446 381 L 443 383 L 439 385 L 436 387 L 433 389 L 430 392 L 427 395 L 425 398 L 423 401 L 421 404 L 419 408 L 417 411 L 416 415 L 415 419 L 414 422 L 414 426 L 414 430 L 414 434 L 414 438 L 415 442 L 416 446 L 417 449 L 418 453 L 420 456 L 422 460 L 424 463 L 426 466 L 429 469 L 432 472 L 435 474 L 438 477 L 441 479 L 445 481 L 448 482 L 452 484 L 455 485 L 459 486 L 463 486 L 467 487 L 471 487 L 475 487 L 479 486 L 482 485 L 486 484 L 490 483 L 494 482 L 497 480 L 500 478 L 504 476 L 507 473 L 510 471 L 512 468 L 515 465 L 517 462 L 519 458 L 521 455 L 522 451 L 524 448 L 525 444 L 526 440 L 526 436 L 526 432 L 526 428 L 526 425 L 525 421 L 525 417 L 523 413 L 522 410 L 520 406 L 519 403 L 516 399 L 514 396 L 511 393 L 509 391 L 506 388 L 503 386 L 499 384 L 496 382 L 492 380 L 489 379 L 485 378 L 481 377 L 477 376 L 473 376 L 470 376" fill="none" stroke="#b3261e" stroke-width="1.9" opacity="1"/>
+<rect x="493" y="477" width="58" height="19" rx="3" fill="#fcfdfc" opacity=".96"/>
+<text x="522.0" y="491.7" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#b3261e" font-weight="700">+300 V</text>
+<path d="M 470 244 L 469 244 L 465 244 L 461 244 L 457 243 L 453 242 L 450 241 L 446 239 L 443 237 L 439 235 L 436 233 L 433 231 L 430 228 L 427 225 L 425 222 L 423 219 L 421 216 L 419 212 L 417 209 L 416 205 L 415 201 L 414 198 L 414 194 L 414 190 L 414 186 L 414 182 L 415 178 L 416 174 L 417 171 L 418 167 L 420 164 L 422 160 L 424 157 L 426 154 L 429 151 L 432 148 L 435 146 L 438 143 L 441 141 L 445 139 L 448 138 L 452 136 L 455 135 L 459 134 L 463 134 L 467 133 L 471 133 L 475 133 L 479 134 L 482 135 L 486 136 L 490 137 L 494 138 L 497 140 L 500 142 L 504 144 L 507 147 L 510 149 L 512 152 L 515 155 L 517 158 L 519 162 L 521 165 L 522 169 L 524 172 L 525 176 L 526 180 L 526 184 L 526 188 L 526 192 L 526 195 L 525 199 L 525 203 L 523 207 L 522 210 L 520 214 L 519 217 L 516 221 L 514 224 L 511 227 L 509 229 L 506 232 L 503 234 L 499 236 L 496 238 L 492 240 L 489 241 L 485 242 L 481 243 L 477 244 L 473 244 L 470 244" fill="none" stroke="#1636c8" stroke-width="1.9" opacity="1"/>
+<rect x="493" y="123" width="58" height="19" rx="3" fill="#fcfdfc" opacity=".96"/>
+<text x="522.0" y="138.3" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8" font-weight="700">&minus;300 V</text>
+<path d="M 470 369 L 469 369 L 465 369 L 461 370 L 457 370 L 453 371 L 450 372 L 446 374 L 442 375 L 439 377 L 435 379 L 432 381 L 429 383 L 426 386 L 423 388 L 421 391 L 418 394 L 416 398 L 414 401 L 412 404 L 410 408 L 409 411 L 408 415 L 407 419 L 406 423 L 405 427 L 405 430 L 405 434 L 405 438 L 406 442 L 407 446 L 408 450 L 409 453 L 410 457 L 412 461 L 414 464 L 416 467 L 418 471 L 420 474 L 423 476 L 426 479 L 429 482 L 432 484 L 435 486 L 439 488 L 442 490 L 446 492 L 449 493 L 453 494 L 457 495 L 461 496 L 465 496 L 468 496 L 472 496 L 476 496 L 480 495 L 484 495 L 488 494 L 491 493 L 495 491 L 499 490 L 502 488 L 505 486 L 509 484 L 512 481 L 515 479 L 517 476 L 520 473 L 522 470 L 525 467 L 527 463 L 528 460 L 530 456 L 531 453 L 533 449 L 534 445 L 534 441 L 535 438 L 535 434 L 535 430 L 535 426 L 534 422 L 533 418 L 532 414 L 531 411 L 530 407 L 528 404 L 526 400 L 524 397 L 522 394 L 519 391 L 516 388 L 513 385 L 510 383 L 507 381 L 504 378 L 501 377 L 497 375 L 493 373 L 490 372 L 486 371 L 482 370 L 478 370 L 474 369 L 470 369" fill="none" stroke="#b3261e" stroke-width="1.3" opacity=".62"/>
+<path d="M 470 251 L 469 251 L 465 251 L 461 250 L 457 250 L 453 249 L 450 248 L 446 246 L 442 245 L 439 243 L 435 241 L 432 239 L 429 237 L 426 234 L 423 232 L 421 229 L 418 226 L 416 222 L 414 219 L 412 216 L 410 212 L 409 209 L 408 205 L 407 201 L 406 197 L 405 193 L 405 190 L 405 186 L 405 182 L 406 178 L 407 174 L 408 170 L 409 167 L 410 163 L 412 159 L 414 156 L 416 153 L 418 149 L 420 146 L 423 144 L 426 141 L 429 138 L 432 136 L 435 134 L 439 132 L 442 130 L 446 128 L 449 127 L 453 126 L 457 125 L 461 124 L 465 124 L 468 124 L 472 124 L 476 124 L 480 125 L 484 125 L 488 126 L 491 127 L 495 129 L 499 130 L 502 132 L 505 134 L 509 136 L 512 139 L 515 141 L 517 144 L 520 147 L 522 150 L 525 153 L 527 157 L 528 160 L 530 164 L 531 167 L 533 171 L 534 175 L 534 179 L 535 182 L 535 186 L 535 190 L 535 194 L 534 198 L 533 202 L 532 206 L 531 209 L 530 213 L 528 216 L 526 220 L 524 223 L 522 226 L 519 229 L 516 232 L 513 235 L 510 237 L 507 239 L 504 242 L 501 243 L 497 245 L 493 247 L 490 248 L 486 249 L 482 250 L 478 250 L 474 251 L 470 251" fill="none" stroke="#1636c8" stroke-width="1.3" opacity=".62"/>
+<path d="M 470 361 L 469 361 L 465 361 L 461 362 L 457 362 L 453 363 L 449 364 L 446 365 L 442 366 L 438 368 L 435 369 L 431 371 L 428 373 L 425 375 L 422 378 L 419 380 L 416 383 L 413 385 L 410 388 L 408 391 L 406 395 L 404 398 L 402 401 L 400 405 L 398 408 L 397 412 L 396 416 L 395 420 L 394 423 L 394 427 L 394 431 L 393 435 L 394 439 L 394 443 L 394 447 L 395 451 L 396 454 L 397 458 L 399 462 L 400 465 L 402 469 L 404 472 L 406 475 L 408 479 L 411 482 L 413 485 L 416 488 L 419 490 L 422 493 L 425 495 L 428 497 L 431 499 L 435 501 L 438 503 L 442 504 L 445 506 L 449 507 L 453 508 L 457 509 L 461 509 L 464 510 L 468 510 L 472 510 L 476 509 L 480 509 L 484 508 L 488 508 L 492 507 L 495 505 L 499 504 L 502 503 L 506 501 L 509 499 L 513 497 L 516 495 L 519 492 L 522 490 L 525 487 L 527 484 L 530 481 L 532 478 L 534 475 L 537 472 L 538 468 L 540 465 L 542 461 L 543 457 L 544 454 L 545 450 L 546 446 L 546 442 L 546 438 L 547 434 L 546 430 L 546 427 L 546 423 L 545 419 L 544 415 L 543 411 L 541 408 L 540 404 L 538 401 L 536 397 L 534 394 L 532 391 L 529 388 L 527 385 L 524 382 L 521 380 L 518 377 L 515 375 L 511 373 L 508 371 L 505 369 L 501 367 L 497 366 L 494 365 L 490 364 L 486 363 L 482 362 L 478 362 L 475 361 L 470 361" fill="none" stroke="#b3261e" stroke-width="1.9" opacity="1"/>
+<rect x="389" y="500" width="58" height="19" rx="3" fill="#fcfdfc" opacity=".96"/>
+<text x="418.0" y="514.7" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#b3261e" font-weight="700">+200 V</text>
+<path d="M 470 259 L 469 259 L 465 259 L 461 258 L 457 258 L 453 257 L 449 256 L 446 255 L 442 254 L 438 252 L 435 251 L 431 249 L 428 247 L 425 245 L 422 242 L 419 240 L 416 237 L 413 235 L 410 232 L 408 229 L 406 225 L 404 222 L 402 219 L 400 215 L 398 212 L 397 208 L 396 204 L 395 200 L 394 197 L 394 193 L 394 189 L 393 185 L 394 181 L 394 177 L 394 173 L 395 169 L 396 166 L 397 162 L 399 158 L 400 155 L 402 151 L 404 148 L 406 145 L 408 141 L 411 138 L 413 135 L 416 132 L 419 130 L 422 127 L 425 125 L 428 123 L 431 121 L 435 119 L 438 117 L 442 116 L 445 114 L 449 113 L 453 112 L 457 111 L 461 111 L 464 110 L 468 110 L 472 110 L 476 111 L 480 111 L 484 112 L 488 112 L 492 113 L 495 115 L 499 116 L 502 117 L 506 119 L 509 121 L 513 123 L 516 125 L 519 128 L 522 130 L 525 133 L 527 136 L 530 139 L 532 142 L 534 145 L 537 148 L 538 152 L 540 155 L 542 159 L 543 163 L 544 166 L 545 170 L 546 174 L 546 178 L 546 182 L 547 186 L 546 190 L 546 193 L 546 197 L 545 201 L 544 205 L 543 209 L 541 212 L 540 216 L 538 219 L 536 223 L 534 226 L 532 229 L 529 232 L 527 235 L 524 238 L 521 240 L 518 243 L 515 245 L 511 247 L 508 249 L 505 251 L 501 253 L 497 254 L 494 255 L 490 256 L 486 257 L 482 258 L 478 258 L 475 259 L 470 259" fill="none" stroke="#1636c8" stroke-width="1.9" opacity="1"/>
+<rect x="389" y="100" width="58" height="19" rx="3" fill="#fcfdfc" opacity=".96"/>
+<text x="418.0" y="115.3" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8" font-weight="700">&minus;200 V</text>
+<path d="M 470 352 L 469 352 L 465 352 L 461 352 L 457 352 L 453 353 L 449 354 L 446 354 L 442 355 L 438 357 L 434 358 L 431 359 L 427 361 L 424 363 L 420 364 L 417 366 L 414 369 L 410 371 L 407 373 L 404 376 L 402 379 L 399 381 L 396 384 L 394 387 L 392 390 L 389 394 L 387 397 L 386 400 L 384 404 L 382 408 L 381 411 L 380 415 L 379 419 L 378 423 L 377 426 L 377 430 L 376 434 L 376 438 L 376 442 L 377 446 L 377 450 L 378 454 L 378 457 L 379 461 L 380 465 L 381 469 L 383 472 L 384 476 L 386 479 L 388 483 L 390 486 L 392 489 L 394 493 L 397 496 L 399 499 L 402 502 L 405 504 L 407 507 L 410 509 L 414 512 L 417 514 L 420 516 L 423 518 L 427 520 L 430 522 L 434 523 L 438 525 L 441 526 L 445 527 L 449 528 L 453 529 L 456 529 L 460 530 L 464 530 L 468 530 L 472 530 L 476 530 L 480 530 L 484 529 L 487 529 L 491 528 L 495 527 L 499 526 L 503 525 L 506 523 L 510 522 L 513 520 L 517 518 L 520 516 L 523 514 L 526 512 L 530 509 L 533 507 L 535 504 L 538 501 L 541 499 L 543 496 L 546 493 L 548 489 L 550 486 L 552 483 L 554 479 L 556 476 L 557 472 L 559 469 L 560 465 L 561 461 L 562 457 L 562 454 L 563 450 L 563 446 L 564 442 L 564 438 L 564 434 L 563 430 L 563 426 L 562 422 L 561 419 L 560 415 L 559 411 L 558 408 L 556 404 L 554 400 L 553 397 L 551 394 L 548 390 L 546 387 L 544 384 L 541 381 L 538 379 L 535 376 L 533 373 L 529 371 L 526 369 L 523 366 L 520 364 L 516 363 L 513 361 L 509 359 L 506 358 L 502 357 L 498 355 L 494 354 L 491 354 L 487 353 L 483 352 L 479 352 L 475 352 L 470 352" fill="none" stroke="#b3261e" stroke-width="1.3" opacity=".62"/>
+<path d="M 470 268 L 469 268 L 465 268 L 461 268 L 457 268 L 453 267 L 449 266 L 446 266 L 442 265 L 438 263 L 434 262 L 431 261 L 427 259 L 424 257 L 420 256 L 417 254 L 414 251 L 410 249 L 407 247 L 404 244 L 402 241 L 399 239 L 396 236 L 394 233 L 392 230 L 389 226 L 387 223 L 386 220 L 384 216 L 382 212 L 381 209 L 380 205 L 379 201 L 378 197 L 377 194 L 377 190 L 376 186 L 376 182 L 376 178 L 377 174 L 377 170 L 378 166 L 378 163 L 379 159 L 380 155 L 381 151 L 383 148 L 384 144 L 386 141 L 388 137 L 390 134 L 392 131 L 394 127 L 397 124 L 399 121 L 402 118 L 405 116 L 407 113 L 410 111 L 414 108 L 417 106 L 420 104 L 423 102 L 427 100 L 430 98 L 434 97 L 438 95 L 441 94 L 445 93 L 449 92 L 453 91 L 456 91 L 460 90 L 464 90 L 468 90 L 472 90 L 476 90 L 480 90 L 484 91 L 487 91 L 491 92 L 495 93 L 499 94 L 503 95 L 506 97 L 510 98 L 513 100 L 517 102 L 520 104 L 523 106 L 526 108 L 530 111 L 533 113 L 535 116 L 538 119 L 541 121 L 543 124 L 546 127 L 548 131 L 550 134 L 552 137 L 554 141 L 556 144 L 557 148 L 559 151 L 560 155 L 561 159 L 562 163 L 562 166 L 563 170 L 563 174 L 564 178 L 564 182 L 564 186 L 563 190 L 563 194 L 562 198 L 561 201 L 560 205 L 559 209 L 558 212 L 556 216 L 554 220 L 553 223 L 551 226 L 548 230 L 546 233 L 544 236 L 541 239 L 538 241 L 535 244 L 533 247 L 529 249 L 526 251 L 523 254 L 520 256 L 516 257 L 513 259 L 509 261 L 506 262 L 502 263 L 498 265 L 494 266 L 491 266 L 487 267 L 483 268 L 479 268 L 475 268 L 470 268" fill="none" stroke="#1636c8" stroke-width="1.3" opacity=".62"/>
+<path d="M 470 340 L 469 340 L 465 340 L 461 340 L 457 340 L 453 341 L 449 341 L 445 342 L 442 342 L 438 343 L 434 344 L 430 345 L 426 346 L 423 347 L 419 349 L 415 350 L 412 352 L 408 353 L 405 355 L 401 357 L 398 359 L 395 361 L 392 363 L 389 366 L 386 368 L 383 371 L 380 373 L 377 376 L 374 379 L 372 382 L 369 385 L 367 388 L 365 391 L 363 395 L 361 398 L 359 402 L 357 405 L 356 409 L 354 412 L 353 416 L 352 420 L 351 423 L 350 427 L 349 431 L 349 435 L 348 439 L 348 443 L 348 447 L 348 450 L 348 454 L 348 458 L 348 462 L 349 466 L 350 470 L 350 474 L 351 477 L 352 481 L 354 485 L 355 489 L 356 492 L 358 496 L 360 499 L 361 503 L 363 506 L 365 510 L 367 513 L 370 516 L 372 519 L 374 522 L 377 525 L 380 528 L 382 531 L 385 533 L 388 536 L 391 539 L 394 541 L 397 543 L 400 546 L 404 548 L 407 550 L 410 552 L 414 553 L 417 555 L 421 557 L 425 558 L 428 559 L 432 561 L 436 562 L 439 563 L 443 564 L 447 565 L 451 565 L 455 566 L 459 566 L 463 566 L 466 567 L 470 567 L 474 567 L 478 566 L 482 566 L 486 566 L 490 565 L 494 564 L 497 564 L 501 563 L 505 562 L 509 560 L 512 559 L 516 558 L 520 556 L 523 555 L 527 553 L 530 551 L 534 549 L 537 547 L 540 545 L 543 543 L 546 541 L 550 538 L 552 536 L 555 533 L 558 530 L 561 527 L 563 525 L 566 522 L 568 519 L 571 515 L 573 512 L 575 509 L 577 506 L 579 502 L 581 499 L 582 495 L 584 492 L 585 488 L 587 484 L 588 481 L 589 477 L 590 473 L 590 469 L 591 465 L 592 461 L 592 458 L 592 454 L 592 450 L 592 446 L 592 442 L 592 438 L 591 434 L 591 430 L 590 427 L 589 423 L 588 419 L 587 415 L 585 412 L 584 408 L 582 404 L 581 401 L 579 397 L 577 394 L 575 391 L 573 388 L 570 384 L 568 381 L 565 379 L 563 376 L 560 373 L 557 370 L 554 368 L 551 365 L 548 363 L 545 361 L 541 359 L 538 357 L 534 355 L 531 353 L 527 351 L 524 350 L 520 348 L 517 347 L 513 346 L 509 345 L 505 344 L 502 343 L 498 342 L 494 342 L 490 341 L 486 341 L 482 340 L 478 340 L 474 340 L 470 340" fill="none" stroke="#b3261e" stroke-width="1.9" opacity="1"/>
+<rect x="493" y="557" width="58" height="19" rx="3" fill="#fcfdfc" opacity=".96"/>
+<text x="522.0" y="571.6" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#b3261e" font-weight="700">+100 V</text>
+<path d="M 470 280 L 469 280 L 465 280 L 461 280 L 457 280 L 453 279 L 449 279 L 445 278 L 442 278 L 438 277 L 434 276 L 430 275 L 426 274 L 423 273 L 419 271 L 415 270 L 412 268 L 408 267 L 405 265 L 401 263 L 398 261 L 395 259 L 392 257 L 389 254 L 386 252 L 383 249 L 380 247 L 377 244 L 374 241 L 372 238 L 369 235 L 367 232 L 365 229 L 363 225 L 361 222 L 359 218 L 357 215 L 356 211 L 354 208 L 353 204 L 352 200 L 351 197 L 350 193 L 349 189 L 349 185 L 348 181 L 348 177 L 348 173 L 348 170 L 348 166 L 348 162 L 348 158 L 349 154 L 350 150 L 350 146 L 351 143 L 352 139 L 354 135 L 355 131 L 356 128 L 358 124 L 360 121 L 361 117 L 363 114 L 365 110 L 367 107 L 370 104 L 372 101 L 374 98 L 377 95 L 380 92 L 382 89 L 385 87 L 388 84 L 391 81 L 394 79 L 397 77 L 400 74 L 404 72 L 407 70 L 410 68 L 414 67 L 417 65 L 421 63 L 425 62 L 428 61 L 432 59 L 436 58 L 439 57 L 443 56 L 447 55 L 451 55 L 455 54 L 459 54 L 463 54 L 466 53 L 470 53 L 474 53 L 478 54 L 482 54 L 486 54 L 490 55 L 494 56 L 497 56 L 501 57 L 505 58 L 509 60 L 512 61 L 516 62 L 520 64 L 523 65 L 527 67 L 530 69 L 534 71 L 537 73 L 540 75 L 543 77 L 546 79 L 550 82 L 552 84 L 555 87 L 558 90 L 561 93 L 563 95 L 566 98 L 568 101 L 571 105 L 573 108 L 575 111 L 577 114 L 579 118 L 581 121 L 582 125 L 584 128 L 585 132 L 587 136 L 588 139 L 589 143 L 590 147 L 590 151 L 591 155 L 592 159 L 592 162 L 592 166 L 592 170 L 592 174 L 592 178 L 592 182 L 591 186 L 591 190 L 590 193 L 589 197 L 588 201 L 587 205 L 585 208 L 584 212 L 582 216 L 581 219 L 579 223 L 577 226 L 575 229 L 573 232 L 570 236 L 568 239 L 565 241 L 563 244 L 560 247 L 557 250 L 554 252 L 551 255 L 548 257 L 545 259 L 541 261 L 538 263 L 534 265 L 531 267 L 527 269 L 524 270 L 520 272 L 517 273 L 513 274 L 509 275 L 505 276 L 502 277 L 498 278 L 494 278 L 490 279 L 486 279 L 482 280 L 478 280 L 474 280 L 470 280" fill="none" stroke="#1636c8" stroke-width="1.9" opacity="1"/>
+<rect x="493" y="43" width="58" height="19" rx="3" fill="#fcfdfc" opacity=".96"/>
+<text x="522.0" y="58.4" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#1636c8" font-weight="700">&minus;100 V</text>
+<path d="M 470 333 L 469 333 L 465 333 L 461 333 L 457 333 L 453 334 L 449 334 L 445 334 L 442 335 L 438 336 L 434 336 L 430 337 L 426 338 L 422 339 L 419 340 L 415 341 L 411 342 L 408 343 L 404 345 L 400 346 L 397 348 L 393 350 L 390 351 L 386 353 L 383 355 L 380 357 L 376 359 L 373 362 L 370 364 L 367 367 L 364 369 L 361 372 L 358 374 L 356 377 L 353 380 L 351 383 L 348 386 L 346 389 L 344 393 L 342 396 L 340 399 L 338 403 L 336 406 L 334 410 L 333 413 L 331 417 L 330 421 L 329 424 L 328 428 L 327 432 L 326 436 L 325 440 L 325 443 L 324 447 L 324 451 L 324 455 L 324 459 L 324 463 L 324 467 L 324 471 L 325 474 L 325 478 L 326 482 L 327 486 L 328 490 L 328 494 L 330 497 L 331 501 L 332 505 L 333 508 L 335 512 L 337 516 L 338 519 L 340 522 L 342 526 L 344 529 L 346 533 L 348 536 L 351 539 L 353 542 L 355 545 L 358 548 L 360 551 L 363 554 L 366 557 L 369 559 L 372 562 L 375 564 L 378 567 L 381 569 L 384 571 L 387 574 L 390 576 L 394 578 L 397 580 L 401 581 L 404 583 L 408 585 L 411 586 L 415 588 L 418 589 L 422 591 L 426 592 L 430 593 L 433 594 L 437 595 L 441 596 L 445 596 L 449 597 L 453 597 L 456 598 L 460 598 L 464 598 L 468 598 L 472 598 L 476 598 L 480 598 L 484 598 L 488 597 L 491 597 L 495 596 L 499 596 L 503 595 L 507 594 L 511 593 L 514 592 L 518 591 L 522 589 L 525 588 L 529 586 L 532 585 L 536 583 L 540 581 L 543 580 L 546 578 L 550 576 L 553 574 L 556 571 L 559 569 L 562 567 L 565 564 L 568 562 L 571 559 L 574 556 L 577 554 L 580 551 L 582 548 L 585 545 L 587 542 L 590 539 L 592 536 L 594 532 L 596 529 L 598 526 L 600 522 L 602 519 L 603 515 L 605 512 L 607 508 L 608 505 L 609 501 L 610 497 L 612 493 L 613 490 L 613 486 L 614 482 L 615 478 L 615 474 L 616 470 L 616 467 L 616 463 L 616 459 L 616 455 L 616 451 L 616 447 L 615 443 L 614 439 L 614 436 L 613 432 L 612 428 L 611 424 L 610 420 L 608 417 L 607 413 L 606 410 L 604 406 L 602 403 L 600 399 L 598 396 L 596 392 L 594 389 L 592 386 L 589 383 L 587 380 L 584 377 L 581 374 L 579 372 L 576 369 L 573 366 L 570 364 L 567 362 L 563 359 L 560 357 L 557 355 L 554 353 L 550 351 L 547 350 L 543 348 L 540 346 L 536 345 L 532 343 L 529 342 L 525 341 L 521 340 L 517 339 L 514 338 L 510 337 L 506 336 L 502 335 L 498 335 L 494 334 L 491 334 L 487 334 L 483 333 L 479 333 L 475 333 L 470 333" fill="none" stroke="#b3261e" stroke-width="1.3" opacity=".62"/>
+<path d="M 470 287 L 469 287 L 465 287 L 461 287 L 457 287 L 453 286 L 449 286 L 445 286 L 442 285 L 438 284 L 434 284 L 430 283 L 426 282 L 422 281 L 419 280 L 415 279 L 411 278 L 408 277 L 404 275 L 400 274 L 397 272 L 393 270 L 390 269 L 386 267 L 383 265 L 380 263 L 376 261 L 373 258 L 370 256 L 367 253 L 364 251 L 361 248 L 358 246 L 356 243 L 353 240 L 351 237 L 348 234 L 346 231 L 344 227 L 342 224 L 340 221 L 338 217 L 336 214 L 334 210 L 333 207 L 331 203 L 330 199 L 329 196 L 328 192 L 327 188 L 326 184 L 325 180 L 325 177 L 324 173 L 324 169 L 324 165 L 324 161 L 324 157 L 324 153 L 324 149 L 325 146 L 325 142 L 326 138 L 327 134 L 328 130 L 328 126 L 330 123 L 331 119 L 332 115 L 333 112 L 335 108 L 337 104 L 338 101 L 340 98 L 342 94 L 344 91 L 346 87 L 348 84 L 351 81 L 353 78 L 355 75 L 358 72 L 360 69 L 363 66 L 366 63 L 369 61 L 372 58 L 375 56 L 378 53 L 381 51 L 384 49 L 387 46 L 390 44 L 394 42 L 397 40 L 401 39 L 404 37 L 408 35 L 411 34 L 415 32 L 418 31 L 422 29 L 426 28 L 430 27 L 433 26 L 437 25 L 441 24 L 445 24 L 449 23 L 453 23 L 456 22 L 460 22 L 464 22 L 468 22 L 472 22 L 476 22 L 480 22 L 484 22 L 488 23 L 491 23 L 495 24 L 499 24 L 503 25 L 507 26 L 511 27 L 514 28 L 518 29 L 522 31 L 525 32 L 529 34 L 532 35 L 536 37 L 540 39 L 543 40 L 546 42 L 550 44 L 553 46 L 556 49 L 559 51 L 562 53 L 565 56 L 568 58 L 571 61 L 574 64 L 577 66 L 580 69 L 582 72 L 585 75 L 587 78 L 590 81 L 592 84 L 594 88 L 596 91 L 598 94 L 600 98 L 602 101 L 603 105 L 605 108 L 607 112 L 608 115 L 609 119 L 610 123 L 612 127 L 613 130 L 613 134 L 614 138 L 615 142 L 615 146 L 616 150 L 616 153 L 616 157 L 616 161 L 616 165 L 616 169 L 616 173 L 615 177 L 614 181 L 614 184 L 613 188 L 612 192 L 611 196 L 610 200 L 608 203 L 607 207 L 606 210 L 604 214 L 602 217 L 600 221 L 598 224 L 596 228 L 594 231 L 592 234 L 589 237 L 587 240 L 584 243 L 581 246 L 579 248 L 576 251 L 573 254 L 570 256 L 567 258 L 563 261 L 560 263 L 557 265 L 554 267 L 550 269 L 547 270 L 543 272 L 540 274 L 536 275 L 532 277 L 529 278 L 525 279 L 521 280 L 517 281 L 514 282 L 510 283 L 506 284 L 502 285 L 498 285 L 494 286 L 491 286 L 487 286 L 483 287 L 479 287 L 475 287 L 470 287" fill="none" stroke="#1636c8" stroke-width="1.3" opacity=".62"/>
+<path d="M 470 326 L 469 326 L 465 326 L 461 326 L 457 326 L 453 326 L 449 326 L 445 327 L 441 327 L 438 327 L 434 328 L 430 328 L 426 329 L 422 330 L 418 330 L 414 331 L 411 332 L 407 333 L 403 334 L 399 335 L 396 336 L 392 337 L 388 338 L 385 340 L 381 341 L 377 343 L 374 344 L 370 346 L 367 347 L 363 349 L 360 351 L 356 353 L 353 355 L 350 357 L 347 359 L 343 362 L 340 364 L 337 366 L 334 369 L 331 372 L 329 374 L 326 377 L 323 380 L 320 383 L 318 386 L 315 389 L 313 392 L 311 395 L 309 398 L 306 401 L 304 405 L 303 408 L 301 412 L 299 415 L 297 419 L 296 422 L 294 426 L 293 430 L 292 433 L 291 437 L 290 441 L 289 444 L 288 448 L 287 452 L 286 456 L 286 460 L 285 464 L 285 468 L 285 471 L 285 475 L 285 479 L 285 483 L 285 487 L 285 491 L 285 495 L 286 499 L 286 503 L 287 506 L 288 510 L 288 514 L 289 518 L 290 522 L 291 525 L 293 529 L 294 533 L 295 536 L 297 540 L 298 544 L 300 547 L 301 551 L 303 554 L 305 558 L 307 561 L 309 564 L 311 568 L 313 571 L 315 574 L 318 577 L 320 581 L 322 584 L 325 587 L 327 590 L 330 592 L 333 595 L 335 598 L 338 601 L 341 603 L 344 606 L 347 609 L 350 611 L 352 613" fill="none" stroke="#b3261e" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 326 L 471 326 L 475 326 L 479 326 L 483 326 L 487 326 L 491 326 L 495 327 L 499 327 L 502 327 L 506 328 L 510 328 L 514 329 L 518 330 L 522 330 L 526 331 L 529 332 L 533 333 L 537 334 L 541 335 L 544 336 L 548 337 L 552 338 L 555 340 L 559 341 L 563 343 L 566 344 L 570 346 L 573 347 L 577 349 L 580 351 L 584 353 L 587 355 L 590 357 L 593 359 L 597 362 L 600 364 L 603 366 L 606 369 L 609 372 L 611 374 L 614 377 L 617 380 L 620 383 L 622 386 L 625 389 L 627 392 L 629 395 L 631 398 L 634 401 L 636 405 L 637 408 L 639 412 L 641 415 L 643 419 L 644 422 L 646 426 L 647 430 L 648 433 L 649 437 L 650 441 L 651 444 L 652 448 L 653 452 L 654 456 L 654 460 L 655 464 L 655 468 L 655 471 L 655 475 L 655 479 L 655 483 L 655 487 L 655 491 L 655 495 L 654 499 L 654 503 L 653 506 L 652 510 L 652 514 L 651 518 L 650 522 L 649 525 L 647 529 L 646 533 L 645 536 L 643 540 L 642 544 L 640 547 L 639 551 L 637 554 L 635 558 L 633 561 L 631 564 L 629 568 L 627 571 L 625 574 L 622 577 L 620 581 L 618 584 L 615 587 L 613 590 L 610 592 L 607 595 L 605 598 L 602 601 L 599 603 L 596 606 L 593 609 L 590 611 L 588 613" fill="none" stroke="#b3261e" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 294 L 469 294 L 465 294 L 461 294 L 457 294 L 453 294 L 449 294 L 445 293 L 441 293 L 438 293 L 434 292 L 430 292 L 426 291 L 422 290 L 418 290 L 414 289 L 411 288 L 407 287 L 403 286 L 399 285 L 396 284 L 392 283 L 388 282 L 385 280 L 381 279 L 377 277 L 374 276 L 370 274 L 367 273 L 363 271 L 360 269 L 356 267 L 353 265 L 350 263 L 347 261 L 343 258 L 340 256 L 337 254 L 334 251 L 331 248 L 329 246 L 326 243 L 323 240 L 320 237 L 318 234 L 315 231 L 313 228 L 311 225 L 309 222 L 306 219 L 304 215 L 303 212 L 301 208 L 299 205 L 297 201 L 296 198 L 294 194 L 293 190 L 292 187 L 291 183 L 290 179 L 289 176 L 288 172 L 287 168 L 286 164 L 286 160 L 285 156 L 285 152 L 285 149 L 285 145 L 285 141 L 285 137 L 285 133 L 285 129 L 285 125 L 286 121 L 286 117 L 287 114 L 288 110 L 288 106 L 289 102 L 290 98 L 291 95 L 293 91 L 294 87 L 295 84 L 297 80 L 298 76 L 300 73 L 301 69 L 303 66 L 305 62 L 307 59 L 309 56 L 311 52 L 313 49 L 315 46 L 318 43 L 320 39 L 322 36 L 325 33 L 327 30 L 330 28 L 333 25 L 335 22 L 338 19 L 341 17 L 344 14 L 347 11 L 350 9 L 352 7" fill="none" stroke="#1636c8" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 294 L 471 294 L 475 294 L 479 294 L 483 294 L 487 294 L 491 294 L 495 293 L 499 293 L 502 293 L 506 292 L 510 292 L 514 291 L 518 290 L 522 290 L 526 289 L 529 288 L 533 287 L 537 286 L 541 285 L 544 284 L 548 283 L 552 282 L 555 280 L 559 279 L 563 277 L 566 276 L 570 274 L 573 273 L 577 271 L 580 269 L 584 267 L 587 265 L 590 263 L 593 261 L 597 258 L 600 256 L 603 254 L 606 251 L 609 248 L 611 246 L 614 243 L 617 240 L 620 237 L 622 234 L 625 231 L 627 228 L 629 225 L 631 222 L 634 219 L 636 215 L 637 212 L 639 208 L 641 205 L 643 201 L 644 198 L 646 194 L 647 190 L 648 187 L 649 183 L 650 179 L 651 176 L 652 172 L 653 168 L 654 164 L 654 160 L 655 156 L 655 152 L 655 149 L 655 145 L 655 141 L 655 137 L 655 133 L 655 129 L 655 125 L 654 121 L 654 117 L 653 114 L 652 110 L 652 106 L 651 102 L 650 98 L 649 95 L 647 91 L 646 87 L 645 84 L 643 80 L 642 76 L 640 73 L 639 69 L 637 66 L 635 62 L 633 59 L 631 56 L 629 52 L 627 49 L 625 46 L 622 43 L 620 39 L 618 36 L 615 33 L 613 30 L 610 28 L 607 25 L 605 22 L 602 19 L 599 17 L 596 14 L 593 11 L 590 9 L 588 7" fill="none" stroke="#1636c8" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 319 L 469 319 L 465 319 L 461 320 L 457 320 L 453 320 L 449 320 L 445 320 L 441 320 L 438 321 L 434 321 L 430 321 L 426 321 L 422 322 L 418 322 L 414 323 L 410 323 L 407 324 L 403 324 L 399 325 L 395 326 L 391 326 L 387 327 L 383 328 L 380 329 L 376 330 L 372 331 L 368 332 L 365 333 L 361 334 L 357 335 L 353 337 L 350 338 L 346 339 L 343 341 L 339 342 L 335 344 L 332 345 L 328 347 L 325 349 L 321 351 L 318 352 L 315 354 L 311 356 L 308 358 L 305 361 L 301 363 L 298 365 L 295 367 L 292 370 L 289 372 L 286 375 L 283 377 L 280 380 L 277 383 L 275 385 L 272 388 L 269 391 L 267 394 L 264 397 L 262 400 L 259 403 L 257 406 L 255 410 L 253 413 L 251 416 L 249 419 L 247 423 L 245 426 L 243 430 L 241 433 L 240 437 L 238 440 L 237 444 L 235 448 L 234 451 L 233 455 L 232 459 L 230 462 L 229 466 L 228 470 L 228 474 L 227 478 L 226 481 L 226 485 L 225 489 L 225 493 L 224 497 L 224 501 L 224 505 L 223 509 L 223 512 L 223 516 L 224 520 L 224 524 L 224 528 L 224 532 L 225 536 L 225 540 L 226 544 L 226 547 L 227 551 L 228 555 L 228 559 L 229 563 L 230 566 L 231 570 L 232 574 L 234 578 L 235 581 L 236 585 L 238 589 L 239 592 L 240 596 L 242 599 L 244 603 L 245 607 L 247 610 L 248 612" fill="none" stroke="#b3261e" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 319 L 471 319 L 475 319 L 479 320 L 483 320 L 487 320 L 491 320 L 495 320 L 499 320 L 502 321 L 506 321 L 510 321 L 514 321 L 518 322 L 522 322 L 526 323 L 530 323 L 533 324 L 537 324 L 541 325 L 545 326 L 549 326 L 553 327 L 557 328 L 560 329 L 564 330 L 568 331 L 572 332 L 575 333 L 579 334 L 583 335 L 587 337 L 590 338 L 594 339 L 597 341 L 601 342 L 605 344 L 608 345 L 612 347 L 615 349 L 619 351 L 622 352 L 625 354 L 629 356 L 632 358 L 635 361 L 639 363 L 642 365 L 645 367 L 648 370 L 651 372 L 654 375 L 657 377 L 660 380 L 663 383 L 665 385 L 668 388 L 671 391 L 673 394 L 676 397 L 678 400 L 681 403 L 683 406 L 685 410 L 687 413 L 689 416 L 691 419 L 693 423 L 695 426 L 697 430 L 699 433 L 700 437 L 702 440 L 703 444 L 705 448 L 706 451 L 707 455 L 708 459 L 710 462 L 711 466 L 712 470 L 712 474 L 713 478 L 714 481 L 714 485 L 715 489 L 715 493 L 716 497 L 716 501 L 716 505 L 717 509 L 717 512 L 717 516 L 716 520 L 716 524 L 716 528 L 716 532 L 715 536 L 715 540 L 714 544 L 714 547 L 713 551 L 712 555 L 712 559 L 711 563 L 710 566 L 709 570 L 708 574 L 706 578 L 705 581 L 704 585 L 702 589 L 701 592 L 700 596 L 698 599 L 696 603 L 695 607 L 693 610 L 692 612" fill="none" stroke="#b3261e" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 301 L 469 301 L 465 301 L 461 300 L 457 300 L 453 300 L 449 300 L 445 300 L 441 300 L 438 299 L 434 299 L 430 299 L 426 299 L 422 298 L 418 298 L 414 297 L 410 297 L 407 296 L 403 296 L 399 295 L 395 294 L 391 294 L 387 293 L 383 292 L 380 291 L 376 290 L 372 289 L 368 288 L 365 287 L 361 286 L 357 285 L 353 283 L 350 282 L 346 281 L 343 279 L 339 278 L 335 276 L 332 275 L 328 273 L 325 271 L 321 269 L 318 268 L 315 266 L 311 264 L 308 262 L 305 259 L 301 257 L 298 255 L 295 253 L 292 250 L 289 248 L 286 245 L 283 243 L 280 240 L 277 237 L 275 235 L 272 232 L 269 229 L 267 226 L 264 223 L 262 220 L 259 217 L 257 214 L 255 210 L 253 207 L 251 204 L 249 201 L 247 197 L 245 194 L 243 190 L 241 187 L 240 183 L 238 180 L 237 176 L 235 172 L 234 169 L 233 165 L 232 161 L 230 158 L 229 154 L 228 150 L 228 146 L 227 142 L 226 139 L 226 135 L 225 131 L 225 127 L 224 123 L 224 119 L 224 115 L 223 111 L 223 108 L 223 104 L 224 100 L 224 96 L 224 92 L 224 88 L 225 84 L 225 80 L 226 76 L 226 73 L 227 69 L 228 65 L 228 61 L 229 57 L 230 54 L 231 50 L 232 46 L 234 42 L 235 39 L 236 35 L 238 31 L 239 28 L 240 24 L 242 21 L 244 17 L 245 13 L 247 10 L 248 8" fill="none" stroke="#1636c8" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 301 L 471 301 L 475 301 L 479 300 L 483 300 L 487 300 L 491 300 L 495 300 L 499 300 L 502 299 L 506 299 L 510 299 L 514 299 L 518 298 L 522 298 L 526 297 L 530 297 L 533 296 L 537 296 L 541 295 L 545 294 L 549 294 L 553 293 L 557 292 L 560 291 L 564 290 L 568 289 L 572 288 L 575 287 L 579 286 L 583 285 L 587 283 L 590 282 L 594 281 L 597 279 L 601 278 L 605 276 L 608 275 L 612 273 L 615 271 L 619 269 L 622 268 L 625 266 L 629 264 L 632 262 L 635 259 L 639 257 L 642 255 L 645 253 L 648 250 L 651 248 L 654 245 L 657 243 L 660 240 L 663 237 L 665 235 L 668 232 L 671 229 L 673 226 L 676 223 L 678 220 L 681 217 L 683 214 L 685 210 L 687 207 L 689 204 L 691 201 L 693 197 L 695 194 L 697 190 L 699 187 L 700 183 L 702 180 L 703 176 L 705 172 L 706 169 L 707 165 L 708 161 L 710 158 L 711 154 L 712 150 L 712 146 L 713 142 L 714 139 L 714 135 L 715 131 L 715 127 L 716 123 L 716 119 L 716 115 L 717 111 L 717 108 L 717 104 L 716 100 L 716 96 L 716 92 L 716 88 L 715 84 L 715 80 L 714 76 L 714 73 L 713 69 L 712 65 L 712 61 L 711 57 L 710 54 L 709 50 L 708 46 L 706 42 L 705 39 L 704 35 L 702 31 L 701 28 L 700 24 L 698 21 L 696 17 L 695 13 L 693 10 L 692 8" fill="none" stroke="#1636c8" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 315 L 469 315 L 465 315 L 461 315 L 457 315 L 453 315 L 449 315 L 445 315 L 441 315 L 438 315 L 434 315 L 430 316 L 426 316 L 422 316 L 418 316 L 414 316 L 410 317 L 406 317 L 402 317 L 399 318 L 395 318 L 391 318 L 387 319 L 383 319 L 379 320 L 375 320 L 371 321 L 368 321 L 364 322 L 360 322 L 356 323 L 352 323 L 348 324 L 344 325 L 341 326 L 337 326 L 333 327 L 329 328 L 325 329 L 322 330 L 318 331 L 314 332 L 310 333 L 307 334 L 303 335 L 299 336 L 295 337 L 292 339 L 288 340 L 284 341 L 281 343 L 277 344 L 273 346 L 270 347 L 266 349 L 263 350 L 259 352 L 256 354 L 252 355 L 249 357 L 245 359 L 242 361 L 239 363 L 235 365 L 232 367 L 229 369 L 225 371 L 222 373 L 219 375 L 216 378 L 213 380 L 209 382 L 206 385 L 203 387 L 200 390 L 197 392 L 195 395 L 192 398 L 189 400 L 186 403 L 183 406 L 181 409 L 178 412 L 175 414 L 173 417 L 170 420 L 168 423 L 165 426 L 163 430 L 161 433 L 159 436 L 156 439 L 154 442 L 152 446 L 150 449 L 148 452 L 146 456 L 144 459 L 142 463 L 141 466 L 139 469 L 137 473 L 136 477 L 134 480 L 133 484 L 131 487 L 130 491 L 128 495 L 127 498 L 126 502 L 125 506 L 124 510 L 123 513 L 122 517 L 121 521 L 120 525 L 119 528 L 118 532 L 117 536 L 117 540 L 116 544 L 116 548 L 115 552 L 115 555 L 114 559 L 114 563 L 114 567 L 114 571 L 113 575 L 113 579 L 113 583 L 113 587 L 113 590 L 114 594 L 114 598 L 114 602 L 114 606 L 115 610 L 115 612" fill="none" stroke="#b3261e" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 315 L 471 315 L 475 315 L 479 315 L 483 315 L 487 315 L 491 315 L 495 315 L 499 315 L 502 315 L 506 315 L 510 316 L 514 316 L 518 316 L 522 316 L 526 316 L 530 317 L 534 317 L 538 317 L 541 318 L 545 318 L 549 318 L 553 319 L 557 319 L 561 320 L 565 320 L 569 321 L 572 321 L 576 322 L 580 322 L 584 323 L 588 323 L 592 324 L 596 325 L 599 326 L 603 326 L 607 327 L 611 328 L 615 329 L 618 330 L 622 331 L 626 332 L 630 333 L 633 334 L 637 335 L 641 336 L 645 337 L 648 339 L 652 340 L 656 341 L 659 343 L 663 344 L 667 346 L 670 347 L 674 349 L 677 350 L 681 352 L 684 354 L 688 355 L 691 357 L 695 359 L 698 361 L 701 363 L 705 365 L 708 367 L 711 369 L 715 371 L 718 373 L 721 375 L 724 378 L 727 380 L 731 382 L 734 385 L 737 387 L 740 390 L 743 392 L 745 395 L 748 398 L 751 400 L 754 403 L 757 406 L 759 409 L 762 412 L 765 414 L 767 417 L 770 420 L 772 423 L 775 426 L 777 430 L 779 433 L 781 436 L 784 439 L 786 442 L 788 446 L 790 449 L 792 452 L 794 456 L 796 459 L 798 463 L 799 466 L 801 469 L 803 473 L 804 477 L 806 480 L 807 484 L 809 487 L 810 491 L 812 495 L 813 498 L 814 502 L 815 506 L 816 510 L 817 513 L 818 517 L 819 521 L 820 525 L 821 528 L 822 532 L 823 536 L 823 540 L 824 544 L 824 548 L 825 552 L 825 555 L 826 559 L 826 563 L 826 567 L 826 571 L 827 575 L 827 579 L 827 583 L 827 587 L 827 590 L 826 594 L 826 598 L 826 602 L 826 606 L 825 610 L 825 612" fill="none" stroke="#b3261e" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 305 L 469 305 L 465 305 L 461 305 L 457 305 L 453 305 L 449 305 L 445 305 L 441 305 L 438 305 L 434 305 L 430 304 L 426 304 L 422 304 L 418 304 L 414 304 L 410 303 L 406 303 L 402 303 L 399 302 L 395 302 L 391 302 L 387 301 L 383 301 L 379 300 L 375 300 L 371 299 L 368 299 L 364 298 L 360 298 L 356 297 L 352 297 L 348 296 L 344 295 L 341 294 L 337 294 L 333 293 L 329 292 L 325 291 L 322 290 L 318 289 L 314 288 L 310 287 L 307 286 L 303 285 L 299 284 L 295 283 L 292 281 L 288 280 L 284 279 L 281 277 L 277 276 L 273 274 L 270 273 L 266 271 L 263 270 L 259 268 L 256 266 L 252 265 L 249 263 L 245 261 L 242 259 L 239 257 L 235 255 L 232 253 L 229 251 L 225 249 L 222 247 L 219 245 L 216 242 L 213 240 L 209 238 L 206 235 L 203 233 L 200 230 L 197 228 L 195 225 L 192 222 L 189 220 L 186 217 L 183 214 L 181 211 L 178 208 L 175 206 L 173 203 L 170 200 L 168 197 L 165 194 L 163 190 L 161 187 L 159 184 L 156 181 L 154 178 L 152 174 L 150 171 L 148 168 L 146 164 L 144 161 L 142 157 L 141 154 L 139 151 L 137 147 L 136 143 L 134 140 L 133 136 L 131 133 L 130 129 L 128 125 L 127 122 L 126 118 L 125 114 L 124 110 L 123 107 L 122 103 L 121 99 L 120 95 L 119 92 L 118 88 L 117 84 L 117 80 L 116 76 L 116 72 L 115 68 L 115 65 L 114 61 L 114 57 L 114 53 L 114 49 L 113 45 L 113 41 L 113 37 L 113 33 L 113 30 L 114 26 L 114 22 L 114 18 L 114 14 L 115 10 L 115 8" fill="none" stroke="#1636c8" stroke-width="1.0" opacity=".5"/>
+<path d="M 470 305 L 471 305 L 475 305 L 479 305 L 483 305 L 487 305 L 491 305 L 495 305 L 499 305 L 502 305 L 506 305 L 510 304 L 514 304 L 518 304 L 522 304 L 526 304 L 530 303 L 534 303 L 538 303 L 541 302 L 545 302 L 549 302 L 553 301 L 557 301 L 561 300 L 565 300 L 569 299 L 572 299 L 576 298 L 580 298 L 584 297 L 588 297 L 592 296 L 596 295 L 599 294 L 603 294 L 607 293 L 611 292 L 615 291 L 618 290 L 622 289 L 626 288 L 630 287 L 633 286 L 637 285 L 641 284 L 645 283 L 648 281 L 652 280 L 656 279 L 659 277 L 663 276 L 667 274 L 670 273 L 674 271 L 677 270 L 681 268 L 684 266 L 688 265 L 691 263 L 695 261 L 698 259 L 701 257 L 705 255 L 708 253 L 711 251 L 715 249 L 718 247 L 721 245 L 724 242 L 727 240 L 731 238 L 734 235 L 737 233 L 740 230 L 743 228 L 745 225 L 748 222 L 751 220 L 754 217 L 757 214 L 759 211 L 762 208 L 765 206 L 767 203 L 770 200 L 772 197 L 775 194 L 777 190 L 779 187 L 781 184 L 784 181 L 786 178 L 788 174 L 790 171 L 792 168 L 794 164 L 796 161 L 798 157 L 799 154 L 801 151 L 803 147 L 804 143 L 806 140 L 807 136 L 809 133 L 810 129 L 812 125 L 813 122 L 814 118 L 815 114 L 816 110 L 817 107 L 818 103 L 819 99 L 820 95 L 821 92 L 822 88 L 823 84 L 823 80 L 824 76 L 824 72 L 825 68 L 825 65 L 826 61 L 826 57 L 826 53 L 826 49 L 827 45 L 827 41 L 827 37 L 827 33 L 827 30 L 826 26 L 826 22 L 826 18 L 826 14 L 825 10 L 825 8" fill="none" stroke="#1636c8" stroke-width="1.0" opacity=".5"/>
+<line x1="26" y1="310" x2="934" y2="310" stroke="#1d2b23" stroke-width="2.2" stroke-dasharray="11 7"/>
+<rect x="30" y="297" width="56" height="26" rx="4" fill="#fcfdfc"/>
+<text x="36.0" y="317.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="19" fill="#1d2b23" font-weight="700">0 V</text>
+<line x1="470" y1="310" x2="470" y2="258" stroke="#1e6b3c" stroke-width="2.6" marker-end="url(#em)"/>
+<text x="482.0" y="276.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1e6b3c" font-weight="700">E</text>
+<text x="500.0" y="276.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#1e6b3c" font-weight="600">&mdash; at right angles to the 0 V line</text>
+<circle cx="470" cy="310" r="4" fill="#1e6b3c"/>
+<circle cx="470.0" cy="192.0" r="14" fill="#fff" stroke="#1636c8" stroke-width="2.4"/><line x1="463.5" y1="192.0" x2="476.5" y2="192.0" stroke="#1636c8" stroke-width="2.6"/>
+<circle cx="470.0" cy="428.0" r="14" fill="#fff" stroke="#b3261e" stroke-width="2.4"/><line x1="463.5" y1="428.0" x2="476.5" y2="428.0" stroke="#b3261e" stroke-width="2.6"/><line x1="470.0" y1="421.5" x2="470.0" y2="434.5" stroke="#b3261e" stroke-width="2.6"/>
+<text x="26.0" y="32.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1d2b23" font-weight="700">Equipotential &ldquo;contour lines&rdquo;</text>
+<text x="934.0" y="32.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#1636c8" font-weight="700">potential NEGATIVE up here</text>
+<text x="934.0" y="600.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="14" fill="#b3261e" font-weight="700">potential POSITIVE down here</text>
+</svg></div>
+<div class="fig-note"><b>Figure 2.</b>&nbsp; <b>Equipotential &ldquo;contour lines.&rdquo;</b>&nbsp; Exactly like the contour lines on a map &mdash; every point on one of them is at the same potential, and the value is written on it.&nbsp; They crowd together close to a charge, where the potential changes fast, and spread out as you go away.&nbsp; <b>The 0&nbsp;V line is dead straight</b>, exactly midway.&nbsp; And look at the green arrow: <b>the field crosses the equipotential at right angles</b>, pointing from the + charge toward the &minus; one &mdash; downhill, always.&nbsp; The faint dashed curves are the field lines, and they cut every contour square.</div>
+
+<ol class="items" start="9">
+<li>Grab the sensor and move it around to find a location or locations <b>where the field is zero</b>.&nbsp; Can you find it?</li>
+<li>How do you explain the existence of <b>zero electric potential</b> where the <b>electric field is not zero</b>?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r4" data-label="Show the answer &mdash; and this is the one worth getting">Show the answer &mdash; and this is the one worth getting</button><div class="rbody" id="r4" hidden><p><b>NO.</b>&nbsp; There is nowhere the field is zero.</p><p>And yet the potential <i>is</i> zero all along that middle line.&nbsp; How can both be true?</p><p><b>Because fields add like vectors, while potentials add like numbers.</b>&nbsp; On that line the two field vectors point the same way rather than opposite ways, so they do <b>not</b> cancel &mdash; but the two potentials are a positive number and an equal negative number, and <b>numbers like that always cancel</b>.</p><p>So: field &ne; 0 there, potential = 0 there.&nbsp; Nothing contradictory about it at all, once you remember which of the two is a vector.</p></div></div>
+
+<ol class="items" start="11">
+<li>How does the value of the potential change with the distance from the charges?</li>
+<li>With the charges close enough to touch each other, place the voltmeter nearer the edge of the field (making it easier to see the
+pattern).&nbsp; What happens to the voltmeter reading as you are at the edge of the field, and what does this reading imply about how
+the potentials from positive and negative charges add?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r5" data-label="Show the answer">Show the answer</button><div class="rbody" id="r5" hidden><p><b>Decrease.</b>&nbsp; From the + charge it runs from a large positive value down toward zero; from the &minus; charge, from a large negative value up toward zero.</p><p>At the edge, with the charges touching, the reading goes to <b>zero</b>.&nbsp; <b>They cancel.</b>&nbsp; Positive and negative potentials add like numbers, and like numbers they cancel.</p></div></div>
+
+<h2>Part III &mdash; potential in two like charges (two negative or two positive charges in close proximity)</h2>
+
+<ol class="items" start="13">
+<li>Place two like charges on the grid vertically aligned with a reasonable distance between them.&nbsp; Use a voltmeter and find the
+locations of <b>zero potential</b>.&nbsp; Can you find it?&nbsp; Explain the result.</li>
+<li>Draw the electric field lines.&nbsp; Grab a sensor and move it around.&nbsp; <b>Where is the location of the zero field?</b>&nbsp;
+Indicate it on the diagram.&nbsp; Explain the result.</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r6" data-label="Show the answer">Show the answer</button><div class="rbody" id="r6" hidden><p><b>Zero potential: NO.</b>&nbsp; Two like charges both contribute potential of the same sign, and two numbers of the same sign can never add to zero.</p><p><b>Zero field: YES</b> &mdash; between the two charges, at the <b>midpoint</b>, where the forces point in opposite directions and have the same magnitude, <b>so they cancel (vectors)</b>.</p><p>The plot just below shows it: <b>two same-sign curves never reach the axis.</b></p><p>Which is the exact mirror image of the dipole.&nbsp; There: field never zero, potential zero on a line.&nbsp; Here: potential never zero, field zero at a point.&nbsp; <b>Same reason both times</b> &mdash; one of them is a vector and the other is not.</p></div></div>
+
+<h3>The same three cases, as graphs</h3>
+<p>Here is the potential plotted along the line that runs straight through the two charges.&nbsp;
+<i>V</i><sub>1</sub> is the potential from charge 1 alone, <i>V</i><sub>2</sub> from charge 2 alone, and what the voltmeter reads is
+the two of them added &mdash; <b>added as numbers</b>, which is the whole point.</p>
+
+<div class="fig"><svg viewBox="0 0 960 1072" role="img" aria-label="Three stacked plots of potential along the line through two charges, with the zero line marked.">
+<g transform="translate(0,0)">
+<clipPath id="cpV1"><rect x="88" y="30" width="846" height="270"/></clipPath>
+<rect x="0" y="0" width="960" height="352" fill="#fff" stroke="#d7e2da" stroke-width="1"/>
+<marker id="ahV1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker>
+<line x1="361.0" y1="30" x2="361.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="661.0" y1="30" x2="661.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="92" y1="168.0" x2="930" y2="168.0" stroke="#1d2b23" stroke-width="1.5"/>
+<g clip-path="url(#cpV1)">
+<path d="M 94.0 145.5 L 131.0 141.9 L 163.0 137.7 L 190.5 132.8 L 214.0 127.2 L 234.5 120.6 L 252.0 113.0 L 267.0 104.2 L 280.0 93.9 L 291.5 81.7 L 301.0 68.0 L 309.5 51.5 L 316.5 33.2 L 322.5 12.2 L 328.0 -13.8 L 332.5 -42.5 L 336.5 -76.9" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 386.0 -72.0 L 391.5 -28.7 L 398.0 5.8 L 402.0 21.7 L 406.0 34.7 L 410.5 46.8 L 415.5 57.9 L 421.0 68.0 L 427.0 77.1 L 434.0 85.8 L 441.5 93.5 L 450.0 100.6 L 459.0 106.8 L 469.0 112.4 L 480.0 117.6 L 492.0 122.2 L 505.5 126.5 L 520.5 130.4 L 537.0 133.9 L 575.0 140.0 L 621.0 144.9 L 677.0 149.0 L 745.0 152.4 L 827.5 155.1 L 928.0 157.4" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 157.4 L 195.0 155.1 L 278.0 152.3 L 346.5 148.9 L 402.5 144.8 L 448.5 139.8 L 486.5 133.6 L 503.0 130.0 L 517.5 126.2 L 531.0 121.8 L 543.0 117.2 L 554.0 111.9 L 564.0 106.1 L 573.0 99.8 L 581.0 93.0 L 588.5 85.2 L 595.5 76.4 L 601.5 67.2 L 607.0 56.9 L 612.0 45.6 L 616.5 33.2 L 620.5 19.9 L 624.5 3.6 L 631.0 -32.0 L 636.5 -76.9" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 686.0 -72.0 L 690.0 -38.9 L 694.5 -11.1 L 700.0 14.2 L 706.0 34.7 L 713.0 52.6 L 721.5 68.8 L 731.0 82.3 L 742.5 94.4 L 755.5 104.5 L 770.5 113.2 L 788.0 120.8 L 808.5 127.3 L 832.0 132.9 L 859.5 137.8 L 891.0 141.9 L 928.0 145.5" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 134.9 L 129.0 130.9 L 159.5 126.3 L 186.0 121.1 L 209.5 115.1 L 229.5 108.5 L 247.0 100.9 L 262.5 92.0 L 275.5 82.3 L 287.0 70.9 L 297.0 57.8 L 305.5 43.0 L 313.0 25.8 L 319.5 5.9 L 325.0 -16.5 L 330.0 -43.7 L 334.0 -72.6" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 388.5 -72.2 L 395.0 -31.0 L 399.0 -12.8 L 403.5 3.5 L 408.5 17.9 L 414.0 30.5 L 420.0 41.4 L 426.5 50.8 L 434.0 59.4 L 442.5 66.9 L 452.0 73.4 L 462.5 78.7 L 474.0 82.8 L 486.5 85.8 L 500.0 87.6 L 513.5 88.0 L 526.5 87.1 L 539.5 85.0 L 551.5 81.7 L 562.5 77.3 L 572.5 71.8 L 581.5 65.3 L 589.5 57.8 L 597.0 48.8 L 603.5 38.9 L 609.5 27.4 L 615.0 13.9 L 619.5 0.2 L 623.5 -14.9 L 627.5 -33.6 L 631.0 -54.2 L 634.0 -76.2" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 688.5 -68.5 L 692.5 -40.6 L 697.5 -14.2 L 703.0 7.6 L 709.5 27.1 L 717.0 44.0 L 725.5 58.5 L 735.5 71.4 L 747.0 82.7 L 760.0 92.4 L 775.5 101.1 L 793.0 108.7 L 813.0 115.3 L 836.0 121.1 L 862.5 126.3 L 893.0 130.9 L 928.0 134.9" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+</g>
+<text x="349.0" y="50.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e" font-weight="700">V<tspan font-size='10' dy='4'>1</tspan></text>
+<text x="649.0" y="50.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e" font-weight="700">V<tspan font-size='10' dy='4'>2</tspan></text>
+<rect x="872.0" y="146.0" width="54" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="926.0" y="160.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="700">V = 0</text>
+<rect x="459.0" y="34.0" width="104" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="511.0" y="49.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">V<tspan font-size='10' dy='3'>1</tspan><tspan dy='-3'> + V</tspan><tspan font-size='10' dy='3'>2</tspan></text>
+<text x="14.0" y="24.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">Case 1</text>
+<text x="14.0" y="46.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">&#8853; &amp; &#8853;</text>
+<rect x="352.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="361.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">1</text>
+<rect x="652.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="661.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">2</text>
+<circle cx="361.0" cy="168.0" r="13" fill="#fff" stroke="#b3261e" stroke-width="2.2"/><line x1="355.0" y1="168.0" x2="367.0" y2="168.0" stroke="#b3261e" stroke-width="2.4"/><line x1="361.0" y1="162.0" x2="361.0" y2="174.0" stroke="#b3261e" stroke-width="2.4"/>
+<circle cx="661.0" cy="168.0" r="13" fill="#fff" stroke="#b3261e" stroke-width="2.2"/><line x1="655.0" y1="168.0" x2="667.0" y2="168.0" stroke="#b3261e" stroke-width="2.4"/><line x1="661.0" y1="162.0" x2="661.0" y2="174.0" stroke="#b3261e" stroke-width="2.4"/>
+</g>
+<text x="14.0" y="339.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="600">the resultant dips in the middle but never reaches the axis &mdash; two positive numbers cannot add to zero</text>
+<g transform="translate(0,360)">
+<clipPath id="cpV2"><rect x="88" y="30" width="846" height="270"/></clipPath>
+<rect x="0" y="0" width="960" height="352" fill="#fff" stroke="#d7e2da" stroke-width="1"/>
+<marker id="ahV2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker>
+<line x1="361.0" y1="30" x2="361.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="661.0" y1="30" x2="661.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="92" y1="168.0" x2="930" y2="168.0" stroke="#1d2b23" stroke-width="1.5"/>
+<g clip-path="url(#cpV2)">
+<path d="M 94.0 190.5 L 131.0 194.1 L 163.0 198.3 L 190.5 203.2 L 214.0 208.8 L 234.5 215.4 L 252.0 223.0 L 267.0 231.8 L 280.0 242.1 L 291.5 254.3 L 301.0 268.0 L 309.5 284.5 L 316.5 302.8 L 322.5 323.8 L 328.0 349.8 L 332.5 378.5 L 336.5 412.9" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 386.0 408.0 L 391.5 364.7 L 398.0 330.2 L 402.0 314.3 L 406.0 301.3 L 410.5 289.2 L 415.5 278.1 L 421.0 268.0 L 427.0 258.9 L 434.0 250.2 L 441.5 242.5 L 450.0 235.4 L 459.0 229.2 L 469.0 223.6 L 480.0 218.4 L 492.0 213.8 L 505.5 209.5 L 520.5 205.6 L 537.0 202.1 L 575.0 196.0 L 621.0 191.1 L 677.0 187.0 L 745.0 183.6 L 827.5 180.9 L 928.0 178.6" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 178.6 L 195.0 180.9 L 278.0 183.7 L 346.5 187.1 L 402.5 191.2 L 448.5 196.2 L 486.5 202.4 L 503.0 206.0 L 517.5 209.8 L 531.0 214.2 L 543.0 218.8 L 554.0 224.1 L 564.0 229.9 L 573.0 236.2 L 581.0 243.0 L 588.5 250.8 L 595.5 259.6 L 601.5 268.8 L 607.0 279.1 L 612.0 290.4 L 616.5 302.8 L 620.5 316.1 L 624.5 332.4 L 631.0 368.0 L 636.5 412.9" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 686.0 408.0 L 690.0 374.9 L 694.5 347.1 L 700.0 321.8 L 706.0 301.3 L 713.0 283.4 L 721.5 267.2 L 731.0 253.7 L 742.5 241.6 L 755.5 231.5 L 770.5 222.8 L 788.0 215.2 L 808.5 208.7 L 832.0 203.1 L 859.5 198.2 L 891.0 194.1 L 928.0 190.5" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 201.1 L 129.0 205.1 L 159.5 209.7 L 186.0 214.9 L 209.5 220.9 L 229.5 227.5 L 247.0 235.1 L 262.5 244.0 L 275.5 253.7 L 287.0 265.1 L 297.0 278.2 L 305.5 293.0 L 313.0 310.2 L 319.5 330.1 L 325.0 352.5 L 330.0 379.7 L 334.0 408.6" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 388.5 408.2 L 395.0 367.0 L 399.0 348.8 L 403.5 332.5 L 408.5 318.1 L 414.0 305.5 L 420.0 294.6 L 426.5 285.2 L 434.0 276.6 L 442.5 269.1 L 452.0 262.6 L 462.5 257.3 L 474.0 253.2 L 486.5 250.2 L 500.0 248.4 L 513.5 248.0 L 526.5 248.9 L 539.5 251.0 L 551.5 254.3 L 562.5 258.7 L 572.5 264.2 L 581.5 270.7 L 589.5 278.2 L 597.0 287.2 L 603.5 297.1 L 609.5 308.6 L 615.0 322.1 L 619.5 335.8 L 623.5 350.9 L 627.5 369.6 L 631.0 390.2 L 634.0 412.2" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 688.5 404.5 L 692.5 376.6 L 697.5 350.2 L 703.0 328.4 L 709.5 308.9 L 717.0 292.0 L 725.5 277.5 L 735.5 264.6 L 747.0 253.3 L 760.0 243.6 L 775.5 234.9 L 793.0 227.3 L 813.0 220.7 L 836.0 214.9 L 862.5 209.7 L 893.0 205.1 L 928.0 201.1" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+</g>
+<text x="349.0" y="290.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" font-weight="700">V<tspan font-size='10' dy='4'>1</tspan></text>
+<text x="649.0" y="290.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" font-weight="700">V<tspan font-size='10' dy='4'>2</tspan></text>
+<rect x="872.0" y="146.0" width="54" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="926.0" y="160.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="700">V = 0</text>
+<rect x="459.0" y="34.0" width="104" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="511.0" y="49.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">V<tspan font-size='10' dy='3'>1</tspan><tspan dy='-3'> + V</tspan><tspan font-size='10' dy='3'>2</tspan></text>
+<text x="14.0" y="24.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">Case 2</text>
+<text x="14.0" y="46.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#1636c8" font-weight="700">&#8854; &amp; &#8854;</text>
+<rect x="352.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="361.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">1</text>
+<rect x="652.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="661.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">2</text>
+<circle cx="361.0" cy="168.0" r="13" fill="#fff" stroke="#1636c8" stroke-width="2.2"/><line x1="355.0" y1="168.0" x2="367.0" y2="168.0" stroke="#1636c8" stroke-width="2.4"/>
+<circle cx="661.0" cy="168.0" r="13" fill="#fff" stroke="#1636c8" stroke-width="2.2"/><line x1="655.0" y1="168.0" x2="667.0" y2="168.0" stroke="#1636c8" stroke-width="2.4"/>
+</g>
+<text x="14.0" y="699.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="600">the same below the axis &mdash; two negative numbers cannot add to zero either</text>
+<g transform="translate(0,720)">
+<clipPath id="cpV3"><rect x="88" y="30" width="846" height="270"/></clipPath>
+<rect x="0" y="0" width="960" height="352" fill="#fff" stroke="#d7e2da" stroke-width="1"/>
+<marker id="ahV3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker>
+<line x1="361.0" y1="30" x2="361.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="661.0" y1="30" x2="661.0" y2="300" stroke="#9aa8a0" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="92" y1="168.0" x2="930" y2="168.0" stroke="#1d2b23" stroke-width="1.5"/>
+<g clip-path="url(#cpV3)">
+<path d="M 94.0 145.5 L 131.0 141.9 L 163.0 137.7 L 190.5 132.8 L 214.0 127.2 L 234.5 120.6 L 252.0 113.0 L 267.0 104.2 L 280.0 93.9 L 291.5 81.7 L 301.0 68.0 L 309.5 51.5 L 316.5 33.2 L 322.5 12.2 L 328.0 -13.8 L 332.5 -42.5 L 336.5 -76.9" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 386.0 -72.0 L 391.5 -28.7 L 398.0 5.8 L 402.0 21.7 L 406.0 34.7 L 410.5 46.8 L 415.5 57.9 L 421.0 68.0 L 427.0 77.1 L 434.0 85.8 L 441.5 93.5 L 450.0 100.6 L 459.0 106.8 L 469.0 112.4 L 480.0 117.6 L 492.0 122.2 L 505.5 126.5 L 520.5 130.4 L 537.0 133.9 L 575.0 140.0 L 621.0 144.9 L 677.0 149.0 L 745.0 152.4 L 827.5 155.1 L 928.0 157.4" fill="none" stroke="#b3261e" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 178.6 L 195.0 180.9 L 278.0 183.7 L 346.5 187.1 L 402.5 191.2 L 448.5 196.2 L 486.5 202.4 L 503.0 206.0 L 517.5 209.8 L 531.0 214.2 L 543.0 218.8 L 554.0 224.1 L 564.0 229.9 L 573.0 236.2 L 581.0 243.0 L 588.5 250.8 L 595.5 259.6 L 601.5 268.8 L 607.0 279.1 L 612.0 290.4 L 616.5 302.8 L 620.5 316.1 L 624.5 332.4 L 631.0 368.0 L 636.5 412.9" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 686.0 408.0 L 690.0 374.9 L 694.5 347.1 L 700.0 321.8 L 706.0 301.3 L 713.0 283.4 L 721.5 267.2 L 731.0 253.7 L 742.5 241.6 L 755.5 231.5 L 770.5 222.8 L 788.0 215.2 L 808.5 208.7 L 832.0 203.1 L 859.5 198.2 L 891.0 194.1 L 928.0 190.5" fill="none" stroke="#1636c8" stroke-width="1.7" opacity=".55"/>
+<path d="M 94.0 156.1 L 132.5 153.1 L 165.5 149.4 L 193.5 145.0 L 217.5 139.7 L 238.0 133.4 L 255.5 125.9 L 270.5 117.1 L 283.0 106.9 L 294.0 94.8 L 303.5 80.4 L 311.5 64.0 L 318.5 44.3 L 324.5 21.4 L 329.5 -4.4 L 334.0 -35.9 L 338.0 -74.3" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 384.0 -71.2 L 387.5 -36.5 L 391.0 -9.8 L 395.0 14.1 L 400.0 37.1 L 405.5 56.7 L 412.0 74.4 L 419.5 90.3 L 428.0 104.2 L 436.0 114.7 L 444.5 123.9 L 454.5 132.9 L 465.5 141.3 L 487.5 155.2 L 541.5 185.0 L 555.0 193.7 L 566.5 202.3 L 577.5 212.1 L 587.5 223.1 L 596.0 234.8 L 603.5 247.6 L 610.0 261.6 L 615.5 276.3 L 620.5 293.0 L 625.0 311.9 L 629.0 333.1 L 632.5 356.4 L 638.5 413.0" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+<path d="M 684.5 404.8 L 688.5 367.9 L 693.0 337.4 L 698.0 312.4 L 704.0 290.0 L 711.0 270.9 L 719.5 253.8 L 729.0 239.9 L 740.0 228.1 L 753.0 217.9 L 768.0 209.3 L 785.5 202.1 L 805.5 196.0 L 829.0 190.9 L 857.0 186.5 L 889.5 182.9 L 928.0 179.9" fill="none" stroke="#1d2b23" stroke-width="2.9"/>
+</g>
+<text x="349.0" y="50.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#b3261e" font-weight="700">V<tspan font-size='10' dy='4'>1</tspan></text>
+<text x="649.0" y="290.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1636c8" font-weight="700">V<tspan font-size='10' dy='4'>2</tspan></text>
+<rect x="872.0" y="146.0" width="54" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="926.0" y="160.0" text-anchor="end" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="700">V = 0</text>
+<circle cx="511.0" cy="168.0" r="11" fill="#fff" stroke="#b3261e" stroke-width="2.4"/>
+<line x1="504.0" y1="161.0" x2="518.0" y2="175.0" stroke="#b3261e" stroke-width="2.2"/>
+<line x1="504.0" y1="175.0" x2="518.0" y2="161.0" stroke="#b3261e" stroke-width="2.2"/>
+<rect x="527.0" y="132.0" width="150" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="533.0" y="147.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13.5" fill="#b3261e" font-weight="700">total V = 0 here</text>
+<rect x="459.0" y="34.0" width="104" height="20" rx="4" fill="#fff" opacity=".93"/>
+<text x="511.0" y="49.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">V<tspan font-size='10' dy='3'>1</tspan><tspan dy='-3'> + V</tspan><tspan font-size='10' dy='3'>2</tspan></text>
+<text x="14.0" y="24.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#1d2b23" font-weight="700">Case 3</text>
+<text x="14.0" y="46.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="17" fill="#b3261e" font-weight="700">&#8853; &amp; &#8854;</text>
+<rect x="352.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="361.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">1</text>
+<rect x="652.0" y="212.0" width="18" height="18" rx="3" fill="#fff" opacity=".95"/>
+<text x="661.0" y="226.0" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="15" fill="#5c6b62" font-weight="700">2</text>
+<circle cx="361.0" cy="168.0" r="13" fill="#fff" stroke="#b3261e" stroke-width="2.2"/><line x1="355.0" y1="168.0" x2="367.0" y2="168.0" stroke="#b3261e" stroke-width="2.4"/><line x1="361.0" y1="162.0" x2="361.0" y2="174.0" stroke="#b3261e" stroke-width="2.4"/>
+<circle cx="661.0" cy="168.0" r="13" fill="#fff" stroke="#1636c8" stroke-width="2.2"/><line x1="655.0" y1="168.0" x2="667.0" y2="168.0" stroke="#1636c8" stroke-width="2.4"/>
+</g>
+<text x="14.0" y="1059.0" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#5c6b62" font-weight="600">the resultant crosses V = 0 midway &mdash; the only one of the three that does</text>
+</svg></div>
+<div class="fig-note"><b>Figure 3.</b>&nbsp; <b>Up means positive potential; the horizontal line is V = 0.</b>&nbsp; Each curve runs away to infinity at its own charge and decays toward zero far away.&nbsp; <b>Case 1: both curves sit entirely above the line.&nbsp; Case 2: both entirely below.</b>&nbsp; Two numbers of the same sign cannot add to zero, so on neither of those plots can the total ever reach the line &mdash; which is exactly the answer to the question above.&nbsp; <b>Only Case 3, the dipole, crosses zero</b>, and it crosses midway between the charges.</div>
+<div class="fig-note" style="margin-top:-.2rem"><b>The thick black line is the one that matters:</b> <i>V</i><sub>1</sub> + <i>V</i><sub>2</sub>, which is what the voltmeter actually reads.&nbsp; The thin curves are what each charge would do on its own.&nbsp; In Cases 1 and 2 the thick line dips toward the axis between the charges and then <b>pulls away again without ever reaching it</b> &mdash; you can watch two same-sign numbers failing to cancel.&nbsp; In Case 3 it goes straight through, at the &otimes;.</div>
+
+<div class="openq"><span class="label">15 &mdash; open question, we do this one together</span>
+<p>Move one charge and place it <b>atop the other</b>.&nbsp; What happens to the field and the potential?&nbsp; Explain the
+results.</p>
+<p style="margin-top:.5rem">Careful here.&nbsp; These are <b>like</b> charges, not a dipole &mdash; so before you answer, decide what
+two vectors pointing the <i>same</i> way do when you add them, and what two numbers of the <i>same</i> sign do.</p></div>
+
+<h2>Part IV &mdash; potential in two line charges of opposite signs</h2>
+
+<ol class="items" start="16">
+<li>Make two lines of charges, one consisting of positive and one negative.&nbsp; Grab a sensor and map the electric field
+<b>between</b> the line charges and <b>outside</b> the line charges.&nbsp; How does the field between the line charges differ from that
+outside them?</li>
+</ol>
+
+<div class="fig"><svg viewBox="0 0 1000 648" role="img" aria-label="A row of positive charges above a row of negative charges. Between the rows the field lines are straight, vertical, evenly spaced and parallel, running from the positive row down to the negative row. The lines that leave the top of the positive row curve outward, round the ends of the rows, and come back underneath to the negative row, so the field above and below is the same set of lines continuing.">
+<defs><marker id="lc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.2" markerHeight="5.2" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<path d="M 196 263 L 196 265 L 195 271 L 193 277 L 192 282 L 190 288 L 187 294 L 185 299 L 183 305 L 182 311 L 180 317 L 179 322 L 178 328 L 177 334 L 177 340 L 177 346 L 178 352 L 179 358 L 180 364 L 182 370 L 184 376 L 186 381 L 188 387 L 190 392 L 192 398 L 194 404 L 195 410 L 196 416 L 196 422" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 196 237 L 196 235 L 195 229 L 193 223 L 191 218 L 188 213 L 184 208 L 181 203 L 177 198 L 173 194 L 168 190 L 164 186 L 159 182 L 154 178 L 149 175 L 144 172 L 139 169 L 134 166 L 129 163 L 123 160 L 118 158 L 112 155 L 107 153 L 101 151 L 95 149 L 90 148 L 84 146 L 78 144 L 72 143 L 66 142 L 60 141 L 55 140 L 49 139 L 43 139 L 37 138 L 31 138 L 25 138 L 19 137 L 13 138 L 7 138 L 5 138" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 183 250 L 181 250 L 175 250 L 169 251 L 163 251 L 157 252 L 151 253 L 145 255 L 140 256 L 134 258 L 128 260 L 123 263 L 118 266 L 112 269 L 107 272 L 103 276 L 98 280 L 94 284 L 90 288 L 86 293 L 83 298 L 80 303 L 77 309 L 75 314 L 73 320 L 72 326 L 71 332 L 70 338 L 70 344 L 71 350 L 72 356 L 73 361 L 75 367 L 78 373 L 80 378 L 83 383 L 87 388 L 91 393 L 95 397 L 99 401 L 104 405 L 109 409 L 114 412 L 119 415 L 124 418 L 130 420 L 135 422 L 141 424 L 147 426 L 153 427 L 158 428 L 164 429 L 170 429 L 176 430 L 182 430 L 188 430" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 185 243 L 183 242 L 178 239 L 172 237 L 167 235 L 161 233 L 155 231 L 149 230 L 144 229 L 138 228 L 132 228 L 126 228 L 120 228 L 114 228 L 108 228 L 102 229 L 96 230 L 90 231 L 84 233 L 78 235 L 73 237 L 67 239 L 62 242 L 56 244 L 51 247 L 46 251 L 41 254 L 37 258 L 32 262 L 28 266 L 24 270 L 20 275 L 16 280 L 13 285 L 10 290 L 7 295 L 6 299" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 185 257 L 183 258 L 178 261 L 173 264 L 168 267 L 163 271 L 158 274 L 153 278 L 149 282 L 145 286 L 140 290 L 137 295 L 133 300 L 130 305 L 127 310 L 125 316 L 123 322 L 122 327 L 121 333 L 121 339 L 121 345 L 122 351 L 123 357 L 125 363 L 127 369 L 129 374 L 133 379 L 136 384 L 140 389 L 144 393 L 148 397 L 153 401 L 157 405 L 162 409 L 167 412 L 172 415 L 177 418 L 182 421 L 187 425 L 189 426" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 247 263 L 247 265 L 246 271 L 246 277 L 245 283 L 245 289 L 244 295 L 244 301 L 243 307 L 243 313 L 242 319 L 242 325 L 242 331 L 242 337 L 242 343 L 242 349 L 242 355 L 242 361 L 243 367 L 243 373 L 244 379 L 244 385 L 245 391 L 245 397 L 246 403 L 246 409 L 247 415 L 247 421 L 247 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 297 263 L 297 265 L 297 271 L 297 277 L 297 283 L 297 289 L 296 295 L 296 301 L 296 307 L 296 313 L 296 319 L 296 325 L 295 331 L 295 337 L 295 343 L 295 349 L 296 355 L 296 361 L 296 367 L 296 373 L 296 379 L 296 385 L 297 391 L 297 397 L 297 403 L 297 409 L 297 415 L 297 421 L 297 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 297 237 L 297 235 L 297 229 L 297 223 L 297 217 L 296 211 L 296 205 L 295 199 L 294 193 L 293 187 L 293 181 L 292 175 L 291 169 L 289 164 L 288 158 L 287 152 L 286 146 L 284 140 L 283 134 L 281 129 L 279 123 L 277 117 L 275 111 L 274 106 L 272 100 L 269 94 L 267 89 L 265 83 L 263 78 L 260 72 L 258 67 L 255 61 L 253 56 L 250 50 L 248 45 L 245 40 L 242 34 L 239 29 L 236 24 L 233 19 L 230 13 L 227 8 L 225 5" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 348 263 L 348 265 L 348 271 L 348 277 L 348 283 L 348 289 L 348 295 L 347 301 L 347 307 L 347 313 L 347 319 L 347 325 L 347 331 L 347 337 L 347 343 L 347 349 L 347 355 L 347 361 L 347 367 L 347 373 L 347 379 L 348 385 L 348 391 L 348 397 L 348 403 L 348 409 L 348 415 L 348 421 L 348 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 399 263 L 399 265 L 399 271 L 399 277 L 399 283 L 399 289 L 398 295 L 398 301 L 398 307 L 398 313 L 398 319 L 398 325 L 398 331 L 398 337 L 398 343 L 398 349 L 398 355 L 398 361 L 398 367 L 398 373 L 398 379 L 398 385 L 399 391 L 399 397 L 399 403 L 399 409 L 399 415 L 399 421 L 399 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 399 237 L 399 235 L 399 229 L 399 223 L 398 217 L 398 211 L 398 205 L 398 199 L 398 193 L 398 187 L 397 181 L 397 175 L 397 169 L 396 163 L 396 157 L 396 151 L 395 145 L 395 139 L 394 133 L 394 127 L 393 121 L 393 115 L 392 109 L 391 103 L 391 97 L 390 91 L 389 85 L 388 79 L 388 74 L 387 68 L 386 62 L 385 56 L 384 50 L 383 44 L 382 38 L 381 32 L 380 26 L 379 20 L 378 14 L 377 8 L 376 4" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 449 263 L 449 265 L 449 271 L 449 277 L 449 283 L 449 289 L 449 295 L 449 301 L 449 307 L 449 313 L 449 319 L 449 325 L 449 331 L 449 337 L 449 343 L 449 349 L 449 355 L 449 361 L 449 367 L 449 373 L 449 379 L 449 385 L 449 391 L 449 397 L 449 403 L 449 409 L 449 415 L 449 421 L 449 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 500 263 L 500 265 L 500 271 L 500 277 L 500 283 L 500 289 L 500 295 L 500 301 L 500 307 L 500 313 L 500 319 L 500 325 L 500 331 L 500 337 L 500 343 L 500 349 L 500 355 L 500 361 L 500 367 L 500 373 L 500 379 L 500 385 L 500 391 L 500 397 L 500 403 L 500 409 L 500 415 L 500 421 L 500 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 500 237 L 500 235 L 500 229 L 500 223 L 500 217 L 500 211 L 500 205 L 500 199 L 500 193 L 500 187 L 500 181 L 500 175 L 500 169 L 500 163 L 500 157 L 500 151 L 500 145 L 500 139 L 500 133 L 500 127 L 500 121 L 500 115 L 500 109 L 500 103 L 500 97 L 500 91 L 500 85 L 500 79 L 500 73 L 500 67 L 500 61 L 500 55 L 500 49 L 500 43 L 500 37 L 500 31 L 500 25 L 500 19 L 500 13 L 500 7 L 500 5" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 551 263 L 551 265 L 551 271 L 551 277 L 551 283 L 551 289 L 551 295 L 551 301 L 551 307 L 551 313 L 551 319 L 551 325 L 551 331 L 551 337 L 551 343 L 551 349 L 551 355 L 551 361 L 551 367 L 551 373 L 551 379 L 551 385 L 551 391 L 551 397 L 551 403 L 551 409 L 551 415 L 551 421 L 551 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 601 263 L 601 265 L 601 271 L 601 277 L 601 283 L 601 289 L 602 295 L 602 301 L 602 307 L 602 313 L 602 319 L 602 325 L 602 331 L 602 337 L 602 343 L 602 349 L 602 355 L 602 361 L 602 367 L 602 373 L 602 379 L 602 385 L 601 391 L 601 397 L 601 403 L 601 409 L 601 415 L 601 421 L 601 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 601 237 L 601 235 L 601 229 L 601 223 L 602 217 L 602 211 L 602 205 L 602 199 L 602 193 L 602 187 L 603 181 L 603 175 L 603 169 L 604 163 L 604 157 L 604 151 L 605 145 L 605 139 L 606 133 L 606 127 L 607 121 L 607 115 L 608 109 L 609 103 L 609 97 L 610 91 L 611 85 L 612 79 L 612 74 L 613 68 L 614 62 L 615 56 L 616 50 L 617 44 L 618 38 L 619 32 L 620 26 L 621 20 L 622 14 L 623 8 L 624 4" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 652 263 L 652 265 L 652 271 L 652 277 L 652 283 L 652 289 L 652 295 L 653 301 L 653 307 L 653 313 L 653 319 L 653 325 L 653 331 L 653 337 L 653 343 L 653 349 L 653 355 L 653 361 L 653 367 L 653 373 L 653 379 L 652 385 L 652 391 L 652 397 L 652 403 L 652 409 L 652 415 L 652 421 L 652 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 703 263 L 703 265 L 703 271 L 703 277 L 703 283 L 703 289 L 704 295 L 704 301 L 704 307 L 704 313 L 704 319 L 704 325 L 705 331 L 705 337 L 705 343 L 705 349 L 704 355 L 704 361 L 704 367 L 704 373 L 704 379 L 704 385 L 703 391 L 703 397 L 703 403 L 703 409 L 703 415 L 703 421 L 703 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 703 237 L 703 235 L 703 229 L 703 223 L 703 217 L 704 211 L 704 205 L 705 199 L 706 193 L 707 187 L 707 181 L 708 175 L 709 169 L 711 164 L 712 158 L 713 152 L 714 146 L 716 140 L 717 134 L 719 129 L 721 123 L 723 117 L 725 111 L 726 106 L 728 100 L 731 94 L 733 89 L 735 83 L 737 78 L 740 72 L 742 67 L 745 61 L 747 56 L 750 50 L 752 45 L 755 40 L 758 34 L 761 29 L 764 24 L 767 19 L 770 13 L 773 8 L 775 5" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 753 263 L 753 265 L 754 271 L 754 277 L 755 283 L 755 289 L 756 295 L 756 301 L 757 307 L 757 313 L 758 319 L 758 325 L 758 331 L 758 337 L 758 343 L 758 349 L 758 355 L 758 361 L 757 367 L 757 373 L 756 379 L 756 385 L 755 391 L 755 397 L 754 403 L 754 409 L 753 415 L 753 421 L 753 423" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 804 263 L 804 265 L 805 271 L 807 277 L 808 282 L 810 288 L 813 294 L 815 299 L 817 305 L 818 311 L 820 317 L 821 322 L 822 328 L 823 334 L 823 340 L 823 346 L 822 352 L 821 358 L 820 364 L 818 370 L 816 376 L 814 381 L 812 387 L 810 392 L 808 398 L 806 404 L 805 410 L 804 416 L 804 422" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 804 237 L 804 235 L 805 229 L 807 223 L 809 218 L 812 213 L 816 208 L 819 203 L 823 198 L 827 194 L 832 190 L 836 186 L 841 182 L 846 178 L 851 175 L 856 172 L 861 169 L 866 166 L 871 163 L 877 160 L 882 158 L 888 155 L 893 153 L 899 151 L 905 149 L 910 148 L 916 146 L 922 144 L 928 143 L 934 142 L 940 141 L 945 140 L 951 139 L 957 139 L 963 138 L 969 138 L 975 138 L 981 137 L 987 138 L 993 138 L 995 138" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 817 250 L 819 250 L 825 250 L 831 251 L 837 251 L 843 252 L 849 253 L 855 255 L 860 256 L 866 258 L 872 260 L 877 263 L 882 266 L 888 269 L 893 272 L 897 276 L 902 280 L 906 284 L 910 288 L 914 293 L 917 298 L 920 303 L 923 309 L 925 314 L 927 320 L 928 326 L 929 332 L 930 338 L 930 344 L 929 350 L 928 356 L 927 361 L 925 367 L 922 373 L 920 378 L 917 383 L 913 388 L 909 393 L 905 397 L 901 401 L 896 405 L 891 409 L 886 412 L 881 415 L 876 418 L 870 420 L 865 422 L 859 424 L 853 426 L 847 427 L 842 428 L 836 429 L 830 429 L 824 430 L 818 430 L 812 430" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 815 243 L 817 242 L 822 239 L 828 237 L 833 235 L 839 233 L 845 231 L 851 230 L 856 229 L 862 228 L 868 228 L 874 228 L 880 228 L 886 228 L 892 228 L 898 229 L 904 230 L 910 231 L 916 233 L 922 235 L 927 237 L 933 239 L 938 242 L 944 244 L 949 247 L 954 251 L 959 254 L 963 258 L 968 262 L 972 266 L 976 270 L 980 275 L 984 280 L 987 285 L 990 290 L 993 295 L 994 299" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 815 257 L 817 258 L 822 261 L 827 264 L 832 267 L 837 271 L 842 274 L 847 278 L 851 282 L 855 286 L 860 290 L 863 295 L 867 300 L 870 305 L 873 310 L 875 316 L 877 322 L 878 327 L 879 333 L 879 339 L 879 345 L 878 351 L 877 357 L 875 363 L 873 369 L 871 374 L 867 379 L 864 384 L 860 389 L 856 393 L 852 397 L 847 401 L 843 405 L 838 409 L 833 412 L 828 415 L 823 418 L 818 421 L 813 425 L 811 426" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 5 542 L 7 542 L 13 542 L 19 543 L 25 542 L 31 542 L 37 542 L 43 541 L 49 541 L 55 540 L 60 539 L 66 538 L 72 537 L 78 536 L 84 534 L 90 532 L 95 531 L 101 529 L 107 527 L 112 525 L 118 522 L 123 520 L 129 517 L 134 514 L 139 511 L 144 508 L 149 505 L 154 502 L 159 498 L 164 494 L 168 490 L 173 486 L 177 482 L 181 477 L 184 472 L 188 467 L 191 462 L 193 457 L 195 451 L 196 445 L 196 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 188 250 L 186 250 L 180 250 L 174 250 L 168 251 L 162 251 L 156 252 L 151 253 L 145 255 L 139 257 L 133 259 L 128 261 L 122 263 L 117 266 L 112 269 L 107 273 L 102 276 L 98 280 L 93 284 L 89 289 L 86 294 L 82 299 L 79 304 L 77 309 L 75 315 L 73 321 L 72 326 L 71 332 L 70 338 L 71 344 L 71 350 L 72 356 L 74 362 L 76 368 L 78 373 L 81 379 L 84 384 L 87 389 L 91 393 L 95 398 L 100 402 L 104 405 L 109 409 L 114 412 L 119 415 L 125 418 L 130 420 L 136 422 L 142 424 L 147 426 L 153 427 L 159 428 L 165 429 L 171 429 L 177 430 L 183 430" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 6 381 L 6 383 L 9 388 L 12 393 L 15 398 L 19 403 L 22 408 L 26 412 L 31 417 L 35 421 L 40 425 L 45 428 L 50 432 L 55 435 L 60 437 L 65 440 L 71 442 L 77 445 L 82 446 L 88 448 L 94 449 L 100 451 L 106 451 L 112 452 L 118 452 L 124 453 L 130 452 L 136 452 L 142 451 L 148 450 L 153 449 L 159 448 L 165 446 L 171 444 L 176 441 L 181 439 L 185 437" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 244 642 L 245 640 L 248 635 L 250 630 L 253 624 L 255 619 L 258 613 L 260 608 L 263 602 L 265 597 L 267 591 L 269 586 L 272 580 L 274 574 L 275 569 L 277 563 L 279 557 L 281 551 L 283 546 L 284 540 L 286 534 L 287 528 L 288 522 L 289 516 L 291 511 L 292 505 L 293 499 L 293 493 L 294 487 L 295 481 L 296 475 L 296 469 L 297 463 L 297 457 L 297 451 L 297 445 L 297 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 382 642 L 382 640 L 383 634 L 384 628 L 385 622 L 386 616 L 387 610 L 388 605 L 389 599 L 389 593 L 390 587 L 391 581 L 392 575 L 392 569 L 393 563 L 393 557 L 394 551 L 394 545 L 395 539 L 395 533 L 396 527 L 396 521 L 397 515 L 397 509 L 397 503 L 397 497 L 398 491 L 398 485 L 398 479 L 398 473 L 398 467 L 399 461 L 399 455 L 399 449 L 399 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 500 643 L 500 641 L 500 635 L 500 629 L 500 623 L 500 617 L 500 611 L 500 605 L 500 599 L 500 593 L 500 587 L 500 581 L 500 575 L 500 569 L 500 563 L 500 557 L 500 551 L 500 545 L 500 539 L 500 533 L 500 527 L 500 521 L 500 515 L 500 509 L 500 503 L 500 497 L 500 491 L 500 485 L 500 479 L 500 473 L 500 467 L 500 461 L 500 455 L 500 449 L 500 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 618 642 L 618 640 L 617 634 L 616 628 L 615 622 L 614 616 L 613 610 L 612 605 L 611 599 L 611 593 L 610 587 L 609 581 L 608 575 L 608 569 L 607 563 L 607 557 L 606 551 L 606 545 L 605 539 L 605 533 L 604 527 L 604 521 L 603 515 L 603 509 L 603 503 L 603 497 L 602 491 L 602 485 L 602 479 L 602 473 L 602 467 L 601 461 L 601 455 L 601 449 L 601 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 756 642 L 755 640 L 752 635 L 750 630 L 747 624 L 745 619 L 742 613 L 740 608 L 737 602 L 735 597 L 733 591 L 731 586 L 728 580 L 726 574 L 725 569 L 723 563 L 721 557 L 719 551 L 717 546 L 716 540 L 714 534 L 713 528 L 712 522 L 711 516 L 709 511 L 708 505 L 707 499 L 707 493 L 706 487 L 705 481 L 704 475 L 704 469 L 703 463 L 703 457 L 703 451 L 703 445 L 703 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 995 542 L 993 542 L 987 542 L 981 543 L 975 542 L 969 542 L 963 542 L 957 541 L 951 541 L 945 540 L 940 539 L 934 538 L 928 537 L 922 536 L 916 534 L 910 532 L 905 531 L 899 529 L 893 527 L 888 525 L 882 522 L 877 520 L 871 517 L 866 514 L 861 511 L 856 508 L 851 505 L 846 502 L 841 498 L 836 494 L 832 490 L 827 486 L 823 482 L 819 477 L 816 472 L 812 467 L 809 462 L 807 457 L 805 451 L 804 445 L 804 443" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 812 250 L 814 250 L 820 250 L 826 250 L 832 251 L 838 251 L 844 252 L 849 253 L 855 255 L 861 257 L 867 259 L 872 261 L 878 263 L 883 266 L 888 269 L 893 273 L 898 276 L 902 280 L 907 284 L 911 289 L 914 294 L 918 299 L 921 304 L 923 309 L 925 315 L 927 321 L 928 326 L 929 332 L 930 338 L 929 344 L 929 350 L 928 356 L 926 362 L 924 368 L 922 373 L 919 379 L 916 384 L 913 389 L 909 393 L 905 398 L 900 402 L 896 405 L 891 409 L 886 412 L 881 415 L 875 418 L 870 420 L 864 422 L 858 424 L 853 426 L 847 427 L 841 428 L 835 429 L 829 429 L 823 430 L 817 430" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 994 381 L 994 383 L 991 388 L 988 393 L 985 398 L 981 403 L 978 408 L 974 412 L 969 417 L 965 421 L 960 425 L 955 428 L 950 432 L 945 435 L 940 437 L 935 440 L 929 442 L 923 445 L 918 446 L 912 448 L 906 449 L 900 451 L 894 451 L 888 452 L 882 452 L 876 453 L 870 452 L 864 452 L 858 451 L 852 450 L 847 449 L 841 448 L 835 446 L 829 444 L 824 441 L 819 439 L 815 437" fill="none" stroke="#1e6b3c" stroke-width="1.7" opacity=".9"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(181.6,310.7) rotate(107.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(180.2,364.0) rotate(77.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(195.0,409.7) rotate(76.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(154.4,178.5) rotate(-143.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(89.7,147.6) rotate(-163.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(24.7,137.5) rotate(-178.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(93.8,283.9) rotate(135.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(83.4,383.1) rotate(59.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(158.4,428.0) rotate(10.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(119.6,227.5) rotate(179.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(56.5,244.4) rotate(152.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(13.0,284.9) rotate(123.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(133.1,300.0) rotate(125.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(129.5,373.9) rotate(63.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(172.1,415.2) rotate(32.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(242.7,312.8) rotate(94.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(242.7,366.8) rotate(86.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(246.3,408.6) rotate(86.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(295.8,313.0) rotate(91.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(295.8,367.0) rotate(88.5) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(297.2,408.9) rotate(88.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(289.5,163.5) rotate(-100.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(265.0,83.3) rotate(-111.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(236.4,23.9) rotate(-118.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(347.3,313.0) rotate(90.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(347.3,367.0) rotate(89.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(347.9,409.0) rotate(89.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(398.3,313.0) rotate(90.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(398.3,367.0) rotate(89.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(398.6,409.0) rotate(89.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(396.5,163.0) rotate(-93.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(389.9,91.4) rotate(-96.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(380.1,26.1) rotate(-100.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(449.2,313.0) rotate(90.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(449.2,367.0) rotate(89.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(449.3,409.0) rotate(89.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,313.0) rotate(90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,367.0) rotate(90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,409.0) rotate(90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,163.0) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,91.0) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,25.0) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(550.8,313.0) rotate(89.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(550.8,367.0) rotate(90.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(550.7,409.0) rotate(90.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(601.7,313.0) rotate(89.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(601.7,367.0) rotate(90.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(601.4,409.0) rotate(90.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(603.5,163.0) rotate(-86.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(610.1,91.4) rotate(-83.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(619.9,26.1) rotate(-80.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(652.7,313.0) rotate(89.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(652.7,367.0) rotate(90.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(652.1,409.0) rotate(90.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(704.2,313.0) rotate(88.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(704.2,367.0) rotate(91.5) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(702.8,408.9) rotate(91.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(710.5,163.5) rotate(-79.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(735.0,83.3) rotate(-68.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(763.6,23.9) rotate(-61.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(757.3,312.8) rotate(85.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(757.3,366.8) rotate(93.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(753.7,408.6) rotate(94.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(818.4,310.7) rotate(72.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(819.8,364.0) rotate(102.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(805.0,409.7) rotate(103.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(845.6,178.5) rotate(-36.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(910.3,147.6) rotate(-17.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(975.3,137.5) rotate(-2.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(906.2,283.9) rotate(44.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(916.6,383.1) rotate(121.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(841.6,428.0) rotate(169.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(880.4,227.5) rotate(0.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(943.5,244.4) rotate(27.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(987.0,284.9) rotate(56.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(866.9,300.0) rotate(54.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(870.5,373.9) rotate(116.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(827.9,415.2) rotate(147.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(78.1,535.5) rotate(-12.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(144.4,508.3) rotate(-31.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(190.5,462.1) rotate(-61.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(97.6,280.1) rotate(138.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(80.7,378.5) rotate(62.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(153.2,427.1) rotate(12.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(49.6,431.5) rotate(33.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(111.7,452.0) rotate(5.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(170.6,443.8) rotate(-20.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(271.5,579.9) rotate(-69.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(289.5,516.5) rotate(-78.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(296.6,463.0) rotate(-85.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(390.9,580.7) rotate(-83.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(396.6,515.0) rotate(-86.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(398.5,461.0) rotate(-89.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,581.0) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,515.0) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(500.0,461.0) rotate(-90.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(609.1,580.7) rotate(-96.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(603.4,515.0) rotate(-93.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(601.5,461.0) rotate(-91.0) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(728.5,579.9) rotate(-110.4) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(710.5,516.5) rotate(-101.7) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(703.4,463.0) rotate(-94.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(921.9,535.5) rotate(-167.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(855.6,508.3) rotate(-148.8) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(809.5,462.1) rotate(-118.9) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(902.4,280.1) rotate(41.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(919.3,378.5) rotate(117.3) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(846.8,427.1) rotate(167.6) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(950.4,431.5) rotate(146.2) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(888.3,452.0) rotate(174.1) translate(0,-4.2)"/>
+<path d="M 0 0 L 15.3 4.2 L 0 8.5 z" fill="#1e6b3c" transform="translate(829.4,443.8) rotate(-159.9) translate(0,-4.2)"/>
+<ellipse cx="196" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="196" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="247" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="247" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="297" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="297" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="348" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="348" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="399" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="399" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="449" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="449" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="500" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="500" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="551" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="551" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="601" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="601" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="652" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="652" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="703" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="703" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="753" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="753" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="804" cy="250" rx="18" ry="11" fill="#fff" stroke="#b3261e" stroke-width="1.8"/>
+<text x="804" y="255" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#b3261e" font-weight="700" font-style="normal">+</text>
+<ellipse cx="196" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="196" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="247" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="247" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="297" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="297" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="348" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="348" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="399" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="399" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="449" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="449" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="500" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="500" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="551" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="551" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="601" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="601" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="652" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="652" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="703" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="703" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="753" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="753" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<ellipse cx="804" cy="430" rx="18" ry="11" fill="#fff" stroke="#1636c8" stroke-width="1.8"/>
+<text x="804" y="435" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="16" fill="#1636c8" font-weight="700" font-style="normal">&minus;</text>
+<rect x="314" y="313" width="372" height="28" rx="5" fill="#fff" opacity=".93"/>
+<text x="500" y="332" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-size="18" fill="#1e6b3c" font-weight="700" font-style="normal">E is CONSTANT between the lines</text>
+<rect x="20" y="50" width="356" height="24" rx="4" fill="#fff" opacity=".93"/>
+<text x="24" y="68" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14.5" fill="#5c6b62" font-weight="700" font-style="normal">the same lines carry on above the + row &hellip;</text>
+<rect x="20" y="580" width="356" height="24" rx="4" fill="#fff" opacity=".93"/>
+<text x="24" y="598" text-anchor="start" font-family="Segoe UI, system-ui, sans-serif" font-size="14.5" fill="#5c6b62" font-weight="700" font-style="normal">&hellip; round the ends, and back under the &minus; row</text>
+</svg></div>
+<div class="fig-note"><b>Figure 4.</b>&nbsp; Two line charges.&nbsp; <b>Between them the lines are straight, parallel and evenly spaced</b>, running + to &minus; &mdash; that is what a constant field looks like, and it is the one picture to carry into Module&nbsp;4, where this geometry comes back as the capacitor.<br><b>Now follow a line past the rows.</b>&nbsp; The field above the + row and below the &minus; row is not something separate: it is the <b>same lines carrying on</b>, up off the top, out round the ends, and back underneath.&nbsp; Notice they point <b>up in both places</b> &mdash; away from the + row above it, toward the &minus; row below it &mdash; and that they are sparse out there compared with the crowd between the rows, which is the field being weak.</div>
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r7" data-label="Show the answer">Show the answer</button><div class="rbody" id="r7" hidden><p><b>Inside:</b> constant E-field magnitude.&nbsp; The field lines are <b>straight lines pointing from + to &minus;</b>, and <b>E = constant</b>.</p><p><b>Outside:</b> the E-field <b>decreases with distance</b>.</p><p>In his own words on the sheet: <b>&ldquo;Field constant between the line charges.&rdquo;</b></p></div></div>
+
+<ol class="items" start="17">
+<li>Use the voltmeter and map the potential between the line charges and outside the line charges.&nbsp; How does the potential between
+the line charges differ from outside the line charges?</li>
+</ol>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r8" data-label="Show the answer">Show the answer</button><div class="rbody" id="r8" hidden><p><b>Inside:</b> goes from <b>+max</b> at the + line charges, decreases to <b>zero</b> at mid-distance, and reaches <b>&minus;max</b> at the &minus; line charges.&nbsp; A straight ramp, because the field is constant.</p><p><b>Outside:</b> the + side decreases to 0 at infinite distance; the &minus; side increases to 0 at infinite distance.</p></div></div>
+
+<div class="punch"><span class="label">The punchline</span>
+<span class="big">One is a vector.&nbsp; The other is just a number.</span>
+<p>Every answer in this note comes from that.&nbsp; A dipole has <b>no</b> zero-field point but a whole <b>line</b> of zero
+potential.&nbsp; Two like charges have <b>no</b> zero potential anywhere but a zero-field <b>point</b> dead in the middle.&nbsp; You do
+not have to remember the four cases &mdash; you have to remember which quantity is a vector.</p></div>
+
+<h2>Summary</h2>
+<div class="openq"><span class="label">Your five &mdash; not mine</span>
+<p>List <b>five things</b> that you learned about electric potential.&nbsp; Left blank on purpose &mdash; write your own.</p>
+<ul><li></li><li></li><li></li><li></li><li></li></ul>
+<p style="margin-top:.6rem">One of mine, if you want a model: <b>equipotential lines are like the contour lines on a map,
+representing regions of equal potential.</b></p></div>
+<h2>Check yourself</h2>
+<div class="ticket" id="ticket">
+  <div id="card-q1"><p class="qtext">1.&nbsp; A charge of 0.25&nbsp;C sits where the potential is 8&nbsp;V.&nbsp; How much energy does
+  it have, in joules?</p>
+    <div class="qnum"><input type="number" id="q1input" step="any" inputmode="decimal" aria-label="energy in joules"><span class="unit">J</span></div><div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; Midway between a + and a &minus; charge of equal size:</p>
+    <label><input type="radio" name="q2" value="a"> both the field and the potential are zero.</label>
+    <label><input type="radio" name="q2" value="b"> the potential is zero but the field is not.</label>
+    <label><input type="radio" name="q2" value="c"> the field is zero but the potential is not.</label>
+    <label><input type="radio" name="q2" value="d"> neither is zero.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; Midway between <b>two like</b> charges of equal size:</p>
+    <label><input type="radio" name="q3" value="a"> both the field and the potential are zero.</label>
+    <label><input type="radio" name="q3" value="b"> the potential is zero but the field is not.</label>
+    <label><input type="radio" name="q3" value="c"> the field is zero but the potential is not.</label>
+    <label><input type="radio" name="q3" value="d"> neither is zero.</label>
+    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; On a contour map of potential, the lines in one region are twice as crowded as in
+  another.&nbsp; In that region the field is:</p>
+    <label><input type="radio" name="q4" value="a"> twice as strong.</label>
+    <label><input type="radio" name="q4" value="b"> half as strong.</label>
+    <label><input type="radio" name="q4" value="c"> the same &mdash; spacing says nothing about E.</label>
+    <label><input type="radio" name="q4" value="d"> zero.</label>
+    <div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+  <div class="score" id="ticketScore" role="status"></div>
+</div>
+
+<h2>Looking ahead</h2>
+<p>You now have both halves: a <b>force</b> picture and an <b>energy</b> picture of the same charges, done with
+algebra.&nbsp; <b>Note&nbsp;5</b> does this same subject again with <b>calculus</b> &mdash; reading the field straight off a
+contour map, and getting the potential of a spread-out charge with one scalar integral instead of three vector
+ones.&nbsp; <b>Note&nbsp;8</b>, later in the module, puts field and potential side by side against the gravitational versions
+you already know, and asks what Newton would have made of all this.</p>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  <!-- When the recording is posted, replace the line below with:
+       &lt;div class="frame"&gt;&lt;iframe src="YOUR_EMBED_URL" allowfullscreen title="M3 N4 &mdash; Dr. Cho on electric potential"&gt;&lt;/iframe&gt;&lt;/div&gt;
+       (adds about 420 px to the page; re-measure and re-declare the wrapper height) -->
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M3_N4_Electric_Potential_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the voltmeter readings are yours to take.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 3 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+
+</div>
+
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 3 Note 4, "Electric Potential Is The Energy Of a Unit Positive Charge
+     In An E-Field"
+
+     F1. Two world's views: force and energy.  Energy is preferred where there is a
+         choice, because force is a vector and energy is a scalar.
+     F2. When you see "field", think "force".  When you see "potential", think "energy".
+     F3. W_G = F_g d = mgh = m U_G, with U_G = gh the gravitational potential.
+     F4. W_E = F_E d = qEd = qV, with V = Ed the electric potential.
+     F5. V = W/q - energy per coulomb, J/C, the volt.  Same quantity as "voltage" and
+         as the Reference Table's "potential difference".
+     F6. E = F_E/q - force per coulomb.
+     F7. Near a single charge the potential takes the sign of the charge, is largest at
+         the charge and falls to zero at infinity.
+     F8. A dipole has a straight line of ZERO POTENTIAL midway between the charges, and
+         NO point of zero field anywhere.
+     F9. Two like charges have NO zero potential anywhere, and a ZERO FIELD point exactly
+         midway between them.
+     F10. The reason for both is the same: fields add like VECTORS, potentials add like
+          NUMBERS.
+     F11. Between two opposite line charges the field is CONSTANT and the potential ramps
+          linearly from +max through zero to -max.  Outside, both fall off.
+     F12. Equipotential lines are contour lines: crowded where the potential changes fast.
+     ========================================================================== -->
+<script>
+/* Check-yourself ticket, M3 Note 4.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q2": "b", "q3": "c", "q4": "a"};
+  var NUM = {"q1": [2.0, 0.02]};
+  var WHY = {
+    "q1": "W = qV = 0.25 &times; 8 = 2 J.  Potential is energy PER COULOMB, so multiply by the coulombs you have.",
+    "q2": "Opposite charges: the two potentials are +n and -n, and numbers like that cancel - so V = 0.  The two field vectors there point the SAME way, so they add rather than cancel.  Field not zero, potential zero.",
+    "q3": "Like charges: the two potentials have the same sign and can never cancel.  The two field vectors point OPPOSITE ways and are equal in size, so they do.  Field zero, potential not zero.  The exact mirror of the dipole.",
+    "q4": "Crowded contours mean V is changing fast over a short distance, and E = &Delta;V/&Delta;r.  Twice the crowding is twice the field."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '\u2713 ' : '\u2717 ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

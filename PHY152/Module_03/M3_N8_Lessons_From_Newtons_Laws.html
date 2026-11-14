@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M3 N8 &mdash; Lessons From Newton&rsquo;s Laws</title>
+<style>
+  /* FLCC Physics note page - Module 3, Electricity, Note 5
+     "Electric Field and Electric Potential: Lessons From Newton's Laws".
+     The isomorphism itself: his synopsis, his table, his ladder.
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+
+     SOURCE, THREE LAYERS, shared by Notes 8, 9 and 10.
+     1. The prose, the table and the Performance Expectation: his 25SP master
+        "M3 N5 Electric Field and Electric Potential Lessons From Newtons Laws"
+        (8 pp, p8 blank; 2748 printed chars on p1 and the running header alone on
+        pp2-7).  ZERO live /Subtype /Ink and ZERO word/ink parts: the master is
+        clean and its answer layer is a separate file.
+     2. The answers: "EM and Newton KEY.pdf", a 7 page CamScanner scan of the SAME
+        sheets in their Regents heading, answered throughout in his red pen and
+        marked /35.  MEASURED 2026-11-10: page for page the same scan as Regents
+        packet pp. 40 to 46, filed standalone at higher resolution, so it is the
+        better read surface of the two.  Its page 7 is scanned upside down.
+     3. Figure 1: "Electric and gravitational potentials KEY.pdf" p. 2, his own
+        hand drawn dual potential ladder.
+
+     THE TABLE'S EQUATIONS DO NOT EXTRACT.  The .docx carries no oMath and no ink;
+     the equations are images.  Every one was read off the rendered page.
+
+     WHY THREE NOTES.  Built whole from his 7 page master this came to 18,211 px
+     closed against D2L's 10,000 ceiling.  Every seam was measured and put to him
+     on 2026-11-10; he chose three notes with the oil drop left where he put it,
+     in the first numbered block.  Module 3 goes from eleven notes to thirteen;
+     the old N9, N10 and N11 become N11, N12 and N13.
+
+     NO CALC-152 FENCE, BY HIS DECISION 2026-11-10.  The lesson is algebra level
+     end to end and its argument is the isomorphism of the two sets of forms,
+     which needs no calculus.  E from V goes to the N7 calculus note instead.
+     All three notes mirror to PHY 119 unchanged.
+
+     ONE CONTENT SOURCE.  body_n8.py writes every word once and split_n8.py cuts
+     it three ways, so the notes cannot drift from each other.  A build time check
+     asserts that no paragraph appears in two of them.
+
+     WHAT IS HIS.  The title, unchanged; all four synopsis paragraphs; the
+     Newton/Coulomb table including its row labels; the Performance Expectation;
+     and Figure 1.
+
+     WHAT IS CLAUDE'S.  The heading "One ladder, two names" and its lead in
+     paragraph; the figure caption; the Check yourself ticket; the foundation
+     list; the Looking ahead paragraph; and the decision to move his synopsis
+     paragraphs 2 to 4 down into the body, which is the anatomy call taken for N6
+     and N7 on 2026-11-10.  His paragraph 1 is the Synopsis unchanged.  The
+     punchline box quotes his own synopsis sentence.
+
+     FIGURE 1 IS HIS, AND ITS NUMBERS ARE CHECKED NOT COPIED.  V = Ed and W = qV
+     are recomputed from q = 2 C and E = 3 N/C and asserted against his
+     handwriting at every rung, and the same for U = gh and W = mU from m = 2 kg
+     and g = 9.8 m/s^2.  HE LEFT THE 4 m ELECTRIC RUNG BLANK and filled the
+     gravitational column all the way; that asymmetry is his and is preserved on
+     the page, blanked throughout on the handout, and filled on the key.
+
+     ONE FLAG FOR HIM, NOT FIXED.  The table's third row prints the gravitational
+     field unit as [N/m] where his own g = F_g / M_2 makes it N/kg.  Transcribed
+     as he wrote it.
+     ================================================================== */
+
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65; }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .1rem; font-weight:700; }
+  .subtitle{ font-family:"Segoe UI", system-ui, sans-serif; font-size:1rem; color:var(--muted); margin:0 0 .3rem; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.06rem; margin:1.3rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:.2rem 0 0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem; }
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ul.items{ padding-left:1.3rem; margin:.4rem 0; } ul.items > li{ margin:.4rem 0; }
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .disp{ display:block; margin:.7rem 0 .9rem; text-align:center; font-size:1.12rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green);
+    border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule);
+    padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  table.doc{ border-collapse:collapse; width:100%; margin:.6rem 0 .8rem; font-size:.95rem; }
+  table.doc th, table.doc td{ border:1px solid var(--rule); padding:.32rem .55rem; text-align:left;
+    vertical-align:top; font-weight:400; }
+  table.doc th{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    color:var(--green-deep); background:var(--green-soft); }
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none;
+    color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; } .pe.lp li{ margin:.32rem 0; } .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem;
+    border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer;
+    margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule);
+    border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.good{ color:var(--green-deep); } .ticket .qfb.bad{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .openq{ border-left:4px solid var(--amber); background:#fdf8ef; border-radius:0 6px 6px 0;
+    padding:.8rem 1.05rem; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .openq .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.3rem; }
+  .openq ul{ margin:.4rem 0 0; padding-left:1.2rem; } .openq li{ margin:.45rem 0; list-style:none; }
+  .openq li::before{ content:"\2014\00a0\00a0"; color:var(--muted); }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+<div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 3 &middot; Electricity</span><span>Note 8</span></div>
+
+<h1>Electric Field and Electric Potential: Lessons From Newton&rsquo;s Laws</h1>
+
+<div class="synopsis"><span class="label">Synopsis</span>You have heard me referring and drawing parallels to Newton&rsquo;s equations to get a feel for the electric field, <b>E</b>, and electric potential, <i>V</i>.&nbsp; The reasons are apparent.&nbsp; Physics phenomena are pretty distinct between gravitation and electrostatic, for sure.&nbsp; Still, the forms of equations are identical:&nbsp; If you swap out the mass for the charge and <i>G</i> for <i>k</i>, then <i>g</i> turns into <b>E</b>, and Newton&rsquo;s law of gravitation turns into Coulomb&rsquo;s law.&nbsp; Moreover, the weight <i>F</i><sub>g</sub> = <i>mg</i> in Newton&rsquo;s equation becomes the attraction/repulse <i>F</i><sub>E</sub> = <i>qE</i> in Coulomb&rsquo;s equation!&nbsp; Gravitational field strength (or simply gravitational field) <i>g</i> = <i>F</i><sub>g</sub>/<i>m</i>, the force in each kg of mass becomes electric field <b>E</b> = <i>F</i><sub>E</sub>/<i>q</i>, the force in each C of charge.&nbsp; Finally, the work in the gravitational field <i>W</i><sub>g</sub> = <i>mgh</i> = <i>mU</i><sub>g</sub> turns to the work in the electrostatic field <i>W</i><sub>E</sub> = <i>qEd</i> = <i>qV</i><sub>E</sub>, where &ldquo;<i>gh</i> = <i>U</i><sub>g</sub>&rdquo; is analogous to &ldquo;<i>Ed</i> = <i>V</i><sub>E</sub>&rdquo; which are known as gravitational potential, <i>U</i> and electrostatic potential <i>V</i>, respectively (I dropped the subscripts g and E).&nbsp; The gravitational potential <i>U</i> = <i>W</i><sub>g</sub>/<i>m</i> is the energy in each kg of mass in a gravitational field, and the electrostatic potential <i>V</i> = <i>W</i><sub>E</sub>/<i>q</i> is the energy in each C of charge in an electrostatic field.</div>
+
+<p>The underlying reason for the isomorphism in equations is that both laws fundamentally seek to find the acceleration so that we can describe the motion, whether it&rsquo;s a mass or charge.&nbsp; A mass or charge will respond to its respective field, the mass in a gravitational field and the charge in an electrostatic field.&nbsp; Remember, the fields are &ldquo;spheres of influence&rdquo; created by other masses or charges whose motions are not interesting to us; only the mass or the charge that feels/experiences the field (or influence and the mass or the charge will accelerate because of the generated field) are.</p>
+
+<p>As we move into the electricity topic, we will use <i>V</i>, the electrostatic potential, better known as the potential difference or voltage, with the unit volt (V, yes, the uppercase v is the symbol for electrostatic potential/potential difference/voltage and the unit of voltage).&nbsp; I summarize the equations in the table below.</p>
+
+<table class="doc"><tr><th></th><th>Newton (Mechanics)</th><th>Coulomb (Electrostatic)</th></tr><tr><td>Force on all bodies (1 and 2) [N]</td><td class="m"><i>F</i><sub>G</sub> = <i>G</i>&#8201;<i>M</i><sub>1</sub><i>M</i><sub>2</sub>&#8201;/&#8201;<i>r</i><sup>2</sup></td><td class="m"><i>F</i><sub>Coulomb</sub> = <i>k</i>&#8201;<i>q</i><sub>1</sub><i>q</i><sub>2</sub>&#8201;/&#8201;<i>r</i><sup>2</sup></td></tr><tr><td>Force on the object of interest (<i>M</i><sub>2</sub> or <i>q</i><sub>2</sub>) [N]</td><td class="m"><i>F</i><sub>g</sub> = <i>M</i><sub>2</sub><i>g</i></td><td class="m"><i>F</i><sub>E</sub> = <i>q</i><sub>2</sub><i>E</i></td></tr><tr><td>Field [N/m] for mass (generated by <i>M</i><sub>1</sub>)<br><span style="margin-left:1.6em">[(N/C) = (V/m)] for charge (generated by <i>q</i><sub>1</sub>)</span></td><td class="m"><i>g</i> = <i>G</i>&#8201;<i>M</i><sub>1</sub>&#8201;/&#8201;<i>r</i><sup>2</sup> = <i>F</i><sub>g</sub>&#8201;/&#8201;<i>M</i><sub>2</sub></td><td class="m"><i>E</i> = <i>k</i>&#8201;<i>q</i><sub>1</sub>&#8201;/&#8201;<i>r</i><sup>2</sup> = <i>F</i><sub>E</sub>&#8201;/&#8201;<i>q</i><sub>2</sub></td></tr><tr><td>Potential energy (object 2) [J]</td><td class="m"><i>W</i><sub>g</sub> = <i>M</i><sub>2</sub><i>gh</i> = <i>M</i><sub>2</sub><i>U</i></td><td class="m"><i>W</i><sub>E</sub> = <i>q</i><sub>2</sub><i>Ed</i> = <i>q</i><sub>2</sub><i>V</i></td></tr><tr><td>Potential (object 2) [J/kg] for mass<br><span style="margin-left:1.6em">[(J/C) = V] for charge</span></td><td class="m"><i>U</i> = <i>W</i><sub>g</sub>&#8201;/&#8201;<i>M</i><sub>2</sub> = <i>gh</i></td><td class="m"><i>V</i> = <i>W</i><sub>E</sub>&#8201;/&#8201;<i>q</i><sub>2</sub> = <i>Ed</i></td></tr></table>
+
+<p>Finally, let me introduce a convenient energy unit for electrostatics: <u>electronvolt, eV</u>.&nbsp; The way you should think about the eV unit is (unit <u>e</u>lementary charge) &times; (<u>V</u>oltage).&nbsp; Remember, voltage is the electrostatic potential or the energy per charge, so 1 electron or proton traversing 1 volt of potential has 1 eV of energy.&nbsp; This energy is equivalent to 1.6 &times; 10<sup>&minus;19</sup> J, i.e., numerically the same as the elementary charge (1.6 &times; 10<sup>&minus;19</sup> C).</p>
+
+<div class="pe lp"><span class="label">Performance expectation</span><ol><li><b>Solve</b> problems involving electrostatic field and electrostatic potential.</li></ol></div>
+
+<h2>One ladder, two names</h2>
+
+<p>Before the questions, here is the table drawn instead of written.&nbsp; A <b>2 C charge</b> sitting in a uniform <b>3 N/C</b> field, beside a <b>2 kg mass</b> sitting in a uniform <b>9.8 m/s&sup2;</b> field.&nbsp; Climb either ladder a metre at a time and read off the potential and the work.</p>
+
+<div class="fig"><svg viewBox="0 0 1000 600" role="img" aria-label="Two ladders side by side. On the left a charged sheet with equipotential rungs at one metre intervals and the potential and work written at each rung; on the right the ground with the same rungs for a two kilogram mass." xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1d2b23"/></marker><marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b3261e"/></marker><marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b3c"/></marker><marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6b62"/></marker></defs><text x="233.0" y="42.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="17.0" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal">Electric</text><text x="233.0" y="76.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.5" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">F</tspan><tspan font-size="11" dy="4">E</tspan><tspan dy="-4"> = </tspan><tspan font-style="italic">qE</tspan> = (2 C)(3 N/C) = 6 N</text><line x1="118.0" y1="460.0" x2="348.0" y2="460.0" stroke="#1d2b23" stroke-width="2.60"/><text x="112.0" y="484.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="14.0" text-anchor="start" fill="#1d2b23" font-weight="bold" font-style="normal">Sheet</text><line x1="72.0" y1="460.0" x2="72.0" y2="156.0" stroke="#1d2b23" stroke-width="1.50" marker-end="url(#ah)"/><text transform="translate(59.0,325.0) rotate(-90)" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="12.5" text-anchor="middle" fill="#5c6b62">increasing potential energy</text><text x="82.0" y="454.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">0 m</text><circle cx="360.0" cy="460.0" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="374.0" y="465.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">0 V,&#160; 0 J</text><line x1="118.0" y1="392.5" x2="348.0" y2="392.5" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="9 7"/><text x="82.0" y="386.5" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">1 m</text><circle cx="360.0" cy="392.5" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="374.0" y="397.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">3 V,&#160; 6 J</text><line x1="118.0" y1="325.0" x2="348.0" y2="325.0" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="9 7"/><text x="82.0" y="319.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">2 m</text><circle cx="360.0" cy="325.0" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="374.0" y="330.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">6 V,&#160; 12 J</text><line x1="118.0" y1="257.5" x2="348.0" y2="257.5" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="9 7"/><text x="82.0" y="251.5" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">3 m</text><circle cx="360.0" cy="257.5" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="374.0" y="262.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">9 V,&#160; 18 J</text><line x1="118.0" y1="190.0" x2="348.0" y2="190.0" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="9 7"/><text x="82.0" y="184.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">4 m</text><circle cx="360.0" cy="190.0" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="374.0" y="195.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#9aa89f" font-weight="normal" font-style="normal">________</text><text x="374.0" y="164.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="12.5" text-anchor="start" fill="#1e6b3c" font-weight="bold" font-style="normal">potential, work</text><text x="233.0" y="518.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.5" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">W</tspan><tspan font-size="11" dy="4">E</tspan><tspan dy="-4"> = </tspan><tspan font-style="italic">qV</tspan><tspan> = </tspan><tspan font-style="italic">q</tspan>(<tspan font-style="italic">Ed</tspan>)</text><text x="233.0" y="544.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">q = 2 C &#183; E = 3 N/C, constant throughout</text><text x="747.0" y="42.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="17.0" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal">Gravitational</text><text x="747.0" y="76.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.5" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">F</tspan><tspan font-size="11" dy="4">G</tspan><tspan dy="-4"> = </tspan><tspan font-style="italic">mg</tspan> = (2 kg)(9.8 m/s&#178;) = 19.6 N</text><line x1="632.0" y1="460.0" x2="862.0" y2="460.0" stroke="#1d2b23" stroke-width="2.60"/><text x="626.0" y="484.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="14.0" text-anchor="start" fill="#1d2b23" font-weight="bold" font-style="normal">Ground</text><line x1="586.0" y1="460.0" x2="586.0" y2="156.0" stroke="#1d2b23" stroke-width="1.50" marker-end="url(#ah)"/><text transform="translate(573.0,325.0) rotate(-90)" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="12.5" text-anchor="middle" fill="#5c6b62">increasing potential energy</text><text x="596.0" y="454.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">0 m</text><circle cx="874.0" cy="460.0" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="888.0" y="465.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">0 m&#178;/s&#178;,&#160; 0 J</text><line x1="632.0" y1="392.5" x2="862.0" y2="392.5" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="9 7"/><text x="596.0" y="386.5" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">1 m</text><circle cx="874.0" cy="392.5" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="888.0" y="397.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">9.8 m&#178;/s&#178;,&#160; 19.6 J</text><line x1="632.0" y1="325.0" x2="862.0" y2="325.0" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="9 7"/><text x="596.0" y="319.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">2 m</text><circle cx="874.0" cy="325.0" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="888.0" y="330.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">19.6 m&#178;/s&#178;,&#160; 39.2 J</text><line x1="632.0" y1="257.5" x2="862.0" y2="257.5" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="9 7"/><text x="596.0" y="251.5" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">3 m</text><circle cx="874.0" cy="257.5" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="888.0" y="262.5" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">29.4 m&#178;/s&#178;,&#160; 58.8 J</text><line x1="632.0" y1="190.0" x2="862.0" y2="190.0" stroke="#5c6b62" stroke-width="1.30" stroke-dasharray="9 7"/><text x="596.0" y="184.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">4 m</text><circle cx="874.0" cy="190.0" r="4.5" fill="#1d2b23" stroke="#1d2b23" stroke-width="1.00"/><text x="888.0" y="195.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.0" text-anchor="start" fill="#1d2b23" font-weight="normal" font-style="normal">39.2 m&#178;/s&#178;,&#160; 78.4 J</text><text x="888.0" y="164.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="12.5" text-anchor="start" fill="#1e6b3c" font-weight="bold" font-style="normal">potential, work</text><text x="747.0" y="518.0" font-family='Charter, Georgia, "Times New Roman", serif' font-size="15.5" text-anchor="middle" fill="#1d2b23" font-weight="normal" font-style="normal"><tspan font-style="italic">W</tspan><tspan font-size="11" dy="4">G</tspan><tspan dy="-4"> = </tspan><tspan font-style="italic">mU</tspan><tspan> = </tspan><tspan font-style="italic">m</tspan>(<tspan font-style="italic">gh</tspan>)</text><text x="747.0" y="544.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.0" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">m = 2 kg &#183; g = 9.8 m/s&#178;, constant throughout</text><text x="500.0" y="580.0" font-family='"Segoe UI", system-ui, Arial, sans-serif' font-size="13.5" text-anchor="middle" fill="#1e6b3c" font-weight="bold" font-style="normal">same ladder, same arithmetic &#8212; only the names change</text></svg></div>
+<div class="fig-note"><b>Figure 1.</b>&nbsp; <b>This is his own sheet, redrawn.</b>&nbsp; Each rung is one metre.&nbsp; On the left the potential climbs <i>V</i> = <i>Ed</i> = 3 V per metre and the work climbs <i>W</i><sub>E</sub> = <i>qV</i>; on the right it is <i>U</i> = <i>gh</i> = 9.8 m&sup2;/s&sup2; per metre (that is 9.8 J/kg) and <i>W</i><sub>G</sub> = <i>mU</i>.&nbsp; <b>The 4 m rung on the electric side is blank because he left it blank</b> &mdash; the gravitational side is filled in all the way, so you have a worked column to copy the pattern from.</div>
+
+<div class="rev"><button class="rbtn" aria-expanded="false" aria-controls="r1" data-label="Show the missing rung">Show the missing rung</button><div class="rbody" id="r1" hidden><p class="disp"><b>12 V,&nbsp; 24 J</b></p><p><i>V</i> = <i>Ed</i> = (3 N/C)(4 m) = <b>12 V</b>, and <i>W</i><sub>E</sub> = <i>qV</i> = (2 C)(12 V) = <b>24 J</b>.</p><p>Which is the same arithmetic as the rung beside it: <i>U</i> = <i>gh</i> = (9.8 m/s&sup2;)(4 m) = 39.2 m&sup2;/s&sup2; and <i>W</i><sub>G</sub> = <i>mU</i> = (2 kg)(39.2 m&sup2;/s&sup2;) = 78.4 J.</p></div></div>
+
+<div class="punch"><span class="label">The punchline, in his words</span><span class="big">swap the mass for the charge and <i>G</i> for <i>k</i></span><p>&ldquo;Then <i>g</i> turns into <b>E</b>, and Newton&rsquo;s law of gravitation turns into Coulomb&rsquo;s law.&rdquo;&nbsp; Every row of the table is one line of that swap, and every question in the next two notes is one row of the table being used.&nbsp; If you can do the mechanics problem, you can already do the electrostatics one &mdash; you just have to recognise which row you are standing on.</p></div>
+
+<h2>Check yourself</h2>
+
+<div class="ticket" id="ticket">
+
+  <div id="card-q1"><p class="qtext">1.&nbsp; In the table, <i>g</i> and <b>E</b> sit in the same row.&nbsp; <i>g</i> is the force per kilogram.&nbsp; <b>E</b> is the force per:</p>    <label><input type="radio" name="q1" value="a"> joule.</label>    <label><input type="radio" name="q1" value="b"> coulomb.</label>    <label><input type="radio" name="q1" value="c"> volt.</label>    <label><input type="radio" name="q1" value="d"> metre.</label>    <div class="qfb"></div></div>
+
+  <div id="card-q2"><p class="qtext">2.&nbsp; A 3.0 C charge is moved through a potential difference of 8.0 V.&nbsp; How much work is done on it, in joules?</p>    <div class="qnum"><input type="number" id="q2input" step="any" inputmode="decimal" aria-label="work in joules"><span class="unit">J</span></div><div class="qfb"></div></div>
+
+  <div id="card-q3"><p class="qtext">3.&nbsp; An electron is pushed through a potential difference of 250 volts.&nbsp; Its energy gain, in electronvolts, is:</p>    <label><input type="radio" name="q3" value="a"> 250 eV.</label>    <label><input type="radio" name="q3" value="b"> 1 eV, because it is one electron.</label>    <label><input type="radio" name="q3" value="c"> 4.0 &times; 10<sup>&minus;17</sup> eV.</label>    <label><input type="radio" name="q3" value="d"> It depends on the electron&rsquo;s mass.</label>    <div class="qfb"></div></div>
+
+  <div id="card-q4"><p class="qtext">4.&nbsp; Twice as much charge is carried up the same ladder in Figure 1.&nbsp; What doubles?</p>    <label><input type="radio" name="q4" value="a"> The potential at each rung.</label>    <label><input type="radio" name="q4" value="b"> The work done reaching each rung.</label>    <label><input type="radio" name="q4" value="c"> Both of them.</label>    <label><input type="radio" name="q4" value="d"> Neither of them.</label>    <div class="qfb"></div></div>
+
+  <div style="margin-top:.6rem"><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Clear</button></div>
+
+  <div class="score" id="ticketScore" role="status"></div>
+
+</div>
+
+<h2>Looking ahead</h2>
+
+<p>The table is the claim; the next two notes are the evidence.&nbsp; <b>Note&nbsp;9</b> takes the top half of it &mdash; force and field &mdash; and works through fifteen questions with it, finishing by weighing a charge you cannot see.&nbsp; <b>Note&nbsp;10</b> takes the bottom half, potential and work.</p>
+
+<div class="video"><span class="label">Watch &middot; the note worked through</span>
+  Recording to come.&nbsp; Print the guided notes (link just below) and fill them in as it goes.
+</div>
+
+<h2>Your notes</h2>
+
+<div class="downloads">
+  <a class="dl-card" href="https://byungmooncho.github.io/PHY152/handouts/M3_N8_Lessons_From_Newtons_Laws_Handout.pdf" target="_blank" rel="noopener"><span class="kind">Before class</span><span class="name">Guided notes &mdash; blank (PDF)</span><span class="hint">print it; the 4&nbsp;m rung is yours to fill in.</span></a>
+  <div class="dl-card static"><span class="kind">After the module</span><span class="name">Completed notes (PDF)</span><span class="hint">released when Module 3 closes.</span></div>
+</div>
+
+<footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 152</footer>
+</div>
+
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 3 Note 5, "Electric Field and Electric Potential: Lessons From Newton's Laws"
+
+     F1. The two force laws have the SAME FORM.  Swap mass for charge and G for
+         k and Newton's law of gravitation becomes Coulomb's law.
+     F2. Weight F_g = mg maps onto F_E = qE.
+     F3. FIELD IS FORCE PER UNIT OF STUFF.  g = F_g / M_2 is force per kilogram;
+         E = F_E / q_2 is force per coulomb.  E is also V/m.
+     F4. Field falls as 1 over r squared on both sides: g = GM_1/r^2, E = kq_1/r^2.
+     F5. POTENTIAL IS ENERGY PER UNIT OF STUFF.  U = W_g / M_2 = gh is joules per
+         kilogram; V = W_E / q_2 = Ed is joules per coulomb, which is the volt.
+     F6. WORK IS CHARGE TIMES POTENTIAL.  W_E = qV = qEd, as W_g = mU = mgh.
+         A joule is a coulomb volt.
+     F7. THE ELECTRONVOLT is (elementary charges) times (volts).
+         1 eV = 1.6e-19 J, numerically the elementary charge in coulombs.
+     F8. Potential belongs to the FIELD, not to what you put in it: climbing the
+         same ladder with twice the charge doubles the work and not the potential.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M3 Note 5.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q1": "b", "q3": "a", "q4": "b"};
+  var NUM = {"q2": [24.0, 0.05]};
+  var WHY = {
+    "q1": "E = F_E / q, the force in each COULOMB of charge, exactly as g is the force in each kilogram of mass.  (N/C and V/m are the same unit, which is why both appear in the table.)",
+    "q2": "W_E = qV = (3.0 C)(8.0 V) = 24 J.  A joule is a coulomb volt.",
+    "q3": "The eV unit is (elementary charges) times (volts).  One elementary charge through 250 volts is 250 eV - no arithmetic with 10 to the minus 19 needed, which is the whole point of the unit.",
+    "q4": "The potential is what the field offers per coulomb and it is there before you bring anything into it.  Double the charge and the WORK at every rung doubles; the potential does not move.  That is his answer to the last question in the note: No."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '✓ ' : '✗ ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>
