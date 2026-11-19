@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M4 N7 &mdash; DC Circuits With Kirchhoff Laws</title>
+<style>
+  /* FLCC Physics note page - Module 4, Electric Circuits, Note 7,
+     "DC Circuits With Kirchhoff Laws".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+
+     MODE B FREE-WRITE.  The 25SP master (5 pages, 4/17/2025) prints 215 and
+     182 characters on its two inked pages and carries four pasted circuit
+     graphics.  PAGES 3, 4 AND 5 ARE GENUINELY BLANK - 0.76 per cent
+     non-white, header and footer only.  The .docx ran to five pages and he
+     inked two.  All the working is in his 1083 live /Subtype /Ink
+     annotations; the .docx holds no pen ink, so all three ink places were
+     checked.
+
+     WHAT IS HIS.  The page title; all four circuits; every loop equation and
+     both junction equations; the whole of example 1 including the power
+     treatment and its unit derivation; example 2 end to end; the resistor
+     matrix, the name "resistor matrix", A x = b and x = A-inverse b; the
+     three-unknown matrix and its solution (1.5, 2.0, 0.5) A.  And the fifth
+     figure, from his own Summer 2021 coursework sheet of 2021-08-05: the
+     ladder, the three loops traced on it in three colours, both junction
+     equations and all three loop equations.
+
+     WHAT IS CLAUDE'S.  The subtitle; the synopsis; the connective sentences;
+     the section headings; the "method" box, which restates his own two lines;
+     the matrices set as HTML tables rather than handwritten grids; the
+     Check-yourself ticket; Looking ahead; the foundation list.
+
+     ★ THE 48 mW IS A SLIP FOR 4.8 mW.  He writes "Sum P = (Sum V) I = 48 mW"
+     and on the very next line computes (2e-4)(2+4+2+2+2+12) = 4.8e-3 W.  The
+     method and the working are right; only the stated figure is out by ten.
+     The page carries 4.8 mW.  Minor, fixed per the standing rule, and the
+     key's watch box says so.
+
+     ★ HIS V-SUBSCRIPTS CLASH WITH THEMSELVES on example 1.  The figure labels
+     the two batteries V1 = 12 V and V2 = 24 V; the working then calls the
+     five resistor drops V1 ... V5, so "V1" means 12 V in one place and 2 V
+     four lines later.  The page writes the drops as V_R1 ... V_R5 and leaves
+     his source labels untouched.  That subscript is the only renaming.
+
+     ★ EXAMPLE 3's SOLUTION IS REVEALED, by his decision of 2026-11-14.  His
+     ink sets the 5x5 matrix up and stops there.  Worked from his own matrix:
+     1.5, 2, 0.5, 2.5 and 2.0 A, and both junction equations check.
+
+     ★ FIGURE 5 IS SCHEMATIC ONLY, by the same decision.  He was offered that
+     sheet's colour-traced schematic alone or the schematic plus its
+     nominal-against-measured comparison, and chose the schematic.  The three
+     loop equations the tracing yields go with it, because showing which
+     closed paths to take is what the tracing is for; the matrix, the
+     solution and the measured comparison do not.  DO NOT ADD THEM.
+     R4 on that sheet is 20 ohm - the 2026-11-13 source addendum records 22,
+     and his own matrix coefficient and his measured 19.8 both say 20.  All
+     five of his 2021 currents were recomputed and all five are right.
+
+     FIGURE 1 IS THE ONLY ONE WITH A data-skel GROUP: his green ink writes the
+     five resistor drops onto it, and those are the answer to it.  Figures 2,
+     3, 4 and 5 are all givens - printed circuits and traced loops - so
+     nothing is removed from them and they keep their descriptive captions on
+     the handout, by the rule of 2026-10-21.
+
+     NO CALCULUS IN THIS NOTE, so no CALC-152 fence question arises.  What it
+     does raise is whether matrix inversion is in scope for the algebra-based
+     partner course: flagged since 2026-11-13, still open, still his.
+
+     NO PERFORMANCE EXPECTATION BLOCK.  His master carries none.
+     ==================================================================== */
+
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65; }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .1rem; font-weight:700; }
+  .subtitle{ font-family:"Segoe UI", system-ui, sans-serif; font-size:1rem; color:var(--muted); margin:0 0 .3rem; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.06rem; margin:1.3rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:.2rem 0 0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem; }
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ul.items{ padding-left:1.3rem; margin:.4rem 0; } ul.items > li{ margin:.4rem 0; }
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .disp{ display:block; margin:.7rem 0 .9rem; text-align:center; font-size:1.12rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green);
+    border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule);
+    padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  table.doc{ border-collapse:collapse; width:100%; margin:.6rem 0 .8rem; font-size:.95rem; }
+  table.doc th, table.doc td{ border:1px solid var(--rule); padding:.32rem .55rem; text-align:left;
+    vertical-align:top; font-weight:400; }
+  table.doc th{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    color:var(--green-deep); background:var(--green-soft); }
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none;
+    color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; } .pe.lp li{ margin:.32rem 0; } .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem;
+    border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer;
+    margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule);
+    border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.good{ color:var(--green-deep); } .ticket .qfb.bad{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .openq{ border-left:4px solid var(--amber); background:#fdf8ef; border-radius:0 6px 6px 0;
+    padding:.8rem 1.05rem; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .openq .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.3rem; }
+  .openq ul{ margin:.4rem 0 0; padding-left:1.2rem; } .openq li{ margin:.45rem 0; list-style:none; }
+  .openq li::before{ content:"\2014\00a0\00a0"; color:var(--muted); }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+<p class="eyebrow"><strong>PHY 152</strong><span>Module 4 &middot; Electric Circuits</span><span>Note 7</span></p>
+<h1>DC Circuits With Kirchhoff Laws</h1>
+<p class="subtitle">Four worked circuits, and the matrix method that solves the ones too tangled to reduce</p>
+<div class="synopsis"><span class="label">Synopsis</span><p>Series and parallel will get you a long way, but not everywhere: as soon as a circuit has two batteries in different branches, there is nothing left to reduce. What always works is the pair of rules from Note&nbsp;3 &mdash; <b>charge in equals charge out at every junction, and the voltages round every closed loop sum to zero</b>. Write one equation per junction and one per independent loop, and you have as many equations as unknown currents. After that it is algebra &mdash; and when there are five of them, it is <b>linear algebra</b>.</p></div>
+<h2>Example 1 &mdash; one loop, two batteries</h2>
+<p><b>Find all the <i>V</i>&rsquo;s and <i>I</i>&rsquo;s.</b></p>
+<div class="fig">
+<svg viewBox="0 0 660 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One series loop containing five resistors and two batteries that oppose each other, twelve volts against twenty-four."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M160.00,80.00 H293.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M347.00,80.00 H480.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M293.00,80.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M160.00,360.00 H293.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M347.00,360.00 H480.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M293.00,360.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M160.00,80.00 V123.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M160.00,177.00 V274.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M160.00,296.00 V360.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M160.00,123.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M143.0,278.0 H177.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M151.0,292.0 H169.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M480.00,80.00 V113.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M480.00,167.00 V214.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M480.00,236.00 V283.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M480.00,337.00 V360.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M480.00,113.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M463.0,218.0 H497.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M471.0,232.0 H489.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M480.00,283.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><text x="320.0" y="62.0" font-size="13.5" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;20&#160;k&#937;</tspan></text><text x="320.0" y="388.0" font-size="13.5" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">5</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;10&#160;k&#937;</tspan></text><text x="146.0" y="155.0" font-size="13.5" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;10&#160;k&#937;</tspan></text><text x="134.0" y="291.0" font-size="13.5" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;12&#160;V</tspan></text><text x="494.0" y="145.0" font-size="13.5" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">3</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;10&#160;k&#937;</tspan></text><text x="506.0" y="231.0" font-size="13.5" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;24&#160;V</tspan></text><text x="494.0" y="315.0" font-size="13.5" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">4</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;10&#160;k&#937;</tspan></text><path d="M190.0,110.0 L450.0,110.0 L450.0,330.0 L190.0,330.0 Z" fill="none" stroke="#5c6b62" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="7 5"/><path d="M330.0,110.0 L250.0,110.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="290.0" y="130.0" font-size="14" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan></text><g data-skel="draw-this"><text x="320.0" y="42.0" font-size="13" fill="#c77b1f" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="8.8" dy="3">R2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;4&#160;V</tspan></text><text x="146.0" y="178.0" font-size="13" fill="#c77b1f" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="8.8" dy="3">R1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;2&#160;V</tspan></text><text x="494.0" y="168.0" font-size="13" fill="#c77b1f" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="8.8" dy="3">R3</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;2&#160;V</tspan></text><text x="494.0" y="338.0" font-size="13" fill="#c77b1f" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="8.8" dy="3">R4</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;2&#160;V</tspan></text><text x="320.0" y="410.0" font-size="13" fill="#c77b1f" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="8.8" dy="3">R5</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;2&#160;V</tspan></text></g></svg>
+<div class="fig-note"><b>Figure 1.</b> Five resistors and two batteries in a single loop. The two sources face each other: going round, you meet 24 V one way and 12 V the other.</div>
+</div>
+<p>Two things to carry in:</p>
+<p><span class="disp">&Sigma;<i>V</i><sub>i</sub> = 0&nbsp;,&nbsp;&nbsp;<i>V</i> = <i>IR</i></span></p>
+<p>Round the loop:</p>
+<p><span class="disp">&minus;<i>V</i><sub>R3</sub> &minus; <i>V</i><sub>R2</sub> &minus; <i>V</i><sub>R1</sub> &minus; 12 &minus; <i>V</i><sub>R5</sub> &minus; <i>V</i><sub>R4</sub> + 24 = 0</span></p>
+<p>and with <i>V</i> = <i>IR</i> on every resistor:</p>
+<p><span class="disp">&minus;<i>I</i><sub>3</sub><i>R</i><sub>3</sub> &minus; <i>I</i><sub>2</sub><i>R</i><sub>2</sub> &minus; <i>I</i><sub>1</sub><i>R</i><sub>1</sub> &minus; 12 &minus; <i>I</i><sub>5</sub><i>R</i><sub>5</sub> &minus; <i>I</i><sub>4</sub><i>R</i><sub>4</sub> + 24 = 0</span></p>
+<p>There is only one loop, so there is only one current:</p>
+<p><span class="disp"><i>I</i> = <i>I</i><sub>1</sub> = <i>I</i><sub>2</sub> = <i>I</i><sub>3</sub> = <i>I</i><sub>4</sub> = <i>I</i><sub>5</sub></span></p>
+<div class="rev"><button class="rbtn" aria-controls="r1" aria-expanded="false" data-label="Show the current">Show the current</button><div class="rbody" id="r1" hidden><p>Collect the resistances:</p><p><span class="disp">12 + <i>I</i>(&minus;<i>R</i><sub>3</sub> &minus; <i>R</i><sub>2</sub> &minus; <i>R</i><sub>1</sub> &minus; <i>R</i><sub>5</sub> &minus; <i>R</i><sub>4</sub>) = 0</span></p><p><span class="disp">12 = <i>I</i>(<i>R</i><sub>1</sub> + <i>R</i><sub>2</sub> + <i>R</i><sub>3</sub> + <i>R</i><sub>4</sub> + <i>R</i><sub>5</sub>) = <i>I</i>(60 &times; 10<sup>3</sup>)</span></p><p><span class="disp">&#8756; <i>I</i> = 2 &times; 10<sup>&minus;4</sup> A</span></p><p>The 12 on the left is what is left of the two batteries after they have fought each other: <b>24 &minus; 12</b>.</p></div></div>
+<div class="rev"><button class="rbtn" aria-controls="r2" aria-expanded="false" data-label="Show the voltage across each resistor">Show the voltage across each resistor</button><div class="rbody" id="r2" hidden><p>Same current through all five, so it is <i>V</i> = <i>IR</i> five times:</p><p><span class="disp"><i>V</i><sub>R1</sub> = <i>IR</i><sub>1</sub> = (2 &times; 10<sup>&minus;4</sup>)(10 k&#937;) = 2 V</span></p><p><span class="disp"><i>V</i><sub>R2</sub> = 4 V&nbsp;,&nbsp;&nbsp;<i>V</i><sub>R3</sub> = <i>V</i><sub>R4</sub> = <i>V</i><sub>R5</sub> = 2 V</span></p><p>And they add to 12 V, which is exactly the net voltage the two batteries supply. <b>That is the loop rule holding, and it is the check worth doing every time.</b></p></div></div>
+<h3>Power</h3>
+<p><span class="disp"><i>P</i> = <i>IV</i>&nbsp;&nbsp;&#8658;&nbsp;&nbsp;[W] = [J/s] = [C/s][J/C]</span></p>
+<p>The units are the argument: a coulomb per second times joules per coulomb is joules per second. <b>Power out from this circuit:</b></p>
+<div class="rev"><button class="rbtn" aria-controls="r3" aria-expanded="false" data-label="Show the power">Show the power</button><div class="rbody" id="r3" hidden><p><span class="disp">&Sigma;<i>P</i><sub>i</sub> = (&Sigma;<i>V</i><sub>i</sub>)<i>I</i></span></p><p><span class="disp">= (2 &times; 10<sup>&minus;4</sup> A)(2 + 4 + 2 + 2 + 2 + 12 V) = 4.8 &times; 10<sup>&minus;3</sup> W</span></p><p>The five resistor drops plus the 12 V battery, which is being <b>charged</b> by the bigger one and so takes power out of the circuit just as a resistor does. <b>4.8 mW</b> in all, every bit of it supplied by the 24 V source.</p></div></div>
+<h2>Example 2 &mdash; two loops and a junction</h2>
+<div class="fig">
+<svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two loops meeting at junction A, with a twelve ohm branch carrying two amps, a six ohm branch and a five ohm branch on a twenty-one volt battery."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M120.00,90.00 H560.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M120.00,340.00 H418.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M472.00,340.00 H560.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M418.00,340.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M120.00,90.00 V133.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M120.00,187.00 V264.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M120.00,286.00 V340.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M120.00,133.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M103.0,268.0 H137.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M111.0,282.0 H129.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M300.00,90.00 V178.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M300.00,232.00 V340.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M300.00,178.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M560.00,90.00 V169.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M560.00,191.00 V340.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M551.0,173.0 H569.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M543.0,187.0 H577.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><circle cx="300.0" cy="90.0" r="4.5" fill="#1d2b23"/><text x="316.0" y="78.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="14" fill="#1d2b23" text-anchor="start" font-weight="600">A</text><text x="106.0" y="165.0" font-size="13.5" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;12&#160;&#937;</tspan></text><text x="94.0" y="281.0" font-size="14" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.5" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan></text><text x="318.0" y="210.0" font-size="13.5" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;6&#160;&#937;</tspan></text><text x="445.0" y="368.0" font-size="13.5" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">3</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;5&#160;&#937;</tspan></text><text x="586.0" y="186.0" font-size="13.5" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;21&#160;V</tspan></text><path d="M190.0,74.0 L260.0,74.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="225.0" y="66.0" font-size="13" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;2&#160;A</tspan></text><path d="M278.0,258.0 L278.0,162.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="278.0" y="150.0" font-size="13" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M400.0,74.0 L470.0,74.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="435.0" y="66.0" font-size="13" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">3</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M142.0,112.0 L538.0,112.0 L538.0,318.0 L142.0,318.0 Z" fill="none" stroke="#c77b1f" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="174.0" cy="144.0" r="14.0" fill="#fff" stroke="#c77b1f" stroke-width="2"/><text x="174.0" y="149.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#c77b1f" text-anchor="middle" font-weight="600">1</text><path d="M420.0,136.0 L538.0,136.0 L538.0,294.0 L420.0,294.0 Z" fill="none" stroke="#b4432a" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="452.0" cy="262.0" r="14.0" fill="#fff" stroke="#b4432a" stroke-width="2"/><text x="452.0" y="267.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#b4432a" text-anchor="middle" font-weight="600">2</text></svg>
+<div class="fig-note"><b>Figure 2.</b> Two loops sharing the middle branch. <i>I</i><sub>1</sub> and <i>V</i><sub>2</sub> are given; <i>V</i><sub>1</sub>, <i>I</i><sub>2</sub> and <i>I</i><sub>3</sub> are not.</div>
+</div>
+<p>Three unknowns, so three equations &mdash; one for each loop, one for the junction:</p>
+<p><span class="disp"><b>Loop 1:</b>&nbsp;&nbsp;+21 &minus; 5<i>I</i><sub>3</sub> + <i>V</i><sub>1</sub> &minus; (12 &middot; 2) = 0</span></p>
+<p><span class="disp"><b>Loop 2:</b>&nbsp;&nbsp;+21 &minus; 5<i>I</i><sub>3</sub> &minus; 6<i>I</i><sub>2</sub> = 0</span></p>
+<p><span class="disp"><b>Junction A:</b>&nbsp;&nbsp;2 + <i>I</i><sub>2</sub> = <i>I</i><sub>3</sub></span></p>
+<div class="rev"><button class="rbtn" aria-controls="r4" aria-expanded="false" data-label="Show the solution">Show the solution</button><div class="rbody" id="r4" hidden><p>The junction equation has no unknown but <i>I</i><sub>2</sub> and <i>I</i><sub>3</sub> in it, so substitute it straight into loop 2:</p><p><span class="disp">21 &minus; 5(2 + <i>I</i><sub>2</sub>) &minus; 6<i>I</i><sub>2</sub> = 0</span></p><p><span class="disp">21 &minus; 10 &minus; 5<i>I</i><sub>2</sub> &minus; 6<i>I</i><sub>2</sub> = 0&nbsp;&nbsp;&#8658;&nbsp;&nbsp;11 = 11<i>I</i><sub>2</sub></span></p><p><span class="disp"><i>I</i><sub>2</sub> = 1 A&nbsp;,&nbsp;&nbsp;<i>I</i><sub>3</sub> = 2 + 1 = 3 A</span></p><p>Then loop 1 gives up the battery, since 21 &minus; 24 = &minus;3:</p><p><span class="disp">&minus;5<i>I</i><sub>3</sub> + <i>V</i><sub>1</sub> &minus; 3 = 0&nbsp;&nbsp;&#8658;&nbsp;&nbsp;<i>V</i><sub>1</sub> = 18 V</span></p></div></div>
+<h2>When substitution runs out: the resistor matrix</h2>
+<p>Two unknowns you can substitute. Five you cannot &mdash; not without losing your place. But every one of those equations is <b>linear in the currents</b>, and a set of linear equations is a matrix.</p>
+<div class="fig">
+<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five unknown currents in a network with two junctions and three independent loops."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M120.00,90.00 H680.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M120.00,330.00 H193.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M247.00,330.00 H383.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M437.00,330.00 H680.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M193.00,330.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M383.00,330.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M120.00,90.00 V189.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M120.00,211.00 V330.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M103.0,193.0 H137.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M111.0,207.0 H129.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M320.00,90.00 V173.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M320.00,227.00 V330.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M320.00,173.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M500.00,90.00 V189.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M500.00,211.00 V330.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M483.0,193.0 H517.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M491.0,207.0 H509.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M680.00,90.00 V173.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M680.00,227.00 V330.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M680.00,173.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><circle cx="320.0" cy="330.0" r="4.5" fill="#1d2b23"/><text x="326.0" y="360.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="14" fill="#1d2b23" text-anchor="start" font-weight="600">A</text><circle cx="500.0" cy="330.0" r="4.5" fill="#1d2b23"/><text x="506.0" y="360.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="14" fill="#1d2b23" text-anchor="start" font-weight="600">B</text><text x="94.0" y="206.0" font-size="13.5" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;12&#160;V</tspan></text><text x="288.0" y="206.0" font-size="13.5" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;4&#160;&#937;</tspan></text><text x="518.0" y="206.0" font-size="13.5" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;5&#160;V</tspan></text><text x="694.0" y="206.0" font-size="13.5" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">4</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;2&#160;&#937;</tspan></text><text x="220.0" y="360.0" font-size="13.5" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;3&#160;&#937;</tspan></text><text x="410.0" y="360.0" font-size="13.5" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">3</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;2&#160;&#937;</tspan></text><path d="M342.0,168.0 L342.0,240.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="350.0" y="206.0" font-size="13" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M210.0,308.0 L150.0,308.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="180.0" y="300.0" font-size="13" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M400.0,308.0 L340.0,308.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="370.0" y="300.0" font-size="13" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">3</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M658.0,168.0 L658.0,240.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="650.0" y="206.0" font-size="13" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">4</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M478.0,240.0 L478.0,168.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="470.0" y="206.0" font-size="13" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">5</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M140.0,110.0 L300.0,110.0 L300.0,284.0 L140.0,284.0 Z" fill="none" stroke="#c77b1f" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="172.0" cy="142.0" r="14.0" fill="#fff" stroke="#c77b1f" stroke-width="2"/><text x="172.0" y="147.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#c77b1f" text-anchor="middle" font-weight="600">3</text><path d="M156.0,130.0 L430.0,130.0 L430.0,268.0 L156.0,268.0 Z" fill="none" stroke="#b4432a" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="396.0" cy="130.0" r="14.0" fill="#fff" stroke="#b4432a" stroke-width="2"/><text x="396.0" y="135.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#b4432a" text-anchor="middle" font-weight="600">4</text><path d="M172.0,150.0 L628.0,150.0 L628.0,252.0 L172.0,252.0 Z" fill="none" stroke="#1e6b3c" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="594.0" cy="150.0" r="14.0" fill="#fff" stroke="#1e6b3c" stroke-width="2"/><text x="594.0" y="155.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#1e6b3c" text-anchor="middle" font-weight="600">5</text></svg>
+<div class="fig-note"><b>Figure 3.</b> Five unknown currents, two junctions and three independent loops &mdash; five equations for five unknowns.</div>
+</div>
+<p>Write the five equations as rows, one column per current and one for the constant. Kirchhoff&rsquo;s rules give exactly as many rows as you need:</p>
+<table class="doc"><tr><th></th><th><i>I</i><sub>1</sub></th><th><i>I</i><sub>2</sub></th><th><i>I</i><sub>3</sub></th><th><i>I</i><sub>4</sub></th><th><i>I</i><sub>5</sub></th><th><i>V</i></th></tr><tr><td>loop 3</td><td>4</td><td>3</td><td>0</td><td>0</td><td>0</td><td>12</td></tr><tr><td>loop 4</td><td>0</td><td>3</td><td>2</td><td>0</td><td>0</td><td>12 &minus; 5</td></tr><tr><td>loop 5</td><td>0</td><td>3</td><td>2</td><td>2</td><td>0</td><td>12</td></tr><tr><td>junction A</td><td>1</td><td>&minus;1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr><tr><td>junction B</td><td>0</td><td>0</td><td>&minus;1</td><td>1</td><td>&minus;1</td><td>0</td></tr></table>
+<p>That table is the <b>&ldquo;resistor matrix&rdquo;</b>. Call it <i>A</i>, call the column of unknown currents <b>x</b> and the column of constants <b>b</b>, and the whole circuit is one line:</p>
+<div class="punch"><span class="label">The method</span><span class="big"><i>A</i><b>x</b> = <b>b</b>&nbsp;&nbsp;&#8658;&nbsp;&nbsp;<i>A</i><sup>&minus;1</sup><i>A</i><b>x</b> = <i>A</i><sup>&minus;1</sup><b>b</b>&nbsp;&nbsp;&#8658;&nbsp;&nbsp;<b>x</b> = <i>A</i><sup>&minus;1</sup><b>b</b></span><p>Because <i>A</i><sup>&minus;1</sup><i>A</i> is the identity. <b>Build the matrix, invert it, multiply.</b> The circuit stops being a puzzle and becomes a procedure.</p></div>
+<div class="rev"><button class="rbtn" aria-controls="r5" aria-expanded="false" data-label="Show the five currents">Show the five currents</button><div class="rbody" id="r5" hidden><p>Rows 2 and 3 differ only by the 2<i>I</i><sub>4</sub> term, so subtracting gives <i>I</i><sub>4</sub> straight away:</p><p><span class="disp">2<i>I</i><sub>4</sub> = 12 &minus; 7&nbsp;&nbsp;&#8658;&nbsp;&nbsp;<i>I</i><sub>4</sub> = 2.5 A</span></p><p>and the rest follow:</p><p><span class="disp"><i>I</i><sub>1</sub> = 1.5 A&nbsp;,&nbsp;&nbsp;<i>I</i><sub>2</sub> = 2 A&nbsp;,&nbsp;&nbsp;<i>I</i><sub>3</sub> = 0.5 A&nbsp;,&nbsp;&nbsp;<i>I</i><sub>4</sub> = 2.5 A&nbsp;,&nbsp;&nbsp;<i>I</i><sub>5</sub> = 2 A</span></p><p>Check them against both junctions before you believe them: 1.5 &minus; 2 + 0.5 = 0 at A, and &minus;0.5 + 2.5 &minus; 2 = 0 at B.</p></div></div>
+<h2>Example 4 &mdash; the method end to end</h2>
+<div class="fig">
+<svg viewBox="0 0 700 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three unknown currents: two batteries, three resistors and one junction."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M140.00,90.00 H600.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M140.00,320.00 H223.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M277.00,320.00 H463.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M517.00,320.00 H600.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M223.00,320.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M463.00,320.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M140.00,90.00 V179.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M140.00,201.00 V320.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M123.0,183.0 H157.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M131.0,197.0 H149.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M380.00,90.00 V163.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M380.00,217.00 V320.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M380.00,163.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M600.00,90.00 V179.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M600.00,201.00 V320.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M583.0,183.0 H617.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M591.0,197.0 H609.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><circle cx="380.0" cy="320.0" r="4.5" fill="#1d2b23"/><text x="386.0" y="350.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="14" fill="#1d2b23" text-anchor="start" font-weight="600">A</text><text x="114.0" y="196.0" font-size="13.5" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;24&#160;V</tspan></text><text x="424.0" y="196.0" font-size="13.5" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;8&#160;&#937;</tspan></text><text x="626.0" y="196.0" font-size="13.5" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;10&#160;V</tspan></text><text x="250.0" y="350.0" font-size="13.5" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;6&#160;&#937;</tspan></text><text x="490.0" y="350.0" font-size="13.5" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="9.2" dy="3">3</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;4&#160;&#937;</tspan></text><path d="M402.0,158.0 L402.0,232.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="402.0" y="148.0" font-size="13" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M240.0,298.0 L180.0,298.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="210.0" y="290.0" font-size="13" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M480.0,298.0 L420.0,298.0" fill="none" stroke="#1e6b3c" stroke-width="2.0" marker-end="url(#ag)"/><text x="450.0" y="290.0" font-size="13" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">3</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M160.0,110.0 L360.0,110.0 L360.0,276.0 L160.0,276.0 Z" fill="none" stroke="#c77b1f" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="192.0" cy="142.0" r="14.0" fill="#fff" stroke="#c77b1f" stroke-width="2"/><text x="192.0" y="147.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#c77b1f" text-anchor="middle" font-weight="600">1</text><path d="M176.0,130.0 L564.0,130.0 L564.0,260.0 L176.0,260.0 Z" fill="none" stroke="#b4432a" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="530.0" cy="130.0" r="14.0" fill="#fff" stroke="#b4432a" stroke-width="2"/><text x="530.0" y="135.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#b4432a" text-anchor="middle" font-weight="600">2</text></svg>
+<div class="fig-note"><b>Figure 4.</b> The same shape of problem with three unknowns instead of five &mdash; small enough to invert by hand, big enough to be worth the method.</div>
+</div>
+<table class="doc"><tr><th></th><th><i>I</i><sub>1</sub></th><th><i>I</i><sub>2</sub></th><th><i>I</i><sub>3</sub></th><th><i>V</i></th></tr><tr><td>loop 1</td><td>8</td><td>6</td><td>0</td><td>24</td></tr><tr><td>loop 2</td><td>0</td><td>6</td><td>4</td><td>24 &minus; 10</td></tr><tr><td>junction A</td><td>1</td><td>&minus;1</td><td>1</td><td>0</td></tr></table>
+<div class="rev"><button class="rbtn" aria-controls="r6" aria-expanded="false" data-label="Show x = A inverse b">Show x = A inverse b</button><div class="rbody" id="r6" hidden><p><span class="disp">(<i>I</i><sub>1</sub>, <i>I</i><sub>2</sub>, <i>I</i><sub>3</sub>) = (1.5, 2.0, 0.5) A</span></p><p>Put them back into the rows as a check: 8(1.5) + 6(2) = 24 &#10003;, 6(2) + 4(0.5) = 14 &#10003;, and 1.5 &minus; 2 + 0.5 = 0 &#10003; at the junction.</p></div></div>
+<h2>Choosing the loops</h2>
+<p>The matrix is the easy part. <b>The step that goes wrong is choosing the loops</b> &mdash; which closed paths to take, and how to be sure you have enough of them and no repeats. It is much easier to see traced on the circuit than written out.</p>
+<div class="fig">
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A five-unknown ladder with the three independent loops traced in three colours directly on the circuit."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M140.00,100.00 H253.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M307.00,100.00 H660.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M253.00,100.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M140.00,390.00 H660.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M140.00,100.00 V234.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M140.00,256.00 V390.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M123.0,238.0 H157.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M131.0,252.0 H149.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M660.00,100.00 V218.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M660.00,272.00 V390.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M660.00,218.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M420.00,100.00 V153.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M420.00,207.00 V260.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M420.00,153.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M360.00,260.00 H480.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M360.00,260.00 V298.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M360.00,352.00 V390.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M360.00,298.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><path d="M480.00,260.00 V298.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M480.00,352.00 V390.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M480.00,298.00 v9.00 l9,4.50 l-18,9.00 l18,9.00 l-18,9.00 l9,4.50 v9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><circle cx="420.0" cy="100.0" r="4.5" fill="#1d2b23"/><circle cx="420.0" cy="260.0" r="4.5" fill="#1d2b23"/><text x="434.0" y="88.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="14" fill="#1d2b23" text-anchor="start" font-weight="600">A</text><text x="434.0" y="250.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="14" fill="#1d2b23" text-anchor="start" font-weight="600">B</text><text x="114.0" y="251.0" font-size="14" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>3&#160;V</tspan></text><text x="280.0" y="82.0" font-size="13" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="8.8" dy="3">1</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;100&#160;&#937;</tspan></text><text x="386.0" y="186.0" font-size="13" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="8.8" dy="3">2</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;220&#160;&#937;</tspan></text><text x="674.0" y="251.0" font-size="13" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="8.8" dy="3">3</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;470&#160;&#937;</tspan></text><text x="326.0" y="331.0" font-size="13" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="8.8" dy="3">4</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;20&#160;&#937;</tspan></text><text x="498.0" y="331.0" font-size="13" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan><tspan font-size="8.8" dy="3">5</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;10&#160;&#937;</tspan></text><path d="M154.0,114.0 L646.0,114.0 L646.0,376.0 L154.0,376.0 Z" fill="none" stroke="#b4432a" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="612.0" cy="146.0" r="14.0" fill="#fff" stroke="#b4432a" stroke-width="2"/><text x="612.0" y="151.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#b4432a" text-anchor="middle" font-weight="600">4</text><path d="M168.0,128.0 L406.0,128.0 L406.0,246.0 L348.0,246.0 L348.0,362.0 L168.0,362.0 Z" fill="none" stroke="#1e6b3c" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="202.0" cy="328.0" r="14.0" fill="#fff" stroke="#1e6b3c" stroke-width="2"/><text x="202.0" y="333.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#1e6b3c" text-anchor="middle" font-weight="600">3</text><path d="M182.0,142.0 L434.0,142.0 L434.0,274.0 L492.0,274.0 L492.0,348.0 L182.0,348.0 Z" fill="none" stroke="#c77b1f" stroke-width="2.0" stroke-linejoin="round" stroke-dasharray="7 5"/><circle cx="236.0" cy="314.0" r="14.0" fill="#fff" stroke="#c77b1f" stroke-width="2"/><text x="236.0" y="319.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13.5" fill="#c77b1f" text-anchor="middle" font-weight="600">5</text></svg>
+<div class="fig-note"><b>Figure 5.</b> Three independent loops traced straight onto the circuit, each in its own colour. Every one starts and ends at the battery and takes a different route back.</div>
+</div>
+<p>Two junctions give two equations:</p>
+<p><span class="disp"><b>A:</b>&nbsp;&nbsp;<i>I</i><sub>1</sub> = <i>I</i><sub>2</sub> + <i>I</i><sub>3</sub>&nbsp;&nbsp;&nbsp;&nbsp;<b>B:</b>&nbsp;&nbsp;<i>I</i><sub>2</sub> = <i>I</i><sub>4</sub> + <i>I</i><sub>5</sub></span></p>
+<p>and each traced loop gives one more:</p>
+<div class="rev"><button class="rbtn" aria-controls="r7" aria-expanded="false" data-label="Show the three loop equations">Show the three loop equations</button><div class="rbody" id="r7" hidden><p><span class="disp"><b>3:</b>&nbsp;&nbsp;<i>I</i><sub>1</sub>(100) + <i>I</i><sub>2</sub>(220) + <i>I</i><sub>4</sub>(20) = 3 V</span></p><p><span class="disp"><b>4:</b>&nbsp;&nbsp;<i>I</i><sub>1</sub>(100) + <i>I</i><sub>3</sub>(470) = 3 V</span></p><p><span class="disp"><b>5:</b>&nbsp;&nbsp;<i>I</i><sub>1</sub>(100) + <i>I</i><sub>2</sub>(220) + <i>I</i><sub>5</sub>(10) = 3 V</span></p><p>Five equations, five unknowns. <b>Every loop here passes through the battery and through <i>R</i><sub>1</sub>, then takes a different way home</b> &mdash; that is what makes them independent, and it is the pattern to look for.</p></div></div>
+<h2>Looking ahead</h2>
+<p class="ahead">That closes the circuits. Everything in this module came from two rules about conservation and one about resistance, and the only thing that ever changed was how many equations you had to write down at once. <b>Next the charges stop just flowing and start pushing on each other sideways</b> &mdash; magnetism.</p>
+<h2>Check yourself</h2>
+<div class="ticket"><p>Four questions. Nothing is recorded and nothing is sent anywhere.</p><div id="card-q1"><p class="qtext">1. One loop, 24 V and 12 V facing each other, total resistance 60 k&#937;. The current is</p><p class="qnum"><input id="q1input" inputmode="decimal" placeholder="number"><span class="unit">&#181;A</span></p><div class="qfb"></div></div><div id="card-q2"><p class="qtext">2. A circuit has 5 unknown currents. To solve it you need</p><label><input type="radio" name="q2" value="a"> 2 equations</label><label><input type="radio" name="q2" value="b"> 3 equations</label><label><input type="radio" name="q2" value="c"> 5 equations</label><label><input type="radio" name="q2" value="d"> as many as there are resistors</label><div class="qfb"></div></div><div id="card-q3"><p class="qtext">3. In <i>A</i><b>x</b> = <b>b</b>, the column <b>x</b> holds</p><label><input type="radio" name="q3" value="a"> the resistances</label><label><input type="radio" name="q3" value="b"> the unknown currents</label><label><input type="radio" name="q3" value="c"> the battery voltages</label><label><input type="radio" name="q3" value="d"> the power in each branch</label><div class="qfb"></div></div><div id="card-q4"><p class="qtext">4. You have written one equation per junction and one per loop, and you have one equation too many. Most likely</p><label><input type="radio" name="q4" value="a"> you made an arithmetic error</label><label><input type="radio" name="q4" value="b"> one of your loops is a combination of the others</label><label><input type="radio" name="q4" value="c"> the circuit has no solution</label><label><input type="radio" name="q4" value="d"> you need another battery</label><div class="qfb"></div></div><p><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Reset</button><span class="score" id="ticketScore"></span></p></div>
+<div class="video"><span class="label">Watch</span>the note worked through (link just below).<!-- iframe src="YOUR_EMBED_URL" --></div>
+<h2>Your notes</h2>
+<div class="downloads"><div class="dl-card static"><span class="kind">Guided note</span><span class="name">M4 N7 &mdash; DC Circuits With Kirchhoff Laws</span><span class="hint">The printable sheet we fill in together in class.</span></div><div class="dl-card static"><span class="kind">Read</span><span class="name">M4 N7 &mdash; this page as a PDF</span><span class="hint">Everything here, with the answers already open.</span></div></div>
+<footer>FLCC Physics &middot; Module 4 &middot; Note 7</footer>
+</div>
+
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 4 Note 7, "DC Circuits With Kirchhoff Laws"
+
+     F1. WHEN SERIES AND PARALLEL RUN OUT.  As soon as a circuit has batteries
+         in two different branches there is nothing left to reduce.  The two
+         Kirchhoff rules always work; reduction does not.
+     F2. COUNT FIRST.  One equation per junction plus one per INDEPENDENT loop
+         gives exactly as many equations as there are unknown currents.  The
+         number of resistors is irrelevant.
+     F3. INDEPENDENT LOOPS.  A loop made by stitching two others together
+         carries no new information.  On his traced ladder every loop goes
+         through the battery and R1 and then takes a DIFFERENT way home -
+         that is the pattern.
+     F4. OPPOSING BATTERIES SUBTRACT.  In his example 1, 24 V and 12 V face
+         each other and the circuit is driven by 12 V, not 36.  A very common
+         wrong answer adds them.
+     F5. ONE LOOP MEANS ONE CURRENT.  I = I1 = I2 = ... through every element
+         in a single loop, however many elements there are.
+     F6. HIS EXAMPLE 1.  R = 10k, 20k, 10k, 10k, 10k in one loop with 24 V
+         against 12 V:
+           12 = I (60 x 10^3)  so  I = 2 x 10^-4 A
+           drops 2, 4, 2, 2, 2 V, which sum to 12 V - the loop rule holding.
+     F7. THE DROP CHECK.  The resistor drops must sum to the NET source
+         voltage.  Cheapest check there is; do it every time.
+     F8. POWER.  P = IV, and the units carry the argument: [W] = [J/s] =
+         [C/s][J/C].  In example 1, Sum P = (Sum V) I = (2e-4)(24) = 4.8 mW.
+         NOTE FOR ITEM WRITERS: his sheet states 48 mW and then computes
+         4.8e-3 W on the next line.  4.8 mW is right.
+     F9. A CHARGING BATTERY TAKES POWER OUT.  The 12 V cell is being charged
+         by the 24 V one, so it absorbs I x 12 just as a resistor would.
+         That is why the 12 appears in the power sum alongside the five
+         resistor drops.
+     F10. HIS EXAMPLE 2.  R1 = 12, R2 = 6, R3 = 5 ohm, I1 = 2 A, V2 = 21 V:
+            loop 1   21 - 5 I3 + V1 - 24 = 0
+            loop 2   21 - 5 I3 - 6 I2 = 0
+            junction 2 + I2 = I3
+          giving I2 = 1 A, I3 = 3 A, V1 = 18 V.
+     F11. THE RESISTOR MATRIX.  Every Kirchhoff equation is LINEAR in the
+          currents, so the set of them is a matrix.  A holds the coefficients
+          (resistances, and the plus and minus ones from the junctions), x
+          holds the unknown currents, b holds the battery voltages.
+     F12. A x = b, so x = A-inverse b.  Build it, invert it, multiply.  The
+          circuit stops being a puzzle and becomes a procedure.
+     F13. HIS FIVE-UNKNOWN NETWORK.  R = 4, 3, 2, 2 ohm with 12 V and 5 V:
+            I1 = 1.5, I2 = 2, I3 = 0.5, I4 = 2.5, I5 = 2.0 A.
+          NOTE FOR ITEM WRITERS: these are NOT in his ink.  He set the matrix
+          up and stopped; on 2026-11-14 he asked for the solution to be
+          worked from his own matrix.
+     F14. HIS THREE-UNKNOWN NETWORK.  R = 8, 6, 4 ohm with 24 V and 10 V:
+            (I1, I2, I3) = (1.5, 2.0, 0.5) A.
+     F15. ★ THOSE TWO NETWORKS ARE THE SAME CIRCUIT SCALED.  Every resistance
+          and every EMF in F14 is exactly DOUBLE the matching one in F13, so
+          the currents are identical.  Doubling R and V together leaves every
+          current unchanged - a good discriminating item, and a good thing to
+          notice out loud in class.
+     F16. HIS TRACED LADDER, 2021-08-05.  100, 220, 470, 20 and 10 ohm on 3 V,
+          junctions A and B:
+            A  I1 = I2 + I3        B  I2 = I4 + I5
+            3  I1(100) + I2(220) + I4(20) = 3 V
+            4  I1(100) + I3(470)          = 3 V
+            5  I1(100) + I2(220) + I5(10) = 3 V
+          Solving: 0.0118, 0.008, 0.0038, 0.0026 and 0.0053 A, all of which
+          were recomputed and are right.  The page shows the tracing and the
+          equations only; the solution is NOT on it.
+
+     Item-writing note: this note contains no calculus.  Whether the matrix
+     method is in scope for the algebra-based partner course is open and is
+     Cho's call, so do not assume it either way in a shared item bank.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M4 Note 7.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q2": "c", "q3": "b", "q4": "b"};
+  var NUM = {"q1": [200.0, 4.0]};
+  var WHY = {
+    "q1": "200 &#181;A.  The two batteries oppose, so the driving voltage is 24 &minus; 12 = 12 V, and I = 12 / 60000 = 2 &times; 10<sup>&minus;4</sup> A.  Facing each other is the whole trick here &mdash; adding them would give 600 &#181;A.",
+    "q2": "Five.  One unknown needs one equation, and Kirchhoff's rules always supply exactly enough: one per junction plus one per independent loop.  The number of resistors has nothing to do with it.",
+    "q3": "The unknown currents.  A holds the coefficients, which are the resistances and the junction &plusmn;1s; b holds the constants, which are the battery voltages; x is what you are solving for.",
+    "q4": "One of your loops is a combination of the others, so it carries no new information.  Independent loops are the ones that each take a different route home &mdash; a loop made by stitching two others together is not a new equation."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '&#10003; ' : '&#10007; ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>

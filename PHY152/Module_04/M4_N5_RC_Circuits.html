@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M4 N5 &mdash; RC Circuits</title>
+<style>
+  /* FLCC Physics note page - Module 4, Electric Circuits, Note 5,
+     "RC Circuits".
+
+     PROVENANCE AND COURSE NAMES LIVE IN THE LOG ENTRY, NOT HERE.
+
+     MODE B FREE-WRITE, and the most completely handwritten note in the module.
+     The 25SP master (2 pages, 4/17/2025) prints 151 and 152 characters a page
+     - the running header, the page title and two section labels - and NOT ONE
+     GRAPHIC.  All 1023 live /Subtype /Ink annotations are his, and they carry
+     the whole lesson: both circuits, the entire derivation, and all six
+     graphs.  The .docx master holds no pen ink and no contentPart, so all
+     three ink places were checked and the live annotations are everything.
+
+     WHAT IS HIS.  Every word, every equation and every figure.  The two
+     circuits; the loop rule and the three substitutions; the differential
+     equation and its separation; the integration; Q(t) = epsilon C times
+     (1 - exp(-t/RC)); epsilon C = Q-nought; RC = tau, the time constant;
+     Q(tau)/Q-nought = 1 - 1/e = 0.63; the current I = I-nought exp(-t/RC);
+     the remark that V = Q/C gives the capacitor voltage the same shape and
+     V = IR gives the resistor voltage the same shape; the discharging loop
+     rule with epsilon = 0; dq/q = -dt/RC; Q = Q-nought exp(-t/RC); and all
+     six graphs including the sign of the discharging current.
+
+     WHAT IS CLAUDE'S.  The subtitle; the synopsis, which restates his own
+     opening line; the connective sentences between his equations; the time
+     constant box, which restates what he writes; the Check-yourself ticket;
+     Looking ahead; the foundation list.
+
+     ★ HIS SECTION 2 IS STRUCK THROUGH IN HIS OWN GREEN INK.  The printed label
+     "2. RC Circuits With Varying Resistance" is scribbled out on page 2, and
+     he used that page for the charging graph instead.  Its only content is one
+     figure in "M4 N5 RC Circuits p2.docx" - 12 V, a variable resistor with a
+     wiper, a capacitor, V_out = 10 V, and "Variable resistance - tune tau by
+     changing R value."  The 2026-11-13 sweep recorded that annotation as
+     "tune I"; it is tau.  On 2026-11-14 he chose to RESPECT THE STRIKE, so
+     this note is section 1 only.  DO NOT ADD SECTION 2 BACK.
+
+     ★ THE INTEGRATION IS WRITTEN FROM HIS 2021 SHEET, NOT FROM THE 2025 PAGE.
+     The 2025 ink writes
+
+         + ln(epsilon C - q) | 0 to Q  =  - t / RC
+
+     where the antiderivative of dq/(epsilon C - q) is MINUS ln(epsilon C - q).
+     Both sides are negated, so it self-cancels and his final Q(t) is right -
+     but the antiderivative as written is not, and it is not a line to put in
+     front of students.  His own Summer 2021 coursework sheet of 2021-08-06
+     (named in the log entry) does the same derivation correctly, as
+     - ln(C epsilon - q) | 0 to q = t / RC, and lands
+     on the same result.  THAT is the form on this page: his, from his own
+     hand, and the only change this build makes to his mathematics.  The key's
+     watch box says so.
+
+     THE ELEMENT LABELS come from that same 2021 sheet, as the source addendum
+     of 2026-11-13 asked: "Capacitor" against V = q/C = epsilon (1 - exp) and
+     "Resistor" against V = IR = epsilon exp.  The observation that the two
+     add to epsilon at every instant is drawn from his own two boxed results.
+
+     NO CALCULUS FENCE.  This note is calculus end to end - a separable
+     differential equation solved, not asserted - so a CALC-152 fence would
+     strip it to its title.  Same deferral as M1 N2a, M1 N3, M3 N13 and M3 N14.
+     mirror_152_to_119.py has no per-note exclusion, so run it on NAMED FILES,
+     never over this directory.
+
+     NO data-skel GROUPS AND NO SKELETON FIGURES.  All five figures are ALL
+     GIVENS: the circuits are the situation and the graphs are the shape of the
+     result, both drawn in his ink before any algebra is done.  By the rule of
+     2026-10-21 they keep their descriptive captions on the handout.  The work
+     on this note is the derivation, and the derivation is in the reveals.
+
+     NO PERFORMANCE EXPECTATION BLOCK.  His master carries none and this note
+     has no numbered question set for one to govern.
+     ==================================================================== */
+
+
+  :root{
+    --ink:#1d2b23; --paper:#ffffff;
+    --green:#1e6b3c; --green-soft:#eaf3ed; --green-deep:#134a29;
+    --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65; }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 2rem; }
+  .eyebrow{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:1.9rem; line-height:1.2; margin:1rem 0 .1rem; font-weight:700; }
+  .subtitle{ font-family:"Segoe UI", system-ui, sans-serif; font-size:1rem; color:var(--muted); margin:0 0 .3rem; }
+  h2{ font-size:1.25rem; margin:1.9rem 0 .7rem; font-weight:700; }
+  h3{ font-size:1.06rem; margin:1.3rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+  .synopsis .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem; }
+  .hook{ background:#fff; border:1.5px dashed var(--green); padding:.95rem 1.1rem; margin:1.4rem 0; border-radius:8px; }
+  .hook .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; display:block; margin-bottom:.3rem; }
+  .hook p{ margin:.2rem 0 0; }
+  .video{ border:1.5px dashed var(--rule); border-radius:8px; padding:.9rem 1.1rem; background:#fbfdfc;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; color:var(--muted); margin:1.4rem 0; }
+  .video .label{ font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    font-weight:600; display:block; margin-bottom:.4rem; }
+  .fig{ border:1px solid var(--rule); border-radius:8px; padding:.8rem .9rem .6rem; margin:1.1rem 0; }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig-note{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; color:var(--muted); margin-top:.55rem; }
+  ol.items{ padding-left:1.6rem; margin:.4rem 0; } ol.items > li{ margin:.55rem 0; }
+  ul.items{ padding-left:1.3rem; margin:.4rem 0; } ul.items > li{ margin:.4rem 0; }
+  .eq{ margin:.6rem 0 .6rem 1.2rem; line-height:1.85; }
+  .step{ display:block; margin:.35rem 0 .35rem .6rem; }
+  .disp{ display:block; margin:.7rem 0 .9rem; text-align:center; font-size:1.12rem; }
+  .rev{ margin:.5rem 0 1rem; }
+  .rev .rbtn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600;
+    padding:.3rem .8rem; border:1.5px solid var(--green); background:#fff; color:var(--green);
+    border-radius:999px; cursor:pointer; }
+  .rev .rbtn[aria-expanded="true"]{ background:var(--green); color:#fff; }
+  .rev .rbody{ margin-top:.6rem; }
+  .punch{ border:2px solid #b3261e; border-radius:10px; padding:.8rem 1.1rem; margin:1.3rem 0; background:#fffafa; }
+  .punch .label{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:#b3261e; font-weight:700; display:block; margin-bottom:.35rem; }
+  .punch .big{ display:block; text-align:center; font-size:1.2rem; margin:.3rem 0 .5rem; }
+  .punch p{ margin:.2rem 0 0; }
+  .ahead{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem; border-top:1px solid var(--rule);
+    padding-top:.9rem; margin-top:1.8rem; color:var(--muted); }
+  .ahead b{ color:var(--green); }
+  table.doc{ border-collapse:collapse; width:100%; margin:.6rem 0 .8rem; font-size:.95rem; }
+  table.doc th, table.doc td{ border:1px solid var(--rule); padding:.32rem .55rem; text-align:left;
+    vertical-align:top; font-weight:400; }
+  table.doc th{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.82rem; font-weight:600;
+    color:var(--green-deep); background:var(--green-soft); }
+  .downloads{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{ border:1px solid var(--rule); border-radius:8px; padding:.9rem 1rem; text-decoration:none;
+    color:inherit; display:block; background:#fff; }
+  a.dl-card:hover{ border-color:var(--green); background:var(--green-soft); }
+  .dl-card.static{ color:var(--muted); }
+  .dl-card .kind{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; }
+  .dl-card.static .kind{ color:var(--muted); }
+  .dl-card .name{ font-weight:700; display:block; margin:.2rem 0 .15rem; }
+  .dl-card .hint{ font-size:.88rem; color:var(--muted); }
+  footer{ margin-top:2rem; border-top:1px solid var(--rule); padding-top:.7rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted); text-align:right; }
+  .pe{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:1.6rem 0; }
+  .pe.lp{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.94rem; padding:.8rem 1rem; }
+  .pe.lp .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.45rem; }
+  .pe.lp ol{ margin:.25rem 0 0; padding-left:1.3rem; } .pe.lp li{ margin:.32rem 0; } .pe.lp b{ color:var(--green); }
+  .btn{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; font-weight:600; padding:.38rem .85rem;
+    border:1.5px solid var(--green); background:#fff; color:var(--green); border-radius:999px; cursor:pointer;
+    margin:0 .3rem .3rem 0; }
+  .btn.primary{ background:var(--green); color:#fff; }
+  .ticket{ border:1px solid var(--rule); border-radius:10px; padding:.8rem 1.1rem 1rem; margin:1rem 0; }
+  .ticket .qtext{ margin:.8rem 0 .3rem; font-weight:600; }
+  .ticket label{ display:block; margin:.12rem 0 .12rem 1.2rem; }
+  .ticket .qnum input{ font:inherit; width:7rem; padding:.2rem .4rem; border:1px solid var(--rule);
+    border-radius:6px; margin-left:1.2rem; }
+  .ticket .unit{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem; color:var(--muted); margin-left:.35rem; }
+  .ticket .qfb{ font-family:"Segoe UI", system-ui, sans-serif; font-size:.86rem; margin:.3rem 0 0 1.2rem; min-height:1.1em; }
+  .ticket .qfb.good{ color:var(--green-deep); } .ticket .qfb.bad{ color:#8a1a1a; }
+  .ticket .score{ margin-top:.7rem; font-weight:700; color:var(--green-deep); }
+  @media print{ .ticket .btn{ display:none; } }
+  .openq{ border-left:4px solid var(--amber); background:#fdf8ef; border-radius:0 6px 6px 0;
+    padding:.8rem 1.05rem; margin:1rem 0; font-family:"Segoe UI", system-ui, sans-serif; font-size:.92rem; }
+  .openq .label{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.3rem; }
+  .openq ul{ margin:.4rem 0 0; padding-left:1.2rem; } .openq li{ margin:.45rem 0; list-style:none; }
+  .openq li::before{ content:"\2014\00a0\00a0"; color:var(--muted); }
+
+</style>
+</head>
+<body>
+
+<div class="note-wrap">
+<p class="eyebrow"><strong>PHY 152</strong><span>Module 4 &middot; Electric Circuits</span><span>Note 5</span></p>
+<h1>RC Circuits</h1>
+<p class="subtitle">Charging and discharging a capacitor through a resistor, and the time constant that sets how long it takes</p>
+<div class="synopsis"><span class="label">Synopsis</span><p>An RC circuit is a <b>circuit containing resistance and capacitance</b>. Close it and the capacitor does not charge instantly: the resistor limits how fast charge can arrive, so the charge builds up over time and the current dies away. Everything in this note comes out of one application of the loop rule &mdash; but because the current is <i>I</i> = d<i>q</i>/d<i>t</i>, the loop rule becomes a <b>differential equation</b>, and solving it is the work.</p></div>
+<h2>1. What is an RC Circuit?</h2>
+<p>A circuit containing <b>resistance and capacitance</b>.</p>
+<div class="fig">
+<svg viewBox="0 0 700 412" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A battery, a two-way switch with contacts A and B, a resistor and a capacitor. Contact A puts the battery in the loop; contact B closes the resistor and capacitor on themselves."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M92.00,46.00 H215.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M92.00,46.00 V194.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M92.00,216.00 V352.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M75.0,198.0 H109.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M83.0,212.0 H101.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><text x="66.0" y="211.0" font-size="16" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">&#949;</tspan></text><path d="M215.00,142.00 V352.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M92.00,352.00 H590.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M330.00,90.00 H433.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M487.00,90.00 H590.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M433.00,90.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><text x="460.0" y="68.0" font-size="15" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan></text><path d="M590.00,90.00 V218.50" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M590.00,231.50 V352.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M577.00,218.50 H603.00" fill="none" stroke="#1d2b23" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M577.00,231.50 H603.00" fill="none" stroke="#1d2b23" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><text x="614.0" y="231.0" font-size="15" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">C</tspan></text><path d="M330.0,90.0 L221.0,50.0" fill="none" stroke="#1d2b23" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M330.0,90.0 L221.0,138.0" fill="none" stroke="#1d2b23" stroke-width="2.2" stroke-dasharray="5 4"/><circle cx="330.0" cy="90.0" r="4.5" fill="#1d2b23"/><circle cx="215.0" cy="46.0" r="4.5" fill="#1d2b23"/><circle cx="215.0" cy="142.0" r="4.5" fill="#1d2b23"/><text x="199.0" y="51.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="15" fill="#1d2b23" text-anchor="end" font-weight="600">A</text><text x="199.0" y="147.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="15" fill="#1d2b23" text-anchor="end" font-weight="600">B</text><circle cx="215.0" cy="352.0" r="4.0" fill="#1d2b23"/><text x="330.0" y="392.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="12.5" fill="#5c6b62" text-anchor="middle">A charges the capacitor &middot; B discharges it through the same resistor</text></svg>
+<div class="fig-note"><b>Figure 1.</b> The capacitor charges through the resistor when the switch is at <b>A</b>, and discharges through the same resistor when it is at <b>B</b>. Two situations, one circuit.</div>
+</div>
+<p>With the switch at <b>A</b> the circuit is closed through the battery and the capacitor <b>charges</b>. With it at <b>B</b> the battery is out of the loop and the capacitor <b>discharges</b> through the resistor, driving the current the other way round.</p>
+<div class="fig">
+<svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two loops: the charging loop with the battery in it, and the discharging loop with no battery and the current running the other way."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M70.00,80.00 V159.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M70.00,181.00 V260.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M53.0,163.0 H87.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M61.0,177.0 H79.0" fill="none" stroke="#1e6b3c" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><text x="46.0" y="176.0" font-size="15" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">&#949;</tspan></text><path d="M70.00,80.00 H153.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M207.00,80.00 H290.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M153.00,80.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><text x="180.0" y="60.0" font-size="14" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan></text><path d="M290.00,80.00 V163.50" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M290.00,176.50 V260.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M277.00,163.50 H303.00" fill="none" stroke="#1d2b23" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M277.00,176.50 H303.00" fill="none" stroke="#1d2b23" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><text x="312.0" y="160.0" font-size="13" fill="#5c6b62" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>+</tspan><tspan font-style="italic">q</tspan></text><text x="312.0" y="192.0" font-size="13" fill="#5c6b62" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>&minus;</tspan><tspan font-style="italic">q</tspan></text><path d="M70.00,260.00 H290.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M258.0,190.0 V228.0 H102.0 V112.0 H258.0 V150.0" fill="none" stroke="#1e6b3c" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#ag)"/><text x="180.0" y="218.0" font-size="14" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan></text><text x="180.0" y="294.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13" fill="#5c6b62" text-anchor="middle">(a)  charging &mdash; switch at A</text><path d="M420.00,80.00 V260.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M420.00,80.00 H503.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M557.00,80.00 H640.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M503.00,80.00 h9.00 l4.50,-9 l9.00,18 l9.00,-18 l9.00,18 l4.50,-9 h9.00" fill="none" stroke="#1d2b23" stroke-width="2.4" stroke-linejoin="round"/><text x="530.0" y="60.0" font-size="14" fill="#1d2b23" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">R</tspan></text><path d="M640.00,80.00 V163.50" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M640.00,176.50 V260.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M627.00,163.50 H653.00" fill="none" stroke="#1d2b23" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><path d="M627.00,176.50 H653.00" fill="none" stroke="#1d2b23" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round"/><text x="662.0" y="160.0" font-size="13" fill="#5c6b62" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>+</tspan><tspan font-style="italic">q</tspan></text><text x="662.0" y="192.0" font-size="13" fill="#5c6b62" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>&minus;</tspan><tspan font-style="italic">q</tspan></text><path d="M420.00,260.00 H640.00" fill="none" stroke="#9fb3a6" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M608.0,150.0 V112.0 H452.0 V228.0 H608.0 V190.0" fill="none" stroke="#1e6b3c" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#ag)"/><text x="530.0" y="218.0" font-size="14" fill="#1e6b3c" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan></text><text x="530.0" y="294.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="13" fill="#5c6b62" text-anchor="middle">(b)  discharging &mdash; switch at B, no battery</text><text x="396.0" y="176.0" font-size="15" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">&#949;</tspan><tspan>&#160;=&#160;0</tspan></text></svg>
+<div class="fig-note"><b>Figure 2.</b> The two loops on their own. In (a) the battery drives charge onto the capacitor; in (b) there is no battery and the charge already on the capacitor drives the current. <b>The current arrow stops at the plates in both.</b> Charge piles up on them and never crosses the gap &mdash; what flows in the wires is charge arriving at one plate and leaving the other.</div>
+</div>
+<h2>i) Charging a capacitor</h2>
+<p>Round the loop, with the battery in it:</p>
+<p><span class="disp"><i>&#949;</i> &minus; <i>V</i><sub>R</sub> &minus; <i>V</i><sub>C</sub> = 0&nbsp;&nbsp;&nbsp;&nbsp;(&Sigma;<i>V</i><sub>i</sub> = 0)</span></p>
+<p>and the three things we need to substitute into it:</p>
+<p><span class="disp"><i>V</i> = <i>q</i>/<i>C</i>&nbsp;,&nbsp;&nbsp;<i>I</i> = d<i>q</i>/d<i>t</i>&nbsp;,&nbsp;&nbsp;<i>V</i> = <i>IR</i></span></p>
+<div class="rev"><button class="rbtn" aria-controls="r1" aria-expanded="false" data-label="Show the loop rule turned into an equation in q">Show the loop rule turned into an equation in q</button><div class="rbody" id="r1" hidden><p><span class="disp"><i>&#949;</i> &minus; <i>IR</i> &minus; <i>q</i>/<i>C</i> = 0</span></p><p><span class="disp"><i>&#949;</i> &minus; <i>R</i>&thinsp;d<i>q</i>/d<i>t</i> &minus; <i>q</i>/<i>C</i> = 0</span></p><p>Collect the two terms that do not carry the derivative:</p><p><span class="disp">&minus;<i>R</i>&thinsp;d<i>q</i>/d<i>t</i> + (<i>&#949;C</i> &minus; <i>q</i>)/<i>C</i> = 0</span></p><p><span class="disp">d<i>q</i>/d<i>t</i> = (<i>&#949;C</i> &minus; <i>q</i>)/<i>RC</i></span></p><p><b>This is a differential equation</b>, not an algebraic one: the rate at which charge arrives depends on how much charge is already there. That is the whole difference between this note and the last one.</p></div></div>
+<p>It separates: everything in <i>q</i> on one side, everything in <i>t</i> on the other.</p>
+<div class="rev"><button class="rbtn" aria-controls="r2" aria-expanded="false" data-label="Show the separation and the integration">Show the separation and the integration</button><div class="rbody" id="r2" hidden><p><span class="disp">&#8747;<sub>0</sub><sup><i>Q</i></sup> d<i>q</i>/(<i>&#949;C</i> &minus; <i>q</i>) = &#8747;<sub>0</sub><sup><i>t</i></sup> d<i>t</i>/<i>RC</i></span></p><p>The antiderivative of 1/(<i>&#949;C</i> &minus; <i>q</i>) carries a minus sign, because the thing inside the bracket <i>decreases</i> as <i>q</i> grows:</p><p><span class="disp">&minus;ln(<i>&#949;C</i> &minus; <i>q</i>) &#8739;<sub>0</sub><sup><i>Q</i></sup> = <i>t</i>/<i>RC</i></span></p><p><span class="disp">&minus;ln(<i>&#949;C</i> &minus; <i>Q</i>) + ln(<i>&#949;C</i>) = <i>t</i>/<i>RC</i></span></p><p><span class="disp">ln[(<i>&#949;C</i> &minus; <i>Q</i>)/<i>&#949;C</i>] = &minus;<i>t</i>/<i>RC</i></span></p><p>and exponentiating both sides:</p><p><span class="disp">(<i>&#949;C</i> &minus; <i>Q</i>)/<i>&#949;C</i> = <i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup></span></p></div></div>
+<div class="rev"><button class="rbtn" aria-controls="r3" aria-expanded="false" data-label="Show the charge on the capacitor">Show the charge on the capacitor</button><div class="rbody" id="r3" hidden><p><span class="disp"><i>&#949;C</i> &minus; <i>Q</i> = <i>&#949;C</i>&thinsp;<i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup></span></p><p><span class="disp"><i>Q</i>(<i>t</i>) = <i>&#949;C</i>&thinsp;(1 &minus; <i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup>)</span></p><p>At <i>t</i> = &infin; the exponential is gone and the capacitor holds <i>&#949;C</i> &mdash; which is just <i>Q</i> = <i>CV</i> with the full battery voltage across it. So <b><i>&#949;C</i> = <i>Q</i><sub>0</sub></b>, the final charge, and</p><p><span class="disp"><i>Q</i>(<i>t</i>) = <i>Q</i><sub>0</sub>(1 &minus; <i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup>)</span></p></div></div>
+<div class="punch"><span class="label">The time constant</span><span class="big"><i>RC</i> = <i>&#964;</i></span><span class="big"><i>Q</i>(<i>t</i>) = <i>Q</i><sub>0</sub>(1 &minus; <i>e</i><sup>&minus;<i>t</i>/<i>&#964;</i></sup>)</span><p><i>RC</i> has units of time, and it is the only time in the problem. Every RC circuit charges on the same curve &mdash; all that changes is how fast the clock runs.</p></div>
+<div class="fig">
+<svg viewBox="0 0 640 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Charge on the capacitor against time: a curve rising from zero towards Q nought, passing 0.63 of it at one time constant."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M110.0,330.0 V80.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><path d="M110.0,330.0 H540.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><text x="546.0" y="336.0" font-size="14" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">t</tspan></text><text x="122.0" y="72.0" font-size="14" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">Q</tspan></text><path d="M110.00,330.00 L114.78,321.27 L119.56,312.84 L124.33,304.71 L129.11,296.86 L133.89,289.28 L138.67,281.97 L143.44,274.92 L148.22,268.11 L153.00,261.54 L157.78,255.20 L162.56,249.08 L167.33,243.17 L172.11,237.47 L176.89,231.97 L181.67,226.66 L186.44,221.54 L191.22,216.59 L196.00,211.82 L200.78,207.22 L205.56,202.77 L210.33,198.49 L215.11,194.35 L219.89,190.35 L224.67,186.50 L229.44,182.78 L234.22,179.19 L239.00,175.72 L243.78,172.38 L248.56,169.15 L253.33,166.04 L258.11,163.03 L262.89,160.13 L267.67,157.33 L272.44,154.63 L277.22,152.03 L282.00,149.51 L286.78,147.08 L291.56,144.74 L296.33,142.48 L301.11,140.29 L305.89,138.19 L310.67,136.16 L315.44,134.19 L320.22,132.30 L325.00,130.47 L329.78,128.71 L334.56,127.01 L339.33,125.37 L344.11,123.78 L348.89,122.25 L353.67,120.78 L358.44,119.35 L363.22,117.98 L368.00,116.65 L372.78,115.37 L377.56,114.14 L382.33,112.94 L387.11,111.79 L391.89,110.68 L396.67,109.61 L401.44,108.58 L406.22,107.58 L411.00,106.61 L415.78,105.68 L420.56,104.79 L425.33,103.92 L430.11,103.09 L434.89,102.28 L439.67,101.50 L444.44,100.75 L449.22,100.03 L454.00,99.33 L458.78,98.65 L463.56,98.00 L468.33,97.37 L473.11,96.76 L477.89,96.18 L482.67,95.61 L487.44,95.07 L492.22,94.54 L497.00,94.03 L501.78,93.54 L506.56,93.07 L511.33,92.61 L516.11,92.17 L520.89,91.75 L525.67,91.34 L530.44,90.94 L535.22,90.56 L540.00,90.19" fill="none" stroke="#1d2b23" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M110.0,80.0 H540.0" fill="none" stroke="#5c6b62" stroke-width="1.4" stroke-dasharray="5 4"/><path d="M110.0,172.0 H244.4" fill="none" stroke="#5c6b62" stroke-width="1.4" stroke-dasharray="5 4"/><path d="M244.4,330.0 V172.0" fill="none" stroke="#5c6b62" stroke-width="1.4" stroke-dasharray="5 4"/><text x="100.0" y="85.0" font-size="14" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">Q</tspan><tspan font-size="9.5" dy="3">0</tspan><tspan font-size="0" dy="-3"> </tspan></text><text x="100.0" y="177.0" font-size="13.5" fill="#c77b1f" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>0.63&#160;</tspan><tspan font-style="italic">Q</tspan><tspan font-size="9.2" dy="3">0</tspan><tspan font-size="0" dy="-3"> </tspan></text><text x="244.4" y="352.0" font-size="15" fill="#c77b1f" text-anchor="middle" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">&#964;</tspan></text><text x="260.0" y="64.0" font-size="13" fill="#5c6b62" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>the&#160;capacitor&#160;charges</tspan></text><text x="260.0" y="244.0" font-size="13.5" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan>&#160;=&#160;</tspan><tspan font-style="italic">Q</tspan><tspan>/</tspan><tspan font-style="italic">C</tspan><tspan>,&#160;so&#160;the&#160;capacitor&#160;voltage</tspan></text><text x="260.0" y="266.0" font-size="13.5" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>has&#160;exactly&#160;this&#160;shape,&#160;rising&#160;to&#160;</tspan><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">0</tspan><tspan font-size="0" dy="-3"> </tspan></text></svg>
+<div class="fig-note"><b>Figure 3.</b> The charge climbing towards <i>Q</i><sub>0</sub>, through 0.63<i>Q</i><sub>0</sub> at one time constant. It never quite arrives &mdash; an exponential approaches its asymptote and does not reach it.</div>
+</div>
+<p>So what happens after exactly one time constant?</p>
+<div class="rev"><button class="rbtn" aria-controls="r4" aria-expanded="false" data-label="Show where the 0.63 comes from">Show where the 0.63 comes from</button><div class="rbody" id="r4" hidden><p>Put <i>t</i> = <i>&#964;</i>:</p><p><span class="disp"><i>Q</i>(<i>&#964;</i>) = <i>Q</i><sub>0</sub>(1 &minus; <i>e</i><sup>&minus;1</sup>)</span></p><p><span class="disp"><i>Q</i>(<i>&#964;</i>)/<i>Q</i><sub>0</sub> = 1 &minus; <i>e</i><sup>&minus;1</sup> = 0.63</span></p><p><b>63% of the way there, after one time constant</b> &mdash; and that is true of every RC circuit ever built, whatever <i>R</i> and <i>C</i> are.</p></div></div>
+<h3>The current, and the two voltages</h3>
+<p>The current is the rate at which charge arrives, so differentiate what we just found.</p>
+<div class="rev"><button class="rbtn" aria-controls="r5" aria-expanded="false" data-label="Show the current">Show the current</button><div class="rbody" id="r5" hidden><p><span class="disp"><i>I</i> = d<i>q</i>/d<i>t</i> = d<i>Q</i>/d<i>t</i> = (<i>Q</i><sub>0</sub>/<i>&#964;</i>)&thinsp;<i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup></span></p><p><span class="disp"><i>I</i> = <i>I</i><sub>0</sub>&thinsp;<i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup></span></p><p>and since <i>Q</i><sub>0</sub>/<i>&#964;</i> = <i>&#949;C</i>/<i>RC</i> = <i>&#949;</i>/<i>R</i>, the starting current is <b><i>I</i><sub>0</sub> = <i>&#949;</i>/<i>R</i></b> &mdash; which is what you would get from Ohm’s law alone, because at <i>t</i> = 0 the capacitor is empty and has no voltage across it to push back with.</p></div></div>
+<div class="fig">
+<svg viewBox="0 0 640 356" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Current against time while the capacitor charges: a curve falling from I nought towards zero."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M110.0,310.0 V80.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><path d="M110.0,310.0 H540.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><text x="546.0" y="316.0" font-size="14" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">t</tspan></text><text x="122.0" y="72.0" font-size="14" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan></text><path d="M110.00,80.00 L114.78,88.03 L119.56,95.79 L124.33,103.27 L129.11,110.49 L133.89,117.46 L138.67,124.19 L143.44,130.68 L148.22,136.94 L153.00,142.99 L157.78,148.82 L162.56,154.45 L167.33,159.88 L172.11,165.13 L176.89,170.19 L181.67,175.07 L186.44,179.78 L191.22,184.33 L196.00,188.72 L200.78,192.96 L205.56,197.05 L210.33,200.99 L215.11,204.80 L219.89,208.48 L224.67,212.02 L229.44,215.44 L234.22,218.75 L239.00,221.93 L243.78,225.01 L248.56,227.98 L253.33,230.84 L258.11,233.61 L262.89,236.28 L267.67,238.85 L272.44,241.34 L277.22,243.74 L282.00,246.05 L286.78,248.29 L291.56,250.44 L296.33,252.52 L301.11,254.53 L305.89,256.47 L310.67,258.34 L315.44,260.14 L320.22,261.88 L325.00,263.56 L329.78,265.19 L334.56,266.75 L339.33,268.26 L344.11,269.72 L348.89,271.13 L353.67,272.48 L358.44,273.80 L363.22,275.06 L368.00,276.28 L372.78,277.46 L377.56,278.59 L382.33,279.69 L387.11,280.75 L391.89,281.77 L396.67,282.76 L401.44,283.71 L406.22,284.63 L411.00,285.51 L415.78,286.37 L420.56,287.20 L425.33,287.99 L430.11,288.76 L434.89,289.50 L439.67,290.22 L444.44,290.91 L449.22,291.58 L454.00,292.22 L458.78,292.84 L463.56,293.44 L468.33,294.02 L473.11,294.58 L477.89,295.12 L482.67,295.64 L487.44,296.14 L492.22,296.62 L497.00,297.09 L501.78,297.54 L506.56,297.98 L511.33,298.40 L516.11,298.80 L520.89,299.19 L525.67,299.57 L530.44,299.93 L535.22,300.29 L540.00,300.62" fill="none" stroke="#1d2b23" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M110.0,80.0 H136.0" fill="none" stroke="#5c6b62" stroke-width="1.4" stroke-dasharray="5 4"/><text x="100.0" y="85.0" font-size="14" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan><tspan font-size="9.5" dy="3">0</tspan><tspan font-size="0" dy="-3"> </tspan></text><text x="280.0" y="68.0" font-size="13" fill="#5c6b62" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>current&#160;falls&#160;as&#160;the&#160;capacitor&#160;fills</tspan></text><text x="280.0" y="202.0" font-size="13.5" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="9.2" dy="3">R</tspan><tspan font-size="0" dy="-3"> </tspan><tspan>&#160;=&#160;</tspan><tspan font-style="italic">IR</tspan><tspan>,&#160;so&#160;the&#160;resistor&#160;voltage</tspan></text><text x="280.0" y="224.0" font-size="13.5" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>has&#160;exactly&#160;this&#160;shape&#160;too</tspan></text></svg>
+<div class="fig-note"><b>Figure 4.</b> The current is largest the instant the switch closes and dies away as the capacitor fills. Charge and current run in opposite directions on the clock.</div>
+</div>
+<div class="rev"><button class="rbtn" aria-controls="r6" aria-expanded="false" data-label="Show the voltage on each element">Show the voltage on each element</button><div class="rbody" id="r6" hidden><p><b>Capacitor:</b></p><p><span class="disp"><i>V</i> = <i>q</i>/<i>C</i> = <i>&#949;</i>(1 &minus; <i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup>)</span></p><p><b>Resistor:</b></p><p><span class="disp"><i>V</i> = <i>IR</i> = <i>&#949;</i>&thinsp;<i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup></span></p><p>Add them and the exponentials cancel: <i>&#949;</i>(1 &minus; <i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup>) + <i>&#949;e</i><sup>&minus;<i>t</i>/<i>RC</i></sup> = <i>&#949;</i>, <b>at every instant</b>. That is the loop rule still holding, moment by moment, all the way through the charging.</p></div></div>
+<h2>ii) Discharging &mdash; no battery, <i>&#949;</i> = 0</h2>
+<p>Throw the switch to <b>B</b>. The battery is out of the loop, so the same loop rule has nothing on the supply side:</p>
+<p><span class="disp">&minus;<i>V</i><sub>R</sub> &minus; <i>V</i><sub>C</sub> = 0</span></p>
+<div class="rev"><button class="rbtn" aria-controls="r7" aria-expanded="false" data-label="Show the discharging equation">Show the discharging equation</button><div class="rbody" id="r7" hidden><p>Same substitutions as before, with <i>&#949;</i> = 0:</p><p><span class="disp">&minus;<i>R</i>&thinsp;d<i>q</i>/d<i>t</i> &minus; <i>q</i>/<i>C</i> = 0</span></p><p>which separates immediately:</p><p><span class="disp">d<i>q</i>/<i>q</i> = &minus;d<i>t</i>/<i>RC</i></span></p></div></div>
+<div class="rev"><button class="rbtn" aria-controls="r8" aria-expanded="false" data-label="Show the discharging solution">Show the discharging solution</button><div class="rbody" id="r8" hidden><p><span class="disp"><i>Q</i> = <i>Q</i><sub>0</sub>&thinsp;<i>e</i><sup>&minus;<i>t</i>/<i>RC</i></sup></span></p><p>The same time constant governs it. After one <i>&#964;</i> the capacitor has lost 63% of its charge and keeps 37% &mdash; the mirror of the charging result.</p></div></div>
+<div class="fig">
+<svg viewBox="0 0 800 326" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three curves for the discharging circuit: the charge and voltage on the capacitor both decaying, the current climbing from minus I nought back to zero, and the resistor voltage decaying."><defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e6b3c"/></marker><marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6b62"/></marker><marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d2b23"/></marker></defs><path d="M70.0,270.0 H270.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><path d="M70.0,270.0 V96.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><text x="276.0" y="276.0" font-size="13" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">t</tspan></text><text x="82.0" y="92.0" font-size="13" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">Q</tspan></text><path d="M70.00,120.00 L71.89,125.24 L73.78,130.30 L75.67,135.18 L77.56,139.89 L79.44,144.43 L81.33,148.82 L83.22,153.05 L85.11,157.14 L87.00,161.08 L88.89,164.88 L90.78,168.55 L92.67,172.10 L94.56,175.52 L96.44,178.82 L98.33,182.00 L100.22,185.08 L102.11,188.04 L104.00,190.91 L105.89,193.67 L107.78,196.34 L109.67,198.91 L111.56,201.39 L113.44,203.79 L115.33,206.10 L117.22,208.33 L119.11,210.49 L121.00,212.57 L122.89,214.57 L124.78,216.51 L126.67,218.38 L128.56,220.18 L130.44,221.92 L132.33,223.60 L134.22,225.22 L136.11,226.78 L138.00,228.29 L139.89,229.75 L141.78,231.16 L143.67,232.51 L145.56,233.82 L147.44,235.09 L149.33,236.31 L151.22,237.48 L153.11,238.62 L155.00,239.72 L156.89,240.77 L158.78,241.79 L160.67,242.78 L162.56,243.73 L164.44,244.65 L166.33,245.53 L168.22,246.39 L170.11,247.21 L172.00,248.01 L173.89,248.78 L175.78,249.52 L177.67,250.23 L179.56,250.92 L181.44,251.59 L183.33,252.23 L185.22,252.85 L187.11,253.45 L189.00,254.03 L190.89,254.59 L192.78,255.13 L194.67,255.65 L196.56,256.15 L198.44,256.63 L200.33,257.10 L202.22,257.55 L204.11,257.98 L206.00,258.40 L207.89,258.81 L209.78,259.20 L211.67,259.58 L213.56,259.94 L215.44,260.29 L217.33,260.63 L219.22,260.96 L221.11,261.28 L223.00,261.58 L224.89,261.87 L226.78,262.16 L228.67,262.43 L230.56,262.70 L232.44,262.95 L234.33,263.20 L236.22,263.44 L238.11,263.66 L240.00,263.89" fill="none" stroke="#1d2b23" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M70.00,135.00 L71.89,139.72 L73.78,144.27 L75.67,148.66 L77.56,152.90 L79.44,156.99 L81.33,160.94 L83.22,164.75 L85.11,168.42 L87.00,171.97 L88.89,175.39 L90.78,178.70 L92.67,181.89 L94.56,184.97 L96.44,187.94 L98.33,190.80 L100.22,193.57 L102.11,196.24 L104.00,198.82 L105.89,201.30 L107.78,203.70 L109.67,206.02 L111.56,208.25 L113.44,210.41 L115.33,212.49 L117.22,214.50 L119.11,216.44 L121.00,218.31 L122.89,220.12 L124.78,221.86 L126.67,223.54 L128.56,225.16 L130.44,226.73 L132.33,228.24 L134.22,229.70 L136.11,231.11 L138.00,232.46 L139.89,233.78 L141.78,235.04 L143.67,236.26 L145.56,237.44 L147.44,238.58 L149.33,239.68 L151.22,240.74 L153.11,241.76 L155.00,242.74 L156.89,243.70 L158.78,244.61 L160.67,245.50 L162.56,246.36 L164.44,247.18 L166.33,247.98 L168.22,248.75 L170.11,249.49 L172.00,250.21 L173.89,250.90 L175.78,251.57 L177.67,252.21 L179.56,252.83 L181.44,253.43 L183.33,254.01 L185.22,254.57 L187.11,255.11 L189.00,255.63 L190.89,256.13 L192.78,256.61 L194.67,257.08 L196.56,257.53 L198.44,257.97 L200.33,258.39 L202.22,258.79 L204.11,259.19 L206.00,259.56 L207.89,259.93 L209.78,260.28 L211.67,260.62 L213.56,260.95 L215.44,261.26 L217.33,261.57 L219.22,261.86 L221.11,262.15 L223.00,262.42 L224.89,262.69 L226.78,262.94 L228.67,263.19 L230.56,263.43 L232.44,263.66 L234.33,263.88 L236.22,264.09 L238.11,264.30 L240.00,264.50" fill="none" stroke="#1e6b3c" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round"/><text x="62.0" y="125.0" font-size="13" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">Q</tspan><tspan font-size="8.8" dy="3">0</tspan><tspan font-size="0" dy="-3"> </tspan></text><text x="62.0" y="143.0" font-size="13" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="8.8" dy="3">0</tspan><tspan font-size="0" dy="-3"> </tspan></text><text x="155.0" y="302.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="12.5" fill="#5c6b62" text-anchor="middle">capacitor discharging</text><path d="M320.0,120.0 H520.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><path d="M320.0,280.0 V96.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><text x="332.0" y="92.0" font-size="13" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">I</tspan></text><text x="526.0" y="126.0" font-size="13" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">t</tspan></text><path d="M320.00,270.00 L321.89,264.76 L323.78,259.70 L325.67,254.82 L327.56,250.11 L329.44,245.57 L331.33,241.18 L333.22,236.95 L335.11,232.86 L337.00,228.92 L338.89,225.12 L340.78,221.45 L342.67,217.90 L344.56,214.48 L346.44,211.18 L348.33,208.00 L350.22,204.92 L352.11,201.96 L354.00,199.09 L355.89,196.33 L357.78,193.66 L359.67,191.09 L361.56,188.61 L363.44,186.21 L365.33,183.90 L367.22,181.67 L369.11,179.51 L371.00,177.43 L372.89,175.43 L374.78,173.49 L376.67,171.62 L378.56,169.82 L380.44,168.08 L382.33,166.40 L384.22,164.78 L386.11,163.22 L388.00,161.71 L389.89,160.25 L391.78,158.84 L393.67,157.49 L395.56,156.18 L397.44,154.91 L399.33,153.69 L401.22,152.52 L403.11,151.38 L405.00,150.28 L406.89,149.23 L408.78,148.21 L410.67,147.22 L412.56,146.27 L414.44,145.35 L416.33,144.47 L418.22,143.61 L420.11,142.79 L422.00,141.99 L423.89,141.22 L425.78,140.48 L427.67,139.77 L429.56,139.08 L431.44,138.41 L433.33,137.77 L435.22,137.15 L437.11,136.55 L439.00,135.97 L440.89,135.41 L442.78,134.87 L444.67,134.35 L446.56,133.85 L448.44,133.37 L450.33,132.90 L452.22,132.45 L454.11,132.02 L456.00,131.60 L457.89,131.19 L459.78,130.80 L461.67,130.42 L463.56,130.06 L465.44,129.71 L467.33,129.37 L469.22,129.04 L471.11,128.72 L473.00,128.42 L474.89,128.13 L476.78,127.84 L478.67,127.57 L480.56,127.30 L482.44,127.05 L484.33,126.80 L486.22,126.56 L488.11,126.34 L490.00,126.11" fill="none" stroke="#1d2b23" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M320.0,270.0 H346.0" fill="none" stroke="#5c6b62" stroke-width="1.4" stroke-dasharray="5 4"/><text x="312.0" y="275.0" font-size="13" fill="#1d2b23" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan>&minus;</tspan><tspan font-style="italic">I</tspan><tspan font-size="8.8" dy="3">0</tspan><tspan font-size="0" dy="-3"> </tspan></text><text x="405.0" y="302.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="12.5" fill="#5c6b62" text-anchor="middle">current in the resistor</text><path d="M570.0,270.0 H770.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><path d="M570.0,270.0 V96.0" fill="none" stroke="#1d2b23" stroke-width="2" marker-end="url(#ai)"/><text x="776.0" y="276.0" font-size="13" fill="#1d2b23" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">t</tspan></text><text x="582.0" y="92.0" font-size="13" fill="#1e6b3c" text-anchor="start" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="8.8" dy="3">R</tspan><tspan font-size="0" dy="-3"> </tspan></text><path d="M570.00,120.00 L571.89,125.24 L573.78,130.30 L575.67,135.18 L577.56,139.89 L579.44,144.43 L581.33,148.82 L583.22,153.05 L585.11,157.14 L587.00,161.08 L588.89,164.88 L590.78,168.55 L592.67,172.10 L594.56,175.52 L596.44,178.82 L598.33,182.00 L600.22,185.08 L602.11,188.04 L604.00,190.91 L605.89,193.67 L607.78,196.34 L609.67,198.91 L611.56,201.39 L613.44,203.79 L615.33,206.10 L617.22,208.33 L619.11,210.49 L621.00,212.57 L622.89,214.57 L624.78,216.51 L626.67,218.38 L628.56,220.18 L630.44,221.92 L632.33,223.60 L634.22,225.22 L636.11,226.78 L638.00,228.29 L639.89,229.75 L641.78,231.16 L643.67,232.51 L645.56,233.82 L647.44,235.09 L649.33,236.31 L651.22,237.48 L653.11,238.62 L655.00,239.72 L656.89,240.77 L658.78,241.79 L660.67,242.78 L662.56,243.73 L664.44,244.65 L666.33,245.53 L668.22,246.39 L670.11,247.21 L672.00,248.01 L673.89,248.78 L675.78,249.52 L677.67,250.23 L679.56,250.92 L681.44,251.59 L683.33,252.23 L685.22,252.85 L687.11,253.45 L689.00,254.03 L690.89,254.59 L692.78,255.13 L694.67,255.65 L696.56,256.15 L698.44,256.63 L700.33,257.10 L702.22,257.55 L704.11,257.98 L706.00,258.40 L707.89,258.81 L709.78,259.20 L711.67,259.58 L713.56,259.94 L715.44,260.29 L717.33,260.63 L719.22,260.96 L721.11,261.28 L723.00,261.58 L724.89,261.87 L726.78,262.16 L728.67,262.43 L730.56,262.70 L732.44,262.95 L734.33,263.20 L736.22,263.44 L738.11,263.66 L740.00,263.89" fill="none" stroke="#1e6b3c" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><text x="562.0" y="125.0" font-size="13" fill="#1e6b3c" text-anchor="end" font-family="Georgia, Cambria, "Times New Roman", serif"><tspan font-style="italic">V</tspan><tspan font-size="8.8" dy="3">0</tspan><tspan font-size="0" dy="-3"> </tspan></text><text x="655.0" y="302.0" font-family="Segoe UI, system-ui, Arial, sans-serif" font-size="12.5" fill="#5c6b62" text-anchor="middle">voltage across the resistor</text></svg>
+<div class="fig-note"><b>Figure 5.</b> Discharging. The charge and the capacitor voltage both decay; the current is <b>negative</b>, because it runs the opposite way round the loop from the charging current, and climbs back to zero as the capacitor empties.</div>
+</div>
+<h2>Looking ahead</h2>
+<p class="ahead">One loop rule, one differential equation, one time constant &mdash; and the whole behaviour of the circuit falls out of it. <b>Every circuit from here on is solved the same way</b>: write the loop rule, substitute until one variable is left, and solve what you get.</p>
+<h2>Check yourself</h2>
+<div class="ticket"><p>Four questions. Nothing is recorded and nothing is sent anywhere.</p><div id="card-q1"><p class="qtext">1. <i>R</i> = 2.0 k&#937; and <i>C</i> = 5.0 &#181;F. The time constant is</p><p class="qnum"><input id="q1input" inputmode="decimal" placeholder="number"><span class="unit">ms</span></p><div class="qfb"></div></div><div id="card-q2"><p class="qtext">2. After one time constant, a charging capacitor has reached what fraction of its final charge?</p><label><input type="radio" name="q2" value="a"> 37%</label><label><input type="radio" name="q2" value="b"> 50%</label><label><input type="radio" name="q2" value="c"> 63%</label><label><input type="radio" name="q2" value="d"> 100%</label><div class="qfb"></div></div><div id="card-q3"><p class="qtext">3. While a capacitor charges, the current</p><label><input type="radio" name="q3" value="a"> starts at zero and builds up</label><label><input type="radio" name="q3" value="b"> is largest at the start and dies away</label><label><input type="radio" name="q3" value="c"> stays the same throughout</label><label><input type="radio" name="q3" value="d"> peaks at one time constant</label><div class="qfb"></div></div><div id="card-q4"><p class="qtext">4. Double <i>R</i> and leave <i>C</i> alone. The capacitor now charges</p><label><input type="radio" name="q4" value="a"> twice as fast</label><label><input type="radio" name="q4" value="b"> half as fast</label><label><input type="radio" name="q4" value="c"> at the same rate</label><label><input type="radio" name="q4" value="d"> four times as slowly</label><div class="qfb"></div></div><p><button class="btn primary" id="ticketCheck">Check</button><button class="btn" id="ticketReset">Reset</button><span class="score" id="ticketScore"></span></p></div>
+<div class="video"><span class="label">Watch</span>the note worked through (link just below).<!-- iframe src="YOUR_EMBED_URL" --></div>
+<h2>Your notes</h2>
+<div class="downloads"><div class="dl-card static"><span class="kind">Guided note</span><span class="name">M4 N5 &mdash; RC Circuits</span><span class="hint">The printable sheet we fill in together in class.</span></div><div class="dl-card static"><span class="kind">Read</span><span class="name">M4 N5 &mdash; this page as a PDF</span><span class="hint">Everything here, with the answers already open.</span></div></div>
+<footer>FLCC Physics &middot; Module 4 &middot; Note 5</footer>
+</div>
+
+
+<script>
+/* Plain show/hide reveals, each independent of the others. */
+(function(){
+  [].slice.call(document.querySelectorAll('.rev .rbtn')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=document.getElementById(b.getAttribute('aria-controls'));
+      var open=d.hidden; d.hidden=!open;
+      b.setAttribute('aria-expanded', open?'true':'false');
+      b.textContent = open ? 'Hide' : b.getAttribute('data-label'); }); });
+})();
+</script>
+
+<script>
+/* Reports this page's height to its Brightspace wrapper so the iframe auto-fits (V4 reporter). */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+
+<!-- ==========================================================================
+     FOUNDATION LIST  -  for the quiz project (Lesson Package rung 2 / 3).
+     Module 4 Note 5, "RC Circuits"
+
+     F1. AN RC CIRCUIT CONTAINS RESISTANCE AND CAPACITANCE.  The resistor
+         limits how fast charge can reach the capacitor, so nothing happens
+         instantly and everything is a function of time.
+     F2. THE LOOP RULE BECOMES A DIFFERENTIAL EQUATION.  Because
+         I = dq/dt, writing the loop rule for an RC circuit gives
+           epsilon - R dq/dt - q/C = 0,  i.e.  dq/dt = (epsilon C - q)/RC.
+         The rate charge arrives depends on how much is already there.  THIS
+         is what separates this note from every earlier circuit note.
+     F3. IT SEPARATES.  Integrate dq/(epsilon C - q) against dt/RC.  The
+         antiderivative carries a MINUS sign, because the bracket shrinks as q
+         grows:  - ln(epsilon C - q) | 0 to Q = t/RC.
+     F4. CHARGING.  Q(t) = epsilon C (1 - exp(-t/RC)) = Q0 (1 - exp(-t/tau)).
+     F5. Q0 = epsilon C.  The final charge is just Q = CV with the whole
+         battery voltage across the capacitor; R does not appear in it.  R
+         sets HOW LONG, never HOW MUCH.
+     F6. THE TIME CONSTANT.  tau = RC, and it has units of seconds (ohms times
+         farads).  It is the only time in the problem.
+     F7. THE 63% RESULT.  Q(tau)/Q0 = 1 - 1/e = 0.63.  True of EVERY RC
+         circuit, whatever R and C are.  Discharging mirrors it: 37% left
+         after one tau.
+     F8. CHARGING CURRENT.  I = dQ/dt = I0 exp(-t/RC), with I0 = epsilon/R.
+         Largest at t = 0, because an empty capacitor pushes back with no
+         voltage; it dies away as the capacitor fills.
+     F9. CHARGE AND CURRENT RUN OPPOSITE WAYS ON THE CLOCK.  Charge rises,
+         current falls.  A common wrong answer has the current building up.
+     F10. THE TWO ELEMENT VOLTAGES, and the distinction students lose:
+            Capacitor   V = q/C = epsilon (1 - exp(-t/RC))     rises
+            Resistor    V = IR  = epsilon exp(-t/RC)           falls
+          They ADD TO epsilon at every instant - the loop rule holding moment
+          by moment.
+     F11. DISCHARGING, no battery, epsilon = 0.  Loop rule gives
+            dq/q = -dt/RC    and    Q = Q0 exp(-t/RC).
+          The SAME tau governs it.
+     F12. THE DISCHARGING CURRENT IS NEGATIVE.  It runs the opposite way round
+          the loop from the charging current, starting at -I0 and climbing
+          back to zero.  His own graph draws it that way and the sign is the
+          content of it.
+     F13. WHAT CHANGES WHAT.  Doubling R doubles tau and halves the speed, and
+          changes the final charge not at all.  Doubling C doubles tau AND
+          doubles the final charge.  Good discriminating item material.
+
+     Item-writing note: this note treats the SWITCHED circuit - charge with the
+     battery in, discharge with it out.  It does not cover a capacitor left
+     connected to a source while something else changes, and it does not cover
+     the variable-resistance section: that printed heading is struck out in his
+     own ink and the note stops at section 1.  Do not write an item that
+     assumes either.
+     ========================================================================== -->
+
+<script>
+/* Check-yourself ticket, M4 Note 5.  Four items; independent feedback; no score is stored. */
+(function(){
+  var KEY = {"q2": "c", "q3": "b", "q4": "b"};
+  var NUM = {"q1": [10.0, 0.2]};
+  var WHY = {
+    "q1": "&#964; = RC = (2.0 &times; 10<sup>3</sup> &#937;)(5.0 &times; 10<sup>&minus;6</sup> F) = 0.010 s = 10 ms.  Ohms times farads give seconds &mdash; worth checking once so you trust it.",
+    "q2": "63%.  Q(&#964;)/Q<sub>0</sub> = 1 &minus; e<sup>&minus;1</sup> = 0.63, and it is the same 63% for every RC circuit whatever R and C are.",
+    "q3": "Largest at the start.  At t = 0 the capacitor is empty, so it pushes back with no voltage at all and the current is just &#949;/R.  As charge builds up the capacitor opposes the battery more and more, and the current dies away.",
+    "q4": "Half as fast.  &#964; = RC, so doubling R doubles the time constant and everything takes twice as long.  Note it does NOT change where it ends up &mdash; the final charge is &#949;C, which has no R in it."
+};
+  function fb(card, ok, msg){
+    var d = card.querySelector('.qfb');
+    d.className = 'qfb ' + (ok ? 'good' : 'bad');
+    d.innerHTML = (ok ? '&#10003; ' : '&#10007; ') + msg;
+  }
+  function num(id){ var el = document.getElementById(id); return el && el.value.trim() !== '' ? parseFloat(el.value) : null; }
+  function close(a, b, tol){ return a !== null && isFinite(a) && Math.abs(a - b) <= tol; }
+  var btn = document.getElementById('ticketCheck');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var n = 0;
+    Object.keys(NUM).forEach(function(q){
+      var ok = close(num(q + 'input'), NUM[q][0], NUM[q][1]);
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    Object.keys(KEY).forEach(function(q){
+      var sel = document.querySelector('input[name="' + q + '"]:checked');
+      var ok = !!sel && sel.value === KEY[q];
+      fb(document.getElementById('card-' + q), ok, WHY[q]); if (ok) n++;
+    });
+    document.getElementById('ticketScore').textContent = n + ' of 4.';
+  });
+  document.getElementById('ticketReset').addEventListener('click', function(){
+    Object.keys(NUM).forEach(function(q){ var el = document.getElementById(q + 'input'); if (el) el.value = ''; });
+    Object.keys(KEY).forEach(function(q){
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="' + q + '"]'), function(r){ r.checked = false; });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.qfb'), function(d){ d.className = 'qfb'; d.innerHTML = ''; });
+    document.getElementById('ticketScore').textContent = '';
+  });
+})();
+</script>
+
+</body>
+</html>
