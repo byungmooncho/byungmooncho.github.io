@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M4 N1 &mdash; Harmonics And Wave Synthesis</title>
+<style>/* PHY 105 M3 N4. CSS carried unchanged from M3 N3 (itself from M3 N2) so the module is uniform. */
+:root{ --ink:#1d2b23; --paper:#fff; --green:#1e6b3c; --green-soft:#eaf3ed;
+  --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62; --line:#b7c6bc; }
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--paper); color:var(--ink);
+  font-family:Charter,"Bitstream Charter",Georgia,"Times New Roman",serif;
+  font-size:1.06rem; line-height:1.65; }
+.note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+.eyebrow{ font-family:"Segoe UI",system-ui,Arial,sans-serif; font-size:.78rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:flex;
+  flex-wrap:wrap; gap:.4em 1.2em; border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+.eyebrow strong{ color:var(--green); font-weight:600; }
+h1{ font-size:1.85rem; line-height:1.22; margin:1rem 0 .25rem; font-weight:700; }
+h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+  border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+.synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+  padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+.synopsis .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  display:block; margin-bottom:.25rem; }
+.figure{ border:1px solid var(--rule); border-radius:10px; padding:1rem; margin:1.4rem 0;
+  text-align:center; }
+.figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+.figure figcaption{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem;
+  color:var(--muted); margin-top:.5rem; text-align:left; }
+.figure figcaption b{ color:var(--green-deep); }
+.steps{ counter-reset:step; margin:1rem 0; padding:0; }
+.qitem{ counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+  border-left:2px solid var(--rule); margin-left:.9rem; }
+.qitem:last-child{ border-left-color:transparent; }
+.qitem::before{ content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+  width:1.8rem; height:1.8rem; border-radius:50%; background:var(--green); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem; font-weight:600; }
+.tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0;
+  border-radius:0 6px 6px 0; font-size:.98rem; }
+.tip .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+table.logtab{ border-collapse:collapse; width:100%; margin:.9rem 0; font-size:.97rem; }
+table.logtab th, table.logtab td{ border:1px solid var(--ink); padding:.3rem .55rem;
+  text-align:left; }
+table.logtab th{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem;
+  background:var(--green-soft); }
+table.logtab td.blank{ height:1.5rem; }
+.eq{ text-align:center; font-size:1.12rem; margin:1rem 0; padding:.6rem;
+  background:var(--green-soft); border-radius:6px; }
+footer{ margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+  font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; color:var(--muted); }
+/* downloads */
+.downloads{ display:grid; gap:.8rem; margin:1.2rem 0; grid-template-columns:1fr 1fr; }
+.dl-card{ display:block; border:1px solid var(--rule); border-radius:10px;
+  padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+  background:#fff; transition:border-color .15s, box-shadow .15s; }
+.dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+.dl-card .kind{ display:block; font-family:"Segoe UI",system-ui,sans-serif;
+  font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--green); font-weight:700; }
+.dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+.dl-card .hint{ display:block; font-family:"Segoe UI",system-ui,sans-serif;
+  font-size:.83rem; color:var(--muted); }
+@media (max-width:520px){ .downloads{ grid-template-columns:1fr; } }
+.reveal{ margin:.5rem 0 .2rem; }
+.reveal > button{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.82rem; font-weight:600;
+  color:var(--green-deep); background:var(--green-soft); border:1px solid var(--rule);
+  border-radius:999px; padding:.3rem .85rem .3rem .55rem; cursor:pointer;
+  display:inline-flex; align-items:center; gap:.45em; }
+.reveal > button:hover{ border-color:var(--green); }
+.reveal > button .rv-mark{ display:inline-flex; align-items:center; justify-content:center;
+  width:1.15rem; height:1.15rem; border-radius:50%; background:var(--green); color:#fff;
+  font-size:.72rem; font-weight:700; }
+.rv-panel{ border-left:3px solid var(--green); background:var(--green-soft);
+  padding:.6rem .85rem; margin:.5rem 0 0; border-radius:0 5px 5px 0; font-size:.98rem; }
+.videoslot{ border:1px dashed var(--line); border-radius:10px; background:#fafcfb;
+  padding:.8rem 1rem; margin:1.4rem 0; }
+.videoslot .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700;
+  display:block; margin-bottom:.2rem; }
+.videoslot p{ margin:0; color:var(--muted); font-size:.95rem; }
+@media print{ .reveal > button{ display:none; } .videoslot{ display:none; } }
+
+.worked{ border:1px solid var(--rule); border-left:4px solid var(--green);
+  background:#f7fbf8; padding:.8rem 1.05rem; margin:1.3rem 0; border-radius:0 7px 7px 0; }
+.worked .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:700;
+  display:block; margin-bottom:.3rem; }
+.worked p{ margin:0 0 .5rem; }
+.worked-a{ color:#7a1a16; }
+.worked-a b{ color:#7a1a16; }
+.deckref{ background:#eef3f8; border-left:4px solid #3a6ea5; padding:.7rem 1rem;
+  margin:1.1rem 0; border-radius:0 6px 6px 0; font-size:.98rem; }
+.deckref .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:#3a6ea5; font-weight:700;
+  display:block; margin-bottom:.15rem; }
+.demo{ background:#f4eef8; border-left:4px solid #6b4a8f; padding:.75rem 1rem;
+  margin:1.3rem 0; border-radius:0 6px 6px 0; }
+.demo .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:#6b4a8f; font-weight:700;
+  display:block; margin-bottom:.15rem; }
+.writein{ border-left:3px solid var(--rule); background:#fcfdfc; margin:.5rem 0 .2rem;
+  padding:.35rem .85rem .1rem; }
+.writein .rule{ display:block; border-bottom:1px solid var(--line); height:1.55rem; }
+.answer{ border-left:3px solid #b3261e; background:#fdf1f0; padding:.6rem .85rem;
+  margin:.5rem 0 .2rem; border-radius:0 5px 5px 0; font-size:.98rem; color:#7a1a16; }
+.answer .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; font-weight:700; display:block;
+  margin-bottom:.15rem; color:#b3261e; }
+.answer b{ color:#7a1a16; }
+.kbanner{ background:#b3261e; color:#fff; font-family:"Segoe UI",system-ui,sans-serif;
+  font-size:.8rem; letter-spacing:.09em; text-transform:uppercase; font-weight:700;
+  padding:.45rem .9rem; border-radius:6px; margin:0 0 1rem; }
+</style>
+</head>
+<body>
+<div class="note-wrap"><div class="eyebrow"><span><strong>FLCC Physics</strong></span><span>Module 4: Production Of Sound</span><span>Note 1: Harmonics And Wave Synthesis</span></div><h1>Harmonics And Wave Synthesis</h1><div class="synopsis"><span class="label">Synopsis</span>In the previous module, we focused on hearing the sound. We handled the sound intensity, sound intensity levels, and sound loudness. These quantities are the amplitude of the waves. In this module, we explore the production or generation of the sound, and here, the focus is the frequency/pitch. The terms we come across in this module mostly refer to the frequency aspect of waves: Harmonics, pure tones, partials, synthesis, and spectrum analysis are all related to the frequency of waves. This note will first explore essential terms for this module and beyond.</div><div class="synopsis"><span class="label">Performance Expectations</span>Be able to describe the terms, fundamentals, harmonics, partial tones, pure tones, wave synthesis, formant, wave phases, and spectrum.</div><h2>Questions and Instructions</h2><div class="deckref"><span class="label">Work from the slides</span>Open <b>Harmonics and Synthesis</b> in Brightspace and answer the following questions.</div><div class="steps"><div class="qitem"><p>What is the fundamental frequency?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>The <b>lowest frequency that a resonator can support</b>.</div></div></div><div class="qitem"><p>What are the harmonic frequencies?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden><b>Integer multiples of the fundamental frequency.</b> If <i>f</i><sub>1</sub> = 100 Hz, the harmonics are 2 &times; 100 Hz = 200 Hz, 3 &times; 100 Hz = 300 Hz, 4 &times; 100 Hz = 400 Hz, and so on.</div></div></div><div class="qitem"><p>How are harmonic frequencies related to the fundamental frequency?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>The <i>n</i>th harmonic is <b><i>n f</i><sub>1</sub></b>: the 2nd harmonic is 2<i>f</i><sub>1</sub>, the 3rd is 3<i>f</i><sub>1</sub>. In musical terms, if C<sub>4</sub> = 261 Hz, then 2 &times; 261 Hz is C<sub>5</sub> and 3 &times; 261 Hz is G<sub>5</sub>.</div></div></div><div class="qitem"><p>What are the overtones?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>The harmonics above the fundamental, counted from the fundamental rather than from zero. The <b>1st overtone is the 2nd harmonic</b>; the <b>2nd overtone is the 3rd harmonic</b>.</div></div></div><div class="qitem"><p>How are the overtones related to the fundamentals and harmonics?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden><i>f</i><sub>1</sub> = fundamental. &nbsp; 2<i>f</i><sub>1</sub> = 2nd harmonic = 1st overtone. &nbsp; 3<i>f</i><sub>1</sub> = 3rd harmonic = 2nd overtone. The two countings are offset by one.</div></div></div><div class="qitem"><p>What is a pure tone?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>A <b>single frequency</b> &mdash; a simple sinusoidal wave with one clearly defined frequency.</div></div></div><div class="qitem"><p>What are partials?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>The components of a more complex waveform &mdash; the individual frequencies that are present in it.</div></div></div><div class="qitem"><p>What does the process of wave synthesis entail?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden><b>Combining simple tones into more complex tones.</b> The reverse &mdash; breaking a complex wave back into its partials &mdash; is called <b>analysis</b>.</div></div></div><div class="qitem"><p>What is a spectrum?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>A plot of <b>amplitude against frequency</b>: one &ldquo;stick&rdquo; at each frequency present, whose height is how much of that frequency is in the sound.</div></div></div><div class="qitem"><p>When you look at a spectrum, what do you learn from it?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden><b>Which frequencies are present, and how much of each one.</b> That is what makes two instruments playing the same note sound different.</div></div></div><div class="qitem"><p>What is a waveform?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>The <b>time trace</b> &mdash; the resultant wave you get when a set of frequencies mix, plotted as a function of time. It is what an oscilloscope shows: amplitude against time, for a &ldquo;complex wave.&rdquo;</div></div></div><div class="qitem"><p>How does a waveform differ from a spectrum?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>Same sound, two plots. The <b>waveform is amplitude against time</b> (seconds); the <b>spectrum is amplitude against frequency</b> (Hz).</div></div></div><div class="qitem"><p>How do you convert a waveform to a spectrum?</p><div class="reveal"><button type="button" aria-expanded="false" data-show="Show" data-hide="Hide"><span class="rv-mark">?</span><span class="rv-label">Show</span></button><div class="rv-panel" hidden>By a <b>Fourier transform</b>.</div></div></div></div><div class="videoslot"><span class="label">Watch</span><p>The note worked through (link just below).</p></div><h2>Your notes</h2><div class="downloads"><a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/M4_N1_Harmonics_And_Wave_Synthesis_Handout.pdf"><span class="kind">Print</span><span class="name">Guided note (PDF)</span><span class="hint">Print it out and write on it in class.</span></a></div><footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 105</footer></div>
+
+<script>
+(function(){
+  document.querySelectorAll('.reveal > button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var open = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', open ? 'false' : 'true');
+      b.nextElementSibling.hidden = open;
+      b.querySelector('.rv-label').textContent = open ? b.dataset.show : b.dataset.hide;
+      window.dispatchEvent(new Event('resize'));
+    });
+  });
+})();
+</script>
+<script>
+function reportHeight(){ parent.postMessage({ flccNoteHeight: document.documentElement.scrollHeight }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+</body>
+</html>
