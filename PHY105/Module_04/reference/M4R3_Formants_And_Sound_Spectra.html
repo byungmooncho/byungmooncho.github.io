@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M4R3 &mdash; Formants and Sound Spectra</title>
+<!-- ==================================================================
+     FLCC Physics - PHY 105 - Module 4 (Production of Sound)
+     Trevor deck conversion, Tier B reference page.  M4R3
+
+     This page is a web version of one of from Dr. H. Trevor
+     Johnson-Steigelman's Physics of Sound lecture decks (CC BY-NC-SA 4.0).  His
+     attribution and licence travel with it; the source decks are named at the
+     foot of the page and in the eyebrow above the title.
+
+     TIER B, NOT A NOTE.  A lead paragraph, figure captions and tip boxes are
+     added here because framing is accepted on a reference page; the physics,
+     the worked examples and the figures are his.  No probe, no exit ticket, no
+     performance-expectation card - those belong to the module notes.
+
+     EVERY FIGURE IS REDRAWN AS SCALABLE SVG, computed from the physics - see
+     reffigs.py.  Photographs and third-party imagery are never reproduced.
+     FIGURES ADAPTED FROM WHITE & WHITE ARE REDRAWN FROM THE PHYSICS, NOT COPIED
+     (Cho's decision, 2026-11-28, option A of the M4 deck triage): the bar,
+     membrane, Chladni and bell figures are generated from the free-free beam
+     equation, Bessel zeros and plate nodal geometry, so no scan is republished.
+     Where a slide carried a photograph, this page says in words what it showed.
+
+     REFERENCES ARE LEAVES (playbook Step 5a).  Notes link to reference pages;
+     a reference page never links back to a note.  Prose mentions are fine.
+
+     Same design system as the module note pages; hosted on GitHub Pages and
+     reached by link from the Module 4 reference index.  Never framed, so no
+     wrapper - the index is the only framed page in the set.
+     ================================================================== -->
+<style>
+:root{ --ink:#1d2b23; --paper:#fff; --green:#1e6b3c; --green-soft:#eaf3ed;
+  --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62; --line:#b7c6bc;
+  --red:#b3261e; --blue:#1f4e8c; }
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--paper); color:var(--ink);
+  font-family:Charter,"Bitstream Charter",Georgia,"Times New Roman",serif;
+  font-size:1.06rem; line-height:1.65; }
+.note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+.eyebrow{ font-family:"Segoe UI",system-ui,Arial,sans-serif; font-size:.78rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:flex;
+  flex-wrap:wrap; gap:.4em 1.2em; border-bottom:2px solid var(--green); padding-bottom:.6rem; }
+.eyebrow strong{ color:var(--green); font-weight:600; }
+h1{ font-size:1.85rem; line-height:1.22; margin:1rem 0 .25rem; font-weight:700; }
+h2{ font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+  border-bottom:1px solid var(--rule); padding-bottom:.3rem; }
+h3{ font-size:1.08rem; margin:1.5rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+.byline{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.95rem; color:var(--muted);
+  margin:0 0 1rem; }
+.byline a{ color:var(--green); }
+.synopsis{ background:var(--green-soft); border-left:4px solid var(--green);
+  padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0; }
+.synopsis .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.75rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:600;
+  display:block; margin-bottom:.25rem; }
+.figure{ border:1px solid var(--rule); border-radius:10px; padding:1rem; margin:1.4rem 0;
+  text-align:center; }
+.figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+.figure figcaption{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem;
+  color:var(--muted); margin-top:.5rem; text-align:left; }
+.figure figcaption b{ color:var(--green-deep); }
+.tip{ background:#fdf6ec; border-left:4px solid var(--amber); padding:.7rem 1rem; margin:.9rem 0;
+  border-radius:0 6px 6px 0; font-size:.98rem; }
+.tip .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--amber); font-weight:700; display:block; margin-bottom:.15rem; }
+.known{ background:#f4f8f5; border:1px solid var(--rule); border-left:4px solid var(--green-deep);
+  padding:.75rem 1rem; margin:1rem 0; border-radius:0 6px 6px 0; font-size:.99rem; }
+.why{ font-size:.93rem; color:var(--muted); border-left:3px solid var(--line);
+  padding:.1rem 0 .1rem .9rem; margin:1.2rem 0; }
+.refs{ font-size:.9rem; color:var(--muted); margin-top:2.2rem; padding-top:.8rem;
+  border-top:1px solid var(--rule); }
+.worked{ border:1px solid var(--rule); border-radius:10px; padding:.9rem 1.1rem; margin:1.2rem 0;
+  background:#fcfdfc; }
+.worked .label{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.72rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--green); font-weight:700;
+  display:block; margin-bottom:.3rem; }
+.worked p{ margin:.45rem 0; }
+table.grid, table.defs{ border-collapse:collapse; width:100%; margin:1rem 0; font-size:.97rem; }
+table.grid th, table.grid td, table.defs td{ border:1px solid var(--ink); padding:.32rem .55rem;
+  text-align:left; vertical-align:top; }
+table.grid th{ font-family:"Segoe UI",system-ui,sans-serif; font-size:.85rem;
+  background:var(--green-soft); }
+table.defs td.term{ font-weight:700; white-space:nowrap; width:1%; }
+.eq{ text-align:center; font-size:1.12rem; margin:1rem 0; padding:.6rem;
+  background:var(--green-soft); border-radius:6px; }
+.mathblock{ text-align:center; margin:1rem 0; }
+.mathline{ font-size:1.1rem; padding:.2rem 0; }
+.scroll{ overflow-x:auto; }
+footer{ margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+  font-family:"Segoe UI",system-ui,sans-serif; font-size:.8rem; color:var(--muted); }
+footer a{ color:var(--green); }
+</style>
+</head>
+<body>
+<div class="note-wrap">
+<div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 4 &middot; Production of Sound</span>
+    <span>Reference M4R3 &middot; Deck: Formants</span>
+  </div>
+
+<h1>Formants and Sound Spectra</h1>
+
+<p class="byline">Web version of the lecture slides by Dr. H. Trevor Johnson-Steigelman (<a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">Physics This Week</a>), adapted for PHY&nbsp;105.</p>
+
+<div class="synopsis"><span class="label">The idea</span>A spectrum is a plot of amplitude against frequency: one stick for each partial in a sound. This page is about what a spectrum tells you that a waveform does not &mdash; which frequencies are present and how much of each &mdash; what a Fourier transform does to get you from one to the other, and what a formant is: a band where the energy piles up, set by the resonator rather than by the note.</div>
+
+<h2>Why two instruments playing the same note sound different</h2>
+
+<p>Play A4 on a violin and on a trumpet and the fundamental is 440&nbsp;Hz in both. What differs is everything above it: which partials are present and how strong each one is. That recipe is the <b>sound spectrum</b>, and it is what your ear is actually using to tell a violin from a trumpet.</p>
+
+<figure class="figure"><svg viewBox="0 0 620 260" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, system-ui, sans-serif"><rect x="188.2" y="30" width="94.5" height="176" fill="#c77b1f" opacity=".13"/><text x="235.5" y="26.0" font-size="12.5" text-anchor="middle" fill="#c77b1f" font-weight="700" font-style="normal">formant</text><line x1="70" y1="206" x2="590" y2="206" stroke="#1d2b23" stroke-width="1.4"/><line x1="70" y1="36" x2="70" y2="206" stroke="#1d2b23" stroke-width="1.4"/><line x1="117.3" y1="46.0" x2="117.3" y2="206" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="117.3" y="224.0" font-size="12" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">1</text><line x1="164.5" y1="118.0" x2="164.5" y2="206" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="164.5" y="224.0" font-size="12" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">2</text><line x1="211.8" y1="74.8" x2="211.8" y2="206" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="211.8" y="224.0" font-size="12" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">3</text><line x1="259.1" y1="129.2" x2="259.1" y2="206" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="259.1" y="224.0" font-size="12" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">4</text><line x1="306.4" y1="158.0" x2="306.4" y2="206" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="306.4" y="224.0" font-size="12" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">5</text><line x1="353.6" y1="122.8" x2="353.6" y2="206" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="353.6" y="224.0" font-size="12" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">6</text><line x1="400.9" y1="170.8" x2="400.9" y2="206" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="400.9" y="224.0" font-size="12" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">7</text><line x1="448.2" y1="185.2" x2="448.2" y2="206" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="448.2" y="224.0" font-size="12" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">8</text><text x="62.0" y="48.0" font-size="12" text-anchor="end" fill="#5c6b62" font-weight="normal" font-style="normal">amplitude</text><text x="590.0" y="242.0" font-size="12.5" text-anchor="end" fill="#5c6b62" font-weight="normal" font-style="normal">frequency &#8594;</text><text x="8.0" y="22.0" font-size="14" text-anchor="start" fill="#1d2b23" font-weight="600" font-style="normal">A sound spectrum, with one formant marked</text><text x="70.0" y="242.0" font-size="12" text-anchor="start" fill="#5c6b62" font-weight="normal" font-style="normal">harmonic number</text></svg><figcaption><b>Figure 1.</b>&nbsp; <b>One stick per partial.</b> The height is how much of that frequency is in the sound. Usually the lowest partial is the tallest, but that is a tendency and not a rule. A band where the energy piles up &mdash; shaded here &mdash; is a <b>formant</b>.</figcaption></figure>
+
+<div class="known"><b>Formant.</b>&nbsp; A frequency band where sound energy is largely concentrated. Formants are a property of the <em>resonator</em> &mdash; the body of the violin, the bore of the trumpet, your own vocal tract &mdash; so they tend to stay put when the played note changes.</div>
+
+<div class="tip"><span class="label">Two things to notice on any real spectrum</span>The partials are usually <b>equally spaced</b>, because they are usually harmonics. And the sticks are never perfectly sharp &mdash; detuning, vibrato and the decay of the note all smear them out a little.</div>
+
+<h2>From a waveform to a spectrum</h2>
+
+<p>You can do this by hand for a pure tone. Measure one period off the trace, invert it, and you have the frequency &mdash; Trevor calls this the <em>slow</em> Fourier transform, and for a tuning fork it is enough, because there is only one frequency to find. A real instrument has a dozen, and the measurement by hand becomes hopeless.</p>
+
+<figure class="figure"><svg viewBox="0 0 640 190" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, system-ui, sans-serif"><defs><marker id="far" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1f4e8c"/></marker></defs><line x1="46" y1="96.0" x2="288" y2="96.0" stroke="#1d2b23" stroke-width="1.2"/><polyline points="46.0,96.0 46.6,92.4 47.2,88.8 47.8,85.2 48.4,81.8 49.0,78.5 49.6,75.4 50.2,72.5 50.8,69.8 51.4,67.4 52.0,65.2 52.7,63.3 53.3,61.7 53.9,60.4 54.5,59.4 55.1,58.7 55.7,58.3 56.3,58.1 56.9,58.3 57.5,58.7 58.1,59.3 58.7,60.1 59.3,61.1 59.9,62.3 60.5,63.6 61.1,65.0 61.7,66.5 62.3,68.0 62.9,69.6 63.5,71.1 64.2,72.7 64.8,74.2 65.4,75.6 66.0,76.9 66.6,78.1 67.2,79.3 67.8,80.3 68.4,81.2 69.0,82.0 69.6,82.6 70.2,83.2 70.8,83.6 71.4,84.0 72.0,84.2 72.6,84.4 73.2,84.5 73.8,84.6 74.4,84.7 75.0,84.7 75.6,84.7 76.2,84.8 76.9,84.9 77.5,85.1 78.1,85.3 78.7,85.6 79.3,86.0 79.9,86.4 80.5,87.0 81.1,87.6 81.7,88.3 82.3,89.1 82.9,90.0 83.5,91.0 84.1,92.0 84.7,93.0 85.3,94.1 85.9,95.2 86.5,96.4 87.1,97.5 87.7,98.6 88.3,99.7 89.0,100.7 89.6,101.7 90.2,102.6 90.8,103.4 91.4,104.2 92.0,104.8 92.6,105.4 93.2,105.9 93.8,106.3 94.4,106.6 95.0,106.8 95.6,107.0 96.2,107.1 96.8,107.2 97.4,107.3 98.0,107.3 98.6,107.4 99.2,107.5 99.8,107.6 100.5,107.7 101.1,108.0 101.7,108.3 102.3,108.7 102.9,109.2 103.5,109.8 104.1,110.5 104.7,111.4 105.3,112.4 105.9,113.5 106.5,114.7 107.1,116.0 107.7,117.4 108.3,118.8 108.9,120.3 109.5,121.9 110.1,123.5 110.7,125.0 111.3,126.5 111.9,128.0 112.6,129.3 113.2,130.5 113.8,131.6 114.4,132.5 115.0,133.2 115.6,133.6 116.2,133.8 116.8,133.8 117.4,133.5 118.0,132.9 118.6,132.0 119.2,130.8 119.8,129.3 120.4,127.5 121.0,125.4 121.6,123.0 122.2,120.4 122.8,117.6 123.4,114.5 124.0,111.3 124.7,107.9 125.3,104.4 125.9,100.8 126.5,97.2 127.1,93.6 127.7,90.0 128.3,86.4 128.9,82.9 129.5,79.6 130.1,76.4 130.7,73.5 131.3,70.7 131.9,68.2 132.5,65.9 133.1,63.9 133.7,62.2 134.3,60.8 134.9,59.7 135.5,58.9 136.1,58.4 136.8,58.2 137.4,58.2 138.0,58.5 138.6,59.0 139.2,59.8 139.8,60.8 140.4,61.9 141.0,63.1 141.6,64.5 142.2,66.0 142.8,67.5 143.4,69.1 144.0,70.6 144.6,72.2 145.2,73.7 145.8,75.1 146.4,76.5 147.0,77.7 147.6,78.9 148.2,80.0 148.8,80.9 149.5,81.7 150.1,82.4 150.7,83.0 151.3,83.5 151.9,83.9 152.5,84.1 153.1,84.3 153.7,84.5 154.3,84.6 154.9,84.6 155.5,84.7 156.1,84.7 156.7,84.8 157.3,84.9 157.9,85.0 158.5,85.2 159.1,85.5 159.7,85.8 160.3,86.3 160.9,86.8 161.6,87.4 162.2,88.1 162.8,88.8 163.4,89.7 164.0,90.6 164.6,91.6 165.2,92.7 165.8,93.8 166.4,94.9 167.0,96.0 167.6,97.1 168.2,98.2 168.8,99.3 169.4,100.4 170.0,101.4 170.6,102.3 171.2,103.2 171.8,103.9 172.4,104.6 173.1,105.2 173.7,105.7 174.3,106.2 174.9,106.5 175.5,106.8 176.1,107.0 176.7,107.1 177.3,107.2 177.9,107.3 178.5,107.3 179.1,107.4 179.7,107.4 180.3,107.5 180.9,107.7 181.5,107.9 182.1,108.1 182.7,108.5 183.3,109.0 183.9,109.6 184.5,110.3 185.1,111.1 185.8,112.0 186.4,113.1 187.0,114.3 187.6,115.5 188.2,116.9 188.8,118.3 189.4,119.8 190.0,121.4 190.6,122.9 191.2,124.5 191.8,126.0 192.4,127.5 193.0,128.9 193.6,130.1 194.2,131.2 194.8,132.2 195.4,133.0 196.0,133.5 196.6,133.8 197.2,133.8 197.9,133.6 198.5,133.1 199.1,132.3 199.7,131.2 200.3,129.8 200.9,128.1 201.5,126.1 202.1,123.8 202.7,121.3 203.3,118.5 203.9,115.6 204.5,112.4 205.1,109.1 205.7,105.6 206.3,102.0 206.9,98.4 207.5,94.8 208.1,91.2 208.7,87.6 209.4,84.1 210.0,80.7 210.6,77.5 211.2,74.4 211.8,71.6 212.4,69.0 213.0,66.6 213.6,64.5 214.2,62.7 214.8,61.2 215.4,60.0 216.0,59.1 216.6,58.5 217.2,58.2 217.8,58.2 218.4,58.4 219.0,58.8 219.6,59.5 220.2,60.4 220.8,61.5 221.4,62.7 222.1,64.0 222.7,65.5 223.3,67.0 223.9,68.5 224.5,70.1 225.1,71.7 225.7,73.2 226.3,74.6 226.9,76.0 227.5,77.3 228.1,78.5 228.7,79.6 229.3,80.6 229.9,81.5 230.5,82.2 231.1,82.8 231.7,83.3 232.3,83.7 232.9,84.0 233.6,84.3 234.2,84.4 234.8,84.5 235.4,84.6 236.0,84.7 236.6,84.7 237.2,84.8 237.8,84.9 238.4,85.0 239.0,85.2 239.6,85.4 240.2,85.7 240.8,86.1 241.4,86.6 242.0,87.2 242.6,87.8 243.2,88.6 243.8,89.4 244.4,90.3 245.0,91.3 245.6,92.3 246.3,93.4 246.9,94.5 247.5,95.6 248.1,96.8 248.7,97.9 249.3,99.0 249.9,100.0 250.5,101.0 251.1,102.0 251.7,102.9 252.3,103.7 252.9,104.4 253.5,105.0 254.1,105.6 254.7,106.0 255.3,106.4 255.9,106.7 256.5,106.9 257.1,107.1 257.8,107.2 258.4,107.3 259.0,107.3 259.6,107.3 260.2,107.4 260.8,107.5 261.4,107.6 262.0,107.8 262.6,108.0 263.2,108.4 263.8,108.8 264.4,109.4 265.0,110.0 265.6,110.8 266.2,111.7 266.8,112.7 267.4,113.9 268.0,115.1 268.6,116.4 269.2,117.8 269.9,119.3 270.5,120.9 271.1,122.4 271.7,124.0 272.3,125.5 272.9,127.0 273.5,128.4 274.1,129.7 274.7,130.9 275.3,131.9 275.9,132.7 276.5,133.3 277.1,133.7 277.7,133.9 278.3,133.7 278.9,133.3 279.5,132.6 280.1,131.6 280.7,130.3 281.3,128.7 281.9,126.8 282.6,124.6 283.2,122.2 283.8,119.5 284.4,116.6 285.0,113.5 285.6,110.2 286.2,106.8 286.8,103.2 287.4,99.6 288.0,96.0" fill="none" stroke="#1e6b3c" stroke-width="2.4"/><text x="46.0" y="34.0" font-size="13" text-anchor="start" fill="#1d2b23" font-weight="600" font-style="normal">waveform &mdash; amplitude vs time</text><line x1="306" y1="96" x2="358" y2="96" stroke="#1f4e8c" stroke-width="2.2" marker-end="url(#far)"/><text x="332.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f4e8c" font-weight="700" font-style="normal">FFT</text><line x1="386" y1="144" x2="614" y2="144" stroke="#1d2b23" stroke-width="1.2"/><line x1="432" y1="68.0" x2="432" y2="144" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="432.0" y="161.0" font-size="12.5" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">f</text><line x1="490" y1="106.0" x2="490" y2="144" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="490.0" y="161.0" font-size="12.5" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">2f</text><line x1="548" y1="121.2" x2="548" y2="144" stroke="#1e6b3c" stroke-width="5" stroke-linecap="round"/><text x="548.0" y="161.0" font-size="12.5" text-anchor="middle" fill="#5c6b62" font-weight="normal" font-style="normal">3f</text><text x="386.0" y="34.0" font-size="13" text-anchor="start" fill="#1d2b23" font-weight="600" font-style="normal">spectrum &mdash; amplitude vs frequency</text></svg><figcaption><b>Figure 2.</b>&nbsp; <b>The same sound, twice.</b> On the left, amplitude against time &mdash; what an oscilloscope shows. On the right, amplitude against frequency. The Fast Fourier Transform is the program that gets you from one to the other.</figcaption></figure>
+
+<div class="known"><b>Fast Fourier Transform (FFT).</b>&nbsp; A program that looks for repeating patterns in a waveform and reports the frequencies at which those patterns occur. Its output is the sound spectrum: the relative amplitude of each partial.</div>
+
+<div class="tip"><span class="label">A period is not a frequency</span>The period you measure off the trace is in seconds. Invert it to get hertz. Students lose more marks to skipping that step than to any other part of this topic.</div>
+
+<h2>One instrument, one spectrum</h2>
+
+<p>The deck walks through recorded spectra of a pipa, a guitar, a violin and a cello playing C3, each with its own distribution of partials. The pattern worth carrying away is not any one of them but the comparison: <b>same note, same fundamental, different recipe above it.</b></p>
+
+<p>Modern synthesiser software turns that observation into a control panel. You add oscillators to choose which harmonics are present, shape how the note starts and stops with attack, decay, sustain and release, then add effects such as detune and distortion. It is the vocabulary of M4R1 with knobs on it.</p>
+
+<p class="why">The spectra themselves are screen captures of recorded instruments and are not reproduced here, along with photographs of the instruments and of a synthesiser interface. Anything you can record, you can analyse the same way &mdash; a free spectrum analyser on a phone will show you your own voice's formants moving as you change vowel.</p>
+
+<p class="refs"><b>Source.</b>&nbsp; Trevor Johnson-Steigelman, <em>Formants</em> (10 slides). Further reading: OpenStax <em>College Physics</em>, <a href="https://openstax.org/books/college-physics/pages/17-5-sound-interference-and-resonance-standing-waves-in-air-columns" target="_blank" rel="noopener">&sect;17.5</a>; H. E. White and D. H. White, <em>Physics and Music: The Science of Musical Sound</em> (Dover, Mineola NY, 2014; originally published 1980).</p>
+
+  <footer>
+    This page is adapted from the presentation <em>Formants</em> by
+    <a href="https://www.physicsthisweek.com/" target="_blank" rel="noopener">H. Trevor Johnson-Steigelman</a>,
+    licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    This adaptation is likewise shared under CC BY-NC-SA 4.0 &middot;
+    Adapted for PHY 105 by Dr. Byungmoon Cho &middot; FLCC Physics
+  </footer>
+
+</div>
+
+<script>
+/* Reports this page's height to a Brightspace wrapper so the iframe auto-fits (V4 reporter).
+   This page is reached by link, not framed, so the reporter is inert here - it is kept so the
+   page behaves if it is ever embedded. */
+function flccContentHeight(){
+  var el = document.querySelector('.note-wrap') || document.body;
+  var cs = getComputedStyle(document.body);
+  return Math.ceil(el.getBoundingClientRect().height
+    + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+    + parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom));
+}
+function reportHeight(){ parent.postMessage({ flccNoteHeight: flccContentHeight() }, "*"); }
+window.addEventListener("load", reportHeight);
+window.addEventListener("resize", reportHeight);
+new ResizeObserver(reportHeight).observe(document.body);
+</script>
+
+<script>
+/* flccSettleV6 (2026-10-06) - re-measures while layout settles (first-paint width race in D2L). */
+(function(){
+  if (window.__flccSettleV6) return; window.__flccSettleV6 = 1;
+  var last = -1;
+  function h(){ var el = document.querySelector('.note-wrap') || document.body; var cs = getComputedStyle(document.body);
+    return Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); }
+  function post(){ var v = h(); if (v === last) return; last = v; parent.postMessage({ flccNoteHeight: v }, "*"); }
+  function settle(){ post(); requestAnimationFrame(post); [60,150,400,900,1800,3500].forEach(function(ms){ setTimeout(post, ms); }); }
+  if (document.readyState === "complete") settle(); else window.addEventListener("load", settle);
+  document.addEventListener("DOMContentLoaded", settle);
+  window.addEventListener("resize", post);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(post); ro.observe(document.documentElement); var w = document.querySelector('.note-wrap'); if (w) ro.observe(w); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(post);
+})();
+</script>
+
+</body>
+</html>
