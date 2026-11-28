@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 5 &mdash; Harmonic Synthesis</title>
+<style>
+  /* ==================================================================
+     FLCC Physics — PHY 105 Module 4, Lab 5.
+     Design system, tokens, type scale and print rules copied unchanged
+     from PHY105_LB03_Standing_Waves_On_A_String.html. No new colours,
+     no new components. One class reused with a new modifier:
+     .dl-card.static (already defined in LB03) carries the Google Sheets
+     card, which has no href yet — see the instructor notes.
+
+     SOURCE: rebuilt from the six-item "Lab 06 - Harmonic Synthesis"
+     folder, 26FA PHY 105 Module 04, (c) Trevor Johnson-Steigelman.
+     Inherited material. Every change is flagged in the instructor notes
+     at the foot of this file.
+     ================================================================== */
+  
+:root{
+    --ink:#1d2b23; --paper:#ffffff; --green:#1e6b3c; --green-soft:#eaf3ed;
+    --green-deep:#134a29; --amber:#c77b1f; --rule:#d7e2da; --muted:#5c6b62;
+    --line:#b7c6bc;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+    font-size:1.06rem; line-height:1.65;
+  }
+  .note-wrap{ max-width:760px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  .eyebrow{
+    font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); display:flex; flex-wrap:wrap; gap:.4em 1.2em;
+    border-bottom:2px solid var(--green); padding-bottom:.6rem;
+  }
+  .eyebrow strong{ color:var(--green); font-weight:600; }
+  h1{ font-size:2rem; line-height:1.2; margin:1rem 0 .25rem; font-weight:700; }
+  h2{
+    font-size:1.35rem; margin:2.2rem 0 .8rem; font-weight:700;
+    border-bottom:1px solid var(--rule); padding-bottom:.3rem;
+  }
+  h3{ font-size:1.08rem; margin:1.5rem 0 .5rem; font-weight:700; color:var(--green-deep); }
+  .synopsis{
+    background:var(--green-soft); border-left:4px solid var(--green);
+    padding:.9rem 1.1rem; margin:1.4rem 0; border-radius:0 6px 6px 0;
+  }
+  .synopsis .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.75rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--green);
+    font-weight:600; display:block; margin-bottom:.25rem;
+  }
+  .figure{
+    border:1px solid var(--rule); border-radius:10px; padding:1rem;
+    margin:1.4rem 0; text-align:center;
+  }
+  .figure img, .figure svg{ max-width:100%; height:auto; display:block; margin:0 auto; }
+  .figure figcaption{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.85rem;
+    color:var(--muted); margin-top:.5rem; text-align:left;
+  }
+  .figure figcaption b{ color:var(--green-deep); }
+  ol.steps{ counter-reset:step; list-style:none; margin:1rem 0; padding:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:0 0 1.1rem 2.6rem;
+    border-left:2px solid var(--rule); margin-left:.9rem;
+  }
+  ol.steps > li:last-child{ border-left-color:transparent; }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:-0.95rem; top:-0.1rem;
+    width:1.8rem; height:1.8rem; border-radius:50%;
+    background:var(--green); color:#fff; display:flex; align-items:center;
+    justify-content:center; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.85rem; font-weight:600;
+  }
+  ol.steps.questions > li{ padding-bottom:1.4rem; }
+  .fillin{
+    display:inline-block; min-width:9rem; border-bottom:1px solid var(--line);
+    margin:0 .25rem;
+  }
+  .slot{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.95rem;
+    color:var(--green-deep); margin:.45rem 0 0; font-weight:600;
+  }
+  .slot .unit{ font-weight:400; color:var(--muted); }
+  .tip{
+    background:#fdf6ec; border-left:4px solid var(--amber);
+    padding:.7rem 1rem; margin:.9rem 0; border-radius:0 6px 6px 0; font-size:.98rem;
+  }
+  .tip .label{
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.72rem;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--amber);
+    font-weight:700; display:block; margin-bottom:.15rem;
+  }
+  .eqn{
+    background:var(--green-soft); border:1px solid var(--rule); border-radius:8px;
+    padding:.85rem 1rem; margin:1.1rem 0; text-align:center;
+  }
+  .eqn .math{
+    font-size:1.25rem; font-weight:700; color:var(--green-deep);
+    font-family:Charter, Georgia, serif; display:block;
+  }
+  .eqn .domain{
+    display:block; margin-top:.45rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem;
+    letter-spacing:.02em; color:var(--muted);
+  }
+  .eqn .domain b{ color:var(--amber); }
+  table.spec{
+    width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:.95rem;
+    font-family:"Segoe UI", system-ui, sans-serif;
+  }
+  table.spec th, table.spec td{
+    border:1px solid var(--rule); padding:.5rem .6rem; text-align:left;
+  }
+  table.spec th{ background:var(--green-soft); color:var(--green-deep); font-weight:600; }
+  table.spec td.blank{ height:2.1rem; }
+  .drawbox{
+    border:1px solid var(--line); border-radius:8px; height:9rem; margin:.5rem 0 .3rem;
+    background:
+      repeating-linear-gradient(0deg,#f4f8f5 0 1px,transparent 1px 22px),
+      repeating-linear-gradient(90deg,#f4f8f5 0 1px,transparent 1px 22px);
+    position:relative; break-inside:avoid; page-break-inside:avoid;
+  }
+  .drawbox .cue{
+    position:absolute; top:.4rem; left:.6rem;
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.74rem;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700;
+  }
+  .write{ margin:.35rem 0 .2rem; break-inside:avoid; page-break-inside:avoid; }
+  .write span{ display:block; border-bottom:1px solid #c9d6ce; height:1.5rem; }
+  .downloads{ display:grid; gap:.8rem; margin:1.2rem 0; }
+  @media (min-width:560px){ .downloads{ grid-template-columns:1fr 1fr; } }
+  .dl-card{
+    display:block; border:1px solid var(--rule); border-radius:10px;
+    padding:.8rem .95rem; text-decoration:none; color:var(--ink);
+    background:#fff; transition:border-color .15s, box-shadow .15s;
+  }
+  .dl-card.static{ cursor:default; }
+  .dl-card:hover{ border-color:var(--green); box-shadow:0 2px 8px rgba(30,107,60,.12); }
+  .dl-card .kind{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.72rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--green); font-weight:700;
+  }
+  .dl-card .name{ display:block; font-weight:700; margin:.15rem 0; }
+  .dl-card .hint{
+    display:block; font-family:"Segoe UI", system-ui, sans-serif;
+    font-size:.83rem; color:var(--muted);
+  }
+  footer{
+    margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule);
+    font-family:"Segoe UI", system-ui, sans-serif; font-size:.8rem; color:var(--muted);
+  }
+@media print{
+  @page{ size: Letter; margin: .5in .5in .45in; }
+  body{ font-size:10.6pt; line-height:1.5; }
+  .note-wrap{ max-width:none; padding:0; }
+  h1{ font-size:1.6rem; margin:.5rem 0 .2rem; }
+  h2{ font-size:1.12rem; margin:1rem 0 .45rem; }
+  h3{ font-size:1rem; margin:.8rem 0 .35rem; }
+  p{ margin:.42rem 0; }
+  .synopsis{ margin:.7rem 0; padding:.6rem .85rem; }
+  .figure{ padding:.55rem .6rem; margin:.6rem 0; }
+  .figure figcaption{ font-size:.82rem; margin-top:.35rem; }
+  ol.steps > li{ padding-bottom:.6rem; }
+  ol.steps.questions > li{ padding-bottom:.55rem; }
+  .synopsis, .tip, .figure, .eqn, ol.steps > li, table.spec{
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  h1, h2, h3{ break-after:avoid; page-break-after:avoid; }
+  .downloads, h2.filesheading{ display:none; }
+  footer{ margin-top:.9rem; padding-top:.5rem; font-size:.72rem; }
+}
+</style>
+</head>
+<body>
+<div class="note-wrap">
+
+  <div class="eyebrow">
+    <span><strong>FLCC Physics</strong></span>
+    <span>Module 4: Production of Sound</span>
+    <span>Lab 5: Harmonic Synthesis</span>
+    <span>Name: ______________________</span>
+  </div>
+
+  <h1>Lab 5 &mdash; Harmonic Synthesis</h1>
+
+  <div class="synopsis">
+    <span class="label">Synopsis</span>
+    In Note 1 you took a complex periodic wave apart and found a fundamental with a series of
+    harmonics stacked on top of it. That was analysis: you were handed the wave and asked what was
+    in it. This lab runs the same idea backwards. You start with nothing but pure sine tones, you
+    choose their frequencies, amplitudes and phases yourself, and you watch a shape appear that
+    none of them has on its own. By the end you will have built a sawtooth, a square and a triangle
+    out of sine waves, heard each of them, and found out what happens when the frequencies you add
+    are <i>not</i> whole-number multiples of one another.
+  </div>
+
+  <p><b>Performance Expectations:</b> Use a spreadsheet model to add up to four sine components of
+  chosen harmonic number, amplitude and phase. Predict, then verify, the effect of a 180&deg;
+  phase shift on a sum. Construct sawtooth, square and triangle waveforms from their harmonic
+  recipes, and state the rule that distinguishes the square wave's series from the sawtooth's.
+  Relate the frequency of a sum to the frequencies of its components. Distinguish harmonic from
+  inharmonic addition by the behaviour of the resulting waveform. Support every claim with a
+  graph you generated and can point to.</p>
+
+  <p><b>Equipment:</b> A laptop with Excel &middot; the Wave Synthesis workbook (download below;
+  a Google Sheets copy is linked if you prefer) &middot; headphones or earbuds &middot; the
+  additive-synthesis applet and the online tone generator, both linked in the steps.</p>
+
+  <h2>Setting up the workbook</h2>
+
+  <p>Open the workbook and read the <b>Start Here</b> sheet. Every sheet after it is laid out the
+  same way, so once you can drive one of them you can drive all of them. The sheet is in two
+  halves: a block of controls you change, and a graph that redraws itself when you do.</p>
+
+  <figure class="figure">
+    <svg viewBox="0 0 760 276" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Layout of the workbook control block: base note and wave speed on the top row, then four wave columns with rows for harmonic number, frequency, amplitude and phase.">
+      <rect x="30" y="20" width="118" height="26" fill="none" stroke="#b7c6bc"/><text x="36" y="37" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29">Base Note</text>
+      <rect x="148" y="20" width="62" height="26" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/><text x="179" y="37" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="400" font-size="12" fill="#5c6b62" text-anchor="middle">440</text><text x="218" y="37" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="400" font-size="12" fill="#5c6b62">Hz</text>
+      <rect x="250" y="20" width="30" height="26" fill="none" stroke="#b7c6bc"/><text x="258" y="37" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29">v</text>
+      <rect x="280" y="20" width="62" height="26" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/><text x="311" y="37" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="400" font-size="12" fill="#5c6b62" text-anchor="middle">340</text><text x="350" y="37" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="400" font-size="12" fill="#5c6b62">m/s</text>
+      <text x="245" y="82" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29" text-anchor="middle">Wave 1</text>
+      <text x="340" y="82" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29" text-anchor="middle">Wave 2</text>
+      <text x="435" y="82" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29" text-anchor="middle">Wave 3</text>
+      <text x="530" y="82" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29" text-anchor="middle">Wave 4</text>
+      <rect x="30" y="92" width="168" height="28" fill="none" stroke="#b7c6bc"/><text x="36" y="111" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29">Harmonic</text>
+      <rect x="200" y="92" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="295" y="92" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="390" y="92" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="485" y="92" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="30" y="124" width="168" height="28" fill="none" stroke="#b7c6bc"/><text x="36" y="143" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29">Frequency (Hz)</text>
+      <rect x="200" y="124" width="90" height="28" fill="#e8eef6" stroke="#8fa6c4" stroke-width="1.5"/>
+      <rect x="295" y="124" width="90" height="28" fill="#e8eef6" stroke="#8fa6c4" stroke-width="1.5"/>
+      <rect x="390" y="124" width="90" height="28" fill="#e8eef6" stroke="#8fa6c4" stroke-width="1.5"/>
+      <rect x="485" y="124" width="90" height="28" fill="#e8eef6" stroke="#8fa6c4" stroke-width="1.5"/>
+      <rect x="30" y="160" width="168" height="28" fill="none" stroke="#b7c6bc"/><text x="36" y="179" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29">Amplitude</text>
+      <rect x="200" y="160" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="295" y="160" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="390" y="160" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="485" y="160" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="30" y="192" width="168" height="28" fill="none" stroke="#b7c6bc"/><text x="36" y="211" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="600" font-size="12" fill="#134a29">Phase (°)</text>
+      <rect x="200" y="192" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="295" y="192" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="390" y="192" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="485" y="192" width="90" height="28" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/>
+      <rect x="600" y="92" width="18" height="18" fill="#eaf3ed" stroke="#1e6b3c" stroke-width="1.5"/><text x="624" y="106" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="400" font-size="11" fill="#5c6b62">you type here</text>
+      <rect x="600" y="124" width="18" height="18" fill="#e8eef6" stroke="#8fa6c4" stroke-width="1.5"/><text x="624" y="138" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="400" font-size="11" fill="#5c6b62">calculated — leave alone</text>
+      <line x1="30" y1="240" x2="730" y2="240" stroke="#d7e2da"/>
+      <text x="30" y="260" font-family="Segoe UI, system-ui, Arial, sans-serif" font-weight="400" font-size="11" fill="#5c6b62">Frequency = Base Note × Harmonic.  Set an amplitude to 0 to switch a wave off.</text>
+      </svg>
+    <figcaption><b>Figure 1.</b> The control block, the same on every sheet. Green cells are yours
+    to type in; blue cells are computed from them and will overwrite anything you put there. Only
+    four waves are available, so every recipe in this lab is a four-term approximation &mdash; keep
+    that in mind when a shape does not come out perfectly sharp.</figcaption>
+  </figure>
+
+  <div class="tip">
+    <span class="label">Before you start</span>
+    Save your own copy first and work in that. If you would rather work in Google Sheets, use the
+    link in <b>Files for this lab</b> and make a copy to your own Drive &mdash; the shared sheet is
+    read-only. Put headphones on and turn the volume <b>down</b> before you open either of the
+    sound applets; they start louder than you expect.
+  </div>
+
+  <h2>Part 1 &mdash; Two pure tones</h2>
+
+  <p>Go to the <b>Phases</b> sheet. One wave is switched on. You are going to add a second one at
+  the same frequency and watch what the phase does to the sum.</p>
+
+  <ol class="steps">
+    <li><p>Set the amplitude of Wave 2 to 1, leaving both phases at 0. Describe what happened to
+    the sum, and save the graph for your report.</p>
+      <div class="write"><span></span><span></span></div></li>
+
+    <li><p>Now change the phase of Wave 2 to 180&deg;. Before you press Enter, write down what you
+    expect. Then do it.</p>
+      <p class="slot">Prediction: <span class="fillin"></span></p>
+      <div class="write"><span></span><span></span></div></li>
+
+    <li><p>Switch Waves 3 and 4 on with amplitudes and phases of your own choosing. Save this
+    graph too, and record the four settings you used so the graph can be reproduced.</p></li>
+
+    <li><p>Read the frequency of the sum off your graph &mdash; measure one full period and invert
+    it. Show the arithmetic; do not read it out of a cell.</p>
+      <div class="drawbox"><span class="cue">Your period measurement, marked on a sketch of the sum</span></div>
+      <p class="slot">T = <span class="fillin"></span> <span class="unit">s</span> &nbsp;&nbsp;
+      f = 1/T = <span class="fillin"></span> <span class="unit">Hz</span></p></li>
+
+    <li><p>Change the Base Note and watch what the sum does. Say in one sentence what changed and
+    what did not.</p>
+      <div class="write"><span></span></div></li>
+  </ol>
+
+  <h2>Part 2 &mdash; Building the classic waveforms</h2>
+
+  <p>Three of the sheets &mdash; <b>Sawtooth</b>, <b>Square</b> and <b>Triangle</b> &mdash; ask for
+  the same thing, and the procedure below is the same on all three. Section 8.8 of the textbook
+  gives the recipe for each: which harmonics appear, how loud each one is relative to the
+  fundamental, and what phase it comes in at. Work the recipe out from the text first and write it
+  into the table, then type it into the sheet. The table is deliberately blank — fill it in
+  before you touch the sheet.</p>
+
+  <table class="spec">
+    <tr><th>Waveform</th><th>Which harmonics</th><th>Amplitude of the <i>n</i>th</th><th>Phases</th></tr>
+    <tr><td><b>Sawtooth</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+    <tr><td><b>Square</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+    <tr><td><b>Triangle</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+  </table>
+
+  <ol class="steps">
+    <li><p>Enter your recipe into the sheet, four components at most. Save the graph.</p></li>
+    <li><p>Open the additive-synthesis applet at
+    <b>meettechniek.info/additional/additive-synthesis.html</b> and play that waveform, then play a
+    pure sine of the same pitch. Volume down first.</p></li>
+    <li><p>Write down how the two sound different. &ldquo;Harsher&rdquo; is a start, not an answer
+    &mdash; say what you hear and then connect it to the harmonics you had to add.</p>
+      <div class="write"><span></span><span></span></div></li>
+    <li><p>Read the frequency of the sum off your graph, as you did in Part 1. Compare it to the
+    Base Note.</p>
+      <p class="slot">f<sub>sum</sub> = <span class="fillin"></span> <span class="unit">Hz</span>
+      &nbsp;&nbsp; Base Note = <span class="fillin"></span> <span class="unit">Hz</span></p></li>
+  </ol>
+
+  <p>Do all four steps for each of the three waveforms. You should end Part 2 with three graphs and
+  three descriptions.</p>
+
+  <div class="eqn">
+    <span class="math">f<sub>n</sub> = n f<sub>1</sub></span>
+    <span class="domain">Every component you added is a whole-number multiple of the base note.
+    That is what makes the sum <b>periodic at the base note</b>, no matter how many harmonics you
+    stack on it &mdash; and it is why all three of your sums came out at the same frequency.</span>
+  </div>
+
+  <div class="tip">
+    <span class="label">Watch the square wave</span>
+    One of the three recipes skips half the harmonics. Which one, and which half, is worth noticing
+    now &mdash; you met that same series in Note 3 when you worked out the resonances of a tube
+    closed at one end.
+  </div>
+
+  <h2>Part 3 &mdash; When the ratio is not a whole number</h2>
+
+  <p>Go to the <b>Inharmonic Addition</b> sheet. Everything in Part 2 depended on the components
+  being whole-number multiples of the base note. Now break that.</p>
+
+  <ol class="steps">
+    <li><p>Set the harmonic of Wave 2 to <b>1.5</b>. Does the sum still repeat? Save the graph and
+    say what you see.</p>
+      <div class="write"><span></span><span></span></div></li>
+
+    <li><p>Raise the Base Note so that more cycles fit across the plot. Having seen more of it,
+    would you still give the same answer?</p>
+      <div class="write"><span></span></div></li>
+
+    <li><p>Now set the harmonic of Wave 2 to <b>1.6</b>. Look carefully &mdash; the change is
+    subtle. Save this graph next to the previous one.</p></li>
+
+    <li><p>Try several more values. See whether you can state a rule for which ratios give a
+    repeating pattern and which do not, and test your rule on a value you have not tried yet.</p>
+      <p class="slot">My rule: <span class="fillin"></span></p>
+      <div class="write"><span></span><span></span></div></li>
+  </ol>
+
+  <div class="tip">
+    <span class="label">A warning about this part</span>
+    It is hard to find a ratio that never repeats, because the plot is only a fraction of a second
+    long and anything close to a simple fraction will look periodic over that window. Say what you
+    observed over the window you had, rather than claiming something about all time.
+  </div>
+
+  <h2>Part 4 &mdash; Chords</h2>
+
+  <p>Go to the <b>Combining Notes</b> sheet. So far every component has been built on one base
+  note. A chord is several notes sounded together, and their frequencies are not harmonics of each
+  other.</p>
+
+  <ol class="steps">
+    <li><p>Choose up to four notes from the table on that sheet and type their frequencies into the
+    frequency slots. Set the amplitude of any note you are not using to 0.</p>
+      <p class="slot">Notes chosen: <span class="fillin"></span></p></li>
+
+    <li><p>Look at both graphs on the sheet &mdash; note the different time ranges &mdash; and save
+    them.</p></li>
+
+    <li><p>Estimate the period of the overall waveform and comment on how it compares with the
+    periods of the individual notes.</p>
+      <div class="write"><span></span><span></span></div></li>
+
+    <li><p>Play the same chord. Use the tone generator at
+    <b>szynalski.com/tone-generator</b>, setting up each note in its own player, or play it on any
+    instrument you have. Say whether the chord sounded the way the waveform looked.</p>
+      <div class="write"><span></span><span></span></div></li>
+  </ol>
+
+  <h2>Questions for Discussion</h2>
+
+  <p><b>Choose three of the following and answer those three fully</b>, working them into your
+  discussion section. Say which three you chose. Do not simply copy the question and answer it in a
+  line &mdash; and do not limit yourself to these topics if you have other insights.</p>
+
+  <ol class="steps questions">
+    <li><p>In Part 1 you added two waves of the same frequency and the sum was still at that
+    frequency. In Part 2 you added four waves of four different frequencies and the sum was still
+    at the lowest one. Explain why adding higher harmonics cannot change the frequency of the sum,
+    using your own graphs.</p></li>
+
+    <li><p>Your square wave uses only some of the harmonics. Name which ones and explain the
+    connection to the closed tube in Note 3 &mdash; two very different systems producing the same
+    series is not a coincidence.</p></li>
+
+    <li><p>A 180&deg; phase shift changed your Part 1 sum dramatically, but in Part 2 the phases
+    mattered much less to how the waveform <i>sounded</i> than the amplitudes did. Say what that
+    tells you about what the ear is sensitive to.</p></li>
+
+    <li><p>You only had four components to work with. Describe where your waveforms departed most
+    from the ideal sawtooth, square or triangle, and say what adding a fifth, tenth and twentieth
+    harmonic would do to that departure.</p></li>
+
+    <li><p>From Part 3: what is physically different about a sum of inharmonic components, and why
+    does a sound built that way tend to be heard as noise or as a clang rather than as a note with
+    a pitch?</p></li>
+
+    <li><p>A clarinet and a violin playing the same written note are instantly distinguishable.
+    Using nothing but the controls in this workbook, say what would have to differ between them,
+    and what would have to be the same.</p></li>
+  </ol>
+
+  <div class="tip">
+    <span class="label">Lab report</span>
+    Follow the standard format in the <b>Writing Lab Reports</b> module. Every graph you paste in
+    must carry the settings that produced it &mdash; harmonic numbers, amplitudes and phases &mdash;
+    or it cannot be checked. Paste graphs <b>as pictures</b>; a live-pasted Excel chart updates
+    itself when you go back and change the sheet, and will silently rewrite a figure you already
+    discussed.
+  </div>
+
+  <h2 class="filesheading">Files for this lab</h2>
+  <div class="downloads">
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/PHY105_LB05_Harmonic_Synthesis.pdf">
+      <span class="kind">Print</span>
+      <span class="name">Lab handout (PDF)</span>
+      <span class="hint">Print this and bring it &mdash; the recipe table and the writing space are on it.</span>
+    </a>
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/PHY105_LB05_Wave_Synthesis_Workbook.xlsx">
+      <span class="kind">Open first</span>
+      <span class="name">Wave Synthesis workbook (Excel)</span>
+      <span class="hint">The instrument for this whole lab. Save your own copy before you type in it.</span>
+    </a>
+    <a class="dl-card" target="_blank" rel="noopener" href="https://byungmooncho.github.io/PHY105/handouts/PHY105_LB05_Report_Template.docx">
+      <span class="kind">Template</span>
+      <span class="name">Lab 5 report template</span>
+      <span class="hint">Openers only. Read its first page before you start writing.</span>
+    </a>
+    <a class="dl-card static">
+      <span class="kind">Alternative</span>
+      <span class="name">Google Sheets version</span>
+      <span class="hint">Linked from the Module 4 page. Make a copy to your own Drive &mdash; the shared sheet is read-only.</span>
+    </a>
+  </div>
+
+<!-- =====================================================================
+     INSTRUCTOR NOTES — PHY105 Lab 5, Harmonic Synthesis (not shown to students)
+
+     SOURCE AND PROVENANCE
+     Rebuilt from the six-part "Lab 06 - Harmonic Synthesis" folder in the
+     26FA Module 04 shell, (c) Trevor Johnson-Steigelman. Those six items
+     were:
+       1. Harmonics Lab Introduction and Setup  (topic 64686456)
+          — an HTML wrapper whose entire content is a YouTube embed
+            (youtube.com/embed/52mBQ7eqxlQ). No text at all.
+       2. PS-LB-Wave Synthesis Excel Workbook.xlsx (topic 64686457)
+          — the actual instrument. 7 sheets. Kept, unchanged.
+       3. Lab Template.docx (topic 64686455)  — his generic template.
+       4. Google Sheets Link (topic 64686465)
+          — one sentence plus a live Google Sheets URL.
+       5. Changing Things in the Spreadsheet (topic 64686484)
+          — a second YouTube-only wrapper (youtube.com/embed/gv5POjHGbEE).
+       6. Special Waveforms (topic 64686485)
+          — a OneDrive-embedded copy of d-Special Waveforms.pptx.
+     Plus a hidden quicklink, zz-OLD-LB06-Wave Synthesis (64686466).
+
+     WHAT CHANGED, AND WHY
+     1. There was no written procedure anywhere in the lab. Every
+        instruction lived either inside a spreadsheet cell or inside a
+        video. A student who could not play the videos had nothing to
+        follow, and nothing could be printed. The procedure on this page
+        is written out from the cell text of all seven sheets, verbatim
+        in intent, reorganised into the house Part structure.
+     2. SIX SHEETS COLLAPSED TO FOUR PARTS. Sawtooth, Square and Triangle
+        are the same operation three times over — his sheets repeat the
+        same four instructions with a different target waveform. They are
+        now one Part 2 with one procedure and three cases. Phases becomes
+        Part 1, Inharmonic Addition Part 3, Combining Notes Part 4.
+        Start Here becomes the "Setting up the workbook" section.
+     3. The recipe table in Part 2 is a SKELETON — harmonic numbers,
+        amplitudes and phases are all left blank and the student derives
+        them from textbook section 8.8. Trevor pre-filled the sawtooth
+        sheet (1,2,3,4 / 1,0.5,0.333,0.25 / 0,180,0,180) and the student
+        only had to press play. His Square sheet ships WRONG — all four
+        harmonics set to 1 with amplitude 0.5 each, which is four copies
+        of the fundamental, not a square wave. Leaving the table blank
+        fixes the defect and makes the part do some work.
+     4. Trevor's lettered question numbering (P1-P5, ST1-ST3, SQ1-SQ4,
+        T1-T5, I1-I4) is gone; his P-series also numbers two different
+        questions "P2". Questions are now steps within their Part.
+     5. Questions for Discussion are new, "choose three, answer fully",
+        per the standing rule (2026-09-28). Trevor had no discussion
+        section — his questions were all procedural.
+     6. The two videos and the Special Waveforms deck are NOT dropped.
+        Per the standing rule, d-Special Waveforms.pptx becomes a Tier B
+        reference page in the Module 04 References sub-module; the two
+        YouTube items can stay as optional "watch me drive it" support,
+        but they are no longer load-bearing — the page stands alone.
+
+     OPEN — NEEDS YOUR HAND
+     The Google Sheets card is a static card, not a link. The live URL is
+     inside topic 64686465 and could not be transcribed in session. Paste
+     it into the href and change the class from "dl-card static" to
+     "dl-card" with target/rel, or leave the card as is and keep topic
+     64686465 visible in the module. It is currently kept visible.
+
+     PHYSICS NOTES
+     Sawtooth: all harmonics, a_n = 1/n, alternating phase in his sheet.
+     Square: ODD harmonics only, a_n = 1/n. Triangle: odd harmonics,
+     a_n = 1/n^2, alternating phase. With only four components available
+     the square and triangle are coarse — the Gibbs overshoot on the
+     square is visible and is worth pointing at in class.
+     The square-wave odd series is the same series as the closed-tube
+     resonances in N3, which is what question 2 is for.
+     In Part 1 step 4 the sum of two equal-amplitude, equal-frequency
+     waves is still at that frequency; students routinely report double.
+     Part 3: 1.5 repeats with period 2/f1; 1.6 repeats with period 5/f1 —
+     both repeat, which is the point of the warning box. A ratio repeats
+     iff it is rational; over a 0.01 s window nothing looks irrational.
+
+     NUMBERING
+     Lab 5. LB01 Oscillator, LB02 Interference, LB03 Standing Waves on a
+     String, LB04 Hearing Loss Reaction Paper (M3, built 2026-11-24).
+     The inherited folder was named "Lab 06"; renamed to
+     "Lab 05 - Harmonic Synthesis" (module 64686227) on 2026-11-28.
+
+     Rung 2 (Sharpen) and any D2L quiz items for this lab live in the
+     Quiz project.
+     ===================================================================== -->
+
+  <footer>Copyright &copy; 2026 by Dr. Byungmoon Cho &middot; FLCC Physics &middot; PHY 105</footer>
+
+</div>
+</body>
+</html>
